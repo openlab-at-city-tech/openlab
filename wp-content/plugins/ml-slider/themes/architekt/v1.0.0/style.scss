@@ -96,10 +96,10 @@
       color: inherit;
       cursor: pointer;
       display: inline-block;
-      font-size: 11px;
+      font-size: 20px;
       height: auto;
-      line-height: 15px;
-      margin: 0 5px 0 0;
+      line-height: 23px;
+      margin: 0 10px 0 0;
       padding: 0;
       padding-bottom: 3px;
       position: relative;
@@ -211,6 +211,8 @@
 
       &:focus {
         background: transparent;
+        outline: 2px solid #000;
+        outline-offset: 2px;
       }
 
       &.flex-prev {
@@ -562,7 +564,7 @@
         opacity: 0;
       }
   
-      &:hover .flex-direction-nav {
+      &:hover .flex-direction-nav, &:focus-within .flex-direction-nav {
         li, a {
           opacity: 1;
         }

@@ -84,7 +84,8 @@
 
 					&:focus {
 						background-color: #fff;
-						outline: none;
+						outline: 2px solid #fff;
+						outline-offset: 2px;
 					}
 
 					&:after {

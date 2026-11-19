@@ -56,9 +56,10 @@ class MetaSlider
         if (
             is_array($settings) &&
             isset($settings['type']) &&
-            in_array($settings['type'], array( 'flex', 'coin', 'nivo', 'responsive' )) 
+            in_array($settings['type'], array( 'flex', 'coin', 'nivo', 'responsive' ))
         ) {
-            return $settings;
+            // Only trust keys we actually recognise
+            return array_intersect_key($settings, $this->get_default_parameters());
         } else {
             return $this->get_default_parameters();
         }
@@ -76,6 +77,11 @@ class MetaSlider
             $defaults = $this->get_default_parameters();
 
             if (isset($defaults[$name])) {
+                // Make sure to return a string, even if the default is boolean
+                if (gettype($defaults[$name]) == 'boolean') {
+                    return $defaults[$name] ? 'true' : 'false';
+                }
+
                 return $defaults[$name] ? $defaults[$name] : 'false';
             }
         } else {
@@ -272,8 +278,8 @@ class MetaSlider
             $type = get_post_meta($slide_id, 'ml-slider_type', true);
             $type = $type ? $type : 'image'; // backwards compatibility, fall back to 'image'
 
-            // Skip over deleted media files
-            if ('image' === $type && 'ml-slide' === get_post_type($slide_id) && !get_post_thumbnail_id($slide_id)) {
+            // Skip over deleted media files — on the frontend only; in admin, show them so they can be deleted
+            if ( ! is_admin() && 'image' === $type && 'ml-slide' === get_post_type($slide_id) && ! get_post_thumbnail_id($slide_id)) {
                 continue;
             }
 
@@ -644,6 +650,26 @@ class MetaSlider
     }
 
     /**
+     * Coerce a setting into a JS-safe integer token, without turning an empty/disabled
+     * setting (e.g. an unset width/height, normalised by get_setting() to the string
+     * 'false') into 0. Anything that's neither numeric nor the 'true'/'false' sentinel
+     * is untrusted and is coerced to 0 rather than ever being output raw.
+     *
+     * @since 3.111.1
+     * 
+     * @param mixed $val
+     * @return int|string
+     */
+    protected function to_js_int($val)
+    {
+        if (is_numeric($val)) {
+            return (int) $val;
+        }
+
+        return ($val === 'true' || $val === 'false') ? $val : 0;
+    }
+
+    /**
      * Build the javascript parameter arguments for the slider.
      *
      * @return string parameters
@@ -657,8 +683,10 @@ class MetaSlider
             if ($param = $this->get_param($name)) {
                 $val = $this->get_setting($name);
 
-                if (gettype($default) == 'integer' || $val == 'true' || $val == 'false') {
-                    $options[$param] = $val;
+                if (is_int($default)) {
+                    $options[$param] = $this->to_js_int($val);
+                } elseif (is_bool($default) || $val === 'true' || $val === 'false') {
+                    $options[$param] = $val === 'true' ? 'true' : 'false';
                 } else {
                     $options[$param] = '"' . esc_js($val) . '"';
                 }
@@ -838,6 +866,28 @@ class MetaSlider
     }
 
     /**
+     * Check if any of this slideshow's slides have a Font Awesome icon in their caption,
+     * so the icon stylesheet is only loaded on the front end when it's actually needed.
+     *
+     * Note: the inserted <i class="fa-solid"> markup only survives to the front end because
+     * the default `metaslider_html_purifier_config` permits the `class` attribute on inline
+     * elements (see metaslider_filter_unsafe_html() / inc/slide/metaslide.image.class.php).
+     * A site that narrows that filter to strip `class` would silently lose icon rendering.
+     *
+     * @since 3.111
+     */
+    public function has_font_awesome_icons()
+    {
+        $slides = $this->get_slides()->posts;
+        foreach ($slides as $slide) {
+            if (false !== strpos($slide->post_excerpt, 'fa-solid')) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Include slider assets, JS and CSS paths are specified by child classes.
      */
     public function enqueue_scripts()
@@ -851,6 +901,11 @@ class MetaSlider
         if (filter_var($this->get_setting('printCss'), FILTER_VALIDATE_BOOLEAN)) {
             wp_enqueue_style('metaslider-' . $this->get_setting('type') . '-slider', METASLIDER_ASSETS_URL . $this->css_path, false, METASLIDER_ASSETS_VERSION);
             wp_enqueue_style('metaslider-public', METASLIDER_ASSETS_URL . 'metaslider/public.css', false, METASLIDER_ASSETS_VERSION);
+
+            if ($this->has_font_awesome_icons()) {
+                wp_enqueue_style('metaslider-fontawesome', METASLIDER_ADMIN_ASSETS_URL . 'vendor/fontawesome/css/fontawesome.min.css', false, METASLIDER_ASSETS_VERSION);
+                wp_enqueue_style('metaslider-fontawesome-solid', METASLIDER_ADMIN_ASSETS_URL . 'vendor/fontawesome/css/solid.min.css', array('metaslider-fontawesome'), METASLIDER_ASSETS_VERSION);
+            }
 
             $extra_css = apply_filters("metaslider_css", "", $this->settings, $this->id);
             $extra_css .= apply_filters("metaslider_theme_css", "", $this->settings, $this->id);

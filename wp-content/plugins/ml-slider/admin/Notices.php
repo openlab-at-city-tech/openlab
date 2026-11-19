@@ -98,7 +98,7 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
 
         $ads = [
             'rate_plugin' => [
-                'title' => _x('Like MetaSlider? Please help us by giving a positive review at WordPress.org', 'Keep the plugin name "MetaSlider" when possible', 'ml-slider'),
+                'title' => _x('Like MetaSlider Slideshow? Please help us by giving a positive review at WordPress.org', 'Keep the plugin name "MetaSlider Slideshow" when possible', 'ml-slider'),
                 'text' => '',
                 'image' => 'notices/metaslider_logo.png',
                 'button_link' => 'metaslider_rate',
@@ -108,7 +108,7 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
                 'supported_positions' => ['header'],
             ],
             'pro_layers' => [
-                'title' => __('Spice up your site with animated layers and video slides with MetaSlider Pro', 'ml-slider'),
+                'title' => __('Spice up your site with animated layers and video slides with MetaSlider Slideshow Pro', 'ml-slider'),
                 'text' => '',
                 'image' => 'notices/metaslider_logo.png',
                 'button_link' => 'metaslider',
@@ -119,7 +119,7 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
                 'validity_function' => 'metaslider_pro_is_not_installed',
             ],
             'pro_features' => [
-                'title' => __('Increase your revenue and conversion with video slides and many more MetaSlider Pro features', 'ml-slider'),
+                'title' => __('Increase your revenue and conversion with video slides and many more MetaSlider Slideshow Pro features', 'ml-slider'),
                 'text' => '',
                 'image' => 'notices/metaslider_logo.png',
                 'button_link' => 'metaslider',
@@ -130,7 +130,7 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
                 'validity_function' => 'metaslider_pro_is_not_installed',
             ],
             'translation' => [
-                'title' => __('Can you translate? Want to improve MetaSlider for speakers of your language?', 'ml-slider'),
+                'title' => __('Can you translate? Want to improve MetaSlider Slideshow for speakers of your language?', 'ml-slider'),
                 'text' => '',
                 'image' => 'notices/metaslider_logo.png',
                 'button_link' => 'metaslider_translate',
@@ -190,7 +190,7 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
     }
 
     /**
-     * Checks if MetaSlider Pro is NOT installed
+     * Checks if MetaSlider Slideshow Pro is NOT installed
      *
      * @return bool
      */
@@ -358,15 +358,15 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
     {
         $messages = array(
             'lets_start' => __('Let\'s Start &rarr;', 'ml-slider'),
-            'review' => _x('Review MetaSlider &rarr;', 'Keep the plugin name "MetaSlider" when possible', 'ml-slider'),
+            'review' => _x('Review MetaSlider Slideshow &rarr;', 'Keep the plugin name "MetaSlider Slideshow" when possible', 'ml-slider'),
             'ml-slider' => __('Find out more &rarr;', 'ml-slider'),
-            'buy-w-discount' => __('Get MetaSlider Pro &rarr;', 'ml-slider'),
+            'buy-w-discount' => __('Get MetaSlider Slideshow Pro &rarr;', 'ml-slider'),
             'signup' => __('Sign up &rarr;', 'ml-slider'),
             'go_there' => __('Go there &rarr;', 'ml-slider')
         );
 
         if ( metaslider_plugin_is_installed( 'ml-slider-lightbox' ) === false ) {
-            $messages['install-lightbox'] = __('Click to install the MetaSlider Lightbox plugin &rarr;', 'ml-slider');
+            $messages['install-lightbox'] = __('Click to install the MetaSlider Gallery plugin &rarr;', 'ml-slider');
         }
 
         $message = isset($messages[$type]) ? $messages[$type] : __('Read more', 'ml-slider');

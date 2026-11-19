@@ -259,6 +259,54 @@ return array(
                     )
                 )
             ),
+            array(
+                'label' => esc_html__('Focus Outline Color', 'ml-slider'),
+                'info' => esc_html__('The outline color shown around an arrow when it receives focus, for accessibility.', 'ml-slider'),
+                'name' => 'arrows_focus_outline_color',
+                'type' => 'color',
+                'default' => '#fff',
+                'css' => '[ms_id] .flexslider .flex-direction-nav li a:focus { outline-color: [ms_value] }',
+                'scope' => array(
+                    'links' => array(
+                        'true',
+                        'onhover'
+                    )
+                )
+            ),
+            array(
+                'label' => esc_html__('Focus Outline Width', 'ml-slider'),
+                'info' => esc_html__('The width of the outline shown around an arrow when it receives focus, for accessibility.', 'ml-slider'),
+                'name' => 'arrows_focus_outline_width',
+                'type' => 'range',
+                'default' => 2,
+                'metric' => 'px',
+                'min' => 0,
+                'max' => 10,
+                'css' => '[ms_id] .flexslider .flex-direction-nav li a:focus { outline-width: [ms_value]px }',
+                'scope' => array(
+                    'links' => array(
+                        'true',
+                        'onhover'
+                    )
+                )
+            ),
+            array(
+                'label' => esc_html__('Focus Outline Offset', 'ml-slider'),
+                'info' => esc_html__('The distance between the outline and the arrow when it receives focus, for accessibility.', 'ml-slider'),
+                'name' => 'arrows_focus_outline_offset',
+                'type' => 'range',
+                'default' => 2,
+                'metric' => 'px',
+                'min' => -10,
+                'max' => 20,
+                'css' => '[ms_id] .flexslider .flex-direction-nav li a:focus { outline-offset: [ms_value]px }',
+                'scope' => array(
+                    'links' => array(
+                        'true',
+                        'onhover'
+                    )
+                )
+            )
         )
     ),
     array(
@@ -691,6 +739,7 @@ return array(
             ),
             array(
                 'label' => esc_html__('Font Size', 'ml-slider'),
+                'info' => esc_html__("The Font Size uses rem units. The display is relative to your theme's CSS so the preview be different from the frontend display.", 'ml-slider'),
                 'name' => 'caption_font_size',
                 'type' => 'range',
                 'default' => 0.9,
@@ -702,6 +751,7 @@ return array(
             ),
             array(
                 'label' => esc_html__('Line Height', 'ml-slider'),
+                'info' => esc_html__("The Line Height uses rem units. The display is relative to your theme's CSS so the preview be different from the frontend display.", 'ml-slider'),
                 'name' => 'caption_line_height',
                 'type' => 'range',
                 'default' => 1.2,

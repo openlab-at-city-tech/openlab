@@ -140,6 +140,12 @@
 						position: absolute;
 						width: 100%;
 					}
+					&:focus {
+						opacity: 1 !important;
+						background-color: black;
+						outline: 2px solid #fff;
+						outline-offset: 2px;
+					}
 				}
 				a.flex-prev {
 					left: -25px;

@@ -10,6 +10,20 @@ class MetaSlider_Admin_Table extends WP_List_table
     public function prepare_items()
     {
         $this->process_action();
+
+        // Check if we filter by theme
+        $nonce_valid = isset($_REQUEST['search_wpnonce']) && wp_verify_nonce(sanitize_key($_REQUEST['search_wpnonce']), 'metaslider_search_slideshows');
+        if ($nonce_valid && isset($_POST['metaslider_theme'])) {
+            $theme_param = sanitize_text_field($_POST['metaslider_theme']);
+            $current_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+            if ($theme_param !== '') {
+                $_GET['metaslider_theme'] = $theme_param;
+                $_SERVER['REQUEST_URI'] = add_query_arg('metaslider_theme', $theme_param, $current_uri);
+            } else {
+                unset($_GET['metaslider_theme']);
+                $_SERVER['REQUEST_URI'] = remove_query_arg('metaslider_theme', $current_uri);
+            }
+        }
         $columns = $this->get_columns();
         $hidden = array();
         $sortable = $this->get_sortable_columns();
@@ -55,14 +69,25 @@ class MetaSlider_Admin_Table extends WP_List_table
 
             if ($theme && isset($theme['title'])) {
                 $each_slide['slideshow_theme'] = $theme['title'];
+                $each_slide['slideshow_theme_folder'] = $theme['folder'] ?? '';
             } else {
                 $each_slide['slideshow_theme'] = '';
+                $each_slide['slideshow_theme_folder'] = '';
             }
 
             $slideshow_slides = $this->get_slides($each_slide['ID'], $status);
             $each_slide['slideshow_thumb'] = $slideshow_slides;
             $each_slide['slideshow_type'] = $this->get_slide_types($slideshow_slides);
             $each_slide['slide_count'] = count($slideshow_slides);
+        }
+
+        $theme_filter = isset($_REQUEST['metaslider_theme']) ? sanitize_text_field($_REQUEST['metaslider_theme']) : '';
+        if ($theme_filter !== '') {
+            $query_results = array_values(array_filter($query_results, function ($slide) use ($theme_filter) {
+                return $theme_filter === '__none__'
+                    ? $slide['slideshow_theme_folder'] === ''
+                    : $slide['slideshow_theme_folder'] === $theme_filter;
+            }));
         }
 
         if ($orderBy === 'slide_count') {
@@ -226,8 +251,10 @@ class MetaSlider_Admin_Table extends WP_List_table
             $params[] = '%' . $wpdb->esc_like($search) . '%';
         }
 
-        $prepared_query = $wpdb->prepare($query, $params); // WPCS: unprepared SQL OK.
-        return $wpdb->get_results($prepared_query, ARRAY_A); // WPCS: unprepared SQL OK.
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Query fragments are fixed SQL above, with all dynamic values passed through $wpdb->prepare().
+        $prepared_query = $wpdb->prepare($query, $params);
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $prepared_query is prepared immediately above.
+        return $wpdb->get_results($prepared_query, ARRAY_A);
     }
 
     public function get_slides($slideshowId, $status)
@@ -448,14 +475,68 @@ class MetaSlider_Admin_Table extends WP_List_table
 
     public function extra_tablenav( $which )
     {
-		if ( $which == "top" ) {
+        if ( $which == "top" ) {
+            echo '<input type="hidden" name="page" value="' . esc_attr($_REQUEST['page'] ?? 'metaslider') . '">';
+            $this->render_filters();
             if (isset($_REQUEST['post_status']) && $_REQUEST['post_status'] == "trash") {
                 if ( ! empty($this->table_data('', 'trash'))) {
                     submit_button( __( 'Empty Trash' ), 'apply', 'delete_all', false );
                 }
             }
         }
-	}
+    }
+
+    /**
+     * Renders table nav filter dropdowns; currently includes theme, extendable for future filters.
+     * 
+     * @since 3.110.0
+     * 
+     * @return void
+     */
+    private function render_filters()
+    {
+        $status = (isset($_GET['post_status']) && 'trash' === $_GET['post_status']) ? 'trash' : 'publish';
+        $slideshows = $this->get_slideshow_query($status);
+
+        $themes = [];
+        $has_no_theme = false;
+        foreach ($slideshows as $slideshow) {
+            $theme = get_post_meta($slideshow['ID'], 'metaslider_slideshow_theme', true);
+            if ($theme && isset($theme['folder'], $theme['title'])) {
+                $themes[$theme['folder']] = $theme['title'];
+            } else {
+                $has_no_theme = true;
+            }
+        }
+
+        if (empty($themes) && !$has_no_theme) return;
+
+        asort($themes);
+
+        $current = isset($_REQUEST['metaslider_theme']) ? sanitize_text_field($_REQUEST['metaslider_theme']) : '';
+
+        echo '<div class="alignleft actions">';
+        echo '<select name="metaslider_theme" id="metaslider-theme-filter">';
+        echo '<option value="">' . esc_html__('All Themes', 'ml-slider') . '</option>';
+        foreach ($themes as $folder => $title) {
+            printf(
+                '<option value="%s"%s>%s</option>',
+                esc_attr($folder),
+                selected($current, $folder, false),
+                esc_html($title)
+            );
+        }
+        if ($has_no_theme) {
+            printf(
+                '<option value="__none__"%s>%s</option>',
+                selected($current, '__none__', false),
+                esc_html__('(No Theme)', 'ml-slider')
+            );
+        }
+        echo '</select> ';
+        submit_button(__('Filter', 'ml-slider'), 'button', 'filter_action', false);
+        echo '</div>';
+    }
 
     public function check_num_rows()
     {

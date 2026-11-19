@@ -88,7 +88,7 @@ class MetaSlider_Themes
         
         /**
          * Check if we have extra themes/ folders added from external sources,
-         * including MetaSlider Pro 
+         * including MetaSlider Slideshow Pro 
          * 
          * e.g. 
          * array(
@@ -422,7 +422,7 @@ return $theme;
 
         /**
          * Check if we have extra themes/ folders added from external sources,
-         * including MetaSlider Pro 
+         * including MetaSlider Slideshow Pro 
          * 
          * e.g. 
          * array(
@@ -723,7 +723,7 @@ return $theme;
         $is_theme_editor_screen = is_admin() 
             && function_exists('get_current_screen') 
             && ($screen = get_current_screen()) 
-            && 'metaslider-pro_page_metaslider-theme-editor' === $screen->id;
+            && 'slideshow-pro_page_metaslider-theme-editor' === $screen->id;
 
         // Don't load a theme on the editor page.
         if ($is_theme_editor_screen && (! isset($_GET['version']) || $_GET['version'] == 'v1')) {
@@ -780,7 +780,7 @@ return $theme;
 
         /**
          * Check if we have extra themes/ folders added from external sources,
-         * including MetaSlider Pro 
+         * including MetaSlider Slideshow Pro 
          * 
          * e.g. 
          * array(
@@ -1200,7 +1200,7 @@ return $theme;
             /**
              * Check if is a premium or custom theme (v2) based on a premium theme
              * by looping extra themes/ folders added from external sources,
-             * including MetaSlider Pro.
+             * including MetaSlider Slideshow Pro.
              * We may also support external themes (custom coded themes added by users).
              * 
              * e.g. 

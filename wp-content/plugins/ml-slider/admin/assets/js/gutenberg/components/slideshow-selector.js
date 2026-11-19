@@ -2,7 +2,7 @@
 /**
  * Slideshow Selector
  *
- * Renders the SELECT with the slideshows list.
+ * Renders a searchable combobox with the slideshows list.
  */
 
 /**
@@ -10,7 +10,7 @@
  */
 const wp = window.wp
 const {__} = wp.i18n
-const {SelectControl} = wp.components
+const {ComboboxControl} = wp.components
 
 /**
  * SlideshowSelector
@@ -22,21 +22,17 @@ export default function SlideshowSelector({props}) {
     let slideshowId = props.attributes.slideshowId
     let {slideshows} = props
 
-    return <SelectControl
+    return <ComboboxControl
         label={__('Select a slideshow', 'ml-slider')}
-        value={slideshowId}
-        options={[{
-            label: '-- ' + __('Select a slideshow', 'ml-slider') + ' --',
-            value: 0
-        }].concat(slideshows.items.map(function (slider) {
+        value={slideshowId || null}
+        options={slideshows.items.map(function (slider) {
             return {
-                key: slider.id,
                 label: wp.htmlEntities.decodeEntities(slider.title) + ' (#' + slider.id + ')',
                 value: slider.id
             }
-        }))}
+        })}
         onChange={(newId) => {
-            newId = parseInt(newId)
+            newId = parseInt(newId) || 0
             props.setAttributes({slideshowId: newId})
         }}
     />

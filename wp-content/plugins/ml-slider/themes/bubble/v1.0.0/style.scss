@@ -118,6 +118,10 @@
                         transform: translate(-50%, -50%);
                         width: 23px;
 					}
+					&:focus {
+						outline: 2px solid #fff;
+						outline-offset: 2px;
+					}
 				}
 				a.flex-prev {
 					left: 2% !important;
@@ -807,7 +811,7 @@
 			opacity: 0;
 		}
 	}
-	&:hover {
+	&:hover, &:focus-within {
 		.flex-direction-nav {
 			li {
 				opacity: 1;

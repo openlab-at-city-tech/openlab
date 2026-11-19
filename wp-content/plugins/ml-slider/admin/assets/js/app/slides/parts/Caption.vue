@@ -49,6 +49,42 @@
 
 <script>
 import { EventManager } from '../../utils'
+
+// Module-level (not per-editor-instance) so the icon index is fetched once and
+// shared across every slide's caption editor on the page, instead of once per slide.
+const POPULAR_ICONS = [
+	'star', 'heart', 'house', 'user', 'envelope', 'phone', 'check', 'xmark',
+	'magnifying-glass', 'camera', 'image', 'video', 'film', 'music', 'location-dot',
+	'calendar-days', 'clock', 'bell', 'gift', 'cart-shopping', 'thumbs-up', 'comment',
+	'share-nodes', 'lock', 'key', 'gear', 'trash', 'pen', 'arrow-right', 'arrow-left',
+	'chevron-down', 'chevron-up', 'plus', 'minus', 'circle-info', 'triangle-exclamation',
+	'circle-question', 'download', 'upload', 'link', 'tag', 'flag', 'fire', 'bolt',
+	'sun', 'moon', 'cloud', 'umbrella', 'leaf', 'paw', 'gem', 'crown', 'trophy',
+	'medal', 'circle-play', 'circle-check', 'address-book', 'map', 'compass', 'globe'
+];
+
+let iconIndex;
+let iconIndexPromise;
+const fetchIconIndex = function() {
+	if (iconIndex) {
+		return Promise.resolve(iconIndex);
+	}
+	if (iconIndexPromise) {
+		return iconIndexPromise;
+	}
+	iconIndexPromise = fetch(metaslider.fontawesome_icons_url)
+		.then(function(response) { return response.json(); })
+		.then(function(data) {
+			iconIndex = Array.isArray(data) ? data : [];
+			return iconIndex;
+		})
+		.catch(function() {
+			iconIndex = [];
+			return iconIndex;
+		});
+	return iconIndexPromise;
+}
+
 export default {
 	props: {
 		imageCaption: {
@@ -128,7 +164,7 @@ export default {
 				if (!this.editorInstance) {
 
 					if (typeof tinymce === 'undefined') {
-						console.log('TinyMCE is not defined or disabled in MetaSlider settings!');
+						console.log('TinyMCE is not defined or disabled in MetaSlider Slideshow settings!');
 						return;
 					}
 
@@ -140,9 +176,7 @@ export default {
 						metaslider.tinymce.push({
 							type: 'image',
 							configuration: {
-								toolbar: [
-									'undo redo bold italic underline strikethrough removeformat forecolor fontsizeinput lineheight link unlink alignleft aligncenter alignright styles code device_options add_button'
-								],
+								toolbar: 'undo redo bold italic underline strikethrough removeformat forecolor fontsizeinput lineheight styles link unlink alignleft aligncenter alignright add_image add_icon add_button device_options code',
 								menubar: false,
 								plugins: 'code link',
 								line_height_formats: '0.8 0.9 1 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2 2.1 2.2 2.3 2.4 2.5 2.6 2.7 2.8 2.9 3',
@@ -152,6 +186,15 @@ export default {
 								preview_styles: false,
 								forced_root_block: 'div',
 								convert_urls: false,
+								// Mirrors TinyMCE's own bundled default (see non_empty_elements in
+								// admin/assets/vendor/tinymce/js/tinymce/tinymce.min.js) plus 'i', so the inserted
+								// icon survives cleanup as an "empty" tag. Setting this option replaces rather than
+								// merges with the default, so keep this list in sync if TinyMCE is ever upgraded.
+								non_empty_elements: 'td th iframe video audio object script code pre svg i',
+								extended_valid_elements: 'i[class|aria-hidden|style|title]',
+								content_css: typeof metaslider !== 'undefined' && metaslider.fontawesome_css_urls
+									? metaslider.fontawesome_css_urls
+									: [],
 								content_style: `
 									.ms-custom-button {
 										display: inline-block;
@@ -165,6 +208,10 @@ export default {
 									}
 									.ms-custom-button:hover {
 										opacity: 0.8;
+									}
+									img {
+										max-width: 100%;
+										height: auto !important;
 									}
 								`,
 								setup: (editor) => {
@@ -330,6 +377,185 @@ export default {
 										}
 									});
 
+									let mediaFrame;
+									editor.ui.registry.addButton('add_image', {
+										icon: 'image',
+										tooltip: text.add_image,
+										onAction: function() {
+											if (mediaFrame) {
+												mediaFrame.open();
+												return;
+											}
+
+											mediaFrame = wp.media({
+												title: text.add_image,
+												button: { text: text.insert },
+												multiple: false,
+												library: { type: 'image' }
+											});
+
+											mediaFrame.on('select', function() {
+												const attachment = mediaFrame.state().get('selection').first().toJSON();
+
+												const fallbackSanitize = (value) => {
+													if (!value) return '';
+													return value
+														.replace(/</g, '&lt;')
+														.replace(/>/g, '&gt;')
+														.replace(/"/g, '&quot;')
+														.replace(/'/g, '&#039;')
+														.replace(/&/g, '&amp;');
+												}
+
+												const wpSanitizeAvailable = wp && wp.sanitize && wp.sanitize.stripTagsAndEncodeText;
+												const sanitizedUrl = wpSanitizeAvailable ?
+													wp.sanitize.stripTagsAndEncodeText(attachment.url || '') :
+													fallbackSanitize(attachment.url || '');
+												const sanitizedAlt = wpSanitizeAvailable ?
+													wp.sanitize.stripTagsAndEncodeText(attachment.alt || '') :
+													fallbackSanitize(attachment.alt || '');
+
+												editor.insertContent(`<img src="${sanitizedUrl}" alt="${sanitizedAlt}" />`);
+											});
+
+											mediaFrame.open();
+										}
+									});
+
+									editor.ui.registry.addIcon('font-awesome-logo', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20"><path fill="currentColor" d="M91.7 96C106.3 86.8 116 70.5 116 52C116 23.3 92.7 0 64 0S12 23.3 12 52c0 16.7 7.8 31.5 20 41l0 3 0 352 0 64 64 0 0-64 373.6 0c14.6 0 26.4-11.8 26.4-26.4c0-3.7-.8-7.3-2.3-10.7L432 272l61.7-138.9c1.5-3.4 2.3-7 2.3-10.7c0-14.6-11.8-26.4-26.4-26.4L91.7 96z"/></svg>')
+
+									editor.ui.registry.addButton('add_icon', {
+										icon: 'font-awesome-logo',
+										tooltip: text.add_icon,
+										onAction: function() {
+											const bookmark = editor.selection.getBookmark(2, true);
+
+											fetchIconIndex().then(function(icons) {
+												const gridId = 'ms-fa-icon-grid';
+
+												const dialogApi = editor.windowManager.open({
+													title: text.add_icon,
+													size: 'medium',
+													body: {
+														type: 'panel',
+														items: [
+															{ type: 'input', name: 'search', placeholder: text.search_icons },
+															{ type: 'htmlpanel', html: `
+																<style>
+																	.ms-fa-icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 4px; max-height: 260px; overflow-y: auto; padding: 4px 0 !important; }
+																	.ms-fa-icon-grid button { display: flex; align-items: center; justify-content: center; height: 40px; border: 1px solid #dcdcde; background: #fff; border-radius: 3px; cursor: pointer; font-size: 16px; padding: 0; }
+																	.ms-fa-icon-grid button:hover, .ms-fa-icon-grid button:focus { border-color: #0073aa; background: #f0f6fc; }
+																	.ms-fa-icon-grid button i, .ms-fa-search-clear i { font-family: "Font Awesome 6 Free" !important; font-weight: 900 !important; font-style: normal !important; }
+																	.ms-fa-icon-empty { grid-column: 1 / -1; padding: 12px 4px !important; color: #646970 !important; }
+																	.tox-dialog-wrap .tox-form__group:first-child { position: relative !important; }
+																	.tox-dialog-wrap .tox-form__group:first-child .tox-textfield { padding-right: 28px; }
+																	.ms-fa-search-clear { display: none; position: absolute !important; top: 50%; right: 6px; transform: translateY(-50%); padding: 4px; margin: 0; border: 0; background: transparent; cursor: pointer; color: #787c82; }
+																	.ms-fa-search-clear:hover, .ms-fa-search-clear:focus { color: #2271b1; }
+																	.ms-fa-search-clear.ms-is-visible { display: flex; align-items: center; justify-content: center; }
+																</style>
+																<div id="${gridId}" class="ms-fa-icon-grid"></div>
+															` }
+														]
+													},
+													initialData: {},
+													buttons: [
+														{ type: 'cancel', text: text.close }
+													]
+												});
+
+												const insertIcon = function(unicode) {
+													editor.focus();
+													editor.selection.moveToBookmark(bookmark);
+
+													const tempId = 'ms-fa-icon-' + unicode + '-' + Math.floor(Math.random() * 1e9);
+													editor.insertContent(`<i id="${tempId}" class="fa-solid" aria-hidden="true">&#x${unicode};</i>`);
+
+													// Move the caret after the inserted icon, otherwise TinyMCE leaves it
+													// inside the tag and any text typed next ends up inside the <i>
+													const insertedNode = editor.dom.get(tempId);
+													if (insertedNode) {
+														insertedNode.removeAttribute('id');
+														editor.selection.select(insertedNode);
+														editor.selection.collapse(false);
+													}
+
+													dialogApi.close();
+												}
+
+												const renderGrid = function(term) {
+													const container = document.getElementById(gridId);
+													if (!container) {
+														return;
+													}
+
+													const filtered = term
+														? icons.filter(function(icon) {
+															return icon.n.indexOf(term) !== -1 ||
+																icon.l.toLowerCase().indexOf(term) !== -1 ||
+																icon.t.some(function(iconTerm) { return iconTerm.toLowerCase().indexOf(term) !== -1; });
+														}).slice(0, 120)
+														: POPULAR_ICONS.map(function(name) {
+															return icons.find(function(icon) { return icon.n === name; });
+														}).filter(Boolean);
+
+													if (!filtered.length) {
+														container.innerHTML = `<div class="ms-fa-icon-empty">${text.no_icons_found}</div>`;
+														return;
+													}
+
+													container.innerHTML = filtered.map(function(icon) {
+														return `<button type="button" title="${icon.l}" data-unicode="${icon.u}"><i class="fa-solid fa-${icon.n}" aria-hidden="true"></i></button>`;
+													}).join('');
+
+													container.querySelectorAll('button[data-unicode]').forEach(function(btn) {
+														btn.addEventListener('click', function() {
+															insertIcon(btn.getAttribute('data-unicode'));
+														});
+													});
+												}
+
+												setTimeout(function() {
+													renderGrid('');
+
+													// TinyMCE doesn't expose the dialog's own root element via the windowManager
+													// API, so this reaches into its internal (undocumented) DOM/class structure.
+													// Scope to the most recently opened dialog wrap rather than the first match
+													// in the document, in case another TinyMCE dialog is already open elsewhere.
+													const dialogWraps = document.querySelectorAll('.tox-dialog-wrap');
+													const dialogWrap = dialogWraps[dialogWraps.length - 1];
+													const searchInput = dialogWrap ? dialogWrap.querySelector('.tox-textfield') : null;
+													if (searchInput) {
+														const searchGroup = searchInput.closest('.tox-form__group');
+														const clearButton = document.createElement('button');
+														clearButton.type = 'button';
+														clearButton.className = 'ms-fa-search-clear';
+														clearButton.setAttribute('aria-label', text.clear_search);
+														clearButton.innerHTML = '<i class="fa-solid" aria-hidden="true">&#xf00d;</i>';
+														if (searchGroup) {
+															searchGroup.appendChild(clearButton);
+														}
+
+														const toggleClearButton = function() {
+															clearButton.classList.toggle('ms-is-visible', !!searchInput.value);
+														}
+
+														searchInput.addEventListener('input', function() {
+															renderGrid(searchInput.value.trim().toLowerCase());
+															toggleClearButton();
+														});
+
+														clearButton.addEventListener('click', function() {
+															searchInput.value = '';
+															searchInput.focus();
+															renderGrid('');
+															toggleClearButton();
+														});
+													}
+												}, 50);
+											});
+										}
+									});
+
 									editor.on('input', function () {
 										updateContent(editor);
 									});
@@ -446,7 +672,7 @@ export default {
 		selectedSource(newSource, oldSource) {
 
 			if (typeof tinymce === 'undefined') {
-				console.log('TinyMCE is not defined or disabled in MetaSlider settings!');
+				console.log('TinyMCE is not defined or disabled in MetaSlider Slideshow settings!');
 				return;
 			}
 

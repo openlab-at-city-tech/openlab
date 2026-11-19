@@ -130,6 +130,10 @@
 						position: absolute;
 						width: 100%;
 					}
+					&:focus {
+						outline: 2px solid #fff;
+						outline-offset: 2px;
+					}
 				}
 				a.flex-prev {
 					left: 19px;
@@ -805,7 +809,7 @@
 			opacity: 0;
 		}
 	}
-	&:hover {
+	&:hover, &:focus-within {
 		.flex-direction-nav {
 			li {
 				opacity: 1;

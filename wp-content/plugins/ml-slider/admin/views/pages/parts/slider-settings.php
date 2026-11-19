@@ -12,6 +12,33 @@ $breakpoints      = array(
     'desktop'    => isset( $default_settings['desktop'] ) ? (int) $default_settings['desktop'] : 1440
 );
 
+?>
+<div class="ms-settings-search">
+    <div class="ms-settings-search-field">
+        <span class="dashicons dashicons-search" aria-hidden="true"></span>
+        <input
+            type="search"
+            id="ms-settings-search"
+            class="ms-settings-search-input"
+            placeholder="<?php esc_attr_e('Search settings', 'ml-slider'); ?>"
+            aria-label="<?php esc_attr_e('Search settings', 'ml-slider'); ?>"
+        />
+        <button
+            type="button"
+            id="ms-settings-search-clear"
+            class="ms-settings-search-clear tipsy-tooltip-top"
+            title="<?php esc_attr_e('Clear search', 'ml-slider'); ?>"
+            aria-label="<?php esc_attr_e('Clear search', 'ml-slider'); ?>"
+            style="display:none;"
+        >
+            <span class="dashicons dashicons-no-alt" aria-hidden="true"></span>
+        </button>
+    </div>
+    <p class="ms-settings-search-empty" style="display:none;">
+        <?php esc_html_e('No settings found.', 'ml-slider'); ?>
+    </p>
+</div>
+<?php
 // Slider libraries
 $aFields = array(
     'type' => array(
@@ -454,7 +481,7 @@ echo $this->build_settings_rows($aFields);
     </div>
     <div class="ms-settings-box lightboxOptions ms-on">
         <div class="ms-highlight highlight">
-            <?php esc_html_e( 'Lightbox Options', 'ml-slider' ) ?>
+            <?php esc_html_e( 'Gallery Options', 'ml-slider' ) ?>
             <a href="#" class="ms-toggle-static">
                 <span class="dashicons"></span>
             </a>
@@ -466,11 +493,11 @@ echo $this->build_settings_rows($aFields);
                 'lightbox' => array(
                     'priority' => 5,
                     'type' => 'checkbox',
-                    'label' => __('Open in lightbox?', 'ml-slider'),
+                    'label' => __('Open In Gallery', 'ml-slider'),
                     'after' => '',
                     'class' => 'flex',
                     'checked' => '',
-                    'helptext' => __("All slides will open in a lightbox, using MetaSlider Lightbox", "ml-slider"),
+                    'helptext' => __("All slides will open in a gallery, using MetaSlider Gallery", "ml-slider"),
                     'addon_required' => true
                 ),
                 'lightbox_ad' => array(
@@ -1036,7 +1063,7 @@ echo $this->build_settings_rows($aFields);
                         )
                     ),
                     'helptext' => __(
-                        'By default, MetaSlider will crop images using the main width and height of the slideshow. If you want smaller images, select Custom width/height and make sure the values are less than the main width and height.',
+                        'By default, MetaSlider Slideshow will crop images using the main width and height of the slideshow. If you want smaller images, select Custom width/height and make sure the values are less than the main width and height.',
                         'ml-slider'
                     ),
                     'after' => metaslider_upgrade_pro_small_btn()
@@ -1070,7 +1097,7 @@ echo $this->build_settings_rows($aFields);
                         'lazyLoad'
                     ) == 'true' ? 'checked' : '',
                     'helptext' => __(
-                        "This feature can speed up your site. MetaSlider will only load slides when they are required by your slideshow.",
+                        "This feature can speed up your site. MetaSlider Slideshow will only load slides when they are required by your slideshow.",
                         "ml-slider"
                     )
                 )
@@ -1385,7 +1412,7 @@ echo $this->build_settings_rows($aFields);
                     ),
                     'addon_required' => true,
                     'after' => metaslider_upgrade_pro_small_btn(
-                        __( 'This feature is available in MetaSlider Pro', 'ml-slider' )
+                        __( 'This feature is available in MetaSlider Slideshow Pro', 'ml-slider' )
                     )
                 )
             );
@@ -1564,7 +1591,7 @@ echo $this->build_settings_rows($aFields);
     $count = count(metaslider_has_trashed_slides($this->slider->id));
     if ( ! metaslider_viewing_trashed_slides( $this->slider->id ) ) { 
         ?>
-        <div class="ms-settings-box trasedSlidesOptions ms-off" style="<?php echo ! $count ? 'display: none;' : ''  ?>">
+        <div class="ms-settings-box trasedSlidesOptions ms-off<?php echo ! $count ? ' ms-hidden-by-default' : ''  ?>" style="<?php echo ! $count ? 'display: none;' : ''  ?>">
             <div class="ms-highlight">
                 <?php esc_html_e( 'Trashed Slides', 'ml-slider' ) ?>
                 <a href="#" class="ms-toggle-static">

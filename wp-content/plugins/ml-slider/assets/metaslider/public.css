@@ -82,11 +82,13 @@ body .metaslider .flexslider .flex-direction-nav li {
     margin: 0 !important;
 }
 
-.metaslider .caption-wrap .caption img {
-    width: auto;
+.metaslider .flexslider .slides li .caption-wrap .caption img {
+    max-width: 100%;
+    height: auto;
+    display: inline;
 }
 
-.metaslider .slides img {
+.metaslider .slides img:not(.caption img) {
 	width: 100%;
 	display: block;
 }

@@ -8,7 +8,7 @@
             <div class="metaslider-welcome">
                 <div class="welcome-panel-content items-center">
                     <h2>
-                        <?php _e( 'Introducing the Theme Editor in MetaSlider Pro', 'ml-slider' ); ?>
+                        <?php _e( 'Introducing the Theme Editor in MetaSlider Slideshow Pro', 'ml-slider' ); ?>
                     </h2>
                 </div>
                 <div class="welcome-panel-content" style="min-height:270px;">
@@ -29,7 +29,7 @@
                                 <?php _e( 'The Theme Editor allows you to customize almost every aspect of your slideshow themes. You can change the arrows, navigation, captions, Play / Pause button, and other slideshow details.', 'ml-slider' ); ?>
                             </p>
                             <p>
-                                <?php _e( 'Upgrade to MetaSlider Pro and you can create a beautiful WordPress slideshow in minutes.', 'ml-slider' ); ?>
+                                <?php _e( 'Upgrade to MetaSlider Slideshow Pro and you can create a beautiful WordPress slideshow in minutes.', 'ml-slider' ); ?>
                             </p>
                             <p>
                                 <a href="https://www.metaslider.com/upgrade?utm_source=lite&utm_medium=banner&utm_campaign=pro" class="ml-upgrade-button w-auto" target="_blank">

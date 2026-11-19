@@ -82,7 +82,7 @@ Vue.mixin({
 
 		// These are mainly meant for logging and not ideal for hooking into events
 		notifyInfo(id, message, toast = false) {
-			console.log('MetaSlider:', message)
+			console.log('MetaSlider Slideshow:', message)
 			EventManager.$emit(id, message)
 			toast && this.notify.fire({
 				icon: 'info',
@@ -91,7 +91,7 @@ Vue.mixin({
 			})
 		},
 		notifyWarning(id, message, toast = false) {
-			console.warn('MetaSlider:', message)
+			console.warn('MetaSlider Slideshow:', message)
 			EventManager.$emit(id, message)
 			toast && this.notify.fire({
 				icon: 'warning',
@@ -100,7 +100,7 @@ Vue.mixin({
 			})
 		},
 		notifySuccess(id, message, toast = false) {
-			console.log('MetaSlider:', message)
+			console.log('MetaSlider Slideshow:', message)
 			EventManager.$emit(id, message)
 			toast && this.notify.fire({
 				icon: 'success',
@@ -109,7 +109,7 @@ Vue.mixin({
 			})
 		},
 		notifyError(id, error, toast = false) {
-			console.error(`MetaSlider (${id.replace('metaslider/', '')}):`, error)
+			console.error(`MetaSlider Slideshow (${id.replace('metaslider/', '')}):`, error)
 
 			if (!error) {
 				error = this.__('Undefined error occurred', 'ml-slider')
@@ -147,7 +147,7 @@ Vue.mixin({
 
 			// Display the error in the console and optionally a toast message
 			// TODO: Count the error message length and show a modal if needed
-			console.error('MetaSlider:', this.getErrorMessage(error.response))
+			console.error('MetaSlider Slideshow:', this.getErrorMessage(error.response))
 			toast && this.notify.fire({
 				showConfirmButton: true,
 				timer: null,

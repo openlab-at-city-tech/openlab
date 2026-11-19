@@ -81,6 +81,13 @@
 						transition-delay: .1s;
 						width: 30px;
 					}
+					&:focus {
+						background: rgba(255,255,255,0.43);
+						opacity: 1 !important;
+						width: 50px;
+						outline: 2px solid #fff;
+						outline-offset: 2px;
+					}
 				}
 				a.flex-prev {
 					left: 0;
@@ -582,7 +589,7 @@
 			opacity: 0;
 		}
 	}
-	&:hover {
+	&:hover, &:focus-within {
 		.flex-direction-nav {
 			li {
 				opacity: 1;

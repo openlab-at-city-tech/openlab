@@ -29,17 +29,25 @@
                     </button>
                     <button
                         :title="__('Toggle full width (Use F key)', 'ml-slider')"
-                        :disabled="showLaptopWidth || showTabletWidth || showSmartphoneWidth"
                         :class="{
-                            'bg-black text-white': showFullwidth && !(showLaptopWidth || showTabletWidth || showSmartphoneWidth),
-                            'bg-transparent text-black': !showFullwidth && !(showLaptopWidth || showTabletWidth || showSmartphoneWidth),
-                            'opacity-50 cursor-not-allowed': showLaptopWidth || showTabletWidth || showSmartphoneWidth
+                            'bg-black text-white': showFullwidth, 
+                            'bg-transparent text-black': !showFullwidth 
                         }"
                         class="w-14 p-2 hover:bg-black hover:text-white transition duration-200"
                         @click="toggleFullwidth">
 						<span v-if="showFullwidth" class="dashicons dashicons-editor-contract w-full text-xl"></span>
 						<span v-else class="dashicons dashicons-editor-expand text-xl"></span>
                     </button>
+					<button v-if="mobileSettingsEnabled"
+						:title="__('Desktop preview', 'ml-slider')"
+						:class="{
+							'bg-black text-white': showDesktopWidth,
+							'bg-transparent text-black': !showDesktopWidth
+						}"
+						class="w-14 p-2 hover:bg-black hover:text-white transition duration-200"
+						@click="toggleDevice('desktop')">
+						<span class="dashicons dashicons-desktop text-xl"></span>
+					</button>
 					<button v-if="mobileSettingsEnabled"
 						:title="__('Laptop preview', 'ml-slider')"
 						:class="{
@@ -129,6 +137,7 @@ export default {
 			previewIframe: {},
 			overlayTheme: 'dark',
 			showFullwidth: false,
+			showDesktopWidth: false,
 			showLaptopWidth: false,
 			showTabletWidth: false,
 			showSmartphoneWidth: false,
@@ -251,6 +260,7 @@ export default {
 			this.iframeLoaded = true
 		},
 		toggleFullwidth() {
+			this.showDesktopWidth = false;
 			this.showTabletWidth = false;
 			this.showSmartphoneWidth = false;
 			this.showLaptopWidth = false;
@@ -258,6 +268,7 @@ export default {
 			this.showFullwidth = !this.showFullwidth
 
 			// Set the container and slideshow to full width
+			this.previewIframe.iframe.style.width = '100%'
 			this.previewIframe.container.style.maxWidth = this.maxWidth
 			this.previewIframe.slideshow.style.maxWidth = this.maxWidth
 
@@ -268,52 +279,42 @@ export default {
 			this.showFullwidth = false;
 			
 			const breakpoints = typeof metaslider.breakpoints === 'object' ? metaslider.breakpoints : {
+				desktop: 1440,
 				laptop: 1024,
 				tablet: 768,
 				smartphone: 480
 			};
 
-			// Set the container and slideshow to full width
-			switch (device) {
-				default:
-				case 'laptop':
-					this.showTabletWidth = false;
-					this.showSmartphoneWidth = false;
-					
-					this.showLaptopWidth = !this.showLaptopWidth
-
-
-					this.previewIframe.iframe.style.width = this.showLaptopWidth ? breakpoints.laptop + 'px' : '100%'
-					this.previewIframe.container.style.maxWidth = this.showLaptopWidth ? breakpoints.laptop + 'px' : this.maxWidth
-					this.previewIframe.slideshow.style.maxWidth = this.showLaptopWidth ? breakpoints.laptop + 'px' : this.maxWidth
-					break
-				case 'tablet':
-					this.showLaptopWidth = false;
-					this.showSmartphoneWidth = false;
-
-					this.showTabletWidth = !this.showTabletWidth
-
-					this.previewIframe.iframe.style.width = this.showTabletWidth ? breakpoints.tablet + 'px' : '100%'
-					this.previewIframe.container.style.maxWidth = this.showTabletWidth ? breakpoints.tablet + 'px' : this.maxWidth
-					this.previewIframe.slideshow.style.maxWidth = this.showTabletWidth ? breakpoints.tablet + 'px' : this.maxWidth
-					break
-				case 'smartphone':
-					this.showLaptopWidth = false;
-					this.showTabletWidth = false;
-
-					this.showSmartphoneWidth = !this.showSmartphoneWidth
-
-					this.previewIframe.iframe.style.width = this.showSmartphoneWidth ? breakpoints.smartphone + 'px' : '100%'
-					this.previewIframe.container.style.maxWidth = this.showSmartphoneWidth ? breakpoints.smartphone + 'px' : this.maxWidth
-					this.previewIframe.slideshow.style.maxWidth = this.showSmartphoneWidth ? breakpoints.smartphone + 'px' : this.maxWidth
-					break
+			const map = {
+				desktop: 'showDesktopWidth',
+				laptop: 'showLaptopWidth',
+				tablet: 'showTabletWidth',
+				smartphone: 'showSmartphoneWidth'
 			}
+
+			const key = map[device] || 'showDesktopWidth'
+
+			// Reset all
+			Object.values(map).forEach(k => {
+				this[k] = false
+			})
+
+			// Toggle selected
+			this[key] = !this[key]
+
+			// Resolve the breakpoint
+			const bpKey = key.replace('show', '').replace('Width', '').toLowerCase()
+			const size = breakpoints[bpKey]
+			const active = this[key]
+
+			this.previewIframe.iframe.style.width = active ? size + 'px' : '100%'
+			this.previewIframe.container.style.maxWidth = '100%'
+			this.previewIframe.slideshow.style.maxWidth = '100%'
 			
-			// hide content while reloading to avoid glitch
-			this.iframeLoaded = false
-			
-			// reload iframe content to ensure layout recalculates for new screen size
-			this.previewIframe.iframe.contentWindow.location.reload()
+			this.iframeLoaded = true
+
+			// trigger a resize in the iframe to let the slider recalculate itself
+			this.previewIframe.window.dispatchEvent(this.resizeEvent)
 		},
 		toggleLights() {
 			this.overlayTheme = 'dark' === this.overlayTheme ? 'light' : 'dark'
@@ -339,7 +340,7 @@ export default {
 </script>
 
 <style lang="scss">
-	@import '../assets/styles/globals.scss';
+	@use '../assets/styles/globals.scss' as *;
 	#preview-component .dashicons,
 	#preview-component .dashicons:before {
 		font-size: 30px;

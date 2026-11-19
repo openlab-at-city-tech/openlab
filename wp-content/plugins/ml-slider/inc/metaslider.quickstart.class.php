@@ -5,14 +5,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Quickstart helper class for MetaSlider
- * 
+ *
  * @since 3.106
  */
 class MetaSliderQuickstart
 {
     /**
      * Get quickstart options
-     * 
+     *
      * @return array
      */
     public function quickstart_options()
@@ -23,7 +23,8 @@ class MetaSliderQuickstart
                 'label' => esc_html__( 'Nature Site', 'ml-slider' ),
                 'is_dummy' => false, // Is Free
                 'price' => 'free',
-                'type' => array( 'image' ), 
+                'theme' => 'blend',
+                'type' => array( 'image' ),
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -34,7 +35,8 @@ class MetaSliderQuickstart
                 'label' => esc_html__( 'Travel Itinerary', 'ml-slider' ),
                 'is_dummy' => false, // Is Free
                 'price' => 'free',
-                'type' => array( 'image' ), 
+                'theme' => 'radix',
+                'type' => array( 'image' ),
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -45,7 +47,8 @@ class MetaSliderQuickstart
                 'label' => esc_html__( 'City Guide', 'ml-slider' ),
                 'is_dummy' => false, // Is Free
                 'price' => 'free',
-                'type' => array( 'image' ), 
+                'theme' => 'precognition',
+                'type' => array( 'image' ),
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -56,7 +59,8 @@ class MetaSliderQuickstart
                 'label' => esc_html__( 'Black and White Photography', 'ml-slider' ),
                 'is_dummy' => false, // Is Free
                 'price' => 'free',
-                'type' => array( 'image' ), 
+                'theme' => 'simply-dark',
+                'type' => array( 'image' ),
                 'features' => array( 'boxed' ),
                 'animation' => array( 'zooming', 'ken-burns' ),
                 'integration' => false,
@@ -67,7 +71,8 @@ class MetaSliderQuickstart
                 'label' => esc_html__( 'Productivity Guide', 'ml-slider' ),
                 'is_dummy' => false, // Is Free
                 'price' => 'free',
-                'type' => array( 'image' ), 
+                'theme' => 'draxler',
+                'type' => array( 'image' ),
                 'features' => array(),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -78,7 +83,8 @@ class MetaSliderQuickstart
                 'label' => esc_html__( 'Real Estate Listings', 'ml-slider' ),
                 'is_dummy' => false, // Is Free
                 'price' => 'free',
-                'type' => array( 'image' ), 
+                'theme' => 'highway',
+                'type' => array( 'image' ),
                 'features' => array( 'boxed' ),
                 'animation' => array( 'fade' ),
                 'integration' => false,
@@ -90,6 +96,7 @@ class MetaSliderQuickstart
                 'type' => array( 'image' ),
                 'is_dummy' => false, // Is Free
                 'price' => 'free',
+                'theme' => 'jenga',
                 'features' => array( 'full-width' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -101,6 +108,7 @@ class MetaSliderQuickstart
                 'type' => array( 'image' ),
                 'is_dummy' => false, // Is Free
                 'price' => 'free',
+                'theme' => 'highway',
                 'features' => array( 'carousel' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -112,6 +120,7 @@ class MetaSliderQuickstart
                 'type' => array( 'image' ),
                 'is_dummy' => false, // Is Free
                 'price' => 'free',
+                'theme' => 'nexus',
                 'features' => array( 'boxed' ),
                 'animation' => array( 'fade' ),
                 'integration' => false,
@@ -122,6 +131,7 @@ class MetaSliderQuickstart
                 'label' => esc_html__( 'Images', 'ml-slider' ),
                 'is_dummy' => false, // Is Free
                 'price' => 'free',
+                'theme' => 'default-base',
                 'type' => array( 'image' ),
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide' ),
@@ -133,7 +143,8 @@ class MetaSliderQuickstart
                 'label' => esc_html__( 'Image Carousel', 'ml-slider' ),
                 'is_dummy' => false, // Is Free
                 'price' => 'free',
-                'type' => array( 'image' ), 
+                'theme' => 'default-base',
+                'type' => array( 'image' ),
                 'features' => array( 'carousel' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -144,6 +155,7 @@ class MetaSliderQuickstart
                 'label' => esc_html__( 'Image Carousel with Captions', 'ml-slider' ),
                 'is_dummy' => false, // Is Free
                 'price' => 'free',
+                'theme' => 'outline',
                 'type' => array( 'image' ),
                 'features' => array( 'carousel' ),
                 'animation' => array( 'slide' ),
@@ -155,7 +167,8 @@ class MetaSliderQuickstart
                 'label' => esc_html__( 'Creative Process', 'ml-slider' ),
                 'is_dummy' => false, // Is Free
                 'price' => 'free',
-                'type' => array( 'image' ), 
+                'theme' => 'jenga',
+                'type' => array( 'image' ),
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide', 'vertical' ),
                 'integration' => false,
@@ -166,11 +179,36 @@ class MetaSliderQuickstart
                 'label' => esc_html__( 'Architecture', 'ml-slider' ),
                 'is_dummy' => false, // Is Free
                 'price' => 'free',
-                'type' => array( 'image' ), 
+                'theme' => 'simply-dark',
+                'type' => array( 'image' ),
                 'features' => array( 'boxed' ),
                 'animation' => array( 'fade', 'ken-burns' ),
                 'integration' => false,
                 'demo' => 'https://demo.metaslider.com/architecture/'
+            ),
+            array(
+                'slug' => 'emerging-perspectives',
+                'label' => esc_html__( 'Emerging Perspectives', 'ml-slider' ),
+                'is_dummy' => false, // Is Free
+                'price' => 'free',
+                'theme' => 'architekt',
+                'type' => array( 'image' ),
+                'features' => array( 'boxed' ),
+                'animation' => array( 'fade' ),
+                'integration' => false,
+                'demo' => 'https://demo.metaslider.com/emerging-perspectives/'
+            ),
+            array(
+                'slug' => 'sporting-spirit',
+                'label' => esc_html__( 'Sporting Spirit', 'ml-slider' ),
+                'is_dummy' => false, // Is Free
+                'price' => 'free',
+                'theme' => 'databold',
+                'type' => array( 'image' ),
+                'features' => array( 'boxed' ),
+                'animation' => array( 'slide' ),
+                'integration' => false,
+                'demo' => 'https://demo.metaslider.com/sporting-spirit/'
             ),
             array(
                 'slug' => 'marathon-journey',
@@ -178,6 +216,7 @@ class MetaSliderQuickstart
                 'type' => array( 'local_video' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'nexus',
                 'features' => array( 'boxed', 'video-caption' ),
                 'animation' => array( 'fade' ),
                 'integration' => false,
@@ -189,6 +228,7 @@ class MetaSliderQuickstart
                 'type' => array( 'html_overlay' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'draxler',
                 'features' => array( 'boxed', 'thumbnail-nav' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -200,6 +240,7 @@ class MetaSliderQuickstart
                 'type' => array( 'html_overlay' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'jenga',
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide', 'vertical' ),
                 'integration' => false,
@@ -211,6 +252,7 @@ class MetaSliderQuickstart
                 'type' => array( 'html_overlay' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'bubble',
                 'features' => array( 'boxed' ),
                 'animation' => array( 'fade' ),
                 'integration' => false,
@@ -222,6 +264,7 @@ class MetaSliderQuickstart
                 'type' => array( 'html_overlay' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'outline',
                 'features' => array( 'boxed' ),
                 'animation' => array( 'zooming' ),
                 'integration' => false,
@@ -233,6 +276,7 @@ class MetaSliderQuickstart
                 'type' => array( 'youtube' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'social-play',
                 'features' => array( 'carousel' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -244,7 +288,8 @@ class MetaSliderQuickstart
                 'type' => array( 'image' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
-                'features' => array( 'boxed', 'lightbox' ),
+                'theme' => 'hero',
+                'features' => array( 'boxed', 'lightbox', 'hero' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
                 'demo' => 'https://demo.metaslider.com/album-cover-showcase/'
@@ -255,6 +300,7 @@ class MetaSliderQuickstart
                 'type' => array( 'image' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'parallel',
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -266,6 +312,7 @@ class MetaSliderQuickstart
                 'type' => array( 'image' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'revelio',
                 'features' => array( 'carousel' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -277,6 +324,7 @@ class MetaSliderQuickstart
                 'type' => array( 'image' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'praise-loop',
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -288,6 +336,7 @@ class MetaSliderQuickstart
                 'type' => array( 'image' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'retsu',
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -299,6 +348,7 @@ class MetaSliderQuickstart
                 'type' => array( 'image' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'tandem',
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -310,6 +360,7 @@ class MetaSliderQuickstart
                 'type' => array( 'tiktok' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'jenga',
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide', 'vertical' ),
                 'integration' => false,
@@ -321,6 +372,7 @@ class MetaSliderQuickstart
                 'type' => array( 'local_video' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'bubble',
                 'features' => array( 'boxed' ),
                 'animation' => array( 'fade' ),
                 'integration' => false,
@@ -332,6 +384,7 @@ class MetaSliderQuickstart
                 'type' => array( 'custom_html' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'nami',
                 'features' => array( 'boxed' ),
                 'animation' => array( 'flip' ),
                 'integration' => false,
@@ -343,6 +396,7 @@ class MetaSliderQuickstart
                 'type' => array( 'post_feed' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'zonora',
                 'features' => array( 'boxed', 'carousel' ),
                 'animation' => array( 'slide' ),
                 'integration' => array( 'tec', 'posts' ),
@@ -354,6 +408,7 @@ class MetaSliderQuickstart
                 'type' => array( 'image' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'cubic',
                 'features' => array( 'carousel' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -365,6 +420,7 @@ class MetaSliderQuickstart
                 'type' => array( 'woocommerce' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'handimart',
                 'features' => array( 'boxed', 'carousel' ),
                 'animation' => array( 'slide' ),
                 'integration' => array( 'woocommerce' ),
@@ -376,6 +432,7 @@ class MetaSliderQuickstart
                 'type' => array( 'post_feed' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'disjoint',
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide' ),
                 'integration' => array( 'posts' ),
@@ -387,6 +444,7 @@ class MetaSliderQuickstart
                 'type' => array( 'youtube' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'cubic',
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -398,6 +456,7 @@ class MetaSliderQuickstart
                 'type' => array( 'image' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'visage',
                 'features' => array( 'boxed', 'carousel' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -409,6 +468,7 @@ class MetaSliderQuickstart
                 'type' => array( 'image' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'nexus',
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -420,6 +480,7 @@ class MetaSliderQuickstart
                 'type' => array( 'layer' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'default-base',
                 'features' => array( 'boxed' ),
                 'animation' => array( 'fade' ),
                 'integration' => false,
@@ -431,6 +492,7 @@ class MetaSliderQuickstart
                 'type' => array( 'image' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'clarity',
                 'features' => array( 'full-width', 'carousel' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -442,6 +504,7 @@ class MetaSliderQuickstart
                 'type' => array( 'vimeo' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'bitono',
                 'features' => array( 'boxed', 'thumbnail-nav' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
@@ -453,16 +516,18 @@ class MetaSliderQuickstart
                 'type' => array( 'image' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
-                'features' => array( 'boxed', 'thumbnail-nav' ),
+                'theme' => 'focus',
+                'features' => array( 'boxed', 'thumbnail-nav', 'hero' ),
                 'animation' => array( 'slide' ),
                 'integration' => false,
                 'demo' => 'https://demo.metaslider.com/natural-skincare-presentation/'
             ),
             array(
                 'slug' => 'youtube',
-                'label' => __( 'YouTube', 'ml-slider' ),
+                'label' => 'YouTube',
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'simply-dark',
                 'type' => array( 'youtube' ),
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide' ),
@@ -474,6 +539,7 @@ class MetaSliderQuickstart
                 'label' => __( 'YouTube Shorts Carousel', 'ml-slider' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'outline',
                 'type' => array( 'youtube' ),
                 'features' => array( 'carousel', 'boxed' ),
                 'animation' => array( 'slide' ),
@@ -481,10 +547,11 @@ class MetaSliderQuickstart
                 'demo' => 'https://demo.metaslider.com/youtube-shorts-carousel/'
             ),
             array(
-                'slug' => 'tiktok',	
+                'slug' => 'tiktok',
                 'label' => __( 'TikTok Carousel', 'ml-slider' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'social-play',
                 'type' => array( 'tiktok' ),
                 'features' => array( 'carousel', 'boxed' ),
                 'animation' => array( 'slide' ),
@@ -496,6 +563,7 @@ class MetaSliderQuickstart
                 'label' => __( 'Vimeo', 'ml-slider' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'outline',
                 'type' => array( 'vimeo' ),
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide' ),
@@ -507,6 +575,7 @@ class MetaSliderQuickstart
                 'label' => __( 'Local Video', 'ml-slider' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'blend',
                 'type' => array( 'local_video' ),
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide' ),
@@ -518,6 +587,7 @@ class MetaSliderQuickstart
                 'label' => __( 'Layer Slides', 'ml-slider' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'radix',
                 'type' => array( 'html_overlay' ),
                 'features' => array( 'boxed' ),
                 'animation' => array( 'fade' ),
@@ -529,6 +599,7 @@ class MetaSliderQuickstart
                 'label' => __( 'Post Feed', 'ml-slider' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'highway',
                 'type' => array( 'post_feed' ),
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide' ),
@@ -540,6 +611,7 @@ class MetaSliderQuickstart
                 'label' => __( 'External Image', 'ml-slider' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'bubble',
                 'type' => array( 'external' ),
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide' ),
@@ -551,6 +623,7 @@ class MetaSliderQuickstart
                 'label' => __( 'External Video', 'ml-slider' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'revelio',
                 'type' => array( 'external_video' ),
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide' ),
@@ -562,6 +635,7 @@ class MetaSliderQuickstart
                 'label' => __( 'Custom HTML', 'ml-slider' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'blend',
                 'type' => array( 'custom_html' ),
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide' ),
@@ -573,6 +647,7 @@ class MetaSliderQuickstart
                 'label' => __( 'WooCommerce Carousel', 'ml-slider' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'zonora',
                 'type' => array( 'woocommerce' ),
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide' ),
@@ -584,11 +659,24 @@ class MetaSliderQuickstart
                 'label' => __( 'Bold Motion', 'ml-slider' ),
                 'is_dummy' => true, // Is Pro
                 'price' => 'pro',
+                'theme' => 'cascade',
                 'type' => array( 'external_video' ),
                 'features' => array( 'boxed' ),
                 'animation' => array( 'slide', 'vertical' ),
                 'integration' => false,
                 'demo' => 'https://demo.metaslider.com/bold-motion/'
+            ),
+            array(
+                'slug' => 'playful-pets',
+                'label' => __( 'Playful Pets', 'ml-slider' ),
+                'is_dummy' => true, // Is Pro
+                'price' => 'pro',
+                'theme' => 'undertone',
+                'type' => array( 'image' ),
+                'features' => array( 'boxed' ),
+                'animation' => array( 'flip' ),
+                'integration' => false,
+                'demo' => 'https://demo.metaslider.com/playful-pets/'
             )
         );
 
@@ -597,12 +685,12 @@ class MetaSliderQuickstart
 
     /**
      * Extract demo slugs with optional filtering
-     * 
+     *
      * @param array $filter Filter results. e.g. only with 'price' => 'free', 'lorem' => 'ipsum', etc.
      *                      array('price' => 'free')
      *                      array('lorem' => 'ipsum')
      *                      array('price' => 'free', 'lorem' => 'ipsum')
-     * 
+     *
      * @return array
      */
     public function quickstart_slugs( $filter = array() )
@@ -645,11 +733,11 @@ class MetaSliderQuickstart
 
     /**
      * Get slide type translatable label
-     * 
+     *
      * @since 3.107.0
-     * 
+     *
      * @param string $type Slide type. e.g. 'external', 'image', etc.
-     * 
+     *
      * @return string
      */
     public function slide_type_label( $type )
@@ -660,10 +748,10 @@ class MetaSliderQuickstart
                 return __( 'Image', 'ml-slider' );
                 break;
             case 'vimeo':
-                return __( 'Vimeo', 'ml-slider' );
+                return 'Vimeo';
                 break;
             case 'youtube':
-                return __( 'YouTube', 'ml-slider' );
+                return 'YouTube';
                 break;
             case 'local_video':
                 return __( 'Local Video', 'ml-slider' );
@@ -675,7 +763,7 @@ class MetaSliderQuickstart
                 return __( 'External Video', 'ml-slider' );
                 break;
             case 'tiktok':
-                return __( 'TikTok', 'ml-slider' );
+                return 'TikTok';
                 break;
             case 'custom_html':
                 return __( 'Custom HTML', 'ml-slider' );

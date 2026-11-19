@@ -12,7 +12,7 @@ return array(
         'type' => 'free',
         'supports' => array('flex'),
         'tags' => array(),
-        'description' => __('This is the default MetaSlider theme. Use this theme to adjust colors to your preference.', 'ml-slider')
+        'description' => __('This is the default MetaSlider Slideshow theme. Use this theme to adjust colors to your preference.', 'ml-slider')
     ),
     'bitono' => array(
         'folder' => 'bitono',

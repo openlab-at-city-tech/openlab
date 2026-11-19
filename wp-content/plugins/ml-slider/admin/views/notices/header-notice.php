@@ -20,8 +20,9 @@
             <div class="updraft-advert-dismiss">
                 <a class="underline text-blue-dark" href="#" onclick="jQuery('.updraft-ad-container').slideUp(); jQuery.post(ajaxurl, {action: 'notice_handler', ad_identifier: '<?php echo esc_js($args['dismiss_time']);?>', _wpnonce: metaslider_notices_handle_notices_nonce });">
                 <?php 
-                    echo sprintf('%s', esc_html__('Dismiss', 'slider'));
-                    echo ('' !== $args['hide_time']) ? esc_html(sprintf(' (%s Weeks)', $args['hide_time'])) : ''; 
+                    echo sprintf('%s', esc_html__('Dismiss', 'ml-slider'));
+                    /* translators: %s is the number of weeks the notice will be hidden */
+                    echo ('' !== $args['hide_time']) ? ' ' . esc_html(sprintf(__('(%s Weeks)', 'ml-slider'), $args['hide_time'])) : '';
                 ?>
                 </a>
             </div>

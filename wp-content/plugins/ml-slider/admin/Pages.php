@@ -72,7 +72,7 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
     {
         $global_settings = metaslider_global_settings();
 
-        if (! isset($global_settings['tinyMce']) 
+        if (! isset($global_settings['tinyMce'])
             || ( isset($global_settings['tinyMce'] ) && true == $global_settings['tinyMce'])
         ) {
             wp_enqueue_script(
@@ -81,6 +81,10 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
                 array(),
                 METASLIDER_ASSETS_VERSION
             );
+
+            // Needed so the Add Icon dialog (rendered in the admin document, not the TinyMCE iframe) can display icon glyphs
+            wp_enqueue_style('metaslider-fontawesome', METASLIDER_ADMIN_ASSETS_URL . 'vendor/fontawesome/css/fontawesome.min.css', false, METASLIDER_ASSETS_VERSION);
+            wp_enqueue_style('metaslider-fontawesome-solid', METASLIDER_ADMIN_ASSETS_URL . 'vendor/fontawesome/css/solid.min.css', array('metaslider-fontawesome'), METASLIDER_ASSETS_VERSION);
         }
     }
 
@@ -172,9 +176,19 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
             'hide_on_laptop'  => esc_html__('Hide on Laptop', 'ml-slider'),
             'hide_on_desktop' => esc_html__('Hide on Desktop', 'ml-slider'),
             'add_button' => esc_html__('Add Button', 'ml-slider'),
+            'add_image' => esc_html__('Add Image', 'ml-slider'),
+            'add_icon' => esc_html__('Add Icon', 'ml-slider'),
+            'search_icons' => esc_html__('Search icons...', 'ml-slider'),
+            'no_icons_found' => esc_html__('No icons found.', 'ml-slider'),
+            'clear_search' => esc_html__('Clear search', 'ml-slider'),
+            'fontawesome_icons_url' => esc_url(METASLIDER_ADMIN_ASSETS_URL . 'vendor/fontawesome/icons.json'),
+            'fontawesome_css_urls' => array(
+                esc_url(METASLIDER_ADMIN_ASSETS_URL . 'vendor/fontawesome/css/fontawesome.min.css'),
+                esc_url(METASLIDER_ADMIN_ASSETS_URL . 'vendor/fontawesome/css/solid.min.css'),
+            ),
             'close' => esc_html__('Close', 'ml-slider'),
             'insert' => esc_html__('Insert', 'ml-slider'),
-            'url' => esc_html__('URL', 'ml-slider'),
+            'url' => esc_html('URL' ),
             'enter_url' => esc_html__('Please enter a valid URL.', 'ml-slider'),
             'enter_text' => esc_html__('Please enter link text for the button.', 'ml-slider'),
             'open_new_window' => esc_html__('Open in new window', 'ml-slider'),
@@ -209,6 +223,7 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
             'ajaxurl' => admin_url('admin-ajax.php'),
             'proUser' => metaslider_pro_is_active(),
             'hoplink' => metaslider_get_upgrade_link(),
+            'gallery_convert_ad' => metaslider_gallery_convert_ad(),
             'privacy_link' => metaslider_get_privacy_link(),
             'metaslider_admin_assets' => METASLIDER_ADMIN_ASSETS_URL,
             'metaslider_page' => admin_url('admin.php?page=metaslider'),
@@ -219,8 +234,9 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
             'locale' => $this->gutenberg_get_jed_locale_data('ml-slider'),
             'default_locale' => $this->gutenberg_get_jed_locale_data('default'),
             'current_server_time' => current_time('mysql'),
-            'autoThemeConfig' => ! isset( $global_settings['autoThemeConfig'] ) 
+            'autoThemeConfig' => ! isset( $global_settings['autoThemeConfig'] )
                 || (bool) $global_settings['autoThemeConfig'] ? 1 : 0,
+            'theme_notice_dismissed' => get_user_option( 'metaslider_theme_notice_dismissed', get_current_user_id() ) ? 1 : 0,
         ));
         wp_enqueue_script('metaslider-admin-components');
     }

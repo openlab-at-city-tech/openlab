@@ -128,12 +128,12 @@
                 </template>
 			</switch-single-input>
 			<switch-single-input v-model="globalSettings.adminBar" @change="saveGlobalSettings()">
-				<template slot="header">{{ __('Enable MetaSlider on Admin Bar', 'ml-slider') }}</template>
-				<template slot="description">{{ __('Add and edit slideshows easier by showing MetaSlider on your admin bar.', 'ml-slider') }}</template>
+				<template slot="header">{{ __('Enable MetaSlider Slideshow on Admin Bar', 'ml-slider') }}</template>
+				<template slot="description">{{ __('Add and edit slideshows easier by showing MetaSlider Slideshow on your admin bar.', 'ml-slider') }}</template>
 			</switch-single-input>
 			<switch-single-input v-model="globalSettings.editLink" @change="saveGlobalSettings()">
 				<template slot="header">{{ __('Enable Frontend Edit Links', 'ml-slider') }}</template>
-				<template slot="description">{{ __('Edit slideshows easily by showing MetaSlider link under each slideshow.', 'ml-slider') }}</template>
+				<template slot="description">{{ __('Edit slideshows easily by showing MetaSlider Slideshow link under each slideshow.', 'ml-slider') }}</template>
 			</switch-single-input>
 			<select-field-input 
 				v-model="globalSettings.newSlideOrder" 
@@ -147,7 +147,7 @@
 			</select-field-input>
 			<switch-single-input v-model="globalSettings.legacyWidget" @change="saveGlobalSettings()">
 				<template slot="header">{{ __('Disable Legacy Widget', 'ml-slider') }}</template>
-				<template slot="description">{{ __('This setting allows you to disable the legacy MetaSlider widget.', 'ml-slider') }}</template>
+				<template slot="description">{{ __('This setting allows you to disable the legacy MetaSlider Slideshow widget.', 'ml-slider') }}</template>
 			</switch-single-input>
 			<switch-single-input v-model="globalSettings.tinyMce" @change="saveGlobalSettings()">
 				<template slot="header">{{ __('Enable TinyMCE', 'ml-slider') }}</template>
@@ -212,19 +212,19 @@
 	<!-- Pro Ads -->
 	<split-layout :loading="loading" class="lg:mt-6" v-if="!isPro()">
 		<template slot="header">{{ __('Pro Settings', 'ml-slider') }}</template>
-		<template slot="description">{{ __('Update the MetaSlider Pro settings.', 'ml-slider') }}</template>
+		<template slot="description">{{ __('Update the MetaSlider Slideshow Pro settings.', 'ml-slider') }}</template>
 		<template slot="fields">
 			<switch-single-input-ad :value="false">
 				<template slot="header">{{ __('Flush Cache when Saving Changes', 'ml-slider') }}</template>
 				<template slot="description">{{ __('This setting allows you to automatically flush the cache when saving slideshow changes. Supports WP Rocket, WP Super Cache, W3 Total Cache, WP-Optimize and WP Fastest Cache plugins.', 'ml-slider') }}</template>
-				<template slot="proText">{{ __('This feature is available in MetaSlider Pro', 'ml-slider') }}</template>
+				<template slot="proText">{{ __('This feature is available in MetaSlider Slideshow Pro', 'ml-slider') }}</template>
 			</switch-single-input-ad>
 		</template>
 	</split-layout>
 	<!-- Pro settings -->
 	<split-layout :loading="loading" class="lg:mt-6" v-if="isPro()">
 		<template slot="header">{{ __('Pro Settings', 'ml-slider') }}</template>
-		<template slot="description">{{ __('Update the MetaSlider Pro settings.', 'ml-slider') }}</template>
+		<template slot="description">{{ __('Update the MetaSlider Slideshow Pro settings.', 'ml-slider') }}</template>
 		<template slot="fields">
 			<text-single-input 
 				v-model="proSettings.postFeedFields" 

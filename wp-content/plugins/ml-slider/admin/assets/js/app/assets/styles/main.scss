@@ -1,6 +1,6 @@
-@import "./globals.scss";
-@import "./mixins.scss";
-@import "./utility";
+@use "./globals.scss" as *;
+@use "./mixins.scss" as *;
+@use "./utility";
 
-@import "./components";
-@import "./modal";
+@use "./components";
+@use "./modal";

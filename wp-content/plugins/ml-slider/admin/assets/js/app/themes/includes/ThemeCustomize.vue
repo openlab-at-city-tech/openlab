@@ -10,10 +10,10 @@
                 <tr :class="['spacer-top', section_item.name ? 'customizer-' + section_item.name : '']">
                     <td colspan="2"></td>
                 </tr>
-                <template v-for="(row_item, row_index) in section_item.settings" 
-                    :key="row_index">
+                <template v-for="(row_item, row_index) in section_item.settings">
                     <!-- Skip fields settings that has slideshow_edit as false  -->
                     <tr v-if="(row_item.type === 'color' || row_item.type === 'fields') && (typeof row_item.slideshow_edit === 'undefined' || row_item.slideshow_edit)"
+                        :key="row_index"
                         :class="section_item.name ? 'customizer-' + section_item.name : ''">
                         <td>
                             {{ row_item.label }} 
@@ -26,10 +26,9 @@
                         <td>
                             <!-- If type is 'fields', let's look for the list of fields -->
                             <template v-if="row_item.type === 'fields'">
-                                <template v-for="(field_item, field_index) in row_item.fields" 
-                                    :key="field_index">
+                                <template v-for="(field_item, field_index) in row_item.fields">
                                     <template v-if="field_item.type === 'color'">
-                                        <input-color :item="field_item"></input-color>
+                                        <input-color :key="field_index" :item="field_item"></input-color>
                                     </template>
                                 </template>
                             </template>

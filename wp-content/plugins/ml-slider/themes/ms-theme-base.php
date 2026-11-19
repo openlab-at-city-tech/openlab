@@ -348,7 +348,7 @@ return $options;
         $is_theme_editor_screen = is_admin() 
             && function_exists('get_current_screen') 
             && ($screen = get_current_screen())
-            && 'metaslider-pro_page_metaslider-theme-editor' === $screen->id 
+            && 'slideshow-pro_page_metaslider-theme-editor' === $screen->id
             && isset($_GET['version']) 
             && $_GET['version'] == 'v2';
 

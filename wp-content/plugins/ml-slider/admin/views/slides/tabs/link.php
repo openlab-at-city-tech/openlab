@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     </div>
     <div class="row has-right-checkbox mb-0">
         <div>
-            <input class="url" data-lpignore="true" type="text" name="attachment[<?php echo esc_attr($slide_id); ?>][url]" placeholder="<?php echo esc_attr("URL", "ml-slider"); ?>" value="<?php echo esc_url($url); ?>" />
+            <input class="url" data-lpignore="true" type="text" name="attachment[<?php echo esc_attr($slide_id); ?>][url]" placeholder="<?php esc_attr_e("URL", "ml-slider"); ?>" value="<?php echo esc_url($url); ?>" />
         </div>
         <div class="input-label">
             <label>
@@ -45,5 +45,5 @@ if ( ! defined( 'ABSPATH' ) ) {
             <span class="dashicons dashicons-info tipsy-tooltip-top" title="<?php esc_attr_e('This text is used by search engines and visitors using screen readers. Adding Alt text for links is highly recommended.', 'ml-slider') ?>"></span>
         </label>
     </div>
-    <input type="text" size="50" name="attachment[<?php echo esc_attr($slide_id); ?>][link-alt]" placeholder="<?php echo esc_attr("Enter text here", "ml-slider"); ?>" value="<?php echo esc_attr($link_alt); ?>">
+    <input type="text" size="50" name="attachment[<?php echo esc_attr($slide_id); ?>][link-alt]" placeholder="<?php esc_attr_e("Enter text here", "ml-slider"); ?>" value="<?php echo esc_attr($link_alt); ?>">
 </div>

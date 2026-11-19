@@ -458,13 +458,16 @@ class MetaImageSlide extends MetaSlide
         do_action('metaslider-slide-edit-buttons', 'image', $this->slide->ID, $attachment_id);
         $edit_buttons = ob_get_clean();
 
+        $orphaned     = ! $attachment_id;
+        $orphan_class = $orphaned ? ' orphaned-slide' : '';
+
         // slide row HTML
-        $row  = "<tr id='slide-" . esc_attr($this->slide->ID) . "' class='slide image flex responsive nivo coin' data-attachment-id='" . esc_attr($attachment_id) . "'>
+        $row  = "<tr id='slide-" . esc_attr($this->slide->ID) . "' class='slide image flex responsive nivo coin" . esc_attr($orphan_class) . "' data-slide-type='" . esc_attr($this->identifier) . "' data-attachment-id='" . esc_attr($attachment_id) . "'>
                     <td class='col-1'>
                         <div class='metaslider-ui-controls ui-sortable-handle rtl:pl-0 rtl:pr-3'>
-                        <h4 class='slide-details'>" . 
+                        <h4 class='slide-details'>" .
                             apply_filters( 'metaslider_slide_details', '', $this->slide->ID ) . // @since 3.97
-                            esc_html($slide_label) . " | ID: ". 
+                            esc_html($slide_label) . " | ID: ".
                             esc_html($this->slide->ID) . "</h4>";
         if (metaslider_this_is_trash($this->slide)) {
             $row .= '<div class="row-actions trash-btns">';
@@ -513,7 +516,7 @@ class MetaImageSlide extends MetaSlide
         }
         // title
         $title = esc_attr(get_post_meta($slide_id, 'ml-slider_title', true));
-        $image_title = esc_attr($attachment->post_title);
+        $image_title = $attachment ? esc_attr($attachment->post_title) : '';
         $inherit_image_title_check = false; // Converted from string to bool @since 3.60 
         $inherit_image_title_class = '';
         if ($this->is_field_inherited('title')) {
@@ -699,7 +702,7 @@ class MetaImageSlide extends MetaSlide
         }
 
         if ($this->is_field_inherited('title')) {
-            $title = $attachment->post_title;
+            $title = $attachment ? $attachment->post_title : '';
         } else {
             $title = get_post_meta($this->slide->ID, 'ml-slider_title', true);
         }

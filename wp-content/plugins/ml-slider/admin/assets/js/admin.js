@@ -814,6 +814,8 @@ window.jQuery(function ($) {
 
     var add_image_apis = window.metaslider.add_image_apis = function (slide_type, slide_id, unsplash = true) {
 
+        var APP = window.metaslider.app.MetaSlider;
+        
         // This is the pro layer screen (not currently used)
         if ($('.media-menu-item.active:contains("Layer")').length) {
             // If this is the layer slide screen and pro isnt installed, exit
@@ -833,7 +835,7 @@ window.jQuery(function ($) {
         // Unsplash - First remove potentially leftover tabs in case the WP close event doesn't fire
         $('.unsplash-tab').remove()
         if (unsplash) {
-            $('.media-frame-router .media-router').append('<a href="#" id="unsplash-tab" class="text-black hover:text-blue-dark unsplash-tab media-menu-item">Unsplash Library</a>')
+            $('.media-frame-router .media-router').append('<a href="#" id="unsplash-tab" class="text-black hover:text-blue-dark unsplash-tab media-menu-item">' + ( APP && APP.__('Unsplash Library', 'ml-slider') ) + '</a>')
             $('.toplevel_page_metaslider').on('click', '.unsplash-tab', unsplash_api_events)
         }
 
@@ -913,6 +915,7 @@ window.jQuery(function ($) {
                         .find('.metaslider-ui-controls').append(
                         '<button class="undo-delete-slide" title="' + metaslider.restore_language + '" data-slide-id="' + $this.data('slideId') + '">' + metaslider.restore_language + '</button>'
                     );
+                    $slide.find('.ms-delete-overlay').remove();
 
                     // Grab the image from the slide
                     var img = $slide.find('.thumb').css('background-image')
@@ -1068,6 +1071,7 @@ window.jQuery(function ($) {
                         .find('.metaslider-ui-controls').append(
                         '<button class="undo-delete-slide" title="' + metaslider.restore_language + '" data-slide-id="' + $this.data('slideId') + '">' + metaslider.restore_language + '</button>'
                     );
+                    $slide.find('.ms-delete-overlay').remove();
 
                     // Grab the image from the slide
                     var img = $slide.find('.thumb').css('background-image')
@@ -1707,6 +1711,7 @@ window.jQuery(function ($) {
         const filters = {
             features: $('#ms-qs-slide-features').val(),
             price: $('#ms-qs-slide-price').val(),
+            theme: $('#ms-qs-slide-theme').val(),
             animation: $('#ms-qs-slide-animation').val(),
             integration: $('#ms-qs-slide-integration').val(),
             type: $('#ms-qs-slide-type').val()
@@ -1720,6 +1725,7 @@ window.jQuery(function ($) {
             const data = {
                 features: $el.data('features') || [],
                 price: $el.data('price'),
+                theme: $el.data('theme'),
                 animation: $el.data('animation') || [],
                 integration: $el.data('integration') || [],
                 type: $el.data('type') || []
@@ -1735,6 +1741,7 @@ window.jQuery(function ($) {
 
             // string filters (exact match)
             if (filters.price && data.price !== filters.price) visible = false;
+            if (filters.theme && data.theme !== filters.theme) visible = false;
 
             $el.toggle(visible);
 

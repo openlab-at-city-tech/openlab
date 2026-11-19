@@ -41,10 +41,25 @@
 	margin-top: 17px;	
 }
 
+/*
+ * Clears the floated .ms-edit-current-slideshow link so the panel's own
+ * height accounts for it (otherwise its border sits on top of the link).
+ * The 8px padding just adds a little breathing room below it.
+ */
+.ms-slideshow-panel {
+    padding-bottom: 8px;
+}
+
+.ms-slideshow-panel::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
 .ms-edit-current-slideshow {
     position: relative;
     float: right;
-    margin-top: -11px;
+    margin-top: 4px;
     font-size: .95em;
 }
 

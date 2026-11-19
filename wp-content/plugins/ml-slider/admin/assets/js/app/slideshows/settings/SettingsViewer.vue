@@ -168,6 +168,118 @@ export default {
         $(".metaslider-ui").on("click", ".select-slider", function() {
             switchType($(this).attr("rel"));
         });
+
+        /**
+         * Search settings in the sidebar: filters rows across every settings
+         * section and expands only the sections that have a match.
+         *
+         * @since 3.111
+         */
+        var $settingsBoxes = $('#metaslider_configuration .ms-settings-box');
+        var isSearching = false;
+
+        $('#ms-settings-search').on('input', function() {
+            var query = $.trim($(this).val()).toLowerCase();
+            var anyBoxVisible = false;
+
+            $('#ms-settings-search-clear').toggle(!!query);
+
+            if (query && !isSearching) {
+                // Starting a new search: remember which sections were expanded, so that
+                // can be restored once the search is cleared
+                $settingsBoxes.each(function() {
+                    $(this).data('ms-was-on', $(this).hasClass('ms-on'));
+                });
+            }
+            isSearching = !!query;
+
+            if (!query) {
+                // Rows/sections marked "ms-hidden-by-default" are only ever hidden by a
+                // fixed, page-load condition (e.g. no trashed slides, an ad row that isn't
+                // relevant) that can't change without a page reload, so they stay hidden.
+                // Everything else is shown, then switchType()/initToggle() below re-derives
+                // the correct visibility from the CURRENT setting values - a controlling
+                // setting (e.g. "Container Box") may have been toggled while searching.
+                $settingsBoxes.each(function() {
+                    var $box = $(this);
+                    var wasOn = $box.data('ms-was-on');
+
+                    $box.toggle(!$box.hasClass('ms-hidden-by-default'));
+                    $box.find('.ms-settings-box-inner tr').each(function() {
+                        var $row = $(this);
+                        $row.toggle(!$row.hasClass('ms-hidden-by-default'));
+                    });
+                    $box.removeClass('ms-on ms-off').addClass(wasOn ? 'ms-on' : 'ms-off');
+                    $box.find('.ms-settings-box-inner')[wasOn ? 'show' : 'hide']();
+                });
+
+                // Re-apply setting-driven visibility (slider type, data-dependencies,
+                // showNextWhenChecked) in case a controlling setting's value changed
+                // while the search was active
+                switchType($(".metaslider .select-slider:checked").attr("rel"));
+
+                // A number of settings (in both Free and Pro, e.g. the crop source notice,
+                // full width options, extra effect, play/pause text) show/hide other rows
+                // through their own dedicated "change" handler rather than data-dependencies.
+                // Re-firing "change" on every settings field (without altering its value)
+                // lets each of those handlers re-derive the correct state on its own,
+                // without this file needing to know they exist
+                $('.ms-settings-table select, .ms-settings-table input[type="checkbox"], .ms-settings-table input[type="radio"]').trigger('change');
+
+                $('.ms-settings-search-empty').hide();
+                return;
+            }
+
+            $settingsBoxes.each(function() {
+                var $box = $(this);
+                var $rows = $box.find('.ms-settings-box-inner tr');
+                var titleMatches = $box.find('.ms-highlight').first().text().toLowerCase().indexOf(query) !== -1;
+                var rowMatchCount = 0;
+
+                $rows.each(function() {
+                    var $row = $(this);
+                    var $label = $row.find('> td.tipsy-tooltip').first();
+
+                    if (!$label.length) {
+                        // Rows without a label (ad/html rows) can't be matched individually
+                        $row.hide();
+                        return;
+                    }
+
+                    var text = ($label.text() + ' ' + ($label.attr('title') || '')).toLowerCase();
+
+                    if (text.indexOf(query) !== -1) {
+                        rowMatchCount++;
+                        $row.show();
+                    } else {
+                        $row.hide();
+                    }
+                });
+
+                var boxMatches = rowMatchCount > 0 || titleMatches;
+
+                if (boxMatches) {
+                    anyBoxVisible = true;
+
+                    // Sections that only matched by title (e.g. Theme, Shortcode) have no
+                    // per-row labels to filter by, so show everything they contain
+                    if (rowMatchCount === 0 && titleMatches) {
+                        $rows.show();
+                    }
+
+                    $box.show().removeClass('ms-off').addClass('ms-on');
+                    $box.find('.ms-settings-box-inner').show();
+                } else {
+                    $box.hide();
+                }
+            });
+
+            $('.ms-settings-search-empty').toggle(!anyBoxVisible);
+        });
+
+        $('#ms-settings-search-clear').on('click', function() {
+            $('#ms-settings-search').val('').trigger('input').trigger('focus');
+        });
 	}
 }
 </script>

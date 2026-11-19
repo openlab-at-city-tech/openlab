@@ -2,7 +2,7 @@
 
 /**
  * These themes type 'premium' are listed 
- * but not allowed to be selected when MetaSlider Pro is not installed and active.
+ * but not allowed to be selected when MetaSlider Slideshow Pro is not installed and active.
  */
 return array(
     'retsu' => array(
@@ -107,5 +107,13 @@ return array(
         'supports' => array( 'flex' ),
         'description' => __( 'A 2 columns minimalistic theme to split your images and captions.', 'ml-slider' ),
         'instructions' => __( 'Image, External Image, Post Feed, Local Video and External Video slides are displayed in 2 columns, while the other slide types are displayed in 1 column.', 'ml-slider' ),
+    ),
+    'undertone' => array(
+        'folder' => 'undertone',
+        'title' => 'Undertone',
+        'type' => 'premium',
+        'supports' => array( 'flex' ),
+        'description' => __( 'A modern theme with a clean design to display your captions below the slides.', 'ml-slider' ),
+        'instructions' => __( 'Captions from Image, External Image, Local Video, External video, YouTube and Vimeo slides are displayed below the slideshow.', 'ml-slider' )
     )
 );

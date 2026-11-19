@@ -80,13 +80,13 @@ class MetaFlexSlider extends MetaSlider
     {
         if (isset($options["carouselMode"])) {  
             if ($options["carouselMode"] == "true") {
-                $options["itemWidth"] = $this->get_setting('width');
+                $options["itemWidth"] = $this->to_js_int($this->get_setting('width'));
                 $options["animation"] = "'slide'";
                 $options["direction"] = "'horizontal'";
-                $options["minItems"] = $this->get_setting('minItems');
-                $options["maxItems"] = $this->get_setting('maxItems');
+                $options["minItems"] = $this->to_js_int($this->get_setting('minItems'));
+                $options["maxItems"] = $this->to_js_int($this->get_setting('maxItems'));
                 $options["move"] = 1;
-                $options["itemMargin"] = apply_filters('metaslider_carousel_margin', $this->get_setting('carouselMargin'), $slider_id);
+                $options["itemMargin"] = $this->to_js_int(apply_filters('metaslider_carousel_margin', $this->get_setting('carouselMargin'), $slider_id));
                 //activate infinite loop when carousel is set to 'continously' and 'autoplay'
                 if($this->get_setting('infiniteLoop') == 'true'){
                     $options["controlNav"] = "false";
@@ -221,7 +221,7 @@ class MetaFlexSlider extends MetaSlider
     public function get_carousel_css($css, $settings, $slider_id)
     {
         if (isset($settings['carouselMode']) && $settings['carouselMode'] == 'true') {
-            $margin = apply_filters('metaslider_carousel_margin', $this->get_setting('carouselMargin'), $slider_id);
+            $margin = (int) apply_filters('metaslider_carousel_margin', $this->get_setting('carouselMargin'), $slider_id);
             $css .= "\n        #metaslider_{$slider_id}.flexslider .slides li {margin-right: {$margin}px !important;}";
             if(isset($settings['infiniteLoop']) && $settings['infiniteLoop'] == 'true'){
 
@@ -240,8 +240,8 @@ class MetaFlexSlider extends MetaSlider
                     $slides = count($this->slides);
                 }
                 $double = $slides * 2;
-                $animationtime = ($settings['animationSpeed'] * $slides) + ($settings['delay'] * $slides);
-                $transform_width = $margin + $settings["width"];
+                $animationtime = ((int) $settings['animationSpeed'] * $slides) + ((int) $settings['delay'] * $slides);
+                $transform_width = $margin + (int) $settings["width"];
                 $reverse = ( isset( $settings['reverse'] ) && $settings['reverse'] == 'true' ) ? true : false;
                 $start_position = $reverse ? "calc(var(--ms-slide-width) * -" . $slides . ")" : "0";
                 $end_position = $reverse ? "0" : "calc(var(--ms-slide-width) * -" . $slides . ")";
@@ -404,7 +404,7 @@ class MetaFlexSlider extends MetaSlider
         $return_value .= "\n            <ul" . $aria_live . " class='slides'>";
 
         foreach ($this->slides as $slide) {
-            // backwards compatibility with older versions of MetaSlider Pro (< v2.0)
+            // backwards compatibility with older versions of MetaSlider Slideshow Pro (< v2.0)
             // MS Pro < 2.0 does not include the <li>
             // MS Pro 2.0+ returns the <li>
             if (strpos($slide, '<li') === 0) {
@@ -856,6 +856,13 @@ class MetaFlexSlider extends MetaSlider
      */
     public function manage_pausePlay_button($options, $slider_id, $settings)
     {
+        // Don't show the pause/play button when there's only one slide
+        if (count($this->slides) <= 1) {
+            $options['pausePlay'] = 'false';
+            remove_filter('metaslider_flex_slider_parameters', array($this, 'manage_pausePlay_button'));
+            return $options;
+        }
+
         if (isset($settings['pausePlay']) && $settings['pausePlay'] === 'true') {
             /* @since 3.97 - disable hover on pause when play button is enabled */
             unset($options['pauseOnHover']);
@@ -874,7 +881,7 @@ class MetaFlexSlider extends MetaSlider
                 $script = "$('.flex-pauseplay a').removeClass('flex-pause').addClass('flex-play');";
         
                 if ($showPlayText && !empty($settings['playText'])) {
-                    $script .= "$('.flex-pauseplay a').text('" . addslashes($settings['playText']) . "');";
+                    $script .= "$('.flex-pauseplay a').text('" . esc_js($settings['playText']) . "');";
                 }
             
                 $options['start'] = array_merge($options['start'], [$script]);
@@ -890,10 +897,10 @@ class MetaFlexSlider extends MetaSlider
                 "var ms_pause_play_sync = function() {
                     var pausePlayBtn = $('#metaslider_" . $slider_id . " .flex-pauseplay a');
                     if (pausePlayBtn.hasClass('flex-pause')) {
-                        pausePlayBtn.attr('aria-label', '" . addslashes($pauseText) . "');
+                        pausePlayBtn.attr('aria-label', '" . esc_js($pauseText) . "');
                         {$ariaLiveOff}
                     } else {
-                        pausePlayBtn.attr('aria-label', '" . addslashes($playText) . "');
+                        pausePlayBtn.attr('aria-label', '" . esc_js($playText) . "');
                         {$ariaLiveOn}
                     }
                 };
@@ -1093,7 +1100,7 @@ class MetaFlexSlider extends MetaSlider
             $options['init'] = isset( $options['init'] ) ? $options['init'] : array();
             $options['init'] = array_merge( $options['init'], array(
                 "var ms_target_width = function() {
-                    return $('{$fullWidthTarget}').width();
+                    return $('" . esc_js( $fullWidthTarget ) . "').width();
                 };
 
                 var ms_full_width_slideshow = function() {

@@ -120,6 +120,12 @@
 						position: absolute;
 						width: 100%;
 					}
+					&:focus {
+						color: black;
+						opacity: 1 !important;
+						outline: 2px solid #000;
+						outline-offset: 2px;
+					}
 				}
 				a.flex-next {
 					width: 85px;

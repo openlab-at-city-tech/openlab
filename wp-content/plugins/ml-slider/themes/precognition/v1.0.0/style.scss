@@ -273,6 +273,12 @@
 			top: 0;
   			left: 0;
 		}
+
+		&:focus {
+			opacity: 1 !important;
+			outline: 2px solid #fff;
+			outline-offset: 2px;
+		}
 	}
   
 	.rslides_nav.prev:before, div.nivoSlider div.nivo-directionNav a.nivo-prevNav:before, .coin-slider .coin-slider div a.cs-prev:before {
@@ -450,7 +456,7 @@
 		.flex-direction-nav li {
 			opacity: 0;
 		}
-		&:hover {
+		&:hover, &:focus-within {
 			.flex-direction-nav {
 				li {
 					opacity: 1;

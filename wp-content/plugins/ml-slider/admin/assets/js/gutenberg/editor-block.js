@@ -54,12 +54,12 @@ registerStore('metaslider', {
                     if (true === result.success) {
                         dispatch('metaslider').setSlideshows(result.data)
                     } else {
-                        console.warn('MetaSlider: API Request error:', result.data.message)
+                        console.warn('MetaSlider Slideshow: API Request error:', result.data.message)
                         dispatch('metaslider').setSlideshows([])
                     }
                 })
             } catch (error) {
-                console.warn('MetaSlider: API Request error:', error)
+                console.warn('MetaSlider Slideshow: API Request error:', error)
                 dispatch('metaslider').setSlideshows([])
             }
         }
@@ -76,8 +76,8 @@ registerStore('metaslider', {
  */
 registerBlockType('metaslider/slider', {
     apiVersion: 3,
-    title: 'MetaSlider',
-    description: __('Use MetaSlider to insert slideshows and sliders in your page', 'ml-slider'),
+    title: 'MetaSlider Slideshow',
+    description: __('Use MetaSlider Slideshow to insert slideshows and sliders in your page', 'ml-slider'),
     icon: icon,
     category: 'common',
     keywords: [__('slider', 'ml-slider'), __('slideshow', 'ml-slider'), __('gallery', 'ml-slider')],

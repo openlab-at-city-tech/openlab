@@ -10,7 +10,7 @@ const wp = window.wp
 const {__} = wp.i18n
 
 const {Fragment} = wp.element
-const {withSelect} = wp.data
+const {withSelect, useDispatch} = wp.data
 const {
     TextControl,
     // SelectControl,
@@ -37,6 +37,30 @@ const edit = (props) => {
     let hasSlideshows = slideshows.items.length || false
     let refreshPreview = props.attributes.refreshPreview
     const blockProps = useBlockProps()
+    const {selectBlock} = useDispatch('core/block-editor')
+
+    /**
+     * The Placeholder shown before a slideshow is selected wraps an interactive
+     * search field. Focusing/clicking into it doesn't reliably bubble up to
+     * WordPress' own block-selection handling, so select the block explicitly.
+     */
+    const selectThisBlock = () => {
+        if (!isSelected) {
+            selectBlock(props.clientId)
+        }
+    }
+
+    /**
+     * Shared props for the three Placeholder states rendered before a
+     * slideshow is selected (loading, no slideshows found, no slideshow chosen).
+     */
+    const placeholderProps = {
+        ...blockProps,
+        onClick: selectThisBlock,
+        onFocus: selectThisBlock,
+        label: [icon, ' MetaSlider Slideshow']
+    }
+
     /**
      * inspectorControls contains the different block controls
      * - InspectorControls: controls in the sidebar
@@ -45,7 +69,7 @@ const edit = (props) => {
     const inspectorControls = isSelected && (
         <Fragment key='inspectorControls'>
             <InspectorControls key='inspector'>
-                <PanelBody title={__('Slideshow settings', 'ml-slider')}>
+                <PanelBody title={__('Slideshow settings', 'ml-slider')} className='ms-slideshow-panel'>
                     {hasSlideshows && <SlideshowSelector
                         props={props}
                     />}
@@ -102,16 +126,12 @@ const edit = (props) => {
 
     // The slideshows list is loading
     if (!hasSlideshows && !slideshowId && isLoading) {
-        return <Placeholder
-            className={className}
-            label={[icon, ' MetaSlider']}>
+        return <Placeholder {...placeholderProps}>
             <Spinner key="spinner"/> {__('Loading slideshows list...', 'ml-slider')}
         </Placeholder>
         // No slideshows were found
     } else if (!hasSlideshows && !slideshowId && !isLoading) {
-        return <Placeholder
-            className={className}
-            label={[icon, ' MetaSlider']}>
+        return <Placeholder {...placeholderProps}>
             {__('No slideshows found.', 'ml-slider')}&nbsp;<a target='_blank'
                                                               href={blockConfig.plugin_page}>{__('Create one now!', 'ml-slider')}</a>
         </Placeholder>
@@ -136,11 +156,7 @@ const edit = (props) => {
             clientId={props.clientId}
             blockProps={blockProps}
         />,
-        !slideshowId && <Placeholder
-            key="instructions"
-            className={props.className}
-            label={[icon, ' MetaSlider']}
-        >
+        !slideshowId && <Placeholder key="instructions" {...placeholderProps}>
             <SlideshowSelector
                 key="slidehow-selector"
                 props={props}

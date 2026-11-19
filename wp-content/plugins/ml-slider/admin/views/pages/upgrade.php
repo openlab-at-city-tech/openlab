@@ -92,7 +92,7 @@
             <tr>
                 <td>
                     <h4><?php esc_html_e('Extra premium themes', 'ml-slider');?></h4>
-                    <p><?php esc_html_e('MetaSlider Pro provides stylish and exclusive themes for your slideshows.', 'ml-slider');?></p>
+                    <p><?php esc_html_e('MetaSlider Slideshow Pro provides stylish and exclusive themes for your slideshows.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
                 <td><div class="dot available"></div></td>
@@ -117,6 +117,14 @@
                 <td>
                     <h4><?php esc_html_e('Add Custom HTML slides', 'ml-slider');?></h4>
                     <p><?php esc_html_e('Design slides using images, HTML and CSS', 'ml-slider');?></p>
+                </td>
+                <td><div class="dot unavailable"></div></td>
+                <td><div class="dot available"></div></td>
+            </tr>
+            <tr>
+                <td>
+                    <h4><?php esc_html_e('Add Background Color slides', 'ml-slider');?></h4>
+                    <p><?php esc_html_e('Create slides using a solid or gradient background color and text.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
                 <td><div class="dot available"></div></td>

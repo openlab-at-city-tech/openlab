@@ -143,9 +143,9 @@ $demo_slideshows = apply_filters( 'metaslider_quickstart_options_data', $demo_sl
 									<select name="action" id="ms-qs-slide-type">
 										<option value=""><?php esc_html_e( 'Slide Type', 'ml-slider' ) ?></option>
 										<option value="image"><?php esc_html_e( 'Image', 'ml-slider' ) ?></option>
-										<option value="vimeo"><?php esc_html_e( 'Vimeo', 'ml-slider' ) ?></option>
-										<option value="youtube"><?php esc_html_e( 'YouTube', 'ml-slider' ) ?></option>
-										<option value="tiktok"><?php esc_html_e( 'TikTok', 'ml-slider' ) ?></option>
+										<option value="vimeo"><?php echo esc_html( 'Vimeo' ) ?></option>
+										<option value="youtube"><?php echo esc_html( 'YouTube' ) ?></option>
+										<option value="tiktok"><?php echo esc_html( 'TikTok' ) ?></option>
 										<option value="external"><?php esc_html_e( 'External Image', 'ml-slider' ) ?></option>
 										<option value="external_video"><?php esc_html_e( 'External Video', 'ml-slider' ) ?></option>
 										<option value="custom_html"><?php esc_html_e( 'Custom HTML', 'ml-slider' ) ?></option>
@@ -163,6 +163,7 @@ $demo_slideshows = apply_filters( 'metaslider_quickstart_options_data', $demo_sl
 										<option value="carousel"><?php esc_html_e( 'Carousel', 'ml-slider' ) ?></option>
 										<option value="thumbnail-nav"><?php esc_html_e( 'Thumbnail Navigation', 'ml-slider' ) ?></option>
 										<option value="video-caption"><?php esc_html_e( 'Video Caption', 'ml-slider' ) ?></option>
+										<option value="hero"><?php esc_html_e( 'Hero Image', 'ml-slider' ) ?></option>
 									</select>
 								</div>
 								<div class="alignleft actions mb-3">
@@ -185,6 +186,42 @@ $demo_slideshows = apply_filters( 'metaslider_quickstart_options_data', $demo_sl
 									</select>
 								</div>
 								<div class="alignleft actions mb-3">
+									<select name="action" id="ms-qs-slide-theme">
+										<option value=""><?php esc_html_e( 'All Themes', 'ml-slider' ) ?></option>
+										<option value="architekt">Architekt</option>
+										<option value="default-base">Base</option>
+										<option value="bitono">Bitono</option>
+										<option value="blend">Blend</option>
+										<option value="bubble">Bubble</option>
+										<option value="cascade">Cascade</option>
+										<option value="clarity">Clarity</option>
+										<option value="cubic">Cubic</option>
+										<option value="databold">Databold</option>
+										<option value="disjoint">Disjoint</option>
+										<option value="draxler">Draxler</option>
+										<option value="focus">Focus</option>
+										<option value="handimart">Handimart</option>
+										<option value="hero">Hero</option>
+										<option value="highway">Highway</option>
+										<option value="jenga">Jenga</option>
+										<option value="nami">Nami</option>
+										<option value="nexus">Nexus</option>
+										<option value="outline">Outline</option>
+										<option value="parallel">Parallel</option>
+										<option value="praise-loop">Praise Loop</option>
+										<option value="precognition">Precognition</option>
+										<option value="radix">Radix</option>
+										<option value="retsu">Retsu</option>
+										<option value="revelio">Revelio</option>
+										<option value="simply-dark">Simply Dark</option>
+										<option value="social-play">Social Play</option>
+										<option value="tandem">Tandem</option>
+										<option value="undertone">Undertone</option>
+										<option value="visage">Visage</option>
+										<option value="zonora">Zonora</option>
+									</select>
+								</div>
+								<div class="alignleft actions mb-3">
 									<select name="action" id="ms-qs-slide-price">
 										<option value=""><?php esc_html_e( 'Free and Pro', 'ml-slider' ) ?></option>
 										<option value="free"><?php esc_html_e( 'Free only', 'ml-slider' ) ?></option>
@@ -192,7 +229,7 @@ $demo_slideshows = apply_filters( 'metaslider_quickstart_options_data', $demo_sl
 									</select>
 								</div>
 								<div class="alignleft actions mb-3">
-									<input type="button" id="ms-qs-slide-reset" class="button" value="<?php echo esc_attr( 'Reset Filters', 'ml-slider' ) ?>" />
+									<input type="button" id="ms-qs-slide-reset" class="button" value="<?php esc_attr_e( 'Reset Filters', 'ml-slider' ) ?>" />
 								</div>
 							</form>
 						</div>
@@ -216,6 +253,7 @@ $demo_slideshows = apply_filters( 'metaslider_quickstart_options_data', $demo_sl
 								$animation   = ' data-animation="' . htmlspecialchars( json_encode( $item['animation'] ), ENT_QUOTES, 'UTF-8' ) . '"';
 								$integration = ' data-integration="' . htmlspecialchars( json_encode( $item['integration'] ), ENT_QUOTES, 'UTF-8' ) . '"';
 								$price 		 = ' data-price="' . htmlspecialchars( $item['price'], ENT_QUOTES, 'UTF-8' ) . '"';
+								$theme       = ' data-theme="' . htmlspecialchars( $item['theme'] ?? '', ENT_QUOTES, 'UTF-8' ) . '"';
 								$demo 		 = $item['demo'] ?? false;
 								$image 		 = file_exists( METASLIDER_PATH . 'admin/images/quickstart/' . $item['slug'] . '.png' ) 
 									? METASLIDER_ADMIN_URL . 'images/quickstart/' . $item['slug'] . '.png' 
@@ -232,7 +270,7 @@ $demo_slideshows = apply_filters( 'metaslider_quickstart_options_data', $demo_sl
 								?>
 								<li class="cursor-pointer m-0 lg:w-3/12 md:w-4/12 sm:w-6/12 relative slug-<?php 
 									echo esc_attr( $item['slug'] ) ?>"<?php 
-									echo $type_ . $features . $animation . $integration . $price //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+									echo $type_ . $features . $animation . $integration . $price . $theme //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 									<span class="quickstart-labels">
 										<?php 
 										if ( isset( $item['type'] )
@@ -257,6 +295,10 @@ $demo_slideshows = apply_filters( 'metaslider_quickstart_options_data', $demo_sl
 										<?php if ( is_array( $item['integration'] ) && in_array( 'posts', $item['integration'] ) ) { ?>
 											<span class="quickstart-posts-label"><?php 
 												esc_html_e( 'WordPress Posts',  'ml-slider' ) ?></span>
+										<?php } ?>
+										<?php if ( in_array( 'hero', $item['features'] ) ) { ?>
+											<span class="quickstart-hero-label"><?php 
+												esc_html_e( 'Hero Image',  'ml-slider' ) ?></span>
 										<?php } ?>
 										<?php if ( $item['price'] == 'pro' ) { ?>
 											<span class="quickstart-pro-label">Pro</span>
@@ -297,7 +339,7 @@ $demo_slideshows = apply_filters( 'metaslider_quickstart_options_data', $demo_sl
 
 											<?php } else { ?>
 												<h3 class="text-white mb-3 font-bold text-xl">
-													<?php esc_html_e( 'Get MetaSlider Pro!', 'ml-slider') ?>
+													<?php esc_html_e( 'Get MetaSlider Slideshow Pro!', 'ml-slider') ?>
 												</h3>
 												<p class="text-white font-normal text-sm mb-3">
 													<?php esc_html_e( 'Upgrade now to unlock this demo slideshow!', 'ml-slider') ?>

@@ -32,7 +32,7 @@
 			<a
 				:href="hoplink"
 				class="probutton button button-primary button-hero"
-				target="_blank">{{ __('Find out more about MetaSlider Pro', 'ml-slider') }} <span class="dashicons dashicons-external"></span></a>
+				target="_blank">{{ __('Find out more about MetaSlider Slideshow Pro', 'ml-slider') }} <span class="dashicons dashicons-external"></span></a>
 		</div>
 	</div>
 </template>

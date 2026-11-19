@@ -142,7 +142,7 @@ const mutations = {
                 // If the two objects are not identical, replace with the new one
                 if (JSON.stringify(state.all[index]) !== JSON.stringify(slideshows[key])) {
                     Object.assign(state.all[index], slideshows[key])
-                    console.log('MetaSlider:', 'Updated slideshow id #' + slideshows[key].id + ' in local storage.')
+                    console.log('MetaSlider Slideshow:', 'Updated slideshow id #' + slideshows[key].id + ' in local storage.')
                 }
             } else {
 

@@ -5,8 +5,8 @@
 	// Handle captions
 	$slide_caption = $this->cleanup_content_kses( $this->slide->post_excerpt );
 
-	$image_caption = (wp_filter_post_kses($attachment->post_excerpt));
-	$image_description = (wp_filter_post_kses($attachment->post_content));
+	$image_caption = $attachment ? wp_filter_post_kses($attachment->post_excerpt) : '';
+	$image_description = $attachment ? wp_filter_post_kses($attachment->post_content) : '';
 
 	// Deprecate inherit_image_caption by deleting it and setting the source as the image
 	if (filter_var(get_post_meta($this->slide->ID, 'ml-slider_inherit_image_caption', true), FILTER_VALIDATE_BOOLEAN)) {

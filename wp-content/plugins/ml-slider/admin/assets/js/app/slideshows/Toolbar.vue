@@ -1,6 +1,6 @@
 <script>
 import { EventManager } from '../utils'
-import { CSSManagerNotice } from '../notices'
+import { CSSManagerNotice, GalleryConvertNotice } from '../notices'
 import { mapState } from 'vuex'
 export default {
 	data() {
@@ -46,6 +46,9 @@ export default {
 		},
 		showCSSManagerNotice() {
 			EventManager.$emit('metaslider/open-utility-modal', CSSManagerNotice)
+		},
+		showGalleryConvertNotice() {
+			EventManager.$emit('metaslider/open-utility-modal', GalleryConvertNotice)
 		},
 		addSlide() {
 			// The easy way

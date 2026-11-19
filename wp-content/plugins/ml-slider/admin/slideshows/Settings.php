@@ -197,6 +197,50 @@ class MetaSlider_Slideshow_Settings
             }
         }
 
+        // width and height: integers or empty only
+        foreach ( array( 'width', 'height' ) as $key ) {
+            if ( isset( $settings[ $key ] ) && $settings[ $key ] !== '' ) {
+                if ( is_numeric( $settings[ $key ] ) ) {
+                    $settings[ $key ] = intval( $settings[ $key ] );
+                } else {
+                    unset( $settings[ $key ] );
+                }
+            }
+        }
+
+        // Sanitize integers
+        $integers = array(
+            'delay',
+            'animationSpeed',
+            'filmstrip_delay',
+            'filmstrip_animationSpeed',
+            'minItems',
+            'maxItems',
+            'navStep',
+            'imageWidth',
+            'imageHeight',
+            'containerPadding_top',
+            'containerPadding_bottom',
+            'containerPadding_left',
+            'containerPadding_right',
+            'containerMargin_top',
+            'containerMargin_bottom',
+            'thumb_width',
+            'thumb_height',
+            'thumb_min_width',
+            'carouselMargin'
+        );
+        
+        foreach ( $integers as $key ) {
+            if ( isset( $settings[ $key ] ) && $settings[ $key ] !== '' ) {
+                if ( is_numeric( $settings[ $key ] ) ) {
+                    $settings[ $key ] = intval( $settings[ $key ] );
+                } else {
+                    unset( $settings[ $key ] );
+                }
+            }
+        }
+
         return $settings;
     }
 }

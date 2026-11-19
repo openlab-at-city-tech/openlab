@@ -129,7 +129,7 @@ export default {
 
 		window.addEventListener('load', () => {
 			setTimeout(() => {
-				this.notifyInfo('metaslider/app-loaded', this.__('MetaSlider dashboard loaded', 'ml-slider'))
+				this.notifyInfo('metaslider/app-loaded', this.__('MetaSlider Slideshow dashboard loaded', 'ml-slider'))
 			}, 1500)
 		})
 
@@ -239,9 +239,16 @@ export default {
 			})
 		},
 		prepareSlideData(data) {
+			const deletedIds = new Set(
+				[...document.querySelectorAll('tr.ms-deleted [name^="attachment"]')]
+					.map(el => el.name.match(/attachment\[([\s\S]*?)\]/)?.[1])
+					.filter(Boolean)
+			)
+
 			let slides = new Set(
 				data.filter(input => input.name.startsWith('attachment'))
 					.map(slide => slide.name.match(/attachment\[([\s\S]*?)\]/)[1])
+					.filter(id => !deletedIds.has(id))
 			)
 
 			let allSlides = [...slides].map(slide => {
@@ -339,7 +346,7 @@ export default {
 						slideshow_id: this.current.id,
 						nonce: nonce
 					})).then(response => {
-						console.log('MetaSlider:', response.data.data)
+						console.log('MetaSlider Slideshow:', response.data.data)
 					}).catch(error => {
 						let errorMessage = this.getErrorMessage(error.response)
 						this.notifyError('metaslider/delete-error', error)
@@ -369,5 +376,5 @@ export default {
 </script>
 
 <style lang="scss">
-	@import '../assets/styles/main.scss';
+	@use '../assets/styles/main.scss';
 </style>

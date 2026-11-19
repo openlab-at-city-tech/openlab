@@ -15,7 +15,7 @@ die('No direct access.');
         <?php
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo metaslider_upgrade_pro_small_btn(
-            __( 'Custom delay is available in MetaSlider Pro', 'ml-slider' )
+            __( 'Custom delay is available in MetaSlider Slideshow Pro', 'ml-slider' )
         );
         ?> 
     </label>
@@ -34,7 +34,7 @@ die('No direct access.');
         <?php 
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo metaslider_upgrade_pro_small_btn(
-            __( 'Repeat slide is available in MetaSlider Pro', 'ml-slider' )
+            __( 'Repeat slide is available in MetaSlider Slideshow Pro', 'ml-slider' )
         );
         ?> 
     </label>
@@ -53,7 +53,7 @@ die('No direct access.');
         <?php 
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo metaslider_upgrade_pro_small_btn(
-            __( 'Custom thumbnail is available in MetaSlider Pro', 'ml-slider' )
+            __( 'Custom thumbnail is available in MetaSlider Slideshow Pro', 'ml-slider' )
         );
         ?> 
     </label>
@@ -72,7 +72,7 @@ die('No direct access.');
         <?php 
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo metaslider_upgrade_pro_small_btn(
-            __( 'Custom CSS classes is available in MetaSlider Pro', 'ml-slider' )
+            __( 'Custom CSS classes is available in MetaSlider Slideshow Pro', 'ml-slider' )
         );
         ?> 
     </label>

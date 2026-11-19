@@ -1,3 +1,6 @@
+@use 'sass:color';
+@use './globals' as *;
+
 .metaslider .callout-box {
 	background: $brand;
 	display: block !important;
@@ -21,7 +24,7 @@
 		text-decoration: none;
 		transition: all 0.3s ease-in-out;
 		&:hover, &:active, &:focus {
-			background: darken($brand, 10%);
+			background: color.adjust($brand, $lightness: -10%);
 		}
 	}
 }

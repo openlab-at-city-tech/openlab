@@ -85,6 +85,11 @@
 					mask-image: url(images/right.svg);
 				}
 			}
+
+			&:focus {
+				outline: 2px solid #fff;
+				outline-offset: 2px;
+			}
 		}
 
 		.flex-control-paging li a {

@@ -72,13 +72,10 @@
 						<div class="ms-profile-data">
 							<div class="ms-profile-details">
 								<h3>{{ selected.user.name }}</h3>
-								<p
-									class="ms-user-location"
-									v-html="selected.user.location"/>
+								<p class="ms-user-location">{{ selected.user.location }}</p>
 								<div
 									v-if="selected.user.bio"
-									class="ms-user-bio"
-									v-html="selected.user.bio"/>
+									class="ms-user-bio">{{ selected.user.bio }}</div>
 							</div>
 							<ul class="ms-profile-meta">
 								<li v-if="selected.user.username">

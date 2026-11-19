@@ -2,10 +2,10 @@
     <div class="rounded-md">
         <div class="text-center">
             <h3 class="m-0 p-3 text-lg leading-6 font-medium text-white bg-orange rounded-top">
-                {{ __('Thanks for using MetaSlider', 'ml-slider') }}
+                {{ __('Thanks for using MetaSlider Slideshow', 'ml-slider') }}
             </h3>
             <div class="p-5">
-                <p class="text-lg leading-5 text-gray-darker mb-0"> {{ __('We are currently building the next version of MetaSlider. Can you help us out by sharing non-sensitive diagnostic information?', 'ml-slider') }} </p>
+                <p class="text-lg leading-5 text-gray-darker mb-0"> {{ __('We are currently building the next version of MetaSlider Slideshow. Can you help us out by sharing non-sensitive diagnostic information?', 'ml-slider') }} </p>
             </div>
             <div class="relative rounded-md shadow-sm px-5">
                 <input type="email" class="form-input block w-full md:text-sm md:leading-5" v-model="optinEmail" />

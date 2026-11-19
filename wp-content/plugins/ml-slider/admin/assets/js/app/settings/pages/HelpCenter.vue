@@ -6,12 +6,12 @@
 		<template slot="fields">
             <textbox-with-link link="https://www.metaslider.com/docs/" class="mb-4" :new-tab="true">
                 <template slot="header">{{ __('Documentation 📚', 'ml-slider') }}</template>
-                <template slot="description">{{ __('Check out our documentation page for examples, and more information about what you can do with MetaSlider.', 'ml-slider') }}</template>
+                <template slot="description">{{ __('Check out our documentation page for examples, and more information about what you can do with MetaSlider Slideshow.', 'ml-slider') }}</template>
                 <template slot="link-text">{{ __('Visit documentation', 'ml-slider') }}</template>
             </textbox-with-link>
             <textbox-with-link link="https://wordpress.org/plugins/ml-slider" class="mb-4" :new-tab="true">
                 <template slot="header">{{ __('Free Basic Support 🚀', 'ml-slider') }}</template>
-                <template slot="description">{{ __('For users of the free version of MetaSlider, we offer full free support on the wordpress.org forums.', 'ml-slider') }}</template>
+                <template slot="description">{{ __('For users of the free version of MetaSlider Slideshow, we offer full free support on the wordpress.org forums.', 'ml-slider') }}</template>
                 <template slot="link-text">{{ __('Visit wordpress.org', 'ml-slider') }}</template>
             </textbox-with-link>
             <textbox-with-link link="https://www.metaslider.com/support" class="mb-4" :new-tab="true">

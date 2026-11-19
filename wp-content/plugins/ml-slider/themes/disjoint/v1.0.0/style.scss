@@ -124,6 +124,11 @@
 						position: absolute;
 						width: 100%;
 					}
+					&:focus {
+						opacity: 1 !important;
+						outline: 2px solid #fff;
+						outline-offset: 2px;
+					}
 				}
 				a.flex-next {
 					&:before {

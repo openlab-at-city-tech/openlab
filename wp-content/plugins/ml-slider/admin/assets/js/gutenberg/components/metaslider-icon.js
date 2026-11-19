@@ -2,6 +2,11 @@
  * MetaSlider svg icon - circle icon only.
  */
 
-const MetasliderIcon = <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 255.8 255.8" xmlSpace="preserve"><g><path d="M127.9,0C57.3,0,0,57.3,0,127.9c0,70.6,57.3,127.9,127.9,127.9c70.6,0,127.9-57.3,127.9-127.9C255.8,57.3,198.5,0,127.9,0z M16.4,177.1l92.5-117.5L124.2,79l-77.3,98.1H16.4z M170.5,177.1l-38.9-49.4l15.5-19.6l54.4,69H170.5z M208.5,177.1L146.9,99 l-61.6,78.2h-31l92.5-117.5l92.5,117.5H208.5z"/></g></svg>
+const MetasliderIcon = <svg width="24" height="24" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+		<rect width="192" height="192" fill="#dd6923"/>
+		<rect x="48" y="49" width="96" height="94" fill="#ffffff" rx="4"/>
+		<path fill="#dd6923" d="M58 116L89.4 76.2l5.2 6.6L68.4 116zm52.3 0L97.1 99.3l5.2-6.6L120.8 116zM123.2 116L102.3 89.5 81.4 116H70.9l31.4-39.8L133.7 116z"/>
+		<circle cx="144" cy="49" r="11.5" fill="#dd6923"/>
+	</svg>
 
 export default MetasliderIcon

@@ -111,6 +111,11 @@
 						top: 50%;
 						width: 100%;
 					}
+					&:focus {
+						background: rgba(255, 255, 255, 0.3);
+						outline: 2px solid #fff;
+						outline-offset: 2px;
+					}
 				}
 				a.flex-prev {
 					left: 0;
