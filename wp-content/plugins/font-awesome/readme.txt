@@ -1,9 +1,9 @@
 === Font Awesome ===
 Contributors: fontawesome, mlwilkerson, robmadole, frrrances, deathnfudge
-Stable tag: 5.1.4
+Stable tag: 5.2.1
 Tags: FontAwesome, icon, svg icon, iconfont, webfont
 Requires at least: 5.8
-Tested up to: 6.9
+Tested up to: 7.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -117,6 +117,12 @@ You can get more information about using the plugin, details for available setti
 
 
 == Upgrade Notice ==
+= 5.2.0 =
+* The Icon Chooser in this version is Kit subset aware. Only icons included in
+a Kit's subset will be available for search and selection. That's a long-requested feature.
+If it surprises you to see fewer icons available in the Icon Chooser, the solution is to add more icons to your Kit's subset on fontawesome.com. You could even use a Full Library kit
+to include them all.
+
 = 5.1.1 =
 * When upgrading to this version, you'll need to reload the WP admin dashboard, or simply visit the Font Awesome plugin's settings page, in order to cause the plugin to re-fetch a required SVG stylesheet.
 
@@ -190,6 +196,20 @@ If you're using the Icon Chooser, you'll need to use a Pro Kit. (The CDN can onl
 
 
 == Changelog ==
+= 5.2.1 =
+
+* Fix the registration of script translations to enable non-English languages to work
+correctly in the plugin's admin interface.
+
+= 5.2.0 =
+
+* Update the icon chooser to be Kit subset aware. Only icons included in a Kit's subset will be available for search and selection. If it surprises you to see fewer icons available in the Icon Chooser, the solution is to add more icons to your Kit's subset on fontawesome.com. You could even use a Full Library kit to include them all.
+* Fix for WordPress 7 compatibility: loading assets within the block editor content iframe.
+
+= 5.1.5 =
+
+* Minor update to the icon chooser, fixing a bug in the previous update.
+
 = 5.1.4 =
 
 * Update the icon chooser package. This is only for compatibility with other tools that may be

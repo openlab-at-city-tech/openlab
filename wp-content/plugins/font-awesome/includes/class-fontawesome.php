@@ -136,7 +136,7 @@ class FontAwesome {
 	 *
 	 * @since 4.0.0
 	 */
-	public const PLUGIN_VERSION = '5.1.4';
+	public const PLUGIN_VERSION = '5.2.1';
 	/**
 	 * The namespace for this plugin's REST API.
 	 *
@@ -434,11 +434,6 @@ class FontAwesome {
 			}
 
 			$this->maybe_enqueue_admin_assets();
-
-			// Setup JavaScript internationalization if we're on WordPress 5.0+.
-			if ( function_exists( 'wp_set_script_translations' ) ) {
-				wp_set_script_translations( self::ADMIN_RESOURCE_HANDLE, 'font-awesome' );
-			}
 
 			if ( $this->using_kit() ) {
 				if ( $this->skip_enqueue_kit() ) {
@@ -1703,6 +1698,14 @@ class FontAwesome {
 				try {
 					if ( $this->detecting_conflicts() || $hook === $this->screen_id || $should_enable_icon_chooser ) {
 						$this->enqueue_admin_js_assets( $should_enable_icon_chooser );
+
+						// Setup JavaScript internationalization if we're on WordPress 5.0+.
+						// This must happen after the admin script is registered/enqueued
+						// (in enqueue_admin_js_assets), so that the textdomain is
+						// associated with the script object before it is printed.
+						if ( function_exists( 'wp_set_script_translations' ) ) {
+							wp_set_script_translations( self::ADMIN_RESOURCE_HANDLE, 'font-awesome' );
+						}
 					}
 
 					if ( $hook === $this->screen_id ) {
@@ -1938,7 +1941,7 @@ class FontAwesome {
 			throw new ConfigCorruptionException();
 		}
 
-		foreach ( array( 'wp_enqueue_scripts', 'admin_enqueue_scripts', 'login_enqueue_scripts' ) as $action ) {
+		foreach ( array( 'wp_enqueue_scripts', 'admin_enqueue_scripts', 'login_enqueue_scripts', 'enqueue_block_assets' ) as $action ) {
 			$enqueue_command = new FontAwesome_Command(
 				function () use ( $kit_token ) {
 					try {
@@ -1963,7 +1966,7 @@ class FontAwesome {
 							 */
 							$detect_conflicts_until = fa()->detect_conflicts_until() * 1000;
 
-							$script_content = <<< EOT
+							$script_content = <<<EOT
 window.__FontAwesome__WP__KitConfig__ = {
 	detectConflictsUntil: {$detect_conflicts_until}
 }
@@ -2074,7 +2077,7 @@ EOT;
 
 		if ( 'webfont' === $options['technology'] ) {
 
-			foreach ( array( 'wp_enqueue_scripts', 'admin_enqueue_scripts', 'login_enqueue_scripts' ) as $action ) {
+			foreach ( array( 'wp_enqueue_scripts', 'admin_enqueue_scripts', 'login_enqueue_scripts', 'enqueue_block_assets' ) as $action ) {
 				add_action(
 					$action,
 					function () use ( $all_source ) {
@@ -2123,7 +2126,7 @@ EOT;
 				 * We need the @font-face override, especially to appear after any unregistered loads of Font Awesome
 				 * that may try to declare a @font-face with a font-family of "FontAwesome".
 				 */
-				foreach ( array( 'wp_enqueue_scripts', 'admin_enqueue_scripts', 'login_enqueue_scripts' ) as $action ) {
+				foreach ( array( 'wp_enqueue_scripts', 'admin_enqueue_scripts', 'login_enqueue_scripts', 'enqueue_block_assets' ) as $action ) {
 					add_action(
 						$action,
 						function () use ( $v4_shims_source, $v4_shims_integrity, $options, $version ) {
@@ -2172,7 +2175,7 @@ EOT;
 				}
 			}
 		} else {
-			foreach ( array( 'wp_enqueue_scripts', 'admin_enqueue_scripts', 'login_enqueue_scripts' ) as $action ) {
+			foreach ( array( 'wp_enqueue_scripts', 'admin_enqueue_scripts', 'login_enqueue_scripts', 'enqueue_block_assets' ) as $action ) {
 				add_action(
 					$action,
 					function () use ( $all_source, $options ) {
@@ -2220,7 +2223,7 @@ EOT;
 				$v4_shims_source    = $resources['v4-shims']->source();
 				$v4_shims_integrity = $resources['v4-shims']->integrity_key();
 
-				foreach ( array( 'wp_enqueue_scripts', 'admin_enqueue_scripts', 'login_enqueue_scripts' ) as $action ) {
+				foreach ( array( 'wp_enqueue_scripts', 'admin_enqueue_scripts', 'login_enqueue_scripts', 'enqueue_block_assets' ) as $action ) {
 					add_action(
 						$action,
 						function () use ( $v4_shims_source ) {
@@ -2343,7 +2346,7 @@ EOT;
 		* add what we find to the new-style blocklist.
 		*/
 		if ( $this->old_remove_unregistered_clients ) {
-			foreach ( array( 'wp_enqueue_scripts', 'admin_enqueue_scripts', 'login_enqueue_scripts' ) as $action ) {
+			foreach ( array( 'wp_enqueue_scripts', 'admin_enqueue_scripts', 'login_enqueue_scripts', 'enqueue_block_assets' ) as $action ) {
 				add_action(
 					$action,
 					function () {
@@ -2368,7 +2371,7 @@ EOT;
 		 * hopefully allowing any unregistered client to have already enqueued
 		 * itself so that our attempt to dequeue it will be successful.
 		 */
-		foreach ( array( 'wp_enqueue_scripts', 'admin_enqueue_scripts', 'login_enqueue_scripts' ) as $action ) {
+		foreach ( array( 'wp_enqueue_scripts', 'admin_enqueue_scripts', 'login_enqueue_scripts', 'enqueue_block_assets' ) as $action ) {
 			add_action(
 				$action,
 				function () {
@@ -3045,7 +3048,7 @@ EOT;
 	 * @ignore
 	 */
 	private function build_legacy_font_face_overrides_for_v4( $license_subdomain, $version ) {
-		return <<< EOT
+		return <<<EOT
 @font-face {
 font-family: "FontAwesome";
 font-display: block;
