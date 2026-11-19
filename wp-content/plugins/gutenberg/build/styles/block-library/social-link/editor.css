@@ -34,3 +34,7 @@
 .wp-block-social-link__toolbar_content_text {
   width: 250px;
 }
+
+.wp-block-social-link__url-input.block-editor-url-input.is-full-width {
+  min-width: 0;
+}

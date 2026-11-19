@@ -1,220 +1,225 @@
+(function(exports, _wordpress_compose, _wordpress_data, _wordpress_element) {
+
 "use strict";
-var wp;
-(wp ||= {}).viewport = (() => {
-  var __create = Object.create;
-  var __defProp = Object.defineProperty;
-  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-  var __getOwnPropNames = Object.getOwnPropertyNames;
-  var __getProtoOf = Object.getPrototypeOf;
-  var __hasOwnProp = Object.prototype.hasOwnProperty;
-  var __commonJS = (cb, mod) => function __require() {
-    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-  };
-  var __export = (target, all) => {
-    for (var name in all)
-      __defProp(target, name, { get: all[name], enumerable: true });
-  };
-  var __copyProps = (to, from, except, desc) => {
-    if (from && typeof from === "object" || typeof from === "function") {
-      for (let key of __getOwnPropNames(from))
-        if (!__hasOwnProp.call(to, key) && key !== except)
-          __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-    }
-    return to;
-  };
-  var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-    // If the importer is in node compatibility mode or this is not an ESM
-    // file that has been converted to a CommonJS file using a Babel-
-    // compatible transform (i.e. "__esModule" has not been set), then set
-    // "default" to the CommonJS "module.exports" for node compatibility.
-    isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-    mod
-  ));
-  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+// \0rolldown/runtime.js
+	var __defProp = Object.defineProperty;
+	var __exportAll = (all, no_symbols) => {
+		let target = {};
+		for (var name in all) {
+			__defProp(target, name, {
+				get: all[name],
+				enumerable: true
+			});
+		}
+		if (!no_symbols) {
+			__defProp(target, Symbol.toStringTag, { value: "Module" });
+		}
+		return target;
+	};
 
-  // package-external:@wordpress/compose
-  var require_compose = __commonJS({
-    "package-external:@wordpress/compose"(exports, module) {
-      module.exports = window.wp.compose;
-    }
-  });
+// packages/viewport/build-module/store/reducer.mjs
+/**
+	* Reducer returning the viewport state, as keys of breakpoint queries with
+	* boolean value representing whether query is matched.
+	*
+	* @param state  Current state.
+	* @param action Dispatched action.
+	*
+	* @return Updated state.
+	*/
+	function reducer(state = {}, action) {
+		switch (action.type) {
+			case "SET_IS_MATCHING": return action.values;
+		}
+		return state;
+	}
 
-  // package-external:@wordpress/data
-  var require_data = __commonJS({
-    "package-external:@wordpress/data"(exports, module) {
-      module.exports = window.wp.data;
-    }
-  });
+// packages/viewport/build-module/store/actions.mjs
+	var actions_exports = /* @__PURE__ */ __exportAll({ setIsMatching: () => setIsMatching }, 1);
+	/**
+	* Returns an action object used in signalling that viewport queries have been
+	* updated. Values are specified as an object of breakpoint query keys where
+	* value represents whether query matches.
+	* Ignored from documentation as it is for internal use only.
+	*
+	* @ignore
+	*
+	* @param values Breakpoint query matches.
+	*
+	* @return Action object.
+	*/
+	function setIsMatching(values) {
+		return {
+			type: "SET_IS_MATCHING",
+			values
+		};
+	}
 
-  // package-external:@wordpress/element
-  var require_element = __commonJS({
-    "package-external:@wordpress/element"(exports, module) {
-      module.exports = window.wp.element;
-    }
-  });
+// packages/viewport/build-module/store/selectors.mjs
+	var selectors_exports = /* @__PURE__ */ __exportAll({ isViewportMatch: () => isViewportMatch }, 1);
+	/**
+	* Returns true if the viewport matches the given query, or false otherwise.
+	*
+	* @param state Viewport state object.
+	* @param query Query string. Includes operator and breakpoint name,
+	*              space separated. Operator defaults to >=.
+	*
+	* @example
+	*
+	* ```js
+	* import { store as viewportStore } from '@wordpress/viewport';
+	* import { useSelect } from '@wordpress/data';
+	* import { __ } from '@wordpress/i18n';
+	* const ExampleComponent = () => {
+	*     const isMobile = useSelect(
+	*         ( select ) => select( viewportStore ).isViewportMatch( '< small' ),
+	*         []
+	*     );
+	*
+	*     return isMobile ? (
+	*         <div>{ __( 'Mobile' ) }</div>
+	*     ) : (
+	*         <div>{ __( 'Not Mobile' ) }</div>
+	*     );
+	* };
+	* ```
+	*
+	* @return Whether viewport matches query.
+	*/
+	function isViewportMatch(state, query) {
+		if (query.indexOf(" ") === -1) query = ">= " + query;
+		return !!state[query];
+	}
 
-  // packages/viewport/build-module/index.mjs
-  var index_exports = {};
-  __export(index_exports, {
-    ifViewportMatches: () => if_viewport_matches_default,
-    store: () => store,
-    withViewportMatch: () => with_viewport_match_default
-  });
+// packages/viewport/build-module/store/index.mjs
+/**
+	* Store definition for the viewport namespace.
+	*
+	* @see https://github.com/WordPress/gutenberg/blob/HEAD/packages/data/README.md#createReduxStore
+	*/
+	const store = (0, _wordpress_data.createReduxStore)("core/viewport", {
+		reducer,
+		actions: actions_exports,
+		selectors: selectors_exports
+	});
+	(0, _wordpress_data.register)(store);
 
-  // packages/viewport/build-module/listener.mjs
-  var import_compose = __toESM(require_compose(), 1);
-  var import_data2 = __toESM(require_data(), 1);
+// packages/viewport/build-module/listener.mjs
+	const addDimensionsEventListener = (breakpoints, operators) => {
+		/**
+		* Callback invoked when media query state should be updated. Is invoked a
+		* maximum of one time per call stack.
+		*/
+		const setIsMatching = (0, _wordpress_compose.debounce)(() => {
+			const values = Object.fromEntries(queries.map(([key, query]) => [key, query.matches]));
+			(0, _wordpress_data.dispatch)(store).setIsMatching(values);
+		}, 0, { leading: true });
+		/**
+		* Hash of breakpoint names with generated MediaQueryList for corresponding
+		* media query.
+		*
+		* @see https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia
+		* @see https://developer.mozilla.org/en-US/docs/Web/API/MediaQueryList
+		*/
+		const operatorEntries = Object.entries(operators);
+		const queries = Object.entries(breakpoints).flatMap(([name, width]) => {
+			return operatorEntries.map(([operator, condition]) => {
+				const list = window.matchMedia(`screen and (${condition}: ${width}px)`);
+				list.addEventListener("change", setIsMatching);
+				return [`${operator} ${name}`, list];
+			});
+		});
+		window.addEventListener("orientationchange", setIsMatching);
+		setIsMatching();
+		setIsMatching.flush();
+	};
 
-  // packages/viewport/build-module/store/index.mjs
-  var import_data = __toESM(require_data(), 1);
+// packages/viewport/build-module/with-viewport-match.mjs
+/**
+	* Higher-order component creator, creating a new component which renders with
+	* the given prop names, where the value passed to the underlying component is
+	* the result of the query assigned as the object's value.
+	*
+	* @see isViewportMatch
+	*
+	* @param queries Object of prop name to viewport query.
+	*
+	* @example
+	*
+	* ```jsx
+	* function MyComponent( { isMobile } ) {
+	* 	return (
+	* 		<div>Currently: { isMobile ? 'Mobile' : 'Not Mobile' }</div>
+	* 	);
+	* }
+	*
+	* MyComponent = withViewportMatch( { isMobile: '< small' } )( MyComponent );
+	* ```
+	*
+	* @return Higher-order component.
+	*/
+	const withViewportMatch = (queries) => {
+		const queryEntries = Object.entries(queries);
+		const useViewPortQueriesResult = () => Object.fromEntries(queryEntries.map(([key, query]) => {
+			let [operator, breakpointName] = query.split(" ");
+			if (breakpointName === void 0) {
+				breakpointName = operator;
+				operator = ">=";
+			}
+			return [key, (0, _wordpress_compose.useViewportMatch)(breakpointName, operator)];
+		}));
+		return (0, _wordpress_compose.createHigherOrderComponent)((WrappedComponent) => {
+			return function WithViewportMatch(props) {
+				const queriesResult = useViewPortQueriesResult();
+				return (0, _wordpress_element.createElement)(WrappedComponent, {
+					...props,
+					...queriesResult
+				});
+			};
+		}, "withViewportMatch");
+	};
 
-  // packages/viewport/build-module/store/reducer.mjs
-  function reducer(state = {}, action) {
-    switch (action.type) {
-      case "SET_IS_MATCHING":
-        return action.values;
-    }
-    return state;
-  }
-  var reducer_default = reducer;
+// packages/viewport/build-module/if-viewport-matches.mjs
+/**
+	* Higher-order component creator, creating a new component which renders if
+	* the viewport query is satisfied.
+	*
+	* @see withViewportMatches
+	*
+	* @param query Viewport query.
+	*
+	* @example
+	*
+	* ```jsx
+	* function MyMobileComponent() {
+	* 	return <div>I'm only rendered on mobile viewports!</div>;
+	* }
+	*
+	* MyMobileComponent = ifViewportMatches( '< small' )( MyMobileComponent );
+	* ```
+	*
+	* @return Higher-order component.
+	*/
+	const ifViewportMatches = (query) => (0, _wordpress_compose.createHigherOrderComponent)((0, _wordpress_compose.compose)([withViewportMatch({ isViewportMatch: query }), (0, _wordpress_compose.ifCondition)((props) => props.isViewportMatch)]), "ifViewportMatches");
 
-  // packages/viewport/build-module/store/actions.mjs
-  var actions_exports = {};
-  __export(actions_exports, {
-    setIsMatching: () => setIsMatching
-  });
-  function setIsMatching(values) {
-    return {
-      type: "SET_IS_MATCHING",
-      values
-    };
-  }
+// packages/viewport/build-module/index.mjs
+	addDimensionsEventListener({
+		huge: 1440,
+		wide: 1280,
+		large: 960,
+		medium: 782,
+		small: 600,
+		mobile: 480
+	}, {
+		"<": "max-width",
+		">=": "min-width"
+	});
 
-  // packages/viewport/build-module/store/selectors.mjs
-  var selectors_exports = {};
-  __export(selectors_exports, {
-    isViewportMatch: () => isViewportMatch
-  });
-  function isViewportMatch(state, query) {
-    if (query.indexOf(" ") === -1) {
-      query = ">= " + query;
-    }
-    return !!state[query];
-  }
-
-  // packages/viewport/build-module/store/index.mjs
-  var STORE_NAME = "core/viewport";
-  var store = (0, import_data.createReduxStore)(STORE_NAME, {
-    reducer: reducer_default,
-    actions: actions_exports,
-    selectors: selectors_exports
-  });
-  (0, import_data.register)(store);
-
-  // packages/viewport/build-module/listener.mjs
-  var addDimensionsEventListener = (breakpoints, operators) => {
-    const setIsMatching2 = (0, import_compose.debounce)(
-      () => {
-        const values = Object.fromEntries(
-          queries.map(([key, query]) => [key, query.matches])
-        );
-        (0, import_data2.dispatch)(store).setIsMatching(values);
-      },
-      0,
-      { leading: true }
-    );
-    const operatorEntries = Object.entries(operators);
-    const queries = Object.entries(breakpoints).flatMap(
-      ([name, width]) => {
-        return operatorEntries.map(
-          ([operator, condition]) => {
-            const list = window.matchMedia(
-              `(${condition}: ${width}px)`
-            );
-            list.addEventListener("change", setIsMatching2);
-            return [`${operator} ${name}`, list];
-          }
-        );
-      }
-    );
-    window.addEventListener("orientationchange", setIsMatching2);
-    setIsMatching2();
-    setIsMatching2.flush();
-  };
-  var listener_default = addDimensionsEventListener;
-
-  // packages/viewport/build-module/if-viewport-matches.mjs
-  var import_compose3 = __toESM(require_compose(), 1);
-
-  // packages/viewport/build-module/with-viewport-match.mjs
-  var import_element = __toESM(require_element(), 1);
-  var import_compose2 = __toESM(require_compose(), 1);
-  var withViewportMatch = (queries) => {
-    const queryEntries = Object.entries(queries);
-    const useViewPortQueriesResult = () => Object.fromEntries(
-      queryEntries.map(([key, query]) => {
-        let [operator, breakpointName] = query.split(" ");
-        if (breakpointName === void 0) {
-          breakpointName = operator;
-          operator = ">=";
-        }
-        return [
-          key,
-          // Hooks should unconditionally execute in the same order,
-          // we are respecting that as from the static query of the HOC we generate
-          // a hook that calls other hooks always in the same order (because the query never changes).
-          // eslint-disable-next-line react-hooks/rules-of-hooks
-          (0, import_compose2.useViewportMatch)(
-            breakpointName,
-            operator
-          )
-        ];
-      })
-    );
-    return (0, import_compose2.createHigherOrderComponent)(
-      (WrappedComponent) => {
-        const WrappedWithViewport = (props) => {
-          const queriesResult = useViewPortQueriesResult();
-          return (0, import_element.createElement)(WrappedComponent, {
-            ...props,
-            ...queriesResult
-          });
-        };
-        return (0, import_compose2.pure)(WrappedWithViewport);
-      },
-      "withViewportMatch"
-    );
-  };
-  var with_viewport_match_default = withViewportMatch;
-
-  // packages/viewport/build-module/if-viewport-matches.mjs
-  var ifViewportMatches = (query) => (0, import_compose3.createHigherOrderComponent)(
-    (0, import_compose3.compose)([
-      with_viewport_match_default({
-        isViewportMatch: query
-      }),
-      (0, import_compose3.ifCondition)(
-        (props) => props.isViewportMatch
-      )
-    ]),
-    "ifViewportMatches"
-  );
-  var if_viewport_matches_default = ifViewportMatches;
-
-  // packages/viewport/build-module/index.mjs
-  var BREAKPOINTS = {
-    huge: 1440,
-    wide: 1280,
-    large: 960,
-    medium: 782,
-    small: 600,
-    mobile: 480
-  };
-  var OPERATORS = {
-    "<": "max-width",
-    ">=": "min-width"
-  };
-  listener_default(BREAKPOINTS, OPERATORS);
-  return __toCommonJS(index_exports);
-})();
+exports.ifViewportMatches = ifViewportMatches;
+exports.store = store;
+exports.withViewportMatch = withViewportMatch;
+Object.defineProperty(exports, '__esModule', { value: true });
+(window.wp ||= {}).viewport = exports;
+return exports;
+})({}, window.wp.compose, window.wp.data, window.wp.element);
 //# sourceMappingURL=index.js.map

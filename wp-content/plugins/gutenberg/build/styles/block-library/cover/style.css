@@ -54,6 +54,13 @@
   align-items: center;
   overflow: hidden;
   overflow: clip;
+}
+.wp-block-cover-image:has(.wp-block-navigation__responsive-container.is-menu-open),
+.wp-block-cover:has(.wp-block-navigation__responsive-container.is-menu-open) {
+  overflow: visible;
+}
+.wp-block-cover-image,
+.wp-block-cover {
   box-sizing: border-box;
   /*rtl:raw: direction: ltr; */
   /**
@@ -338,6 +345,12 @@
   outline: none;
   border: none;
   box-shadow: none;
+}
+@supports (-webkit-hyphens: none) {
+  .wp-block-cover-image.has-aspect-ratio,
+  .wp-block-cover.has-aspect-ratio {
+    min-height: fit-content !important;
+  }
 }
 .wp-block-cover-image .wp-block-cover__embed-background,
 .wp-block-cover .wp-block-cover__embed-background {

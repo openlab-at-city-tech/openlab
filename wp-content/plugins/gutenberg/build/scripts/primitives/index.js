@@ -1,127 +1,130 @@
+(function(exports, _wordpress_element, react_jsx_runtime) {
+
 "use strict";
-var wp;
-(wp ||= {}).primitives = (() => {
-  var __create = Object.create;
-  var __defProp = Object.defineProperty;
-  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-  var __getOwnPropNames = Object.getOwnPropertyNames;
-  var __getProtoOf = Object.getPrototypeOf;
-  var __hasOwnProp = Object.prototype.hasOwnProperty;
-  var __commonJS = (cb, mod) => function __require() {
-    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-  };
-  var __export = (target, all) => {
-    for (var name in all)
-      __defProp(target, name, { get: all[name], enumerable: true });
-  };
-  var __copyProps = (to, from, except, desc) => {
-    if (from && typeof from === "object" || typeof from === "function") {
-      for (let key of __getOwnPropNames(from))
-        if (!__hasOwnProp.call(to, key) && key !== except)
-          __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-    }
-    return to;
-  };
-  var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-    // If the importer is in node compatibility mode or this is not an ESM
-    // file that has been converted to a CommonJS file using a Babel-
-    // compatible transform (i.e. "__esModule" has not been set), then set
-    // "default" to the CommonJS "module.exports" for node compatibility.
-    isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-    mod
-  ));
-  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+// node_modules/.store/clsx@2.1.1-XOLP1vUL9vEGfpiXm37fAw/node_modules/clsx/dist/clsx.mjs
+	function r(e) {
+		var t, f, n = "";
+		if ("string" == typeof e || "number" == typeof e) n += e;
+		else if ("object" == typeof e) if (Array.isArray(e)) {
+			var o = e.length;
+			for (t = 0; t < o; t++) e[t] && (f = r(e[t])) && (n && (n += " "), n += f);
+		} else for (f in e) e[f] && (n && (n += " "), n += f);
+		return n;
+	}
+	function clsx() {
+		for (var e, t, f = 0, n = "", o = arguments.length; f < o; f++) (e = arguments[f]) && (t = r(e)) && (n && (n += " "), n += t);
+		return n;
+	}
 
-  // package-external:@wordpress/element
-  var require_element = __commonJS({
-    "package-external:@wordpress/element"(exports, module) {
-      module.exports = window.wp.element;
-    }
-  });
+// packages/primitives/build-module/svg/index.mjs
+/**
+	* @param {React.ComponentPropsWithoutRef<'circle'>} props
+	*
+	* @return {React.JSX.Element} Circle component
+	*/
+	const Circle = (props) => (0, _wordpress_element.createElement)("circle", props);
+	/**
+	* @param {React.ComponentPropsWithoutRef<'g'>} props
+	*
+	* @return {React.JSX.Element} G component
+	*/
+	const G = (props) => (0, _wordpress_element.createElement)("g", props);
+	/**
+	* @param {React.ComponentPropsWithoutRef<'line'>} props
+	*
+	* @return {React.JSX.Element} Path component
+	*/
+	const Line = (props) => (0, _wordpress_element.createElement)("line", props);
+	/**
+	* @param {React.ComponentPropsWithoutRef<'path'>} props
+	*
+	* @return {React.JSX.Element} Path component
+	*/
+	const Path = (props) => (0, _wordpress_element.createElement)("path", props);
+	/**
+	* @param {React.ComponentPropsWithoutRef<'polygon'>} props
+	*
+	* @return {React.JSX.Element} Polygon component
+	*/
+	const Polygon = (props) => (0, _wordpress_element.createElement)("polygon", props);
+	/**
+	* @param {React.ComponentPropsWithoutRef<'rect'>} props
+	*
+	* @return {React.JSX.Element} Rect component
+	*/
+	const Rect = (props) => (0, _wordpress_element.createElement)("rect", props);
+	/**
+	* @param {React.ComponentPropsWithoutRef<'defs'>} props
+	*
+	* @return {React.JSX.Element} Defs component
+	*/
+	const Defs = (props) => (0, _wordpress_element.createElement)("defs", props);
+	/**
+	* @param {React.ComponentPropsWithoutRef<'radialGradient'>} props
+	*
+	* @return {React.JSX.Element} RadialGradient component
+	*/
+	const RadialGradient = (props) => (0, _wordpress_element.createElement)("radialGradient", props);
+	/**
+	* @param {React.ComponentPropsWithoutRef<'linearGradient'>} props
+	*
+	* @return {React.JSX.Element} LinearGradient component
+	*/
+	const LinearGradient = (props) => (0, _wordpress_element.createElement)("linearGradient", props);
+	/**
+	* @param {React.ComponentPropsWithoutRef<'stop'>} props
+	*
+	* @return {React.JSX.Element} Stop component
+	*/
+	const Stop = (props) => (0, _wordpress_element.createElement)("stop", props);
+	const SVG = (0, _wordpress_element.forwardRef)(
+		/**
+		* @param {SVGProps}                          props isPressed indicates whether the SVG should appear as pressed.
+		*                                                  Other props will be passed through to svg component.
+		* @param {React.ForwardedRef<SVGSVGElement>} ref   The forwarded ref to the SVG element.
+		*
+		* @return {React.JSX.Element} Stop component
+		*/
+		({ className, isPressed, ...props }, ref) => {
+			const appliedProps = {
+				...props,
+				className: clsx(className, { "is-pressed": isPressed }) || void 0,
+				"aria-hidden": true,
+				focusable: false
+			};
+			return /* @__PURE__ */ (0, react_jsx_runtime.jsx)("svg", {
+				...appliedProps,
+				ref
+			});
+		}
+	);
+	SVG.displayName = "SVG";
 
-  // vendor-external:react/jsx-runtime
-  var require_jsx_runtime = __commonJS({
-    "vendor-external:react/jsx-runtime"(exports, module) {
-      module.exports = window.ReactJSXRuntime;
-    }
-  });
+// packages/primitives/build-module/horizontal-rule/index.mjs
+	const HorizontalRule = "hr";
 
-  // packages/primitives/build-module/index.mjs
-  var index_exports = {};
-  __export(index_exports, {
-    BlockQuotation: () => BlockQuotation,
-    Circle: () => Circle,
-    Defs: () => Defs,
-    G: () => G,
-    HorizontalRule: () => HorizontalRule,
-    Line: () => Line,
-    LinearGradient: () => LinearGradient,
-    Path: () => Path,
-    Polygon: () => Polygon,
-    RadialGradient: () => RadialGradient,
-    Rect: () => Rect,
-    SVG: () => SVG,
-    Stop: () => Stop,
-    View: () => View
-  });
+// packages/primitives/build-module/block-quotation/index.mjs
+	const BlockQuotation = "blockquote";
 
-  // node_modules/clsx/dist/clsx.mjs
-  function r(e) {
-    var t, f, n = "";
-    if ("string" == typeof e || "number" == typeof e) n += e;
-    else if ("object" == typeof e) if (Array.isArray(e)) {
-      var o = e.length;
-      for (t = 0; t < o; t++) e[t] && (f = r(e[t])) && (n && (n += " "), n += f);
-    } else for (f in e) e[f] && (n && (n += " "), n += f);
-    return n;
-  }
-  function clsx() {
-    for (var e, t, f = 0, n = "", o = arguments.length; f < o; f++) (e = arguments[f]) && (t = r(e)) && (n && (n += " "), n += t);
-    return n;
-  }
-  var clsx_default = clsx;
+// packages/primitives/build-module/view/index.mjs
+	const View = "div";
 
-  // packages/primitives/build-module/svg/index.mjs
-  var import_element = __toESM(require_element(), 1);
-  var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
-  var Circle = (props) => (0, import_element.createElement)("circle", props);
-  var G = (props) => (0, import_element.createElement)("g", props);
-  var Line = (props) => (0, import_element.createElement)("line", props);
-  var Path = (props) => (0, import_element.createElement)("path", props);
-  var Polygon = (props) => (0, import_element.createElement)("polygon", props);
-  var Rect = (props) => (0, import_element.createElement)("rect", props);
-  var Defs = (props) => (0, import_element.createElement)("defs", props);
-  var RadialGradient = (props) => (0, import_element.createElement)("radialGradient", props);
-  var LinearGradient = (props) => (0, import_element.createElement)("linearGradient", props);
-  var Stop = (props) => (0, import_element.createElement)("stop", props);
-  var SVG = (0, import_element.forwardRef)(
-    /**
-     * @param {SVGProps}                          props isPressed indicates whether the SVG should appear as pressed.
-     *                                                  Other props will be passed through to svg component.
-     * @param {React.ForwardedRef<SVGSVGElement>} ref   The forwarded ref to the SVG element.
-     *
-     * @return {React.JSX.Element} Stop component
-     */
-    ({ className, isPressed, ...props }, ref) => {
-      const appliedProps = {
-        ...props,
-        className: clsx_default(className, { "is-pressed": isPressed }) || void 0,
-        "aria-hidden": true,
-        focusable: false
-      };
-      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", { ...appliedProps, ref });
-    }
-  );
-  SVG.displayName = "SVG";
-
-  // packages/primitives/build-module/horizontal-rule/index.mjs
-  var HorizontalRule = "hr";
-
-  // packages/primitives/build-module/block-quotation/index.mjs
-  var BlockQuotation = "blockquote";
-
-  // packages/primitives/build-module/view/index.mjs
-  var View = "div";
-  return __toCommonJS(index_exports);
-})();
+exports.BlockQuotation = BlockQuotation;
+exports.Circle = Circle;
+exports.Defs = Defs;
+exports.G = G;
+exports.HorizontalRule = HorizontalRule;
+exports.Line = Line;
+exports.LinearGradient = LinearGradient;
+exports.Path = Path;
+exports.Polygon = Polygon;
+exports.RadialGradient = RadialGradient;
+exports.Rect = Rect;
+exports.SVG = SVG;
+exports.Stop = Stop;
+exports.View = View;
+Object.defineProperty(exports, '__esModule', { value: true });
+(window.wp ||= {}).primitives = exports;
+return exports;
+})({}, window.wp.element, window.ReactJSXRuntime);
 //# sourceMappingURL=index.js.map
