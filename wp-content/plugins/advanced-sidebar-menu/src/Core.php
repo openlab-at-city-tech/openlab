@@ -31,6 +31,7 @@ class Core {
 		add_action( 'advanced-sidebar-menu/widget/page/after-form', [ $this, 'widget_documentation' ], 99, 2 );
 		add_action( 'advanced-sidebar-menu/widget/category/after-form', [ $this, 'widget_documentation' ], 99, 2 );
 		add_filter( 'plugin_action_links_' . self::PLUGIN_FILE, [ $this, 'plugin_action_links' ] );
+		add_filter( 'page_css_class', [ List_Pages::class, 'add_list_item_classes' ], 2, 4 );
 	}
 
 

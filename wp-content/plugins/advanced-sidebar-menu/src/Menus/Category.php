@@ -371,7 +371,7 @@ class Category extends Menu_Abstract implements Menu {
 	 *
 	 * @return \WP_Term[]
 	 */
-	public function get_top_level_terms() {
+	public function get_top_level_terms(): array {
 		$top_level_term_ids = \array_map( function( $term_id ) {
 			$top = $this->get_highest_parent( $term_id );
 			return $this->is_excluded( $top ) ? null : $top;
@@ -379,7 +379,10 @@ class Category extends Menu_Abstract implements Menu {
 
 		$top_level_term_ids = (array) apply_filters( 'advanced-sidebar-menu/menus/category/top-level-term-ids', $top_level_term_ids, $this->args, $this->instance, $this );
 
-		$top_level_term_ids = \array_unique( \array_filter( $top_level_term_ids, fn( $id ) => \is_int( $id ) && $id > 0 ) );
+		// Filter callbacks may supply excluded terms.
+		$top_level_term_ids = \array_unique( \array_filter( $top_level_term_ids, function( $id ) {
+			return \is_int( $id ) && $id > 0 && ! $this->is_excluded( $id );
+		} ) );
 
 		$terms = [];
 		if ( [] !== $top_level_term_ids ) {

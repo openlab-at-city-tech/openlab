@@ -98,7 +98,7 @@ class Scripts {
 	 *
 	 * @return void
 	 */
-	public function register_gutenberg_scripts() {
+	public function register_gutenberg_scripts(): void {
 		wp_register_script( static::GUTENBERG_HANDLE, $this->get_dist_file( self::FILE_BLOCK_EDITOR, 'js' ), [
 			'jquery',
 			'lodash',
@@ -268,7 +268,7 @@ class Scripts {
 	 *
 	 * @return void
 	 */
-	public function init_widget_js() {
+	public function init_widget_js(): void {
 		if ( WP_DEBUG ) {
 			?>
 			<!-- <?php echo __FILE__; ?>-->
@@ -295,7 +295,7 @@ class Scripts {
 	 * @param string               $file_slug - The file slug.
 	 * @param string               $extension - The file extension.
 	 *
-	 * @return string
+	 * @return non-empty-string
 	 */
 	public function get_dist_file( string $file_slug, string $extension ): string {
 		$js_dir = apply_filters( 'advanced-sidebar-menu/js-dir', ADVANCED_SIDEBAR_MENU_URL . 'js/dist/' );

@@ -18,6 +18,12 @@ use Advanced_Sidebar_Menu\Walkers\Page_Walker;
  * @since   5.0.0
  */
 class List_Pages {
+	/**
+	 * Args key holding the list which built the args.
+	 *
+	 * @since 9.9.0
+	 */
+	public const ARGS_KEY = 'advanced-sidebar-menu/list-pages';
 
 	/**
 	 * The page list
@@ -55,15 +61,11 @@ class List_Pages {
 	protected $menu;
 
 	/**
-	 * Used exclusively to differentiate the cache based on changes
-	 * to internal properties.
+	 * Child pages query using this list's args.
 	 *
-	 * @var array{excluded: bool, parent: int}
+	 * @var Child_Pages_Query
 	 */
-	protected $cache = [
-		'excluded' => false,
-		'parent'   => 0,
-	];
+	protected Child_Pages_Query $query;
 
 
 	/**
@@ -76,17 +78,30 @@ class List_Pages {
 		$this->top_parent_id = $menu->get_top_parent_id();
 		$this->current_page = $menu->get_current_post();
 		$this->args = $this->parse_args();
-		$this->hook();
+		$this->query = Child_Pages_Query::factory( $this->args, $menu );
 	}
 
 
 	/**
-	 * Filters
+	 * Add hierarchical level classes to items of lists built from `List_Pages` args.
 	 *
-	 * @return void
+	 * @since 9.9.0 Static and registered once.
+	 *
+	 * @see   Core::hook()
+	 *
+	 * @param array<string>        $classes - Provided classes for item.
+	 * @param \WP_Post             $post    - The item.
+	 * @param int                  $_depth  - Depth of the item.
+	 * @param array<string, mixed> $args    - Args the list is walked with.
+	 *
+	 * @return array<string>
 	 */
-	protected function hook() {
-		add_filter( 'page_css_class', [ $this, 'add_list_item_classes' ], 2, 2 );
+	public static function add_list_item_classes( array $classes, \WP_Post $post, int $_depth = 0, array $args = [] ): array {
+		$list_pages = $args[ self::ARGS_KEY ] ?? null;
+		if ( $list_pages instanceof List_Pages ) {
+			return $list_pages->get_list_item_classes( $classes, $post );
+		}
+		return $classes;
 	}
 
 
@@ -99,12 +114,12 @@ class List_Pages {
 	 * We cover pages as well to handle edge cases where a site's theme
 	 * changes/removes default classes.
 	 *
-	 * @param array    $classes - Provided classes for item.
-	 * @param \WP_Post $post    - The item.
+	 * @param array<string> $classes - Provided classes for item.
+	 * @param \WP_Post      $post    - The item.
 	 *
-	 * @return array
+	 * @return list<string>
 	 */
-	public function add_list_item_classes( $classes, \WP_Post $post ) {
+	protected function get_list_item_classes( array $classes, \WP_Post $post ): array {
 		$classes[] = 'menu-item';
 		$children = $this->get_child_pages( $post->ID, $post->ID === $this->top_parent_id );
 		if ( ! empty( $children ) ) {
@@ -128,7 +143,7 @@ class List_Pages {
 			}
 		}
 
-		return \array_unique( $classes );
+		return \array_values( \array_unique( $classes ) );
 	}
 
 
@@ -168,6 +183,18 @@ class List_Pages {
 
 
 	/**
+	 * Get the child pages query using this list's args.
+	 *
+	 * @since 9.9.0
+	 *
+	 * @return Child_Pages_Query
+	 */
+	public function get_query(): Child_Pages_Query {
+		return $this->query;
+	}
+
+
+	/**
 	 * Magic method to allow using a simple echo to get output.
 	 *
 	 * @return string
@@ -191,7 +218,8 @@ class List_Pages {
 	 *    posts_per_page: int,
 	 *    suppress_filters: bool,
 	 *    title_li: string,
-	 *    walker: Page_Walker
+	 *    walker: Page_Walker,
+	 *    "advanced-sidebar-menu/list-pages": List_Pages
 	 * }
 	 */
 	protected function parse_args(): array {
@@ -215,7 +243,10 @@ class List_Pages {
 		// Must be string when used with `wp_list_pages`.
 		$args['exclude'] = \implode( ',', $args['exclude'] );
 
-		return apply_filters( 'advanced-sidebar-menu/list-pages/parse-args', $args, $this );
+		$args = apply_filters( 'advanced-sidebar-menu/list-pages/parse-args', $args, $this );
+		$args[ self::ARGS_KEY ] = $this;
+
+		return $args;
 	}
 
 
@@ -294,34 +325,21 @@ class List_Pages {
 	 * @return \WP_Post[]
 	 */
 	public function get_child_pages( $parent_page_id, $is_first_level = false ): array {
-		$excluded = $this->menu->is_excluded( $parent_page_id ) || $this->menu->is_excluded( $this->top_parent_id );
-		$this->cache = [
-			'parent'   => $parent_page_id,
-			'excluded' => $excluded,
-		];
-		$child_pages = Cache::instance()->get_child_pages( $this );
-		if ( false === $child_pages ) {
-			if ( $excluded ) {
-				$child_pages = [];
-			} else {
-				$args = $this->args;
-				$args['post_parent'] = $parent_page_id;
-				$args['fields'] = 'ids';
-				$args['suppress_filters'] = false;
-				$child_pages = get_posts( $args );
-			}
-			Cache::instance()->add_child_pages( $this, $child_pages );
+		$child_pages = [];
+		// Top-level pages sit outside the top parent's tree.
+		$top_parent_excluded = 0 < $parent_page_id && $this->menu->is_excluded( $this->top_parent_id );
+		if ( ! $top_parent_excluded && ! $this->menu->is_excluded( $parent_page_id ) ) {
+			$child_pages = $this->query->get_child_ids( $parent_page_id );
 		}
 
-		$child_pages = \array_map( 'get_post', \array_filter( $child_pages, function( $post_id ) {
-			return ! $this->menu->is_excluded( $post_id );
-		} ) );
+		$child_pages = \array_filter( $child_pages, fn( $post_id ) => ! $this->menu->is_excluded( $post_id ) );
+		$posts = \array_map( 'get_post', $child_pages );
 
 		if ( $is_first_level ) {
-			return (array) apply_filters( 'advanced-sidebar-menu/list-pages/first-level-child-pages', $child_pages, $this, $this->menu );
+			return (array) apply_filters( 'advanced-sidebar-menu/list-pages/first-level-child-pages', $posts, $this, $this->menu );
 		}
 
-		return (array) apply_filters( 'advanced-sidebar-menu/list-pages/grandchild-pages', $child_pages, $this, $this->menu );
+		return (array) apply_filters( 'advanced-sidebar-menu/list-pages/grandchild-pages', $posts, $this, $this->menu );
 	}
 
 

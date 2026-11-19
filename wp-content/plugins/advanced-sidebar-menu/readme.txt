@@ -3,9 +3,9 @@ Contributors: onpointplugins, Mat Lipe
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=paypal%40onpointplugins%2ecom&lc=US&item_name=Advanced%20Sidebar%20Menu&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 Tags: menus, page menus, category menus, sidebars, hierarchy
 Requires at least: 6.2.0
-Tested up to: 6.9.1
+Tested up to: 7.1.4
 Requires PHP: 7.4.0
-Stable tag: 9.8.3
+Stable tag: 9.9.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Fully automatic sidebar menus.
@@ -14,7 +14,7 @@ Fully automatic sidebar menus.
 
 <h3>Fully automatic sidebar menus.</h3>
 
-Uses the parent/child relationship of your pages or categories to generate menus based on the current section of your site. Assign a page or category to a parent and Advanced Sidebar Menu will do the rest for you.
+Uses the parent/child relationship of your pages or categories to generate menus based on the current section of your site. Assign a page or category to a parent, and Advanced Sidebar Menu will do the rest for you.
 
 Keeps the menu clean and usable. Only related items display, so you don't have to worry about keeping a custom menu up to date or displaying links to items that don't belong.
 
@@ -218,6 +218,30 @@ The Categories Menu widget/block contains a "Display categories on single posts"
 Yes. Based on whatever page post or category you are on, the menu will change automatically to display the current parents and children.
 
 == Changelog ==
+= 9.9.0 =
+* Added support for multiple top-level pages in the pages menu, each displaying its own child pages.
+* Fixed menu classes leaking onto other page lists and `page_css_class` filters piling up.
+* Changed `List_Pages::add_list_item_classes()` to static and registered once, so classes apply only to lists built from `List_Pages` args.
+* Improved page menu performance by querying and caching child page ids in one place.
+* Improved `List_Pages` caching by keying entries on query arguments only.
+* Introduced `Utils::clean_post_ids()` for sanitizing lists of post ids.
+* Fixed excluded categories displaying when supplied by `top-level-term-ids` filter callbacks.
+* Upgraded js-boilerplate to version 11.
+* Tested to WordPress Core 7.1.4.
+
+= 9.8.6 =
+* Support WordPress 7.1
+* Tested to WordPress Core 7.1
+
+= 9.8.5 =
+* Harden node security and resolve dependabot security alerts.
+* Required PRO version 9.10.1+.
+* Tested to WordPress Core 7.0.2
+
+= 9.8.4 =
+* Improve page ordering defaults.
+* Officially support PHP 8.5.
+* Tested to WordPress Core 7.0.
 
 = 9.8.3 =
 * Added JSON serialization to block attributes.
