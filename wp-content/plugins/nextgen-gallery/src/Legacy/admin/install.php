@@ -268,28 +268,14 @@ function nggallery_abandon_pictures_dedupe( $nggpictures, $attempts ) {
  * be created. Asserting absence from a failed probe is the same conflation the runtime check in
  * nggallery.php:check_schema_tables() already refuses to make.
  *
+ * The lookup itself lives in Util\Schema::table_exists(), shared with the runtime check and the
+ * migrations, which explains why it does not use SHOW TABLES LIKE (#1059).
+ *
  * @param string $table Fully prefixed table name.
  * @return bool|null True/false when the database answered, null when it could not.
  */
 function nggallery_table_exists( $table ) {
-	global $wpdb;
-
-	// last_error is not sufficient on its own: wpdb::query() returns false *before* it calls
-	// flush() when $wpdb->ready is false, so that query never records an error and last_error
-	// still holds whatever the previous one left -- an empty string after any success. The probe
-	// would then answer "absent" about a query that was never executed.
-	if ( ! $wpdb->ready ) {
-		return null;
-	}
-
-	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
-	$found = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', [ $wpdb->esc_like( $table ) ] ) );
-
-	if ( ! empty( $wpdb->last_error ) || ! $wpdb->ready ) {
-		return null;
-	}
-
-	return (bool) $found;
+	return \Imagely\NGG\Util\Schema::table_exists( $table );
 }
 
 /**

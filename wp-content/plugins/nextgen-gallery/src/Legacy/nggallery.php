@@ -214,20 +214,20 @@ class nggLoader {
 				return;
 			}
 
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
-			$exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', [ $wpdb->esc_like( $table ) ] ) );
+			// Not SHOW TABLES LIKE: on a large multisite network that scans every table in the
+			// schema on each call, and this runs for every subsite's administrator (#1059). See
+			// Util\Schema::table_exists().
+			$exists = \Imagely\NGG\Util\Schema::table_exists( $table );
 
-			// get_var() returns null both for "no rows" and for a query that FAILED -- wpdb::query()
-			// returns false, last_result stays empty, and get_var() hands back null either way. So
-			// a lost connection whose reconnect fails, a statement killed by max_statement_time,
-			// $wpdb->ready === false, or a proxy rejecting SHOW is indistinguishable from a table
-			// that genuinely is not there. Treating that as absence is exactly the conflation the
-			// rest of this feature exists to close, and here it would assert something false: a red
-			// banner on every admin screen claiming the images table is missing when it is not.
-			// Bail without writing, so a momentary blip doesn't cost 12 hours of false alarm.
-			// record_schema_probe_failure() owns what does get written -- a short transient, and
-			// the captured error once the failure has proved durable.
-			if ( ! empty( $wpdb->last_error ) || ! $wpdb->ready ) {
+			// null is "the database could not answer", not "absent": a lost connection whose
+			// reconnect fails, a statement killed by max_statement_time, $wpdb->ready === false,
+			// or a proxy rejecting the statement. Treating that as absence is exactly the
+			// conflation the rest of this feature exists to close, and here it would assert
+			// something false: a red banner on every admin screen claiming the images table is
+			// missing when it is not. Bail without writing, so a momentary blip doesn't cost 12
+			// hours of false alarm. record_schema_probe_failure() owns what does get written -- a
+			// short transient, and the captured error once the failure has proved durable.
+			if ( null === $exists ) {
 				$this->record_schema_probe_failure( $wpdb->last_error );
 				return;
 			}

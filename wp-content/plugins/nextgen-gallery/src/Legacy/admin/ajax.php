@@ -186,6 +186,11 @@ function ngg_ajax_operation() {
 				break;
 			case 'set_watermark':
 				$result = nggAdmin::set_watermark( $picture );
+				// The failure message names the saved watermark path, and ngg.ajax.js inserts
+				// the response as HTML.
+				if ( '1' !== $result ) {
+					$result = esc_html( $result );
+				}
 				break;
 			case 'recover_image':
 				$result = nggAdmin::recover_image( $id ) ? '1' : '0';

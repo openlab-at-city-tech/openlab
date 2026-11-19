@@ -101,6 +101,12 @@ class Controller {
 	 * @return void
 	 */
 	public function enqueue_frontend_resources( $displayed_gallery ) {
+		// A private gallery hidden here is not rendered, so its parameters are not printed either.
+		$private_notice = \Imagely\NGG\PrivateGalleries\Visibility::get_render_notice( $displayed_gallery );
+		if ( $private_notice && $private_notice['fully_hidden'] ) {
+			return;
+		}
+
 		// This script provides common JavaScript among all display types.
 		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		\wp_enqueue_script( 'ngg_common' );
@@ -174,6 +180,16 @@ class Controller {
 			get_permalink(),
 			false
 		);
+
+		// The Pro Lightbox reads this to leave share buttons off private galleries.
+		if ( \Imagely\NGG\PrivateGalleries\Manager::shows_private_gallery( $displayed_gallery ) ) {
+			DisplayManager::add_script_data(
+				'ngg_common',
+				'galleries.gallery_' . $displayed_gallery->id() . '.ngg_private',
+				true,
+				false
+			);
+		}
 
 		$settings_instance = \Imagely\NGG\Settings\Settings::get_instance();
 		$external_defaults = $settings_instance->get( 'external_source_default_settings' );

@@ -73,8 +73,11 @@ if ( $mode == 'last_pictures' ) {
 		--$gid;
 	}
 
-	// Set the main gallery object
-	$gallery = $galleries[ $gid ];
+	// Set the main gallery object. A private gallery is reported as missing.
+	$gallery = isset( $galleries[ $gid ] ) ? $galleries[ $gid ] : null;
+	if ( $gallery && \Imagely\NGG\PrivateGalleries\Visibility::is_hidden( $gallery->gid ) ) {
+		$gallery = null;
+	}
 
 	if ( ! isset( $gallery ) || $gallery == null ) {
 		header( 'content-type:text/plain;charset=utf-8' );
@@ -104,6 +107,14 @@ if ( $mode == 'last_pictures' ) {
 		// two step forward... Could be easier ? How ?
 		next( $galleries );
 		$next_gallery = next( $galleries );
+
+		// Never link to a private gallery.
+		if ( $prev_gallery && \Imagely\NGG\PrivateGalleries\Visibility::is_hidden( $prev_gallery->gid ) ) {
+			$prev_gallery = null;
+		}
+		if ( $next_gallery && \Imagely\NGG\PrivateGalleries\Visibility::is_hidden( $next_gallery->gid ) ) {
+			$next_gallery = null;
+		}
 	}
 
 	$rss = nggMediaRss::get_gallery_mrss( $gallery, $prev_gallery, $next_gallery );

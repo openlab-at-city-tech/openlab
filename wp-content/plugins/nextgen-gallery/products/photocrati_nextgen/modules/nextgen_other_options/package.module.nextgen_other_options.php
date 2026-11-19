@@ -541,6 +541,11 @@ class A_Reset_Form extends Mixin
     }
     public function reset_action()
     {
+        // The page's nonce and capability check passes for any role granted 'NextGEN Change
+        // options'; a site-wide reset needs an administrator, as Pro's reset actions do (#1162).
+        if (!current_user_can('manage_options')) {
+            return;
+        }
         global $wpdb;
         // Flush the cache.
         \Imagely\NGG\Util\Transient::flush();

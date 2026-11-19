@@ -928,7 +928,7 @@ class ngg_Thumbnail {
 	 * @param int    $xPOS
 	 * @param int    $yPOS
 	 * @return bool True when the watermark was composited; false when its image
-	 *              could not be loaded (refused, unreachable or not a PNG).
+	 *              could not be loaded (refused, unreachable or not an image).
 	 */
 	public function watermarkImage( $relPOS = 'botRight', $xPOS = 0, $yPOS = 0 ) {
 
@@ -936,39 +936,12 @@ class ngg_Thumbnail {
 		if (is_resource( $this->watermarkImgPath ) || $this->watermarkImgPath instanceof GdImage) {
 			$this->workingImage = $this->watermarkImgPath;
 		} else {
-			// SECURITY (#1084): same handling as Imagely\NGG\DataTypes\LegacyThumbnail. Only
-			// a local path inside the install is opened, contained before any filesystem
-			// call; an http(s) URL is fetched with wp_safe_remote_get(); any other stream
-			// wrapper (phar://, file://, ...) is refused.
-			if ( ! is_string( $this->watermarkImgPath ) || '' === $this->watermarkImgPath ) {
-				return false;
-			}
-			$normalized = str_replace( '\\', '/', $this->watermarkImgPath );
-			if ( false !== strpos( $normalized, '://' ) ) {
-				if ( ! preg_match( '#^https?://#i', $normalized ) ) {
-					return false;
-				}
-				$response = wp_safe_remote_get( $this->watermarkImgPath, array( 'timeout' => 10 ) );
-				if ( is_wp_error( $response ) || 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {
-					return false;
-				}
-				$body = wp_remote_retrieve_body( $response );
-				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-				$this->workingImage = $body ? @imagecreatefromstring( $body ) : false;
-			} else {
-				$contained = \Imagely\NGG\Util\Security::resolve_watermark_path(
-					$this->watermarkImgPath,
-					trailingslashit( WP_CONTENT_DIR ) . ltrim( $this->watermarkImgPath, '/\\' )
-				);
-				if ( null === $contained ) {
-					return false;
-				}
-				// Would you really want to use anything other than a png?
-				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-				$this->workingImage = @imagecreatefrompng( $contained );
-			}
-			// if it's not a valid file die...
-			if (empty( $this->workingImage ) or ( !$this->workingImage )) {
+			// One loader for every renderer and the settings preview (#1104): an own-site
+			// URL is read from disk, another http(s) URL is fetched with wp_safe_remote_get(),
+			// any other stream wrapper is refused (#1084) and a local path is contained to
+			// the install before it is opened.
+			$this->workingImage = \Imagely\NGG\Util\Security::load_watermark_image( $this->watermarkImgPath );
+			if ( ! $this->workingImage ) {
 				return false;
 			}
 		}

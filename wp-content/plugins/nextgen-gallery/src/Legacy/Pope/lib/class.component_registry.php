@@ -875,24 +875,23 @@ class C_Component_Registry
         if ($this->_module_type_cache == null || count($this->_modules) > $this->_module_type_cache_count)
         {
             $this->_module_type_cache_count = count($this->_modules);
-            $modules = $this->_modules;
 
-            $keys = array();
-            foreach ($modules as $mod => $properties) $keys[$mod] = $properties->module_version;
-            if (!($this->_module_type_cache = C_Pope_Cache::get($keys, array()))) {
-                foreach ($modules as $module_id => $module)
+            // Built from the registered modules' own directories on every request, never read
+            // from C_Pope_Cache: this map decides which files get included, and a cached copy
+            // was keyed only by module versions, so it could hold another install's paths
+            // (nextgen-gallery#1248). Each module keeps its scanned type list, so a rebuild
+            // after more modules load only scans the new ones.
+            $this->_module_type_cache = array();
+            foreach ($this->_modules as $module_id => $module)
+            {
+                $dir = $this->get_module_dir($module_id);
+                $type_list = $module->get_type_list();
+
+                foreach ($type_list as $type => $filename)
                 {
-                    $dir = $this->get_module_dir($module_id);
-                    $type_list = $module->get_type_list();
-
-                    foreach ($type_list as $type => $filename)
-                    {
-                        $this->_module_type_cache[strtolower($type)] = $dir . DIRECTORY_SEPARATOR . $filename;
-                    }
+                    $this->_module_type_cache[strtolower($type)] = $dir . DIRECTORY_SEPARATOR . $filename;
                 }
-                C_Pope_Cache::set($keys, $this->_module_type_cache);
             }
-            elseif (is_object($this->_module_type_cache)) $this->_module_type_cache = get_object_vars($this->_module_type_cache);
         }
 
         $name = strtolower($name);

@@ -76,6 +76,20 @@ function tbIsSafeUrl(value, sameOrigin) {
 	}
 }
 
+// SECURITY (#1246): the ajax branch of tb_show() inserts the fetched response as HTML,
+// so its inline handlers and scripts run in this page's origin. The "Try to apply to all
+// images" context turns any a > img into a trigger, visitor comment links included, so
+// only same-origin http/https URLs may be loaded that way.
+function tbIsSameOriginHttpUrl(value) {
+	try {
+		var u = new URL(value, document.baseURI);
+		var scheme = u.protocol.toLowerCase();
+		return (scheme === 'http:' || scheme === 'https:') && u.origin === window.location.origin;
+	} catch (e) {
+		return false;
+	}
+}
+
 // SECURITY (#1089): URLs are concatenated into single-quoted attributes below, and a
 // link's .href keeps a literal "'" (URL serialisation does not percent-encode it), so
 // "x.png?'onload='…" broke out of src='…'. Entity-encode before concatenating; the
@@ -403,6 +417,12 @@ function tb_show(caption, url, imageGroup) {
 			if (url.indexOf('TB_iframe') != -1) {
 				// either iframe or ajax window
 				urlNoQuery = url.split('TB_');
+				// SECURITY (#1246): the iframe src had no scheme check, so a
+				// "javascript:…?TB_iframe=true" link ran in this page. Only http/https.
+				if (!tbIsSafeUrl(urlNoQuery[0], false) || /^mailto:/i.test(urlNoQuery[0])) {
+					tb_remove();
+					return false;
+				}
 				jQuery('#TB_iframeContent').remove();
 				if (params['modal'] != 'true') {
 					//iframe no modal
@@ -490,6 +510,19 @@ function tb_show(caption, url, imageGroup) {
 				tb_position();
 				jQuery('#TB_load').remove();
 				jQuery('#TB_window').css({visibility: 'visible'});
+			} else if (!tbIsSameOriginHttpUrl(url)) {
+				// SECURITY (#1246): never inject another origin's HTML. Close the window and
+				// let the link behave as a plain link (http/https/mailto only).
+				// tb_click() ran the href through sanitizeAllowedHTML(), which serialises "&" as
+				// "&amp;"; decode it inertly (DOMParser runs no script) before navigating, or
+				// "?a=1&b=2" would open as "?a=1&amp;b=2".
+				tb_remove();
+				var parsed = new DOMParser().parseFromString(url, 'text/html');
+				var plainUrl = parsed.documentElement.textContent;
+				if (tbIsSafeUrl(plainUrl, false)) {
+					window.location.assign(plainUrl);
+				}
+				return false;
 			} else {
 				var load_url = url;
 				load_url += -1 === url.indexOf('?') ? '?' : '&';

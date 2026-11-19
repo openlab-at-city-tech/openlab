@@ -7,6 +7,7 @@ use Imagely\NGG\DataMappers\Album as AlbumMapper;
 use Imagely\NGG\DataMappers\Gallery as GalleryMapper;
 use Imagely\NGG\DataMappers\Image as ImageMapper;
 use Imagely\NGG\DataStorage\Manager as StorageManager;
+use Imagely\NGG\PrivateGalleries\ClientPage;
 use Imagely\NGG\REST\DataMappers\AlbumREST;
 
 use Imagely\NGG\Util\{Filesystem, MassAssignment, Security};
@@ -3237,6 +3238,8 @@ class API {
 									$error = __( 'Failed to remove gallery (%1$s).', 'nggallery' );
 								}
 							} elseif ( $task_type == 'gallery_edit' ) {
+								$privacy = [];
+
 								if ( isset( $task_object['name'] ) ) {
 									$gallery->name = $task_object['name'];
 								}
@@ -3260,6 +3263,9 @@ class API {
 									// directory every image path in the gallery is built from and
 									// 'author' decides who may manage it.
 									$assignable = MassAssignment::filter( $properties, 'gallery', $refused );
+
+									// is_private and pageid go through the client page service once the gallery is saved.
+									$privacy = ClientPage::extract_assigned( $assignable );
 
 									foreach ( $assignable as $key => $value ) {
 										$gallery->$key = $value;
@@ -3700,6 +3706,13 @@ class API {
 										$gal_errors = '[' . wp_json_encode( $gallery->validation() ) . ']';
 										/* translators: %1$s: gallery ID */
 										$error = __( 'Failed to save modified gallery (%1$s). ', 'nggallery' ) . $gal_errors;
+									}
+								} elseif ( $privacy ) {
+									$applied = ClientPage::apply_assigned( $gallery, $privacy );
+
+									if ( is_wp_error( $applied ) ) {
+										// $warning is a format string; the message must not consume the id argument.
+										$warning = ( $warning ? $warning . ' ' : '' ) . str_replace( '%', '%%', $applied->get_error_message() );
 									}
 								}
 							}

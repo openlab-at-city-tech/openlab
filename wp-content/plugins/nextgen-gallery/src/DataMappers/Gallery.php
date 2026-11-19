@@ -8,6 +8,8 @@ use Imagely\NGG\DataTypes\Gallery as GalleryType;
 
 use Imagely\NGG\DataMapper\TableDriver;
 use Imagely\NGG\Display\I18N;
+use Imagely\NGG\PrivateGalleries\ClientPage;
+use Imagely\NGG\PrivateGalleries\Registry as PrivateGalleries;
 use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Util\Transient;
 
@@ -88,6 +90,10 @@ class Gallery extends TableDriver {
 		$this->define_column( 'is_private', 'TINYINT', 0 );
 
 		$this->define_column( 'is_ecommerce_enabled', 'TINYINT', 0 );
+
+		// Client page unlocks by logged-out visitors; written only by PrivateGalleries\Gate.
+		$this->define_column( 'access_count', 'INT', 0 );
+		$this->define_column( 'last_access_at', 'DATETIME' );
 
 		if ( \C_NextGEN_Bootstrap::get_pro_api_version() < 4.0 ) {
 			$this->define_column( 'pricelist_id', 'BIGINT', 0, true );
@@ -265,8 +271,31 @@ class Gallery extends TableDriver {
 		return $settings;
 	}
 
+	/**
+	 * Leaves the access counters out of updates, so a save never overwrites a newer count.
+	 *
+	 * @param object $entity Gallery entity.
+	 * @return array
+	 */
+	public function _convert_to_table_data( $entity ) {
+		$data = parent::_convert_to_table_data( $entity );
+
+		if ( ! empty( $data['gid'] ) ) {
+			unset( $data['access_count'], $data['last_access_at'] );
+		}
+
+		return $data;
+	}
+
 	public function save_entity( $entity ) {
 		$storage = StorageManager::get_instance();
+
+		// Only PrivateGalleries\ClientPage may change the page or the flag of a set up private gallery.
+		$gid = (int) ( $entity->{$this->get_primary_key_column()} ?? 0 );
+		if ( $gid > 0 && ! ClientPage::is_writing() && PrivateGalleries::is_private( $gid ) ) {
+			$entity->pageid     = PrivateGalleries::page_for( $gid );
+			$entity->is_private = 1;
+		}
 
 		// Set dates using WordPress functions.
 		$current_time = current_time( 'mysql', true );
@@ -334,6 +363,7 @@ class Gallery extends TableDriver {
 			}
 			Transient::flush( 'displayed_gallery_rendering' );
 			Transient::flush( 'rest_galleries' );
+			PrivateGalleries::rebuild();
 		}
 
 		return $retval;
@@ -406,6 +436,7 @@ class Gallery extends TableDriver {
 				do_action( 'ngg_delete_gallery', $entity );
 				Transient::flush( 'displayed_gallery_rendering' );
 				Transient::flush( 'rest_galleries' );
+				PrivateGalleries::rebuild();
 			}
 		}
 

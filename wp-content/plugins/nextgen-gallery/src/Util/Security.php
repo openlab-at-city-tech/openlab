@@ -442,6 +442,164 @@ class Security {
 	}
 
 	/**
+	 * Maps an http(s) watermark URL that points at this site to the file it serves.
+	 *
+	 * A watermark URL on the site's own domain (a media-library URL, or any file under
+	 * the uploads, plugins, content or site root) is read from disk instead of being
+	 * downloaded. Downloading it means a request from the server back to itself, which
+	 * many shared hosts and WAFs refuse, so the preview and Set Watermark could fail
+	 * on a file that sits on the same disk (#1104). It also saves one HTTP request per
+	 * image in a bulk job.
+	 *
+	 * The scheme is ignored (http and https serve the same file); host and port must
+	 * match. The decoded path is contained with contain_watermark_path(), so "%2e%2e/"
+	 * or a symlink cannot reach outside the install. Only image extensions are mapped,
+	 * so a URL that is really a script is never read as a file.
+	 *
+	 * @param string $url Watermark URL.
+	 * @return string|null Canonical local path of an existing file, or null when the URL
+	 *                     is not on this site (callers then download it).
+	 */
+	public static function watermark_url_to_local_path( $url ) {
+		if ( ! is_string( $url ) || ! preg_match( '#^https?://#i', $url ) ) {
+			return null;
+		}
+
+		$parts = \wp_parse_url( $url );
+		if ( empty( $parts['host'] ) || empty( $parts['path'] ) || isset( $parts['user'] ) || isset( $parts['pass'] ) ) {
+			return null;
+		}
+
+		$extension = strtolower( (string) pathinfo( $parts['path'], PATHINFO_EXTENSION ) );
+		if ( ! in_array( $extension, [ 'png', 'jpg', 'jpeg', 'gif', 'webp' ], true ) ) {
+			return null;
+		}
+
+		$host = strtolower( $parts['host'] );
+		$port = isset( $parts['port'] ) ? (int) $parts['port'] : null;
+
+		foreach ( self::own_site_url_bases() as $base ) {
+			list( $base_url, $base_dir ) = $base;
+
+			$base_parts = \wp_parse_url( $base_url );
+			if ( empty( $base_parts['host'] ) || strtolower( $base_parts['host'] ) !== $host ) {
+				continue;
+			}
+			if ( ( isset( $base_parts['port'] ) ? (int) $base_parts['port'] : null ) !== $port ) {
+				continue;
+			}
+
+			$base_path = isset( $base_parts['path'] ) ? rtrim( $base_parts['path'], '/' ) : '';
+			if ( 0 !== strpos( $parts['path'], $base_path . '/' ) ) {
+				continue;
+			}
+
+			$relative = rawurldecode( substr( $parts['path'], strlen( $base_path ) + 1 ) );
+			if ( '' === $relative || false !== strpos( $relative, "\0" ) ) {
+				continue;
+			}
+
+			$contained = self::contain_watermark_path( \trailingslashit( \wp_normalize_path( $base_dir ) ) . $relative );
+			if ( null !== $contained && is_file( $contained ) ) {
+				return $contained;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * URL prefixes of this site and the directories they serve, most specific first.
+	 *
+	 * @return array<int, array{0: string, 1: string}>
+	 */
+	private static function own_site_url_bases() {
+		$bases = [];
+
+		$upload_dir = \wp_upload_dir( null, false );
+		if ( ! empty( $upload_dir['baseurl'] ) && ! empty( $upload_dir['basedir'] ) ) {
+			$bases[] = [ $upload_dir['baseurl'], $upload_dir['basedir'] ];
+		}
+		if ( defined( 'WP_PLUGIN_DIR' ) ) {
+			$bases[] = [ \plugins_url(), WP_PLUGIN_DIR ];
+		}
+		if ( defined( 'WP_CONTENT_DIR' ) ) {
+			$bases[] = [ \content_url(), WP_CONTENT_DIR ];
+		}
+		$bases[] = [ \site_url(), ABSPATH ];
+
+		// home_url() serves ABSPATH too when WordPress is not in a subdirectory (it may
+		// differ from site_url() only by host, e.g. a mapped domain).
+		$home_path = (string) \wp_parse_url( \home_url(), PHP_URL_PATH );
+		$site_path = (string) \wp_parse_url( \site_url(), PHP_URL_PATH );
+		if ( rtrim( $home_path, '/' ) === rtrim( $site_path, '/' ) ) {
+			$bases[] = [ \home_url(), ABSPATH ];
+		}
+
+		return $bases;
+	}
+
+	/**
+	 * Opens a watermark image for compositing: the one loader every thumbnail renderer
+	 * uses, so Set Watermark, upload auto-watermarking, dynamic thumbnails and the
+	 * settings preview read the same file the same way (#1104).
+	 *
+	 * - An http(s) URL on this site is read from disk (watermark_url_to_local_path()).
+	 * - Any other http(s) URL is fetched with wp_safe_remote_get(), which refuses
+	 *   internal and loopback hosts, closing the SSRF that imagecreatefrompng()'s own
+	 *   fopen wrapper would allow.
+	 * - Every other wrapper (phar://, file://, php://, data://, ...) is refused: opening
+	 *   one reads or deserialises attacker-chosen data (#1084).
+	 * - A local path is contained to the install with resolve_watermark_path().
+	 *
+	 * The bytes go through imagecreatefromstring(), so PNG, JPEG, GIF and WebP all work
+	 * wherever they come from (a remote URL always accepted any of them).
+	 *
+	 * @param string $path Saved watermark path or URL.
+	 * @return \GdImage|resource|false The image, or false when it cannot be loaded.
+	 */
+	public static function load_watermark_image( $path ) {
+		if ( ! is_string( $path ) || '' === $path ) {
+			return false;
+		}
+
+		$normalized = str_replace( '\\', '/', $path );
+		$body       = false;
+
+		if ( false !== strpos( $normalized, '://' ) ) {
+			if ( ! preg_match( '#^https?://#i', $normalized ) ) {
+				return false;
+			}
+
+			$local = self::watermark_url_to_local_path( $path );
+			if ( null !== $local ) {
+				$body = @file_get_contents( $local ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			} else {
+				$response = \wp_safe_remote_get( $path, [ 'timeout' => 10 ] );
+				if ( \is_wp_error( $response ) || 200 !== (int) \wp_remote_retrieve_response_code( $response ) ) {
+					return false;
+				}
+				$body = \wp_remote_retrieve_body( $response );
+			}
+		} else {
+			$fs        = Filesystem::get_instance();
+			$contained = self::resolve_watermark_path( $path, $fs->join_paths( $fs->get_document_root( 'content' ), $path ) );
+			if ( null === $contained ) {
+				return false;
+			}
+			$body = @file_get_contents( $contained ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		}
+
+		if ( ! is_string( $body ) || '' === $body ) {
+			return false;
+		}
+
+		$image = @imagecreatefromstring( $body ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+
+		return $image ? $image : false;
+	}
+
+	/**
 	 * Whether a local watermark path can resolve inside the install.
 	 *
 	 * The save-time twin of resolve_watermark_path(): the same candidates and roots,

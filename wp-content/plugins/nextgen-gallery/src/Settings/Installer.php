@@ -2,7 +2,9 @@
 
 namespace Imagely\NGG\Settings;
 
+use Imagely\NGG\Migrations\ClearDanglingPrivatePageLinks;
 use Imagely\NGG\Migrations\ResetIgnoredWatermarkOffsets;
+use Imagely\NGG\Migrations\ShowPrivacyColumn;
 
 /**
  * Installer for NextGEN Gallery settings.
@@ -255,6 +257,10 @@ class Installer {
 		// Runs only on a version change, under the upgrade lock, and is persisted by the
 		// save Util\Installer::update() already performs once every handler has run.
 		ResetIgnoredWatermarkOffsets::apply( $this->blog_settings );
+
+		// Same rules: once per upgrade, under the lock, marker saved with the settings.
+		ClearDanglingPrivatePageLinks::apply( $this->blog_settings );
+		ShowPrivacyColumn::apply( $this->blog_settings );
 	}
 
 	/**

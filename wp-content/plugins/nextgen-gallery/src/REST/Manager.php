@@ -8,8 +8,10 @@
 
 namespace Imagely\NGG\REST;
 
+use Imagely\NGG\REST\Admin\Abilities;
 use Imagely\NGG\REST\Admin\AttachToPost;
 use Imagely\NGG\REST\Admin\Block;
+use Imagely\NGG\REST\Admin\Pages;
 use Imagely\NGG\REST\Admin\RolesCapabilities;
 use Imagely\NGG\REST\DataMappers\AddonsREST;
 use Imagely\NGG\REST\DataMappers\AlbumREST;
@@ -23,6 +25,7 @@ use Imagely\NGG\REST\DataMappers\NotificationsREST;
 use Imagely\NGG\REST\DataMappers\PluginManagementREST;
 use Imagely\NGG\REST\DataMappers\TagREST;
 use Imagely\NGG\REST\ConvertGallery\ConvertGalleryREST;
+use Imagely\NGG\PrivateGalleries\PrivacyREST;
 
 /**
  * REST API Manager for NextGEN Gallery.
@@ -41,12 +44,19 @@ class Manager {
 		$atp = new AttachToPost();
 		$atp->register_routes();
 
+		$pages = new Pages();
+		$pages->register_routes();
+
 		$roles_capabilities = new RolesCapabilities();
 		$roles_capabilities->register_routes();
+
+		$abilities = new Abilities();
+		$abilities->register_routes();
 
 		// Register the DataMappers REST endpoints.
 		AddonsREST::register_routes();
 		GalleryREST::register_routes();
+		PrivacyREST::register_routes();
 		AlbumREST::register_routes();
 		ImageREST::register_routes();
 		ImageOperationsREST::register_routes();

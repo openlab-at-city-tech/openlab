@@ -316,6 +316,7 @@ HTML;
 			'enviraCdnConfig'           => self::get_cdn_config(),
 			'canAccessRolesSettings'    => self::can_access_roles_settings(),
 			'canAccessLicenseSettings'  => self::can_access_license_settings(),
+			'canAccessAbilities'        => self::can_access_abilities_settings(),
 			// Integers survive wp_localize_script better than booleans. canEditGalleryPath is authoritative in JS.
 			'is_multisite'              => is_multisite() ? 1 : 0,
 			'is_main_site'              => ( ! is_multisite() || is_main_site() ) ? 1 : 0,
@@ -655,6 +656,16 @@ HTML;
 
 		$wpmu_roles = (bool) \Imagely\NGG\Settings\GlobalSettings::get_instance()->get( 'wpmuRoles' );
 		return $wpmu_roles && current_user_can( 'manage_options' );
+	}
+
+	/**
+	 * Check if current user can access the AI & MCP settings, which switch the gallery write
+	 * abilities on for this site.
+	 *
+	 * @return bool
+	 */
+	public static function can_access_abilities_settings() {
+		return current_user_can( 'manage_options' );
 	}
 
 	/**

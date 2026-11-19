@@ -142,6 +142,20 @@ class Gallery extends Model {
 	 */
 	public $is_ecommerce_enabled = false;
 
+	/**
+	 * Client page unlocks by visitors who are not logged in.
+	 *
+	 * @var int
+	 */
+	public $access_count = 0;
+
+	/**
+	 * Last client page unlock, GMT.
+	 *
+	 * @var string|null
+	 */
+	public $last_access_at;
+
 	// TODO: remove this when get_pro_compat_level() >= 1.
 	/**
 	 * Price list ID.

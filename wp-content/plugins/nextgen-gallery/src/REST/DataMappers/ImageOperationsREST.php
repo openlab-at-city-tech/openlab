@@ -755,6 +755,18 @@ class ImageOperationsREST {
 				);
 			}
 
+			// The watermark is on, but stale cached copies remain (#1236): still clear what the
+			// cache flush can reach, and report it as its own error rather than a failed watermark.
+			if ( \nggAdmin::cached_copies_not_deleted_message() === $result ) {
+				StorageManager::get_instance()->flush_image_cache( $image_id );
+
+				return new WP_Error(
+					'watermark_cached_copies_not_deleted',
+					$result,
+					[ 'status' => 500 ]
+				);
+			}
+
 			return new WP_Error(
 				'watermark_failed',
 				is_string( $result ) && '' !== $result ? $result : __( 'Failed to apply watermark', 'nggallery' ),

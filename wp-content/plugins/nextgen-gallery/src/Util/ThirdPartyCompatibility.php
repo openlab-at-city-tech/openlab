@@ -157,6 +157,22 @@ class ThirdPartyCompatibility {
 	 * @return array
 	 */
 	public function add_rankmath_seo_images( $images, $post_ID ) {
+		// Sitemaps are public: private galleries stay out whoever builds them.
+		return \Imagely\NGG\PrivateGalleries\Visibility::strictly(
+			function () use ( $images, $post_ID ) {
+				return $this->collect_rankmath_seo_images( $images, $post_ID );
+			}
+		);
+	}
+
+	/**
+	 * Collects the NextGEN images of a post for RankMath.
+	 *
+	 * @param array $images
+	 * @param int   $post_ID
+	 * @return array
+	 */
+	private function collect_rankmath_seo_images( $images, $post_ID ) {
 		$post = get_post( $post_ID );
 		preg_match_all(
 			'/' . get_shortcode_regex() . '/',
@@ -350,7 +366,12 @@ class ThirdPartyCompatibility {
 		\add_shortcode( 'ngg_images', [ $this, 'wpseo_shortcode_handler' ] );
 
 		try {
-			\do_shortcode( $post->post_content );
+			// Sitemaps are public: private galleries stay out whoever builds them.
+			\Imagely\NGG\PrivateGalleries\Visibility::strictly(
+				static function () use ( $post ) {
+					\do_shortcode( $post->post_content );
+				}
+			);
 		} finally {
 			$shortcode_tags = $registered_shortcodes; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- Restores the registrations saved above.
 		}

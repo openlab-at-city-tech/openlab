@@ -754,6 +754,62 @@ class Manager {
 	}
 
 	/**
+	 * Deletes an image's dynamic sizes (their files and their meta), keeping every other size.
+	 *
+	 * For callers that rewrite the full-size file in place without regenerating the sizes cloned
+	 * from it. The upload watermark and the legacy "Set watermark" action both do this, and a
+	 * listener on ngg_generated_image (NextGEN Pro's HiDPI) may already have cloned 2x dynamic
+	 * sizes from the unwatermarked file. Those copies were trusted on file_exists() alone, so
+	 * they were served (as the retina srcset) without the watermark (#1236). A deleted size is
+	 * rebuilt on its next request from the current full file.
+	 *
+	 * Only names DynamicThumbnails recognises as dynamic are removed: full, thumbnail, backup and
+	 * any size a third party stored stay as they are.
+	 *
+	 * A size delete_image() refuses (its path resolves outside the gallery's bounds), or whose
+	 * file is still on disk afterwards, is logged and raises the CachedCopiesNotDeleted admin
+	 * notice rather than being skipped silently.
+	 *
+	 * @param int|object $image Image ID or image object. An object has its meta updated in place.
+	 * @return bool False when the image is missing or any dynamic size could not be deleted.
+	 */
+	public function delete_dynamic_image_sizes( $image ) {
+		if ( is_numeric( $image ) ) {
+			$image = $this->image_mapper->find( $image );
+		}
+
+		if ( ! $image ) {
+			return false;
+		}
+
+		$dynthumbs = \Imagely\NGG\DynamicThumbnails\Manager::get_instance();
+		$refused   = [];
+
+		foreach ( $this->get_image_sizes( $image ) as $size ) {
+			if ( in_array( $size, [ 'full', 'thumbnail', 'backup' ], true ) || ! $dynthumbs->is_size_dynamic( $size, true ) ) {
+				continue;
+			}
+
+			// delete_image() does not check unlink()'s result, so a file that survived counts as
+			// refused too: its stale copy would otherwise be reported gone and keep being served.
+			$abspath = $this->get_image_abspath( $image, $size );
+			if ( ! $this->delete_image( $image, $size ) || ( $abspath && @file_exists( $abspath ) ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+				$refused[] = $size;
+			}
+		}
+
+		if ( $refused ) {
+			error_log( sprintf( 'NextGEN Gallery: could not delete %1$d cached size(s) of image #%2$s after rewriting its full-size file; they may still show the previous version: %3$s', count( $refused ), isset( $image->pid ) ? $image->pid : '?', implode( ', ', $refused ) ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			// delete_image() has already dropped a surviving size's meta, so nothing would retry
+			// it: the admin has to know (#1236).
+			\Imagely\NGG\Admin\Notifications\CachedCopiesNotDeleted::record();
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Returns an array of dimensional properties (width, height, real_width, real_height) of a resulting clone image if and when generated
 	 *
 	 * @param object|int $image Image ID or an image object
@@ -5854,6 +5910,9 @@ class Manager {
 				) ) {
 					error_log( sprintf( 'NextGEN Gallery: image #%d was uploaded without its automatic watermark - the watermark image or font in the watermark settings could not be loaded.', (int) $image_id ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 					\Imagely\NGG\Admin\Notifications\WatermarkUploadFailed::record();
+				} else {
+					// Sizes generated above (HiDPI 2x copies) were cloned before the watermark (#1236).
+					$this->delete_dynamic_image_sizes( $image );
 				}
 			}
 

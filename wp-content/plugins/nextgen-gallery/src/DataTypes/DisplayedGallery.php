@@ -11,6 +11,7 @@ use Imagely\NGG\DataMappers\Image as ImageMapper;
 use Imagely\NGG\Display\I18N;
 use Imagely\NGG\DisplayedGallery\SourceManager;
 use Imagely\NGG\DisplayType\ControllerFactory;
+use Imagely\NGG\PrivateGalleries\Visibility;
 use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Util\Transient;
 
@@ -513,6 +514,13 @@ class DisplayedGallery extends Model {
 			}
 		}
 
+		// Private galleries render only on their unlocked client page. Added before the random
+		// source copies the where clauses into its sub-query.
+		$hidden_gallery_ids = $this->get_hidden_gallery_ids();
+		if ( $hidden_gallery_ids ) {
+			$mapper->where( [ 'galleryid NOT IN %s', $hidden_gallery_ids ] );
+		}
+
 		// Adjust the query more based on what source was selected.
   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( in_array( $this->source, [ 'recent', 'recent_images' ] ) ) {
@@ -815,6 +823,19 @@ class DisplayedGallery extends Model {
 			$entity_ids = array_merge( $sortorder, array_diff( $entity_ids, $sortorder ) );
 		}
 
+		// Leave out private galleries outside their client page, the "all galleries" sentinel included.
+		$hidden_gallery_ids = $this->get_hidden_gallery_ids();
+		if ( $hidden_gallery_ids ) {
+			$entity_ids = array_values(
+				array_filter(
+					(array) $entity_ids,
+					static function ( $entity_id ) use ( $hidden_gallery_ids ) {
+						return 'a' === substr( (string) $entity_id, 0, 1 ) || ! in_array( (int) $entity_id, $hidden_gallery_ids, true );
+					}
+				)
+			);
+		}
+
 		// Segment entity ids into two groups - galleries and albums.
 		foreach ( $entity_ids as $entity_id ) {
 			if ( substr( $entity_id, 0, 1 ) == 'a' ) {
@@ -904,6 +925,23 @@ class DisplayedGallery extends Model {
 		}
 
 		return $retval;
+	}
+
+	/**
+	 * Gallery ids this displayed gallery must leave out (private galleries outside their page).
+	 *
+	 * @return int[]
+	 */
+	public function get_hidden_gallery_ids() {
+		/**
+		 * Filters the gallery ids left out of a displayed gallery's entity queries.
+		 *
+		 * @param int[]            $hidden            Gallery ids.
+		 * @param DisplayedGallery $displayed_gallery The displayed gallery.
+		 */
+		$hidden = (array) apply_filters( 'ngg_displayed_gallery_hidden_gallery_ids', Visibility::get_hidden_gallery_ids(), $this );
+
+		return array_values( array_filter( array_map( 'intval', $hidden ) ) );
 	}
 
 	/**

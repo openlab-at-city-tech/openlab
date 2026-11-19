@@ -1165,7 +1165,7 @@ class LegacyThumbnail {
 	 * @param int    $xPOS
 	 * @param int    $yPOS
 	 * @return bool True when the watermark was composited; false when its image
-	 *              could not be loaded (refused, unreachable or not a PNG).
+	 *              could not be loaded (refused, unreachable or not an image).
 	 */
 	public function watermarkImage( $relPOS = 'botRight', $xPOS = 0, $yPOS = 0 ) {
 
@@ -1173,55 +1173,12 @@ class LegacyThumbnail {
 		if ( is_resource( $this->watermarkImgPath ) || $this->watermarkImgPath instanceof \GdImage ) {
 			$this->workingImage = $this->watermarkImgPath;
 		} else {
-			if ( ! is_string( $this->watermarkImgPath ) || '' === $this->watermarkImgPath ) {
-				return false;
-			}
-
-			if ( false !== strpos( str_replace( '\\', '/', $this->watermarkImgPath ), '://' ) ) {
-				// SECURITY: a scheme is present. Only http(s) is a legitimate watermark
-				// source — the form documents "an HTTP url" and customers rely on it
-				// (#1104) — and it is fetched through wp_safe_remote_get(), which refuses
-				// internal/loopback hosts, closing the SSRF that imagecreatefrompng()'s own
-				// fopen wrapper would allow. Every other wrapper (phar://, file://, php://,
-				// data://, …) is refused outright: opening one reads or deserialises
-				// attacker-chosen data (#1084, object injection on PHP <= 7.4).
-				if ( ! preg_match( '#^https?://#i', str_replace( '\\', '/', $this->watermarkImgPath ) ) ) {
-					return false;
-				}
-				$response = wp_safe_remote_get( $this->watermarkImgPath, [ 'timeout' => 10 ] );
-				if ( is_wp_error( $response ) || 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {
-					return false;
-				}
-				$body = wp_remote_retrieve_body( $response );
-				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-				$this->workingImage = $body ? @imagecreatefromstring( $body ) : false;
-			} else {
-				// SECURITY: contain the local path to the install (ABSPATH, WP_CONTENT_DIR
-				// or uploads) before touching the filesystem. Without this, a "../../.."
-				// traversal in the saved wmPath reaches any PNG the web-server user can read
-				// and composites it into a publicly served thumbnail (arbitrary-file
-				// disclosure), the existence check doubles as a path oracle, and on Windows a
-				// UNC path makes the server connect to that host. resolve_watermark_path()
-				// tries the site-root and content-root forms, contains each before probing
-				// it, and returns the canonical path: open that, never the raw one, because
-				// the OS follows a symlink before applying "..".
-				$fs        = \Imagely\NGG\Util\Filesystem::get_instance();
-				$contained = \Imagely\NGG\Util\Security::resolve_watermark_path(
-					$this->watermarkImgPath,
-					$fs->join_paths( $fs->get_document_root( 'content' ), $this->watermarkImgPath )
-				);
-				if ( null === $contained ) {
-					return false;
-				}
-				$this->watermarkImgPath = $contained;
-
-				// Would you really want to use anything other than a png?
-				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-				$this->workingImage = @imagecreatefrompng( $this->watermarkImgPath );
-			}
-
-			// if it's not a valid file die...
-			if ( empty( $this->workingImage ) || ( ! $this->workingImage ) ) {
+			// One loader for every renderer and the settings preview (#1104): an own-site
+			// URL is read from disk, another http(s) URL is fetched with wp_safe_remote_get(),
+			// any other stream wrapper is refused (#1084) and a local path is contained to
+			// the install before it is opened.
+			$this->workingImage = \Imagely\NGG\Util\Security::load_watermark_image( $this->watermarkImgPath );
+			if ( ! $this->workingImage ) {
 				return false;
 			}
 		}

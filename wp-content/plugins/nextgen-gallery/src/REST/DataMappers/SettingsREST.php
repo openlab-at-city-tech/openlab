@@ -26,6 +26,35 @@ use Imagely\NGG\DataMappers\Gallery as GalleryMapper;
  * @package Imagely\NGG\REST\DataMappers
  */
 class SettingsREST {
+
+	/**
+	 * Rows hydrated per batch by sweep_rows().
+	 *
+	 * @var int
+	 */
+	const SWEEP_BATCH = 200;
+
+	/**
+	 * Rows the watermark preview will scan, per end of the table, for a sample image.
+	 *
+	 * Per #1154 the scan is bounded as well as the memory: a missing preview beats
+	 * a request that walks a huge library on every watermark change.
+	 *
+	 * @var int
+	 */
+	const PREVIEW_SCAN_LIMIT = 200;
+
+	/**
+	 * Largest images table the preview will still walk end to end.
+	 *
+	 * Below this the scan costs little and the cap can only do harm: runs of rows
+	 * whose file is missing (#1045, #1108) can fill both capped windows while a
+	 * usable image sits between them, which find_all() would have found.
+	 *
+	 * @var int
+	 */
+	const PREVIEW_FULL_SCAN_MAX = 5000;
+
 	/**
 	 * Register the REST API routes for settings
 	 */
@@ -659,6 +688,110 @@ class SettingsREST {
 	}
 
 	/**
+	 * Raises the last database error, so a failed read is not read as end of table.
+	 *
+	 * The detail is logged rather than returned: these routes answer anyone holding
+	 * 'NextGEN Change options', which a site may delegate well below administrator.
+	 *
+	 * @throws \RuntimeException When the last query failed.
+	 */
+	private static function throw_on_db_error() {
+		global $wpdb;
+
+		if ( empty( $wpdb->last_error ) ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+		error_log( 'NextGEN Gallery: a settings sweep query failed — ' . $wpdb->last_error );
+
+		throw new \RuntimeException( esc_html__( 'A database error interrupted the request.', 'nggallery' ) );
+	}
+
+	/**
+	 * Walks a mapper's table, hydrating SWEEP_BATCH rows at a time.
+	 *
+	 * Keyset paging on the primary key, so peak memory is one batch of models
+	 * rather than the whole table. Mapper caching is off for the duration:
+	 * cached batches accumulate every row in the object cache and undo this.
+	 *
+	 * Direction only matters to a capped sweep, and then only because rows whose file
+	 * is missing cluster: a failed import or upload leaves orphans at the newest end
+	 * (#1045, #1108), while migrations leave them at the oldest. A capped caller that
+	 * cares reads from both ends rather than betting on one. The uncapped callers read
+	 * every row either way.
+	 *
+	 * @param \Imagely\NGG\DataMapper\TableDriver $mapper   Mapper owning the table.
+	 * @param callable                            $callback Receives one model; return false to stop.
+	 * @param string                              $where    Extra predicate, placeholders only.
+	 * @param array                               $binds    Values for $where.
+	 * @param int                                 $max      Stop after this many rows; 0 for the whole table.
+	 * @param bool                                $newest   Walk highest key first instead of lowest.
+	 * @return int Rows visited.
+	 * @throws \RuntimeException When a page cannot be read.
+	 */
+	private static function sweep_rows( $mapper, callable $callback, $where = '', $binds = [], $max = 0, $newest = false ) {
+		global $wpdb;
+
+		$table   = esc_sql( $mapper->get_table_name() );
+		$key     = esc_sql( $mapper->get_primary_key_column() );
+		$cached  = $mapper->use_cache;
+		$edge    = $newest ? PHP_INT_MAX : 0;
+		$compare = $newest ? '<' : '>';
+		$order   = $newest ? 'DESC' : 'ASC';
+		$scanned = 0;
+		$visited = 0;
+
+		$mapper->use_cache = false;
+
+		$sql = "SELECT `{$key}` FROM `{$table}` WHERE `{$key}` {$compare} %d {$where} ORDER BY `{$key}` {$order} LIMIT %d";
+
+		try {
+			do {
+				$limit = $max > 0 ? min( self::SWEEP_BATCH, $max - $scanned ) : self::SWEEP_BATCH;
+
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber -- Identifiers escaped; placeholder count follows $where, and a mismatch is caught below.
+				$query = $wpdb->prepare( $sql, array_merge( [ $edge ], $binds, [ $limit ] ) );
+
+				// prepare() answers a placeholder/bind mismatch with null, and wpdb runs an empty
+				// query without setting last_error, so this would otherwise look like an empty page.
+				if ( empty( $query ) ) {
+					throw new \RuntimeException( esc_html__( 'A database error interrupted the request.', 'nggallery' ) );
+				}
+
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared -- $query is prepare()'s own output, checked above; keys are not worth caching.
+				$ids = $wpdb->get_col( $query );
+				self::throw_on_db_error();
+
+				$ids   = array_map( 'intval', (array) $ids );
+				$batch = count( $ids );
+
+				if ( ! $batch ) {
+					break;
+				}
+
+				$scanned += $batch;
+				$models   = $mapper->find_all( [ "{$key} IN %s", $ids ] );
+				self::throw_on_db_error();
+
+				foreach ( $models as $model ) {
+					++$visited;
+					if ( false === $callback( $model ) ) {
+						return $visited;
+					}
+				}
+
+				// Ids come back in scan order, so the last one is this page's edge.
+				$edge = (int) end( $ids );
+			} while ( $batch === $limit && ( 0 === $max || $scanned < $max ) );
+		} finally {
+			$mapper->use_cache = $cached;
+		}
+
+		return $visited;
+	}
+
+	/**
 	 * Get watermark preview
 	 *
 	 * @param \WP_REST_Request $request The request object.
@@ -738,40 +871,72 @@ class SettingsREST {
 		}
 
 		try {
+			global $wpdb;
+
 			// Get NextGen managers
 			$mapper  = ImageMapper::get_instance();
 			$storage = StorageManager::get_instance();
 
-			// Find the first available NextGen image
-			$images = $mapper->find_all();
-
-			if ( empty( $images ) ) {
-				return new WP_Error(
-					'no_images_found',
-					__( 'No images found in NextGen Gallery. Please add images to a gallery first.', 'nggallery' ),
-					[ 'status' => 400 ]
-				);
-			}
-
+			// One sample image, found in bounded batches and within a bounded scan. find_all()
+			// loaded every row in the images table to pick a single image and exhausted memory
+			// on large libraries.
 			$original_image = null;
 
-			// Look for the first usable image
-			foreach ( $images as $image ) {
-				// Skip dynamic thumbnails and thumbs
-				if ( strpos( $image->filename, '-nggid' ) === false && strpos( $image->filename, 'thumbs-' ) !== 0 ) {
-					// Verify the image file actually exists
-					$image_path = $storage->get_image_abspath( $image );
-					if ( $image_path && file_exists( $image_path ) ) {
-						$original_image = $image;
-						break;
-					}
+			// Dynamic thumbnails and thumbs are excluded in SQL rather than skipped in PHP.
+			$take_first = function ( $image ) use ( $storage, &$original_image ) {
+				// Verify the image file actually exists
+				$image_path = $storage->get_image_abspath( $image );
+				if ( $image_path && file_exists( $image_path ) ) {
+					$original_image = $image;
+					return false;
+				}
+			};
+
+			// Only a library too big to walk needs the cap. A failed count reads as 0 and
+			// leaves the scan uncapped, which is the safe direction: slower, never wrong.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name comes from the mapper and is escaped.
+			$library = (int) $wpdb->get_var( 'SELECT COUNT(*) FROM `' . esc_sql( $mapper->get_table_name() ) . '`' );
+			$budget  = $library > self::PREVIEW_FULL_SCAN_MAX ? self::PREVIEW_SCAN_LIMIT : 0;
+
+			// Capped, rows with no file on disk cluster at one end or the other, so a single
+			// window can miss a healthy library. Read the oldest rows, then the newest; both
+			// ends have to be exhausted before the preview gives up. Uncapped, one pass is
+			// the whole table.
+			$candidates = 0;
+
+			foreach ( $budget > 0 ? [ false, true ] : [ false ] as $newest ) {
+				$candidates += self::sweep_rows(
+					$mapper,
+					$take_first,
+					'AND `filename` NOT LIKE %s AND `filename` NOT LIKE %s',
+					[ '%-nggid%', 'thumbs-%' ],
+					$budget,
+					$newest
+				);
+
+				if ( $original_image ) {
+					break;
 				}
 			}
 
 			if ( ! $original_image ) {
+				// An empty library and one whose files are all missing get different codes.
+				// count() reads through the mapper cache, so ask the unfiltered sweep instead.
+				$has_any = $candidates > 0 || self::sweep_rows(
+					$mapper,
+					function () {
+						return false;
+					},
+					'',
+					[],
+					1
+				) > 0;
+
 				return new WP_Error(
-					'no_usable_images',
-					__( 'No usable images found for preview generation.', 'nggallery' ),
+					$has_any ? 'no_usable_images' : 'no_images_found',
+					$has_any
+						? __( 'No usable images found for preview generation.', 'nggallery' )
+						: __( 'No images found in NextGen Gallery. Please add images to a gallery first.', 'nggallery' ),
 					[ 'status' => 400 ]
 				);
 			}
@@ -784,6 +949,18 @@ class SettingsREST {
 			if ( 'image' === ( $watermark_options['wmType'] ?? '' ) && ! empty( $final_wm_path ) ) {
 				$is_url = is_string( $final_wm_path ) && preg_match( '/^https?:\/\//i', $final_wm_path );
 				$is_abs = is_string( $final_wm_path ) && ( 0 === strpos( $final_wm_path, '/' ) || preg_match( '/^[A-Za-z]:[\\\\\/]*/', $final_wm_path ) );
+				if ( $is_url ) {
+					// A URL on this site is read from disk, exactly as Set Watermark reads it
+					// (Security::load_watermark_image()), so the preview neither downloads
+					// it nor refuses it because the site's own host resolves to a private
+					// address (#1104). It then takes the local-path checks below.
+					$own_site_file = \Imagely\NGG\Util\Security::watermark_url_to_local_path( $final_wm_path );
+					if ( null !== $own_site_file ) {
+						$final_wm_path = $own_site_file;
+						$is_url        = false;
+						$is_abs        = true;
+					}
+				}
 				if ( $is_url ) {
 					// Download remote watermark image to uploads folder for preview use
 					$upload_dir  = wp_upload_dir();
@@ -1276,13 +1453,13 @@ class SettingsREST {
 			$storage_manager = StorageManager::get_instance();
 			$gallery_mapper  = GalleryMapper::get_instance();
 
-			// Get all galleries
-			$galleries = $gallery_mapper->find_all();
-
-			// Clear cache for each gallery
-			foreach ( $galleries as $gallery ) {
-				$storage_manager->flush_cache( $gallery );
-			}
+			// Clear cache gallery by gallery, one bounded batch at a time.
+			self::sweep_rows(
+				$gallery_mapper,
+				function ( $gallery ) use ( $storage_manager ) {
+					$storage_manager->flush_cache( $gallery );
+				}
+			);
 
 			// Clear WordPress transients
 			global $wpdb;
@@ -1321,10 +1498,27 @@ class SettingsREST {
 			$image_mapper    = ImageMapper::get_instance();
 			$storage_manager = StorageManager::get_instance();
 
-			// Get all images
-			$images = $image_mapper->find_all();
+			$success_count = 0;
+			$error_count   = 0;
 
-			if ( empty( $images ) ) {
+			// Regenerate one bounded batch at a time; find_all() held every image model in
+			// memory for the whole sweep.
+			$total_count = self::sweep_rows(
+				$image_mapper,
+				function ( $image ) use ( $storage_manager, &$success_count, &$error_count ) {
+					try {
+						if ( $storage_manager->generate_thumbnail( $image ) ) {
+							++$success_count;
+						} else {
+							++$error_count;
+						}
+					} catch ( \Exception $e ) {
+						++$error_count;
+					}
+				}
+			);
+
+			if ( 0 === $total_count ) {
 				return new WP_REST_Response(
 					[
 						'success' => true,
@@ -1334,26 +1528,6 @@ class SettingsREST {
 					200
 				);
 			}
-
-			$success_count = 0;
-			$error_count   = 0;
-
-			// Regenerate thumbnails for each image
-			foreach ( $images as $image ) {
-				try {
-					$result = $storage_manager->generate_thumbnail( $image );
-					if ( $result ) {
-						++$success_count;
-					} else {
-						++$error_count;
-					}
-				} catch ( \Exception $e ) {
-					++$error_count;
-					continue;
-				}
-			}
-
-			$total_count = count( $images );
 
 			if ( $error_count > 0 ) {
 				return new WP_REST_Response(

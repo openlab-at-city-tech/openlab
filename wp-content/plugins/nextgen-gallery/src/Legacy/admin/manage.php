@@ -1231,6 +1231,11 @@ class nggManageGallery {
 								nggGallery::show_error( __( 'The selected preview image does not belong to this gallery and was not saved.', 'nggallery' ) );
 								continue;
 							}
+
+							if ( $field === 'pageid' && is_wp_error( \Imagely\NGG\PrivateGalleries\ClientPage::check_linked_page_change( $this->gallery, $value ) ) ) {
+								nggGallery::show_error( __( 'The linked page cannot be changed while the gallery is private.', 'nggallery' ) );
+								continue;
+							}
 						} else {
 							// title/galdesc are pre-sanitized higher in this branch (sanitize_text_field + strip_tags allowlist) and written back into $_POST; read that processed value.
 							$value = wp_unslash( $_POST[ $field ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Only title/galdesc reach here, already sanitized and written back into $_POST above.
@@ -1298,6 +1303,11 @@ class nggManageGallery {
 				return;
 			}
 			if ( ! current_user_can( 'publish_pages' ) ) {
+				return;
+			}
+
+			if ( \Imagely\NGG\PrivateGalleries\Registry::is_private( $this->gid ) ) {
+				nggGallery::show_error( __( 'The linked page cannot be changed while the gallery is private.', 'nggallery' ) );
 				return;
 			}
 

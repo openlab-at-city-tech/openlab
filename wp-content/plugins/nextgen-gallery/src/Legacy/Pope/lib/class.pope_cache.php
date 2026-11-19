@@ -10,7 +10,7 @@ class C_Pope_Cache
 	static $force_update = FALSE; // force the cache to be updated
 	protected $_queue = array();
 
-	static function &get_instance($driver='C_Pope_Cache_SingleFile')
+	static function &get_instance($driver='C_Pope_Cache_Memory')
 	{
 		if (!isset(self::$_instance))
             self::$_instance = new C_Pope_Cache($driver);
@@ -18,7 +18,7 @@ class C_Pope_Cache
 		return self::$_instance;
 	}
 
-    function __construct($driver = 'C_Pope_Cache_SingleFile')
+    function __construct($driver = 'C_Pope_Cache_Memory')
     {
         if (is_null(self::$_driver))
             self::set_driver($driver);
@@ -91,179 +91,26 @@ interface I_Pope_Cache_Driver
     public static function update($key, $value);
 }
 
-class C_Pope_Cache_MultiFile implements I_Pope_Cache_Driver
+/**
+ * The default driver: keeps entries in memory for the current request only.
+ *
+ * POPE used to persist this cache in one file in the system temp directory
+ * (`sys_get_temp_dir()/pope_cache`, or POPE_CACHE_DIR when defined). That file was keyed
+ * only by module ids and versions and was shared by every site and system user on the host,
+ * so one install could read the cache, and with it the module file paths, that another
+ * install had written (nextgen-gallery#1248). Rebuilding the cache per request costs about
+ * a millisecond, on requests that boot POPE only. POPE_CACHE_DIR is now ignored.
+ */
+class C_Pope_Cache_Memory implements I_Pope_Cache_Driver
 {
-    static $initialized     = FALSE;
-    static $cache_dir        = NULL;
-    static $use_cache_subdir = TRUE;
-
-    public static function initialize()
-    {
-        if (self::$initialized)
-            return;
-
-        if (is_null(self::$cache_dir))
-            self::set_cache_dir();
-
-        self::$initialized = TRUE;
-    }
+    static $cache = array();
 
     public static function add_key_prefix($prefix)
     {
-        self::set_cache_dir();
     }
 
     public static function lookup($key, $default=NULL)
     {
-        self::initialize();
-
-        $filename = self::get_filename_from_key($key);
-
-        if (@file_exists($filename))
-            return json_decode(@file_get_contents($filename));
-        else
-            return $default;
-    }
-
-    public static function update($key, $value)
-    {
-        self::initialize();
-
-        // TODO: log/warn users their cache dir can't be used
-        if (@file_exists(self::$cache_dir) && !@is_dir(self::$cache_dir))
-            return;
-
-        $filename = self::get_filename_from_key($key);
-
-        if (@file_exists($filename) && C_Pope_Cache::$force_update == FALSE)
-            return;
-
-        @file_put_contents($filename, json_encode($value));
-    }
-
-    public static function flush()
-    {
-        self::initialize();
-
-        $dir = self::$cache_dir;
-        if (@file_exists($dir) && @is_dir($dir))
-        {
-            foreach (@scandir($dir) as $file) {
-                if ($file == '.' || $file == '..')
-                    continue;
-                $file = self::join_paths($dir, $file);
-                if (is_dir($file) && self::$use_cache_subdir)
-                {
-                    self::flush($dir);
-                }
-                else {
-                    if (!self::$use_cache_subdir && strpos(basename($file), implode('_', C_Pope_Cache::$key_prefix) . '_') === 0)
-                        @unlink($file);
-                    elseif (self::$use_cache_subdir)
-                        @unlink($file);
-                }
-            }
-        }
-    }
-
-    public static function set_cache_dir()
-    {
-        if (defined('POPE_CACHE_DIR'))
-        {
-            self::$cache_dir = POPE_CACHE_DIR;
-            if (!@file_exists(self::$cache_dir))
-                @mkdir(self::$cache_dir, 0777, TRUE);
-        }
-        else {
-            if (self::$use_cache_subdir)
-            {
-                self::$cache_dir = self::join_paths(sys_get_temp_dir(), C_Pope_cache::$key_prefix);
-                if (!@file_exists(self::$cache_dir))
-                {
-                    // if we can't create a subdirectory we fallback to prefixing filenames (eg /tmp/pope_$key)
-                    $mkdir_result = @mkdir(self::$cache_dir, 0777, TRUE);
-                    if (FALSE === $mkdir_result)
-                    {
-                        self::$use_cache_subdir = FALSE;
-                        self::$cache_dir = self::join_paths(sys_get_temp_dir());
-                    }
-                }
-            }
-            else {
-                self::$cache_dir = self::join_paths(sys_get_temp_dir());
-            }
-        }
-
-        $func = function_exists('wp_is_writable') ? 'wp_is_writable' : 'is_writable';
-        if (!@$func(self::$cache_dir))
-            C_Pope_Cache::$enabled = FALSE;
-    }
-
-    public static function get_filename_from_key($key)
-    {
-        if (self::$use_cache_subdir)
-            $filename = self::join_paths(self::$cache_dir, $key);
-        else
-            $filename = self::join_paths(self::$cache_dir) . DIRECTORY_SEPARATOR . implode('_', C_Pope_Cache::$key_prefix) . '_' . $key;
-        return $filename;
-    }
-
-    public static function join_paths()
-    {
-        $args = func_get_args();
-        foreach ($args as &$arg) {
-            if (is_array($arg))
-                $arg = implode(DIRECTORY_SEPARATOR, $arg);
-        }
-        return implode(DIRECTORY_SEPARATOR, $args);
-    }
-}
-
-function C_Pope_Cache_SingleFile_Shutdown()
-{
-    $filename = C_Pope_Cache_SingleFile::get_filename();
-    @file_put_contents(
-        $filename,
-        json_encode(C_Pope_Cache_SingleFile::$cache)
-    );
-}
-
-class C_Pope_Cache_SingleFile implements I_Pope_Cache_Driver
-{
-    static $initialized  = FALSE;
-    static $cache_dir    = NULL;
-    static $cache        = array();
-    static $writepending = FALSE;
-
-    public static function initialize()
-    {
-        if (self::$initialized)
-            return;
-
-        if (is_null(self::$cache_dir))
-            self::set_cache_dir();
-
-        $filename = self::get_filename();
-        if (@file_exists($filename))
-            self::$cache = json_decode(@file_get_contents($filename), TRUE);
-
-        if (!is_array(self::$cache))
-            self::$cache = array();
-
-        register_shutdown_function('C_Pope_Cache_SingleFile_Shutdown');
-
-        self::$initialized = TRUE;
-    }
-
-    public static function add_key_prefix($prefix)
-    {
-        self::set_cache_dir();
-    }
-
-    public static function lookup($key, $default=NULL)
-    {
-        self::initialize();
-
         if (!empty(self::$cache[$key]))
             return self::$cache[$key];
         else
@@ -272,53 +119,31 @@ class C_Pope_Cache_SingleFile implements I_Pope_Cache_Driver
 
     public static function update($key, $value)
     {
-        self::initialize();
-
-        $dupe = FALSE;
-
-        if (!empty(self::$cache[$key])) {
-            if (self::$cache[$key] == $value)
-                $dupe = TRUE;
-        }
-
-        if ($dupe == TRUE && C_Pope_Cache::$force_update == FALSE)
-            return;
-
         self::$cache[$key] = $value;
-        self::$writepending = TRUE;
     }
 
     public static function flush()
     {
-        self::initialize();
-        $filename = self::get_filename();
-        if (@file_exists($filename))
-            @unlink($filename);
+        self::$cache = array();
     }
+}
 
-    public static function get_filename()
+/**
+ * @deprecated Kept (nextgen-gallery#1248) so code that names the class keeps working. It no longer touches
+ *             the filesystem; it is the in-memory driver.
+ */
+class C_Pope_Cache_MultiFile extends C_Pope_Cache_Memory
+{
+    static $initialized      = FALSE;
+    static $cache_dir        = NULL;
+    static $use_cache_subdir = TRUE;
+
+    public static function initialize()
     {
-        if (count(C_Pope_Cache::$key_prefix) == 1)
-            C_Pope_Cache::add_key_prefix('cache');
-        $filename = implode('_', C_Pope_Cache::$key_prefix);
-        return self::join_paths(self::$cache_dir, $filename);
     }
 
     public static function set_cache_dir()
     {
-        if (defined('POPE_CACHE_DIR'))
-        {
-            self::$cache_dir = POPE_CACHE_DIR;
-            if (!@file_exists(self::$cache_dir))
-                @mkdir(self::$cache_dir, 0777, TRUE);
-        }
-        else {
-            self::$cache_dir = self::join_paths(sys_get_temp_dir());
-        }
-
-        $func = function_exists('wp_is_writable') ? 'wp_is_writable' : 'is_writable';
-        if (!@$func(self::$cache_dir))
-            C_Pope_Cache::$enabled = FALSE;
     }
 
     public static function join_paths()
@@ -332,3 +157,31 @@ class C_Pope_Cache_SingleFile implements I_Pope_Cache_Driver
     }
 }
 
+/**
+ * @deprecated Kept (nextgen-gallery#1248) so code that names the class keeps working. It no longer reads or
+ *             writes `pope_cache` in the temp directory; it is the in-memory driver.
+ */
+class C_Pope_Cache_SingleFile extends C_Pope_Cache_Memory
+{
+    static $initialized  = FALSE;
+    static $cache_dir    = NULL;
+    static $writepending = FALSE;
+
+    public static function initialize()
+    {
+    }
+
+    public static function set_cache_dir()
+    {
+    }
+
+    public static function join_paths()
+    {
+        $args = func_get_args();
+        foreach ($args as &$arg) {
+            if (is_array($arg))
+                $arg = implode(DIRECTORY_SEPARATOR, $arg);
+        }
+        return implode(DIRECTORY_SEPARATOR, $args);
+    }
+}

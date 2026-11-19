@@ -67,7 +67,8 @@ class MassAssignment {
 	 */
 	private static $denied = [
 		'image'   => [ 'pid', 'filename', 'meta_data', 'galleryid', 'post_id', 'extras_post_id', 'updated_at' ],
-		'gallery' => [ 'gid', 'path', 'author', 'slug', 'extras_post_id' ],
+		// The private gallery link token and access counters are set by the server only.
+		'gallery' => [ 'gid', 'path', 'author', 'slug', 'extras_post_id', 'link_token', 'access_count', 'last_access_at' ],
 		'album'   => [ 'id', 'slug', 'extras_post_id' ],
 	];
 
@@ -322,14 +323,25 @@ class MassAssignment {
 	 * @return array
 	 */
 	private static function apply_casts( array $kept ) {
+		/**
+		 * Filters the value coercions for assignable fields: 'bool', 'absint' or a callable.
+		 *
+		 * @param array<string,string|callable> $casts Field name => cast.
+		 */
+		$casts = (array) apply_filters( 'ngg_assignable_property_casts', self::$casts );
+
 		foreach ( $kept as $key => $value ) {
-			if ( ! isset( self::$casts[ $key ] ) ) {
+			if ( ! isset( $casts[ $key ] ) ) {
 				continue;
 			}
 
-			$kept[ $key ] = ( 'bool' === self::$casts[ $key ] )
-				? (int) (bool) $value
-				: \absint( $value );
+			if ( 'bool' === $casts[ $key ] ) {
+				$kept[ $key ] = (int) (bool) $value;
+			} elseif ( 'absint' === $casts[ $key ] ) {
+				$kept[ $key ] = \absint( $value );
+			} elseif ( is_callable( $casts[ $key ] ) ) {
+				$kept[ $key ] = call_user_func( $casts[ $key ], $value );
+			}
 		}
 
 		return $kept;
