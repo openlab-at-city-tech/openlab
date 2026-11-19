@@ -8,17 +8,9 @@
     <taxonomy translate="1" display-as-translated="1">dlm_download_tag</taxonomy>
   </taxonomies>
   <custom-fields>
-    <custom-field action="translate">_version</custom-field>
-    <custom-field action="translate">_files</custom-field>
-    <custom-field action="translate">_filesize</custom-field>
-    <custom-field action="translate">_md5</custom-field>
-    <custom-field action="translate">_sha1</custom-field>
-    <custom-field action="translate">_sha256</custom-field>
-    <custom-field action="translate">_crc32</custom-field>
-    <custom-field action="translate">_download_count</custom-field>
-    <custom-field action="translate">_featured</custom-field>
-    <custom-field action="translate">_members_only</custom-field>
-    <custom-field action="translate">_redirect_only</custom-field>
+    <custom-field action="copy">_featured</custom-field>
+    <custom-field action="copy">_members_only</custom-field>
+    <custom-field action="copy">_redirect_only</custom-field>
   </custom-fields>
   <admin-texts>
     <key name="dlm_download_endpoint"/>
@@ -35,6 +27,18 @@
     <key name="dlm_tc_text"/>
   </admin-texts>
   <shortcodes>
+    <shortcode>
+      <tag>download</tag>
+      <attributes>
+        <attribute type="post-ids" sub-type="dlm_download">id</attribute>
+      </attributes>
+    </shortcode>
+    <shortcode>
+      <tag>download_data</tag>
+      <attributes>
+        <attribute type="post-ids" sub-type="dlm_download">id</attribute>
+      </attributes>
+    </shortcode>
     <shortcode>
       <tag>downloads</tag>
       <attributes>

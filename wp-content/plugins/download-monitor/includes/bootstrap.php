@@ -48,19 +48,14 @@ add_action( 'plugins_loaded', '_load_download_monitor', 10 );
 // Check if endpoint is translated
 add_action( 'wp_ajax_wpml_action', 'dlm_handle_wpml_translation_ajx', 5 );
 
+// set installer file constant.
+define( 'DLM_PLUGIN_FILE_INSTALLER', DLM_PLUGIN_FILE );
+
+// Activation hook. Registered on every request so WP-CLI activations run the installer too.
+register_activation_hook( DLM_PLUGIN_FILE_INSTALLER, '_download_monitor_install' );
+
 if ( is_admin() && ( false === defined( 'DOING_AJAX' ) || false === DOING_AJAX ) ) {
 
-	// set installer file constant.
-	define( 'DLM_PLUGIN_FILE_INSTALLER', DLM_PLUGIN_FILE );
-
-
-	// Activation hook.
-	register_activation_hook( DLM_PLUGIN_FILE_INSTALLER, '_download_monitor_install' );
-
-	// Compat fix for wp 6.5.
-	if ( ! get_option( 'dlm_current_version', false ) ) {
-		_download_monitor_install();
-	}
 	// Check if tables are installed.
 	if ( ! dlm_check_tables() ) {
 		// DLM Installer.
