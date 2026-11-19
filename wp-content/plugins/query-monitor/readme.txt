@@ -2,8 +2,8 @@
 
 Contributors: johnbillion
 Tags: debug, debug-bar, development, performance, query monitor
-Tested up to: 6.9
-Stable tag: 4.0.6
+Tested up to: 7.1
+Stable tag: 4.1.1
 License: GPL v2 or later
 Donate link: https://github.com/sponsors/johnbillion
 
@@ -146,6 +146,36 @@ Do not report security issues on the WordPress.org support forums or via email. 
 In addition, if you like the plugin then I'd love for you to [leave a review](https://wordpress.org/support/view/plugin-reviews/query-monitor). Tell all your friends about it too!
 ## Changelog ##
 
+### 4.1.1 (27 October 2026) ###
+
+- Shows the toolbar menu on small screens again
+- Calls any previously registered PHP error handler, and passes fatal errors on to PHP after displaying them so they're logged
+- Prevents infinite recursion when a backtrace is constructed from within a hook
+- Fixes a fatal error and warnings when an HTTP request is short-circuited via the `pre_http_request` filter
+- Clarifies the warning shown for short-circuited HTTP requests
+- Correctly handles closures in call stacks on PHP 8.4+
+- Doesn't show Query Monitor on the login page when reauthentication is required
+- Compatibility with script concatenation and asset URL changes in WordPress 7.2
+- Fixes panels failing to render when the data contains invalid UTF-8
+
+### 4.1.0 (26 October 2026) ###
+
+- Confirms support for WordPress 7.1 (better late than never)
+- Shows the file size of enqueued scripts and styles
+- Improves the styling of the admin toolbar menu and the nav menu
+- Explains why database queries were performed but none were logged
+- Deletes the `db.php` drop-in when Query Monitor is deactivated with WP-CLI
+- Avoids warnings when a preempted HTTP response is missing its code or message
+
+
+### 4.0.7 (20 June 2026) ###
+
+- Confirms support for WordPress 7.0
+- Makes improvements to the admin bar menu
+- Shows database queries on the timeline even when db.php isn't in place
+- Adds more error highlighting for problems with enqueued JavaScript and CSS dependencies
+- Adds some back-compat for old versions of the Chrome browser
+
 ### 4.0.6 (11 April 2026) ###
 
 Version 4 of Query Monitor adds a new timeline view, and switches from rendering its panels server-side in PHP to efficiently rendering them client-side in Preact.
@@ -217,21 +247,6 @@ Version 4 of Query Monitor adds a new timeline view, and switches from rendering
 - The raw data collected by Query Monitor has been reduced in size and memory usage, and is now exposed to the page as JSON. Take a look at the `QueryMonitorData` object in your browser console to play around with it.
 
 [More information at querymonitor.com/4](https://querymonitor.com/4).
-
-### 3.20.4 (19 March 2026) ###
-
-* This is a security release which fixes a reflected XSS vulnerability in the Request panel. [Full details in the security advisory](https://github.com/johnbillion/query-monitor/security/advisories/GHSA-2xr4-chcf-vmvf).
-
-### 3.20.3 (17 March 2026) ###
-
-- Clicking QM in the the admin toolbar a second time will now close the panel
-- Improvements to accessibility of the toggle buttons
-- Failed HTTP API GET requests now show a clickable link
-
-
-### 3.20.2 (11 December 2025) ###
-
-- Prevents a PHP error being triggered under certain conditions and when no database queries are performed.
 
 ### Earlier versions ###
 
