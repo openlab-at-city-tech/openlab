@@ -11,8 +11,9 @@ declare (strict_types=1);
  */
 namespace SimpleCalendar\plugin_deps\Monolog\Formatter;
 
+use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 /**
- * Formats data into an associative array of scalar values.
+ * Formats data into an associative array of scalar (+ null) values.
  * Objects and arrays will be JSON encoded.
  *
  * @author Andrew Lawson <adlawson@gmail.com>
@@ -20,26 +21,22 @@ namespace SimpleCalendar\plugin_deps\Monolog\Formatter;
 class ScalarFormatter extends NormalizerFormatter
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      *
      * @phpstan-return array<string, scalar|null> $record
      */
-    public function format(array $record): array
+    public function format(LogRecord $record): array
     {
         $result = [];
-        foreach ($record as $key => $value) {
-            $result[$key] = $this->normalizeValue($value);
+        foreach ($record->toArray() as $key => $value) {
+            $result[$key] = $this->toScalar($value);
         }
         return $result;
     }
-    /**
-     * @param  mixed                      $value
-     * @return scalar|null
-     */
-    protected function normalizeValue($value)
+    protected function toScalar(mixed $value): string|int|float|bool|null
     {
         $normalized = $this->normalize($value);
-        if (is_array($normalized)) {
+        if (\is_array($normalized)) {
             return $this->toJson($normalized, \true);
         }
         return $normalized;

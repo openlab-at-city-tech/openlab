@@ -11,6 +11,7 @@ declare (strict_types=1);
  */
 namespace SimpleCalendar\plugin_deps\Monolog\Processor;
 
+use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 /**
  * Injects memory_get_usage in all records
  *
@@ -20,15 +21,15 @@ namespace SimpleCalendar\plugin_deps\Monolog\Processor;
 class MemoryUsageProcessor extends MemoryProcessor
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function __invoke(array $record): array
+    public function __invoke(LogRecord $record): LogRecord
     {
         $usage = memory_get_usage($this->realUsage);
         if ($this->useFormatting) {
             $usage = $this->formatBytes($usage);
         }
-        $record['extra']['memory_usage'] = $usage;
+        $record->extra['memory_usage'] = $usage;
         return $record;
     }
 }

@@ -24,19 +24,27 @@ class FreeBusyResponse extends \SimpleCalendar\plugin_deps\Google\Model
     protected $groupsType = FreeBusyGroup::class;
     protected $groupsDataType = 'map';
     /**
+     * Type of the resource ("calendar#freeBusy").
+     *
      * @var string
      */
     public $kind;
     /**
+     * The end of the interval.
+     *
      * @var string
      */
     public $timeMax;
     /**
+     * The start of the interval.
+     *
      * @var string
      */
     public $timeMin;
     /**
-     * @param FreeBusyCalendar[]
+     * List of free/busy information for calendars.
+     *
+     * @param FreeBusyCalendar[] $calendars
      */
     public function setCalendars($calendars)
     {
@@ -50,7 +58,9 @@ class FreeBusyResponse extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->calendars;
     }
     /**
-     * @param FreeBusyGroup[]
+     * Expansion of groups.
+     *
+     * @param FreeBusyGroup[] $groups
      */
     public function setGroups($groups)
     {
@@ -64,7 +74,9 @@ class FreeBusyResponse extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->groups;
     }
     /**
-     * @param string
+     * Type of the resource ("calendar#freeBusy").
+     *
+     * @param string $kind
      */
     public function setKind($kind)
     {
@@ -78,7 +90,9 @@ class FreeBusyResponse extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->kind;
     }
     /**
-     * @param string
+     * The end of the interval.
+     *
+     * @param string $timeMax
      */
     public function setTimeMax($timeMax)
     {
@@ -92,7 +106,9 @@ class FreeBusyResponse extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->timeMax;
     }
     /**
-     * @param string
+     * The start of the interval.
+     *
+     * @param string $timeMin
      */
     public function setTimeMin($timeMin)
     {

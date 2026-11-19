@@ -21,29 +21,45 @@ class FreeBusyRequest extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'items';
     /**
+     * Maximal number of calendars for which FreeBusy information is to be
+     * provided. Optional. Maximum value is 50.
+     *
      * @var int
      */
     public $calendarExpansionMax;
     /**
+     * Maximal number of calendar identifiers to be provided for a single group.
+     * Optional. An error is returned for a group with more members than this
+     * value. Maximum value is 100.
+     *
      * @var int
      */
     public $groupExpansionMax;
     protected $itemsType = FreeBusyRequestItem::class;
     protected $itemsDataType = 'array';
     /**
+     * The end of the interval for the query formatted as per RFC3339.
+     *
      * @var string
      */
     public $timeMax;
     /**
+     * The start of the interval for the query formatted as per RFC3339.
+     *
      * @var string
      */
     public $timeMin;
     /**
+     * Time zone used in the response. Optional. The default is UTC.
+     *
      * @var string
      */
     public $timeZone;
     /**
-     * @param int
+     * Maximal number of calendars for which FreeBusy information is to be
+     * provided. Optional. Maximum value is 50.
+     *
+     * @param int $calendarExpansionMax
      */
     public function setCalendarExpansionMax($calendarExpansionMax)
     {
@@ -57,7 +73,11 @@ class FreeBusyRequest extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->calendarExpansionMax;
     }
     /**
-     * @param int
+     * Maximal number of calendar identifiers to be provided for a single group.
+     * Optional. An error is returned for a group with more members than this
+     * value. Maximum value is 100.
+     *
+     * @param int $groupExpansionMax
      */
     public function setGroupExpansionMax($groupExpansionMax)
     {
@@ -71,7 +91,9 @@ class FreeBusyRequest extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->groupExpansionMax;
     }
     /**
-     * @param FreeBusyRequestItem[]
+     * List of calendars and/or groups to query.
+     *
+     * @param FreeBusyRequestItem[] $items
      */
     public function setItems($items)
     {
@@ -85,7 +107,9 @@ class FreeBusyRequest extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->items;
     }
     /**
-     * @param string
+     * The end of the interval for the query formatted as per RFC3339.
+     *
+     * @param string $timeMax
      */
     public function setTimeMax($timeMax)
     {
@@ -99,7 +123,9 @@ class FreeBusyRequest extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->timeMax;
     }
     /**
-     * @param string
+     * The start of the interval for the query formatted as per RFC3339.
+     *
+     * @param string $timeMin
      */
     public function setTimeMin($timeMin)
     {
@@ -113,7 +139,9 @@ class FreeBusyRequest extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->timeMin;
     }
     /**
-     * @param string
+     * Time zone used in the response. Optional. The default is UTC.
+     *
+     * @param string $timeZone
      */
     public function setTimeZone($timeZone)
     {

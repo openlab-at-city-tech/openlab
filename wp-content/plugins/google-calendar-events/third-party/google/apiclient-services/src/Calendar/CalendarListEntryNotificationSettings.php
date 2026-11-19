@@ -23,7 +23,9 @@ class CalendarListEntryNotificationSettings extends \SimpleCalendar\plugin_deps\
     protected $notificationsType = CalendarNotification::class;
     protected $notificationsDataType = 'array';
     /**
-     * @param CalendarNotification[]
+     * The list of notifications set for this calendar.
+     *
+     * @param CalendarNotification[] $notifications
      */
     public function setNotifications($notifications)
     {

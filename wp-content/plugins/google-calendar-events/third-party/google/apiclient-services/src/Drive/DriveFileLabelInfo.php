@@ -23,7 +23,10 @@ class DriveFileLabelInfo extends \SimpleCalendar\plugin_deps\Google\Collection
     protected $labelsType = Label::class;
     protected $labelsDataType = 'array';
     /**
-     * @param Label[]
+     * Output only. The set of labels on the file as requested by the label IDs in
+     * the `includeLabels` parameter. By default, no labels are returned.
+     *
+     * @param Label[] $labels
      */
     public function setLabels($labels)
     {

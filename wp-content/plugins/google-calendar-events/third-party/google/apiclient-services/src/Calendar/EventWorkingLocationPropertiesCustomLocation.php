@@ -20,11 +20,15 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 class EventWorkingLocationPropertiesCustomLocation extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
+     * An optional extra label for additional information.
+     *
      * @var string
      */
     public $label;
     /**
-     * @param string
+     * An optional extra label for additional information.
+     *
+     * @param string $label
      */
     public function setLabel($label)
     {

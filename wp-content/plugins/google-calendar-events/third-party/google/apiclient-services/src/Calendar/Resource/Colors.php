@@ -33,6 +33,7 @@ class Colors extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      *
      * @param array $optParams Optional parameters.
      * @return ColorsModel
+     * @throws \Google\Service\Exception
      */
     public function get($optParams = [])
     {

@@ -22,13 +22,28 @@ class EventWorkingLocationProperties extends \SimpleCalendar\plugin_deps\Google\
     protected $customLocationType = EventWorkingLocationPropertiesCustomLocation::class;
     protected $customLocationDataType = '';
     /**
+     * If present, specifies that the user is working at home.
+     *
      * @var array
      */
     public $homeOffice;
     protected $officeLocationType = EventWorkingLocationPropertiesOfficeLocation::class;
     protected $officeLocationDataType = '';
     /**
-     * @param EventWorkingLocationPropertiesCustomLocation
+     * Type of the working location. Possible values are: - "homeOffice" - The
+     * user is working at home.  - "officeLocation" - The user is working from an
+     * office.  - "customLocation" - The user is working from a custom location.
+     * Any details are specified in a sub-field of the specified name, but this
+     * field may be missing if empty. Any other fields are ignored. Required when
+     * adding working location properties.
+     *
+     * @var string
+     */
+    public $type;
+    /**
+     * If present, specifies that the user is working from a custom location.
+     *
+     * @param EventWorkingLocationPropertiesCustomLocation $customLocation
      */
     public function setCustomLocation(EventWorkingLocationPropertiesCustomLocation $customLocation)
     {
@@ -42,7 +57,9 @@ class EventWorkingLocationProperties extends \SimpleCalendar\plugin_deps\Google\
         return $this->customLocation;
     }
     /**
-     * @param array
+     * If present, specifies that the user is working at home.
+     *
+     * @param array $homeOffice
      */
     public function setHomeOffice($homeOffice)
     {
@@ -56,7 +73,9 @@ class EventWorkingLocationProperties extends \SimpleCalendar\plugin_deps\Google\
         return $this->homeOffice;
     }
     /**
-     * @param EventWorkingLocationPropertiesOfficeLocation
+     * If present, specifies that the user is working from an office.
+     *
+     * @param EventWorkingLocationPropertiesOfficeLocation $officeLocation
      */
     public function setOfficeLocation(EventWorkingLocationPropertiesOfficeLocation $officeLocation)
     {
@@ -68,6 +87,27 @@ class EventWorkingLocationProperties extends \SimpleCalendar\plugin_deps\Google\
     public function getOfficeLocation()
     {
         return $this->officeLocation;
+    }
+    /**
+     * Type of the working location. Possible values are: - "homeOffice" - The
+     * user is working at home.  - "officeLocation" - The user is working from an
+     * office.  - "customLocation" - The user is working from a custom location.
+     * Any details are specified in a sub-field of the specified name, but this
+     * field may be missing if empty. Any other fields are ignored. Required when
+     * adding working location properties.
+     *
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

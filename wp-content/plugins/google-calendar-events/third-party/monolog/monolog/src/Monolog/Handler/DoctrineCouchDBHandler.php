@@ -11,10 +11,11 @@ declare (strict_types=1);
  */
 namespace SimpleCalendar\plugin_deps\Monolog\Handler;
 
-use SimpleCalendar\plugin_deps\Monolog\Logger;
+use SimpleCalendar\plugin_deps\Monolog\Level;
 use SimpleCalendar\plugin_deps\Monolog\Formatter\NormalizerFormatter;
 use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
 use SimpleCalendar\plugin_deps\Doctrine\CouchDB\CouchDBClient;
+use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 /**
  * CouchDB handler for Doctrine CouchDB ODM
  *
@@ -22,19 +23,18 @@ use SimpleCalendar\plugin_deps\Doctrine\CouchDB\CouchDBClient;
  */
 class DoctrineCouchDBHandler extends AbstractProcessingHandler
 {
-    /** @var CouchDBClient */
-    private $client;
-    public function __construct(CouchDBClient $client, $level = Logger::DEBUG, bool $bubble = \true)
+    private CouchDBClient $client;
+    public function __construct(CouchDBClient $client, int|string|Level $level = Level::Debug, bool $bubble = \true)
     {
         $this->client = $client;
         parent::__construct($level, $bubble);
     }
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    protected function write(array $record): void
+    protected function write(LogRecord $record): void
     {
-        $this->client->postDocument($record['formatted']);
+        $this->client->postDocument($record->formatted);
     }
     protected function getDefaultFormatter(): FormatterInterface
     {

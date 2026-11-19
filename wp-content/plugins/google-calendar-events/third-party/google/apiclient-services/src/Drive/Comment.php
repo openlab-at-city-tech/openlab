@@ -21,36 +21,73 @@ class Comment extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'replies';
     /**
+     * A region of the document represented as a JSON string. For details on
+     * defining anchor properties, refer to [Manage comments and
+     * replies](https://developers.google.com/workspace/drive/api/v3/manage-
+     * comments).
+     *
      * @var string
      */
     public $anchor;
+    /**
+     * Output only. The email address of the user assigned to this comment. If no
+     * user is assigned, the field is unset.
+     *
+     * @var string
+     */
+    public $assigneeEmailAddress;
     protected $authorType = User::class;
     protected $authorDataType = '';
     /**
+     * The plain text content of the comment. This field is used for setting the
+     * content, while `htmlContent` should be displayed.
+     *
      * @var string
      */
     public $content;
     /**
+     * The time at which the comment was created (RFC 3339 date-time).
+     *
      * @var string
      */
     public $createdTime;
     /**
+     * Output only. Whether the comment has been deleted. A deleted comment has no
+     * content.
+     *
      * @var bool
      */
     public $deleted;
     /**
+     * Output only. The content of the comment with HTML formatting.
+     *
      * @var string
      */
     public $htmlContent;
     /**
+     * Output only. The ID of the comment.
+     *
      * @var string
      */
     public $id;
     /**
+     * Output only. Identifies what kind of resource this is. Value: the fixed
+     * string `"drive#comment"`.
+     *
      * @var string
      */
     public $kind;
     /**
+     * Output only. A list of email addresses for users mentioned in this comment.
+     * If no users are mentioned, the list is empty.
+     *
+     * @var string[]
+     */
+    public $mentionedEmailAddresses;
+    /**
+     * The last time the comment or any of its replies was modified (RFC 3339
+     * date-time).
+     *
      * @var string
      */
     public $modifiedTime;
@@ -59,11 +96,18 @@ class Comment extends \SimpleCalendar\plugin_deps\Google\Collection
     protected $repliesType = Reply::class;
     protected $repliesDataType = 'array';
     /**
+     * Output only. Whether the comment has been resolved by one of its replies.
+     *
      * @var bool
      */
     public $resolved;
     /**
-     * @param string
+     * A region of the document represented as a JSON string. For details on
+     * defining anchor properties, refer to [Manage comments and
+     * replies](https://developers.google.com/workspace/drive/api/v3/manage-
+     * comments).
+     *
+     * @param string $anchor
      */
     public function setAnchor($anchor)
     {
@@ -77,7 +121,27 @@ class Comment extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->anchor;
     }
     /**
-     * @param User
+     * Output only. The email address of the user assigned to this comment. If no
+     * user is assigned, the field is unset.
+     *
+     * @param string $assigneeEmailAddress
+     */
+    public function setAssigneeEmailAddress($assigneeEmailAddress)
+    {
+        $this->assigneeEmailAddress = $assigneeEmailAddress;
+    }
+    /**
+     * @return string
+     */
+    public function getAssigneeEmailAddress()
+    {
+        return $this->assigneeEmailAddress;
+    }
+    /**
+     * Output only. The author of the comment. The author's email address and
+     * permission ID will not be populated.
+     *
+     * @param User $author
      */
     public function setAuthor(User $author)
     {
@@ -91,7 +155,10 @@ class Comment extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->author;
     }
     /**
-     * @param string
+     * The plain text content of the comment. This field is used for setting the
+     * content, while `htmlContent` should be displayed.
+     *
+     * @param string $content
      */
     public function setContent($content)
     {
@@ -105,7 +172,9 @@ class Comment extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->content;
     }
     /**
-     * @param string
+     * The time at which the comment was created (RFC 3339 date-time).
+     *
+     * @param string $createdTime
      */
     public function setCreatedTime($createdTime)
     {
@@ -119,7 +188,10 @@ class Comment extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->createdTime;
     }
     /**
-     * @param bool
+     * Output only. Whether the comment has been deleted. A deleted comment has no
+     * content.
+     *
+     * @param bool $deleted
      */
     public function setDeleted($deleted)
     {
@@ -133,7 +205,9 @@ class Comment extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->deleted;
     }
     /**
-     * @param string
+     * Output only. The content of the comment with HTML formatting.
+     *
+     * @param string $htmlContent
      */
     public function setHtmlContent($htmlContent)
     {
@@ -147,7 +221,9 @@ class Comment extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->htmlContent;
     }
     /**
-     * @param string
+     * Output only. The ID of the comment.
+     *
+     * @param string $id
      */
     public function setId($id)
     {
@@ -161,7 +237,10 @@ class Comment extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->id;
     }
     /**
-     * @param string
+     * Output only. Identifies what kind of resource this is. Value: the fixed
+     * string `"drive#comment"`.
+     *
+     * @param string $kind
      */
     public function setKind($kind)
     {
@@ -175,7 +254,27 @@ class Comment extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->kind;
     }
     /**
-     * @param string
+     * Output only. A list of email addresses for users mentioned in this comment.
+     * If no users are mentioned, the list is empty.
+     *
+     * @param string[] $mentionedEmailAddresses
+     */
+    public function setMentionedEmailAddresses($mentionedEmailAddresses)
+    {
+        $this->mentionedEmailAddresses = $mentionedEmailAddresses;
+    }
+    /**
+     * @return string[]
+     */
+    public function getMentionedEmailAddresses()
+    {
+        return $this->mentionedEmailAddresses;
+    }
+    /**
+     * The last time the comment or any of its replies was modified (RFC 3339
+     * date-time).
+     *
+     * @param string $modifiedTime
      */
     public function setModifiedTime($modifiedTime)
     {
@@ -189,7 +288,11 @@ class Comment extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->modifiedTime;
     }
     /**
-     * @param CommentQuotedFileContent
+     * The file content to which the comment refers, typically within the anchor
+     * region. For a text file, for example, this would be the text at the
+     * location of the comment.
+     *
+     * @param CommentQuotedFileContent $quotedFileContent
      */
     public function setQuotedFileContent(CommentQuotedFileContent $quotedFileContent)
     {
@@ -203,7 +306,10 @@ class Comment extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->quotedFileContent;
     }
     /**
-     * @param Reply[]
+     * Output only. The full list of replies to the comment in chronological
+     * order.
+     *
+     * @param Reply[] $replies
      */
     public function setReplies($replies)
     {
@@ -217,7 +323,9 @@ class Comment extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->replies;
     }
     /**
-     * @param bool
+     * Output only. Whether the comment has been resolved by one of its replies.
+     *
+     * @param bool $resolved
      */
     public function setResolved($resolved)
     {

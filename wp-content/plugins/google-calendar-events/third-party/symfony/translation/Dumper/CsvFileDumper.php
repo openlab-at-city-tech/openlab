@@ -18,12 +18,9 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  */
 class CsvFileDumper extends FileDumper
 {
-    private $delimiter = ';';
-    private $enclosure = '"';
-    /**
-     * {@inheritdoc}
-     */
-    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = [])
+    private string $delimiter = ';';
+    private string $enclosure = '"';
+    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []): string
     {
         $handle = fopen('php://memory', 'r+');
         foreach ($messages->all($domain) as $source => $target) {
@@ -36,16 +33,15 @@ class CsvFileDumper extends FileDumper
     }
     /**
      * Sets the delimiter and escape character for CSV.
+     *
+     * @return void
      */
     public function setCsvControl(string $delimiter = ';', string $enclosure = '"')
     {
         $this->delimiter = $delimiter;
         $this->enclosure = $enclosure;
     }
-    /**
-     * {@inheritdoc}
-     */
-    protected function getExtension()
+    protected function getExtension(): string
     {
         return 'csv';
     }

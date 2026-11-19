@@ -19,9 +19,9 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatorBagInterf
  */
 class FilteringProvider implements ProviderInterface
 {
-    private $provider;
-    private $locales;
-    private $domains;
+    private ProviderInterface $provider;
+    private array $locales;
+    private array $domains;
     public function __construct(ProviderInterface $provider, array $locales, array $domains = [])
     {
         $this->provider = $provider;
@@ -32,9 +32,6 @@ class FilteringProvider implements ProviderInterface
     {
         return (string) $this->provider;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function write(TranslatorBagInterface $translatorBag): void
     {
         $this->provider->write($translatorBag);

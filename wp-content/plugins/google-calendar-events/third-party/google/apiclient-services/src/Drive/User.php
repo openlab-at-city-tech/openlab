@@ -20,31 +20,48 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 class User extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
+     * Output only. A plain text displayable name for this user.
+     *
      * @var string
      */
     public $displayName;
     /**
+     * Output only. The email address of the user. This may not be present in
+     * certain contexts if the user has not made their email address visible to
+     * the requester.
+     *
      * @var string
      */
     public $emailAddress;
     /**
+     * Output only. Identifies what kind of resource this is. Value: the fixed
+     * string `drive#user`.
+     *
      * @var string
      */
     public $kind;
     /**
+     * Output only. Whether this user is the requesting user.
+     *
      * @var bool
      */
     public $me;
     /**
+     * Output only. The user's ID as visible in Permission resources.
+     *
      * @var string
      */
     public $permissionId;
     /**
+     * Output only. A link to the user's profile photo, if available.
+     *
      * @var string
      */
     public $photoLink;
     /**
-     * @param string
+     * Output only. A plain text displayable name for this user.
+     *
+     * @param string $displayName
      */
     public function setDisplayName($displayName)
     {
@@ -58,7 +75,11 @@ class User extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->displayName;
     }
     /**
-     * @param string
+     * Output only. The email address of the user. This may not be present in
+     * certain contexts if the user has not made their email address visible to
+     * the requester.
+     *
+     * @param string $emailAddress
      */
     public function setEmailAddress($emailAddress)
     {
@@ -72,7 +93,10 @@ class User extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->emailAddress;
     }
     /**
-     * @param string
+     * Output only. Identifies what kind of resource this is. Value: the fixed
+     * string `drive#user`.
+     *
+     * @param string $kind
      */
     public function setKind($kind)
     {
@@ -86,7 +110,9 @@ class User extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->kind;
     }
     /**
-     * @param bool
+     * Output only. Whether this user is the requesting user.
+     *
+     * @param bool $me
      */
     public function setMe($me)
     {
@@ -100,7 +126,9 @@ class User extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->me;
     }
     /**
-     * @param string
+     * Output only. The user's ID as visible in Permission resources.
+     *
+     * @param string $permissionId
      */
     public function setPermissionId($permissionId)
     {
@@ -114,7 +142,9 @@ class User extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->permissionId;
     }
     /**
-     * @param string
+     * Output only. A link to the user's profile photo, if available.
+     *
+     * @param string $photoLink
      */
     public function setPhotoLink($photoLink)
     {

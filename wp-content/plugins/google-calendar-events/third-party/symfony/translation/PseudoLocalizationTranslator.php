@@ -17,15 +17,15 @@ use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\TranslatorInterface
 final class PseudoLocalizationTranslator implements TranslatorInterface
 {
     private const EXPANSION_CHARACTER = '~';
-    private $translator;
-    private $accents;
-    private $expansionFactor;
-    private $brackets;
-    private $parseHTML;
+    private TranslatorInterface $translator;
+    private bool $accents;
+    private float $expansionFactor;
+    private bool $brackets;
+    private bool $parseHTML;
     /**
      * @var string[]
      */
-    private $localizableHTMLAttributes;
+    private array $localizableHTMLAttributes;
     /**
      * Available options:
      *  * accents:
@@ -50,7 +50,7 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
      *  * parse_html:
      *      type: boolean
      *      default: false
-     *      description: parse the translated string as HTML - looking for HTML tags has a performance impact but allows to preserve them from alterations - it also allows to compute the visible translated string length which is useful to correctly expand ot when it contains HTML
+     *      description: parse the translated string as HTML - looking for HTML tags has a performance impact but allows to preserve them from alterations - it also allows to compute the visible translated string length which is useful to correctly expand or when it contains HTML
      *      warning: unclosed tags are unsupported, they will be fixed (closed) by the parser - eg, "foo <div>bar" => "foo <div>bar</div>"
      *
      *  * localizable_html_attributes:
@@ -73,9 +73,6 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
         }
         $this->localizableHTMLAttributes = $options['localizable_html_attributes'] ?? [];
     }
-    /**
-     * {@inheritdoc}
-     */
     public function trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
         $trans = '';

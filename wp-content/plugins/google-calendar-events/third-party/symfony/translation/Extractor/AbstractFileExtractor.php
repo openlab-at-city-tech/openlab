@@ -18,12 +18,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\InvalidAr
  */
 abstract class AbstractFileExtractor
 {
-    /**
-     * @param string|iterable $resource Files, a file or a directory
-     *
-     * @return iterable
-     */
-    protected function extractFiles($resource)
+    protected function extractFiles(string|iterable $resource): iterable
     {
         if (is_iterable($resource)) {
             $files = [];
@@ -44,14 +39,12 @@ abstract class AbstractFileExtractor
         return new \SplFileInfo($file);
     }
     /**
-     * @return bool
-     *
      * @throws InvalidArgumentException
      */
-    protected function isFile(string $file)
+    protected function isFile(string $file): bool
     {
         if (!is_file($file)) {
-            throw new InvalidArgumentException(sprintf('The "%s" file does not exist.', $file));
+            throw new InvalidArgumentException(\sprintf('The "%s" file does not exist.', $file));
         }
         return \true;
     }
@@ -60,9 +53,7 @@ abstract class AbstractFileExtractor
      */
     abstract protected function canBeExtracted(string $file);
     /**
-     * @param string|array $resource Files, a file or a directory
-     *
      * @return iterable
      */
-    abstract protected function extractFromDirectory($resource);
+    abstract protected function extractFromDirectory(string|array $resource);
 }

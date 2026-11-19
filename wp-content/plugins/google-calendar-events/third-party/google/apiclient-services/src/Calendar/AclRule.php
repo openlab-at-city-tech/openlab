@@ -20,25 +20,46 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 class AclRule extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
+     * ETag of the resource.
+     *
      * @var string
      */
     public $etag;
     /**
+     * Identifier of the Access Control List (ACL) rule. See Sharing calendars.
+     *
      * @var string
      */
     public $id;
     /**
+     * Type of the resource ("calendar#aclRule").
+     *
      * @var string
      */
     public $kind;
     /**
+     * The role assigned to the scope. Possible values are: - "none" - Provides no
+     * access.  - "freeBusyReader" - Provides read access to free/busy
+     * information.  - "reader" - Provides read access to the calendar. Private
+     * events will appear to users with reader access, but event details will be
+     * hidden.  - "writer" - Provides read and write access to the calendar.
+     * Private events will appear to users with writer access, and event details
+     * will be visible. Provides read access to the calendar's ACLs.  - "owner" -
+     * Provides manager access to the calendar. This role has all of the
+     * permissions of the writer role with the additional ability to modify access
+     * levels of other users. Important: the owner role is different from the
+     * calendar's data owner. A calendar has a single data owner, but can have
+     * multiple users with owner role.
+     *
      * @var string
      */
     public $role;
     protected $scopeType = AclRuleScope::class;
     protected $scopeDataType = '';
     /**
-     * @param string
+     * ETag of the resource.
+     *
+     * @param string $etag
      */
     public function setEtag($etag)
     {
@@ -52,7 +73,9 @@ class AclRule extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->etag;
     }
     /**
-     * @param string
+     * Identifier of the Access Control List (ACL) rule. See Sharing calendars.
+     *
+     * @param string $id
      */
     public function setId($id)
     {
@@ -66,7 +89,9 @@ class AclRule extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->id;
     }
     /**
-     * @param string
+     * Type of the resource ("calendar#aclRule").
+     *
+     * @param string $kind
      */
     public function setKind($kind)
     {
@@ -80,7 +105,20 @@ class AclRule extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->kind;
     }
     /**
-     * @param string
+     * The role assigned to the scope. Possible values are: - "none" - Provides no
+     * access.  - "freeBusyReader" - Provides read access to free/busy
+     * information.  - "reader" - Provides read access to the calendar. Private
+     * events will appear to users with reader access, but event details will be
+     * hidden.  - "writer" - Provides read and write access to the calendar.
+     * Private events will appear to users with writer access, and event details
+     * will be visible. Provides read access to the calendar's ACLs.  - "owner" -
+     * Provides manager access to the calendar. This role has all of the
+     * permissions of the writer role with the additional ability to modify access
+     * levels of other users. Important: the owner role is different from the
+     * calendar's data owner. A calendar has a single data owner, but can have
+     * multiple users with owner role.
+     *
+     * @param string $role
      */
     public function setRole($role)
     {
@@ -94,7 +132,9 @@ class AclRule extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->role;
     }
     /**
-     * @param AclRuleScope
+     * The extent to which calendar access is granted by this ACL rule.
+     *
+     * @param AclRuleScope $scope
      */
     public function setScope(AclRuleScope $scope)
     {

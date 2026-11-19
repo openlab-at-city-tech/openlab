@@ -20,15 +20,22 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 class CommentQuotedFileContent extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
+     * The MIME type of the quoted content.
+     *
      * @var string
      */
     public $mimeType;
     /**
+     * The quoted content itself. This is interpreted as plain text if set through
+     * the API.
+     *
      * @var string
      */
     public $value;
     /**
-     * @param string
+     * The MIME type of the quoted content.
+     *
+     * @param string $mimeType
      */
     public function setMimeType($mimeType)
     {
@@ -42,7 +49,10 @@ class CommentQuotedFileContent extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->mimeType;
     }
     /**
-     * @param string
+     * The quoted content itself. This is interpreted as plain text if set through
+     * the API.
+     *
+     * @param string $value
      */
     public function setValue($value)
     {

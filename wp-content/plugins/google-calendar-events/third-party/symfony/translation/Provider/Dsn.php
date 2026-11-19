@@ -18,15 +18,18 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\MissingRe
  */
 final class Dsn
 {
-    private $scheme;
-    private $host;
-    private $user;
-    private $password;
-    private $port;
-    private $path;
-    private $options;
-    private $originalDsn;
-    public function __construct(string $dsn)
+    private ?string $scheme;
+    private ?string $host;
+    private ?string $user;
+    private ?string $password;
+    private ?int $port;
+    private ?string $path;
+    private array $options = [];
+    private string $originalDsn;
+    public function __construct(
+        #[\SensitiveParameter]
+        string $dsn
+    )
     {
         $this->originalDsn = $dsn;
         if (\false === $params = parse_url($dsn)) {
@@ -66,11 +69,11 @@ final class Dsn
     {
         return $this->port ?? $default;
     }
-    public function getOption(string $key, $default = null)
+    public function getOption(string $key, mixed $default = null): mixed
     {
         return $this->options[$key] ?? $default;
     }
-    public function getRequiredOption(string $key)
+    public function getRequiredOption(string $key): mixed
     {
         if (!\array_key_exists($key, $this->options) || '' === trim($this->options[$key])) {
             throw new MissingRequiredOptionException($key);

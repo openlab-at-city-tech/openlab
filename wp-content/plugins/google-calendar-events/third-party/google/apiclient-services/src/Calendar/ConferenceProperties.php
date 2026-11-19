@@ -21,11 +21,19 @@ class ConferenceProperties extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'allowedConferenceSolutionTypes';
     /**
+     * The types of conference solutions that are supported for this calendar. The
+     * possible values are:   - "eventHangout"  - "eventNamedHangout"  -
+     * "hangoutsMeet"  Optional.
+     *
      * @var string[]
      */
     public $allowedConferenceSolutionTypes;
     /**
-     * @param string[]
+     * The types of conference solutions that are supported for this calendar. The
+     * possible values are:   - "eventHangout"  - "eventNamedHangout"  -
+     * "hangoutsMeet"  Optional.
+     *
+     * @param string[] $allowedConferenceSolutionTypes
      */
     public function setAllowedConferenceSolutionTypes($allowedConferenceSolutionTypes)
     {

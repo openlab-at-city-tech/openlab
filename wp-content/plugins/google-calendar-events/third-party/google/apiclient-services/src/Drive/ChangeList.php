@@ -23,19 +23,32 @@ class ChangeList extends \SimpleCalendar\plugin_deps\Google\Collection
     protected $changesType = Change::class;
     protected $changesDataType = 'array';
     /**
+     * Identifies what kind of resource this is. Value: the fixed string
+     * `"drive#changeList"`.
+     *
      * @var string
      */
     public $kind;
     /**
+     * The starting page token for future changes. This will be present only if
+     * the end of the current changes list has been reached. The page token
+     * doesn't expire.
+     *
      * @var string
      */
     public $newStartPageToken;
     /**
+     * The page token for the next page of changes. This will be absent if the end
+     * of the changes list has been reached. The page token doesn't expire.
+     *
      * @var string
      */
     public $nextPageToken;
     /**
-     * @param Change[]
+     * The list of changes. If nextPageToken is populated, then this list may be
+     * incomplete and an additional page of results should be fetched.
+     *
+     * @param Change[] $changes
      */
     public function setChanges($changes)
     {
@@ -49,7 +62,10 @@ class ChangeList extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->changes;
     }
     /**
-     * @param string
+     * Identifies what kind of resource this is. Value: the fixed string
+     * `"drive#changeList"`.
+     *
+     * @param string $kind
      */
     public function setKind($kind)
     {
@@ -63,7 +79,11 @@ class ChangeList extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->kind;
     }
     /**
-     * @param string
+     * The starting page token for future changes. This will be present only if
+     * the end of the current changes list has been reached. The page token
+     * doesn't expire.
+     *
+     * @param string $newStartPageToken
      */
     public function setNewStartPageToken($newStartPageToken)
     {
@@ -77,7 +97,10 @@ class ChangeList extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->newStartPageToken;
     }
     /**
-     * @param string
+     * The page token for the next page of changes. This will be absent if the end
+     * of the changes list has been reached. The page token doesn't expire.
+     *
+     * @param string $nextPageToken
      */
     public function setNextPageToken($nextPageToken)
     {

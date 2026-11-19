@@ -20,29 +20,45 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 class PermissionTeamDrivePermissionDetails extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
+     * Deprecated: Output only. Use `permissionDetails/inherited` instead.
+     *
+     * @deprecated
      * @var bool
      */
     public $inherited;
     /**
+     * Deprecated: Output only. Use `permissionDetails/inheritedFrom` instead.
+     *
+     * @deprecated
      * @var string
      */
     public $inheritedFrom;
     /**
+     * Deprecated: Output only. Use `permissionDetails/role` instead.
+     *
+     * @deprecated
      * @var string
      */
     public $role;
     /**
+     * Deprecated: Output only. Use `permissionDetails/permissionType` instead.
+     *
+     * @deprecated
      * @var string
      */
     public $teamDrivePermissionType;
     /**
-     * @param bool
+     * Deprecated: Output only. Use `permissionDetails/inherited` instead.
+     *
+     * @deprecated
+     * @param bool $inherited
      */
     public function setInherited($inherited)
     {
         $this->inherited = $inherited;
     }
     /**
+     * @deprecated
      * @return bool
      */
     public function getInherited()
@@ -50,13 +66,17 @@ class PermissionTeamDrivePermissionDetails extends \SimpleCalendar\plugin_deps\G
         return $this->inherited;
     }
     /**
-     * @param string
+     * Deprecated: Output only. Use `permissionDetails/inheritedFrom` instead.
+     *
+     * @deprecated
+     * @param string $inheritedFrom
      */
     public function setInheritedFrom($inheritedFrom)
     {
         $this->inheritedFrom = $inheritedFrom;
     }
     /**
+     * @deprecated
      * @return string
      */
     public function getInheritedFrom()
@@ -64,13 +84,17 @@ class PermissionTeamDrivePermissionDetails extends \SimpleCalendar\plugin_deps\G
         return $this->inheritedFrom;
     }
     /**
-     * @param string
+     * Deprecated: Output only. Use `permissionDetails/role` instead.
+     *
+     * @deprecated
+     * @param string $role
      */
     public function setRole($role)
     {
         $this->role = $role;
     }
     /**
+     * @deprecated
      * @return string
      */
     public function getRole()
@@ -78,13 +102,17 @@ class PermissionTeamDrivePermissionDetails extends \SimpleCalendar\plugin_deps\G
         return $this->role;
     }
     /**
-     * @param string
+     * Deprecated: Output only. Use `permissionDetails/permissionType` instead.
+     *
+     * @deprecated
+     * @param string $teamDrivePermissionType
      */
     public function setTeamDrivePermissionType($teamDrivePermissionType)
     {
         $this->teamDrivePermissionType = $teamDrivePermissionType;
     }
     /**
+     * @deprecated
      * @return string
      */
     public function getTeamDrivePermissionType()
