@@ -11,6 +11,7 @@ use TablePress\PhpOffice\PhpSpreadsheet\Shared\CodePage;
 use TablePress\PhpOffice\PhpSpreadsheet\Shared\Escher as SharedEscher;
 use TablePress\PhpOffice\PhpSpreadsheet\Shared\Escher\DgContainer\SpgrContainer\SpContainer;
 use TablePress\PhpOffice\PhpSpreadsheet\Shared\Escher\DggContainer\BstoreContainer\BSE;
+use TablePress\PhpOffice\PhpSpreadsheet\Shared\Metafile;
 use TablePress\PhpOffice\PhpSpreadsheet\Shared\Xls as SharedXls;
 use TablePress\PhpOffice\PhpSpreadsheet\Spreadsheet;
 use TablePress\PhpOffice\PhpSpreadsheet\Worksheet\MemoryDrawing;
@@ -213,6 +214,7 @@ class LoadSpreadsheet extends Xls
 			//        name in line with the formula, not the reverse
 			$xls->phpSheet->setTitle($sheet['name'], false, false);
 			$xls->phpSheet->setSheetState($sheet['sheetState']);
+			$xls->phpSheetTitle = $sheet['name'];
 
 			$xls->pos = $sheet['offset'];
 
@@ -489,10 +491,8 @@ class LoadSpreadsheet extends Xls
 					}
 
 					// calculate the width and height of the shape
-					/** @var int $startRow */
-					[$startColumn, $startRow] = Coordinate::coordinateFromString($spContainer->getStartCoordinates());
-					/** @var int $endRow */
-					[$endColumn, $endRow] = Coordinate::coordinateFromString($spContainer->getEndCoordinates());
+					[, $startRow, $startColumn] = Coordinate::indexesFromString($spContainer->getStartCoordinates());
+					[, $endRow, $endColumn] = Coordinate::indexesFromString($spContainer->getEndCoordinates());
 
 					$startOffsetX = $spContainer->getStartOffsetX();
 					$startOffsetY = $spContainer->getStartOffsetY();
@@ -515,7 +515,7 @@ class LoadSpreadsheet extends Xls
 
 								if (isset($xls->textObjects[$obj['idObjID']])) {
 									$textObject = $xls->textObjects[$obj['idObjID']];
-									$xls->cellNotes[$obj['idObjID']]['objTextData'] = $textObject; //* @phpstan-ignore-line
+									$xls->cellNotes[$obj['idObjID']]['objTextData'] = $textObject; //* @phpstan-ignore offsetAccess.nonOffsetAccessible (I don't know to fix this)
 								}
 							}
 
@@ -540,9 +540,16 @@ class LoadSpreadsheet extends Xls
 								$BSE = $BSECollection[$BSEindex - 1];
 								$blipType = $BSE->getBlipType();
 
-								// need check because some blip types are not supported by Escher reader such as EMF
+								// need check because some blip types are not supported by Escher reader such as PICT
 								if ($blip = $BSE->getBlip()) {
-									$ih = imagecreatefromstring($blip->getData());
+									$blipData = $blip->getData();
+									if (Metafile::detect($blipData) !== null) {
+										// Windows Metafiles (WMF, EMF, EMF+) are rendered as PNG
+										$blipType = BSE::BLIPTYPE_PNG;
+										$ih = Metafile::tryToGdImage($blipData) ?? false;
+									} else {
+										$ih = imagecreatefromstring($blipData);
+									}
 									if ($ih !== false) {
 										$drawing = new MemoryDrawing();
 										$drawing->setImageResource($ih);
@@ -586,10 +593,9 @@ class LoadSpreadsheet extends Xls
 			// treat SHAREDFMLA records
 			if ($xls->version == self::XLS_BIFF8) {
 				foreach ($xls->sharedFormulaParts as $cell => $baseCell) {
-					/** @var int $row */
-					[$column, $row] = Coordinate::coordinateFromString($cell);
+					[, $row, $column] = Coordinate::indexesFromString($cell);
 					/** @var string $baseCell */
-					if ($xls->getReadFilter()->readCell($column, $row, $xls->phpSheet->getTitle())) {
+					if ($xls->readFilter->readCell($column, $row, $xls->phpSheet->getTitle())) {
 						/** @var string */
 						$temp = $xls->sharedFormulas[$baseCell];
 						$formula = $xls->getFormulaFromStructure($temp, $cell);
@@ -606,7 +612,7 @@ class LoadSpreadsheet extends Xls
 							$textObject = $xls->textObjects[$note];
 							$noteDetails['objTextData'] = $textObject;
 						} else {
-							$noteDetails['objTextData']['text'] = '';
+							$noteDetails['objTextData']['text'] = ''; //* @phpstan-ignore offsetAccess.nonOffsetAccessible (I don't know)
 						}
 					}
 					$cellAddress = str_replace('$', '', $noteDetails['cellRef']);

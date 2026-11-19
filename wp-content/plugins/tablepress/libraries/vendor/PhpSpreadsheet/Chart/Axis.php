@@ -147,7 +147,7 @@ class Axis extends Properties
 	}
 
 	/**
-				 * @param null|float|int|string $value
+				 * @param float|int|string|null $value
 				 */
 				public function setAxisOption(string $key, $value): void
 	{
@@ -158,12 +158,12 @@ class Axis extends Properties
 
 	/**
 				 * Set Axis Options Properties.
-				 * @param null|float|int|string $minimum
-				 * @param null|float|int|string $maximum
-				 * @param null|float|int|string $majorUnit
-				 * @param null|float|int|string $minorUnit
-				 * @param null|float|int|string $textRotation
-				 * @param null|float|int|string $logBase
+				 * @param float|int|string|null $minimum
+				 * @param float|int|string|null $maximum
+				 * @param float|int|string|null $majorUnit
+				 * @param float|int|string|null $minorUnit
+				 * @param float|int|string|null $textRotation
+				 * @param float|int|string|null $logBase
 				 */
 				public function setAxisOptionsProperties(
 		string $axisLabels,
@@ -345,7 +345,7 @@ class Axis extends Properties
 	{
 		parent::__clone();
 		$this->majorGridlines = ($this->majorGridlines === null) ? null : clone $this->majorGridlines;
-		$this->majorGridlines = ($this->minorGridlines === null) ? null : clone $this->minorGridlines;
+		$this->minorGridlines = ($this->minorGridlines === null) ? null : clone $this->minorGridlines;
 		$this->axisText = ($this->axisText === null) ? null : clone $this->axisText;
 		$this->dispUnitsTitle = ($this->dispUnitsTitle === null) ? null : clone $this->dispUnitsTitle;
 		$this->fillColor = clone $this->fillColor;

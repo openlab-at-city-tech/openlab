@@ -8,6 +8,8 @@
  * @since 1.0.0
  */
 
+declare(strict_types=1);
+
 // Prohibit direct script loading.
 defined( 'ABSPATH' ) || die( 'No direct script access allowed!' );
 
@@ -32,6 +34,8 @@ class TablePress_Editor_Button_Thickbox_View extends TablePress_View {
 	 * Initializes the View class.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @phpstan-ignore constructor.missingParentCall (The parent constructor is intentionally not called to avoid executing code that is not needed for this view.)
 	 */
 	public function __construct() {
 		// Intentionally left empty, to void code from parent::__construct().
@@ -113,7 +117,7 @@ html {
 <?php endif; ?>
 </style>
 </head>
-<body class="wp-admin wp-core-ui js iframe<?php echo is_rtl() ? ' rtl' : ''; ?>">
+<body class="wp-admin wp-core-ui js iframe <?php echo 'admin-color-' . sanitize_html_class( get_user_option( 'admin_color' ), 'modern' ) . ( is_rtl() ? ' rtl' : '' ); ?>">
 <div id="tablepress-page" class="wrap">
 <h1><?php /* translators: %1$s: Page title, %2$s: Plugin name */ printf( __( '%1$s &lsaquo; %2$s', 'tablepress' ), __( 'List of Tables', 'tablepress' ), 'TablePress' ); ?></h1>
 <div id="poststuff">

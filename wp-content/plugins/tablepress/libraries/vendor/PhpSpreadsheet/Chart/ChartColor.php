@@ -82,8 +82,8 @@ class ChartColor
 	}
 
 	/**
-				 * @param null|float|int|string $alpha
-				 * @param null|float|int|string $brightness
+				 * @param float|int|string|null $alpha
+				 * @param float|int|string|null $brightness
 				 */
 				public function setColorProperties(?string $color, $alpha = null, ?string $type = null, $brightness = null): self
 	{
@@ -118,7 +118,7 @@ class ChartColor
 		return $this;
 	}
 
-	/** @param array{value: ?string, alpha: null|int|string, brightness?: null|int|string, type: ?string}  $color */
+	/** @param array{value: ?string, alpha?: null|int|string, brightness?: null|int|string, type?: null|string}  $color */
 	public function setColorPropertiesArray(array $color): self
 	{
 		return $this->setColorProperties(

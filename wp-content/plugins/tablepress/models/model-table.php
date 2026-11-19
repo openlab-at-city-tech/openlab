@@ -8,6 +8,8 @@
  * @since 1.0.0
  */
 
+declare(strict_types=1);
+
 // Prohibit direct script loading.
 defined( 'ABSPATH' ) || die( 'No direct script access allowed!' );
 
@@ -147,7 +149,7 @@ class TablePress_Table_Model extends TablePress_Model {
 			'id'            => $table_id,
 			'name'          => $post->post_title,
 			'description'   => $post->post_excerpt,
-			'author'        => $post->post_author,
+			'author'        => (int) $post->post_author,
 			// 'created' => $post->post_date,
 			'last_modified' => $post->post_modified,
 		);
@@ -785,6 +787,8 @@ class TablePress_Table_Model extends TablePress_Model {
 	 * @return array<string, mixed> Empty table.
 	 */
 	public function get_table_template(): array {
+		$current_user_id = get_current_user_id();
+
 		// Attention: Array keys have to be lowercase, to make it possible to match them with Shortcode attributes!
 		$table = array(
 			'id'            => false,
@@ -792,9 +796,9 @@ class TablePress_Table_Model extends TablePress_Model {
 			'description'   => '',
 			'data'          => array( array( '' ) ), // One empty cell.
 			'last_modified' => wp_date( 'Y-m-d H:i:s' ),
-			'author'        => get_current_user_id(),
+			'author'        => $current_user_id,
 			'options'       => array(
-				'last_editor'                 => get_current_user_id(),
+				'last_editor'                 => $current_user_id,
 				'table_head'                  => 1,
 				'table_foot'                  => 0,
 				'alternating_row_colors'      => true,
@@ -820,6 +824,7 @@ class TablePress_Table_Model extends TablePress_Model {
 				'columns' => array( 1 ), // One visible column.
 			),
 		);
+
 		/**
 		 * Filters the default template/structure of an empty table.
 		 *
@@ -1266,11 +1271,14 @@ class TablePress_Table_Model extends TablePress_Model {
 		// Pretend that there is a `_tablepress_export_table_id` post meta field with the list of table IDs.
 		$key = '_tablepress_export_table_id';
 
-		/**
-		 * Load WP export functions.
-		 */
-		require_once ABSPATH . 'wp-admin/includes/export.php';
-		$value = wxr_cdata( implode( ',', $table_ids ) );
+		$value = implode( ',', $table_ids );
+
+		// Mimic `wxr_cdata()` from `wp-admin/includes/export.php`. Using it directly is not reliably possible e.g. with WP-CLI, as it's defined as a nested function inside of `export_wp()`.
+		$utf8_validation_function = function_exists( 'wp_is_valid_utf8' ) ? 'wp_is_valid_utf8' : 'seems_utf8'; // `wp_is_valid_utf8()` was introduced in WP 6.9, for older versions, we need to use the deprecated `seems_utf8()`.
+		if ( ! $utf8_validation_function( $value ) ) {
+			$value = utf8_encode( $value ); // phpcs:ignore Generic.PHP.DeprecatedFunctions.Deprecated
+		}
+		$value = '<![CDATA[' . str_replace( ']]>', ']]]]><![CDATA[>', $value ) . ']]>';
 
 		// Hijack the filter and print extra XML code for our faked post meta field.
 		// phpcs:disable WordPress.Security.EscapeOutput.HeredocOutputNotEscaped

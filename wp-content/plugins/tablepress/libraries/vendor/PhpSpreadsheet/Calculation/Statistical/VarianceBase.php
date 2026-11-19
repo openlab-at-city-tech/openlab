@@ -7,7 +7,7 @@ use TablePress\PhpOffice\PhpSpreadsheet\Calculation\Functions;
 abstract class VarianceBase
 {
 	/**
-				 * @param int|float|string|bool $value
+				 * @param bool|float|int|string $value
 				 * @return float|int
 				 */
 				protected static function datatypeAdjustmentAllowStrings($value)

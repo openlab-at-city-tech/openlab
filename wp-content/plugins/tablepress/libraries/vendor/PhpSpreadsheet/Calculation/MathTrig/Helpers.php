@@ -41,7 +41,7 @@ class Helpers
 
 	/**
 				 * Validate numeric, but allow substitute for null.
-				 * @param null|float|int $substitute
+				 * @param float|int|null $substitute
 				 * @return float|int
 				 * @param mixed $number
 				 */

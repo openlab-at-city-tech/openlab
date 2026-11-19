@@ -21,7 +21,7 @@ class ConditionalFormatValueObject
 	private ?bool $greaterThanOrEqual = null;
 
 	/**
-				 * @param null|float|int|string $value
+				 * @param float|int|string|null $value
 				 */
 				public function __construct(string $type, $value = null, ?string $cellFormula = null)
 	{
@@ -51,7 +51,7 @@ class ConditionalFormatValueObject
 	}
 
 	/**
-				 * @param null|float|int|string $value
+				 * @param float|int|string|null $value
 				 */
 				public function setValue($value): self
 	{

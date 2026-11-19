@@ -181,8 +181,10 @@ abstract class Properties
 		return ((float) $value) / self::PERCENTAGE_MULTIPLIER;
 	}
 
-	/** @return array{type: ?string, value: ?string, alpha: ?int}
-				 * @param null|float|int|string $alpha */
+	/**
+				 * @return array{type: ?string, value: ?string, alpha: ?int}
+				 * @param float|int|string|null $alpha
+				 */
 				protected function setColorProperties(?string $color, $alpha, ?string $colorType): array
 	{
 		return [
@@ -421,7 +423,7 @@ abstract class Properties
 		}
 
 		foreach ($elements as $keys) {
-			$reference = &$reference[$keys]; //* @phpstan-ignore-line
+			$reference = &$reference[$keys]; //* @phpstan-ignore offsetAccess.nonOffsetAccessible (I'm not sure what this is doing)
 		}
 
 		return $reference;
@@ -524,7 +526,7 @@ abstract class Properties
 		return $this->softEdges['size'];
 	}
 
-	/** @param mixed $value */
+	/** @param mixed  $value */
 				public function setShadowProperty(string $propertyName, $value): self
 	{
 		$this->activateObject();
@@ -541,7 +543,7 @@ abstract class Properties
 
 	/**
 				 * Set Shadow Properties.
-				 * @param null|float|int|string $colorAlpha
+				 * @param float|int|string|null $colorAlpha
 				 */
 				public function setShadowProperties(int $presets, ?string $colorValue = null, ?string $colorType = null, $colorAlpha = null, ?float $blur = null, ?int $angle = null, ?float $distance = null): void
 	{
@@ -633,7 +635,7 @@ abstract class Properties
 				 * Set Shadow Angle.
 				 *
 				 * @return $this
-				 * @param null|float|int|string $angle
+				 * @param float|int|string|null $angle
 				 */
 				protected function setShadowAngle($angle)
 	{
@@ -768,7 +770,7 @@ abstract class Properties
 
 	/**
 				 * Set Line Style Properties.
-				 * @param null|float|int|string $lineWidth
+				 * @param float|int|string|null $lineWidth
 				 */
 				public function setLineStyleProperties(
 		$lineWidth = null,
@@ -865,7 +867,7 @@ abstract class Properties
 				public function setLineStyleProperty(string $propertyName, $value): self
 	{
 		$this->activateObject();
-		$this->lineStyleProperties[$propertyName] = $value; //* @phpstan-ignore-line
+		$this->lineStyleProperties[$propertyName] = $value; //* @phpstan-ignore assign.propertyType (Too complicated)
 
 		return $this;
 	}
