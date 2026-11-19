@@ -2,8 +2,8 @@
 Contributors: nsp-code, tdgu
 Tags: post order, posts order, post sort, posts sort, post types order
 Requires at least: 2.8
-Tested up to: 6.9
-Stable tag: 2.4.6
+Tested up to: 7.1.3
+Stable tag: 2.5.9
 Requires PHP: 5.6
 License: GPLv2 or later
 
@@ -115,6 +115,55 @@ Consider upgrading to our advanced version of this plugin, which offers these fe
 
 
 == Changelog ==
+
+= 2.5.9 =
+ - Compatibility with Blocksy: sync the ct_content_block to ct-dashboard show/hide option.
+ - Fix: Sort within the default WordPress interface; pagination issue fix. Update for WPML and Polylang. 
+
+= 2.5.7 =
+ - When using WPML, Polylang, Bogo, the park items left out of an order-save runs only for current language objects. 
+ - WordPress 7.1.3 compatibility check and tag update
+ 
+= 2.5.6 =
+ - Import the old options structure to the new format.
+ - Fix: Text typo.
+ - WordPress 7.1.2 compatibility check and tag update. 
+
+= 2.5.5 =
+ - Relocate the pto/interface/query/limit filter so it can adjust the items_limit class property before it is used in the code.
+ - Fix: Correctly reconstruct the $object_ids list for the queried objects.
+ 
+= 2.5.3 =
+ - Fix: Use the object date (default sorting method) for the Next/Previous navigation links when menu_order is set to the default value (0).
+
+= 2.5.2 =
+ - New option "Revert Previous/Next Links" which reverts the navigational links
+ - Removed the current_user_can( 'edit_post', $id ) to allow users like contributors or custom roles to still be able to save the sorting. 
+
+= 2.5.1 =
+ - Fix: Removed the comparison of the object ids, when saving the order in the default WordPress archive. That may cause issues for non-admin users that have no view access to specific objects. 
+ - Updated the navigational links logic: For A → B → C, when viewing B, the Previous = A and the Next = C
+
+= 2.5 =
+ - Fix drag & drop icon for WordPress 7.1
+ - Process the options page form earlier, for the data to change accordingly when rendering the admin interfaces ( e.g. the menu hide / show )
+ - Identify the custom menus which contains multiple post types ( get_available_menu_locations() ). 
+ - Display a list of available custom post types if the menu has multiple. 
+ - Ensure the current post type sorting function is enabled before processing the response. 
+ - Improved code. 
+
+= 2.4.9 =
+ - Limit the total items in the re-order interface to 500, to avoid server errors ( .e.g memory exhaust, timeout load, timeout processing etc ) 
+ - New filter for adjusting the default 500 limit pto/interface/query/limit
+ - WordPress 7.1 compatibility check and tag update.
+
+= 2.4.8 = 
+ - Improved required user capability and Ajax capability checks.
+ - PHP 8.5.7 compatibility check.
+
+= 2.4.7 = 
+ - WordPress 7.0 compatibility check and tag update. 
+ - Mention the new AI Prompts feature available in APTO. 
 
 = 2.4.6 = 
  - Add a Settings link for the plugin in the Plugins area to make it easier for users to access and get started.

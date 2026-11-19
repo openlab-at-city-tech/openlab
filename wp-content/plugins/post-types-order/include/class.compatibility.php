@@ -41,6 +41,8 @@
                     
                     if ( $this->is_plugin_active( 'advanced-custom-fields-pro/acf.php' ) )
                         include_once( CPTPATH . 'compatibility/acf.php' );
+                    if ( $this->is_plugin_active( 'blocksy-companion-pro/blocksy-companion.php' ) )
+                        include_once( CPTPATH . 'compatibility/blocksy.php' );
 
                       
                     /**

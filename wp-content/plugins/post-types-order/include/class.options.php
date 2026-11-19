@@ -36,14 +36,15 @@
                             $options['show_reorder_interfaces']             =   isset ( $_POST['show_reorder_interfaces'] )             ?   array_map( 'sanitize_key', (array) $_POST['show_reorder_interfaces'] )  :   array();
                             $options['allow_reorder_default_interfaces']    =   isset ( $_POST['allow_reorder_default_interfaces'] )    ?   array_map( 'sanitize_key', (array) $_POST['allow_reorder_default_interfaces'] ) :   '';
                                 
-                            $options['capability']              = isset ( $_POST['capability'] )            ?  sanitize_key($_POST['capability'])  :   '';
+                            $options['capability']                  = isset ( $_POST['capability'] )            ?  sanitize_key($_POST['capability'])  :   '';
                             
-                            $options['autosort']                = isset($_POST['autosort'])                 ? intval($_POST['autosort'])    : '';
-                            $options['adminsort']               = isset($_POST['adminsort'])                ? intval($_POST['adminsort'])   : '';
-                            $options['use_query_ASC_DESC']      = isset($_POST['use_query_ASC_DESC'])       ? intval($_POST['use_query_ASC_DESC'])   : '';
+                            $options['autosort']                    = isset($_POST['autosort'])                 ? intval($_POST['autosort'])    : '';
+                            $options['adminsort']                   = isset($_POST['adminsort'])                ? intval($_POST['adminsort'])   : '';
+                            $options['use_query_ASC_DESC']          = isset($_POST['use_query_ASC_DESC'])       ? intval($_POST['use_query_ASC_DESC'])   : '';
                             
-                            $options['edit_view_links']         = isset($_POST['edit_view_links'])          ? intval($_POST['edit_view_links'])   : '';
-                            $options['navigation_sort_apply']   = isset($_POST['navigation_sort_apply'])    ? intval($_POST['navigation_sort_apply'])   : '';
+                            $options['edit_view_links']             = isset($_POST['edit_view_links'])          ? intval($_POST['edit_view_links'])   : '';
+                            $options['navigation_sort_apply']       = isset($_POST['navigation_sort_apply'])    ? intval($_POST['navigation_sort_apply'])   : '';
+                            $options['navigation_sort_revert']      = isset($_POST['navigation_sort_revert'])    ? intval($_POST['navigation_sort_revert'])   : '';
                                                 
                             update_option('cpto_options', $options);
                             update_option('CPT_configured', 'TRUE');
@@ -86,46 +87,33 @@
                                 <h2><?php esc_html_e('General', 'post-types-order') ?></h2>                              
                                 <table class="form-table">
                                     <tbody>
+                                        
                                         <tr valign="top">
-                                            <th scope="row" style="text-align: right;"><label><?php esc_html_e('Show / Hide re-order interface', 'post-types-order') ?></label></th>
+                                            <th scope="row" style="text-align: right;"><label><?php esc_html_e('Show / Hide re-order interface', 'advanced-taxonomy-terms-order') ?></label></th>
                                             <td>
-                                                <p><?php esc_html_e("Display the ReOrder interface for the specified post types.", 'post-types-order') ?></p>
+                                                <p><?php esc_html_e("Display the ReOrder interface for the specified post types.", 'advanced-taxonomy-terms-order') ?></p>
                                                 <br />
                                                 <div class="pt-list">
                                                 <?php
-                                                
-                                                    $post_types = get_post_types();
-                                                    foreach( $post_types as $post_type_name ) 
+                                            
+                                                    foreach ( $this->CPTO->functions->get_available_menu_locations() as $location    =>  $location_data )
                                                         {
-                                                            //ignore list
-                                                            $ignore_post_types  =   array(
-                                                                                            'reply',
-                                                                                            'topic',
-                                                                                            'report',
-                                                                                            'status'  
-                                                                                            );
-                                                            
-                                                            if( in_array($post_type_name, $ignore_post_types) )
-                                                                continue;
-                                                            
-                                                            if( is_post_type_hierarchical($post_type_name) )
-                                                                continue;
-                                                                
-                                                            $post_type_data = get_post_type_object( $post_type_name );
-                                                            if($post_type_data->show_ui === FALSE)
-                                                                continue;
+                                                            ?>
+                                                            <p class="pt-item"><label>
+                                                                <select name="show_reorder_interfaces[<?php echo esc_attr ( $location ) ?>]">
+                                                                    <option value="show" <?php if(isset($options['show_reorder_interfaces'][$location]) && $options['show_reorder_interfaces'][$location] == 'show') {echo ' selected="selected"';} ?>><?php esc_html_e( "Show", 'advanced-taxonomy-terms-order' ) ?></option>
+                                                                    <option value="hide" <?php if(isset($options['show_reorder_interfaces'][$location]) && $options['show_reorder_interfaces'][$location] == 'hide') {echo ' selected="selected"';} ?>><?php esc_html_e( "Hide", 'advanced-taxonomy-terms-order' ) ?></option>
+                                                                </select> &nbsp;&nbsp;<?php echo esc_html ( $location_data['name'] ); ?>
+                                                            </label><br />&nbsp;</p>
+                                                            <?php
+                                                        }
+                                                
                                                 ?>
-                                                <p class="pt-item"><label>
-                                                    <select name="show_reorder_interfaces[<?php echo esc_attr($post_type_name) ?>]">
-                                                        <option value="show" <?php if(isset($options['show_reorder_interfaces'][$post_type_name]) && $options['show_reorder_interfaces'][$post_type_name] === 'show') {echo ' selected="selected"';} ?>><?php esc_html_e( "Show", 'post-types-order' ) ?></option>
-                                                        <option value="hide" <?php if(isset($options['show_reorder_interfaces'][$post_type_name]) && $options['show_reorder_interfaces'][$post_type_name] === 'hide') {echo ' selected="selected"';} ?>><?php esc_html_e( "Hide", 'post-types-order' ) ?></option>
-                                                    </select> &nbsp;&nbsp;<?php echo esc_html ( $post_type_data->labels->singular_name ); ?>
-                                                </label><br />&nbsp;</p>
-                                                <?php  } ?>
                                                 </div>
                                             </td>
                                              
                                         </tr>
+                                        
                                         <tr valign="top">
                                             <th scope="row" style="text-align: right;"><label><?php esc_html_e('Minimum Level to use this plugin', 'post-types-order') ?></label></th>
                                             <td>
@@ -233,6 +221,16 @@
                                             </td>
                                         </tr>
                                         
+                                        <tr valign="top" id="navigation_sort_revert_row" style="display: <?php echo $options['navigation_sort_apply'] ? 'table-row' : 'none'; ?>;">
+                                            <th scope="row" style="text-align: right;"><label for="navigation_sort_revert"><?php esc_html_e('Revert Previous/Next Links', 'post-types-order') ?></label></th>
+                                            <td>
+                                                <p>
+                                                    <input type="checkbox" <?php checked( '1', $options['navigation_sort_revert'] ); ?> id="navigation_sort_revert" value="1" name="navigation_sort_revert">
+                                                    <?php esc_html_e("Reverse the order of Previous/Next navigation links.", 'post-types-order') ?>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        
                                     </tbody>
                                 </table>
                                                
@@ -245,6 +243,14 @@
                                 
                                 
                            </form>
+                           
+                           <script type="text/javascript">
+                                jQuery(document).ready(function($) {
+                                    $('#navigation_sort_apply').on('change', function() {
+                                        $('#navigation_sort_revert_row').toggle(this.checked);
+                                    });
+                                });
+                            </script>
 
                         </div>        
                     <?php          
