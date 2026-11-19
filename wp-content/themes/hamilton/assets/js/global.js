@@ -26,7 +26,7 @@ jQuery( document ).ready( function( $ ) {
 		$( window ).on( 'load', function () {
 			fadeInSpotted();
 		} );
-		$( window ).scroll( function () {
+		$( window ).on( 'scroll', function () {
 			$( '.tracker' ).each( function () {
 				if ( isScrolledIntoView( this ) === true ) {
 					$( this ).addClass( 'spotted' );
@@ -59,7 +59,7 @@ jQuery( document ).ready( function( $ ) {
 		setTimeout( function() { masonryInit(); }, 500 ); 
 	} );
 
-	$( window ).resize( function () {
+	$( window ).on( 'resize', function () {
 		masonryInit();
 	} );
 	
@@ -93,7 +93,15 @@ jQuery( document ).ready( function( $ ) {
 	// Toggle navigation
 	$( '.nav-toggle' ).on( 'click', function(){	
 		$( this ).add( '.site-nav' ).toggleClass( 'active' );
+		$( this ).attr( 'aria-expanded', $( this ).hasClass( 'active' ) ? 'true' : 'false' );
 		$( 'body' ).toggleClass( 'lock-screen' );
+	} );
+
+	// Close the navigation with the Escape key
+	$( document ).on( 'keydown', function( e ) {
+		if ( 'Escape' === e.key && $( '.nav-toggle' ).hasClass( 'active' ) ) {
+			$( '.nav-toggle' ).trigger( 'click' ).trigger( 'focus' );
+		}
 	} );
 	
         			
@@ -119,7 +127,7 @@ jQuery( document ).ready( function( $ ) {
 
 	resizeVideo( vidSelector );
 
-	$( window ).resize( function() {
+	$( window ).on( 'resize', function() {
 		resizeVideo( vidSelector );
 	} );
 	
@@ -130,7 +138,7 @@ jQuery( document ).ready( function( $ ) {
 	.not('[href="#"]')
 	.not('[href="#0"]')
 	.not( '.skip-link' )
-	.click(function(event) {
+	.on( 'click', function(event) {
 		// On-page links
 		if ( location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname ) {
 			// Figure out element to scroll to
@@ -155,7 +163,7 @@ jQuery( document ).ready( function( $ ) {
 		var headerHeight = $( '.site-header' ).outerHeight();
 		$( '.site-nav' ).css( 'padding-top', headerHeight + 'px' );
 
-		$( window ).resize( function() {
+		$( window ).on( 'resize', function() {
 			var headerHeight = $( '.site-header' ).outerHeight();
 			$( '.site-nav' ).css( 'padding-top', headerHeight + 'px' );
 		} );

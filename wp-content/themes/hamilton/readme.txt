@@ -3,10 +3,17 @@ Contributors: Anlino
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=anders%40andersnoren%2ese&lc=US&item_name=Free%20WordPress%20Themes%20from%20Anders%20Noren&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 4.5
 Requires PHP: 5.4
-Tested up to: 6.0
+Tested up to: 7.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+A clean portfolio theme for creatives, with a beautiful image grid.
+
+
+== Description ==
+
+Hamilton is a clean WordPress portfolio theme for creatives. It displays posts in a beautiful image grid that can be set to either two or three columns, which makes it a perfect fit for photographers, illustrators or graphic designers looking for a theme for their portfolio. It also features Block Editor support, a dark mode, custom background color support, a resume page template, responsive design, Jetpack infinite scroll support, editor styling, and much more. Demo: https://hamilton.andersnoren.se
 
 
 == Installation ==
@@ -37,6 +44,18 @@ Show Preview Titles — Always display the post titles on top of the images in p
 Front Page Title – The title you want shown on the front page when the "Front page displays" setting is set to "Your latest posts" in Settings > Reading.
 Dark Mode (displayed in the Colors tab) — Displays the site with white text and black background. If Background Color is set, only the text color will change. You can combine the background color with the dark mode to, for instance, display the site with a dark purple background color and white text color.
 
+= Where can I get support? =
+Post your question in the Hamilton support forum on WordPress.org: https://wordpress.org/support/theme/hamilton/
+
+= Where can I request a feature or report a bug? =
+Open an issue in the Hamilton GitHub repository: https://github.com/andersnoren/hamilton
+
+
+== Copyright ==
+
+Hamilton WordPress Theme, Copyright 2017-2026 Anders Norén
+Hamilton is distributed under the terms of the GNU GPL.
+
 
 == Licenses ==
 
@@ -44,12 +63,34 @@ Libre Franklin font
 License: SIL Open Font License, 1.1
 Source: https://fonts.google.com/specimen/Libre+Franklin
 
-Images in screenshot.png by Fancycrave, supplied through Pexels
+Images in screenshot.jpg by Fancycrave, supplied through Pexels
 License: Creative Commons Zero (CC0), https://creativecommons.org/publicdomain/zero/1.0/
 Source: https://www.pexels.com/u/fancycrave-60738/
 
 
 == Changelog ==
+
+Version 2.1.4 (2026-11-09)
+-------------------------
+- Added an aria-expanded attribute to the menu toggle, so screen readers announce whether the menu is open, and replaced the block elements inside it with valid button content.
+- The menu can now be closed with the Escape key, which also returns focus to the menu toggle.
+- Removed the underline from the links in the desktop menu, and added it with a slight offset on hover and focus instead.
+- Added an empty alt attribute to the logo image, since the logo link already contains the site title as screen reader text.
+- Removed vendor prefixes that are no longer needed, and replaced the rest with their standard equivalents where available.
+- Updated the theme author link to https://andersnoren.se.
+- Escaped the site title and translated strings in the templates.
+- Added the theme version to the global.js and fonts.css URLs, so browsers load the updated files after a theme update.
+- Recompressed screenshot.jpg, reducing its file size by more than half.
+
+Version 2.1.3 (2026-11-03)
+-------------------------
+- Tested with WordPress 7.1.
+- Fixed Jetpack Infinite Scroll adding the contents of the page <head> to the page when loading more posts.
+- Switched to the variable version of Libre Franklin, which replaces six font files with two smaller ones.
+- Replaced deprecated jQuery methods (.scroll(), .resize() and .click()) with .on().
+- Fixed the block editor styles not loading in the iframed editor.
+- Updated the demo URL.
+- Added Description, Copyright and Upgrade Notice sections to the readme, and support questions to the FAQ.
 
 Version 2.1.2 (2022-07-01)
 -------------------------
@@ -277,3 +318,12 @@ Version 1.01 (2017-07-09)
 
 Version 1.0 (2017-07-09)
 -------------------------
+
+
+== Upgrade Notice ==
+
+= 2.1.4 =
+Improves the accessibility of the menu, makes sure browsers load the updated scripts, removes outdated CSS, and updates the author link.
+
+= 2.1.3 =
+Tested with WordPress 7.1. Fixes Jetpack Infinite Scroll and the block editor styles in the iframed editor.

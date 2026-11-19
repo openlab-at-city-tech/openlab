@@ -21,7 +21,7 @@
 		}
 		?>
 
-		<a class="skip-link button" href="#site-content"><?php _e( 'Skip to the content', 'hamilton' ); ?></a>
+		<a class="skip-link button" href="#site-content"><?php esc_html_e( 'Skip to the content', 'hamilton' ); ?></a>
     
         <header class="section-inner site-header">
 		
@@ -53,23 +53,23 @@
 					</style>
 					
 					<a href="<?php echo esc_url( home_url() ); ?>" class="custom-logo" style="background-image: url( <?php echo esc_url( $logo_url ); ?> );">
-						<img src="<?php echo esc_url( $logo_url ); ?>" />
-						<span class="screen-reader-text"><?php echo $site_title; ?></span>
+						<img src="<?php echo esc_url( $logo_url ); ?>" alt="" />
+						<span class="screen-reader-text"><?php echo esc_html( $site_title ); ?></span>
 					</a>
 
 				<?php else : ?>
-					<a href="<?php echo esc_url( home_url() ); ?>" class="site-name"><?php echo $site_title; ?></a>
+					<a href="<?php echo esc_url( home_url() ); ?>" class="site-name"><?php echo esc_html( $site_title ); ?></a>
 				<?php endif; ?>
 
 			</<?php echo $site_title_elem; ?>>
 			
-			<button class="nav-toggle">
-				<span class="screen-reader-text"><?php _e( 'Toggle menu', 'hamilton' ); ?></span>
-				<div class="bars">
-					<div class="bar"></div>
-					<div class="bar"></div>
-					<div class="bar"></div>
-				</div>
+			<button type="button" class="nav-toggle" aria-expanded="false">
+				<span class="screen-reader-text"><?php esc_html_e( 'Toggle menu', 'hamilton' ); ?></span>
+				<span class="bars" aria-hidden="true">
+					<span class="bar"></span>
+					<span class="bar"></span>
+					<span class="bar"></span>
+				</span>
 			</button><!-- .nav-toggle -->
 
 			<div class="alt-nav-wrapper">
@@ -138,7 +138,7 @@
 				<div class="section-inner group">
 
 					<p>&copy; <?php echo date( 'Y' ); ?> <a href="<?php echo esc_url( home_url() ); ?>" class="site-name"><?php bloginfo( 'name' ); ?></a></p>
-					<p class="theme-by"><?php _e( 'Theme by', 'hamilton' ); ?> <a href="https://www.andersnoren.se">Anders Nor&eacute;n</a></p>
+					<p class="theme-by"><?php esc_html_e( 'Theme by', 'hamilton' ); ?> <a href="https://andersnoren.se">Anders Nor&eacute;n</a></p>
 				
 				</div>
 

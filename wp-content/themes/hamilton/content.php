@@ -33,7 +33,7 @@ $image_style_attr = ( has_post_thumbnail() && ! post_password_required() ) ? ' s
 	<header class="preview-header">
 	
 		<?php if ( is_sticky() ) : ?>
-			<span class="sticky-post"><?php _e( 'Sticky', 'hamilton' ); ?></span>
+			<span class="sticky-post"><?php esc_html_e( 'Sticky', 'hamilton' ); ?></span>
 		<?php endif; ?>
 	
 		<?php the_title( '<h2 class="title">', '</h2>' ); ?>
