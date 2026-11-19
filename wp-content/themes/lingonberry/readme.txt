@@ -2,11 +2,18 @@
 Contributors: Anlino
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=anders%40andersnoren%2ese&lc=US&item_name=Free%20WordPress%20Themes%20from%20Anders%20Noren&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 4.4
-Requires PHP: 5.4
-Tested up to: 6.0
+Requires PHP: 5.6
+Tested up to: 7.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+A clean, simple and responsive theme for bloggers.
+
+
+== Description ==
+
+Lingonberry is a clean, simple and responsive theme for bloggers. It features responsive design, retina ready assets, custom styling for all post formats, custom page templates, Block Editor support, custom accent color, and editor styles. Demo: https://lingonberry.andersnoren.se
 
 
 == Installation ==
@@ -15,6 +22,21 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 2. Activate the theme
 
 All theme specific options are handled through the WordPress Customizer.
+
+
+== Frequently Asked Questions ==
+
+= Where can I get support? =
+Post your question in the Lingonberry support forum on WordPress.org: https://wordpress.org/support/theme/lingonberry/
+
+= Where can I request a feature or report a bug? =
+Open an issue in the Lingonberry GitHub repository: https://github.com/andersnoren/lingonberry
+
+
+== Copyright ==
+
+Lingonberry WordPress Theme, Copyright 2013-2026 Anders Norén
+Lingonberry is distributed under the terms of the GNU GPL.
 
 
 == Licenses ==
@@ -31,24 +53,31 @@ FontAwesome
 License: SIL Open Font License, 1.1 
 Source: https://fontawesome.io
 
-Fitvids.js
-License: WTFPL
-Source: http://fitvidsjs.com
-
 Flexslider 2
 License: GPLv2 
 Source: http://flexslider.woothemes.com
 
-screenshot.png header image
+screenshot.jpg header image
 License: Public Domain 
 Source: Taken by the theme author
 
-screenshot.png post image 
+screenshot.jpg post image 
 License: CC0 Public Domain 
-Source: http://www.unsplash.com
+Source: Unsplash (added before the 2017 change to the Unsplash license, when its photos were released under CC0)
 
 
 == Changelog ==
+
+Version 2.1.2 (2026-11-03)
+-------------------------
+- Tested with WordPress 7.1.
+- Updated FlexSlider from 2.1 to 2.7.0, with deprecated jQuery methods replaced, and removed flexslider.min.js.
+- Switched to the variable version of Raleway, which replaces three font files with one.
+- Replaced deprecated jQuery methods (.resize(), .click() and .focus()) with .on() and .trigger().
+- Fixed the block editor styles not loading in the iframed editor.
+- Updated the demo URL.
+- Added the Requires at least header to style.css, and updated Requires PHP in readme.txt to 5.6 to match style.css.
+- Added Description, FAQ, Copyright and Upgrade Notice sections to the readme, removed the unused FitVids.js license, and updated the image source notes.
 
 Version 2.1.1 (2022-07-01)
 -------------------------
@@ -380,3 +409,9 @@ Version 1.01 (2013-07-25)
 
 Version 1 (2013-07-24)
 -------------------------
+
+
+== Upgrade Notice ==
+
+= 2.1.2 =
+Tested with WordPress 7.1. Updates FlexSlider, and fixes the block editor styles in the iframed editor.

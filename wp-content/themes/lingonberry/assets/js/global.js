@@ -5,7 +5,7 @@ jQuery(document).ready(function($) {
 	$( '.nav-toggle' ).on( 'click', function() {
 		$( this ).toggleClass( 'active' );
 		$( '.navigation' ).slideToggle();
-		$( '.blog-menu' ).focus();
+		$( '.blog-menu' ).trigger( 'focus' );
 		return false;
 	} );
 	
@@ -21,7 +21,7 @@ jQuery(document).ready(function($) {
     
 	
 	// Smooth scroll to the top	.
-    $( '.tothetop' ).click( function() {
+    $( '.tothetop' ).on( 'click', function() {
         $( 'html, body' ).animate( { scrollTop: 0 }, 500 );
         return false;
     } );
@@ -56,7 +56,7 @@ jQuery(document).ready(function($) {
 
 	resizeVideo(vidSelector);
 
-	$(window).resize(function() {
+	$(window).on( 'resize', function() {
 		resizeVideo(vidSelector);
 	});
 	
