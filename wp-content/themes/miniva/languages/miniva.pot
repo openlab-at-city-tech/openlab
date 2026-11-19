@@ -1,37 +1,42 @@
-# Copyright (C) 2023 Tajam
+# Copyright (C) 2026 Tajam
 # This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Miniva 1.7.0\n"
+"Project-Id-Version: Miniva 1.8.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/miniva\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-08-06T07:35:27+02:00\n"
+"POT-Creation-Date: 2026-06-29T10:25:44+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.5.0\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: miniva\n"
 
 #. Theme Name of the theme
+#: style.css
 msgid "Miniva"
 msgstr ""
 
 #. Theme URI of the theme
+#: style.css
 #: inc/extras.php:257
 msgid "https://tajam.id/miniva/"
 msgstr ""
 
 #. Description of the theme
+#: style.css
 msgid "A fast, lightweight, and mobile-friendly WordPress theme for bloggers. Miniva is built with simplicity, accessibility and performance in mind. The clean and minimal design helps readers focus on your content. It supports AMP and several Jetpack modules including featured content, infinite scroll, content options and social menu. See the theme demo at https://tajam.id/miniva-demo/"
 msgstr ""
 
 #. Author of the theme
+#: style.css
 msgid "Tajam"
 msgstr ""
 
 #. Author URI of the theme
+#: style.css
 msgid "https://tajam.id/"
 msgstr ""
 
@@ -49,16 +54,19 @@ msgstr ""
 
 #. translators: %1$s: smiley
 #: 404.php:49
+#, php-format
 msgid "Try looking in the monthly archives. %1$s"
 msgstr ""
 
 #. translators: 1: title.
 #: comments.php:35
+#, php-format
 msgid "One thought on &ldquo;%1$s&rdquo;"
 msgstr ""
 
 #. translators: 1: comment count number, 2: title.
 #: comments.php:41
+#, php-format
 msgctxt "comments title"
 msgid "%1$s thought on &ldquo;%2$s&rdquo;"
 msgid_plural "%1$s thoughts on &ldquo;%2$s&rdquo;"
@@ -307,6 +315,7 @@ msgstr ""
 
 #. translators: %s: Name of current post. Only visible to screen readers
 #: inc/posts.php:197
+#, php-format
 msgid "Continue reading<span class=\"screen-reader-text\"> \"%s\"</span>"
 msgstr ""
 
@@ -317,12 +326,14 @@ msgstr ""
 
 #. translators: %s: post date.
 #: inc/template-tags.php:30
+#, php-format
 msgctxt "post date"
 msgid "Posted on %s"
 msgstr ""
 
 #. translators: %s: post author.
 #: inc/template-tags.php:46
+#, php-format
 msgctxt "post author"
 msgid "by %s"
 msgstr ""
@@ -334,6 +345,7 @@ msgstr ""
 
 #. translators: 1: list of categories.
 #: inc/template-tags.php:66
+#, php-format
 msgid "Posted in %1$s"
 msgstr ""
 
@@ -345,17 +357,20 @@ msgstr ""
 
 #. translators: 1: list of tags.
 #: inc/template-tags.php:73
+#, php-format
 msgid "Tagged %1$s"
 msgstr ""
 
 #. translators: %s: post title
 #: inc/template-tags.php:83
+#, php-format
 msgid "Leave a Comment<span class=\"screen-reader-text\"> on %s</span>"
 msgstr ""
 
 #. translators: %s: Name of current post. Only visible to screen readers
 #: inc/template-tags.php:100
 #: template-parts/content-page.php:44
+#, php-format
 msgid "Edit <span class=\"screen-reader-text\">%s</span>"
 msgstr ""
 
@@ -398,6 +413,7 @@ msgstr ""
 
 #. translators: 1: theme name, 2: theme version.
 #: inc/theme-info.php:62
+#, php-format
 msgid "Welcome to %1$s %2$s"
 msgstr ""
 
@@ -407,6 +423,7 @@ msgstr ""
 
 #. translators: %s: theme name.
 #: inc/theme-info.php:88
+#, php-format
 msgid "%s uses the WordPress Customizer for all theme settings. Click on \"Customize\" to open the Customizer."
 msgstr ""
 
@@ -416,16 +433,19 @@ msgstr ""
 
 #. translators: 1: theme name.
 #: inc/theme-info.php:169
+#, php-format
 msgid "Thanks for choosing %1$s. To get started with %1$s please visit the theme info page."
 msgstr ""
 
 #. translators: %s: theme name.
 #: inc/theme-info.php:176
+#, php-format
 msgid "Get Started with %s"
 msgstr ""
 
 #. translators: %s: search query.
 #: search.php:22
+#, php-format
 msgid "Search Results for: %s"
 msgstr ""
 
@@ -455,6 +475,7 @@ msgstr ""
 
 #. translators: 1: link to WP admin new post page.
 #: template-parts/content-none.php:24
+#, php-format
 msgid "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
 msgstr ""
 
