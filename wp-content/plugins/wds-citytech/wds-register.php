@@ -591,17 +591,18 @@ function openlab_save_meta_data_at_registration( $usermeta ) {
 add_filter( 'bp_signup_usermeta', 'openlab_save_meta_data_at_registration' );
 
 /**
- * Adds the posted fields of the account type's profile group to the signup.
+ * Adds the account type's profile fields to the signup.
  *
- * BuddyPress 14.5.3+ saves only its signup fields when a form posts other fields. Do not mark
- * the account type fields as signup fields to fix this. The theme overrides `members/register.php`,
- * so BuddyPress then shows all of them in the Base section of the form.
+ * BuddyPress 14.5.3+ saves only its signup fields when a form posts any other field, and the
+ * registration form posts the account type's fields. The field list comes from the account type's
+ * profile groups, not from the posted list: the form posts the field IDs of its last group only,
+ * so alumni would lose their Student group answers.
  *
  * @param array $usermeta Signup meta.
  * @return array
  */
 function openlab_add_account_type_fields_to_signup( $usermeta ) {
-	if ( empty( $usermeta['account_type'] ) || empty( $_POST['signup_profile_field_ids'] ) ) {
+	if ( empty( $usermeta['account_type'] ) ) {
 		return $usermeta;
 	}
 
@@ -612,21 +613,26 @@ function openlab_add_account_type_fields_to_signup( $usermeta ) {
 		]
 	);
 
-	$group_field_ids = [];
+	$field_ids = [];
 	foreach ( $groups as $group ) {
-		$group_field_ids = array_merge( $group_field_ids, wp_parse_id_list( wp_list_pluck( (array) $group->fields, 'id' ) ) );
-	}
+		foreach ( wp_parse_id_list( wp_list_pluck( (array) $group->fields, 'id' ) ) as $field_id ) {
+			$value_key      = 'field_' . $field_id;
+			$visibility_key = $value_key . '_visibility';
 
-	$field_ids = array_intersect( wp_parse_id_list( wp_unslash( $_POST['signup_profile_field_ids'] ) ), $group_field_ids );
+			if ( empty( $_POST[ $value_key ] ) && empty( $_POST[ $visibility_key ] ) ) {
+				continue;
+			}
 
-	// Copied as BuddyPress copies its own signup fields in bp_core_screen_signup().
-	foreach ( $field_ids as $field_id ) {
-		if ( ! empty( $_POST[ 'field_' . $field_id ] ) ) {
-			$usermeta[ 'field_' . $field_id ] = $_POST[ 'field_' . $field_id ];
-		}
+			// Copied as BuddyPress copies its own signup fields in bp_core_screen_signup().
+			if ( ! empty( $_POST[ $value_key ] ) ) {
+				$usermeta[ $value_key ] = $_POST[ $value_key ];
+			}
 
-		if ( ! empty( $_POST[ 'field_' . $field_id . '_visibility' ] ) ) {
-			$usermeta[ 'field_' . $field_id . '_visibility' ] = $_POST[ 'field_' . $field_id . '_visibility' ];
+			if ( ! empty( $_POST[ $visibility_key ] ) ) {
+				$usermeta[ $visibility_key ] = $_POST[ $visibility_key ];
+			}
+
+			$field_ids[] = $field_id;
 		}
 	}
 
