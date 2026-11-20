@@ -101,6 +101,12 @@ class Controller {
 	 * @return void
 	 */
 	public function enqueue_frontend_resources( $displayed_gallery ) {
+		// A private gallery hidden here is not rendered, so its parameters are not printed either.
+		$private_notice = \Imagely\NGG\PrivateGalleries\Visibility::get_render_notice( $displayed_gallery );
+		if ( $private_notice && $private_notice['fully_hidden'] ) {
+			return;
+		}
+
 		// This script provides common JavaScript among all display types.
 		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		\wp_enqueue_script( 'ngg_common' );
@@ -174,6 +180,16 @@ class Controller {
 			get_permalink(),
 			false
 		);
+
+		// The Pro Lightbox reads this to leave share buttons off private galleries.
+		if ( \Imagely\NGG\PrivateGalleries\Manager::shows_private_gallery( $displayed_gallery ) ) {
+			DisplayManager::add_script_data(
+				'ngg_common',
+				'galleries.gallery_' . $displayed_gallery->id() . '.ngg_private',
+				true,
+				false
+			);
+		}
 
 		$settings_instance = \Imagely\NGG\Settings\Settings::get_instance();
 		$external_defaults = $settings_instance->get( 'external_source_default_settings' );
@@ -726,6 +742,64 @@ class Controller {
 		}
 
 		return $return;
+	}
+
+	/**
+	 * Returns the 'ajax_pagination_referrer' request parameter, or an empty string unless it is an http(s) URL on
+	 * this site's own host and port, without credentials.
+	 *
+	 * The value can come from the request body and is used as the base of pagination links that ajax_pagination.js
+	 * fetches and injects into the page, so a foreign host must never be accepted. The raw value is returned so
+	 * callers keep decoding it as before; both the raw and the decoded form must pass.
+	 *
+	 * @return string
+	 */
+	public function get_pagination_referrer() {
+		$referrer = Router::get_instance()->get_parameter( 'ajax_pagination_referrer' );
+
+		if ( ! is_string( $referrer ) || '' === $referrer ) {
+			return '';
+		}
+
+		$default_ports = [
+			'http'  => 80,
+			'https' => 443,
+		];
+
+		$home        = \wp_parse_url( \home_url() );
+		$home_host   = isset( $home['host'] ) ? strtolower( $home['host'] ) : '';
+		$home_scheme = isset( $home['scheme'] ) ? strtolower( $home['scheme'] ) : '';
+		$home_port   = isset( $home['port'] ) ? (int) $home['port'] : null;
+
+		// A different port is a different origin. Compare explicit ports, treating the scheme default as none.
+		if ( isset( $default_ports[ $home_scheme ] ) && $home_port === $default_ports[ $home_scheme ] ) {
+			$home_port = null;
+		}
+
+		foreach ( [ $referrer, urldecode( $referrer ) ] as $url ) {
+			// Backslashes and control characters are normalized differently by browsers than by wp_parse_url().
+			if ( preg_match( '#[\\\\\x00-\x1f\x7f]#', $url ) ) {
+				return '';
+			}
+
+			$parts  = \wp_parse_url( $url );
+			$scheme = isset( $parts['scheme'] ) ? strtolower( $parts['scheme'] ) : '';
+			if ( ! is_array( $parts )
+				|| ! isset( $default_ports[ $scheme ] )
+				|| empty( $parts['host'] )
+				|| strtolower( $parts['host'] ) !== $home_host
+				|| isset( $parts['user'] )
+				|| isset( $parts['pass'] ) ) {
+				return '';
+			}
+
+			$port = isset( $parts['port'] ) && (int) $parts['port'] !== $default_ports[ $scheme ] ? (int) $parts['port'] : null;
+			if ( $port !== $home_port ) {
+				return '';
+			}
+		}
+
+		return $referrer;
 	}
 
 	/**

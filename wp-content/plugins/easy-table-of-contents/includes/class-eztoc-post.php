@@ -68,12 +68,20 @@ class ezTOC_Post {
 	 *
 	 * @param WP_Post $post
 	 * @param bool    $apply_content_filter Whether or not to apply the `the_content` filter on the post content.
+	 * @param bool    $content_already_filtered When true, `$post->post_content` is already filtered HTML
+	 *                                          (e.g. from `the_content` at priority 100). Skip nested
+	 *                                          `do_blocks()` / `the_content` re-processing.
 	 */
-	public function __construct( WP_Post $post, $apply_content_filter = true ) {
+	public function __construct( WP_Post $post, $apply_content_filter = true, $content_already_filtered = false ) {
 
 		$this->post            = $post;
 		$this->permalink       = get_permalink( $post );
 		$this->queriedObjectID = get_queried_object_id();
+
+		if ( $content_already_filtered ) {
+			$this->process();
+			return;
+		}
 
         $apply_content_filter  = $this->apply_filter_status( $apply_content_filter );
 
@@ -85,6 +93,26 @@ class ezTOC_Post {
             $this->process();
         }
     }
+
+	/**
+	 * Build a post machine from content that has already passed through `the_content`
+	 * (or an equivalent render filter such as Divi's layout output).
+	 *
+	 * Avoids re-running `do_blocks()` and a nested `the_content` pass on raw `post_content`.
+	 *
+	 * @since 2.0.87
+	 *
+	 * @param WP_Post $post             Original post object (not mutated).
+	 * @param string  $filtered_content Already-rendered HTML for heading extraction.
+	 * @return static
+	 */
+	public static function from_filtered_content( WP_Post $post, $filtered_content ) {
+
+		$clone               = clone $post;
+		$clone->post_content = $filtered_content;
+
+		return new static( $clone, false, true );
+	}
 
 	/**
 	 * apply_filter_status function
@@ -197,14 +225,35 @@ class ezTOC_Post {
 	private function applyContentFilter() {
 
 		/*
-		 * Parses dynamic blocks out of post_content and re-renders them for gutenberg blocks.
-		 */		
-		if(function_exists('do_blocks')){
-			$this->post->post_content = do_blocks($this->post->post_content);
-		}else{
-			$this->post->post_content = $this->post->post_content;
+		 * Ultimate FAQ overwrites the global $post while rendering blocks/shortcodes (see set_display_variables).
+		 * Restore it so TOC eligibility and heading extraction target the page being viewed, not the last FAQ.
+		 *
+		 * @since 2.0.83
+		 */
+		$saved_post = null;
+		if ( eztoc_is_plugin_active( 'ultimate-faqs/ultimate-faqs.php' ) ) {
+			global $post;
+			$saved_post = $post;
 		}
-		
+
+		/*
+		 * Strip Ultimate FAQ shortcodes/blocks before nested the_content / do_blocks so a full FAQ
+		 * listing is not expanded while extracting headings (main FAQ pages can contain hundreds of entries).
+		 *
+		 * @since 2.0.86
+		 */
+		if ( eztoc_is_plugin_active( 'ultimate-faqs/ultimate-faqs.php' ) ) {
+			add_filter( 'strip_shortcodes_tagnames', array( __CLASS__, 'stripShortcodes' ), 10, 2 );
+			$this->post->post_content = strip_shortcodes( $this->post->post_content );
+			remove_filter( 'strip_shortcodes_tagnames', array( __CLASS__, 'stripShortcodes' ), 10 );
+			$this->post->post_content = eztoc_ultimate_faqs_strip_blocks_from_process_content( $this->post->post_content );
+		}
+
+		/*
+		 * Blocks are rendered by core's `do_blocks` on `the_content` (priority 9) below.
+		 * Do not call do_blocks() here — that would parse and render every block twice.
+		 */
+
 		if( defined('EASY_TOC_AMP_VERSION') && function_exists('ampforwp_is_amp_endpoint') && ampforwp_is_amp_endpoint() ){
 			$ampforwp_pagebuilder_enable = get_post_meta(get_the_ID(),'ampforwp_page_builder_enable', true);
 			if($ampforwp_pagebuilder_enable=='yes' && function_exists('ampforwp_eztoc_PageBuilder_content')){
@@ -230,13 +279,46 @@ class ezTOC_Post {
 		*/
 		$this->post->post_content = $this->stripShortcodesButKeepContent($this->post->post_content);
 		
+	}
+
+	/*
+	 * Guard against a WordPress core reentrancy problem in do_blocks() / _restore_wpautop_hook().
+	 *
+	 * When this nested `the_content` pass runs from inside an outer `the_content` pass (the [ez-toc]
+	 * shortcode runs at priority 11) and the outer post contains blocks, core's do_blocks() has already
+	 * removed wpautop and queued `_restore_wpautop_hook` at priority 11. The nested pass would execute
+	 * and remove that pending callback, but WP_Hook still invokes the outer pass's copy afterwards;
+	 * `_restore_wpautop_hook()` then computes `false - 1` and registers wpautop at priority -1 for the
+	 * rest of the request. Every later the_content() call (reusable block areas, widgets, form output)
+	 * is then autop'd twice: once on raw block markup and once on rendered block output.
+	 *
+	 * Park the pending callback while the nested pass runs and put it back at the same priority so the
+	 * outer pass finishes exactly as core expects. No-op when not nested inside `the_content`.
+	 */
+	$restore_wpautop_priority = doing_filter( 'the_content' ) ? has_filter( 'the_content', '_restore_wpautop_hook' ) : false;
+
+	if ( false !== $restore_wpautop_priority ) {
+		remove_filter( 'the_content', '_restore_wpautop_hook', $restore_wpautop_priority );
+	}
+
+	try {
+		// The ezTOC filter was removed above (line 220), so this is safe from infinite recursion
+		// Even if the_content triggers other filters, ezTOC::the_content won't be called again
+		$this->post->post_content = apply_filters( 'the_content', strip_shortcodes( $this->post->post_content ) ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Using WP code hook
+	} finally {
+		if ( false !== $restore_wpautop_priority ) {
+			add_filter( 'the_content', '_restore_wpautop_hook', $restore_wpautop_priority );
 		}
 
-		$this->post->post_content = apply_filters( 'the_content', strip_shortcodes( $this->post->post_content ) ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Using WP code hook
-
 		add_filter( 'the_content', array( 'ezTOC', 'the_content' ), 100 );  // increased  priority to fix other plugin filter overwriting our changes
+	}
 
 		remove_filter( 'strip_shortcodes_tagnames', array( __CLASS__, 'stripShortcodes' ) );
+
+		if ( null !== $saved_post ) {
+			global $post;
+			$post = $saved_post;
+		}
 
 		return $this;
 	}
@@ -269,6 +351,7 @@ class ezTOC_Post {
 				'ez-toc',
 				'ez-toc-widget-sticky',
 				apply_filters( 'ez_toc_shortcode', 'toc' ),  //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
+				'woocommerce_checkout',
 			),
 			$content
 		);
@@ -280,6 +363,7 @@ class ezTOC_Post {
 				'ez-toc',
 				'ez-toc-widget-sticky',
 				apply_filters( 'eztoc_shortcode', 'toc' ),
+				'woocommerce_checkout',
 			),
 			$content
 		);
@@ -477,6 +561,26 @@ class ezTOC_Post {
 	 */
 	private function extractExcludedNodes( $page, $content ) {
 
+		/**
+		 * @since 2.0
+		 *
+		 * @param $selectors array  Array of classes/id selector to exclude from TOC.
+		 * @param $content   string Post content.
+		 */
+		//This is legacy hook,it will be removed in future versions
+		$selectors = apply_filters( 'ez_toc_exclude_by_selector', array( '.ez-toc-exclude-headings' ), $content ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
+		//This is the new hook , it should be used instead of the legacy one.
+		$selectors = apply_filters( 'eztoc_exclude_by_selector', $selectors, $content );
+		$selectors = ! is_array( $selectors ) ? array() : $selectors; // In case we get string instead of array
+
+		/*
+		 * TagFilter walks the entire document in PHP. On a long transcript that is
+		 * wasted work when no exclude selector is present in the markup.
+		 */
+		if ( ! $this->content_matches_exclude_selectors( $content, $selectors ) ) {
+			return;
+		}
+
 		if ( ! class_exists( 'TagFilter' ) ) {
 
                         if(phpversion() <= 5.6)
@@ -492,17 +596,6 @@ class ezTOC_Post {
 
 		$html = TagFilter::Explode( $content, $tagFilterOptions );
 
-		/**
-		 * @since 2.0
-		 *
-		 * @param $selectors array  Array of classes/id selector to exclude from TOC.
-		 * @param $content   string Post content.
-		 */
-		//This is legacy hook,it will be removed in future versions
-		$selectors = apply_filters( 'ez_toc_exclude_by_selector', array( '.ez-toc-exclude-headings' ), $content ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
-		//This is the new hook , it should be used instead of the legacy one.
-		$selectors = apply_filters( 'eztoc_exclude_by_selector', $selectors, $content );
-		$selectors = ! is_array( $selectors ) ? [] : $selectors; // In case we get string instead of array
 		$nodes = $html->Find( implode( ',', $selectors ) );
 		if(isset($nodes['ids'])){
 			foreach ( $nodes['ids'] as $id ) {
@@ -517,6 +610,57 @@ class ezTOC_Post {
 		 *
 		 * @see wpautop()
 		 */
+	}
+
+	/**
+	 * Whether any exclude selector can match this content.
+	 *
+	 * Class and id selectors are checked with strpos. A selector that is not a
+	 * class or id still forces a full parse so element selectors keep working.
+	 *
+	 * @since 2.0.90
+	 *
+	 * @param string $content
+	 * @param array  $selectors
+	 * @return bool
+	 */
+	private function content_matches_exclude_selectors( $content, $selectors ) {
+
+		if ( ! is_string( $content ) || '' === $content || empty( $selectors ) ) {
+			return false;
+		}
+
+		foreach ( $selectors as $selector ) {
+
+			if ( ! is_string( $selector ) ) {
+				return true;
+			}
+
+			$selector = trim( $selector );
+
+			if ( '' === $selector ) {
+				continue;
+			}
+
+			if ( ! preg_match_all( '/[.#]([A-Za-z_][A-Za-z0-9_-]*)/', $selector, $matches ) || empty( $matches[1] ) ) {
+				return true;
+			}
+
+			$present = true;
+
+			foreach ( $matches[1] as $token ) {
+				if ( false === strpos( $content, $token ) ) {
+					$present = false;
+					break;
+				}
+			}
+
+			if ( $present ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -1304,6 +1448,30 @@ class ezTOC_Post {
 	} 
 
 	/**
+	 * Flat list of headings used to build the in-content TOC.
+	 *
+	 * @since 2.0.87
+	 * @return array
+	 */
+	public function get_flat_toc_headings() {
+
+		$headings    = array();
+		$first_page  = 1;
+
+		if ( empty( $this->pages[ $first_page ] ) || ! is_array( $this->pages[ $first_page ] ) ) {
+			return $headings;
+		}
+
+		foreach ( $this->pages[ $first_page ] as $attribute ) {
+			if ( ! empty( $attribute['headings'] ) && is_array( $attribute['headings'] ) ) {
+				$headings = array_merge( $headings, $attribute['headings'] );
+			}
+		}
+
+		return $headings;
+	}
+
+	/**
 	 * createTOCParent function
 	 *
 	 * @param string $prefix
@@ -1312,16 +1480,16 @@ class ezTOC_Post {
 	private function createTOCParent( $prefix = "ez-toc", $toc_more = array() )
 	{
 		$html = ''; 
-		$first_page = 1;
-		$headings = array();
-		foreach ( $this->pages[ $first_page ] as $attribute )
-		{
-			$headings = array_merge( $headings, $attribute[ 'headings' ] );
+		$headings = $this->get_flat_toc_headings();
+
+		if ( isset( $toc_more['split_limit'] ) && (int) $toc_more['split_limit'] > 0 ) {
+			$offset   = isset( $toc_more['split_offset'] ) ? max( 0, (int) $toc_more['split_offset'] ) : 0;
+			$headings = array_slice( $headings, $offset, (int) $toc_more['split_limit'] );
 		}
 
 		if( !empty( $headings ) )
 		{
-			$html .= $this->createTOC( $first_page, $headings, $prefix, $toc_more );
+			$html .= $this->createTOC( 1, $headings, $prefix, $toc_more );
 		}
 
 		return $html;
@@ -1351,6 +1519,15 @@ class ezTOC_Post {
 			$toc_more['collapse_hd'] = true;
 		}elseif(isset($options['no_collapse_hd'])){
 			$toc_more['no_collapse_hd'] = true;
+		}
+
+		if ( isset( $options['split_limit'] ) ) {
+			$toc_more['split_limit']  = (int) $options['split_limit'];
+			$toc_more['split_offset'] = isset( $options['split_offset'] ) ? (int) $options['split_offset'] : 0;
+			// Flat list avoids broken nested markup when a chunk starts mid-hierarchy.
+			$toc_more['no_hierarchy'] = true;
+			unset( $toc_more['view_more'] );
+			unset( $toc_more['hierarchy'] );
 		}
 
 		if ( $this->hasTOCItems ) {
@@ -1393,8 +1570,14 @@ class ezTOC_Post {
 			// Get column setting - check shortcode options first, then global setting
 			$columns = isset($options['columns']) ? $options['columns'] : absint( ezTOC_Option::get('toc_columns', 1) );
 			$column_class = $columns > 1 ? " ez-toc-columns-{$columns}" : "";
+
+			// Continue serial numbers across split TOC sections (CSS counters).
+			$counter_attr = '';
+			if ( isset( $options['split_offset'] ) && (int) $options['split_offset'] > 0 ) {
+				$counter_attr = ' style="counter-reset: item ' . absint( $options['split_offset'] ) . ';"';
+			}
 			
-			$html  = "<ul class='{$prefix}-list {$prefix}-list-level-1{$column_class} $visiblityClass' >" . $html . "</ul>";
+			$html  = "<ul class='{$prefix}-list {$prefix}-list-level-1{$column_class} $visiblityClass'{$counter_attr} >" . $html . "</ul>";
 		}
 
 		return $html;
@@ -1432,11 +1615,11 @@ class ezTOC_Post {
 			if ( ezTOC_Option::get( 'show_heading_text' ) ) {
 					$htmlSticky .= '<div class="ez-toc-sticky-title-container">' . PHP_EOL;
 					$htmlSticky .= $this->get_toc_title_tag(  'sticky' );
-					$htmlSticky .= '<a class="ez-toc-close-icon" href="#" onclick="ezTOC_hideBar(event)" aria-label="'.esc_attr__('×','easy-table-of-contents').'"><span aria-hidden="true">×</span></a>' . PHP_EOL;
+					$htmlSticky .= '<a class="ez-toc-close-icon" href="#" role="button" onclick="ezTOC_hideBar(event)" aria-label="'.esc_attr__('Close table of contents','easy-table-of-contents').'"><span aria-hidden="true">×</span></a>' . PHP_EOL;
 					$htmlSticky .= '</div>' . PHP_EOL;
 			} else {
 				$htmlSticky .= '<div class="ez-toc-sticky-title-container">' . PHP_EOL;
-				$htmlSticky .= '<a class="ez-toc-close-icon" href="#" onclick="ezTOC_hideBar(event)" aria-label="'.esc_attr__('Close','easy-table-of-contents').'"><span aria-hidden="true">×</span></a>' . PHP_EOL;
+				$htmlSticky .= '<a class="ez-toc-close-icon" href="#" role="button" onclick="ezTOC_hideBar(event)" aria-label="'.esc_attr__('Close table of contents','easy-table-of-contents').'"><span aria-hidden="true">×</span></a>' . PHP_EOL;
 				$htmlSticky .= '</div>' . PHP_EOL;
 			}
 			$htmlSticky  .= '<div id="ez-toc-sticky-container" class="ez-toc-sticky-container ' . implode( ' ', $classSticky ) . '">' . PHP_EOL;
@@ -1558,6 +1741,12 @@ class ezTOC_Post {
 	        	$show_counter = false;
 	        }
 
+	        // Split chunks always use a flat list so page/TOC structure stays valid.
+	        if ( isset( $options['split_limit'] ) ) {
+	        	$options['no_hierarchy'] = true;
+	        	unset( $options['hierarchy'] );
+	        }
+
 	        if( $show_counter ){
 	        	$hierarchical = ezTOC_Option::get( 'show_hierarchy' );
 	        	if(isset($options['hierarchy'])){
@@ -1630,7 +1819,12 @@ class ezTOC_Post {
 			$class = array_map( 'trim', $class );
 			$class = array_map( 'sanitize_html_class', $class );
 
-			$html .= '<div id="ez-toc-container" class="' . implode( ' ', $class ) . '">' . PHP_EOL;
+			// Keep the primary TOC markup identical; only secondary split boxes use a unique id/class.
+			if ( ! empty( $options['split_index'] ) && (int) $options['split_index'] > 1 ) {
+				$html .= '<div id="ez-toc-container-' . absint( $options['split_index'] ) . '" class="ez-toc-split-section ' . implode( ' ', $class ) . '">' . PHP_EOL;
+			} else {
+				$html .= '<div id="ez-toc-container" class="' . implode( ' ', $class ) . '">' . PHP_EOL;
+			}
                         
             if( ezTOC_Option::get( 'toc_loading' ) == 'js' ){
 				$html .= $this->get_js_based_toc_heading($options);
@@ -1878,9 +2072,9 @@ class ezTOC_Post {
 					for ( $current_depth; $current_depth < (int) $matches[ $i ][2]; $current_depth++ ) {
 
 						$numbered_items[ $current_depth + 1 ] = 0;
-						//Hide Level 4 Headings
+						// Collapsible sub-headings (h3 under h2, h4+, etc.)
 						$sub_active = '';
-						if($level > 3){
+						if($level > 2){
 							//This is legacy hook,it will be removed in future versions.
 							$sub_active = apply_filters('ez_toc_hierarchy_js_add_attr', $sub_active, $collapse_status); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
 							//This is the new hook , it should be used instead of the legacy one.
@@ -2022,10 +2216,15 @@ class ezTOC_Post {
 				$title
 			);
 		}
+		$rel = '';
+		if ( ezTOC_Option::get( 'nofollow_toc_links' ) ) {
+			$rel = ' rel="nofollow"';
+		}
 		return sprintf(
-			'<a class="ez-toc-link ez-toc-heading-' . $count . '" '.$anch_name.'="%1$s" >%2$s</a>',
+			'<a class="ez-toc-link ez-toc-heading-' . $count . '" '.$anch_name.'="%1$s"%3$s >%2$s</a>',
 			esc_url( $this->createTOCItemURL( $id, $page ) ),
-			$title
+			$title,
+			$rel
 		);
 	}
 
@@ -2127,7 +2326,7 @@ class ezTOC_Post {
 			//This is legacy action hook,it will be removed in future versions.
 			$toc_title = apply_filters('ez_toc_sticky_title', ezTOC_Option::get( 'heading_text' )); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
 			//This is the new action hook , it should be used instead of the legacy one.
-			$toc_title = apply_filters('eztoc_sticky_title', ezTOC_Option::get( 'heading_text' ));
+			$toc_title = apply_filters('eztoc_sticky_title', $toc_title);
 		}else{
 			$toc_title = ezTOC_Option::get( 'heading_text' );
 		}
@@ -2152,6 +2351,22 @@ class ezTOC_Post {
 
 		if(isset($options['header_label'])){
 			$toc_title = $options['header_label'];
+		}
+
+		// Split TOC: include part serial number in the title, e.g. "Table of Contents (Part 1 of 2)".
+		if (
+			'sticky' !== $toc_type
+			&& ! empty( $options['split_index'] )
+			&& ! empty( $options['split_count'] )
+			&& (int) $options['split_count'] > 1
+		) {
+			$toc_title = sprintf(
+				/* translators: 1: TOC heading text, 2: current part number, 3: total parts */
+				__( '%1$s (Part %2$d of %3$d)', 'easy-table-of-contents' ),
+				$toc_title,
+				(int) $options['split_index'],
+				(int) $options['split_count']
+			);
 		}
 
 		$tag_classes = 'ez-toc-title';

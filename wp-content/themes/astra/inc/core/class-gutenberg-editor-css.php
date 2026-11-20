@@ -1220,14 +1220,15 @@ if ( ! class_exists( 'Gutenberg_Editor_CSS' ) ) {
 				'.ast-separate-container .block-editor-block-list__layout, .ast-two-container .editor-block-list__layout' => array(
 					'padding-top' => '0',
 				),
-
-				'.ast-two-container .editor-post-title, .ast-separate-container .block-editor-block-list__layout, .ast-two-container .editor-post-title' => array(
+				// Scope to root container only so nested block layouts (quote, list, etc.)
+				// don't inherit the full-page padding added by the Separate Container layout.
+				'.ast-two-container .editor-post-title, .ast-separate-container .block-editor-block-list__layout.is-root-container, .ast-two-container .editor-post-title' => array(
 					'padding-top'    => 'calc( 5.34em - 19px)',
 					'padding-bottom' => '5.34em',
 					'padding-left'   => 'calc( 6.67em - 28px )',
 					'padding-right'  => 'calc( 6.67em - 28px )',
 				),
-				'.ast-separate-container .block-editor-block-list__layout' => array(
+				'.ast-separate-container .block-editor-block-list__layout.is-root-container' => array(
 					'padding-top'    => '0',
 					'padding-bottom' => '5.34em',
 					'padding-left'   => 'calc( 6.67em - 28px )',

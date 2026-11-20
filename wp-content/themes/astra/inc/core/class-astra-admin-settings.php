@@ -158,6 +158,13 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 					<a href="<?php echo esc_url( astra_get_upgrade_url( 'dashboard' ) ); ?>" target="_blank" title="<?php echo esc_attr__( 'Unlock with Astra Pro', 'astra' ); ?>">
 						<?php echo esc_html__( 'Unlock', 'astra' ); ?>
 					</a>
+					<span class="astra-megamenu-cta-sep" aria-hidden="true" style="margin: 0 6px; color: #c3c4c7;">|</span>
+					<a
+						class="astra-megamenu-doc-link"
+						href="<?php echo esc_url( astra_get_pro_url( '/mega-menu/', 'free-theme', 'nav-menu', 'unlock' ) ); ?>" target="_blank" rel="noopener noreferrer" title="<?php echo esc_attr__( 'Learn how to configure the Astra Megamenu', 'astra' ); ?>"
+					>
+						<?php echo esc_html__( 'Learn more', 'astra' ); ?>
+					</a>
 				</p>
 			<?php
 		}

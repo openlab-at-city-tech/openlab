@@ -7,7 +7,6 @@ use SimpleCalendar\plugin_deps\GuzzleHttp\HandlerStack;
 use SimpleCalendar\plugin_deps\GuzzleHttp\Promise as P;
 use SimpleCalendar\plugin_deps\GuzzleHttp\Promise\PromiseInterface;
 use SimpleCalendar\plugin_deps\GuzzleHttp\TransferStats;
-use SimpleCalendar\plugin_deps\GuzzleHttp\Utils;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\StreamInterface;
@@ -74,7 +73,7 @@ class MockHandler implements \Countable
             throw new \OutOfBoundsException('Mock queue is empty');
         }
         if (isset($options['delay']) && \is_numeric($options['delay'])) {
-            \usleep((int) $options['delay'] * 1000);
+            \usleep((int) ($options['delay'] * 1000));
         }
         $this->lastRequest = $request;
         $this->lastOptions = $options;
@@ -131,7 +130,7 @@ class MockHandler implements \Countable
             if ($value instanceof ResponseInterface || $value instanceof \Throwable || $value instanceof PromiseInterface || \is_callable($value)) {
                 $this->queue[] = $value;
             } else {
-                throw new \TypeError('Expected a Response, Promise, Throwable or callable. Found ' . Utils::describeType($value));
+                throw new \TypeError('Expected a Response, Promise, Throwable or callable. Found ' . \get_debug_type($value));
             }
         }
     }

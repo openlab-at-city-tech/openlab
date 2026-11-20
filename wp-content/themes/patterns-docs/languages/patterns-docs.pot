@@ -1,20 +1,21 @@
-# Copyright (C) 2025 patternswp
+# Copyright (C) 2026 patternswp
 # This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Patterns Docs 1.0.0\n"
+"Project-Id-Version: Patterns Docs 2.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/patterns-docs\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-02-11T13:39:47+00:00\n"
+"POT-Creation-Date: 2026-06-24T17:16:30+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.6.0\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: patterns-docs\n"
 
 #. Theme Name of the theme
+#: style.css
 #: admin/templates/notice-getting-started.php:21
 #: admin/templates/page-theme-info.php:99
 #: admin/templates/page-theme-info.php:104
@@ -22,18 +23,22 @@ msgid "Patterns Docs"
 msgstr ""
 
 #. Theme URI of the theme
+#: style.css
 msgid "https://patternswp.com/full-site-editing-fse-themes/patterns-docs/"
 msgstr ""
 
 #. Description of the theme
+#: style.css
 msgid "Patterns Docs is a clean and professional WordPress theme designed for documentation websites, knowledge bases, wikis, and help centers. Built with WordPress Full Site Editing (FSE), this theme allows effortless customization of headers, footers, templates, and global styles directly within the WordPress Site Editor. The theme includes pre-designed patterns and layouts crafted for organizing guides, FAQs, and support articles. Its responsive design ensures that your documentation remains well-structured, user-friendly, and accessible across all devices."
 msgstr ""
 
 #. Author of the theme
+#: style.css
 msgid "patternswp"
 msgstr ""
 
 #. Author URI of the theme
+#: style.css
 msgid "https://patternswp.com/"
 msgstr ""
 
@@ -48,11 +53,13 @@ msgstr ""
 
 #. translators: 1: welcome page link starting html tag, 2: welcome page link ending html tag.
 #: admin/templates/notice-getting-started.php:27
+#, php-format
 msgid "Welcome! Thank you for choosing %1$s! To fully take advantage of the best our theme can offer, please make sure you visit our %2$swelcome page%3$s."
 msgstr ""
 
-#. translators: %s: singular/plular .
+#. translators: %s: singular/plural .
 #: admin/templates/notice-getting-started.php:43
+#, php-format
 msgid "Clicking the button below will install and activate the following %s:"
 msgstr ""
 
@@ -70,6 +77,7 @@ msgstr ""
 
 #. Translators: %1$s current user display name.
 #: admin/templates/notice-review.php:26
+#, php-format
 msgid "Howdy, %1$s! It seems that you have been using this theme for more than 15 days. We hope you are happy with everything that the theme has to offer. If you can spare a minute, please help us by leaving a review on WordPress.org. By spreading the love, we can continue to develop new amazing features in the future!"
 msgstr ""
 
@@ -279,8 +287,13 @@ msgstr ""
 msgid "Frequently Asked Questions"
 msgstr ""
 
+#: admin/templates/page-theme-info.php:398
+msgid "Changelog"
+msgstr ""
+
 #. translators: %s: Property name.
 #: includes/api/class-api-settings.php:154
+#, php-format
 msgid "The %s property has an invalid stored value, and cannot be updated to null."
 msgstr ""
 
@@ -307,11 +320,13 @@ msgstr ""
 
 #. translators: 1: Copyright symbol or word, 2: Date, 3: Site title
 #: includes/class-block-bindings.php:97
+#, php-format
 msgid "%1$s %2$s %3$s"
 msgstr ""
 
 #. translators: %s is the search term.
 #: includes/class-block-bindings.php:108
+#, php-format
 msgid "Search results for: \"%s\""
 msgstr ""
 
@@ -320,107 +335,149 @@ msgstr ""
 msgid "Blog"
 msgstr ""
 
+#: includes/functions.php:27
+msgid "Advanced Import"
+msgstr ""
+
 #. translators: %s the plugin info
-#: includes/functions.php:60
+#: includes/functions.php:67
+#, php-format
 msgid "Not enough information about plugin. Plugin info %s"
 msgstr ""
 
 #. translators: %s is the plugin name
-#: includes/functions.php:81
-#: includes/functions.php:97
+#: includes/functions.php:88
+#: includes/functions.php:104
+#, php-format
 msgid "Plugin \"%s\" is already active."
 msgstr ""
 
 #. translators: %1$s is the plugin name, %2$s is error message
-#: includes/functions.php:111
-#: includes/functions.php:242
+#: includes/functions.php:118
+#: includes/functions.php:249
+#, php-format
 msgid "Error activating plugin \"%1$s\": %2$s"
 msgstr ""
 
 #. translators: %s is the plugin name.
-#: includes/functions.php:122
-#: includes/functions.php:228
+#: includes/functions.php:129
+#: includes/functions.php:235
+#, php-format
 msgid "Plugin \"%s\" activated successfully."
 msgstr ""
 
 #. translators: %s is the plugin name.
-#: includes/functions.php:131
-#: includes/functions.php:253
+#: includes/functions.php:138
+#: includes/functions.php:260
+#, php-format
 msgid "You don't have permission to activate the plugin \"%s\"."
 msgstr ""
 
 #. translators: %1$s is the plugin name, %2$s is error message
-#: includes/functions.php:156
+#: includes/functions.php:163
+#, php-format
 msgid "Error retrieving information for plugin \"%1$s\": %2$s"
 msgstr ""
 
 #. translators: %1$s is the plugin name, %2$s is error message
-#: includes/functions.php:175
-#: includes/functions.php:185
-#: includes/functions.php:195
-#: includes/functions.php:215
+#: includes/functions.php:182
+#: includes/functions.php:192
+#: includes/functions.php:202
+#: includes/functions.php:222
+#, php-format
 msgid "Error installing plugin \"%1$s\": %2$s"
 msgstr ""
 
-#: includes/functions.php:205
+#: includes/functions.php:212
 msgid "Unable to connect to the filesystem. Please confirm your credentials."
 msgstr ""
 
 #. translators: %s is the plugin name.
-#: includes/functions.php:263
+#: includes/functions.php:270
+#, php-format
 msgid "Plugin \"%s\" installed and activated successfully."
 msgstr ""
 
-#: includes/functions.php:297
+#: includes/functions.php:304
 msgid "and"
 msgstr ""
 
-#: includes/functions.php:541
+#: includes/functions.php:556
 msgid "How can I customize the theme header?"
 msgstr ""
 
-#: includes/functions.php:542
+#: includes/functions.php:557
 msgid "You can customize the theme header by editing the Header template part in the Site Editor. Go to Appearance > Editor > Patterns > Header, then select and edit the Header template part."
 msgstr ""
 
-#: includes/functions.php:545
+#: includes/functions.php:560
 msgid "How do I change the footer credits?"
 msgstr ""
 
-#: includes/functions.php:546
+#: includes/functions.php:561
 msgid "To change the footer credits, go to  Appearance > Editor > Patterns > Footer, then select and edit the Footer template part. You can add your own text or remove the existing credits."
 msgstr ""
 
-#: includes/functions.php:549
+#: includes/functions.php:564
 msgid "Does this theme support block patterns?"
 msgstr ""
 
-#: includes/functions.php:550
+#: includes/functions.php:565
 msgid "Yes, this theme includes several pre-designed block patterns that you can use to quickly create layouts. You can find these patterns in the block inserter."
 msgstr ""
 
-#: includes/functions.php:553
+#: includes/functions.php:568
 msgid "How can I create custom templates?"
 msgstr ""
 
-#: includes/functions.php:554
+#: includes/functions.php:569
 msgid "You can create custom templates by going to Appearance > Editor > Templates, then click Add New Template. You can then design your custom template using blocks."
 msgstr ""
 
-#: includes/functions.php:557
+#: includes/functions.php:572
 msgid "How do I use global styles?"
 msgstr ""
 
-#: includes/functions.php:558
+#: includes/functions.php:573
 msgid "To use global styles, go to Appearance > Editor > Styles, then click on the Edit icon in the top right side of Styles. From there, you can customize the colors, typography, and layout for your entire site."
+msgstr ""
+
+#: patterns/archives.php
+msgctxt "Pattern title"
+msgid "Archives"
+msgstr ""
+
+#: patterns/archives.php
+msgctxt "Pattern description"
+msgid "Display a date-based archive of posts, commonly placed in sidebars, footers, or site maps."
 msgstr ""
 
 #: patterns/archives.php:18
 msgid "Archives"
 msgstr ""
 
+#: patterns/calendar.php
+msgctxt "Pattern title"
+msgid "Calendar"
+msgstr ""
+
+#: patterns/calendar.php
+msgctxt "Pattern description"
+msgid "Display a calendar showing your site’s posts, commonly placed in sidebars, footers, or site maps."
+msgstr ""
+
 #: patterns/calendar.php:18
 msgid "Calendar"
+msgstr ""
+
+#: patterns/card-1.php
+msgctxt "Pattern title"
+msgid "Card 1"
+msgstr ""
+
+#: patterns/card-1.php
+msgctxt "Pattern description"
+msgid "A layout featuring an icon, title, and content, commonly used in repeated columns or as a standalone section."
 msgstr ""
 
 #: patterns/card-1.php:28
@@ -433,6 +490,16 @@ msgstr ""
 #: patterns/featured-section-2.php:43
 #: patterns/featured-section-2.php:76
 msgid "Read More"
+msgstr ""
+
+#: patterns/card-2.php
+msgctxt "Pattern title"
+msgid "Card 2"
+msgstr ""
+
+#: patterns/card-2.php
+msgctxt "Pattern description"
+msgid "A layout featuring an circular design text, title, and content, commonly used in repeated columns or as a standalone section."
 msgstr ""
 
 #: patterns/card-2.php:18
@@ -449,8 +516,28 @@ msgstr ""
 msgid "View All"
 msgstr ""
 
+#: patterns/comments.php
+msgctxt "Pattern title"
+msgid "Comments"
+msgstr ""
+
+#: patterns/comments.php
+msgctxt "Pattern description"
+msgid "Display post comments."
+msgstr ""
+
 #: patterns/comments.php:19
 msgid "Comments"
+msgstr ""
+
+#: patterns/contact-form.php
+msgctxt "Pattern title"
+msgid "Contact Form"
+msgstr ""
+
+#: patterns/contact-form.php
+msgctxt "Pattern description"
+msgid "A layout with a contact information on the left and a contact form on the right."
 msgstr ""
 
 #: patterns/contact-form.php:20
@@ -496,12 +583,53 @@ msgstr ""
 msgid "Add Contact form shortcode"
 msgstr ""
 
+#: patterns/contact.php
+msgctxt "Pattern title"
+msgid "Page contact"
+msgstr ""
+
+#: patterns/contact.php
+msgctxt "Pattern description"
+msgid "A layout that displays contact page."
+msgstr ""
+
+#: patterns/copyright.php
+msgctxt "Pattern title"
+msgid "Copyright"
+msgstr ""
+
+#: patterns/copyright.php
+msgctxt "Pattern description"
+msgid "Dynamic copyright text"
+msgstr ""
+
 #: patterns/copyright.php:17
 msgid "All Rights Reserved"
 msgstr ""
 
 #: patterns/copyright.php:19
 msgid "Dynamic copyright text"
+msgstr ""
+
+#: patterns/docs-archive-left-sidebar.php
+msgctxt "Pattern title"
+msgid "Docs Archive with Left Sidebar"
+msgstr ""
+
+#: patterns/docs-archive-left-sidebar.php
+#: patterns/list-archive-left-sidebar.php
+msgctxt "Pattern description"
+msgid "Layout template for displaying a archives with a left sidebar."
+msgstr ""
+
+#: patterns/docs-sidebar.php
+msgctxt "Pattern title"
+msgid "Docs Sidebar"
+msgstr ""
+
+#: patterns/docs-sidebar.php
+msgctxt "Pattern description"
+msgid "Display a collection of blocks for docs sidebar template part."
 msgstr ""
 
 #: patterns/docs-sidebar.php:16
@@ -511,6 +639,16 @@ msgstr ""
 #: patterns/docs-sidebar.php:16
 #: patterns/hidden-no-search-results.php:19
 msgid "Search"
+msgstr ""
+
+#: patterns/faq.php
+msgctxt "Pattern title"
+msgid "Frequently Asked Questions (FAQ)"
+msgstr ""
+
+#: patterns/faq.php
+msgctxt "Pattern description"
+msgid "A layout with a title and subtitle on the header and FAQ as a content ."
 msgstr ""
 
 #: patterns/faq.php:21
@@ -542,6 +680,29 @@ msgstr ""
 msgid "How long is support valid for?"
 msgstr ""
 
+#: patterns/featured-section-1.php
+msgctxt "Pattern title"
+msgid "Featured Section 1"
+msgstr ""
+
+#: patterns/featured-section-1.php
+msgctxt "Pattern description"
+msgid "A layout with a title, content and button in the left column, and a Card 1 pattern in the right column."
+msgstr ""
+
+#: patterns/featured-section-2.php
+msgctxt "Pattern title"
+msgid "Featured Section 2"
+msgstr ""
+
+#: patterns/featured-section-2.php
+#: patterns/featured-section-3.php
+#: patterns/featured-section-4.php
+#: patterns/featured-section-5.php
+msgctxt "Pattern description"
+msgid "A layout with an image in the left column and a title, content, and Card 2 pattern in the right column."
+msgstr ""
+
 #: patterns/featured-section-2.php:34
 msgid "Community Forums"
 msgstr ""
@@ -550,9 +711,19 @@ msgstr ""
 msgid "Documentations"
 msgstr ""
 
+#: patterns/featured-section-3.php
+msgctxt "Pattern title"
+msgid "Featured Section 3"
+msgstr ""
+
 #: patterns/featured-section-3.php:36
 #: patterns/footer.php:56
 msgid "Installation"
+msgstr ""
+
+#: patterns/featured-section-4.php
+msgctxt "Pattern title"
+msgid "Featured Section 4"
 msgstr ""
 
 #: patterns/featured-section-4.php:25
@@ -581,6 +752,11 @@ msgstr ""
 msgid "How can I deploy Documentation Landing?"
 msgstr ""
 
+#: patterns/featured-section-5.php
+msgctxt "Pattern title"
+msgid "Featured Section 5"
+msgstr ""
+
 #: patterns/featured-section-5.php:18
 msgid "Not finding what you are looking for?"
 msgstr ""
@@ -592,6 +768,16 @@ msgstr ""
 
 #: patterns/featured-section-5.php:28
 msgid "Chat with Us"
+msgstr ""
+
+#: patterns/footer.php
+msgctxt "Pattern title"
+msgid "Footer"
+msgstr ""
+
+#: patterns/footer.php
+msgctxt "Pattern description"
+msgid "A pattern for displaying the site footer."
 msgstr ""
 
 #: patterns/footer.php:28
@@ -615,6 +801,31 @@ msgstr ""
 msgid "000 - 9874 563 210"
 msgstr ""
 
+#: patterns/header-absolute.php
+msgctxt "Pattern title"
+msgid "Header Absolute"
+msgstr ""
+
+#: patterns/header-absolute.php
+msgctxt "Pattern description"
+msgid "A pattern for displaying the site header with an absolute positioning."
+msgstr ""
+
+#: patterns/header-default.php
+msgctxt "Pattern title"
+msgid "Header Default"
+msgstr ""
+
+#: patterns/header-default.php
+msgctxt "Pattern description"
+msgid "A pattern for displaying the site header."
+msgstr ""
+
+#: patterns/hidden-404.php
+msgctxt "Pattern title"
+msgid "404"
+msgstr ""
+
 #: patterns/hidden-404.php:22
 msgid "Ooops!"
 msgstr ""
@@ -635,6 +846,11 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
+#: patterns/hidden-no-search-results.php
+msgctxt "Pattern title"
+msgid "No Search Result"
+msgstr ""
+
 #: patterns/hidden-no-search-results.php:15
 msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
 msgstr ""
@@ -649,8 +865,18 @@ msgctxt "placeholder for search field"
 msgid "Search..."
 msgstr ""
 
+#: patterns/hidden-primary-header.php
+msgctxt "Pattern title"
+msgid "Primary Header"
+msgstr ""
+
 #: patterns/hidden-primary-header.php:27
 msgid "Get Started"
+msgstr ""
+
+#: patterns/hidden-query-no-results.php
+msgctxt "Pattern title"
+msgid "Query No Result"
 msgstr ""
 
 #: patterns/hidden-query-no-results.php:16
@@ -665,12 +891,113 @@ msgstr ""
 msgid "Back to Home"
 msgstr ""
 
+#: patterns/hidden-single-docs-content.php
+msgctxt "Pattern title"
+msgid "Single Docs"
+msgstr ""
+
+#: patterns/hidden-single-docs-content.php
+#: patterns/hidden-single-post-content.php
+msgctxt "Pattern description"
+msgid "A layout that displays single post content with post navigation and comments."
+msgstr ""
+
+#: patterns/hidden-single-post-content.php
+msgctxt "Pattern title"
+msgid "Single Post"
+msgstr ""
+
+#: patterns/landing.php
+msgctxt "Pattern title"
+msgid "Landing"
+msgstr ""
+
+#: patterns/landing.php
+msgctxt "Pattern description"
+msgid "A layout template for displaying the main landing front page."
+msgstr ""
+
+#: patterns/latest-comments.php
+msgctxt "Pattern title"
+msgid "Latest Comments"
+msgstr ""
+
+#: patterns/latest-comments.php
+msgctxt "Pattern description"
+msgid "Display latest comments, commonly placed in sidebars or footers."
+msgstr ""
+
 #: patterns/latest-comments.php:16
 msgid "Recent comments"
 msgstr ""
 
+#: patterns/latest-posts.php
+msgctxt "Pattern title"
+msgid "Latest Posts"
+msgstr ""
+
+#: patterns/latest-posts.php
+msgctxt "Pattern description"
+msgid "Display latest posts, commonly placed in sidebars or footers."
+msgstr ""
+
 #: patterns/latest-posts.php:16
 msgid "Recent Posts"
+msgstr ""
+
+#: patterns/list-archive-both-sidebar.php
+msgctxt "Pattern title"
+msgid "Archive with Both Sidebars"
+msgstr ""
+
+#: patterns/list-archive-both-sidebar.php
+msgctxt "Pattern description"
+msgid "Layout template for displaying archives with both left and right sidebars."
+msgstr ""
+
+#: patterns/list-archive-full-width.php
+msgctxt "Pattern title"
+msgid "Archive Full Width"
+msgstr ""
+
+#: patterns/list-archive-full-width.php
+msgctxt "Pattern description"
+msgid "Full-width layout template for displaying archives without sidebars."
+msgstr ""
+
+#: patterns/list-archive-header.php
+msgctxt "Pattern title"
+msgid "Archive Page Header"
+msgstr ""
+
+#: patterns/list-archive-header.php
+msgctxt "Pattern description"
+msgid "Layout template for displaying the header of an archive page."
+msgstr ""
+
+#: patterns/list-archive-left-sidebar.php
+msgctxt "Pattern title"
+msgid "Archive with Left Sidebar"
+msgstr ""
+
+#: patterns/list-archive-right-sidebar.php
+msgctxt "Pattern title"
+msgid "Archive with Right Sidebar"
+msgstr ""
+
+#: patterns/list-archive-right-sidebar.php
+msgctxt "Pattern description"
+msgid "Layout template for displaying archives with a right sidebar."
+msgstr ""
+
+#: patterns/navigation-menu.php
+msgctxt "Pattern title"
+msgid "Navigation Menu"
+msgstr ""
+
+#: patterns/navigation-menu.php
+msgctxt "Pattern description"
+msgid "A pattern for displaying the site menu."
 msgstr ""
 
 #: patterns/navigation-menu.php:14
@@ -686,6 +1013,16 @@ msgstr ""
 msgid "Services"
 msgstr ""
 
+#: patterns/pagination.php
+msgctxt "Pattern title"
+msgid "Pagination"
+msgstr ""
+
+#: patterns/pagination.php
+msgctxt "Pattern description"
+msgid "Display pagination controls, commonly used within a query block."
+msgstr ""
+
 #: patterns/pagination.php:15
 msgctxt "label"
 msgid "Previous"
@@ -696,6 +1033,16 @@ msgctxt "label"
 msgid "Next"
 msgstr ""
 
+#: patterns/post-meta.php
+msgctxt "Pattern title"
+msgid "Post Meta"
+msgstr ""
+
+#: patterns/post-meta.php
+msgctxt "Pattern description"
+msgid "Display post meta information, commonly used within a query block."
+msgstr ""
+
 #: patterns/post-meta.php:19
 msgid "Posted :"
 msgstr ""
@@ -704,8 +1051,110 @@ msgstr ""
 msgid "by :"
 msgstr ""
 
+#: patterns/post-navigation-docs.php
+msgctxt "Pattern title"
+msgid "Post Navigation Docs"
+msgstr ""
+
+#: patterns/post-navigation-docs.php
+#: patterns/post-navigation.php
+msgctxt "Pattern description"
+msgid "Display post navigation controls, commonly used within a query block in single post templates."
+msgstr ""
+
+#: patterns/post-navigation.php
+msgctxt "Pattern title"
+msgid "Post Navigation"
+msgstr ""
+
+#: patterns/primary-sidebar.php
+msgctxt "Pattern title"
+msgid "Primary Sidebar"
+msgstr ""
+
+#: patterns/primary-sidebar.php
+msgctxt "Pattern description"
+msgid "Display a collection of blocks for primary sidebar template part."
+msgstr ""
+
+#: patterns/query-docs.php
+msgctxt "Pattern title"
+msgid "Query Docs"
+msgstr ""
+
+#: patterns/query-docs.php
+#: patterns/query-list.php
+msgctxt "Pattern description"
+msgid "Display a query block in a list layout."
+msgstr ""
+
+#: patterns/query-grid.php
+msgctxt "Pattern title"
+msgid "Query Grid"
+msgstr ""
+
+#: patterns/query-grid.php
+msgctxt "Pattern description"
+msgid "Display a query block in a grid layout."
+msgstr ""
+
+#: patterns/query-list-min.php
+msgctxt "Pattern title"
+msgid "Query List Minimal"
+msgstr ""
+
+#: patterns/query-list-min.php
+msgctxt "Pattern description"
+msgid "Displays a query block in a list layout with minimal content."
+msgstr ""
+
+#: patterns/query-list.php
+msgctxt "Pattern title"
+msgid "Query List"
+msgstr ""
+
+#: patterns/scroll-to-top-button.php
+msgctxt "Pattern title"
+msgid "Scroll To Top Button"
+msgstr ""
+
+#: patterns/scroll-to-top-button.php
+msgctxt "Pattern description"
+msgid "Display a button to scroll to the top of the page."
+msgstr ""
+
 #: patterns/scroll-to-top-button.php:17
 msgid "Scroll To Top"
+msgstr ""
+
+#: patterns/search-form.php
+msgctxt "Pattern title"
+msgid "Search Form"
+msgstr ""
+
+#: patterns/search-form.php
+msgctxt "Pattern description"
+msgid "Display a search block, commonly used in headers, sidebars, and footers."
+msgstr ""
+
+#: patterns/secondary-sidebar.php
+msgctxt "Pattern title"
+msgid "Secondary Sidebar"
+msgstr ""
+
+#: patterns/secondary-sidebar.php
+msgctxt "Pattern description"
+msgid "Display a collection of blocks for secondary sidebar template part."
+msgstr ""
+
+#: patterns/section-title-1.php
+msgctxt "Pattern title"
+msgid "Section Title 1"
+msgstr ""
+
+#: patterns/section-title-1.php
+msgctxt "Pattern description"
+msgid "A layout featuring a title, content, and button group in centered alignment, commonly used for section titles in feature areas."
 msgstr ""
 
 #: patterns/section-title-1.php:15
@@ -716,8 +1165,146 @@ msgstr ""
 msgid "Patterns Docs is a fully featured knowledge base theme for WordPress."
 msgstr ""
 
+#: patterns/section-title-2.php
+msgctxt "Pattern title"
+msgid "Section Title 2"
+msgstr ""
+
+#: patterns/section-title-2.php
+msgctxt "Pattern description"
+msgid "A layout featuring a title, content, and button group in left alignment, commonly used for section titles in feature areas."
+msgstr ""
+
 #: patterns/section-title-2.php:16
 msgid "Check out our guide categories"
+msgstr ""
+
+#: patterns/single-docs-both-sidebar.php
+msgctxt "Pattern title"
+msgid "Single Docs Both Sidebar"
+msgstr ""
+
+#: patterns/single-docs-both-sidebar.php
+#: patterns/single-post-both-sidebar.php
+msgctxt "Pattern description"
+msgid "A layout template for displaying a post with both left and right sidebars."
+msgstr ""
+
+#: patterns/single-docs-left-sidebar.php
+msgctxt "Pattern title"
+msgid "Single Docs Left Sidebar"
+msgstr ""
+
+#: patterns/single-docs-left-sidebar.php
+#: patterns/single-post-left-sidebar.php
+msgctxt "Pattern description"
+msgid "A layout template for displaying a post with a left sidebar."
+msgstr ""
+
+#: patterns/single-docs-right-sidebar.php
+msgctxt "Pattern title"
+msgid "Single Docs Right Sidebar"
+msgstr ""
+
+#: patterns/single-docs-right-sidebar.php
+#: patterns/single-post-right-sidebar.php
+msgctxt "Pattern description"
+msgid "A layout template for displaying a post with a right sidebar."
+msgstr ""
+
+#: patterns/single-header.php
+msgctxt "Pattern title"
+msgid "Page Header With Post Title"
+msgstr ""
+
+#: patterns/single-header.php
+msgctxt "Pattern description"
+msgid "Page header that displays the post, page or post type title."
+msgstr ""
+
+#: patterns/single-page-both-sidebar.php
+msgctxt "Pattern title"
+msgid "Page Both Sidebar"
+msgstr ""
+
+#: patterns/single-page-both-sidebar.php
+msgctxt "Pattern description"
+msgid "A layout template for displaying a page with both left and right sidebars."
+msgstr ""
+
+#: patterns/single-page-full-width.php
+msgctxt "Pattern title"
+msgid "Page Full Width"
+msgstr ""
+
+#: patterns/single-page-full-width.php
+msgctxt "Pattern description"
+msgid "A full-width layout template for displaying a page without sidebars."
+msgstr ""
+
+#: patterns/single-page-left-sidebar.php
+msgctxt "Pattern title"
+msgid "Page Left Sidebar"
+msgstr ""
+
+#: patterns/single-page-left-sidebar.php
+msgctxt "Pattern description"
+msgid "A layout template for displaying a page with a left sidebar."
+msgstr ""
+
+#: patterns/single-page-right-sidebar.php
+msgctxt "Pattern title"
+msgid "Page Right Sidebar"
+msgstr ""
+
+#: patterns/single-page-right-sidebar.php
+msgctxt "Pattern description"
+msgid "A layout template for displaying a page with a right sidebar."
+msgstr ""
+
+#: patterns/single-post-both-sidebar.php
+msgctxt "Pattern title"
+msgid "Single Post Both Sidebar"
+msgstr ""
+
+#: patterns/single-post-full-width.php
+msgctxt "Pattern title"
+msgid "Single Full width"
+msgstr ""
+
+#: patterns/single-post-full-width.php
+msgctxt "Pattern description"
+msgid "A full-width layout template for displaying a post without sidebars."
+msgstr ""
+
+#: patterns/single-post-left-sidebar.php
+msgctxt "Pattern title"
+msgid "Single Left Sidebar"
+msgstr ""
+
+#: patterns/single-post-right-sidebar.php
+msgctxt "Pattern title"
+msgid "Single Right Sidebar"
+msgstr ""
+
+#: patterns/site-identity.php
+msgctxt "Pattern title"
+msgid "Site Identity"
+msgstr ""
+
+#: patterns/site-identity.php
+msgctxt "Pattern description"
+msgid "Display site logo, title and tagline."
+msgstr ""
+
+#: patterns/sitemap.php
+msgctxt "Pattern title"
+msgid "Page Sitemap"
+msgstr ""
+
+#: patterns/sitemap.php
+msgctxt "Pattern description"
+msgid "A layout that displays site maps."
 msgstr ""
 
 #: patterns/sitemap.php:19
@@ -733,41 +1320,49 @@ msgid "Posts"
 msgstr ""
 
 #: theme.json
+#: styles/dark.json
 msgctxt "Color name"
 msgid "Base"
 msgstr ""
 
 #: theme.json
+#: styles/dark.json
 msgctxt "Color name"
 msgid "Default"
 msgstr ""
 
 #: theme.json
+#: styles/dark.json
 msgctxt "Color name"
 msgid "Primary"
 msgstr ""
 
 #: theme.json
+#: styles/dark.json
 msgctxt "Color name"
 msgid "Secondary"
 msgstr ""
 
 #: theme.json
+#: styles/dark.json
 msgctxt "Color name"
 msgid "Tertiary"
 msgstr ""
 
 #: theme.json
+#: styles/dark.json
 msgctxt "Color name"
 msgid "Quaternary"
 msgstr ""
 
 #: theme.json
+#: styles/dark.json
 msgctxt "Color name"
 msgid "Quinary"
 msgstr ""
 
 #: theme.json
+#: styles/dark.json
 msgctxt "Color name"
 msgid "Accent"
 msgstr ""
@@ -940,4 +1535,14 @@ msgstr ""
 #: theme.json
 msgctxt "Template part name"
 msgid "Documentation Sidebar"
+msgstr ""
+
+#: styles/blocks/button.json
+msgctxt "Style variation name"
+msgid "Scroll to top"
+msgstr ""
+
+#: styles/dark.json
+msgctxt "Style variation name"
+msgid "Dark"
 msgstr ""

@@ -7,7 +7,7 @@
 
 namespace Kadence;
 
-$classes   = array();
+$classes   = [];
 $classes[] = 'entry-header';
 if ( is_singular( get_post_type() ) ) {
 	$classes[] = get_post_type() . '-title';

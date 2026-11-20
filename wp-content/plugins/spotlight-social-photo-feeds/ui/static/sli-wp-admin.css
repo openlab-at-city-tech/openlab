@@ -26,3 +26,14 @@
     padding-right: 0;
   }
 }
+
+.sli-recommended-plugins #the-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.sli-recommended-plugins .plugin-card {
+  display: flex;
+  flex-direction: column;
+}

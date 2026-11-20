@@ -15,6 +15,7 @@
 
 				$.post( ajaxurl, {
 					action: 'pdfemb_admin_settings_getstarted_dismiss',
+					nonce: pdfemb_args.getstarted_nonce,
 				} );
 
 				return;
@@ -22,6 +23,7 @@
 
 			$.post( ajaxurl, {
 				 action: 'pdfemb_admin_settings_getstarted_open',
+				 nonce: pdfemb_args.getstarted_nonce,
 			 } );
 
 			 $( '#pdfemb-getstarted' ).slideDown( 'fast', function() {

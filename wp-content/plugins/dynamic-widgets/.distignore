@@ -1,2 +1,4 @@
 .git*
 .wordpress-org
+tests
+.distignore.rcj

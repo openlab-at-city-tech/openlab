@@ -312,7 +312,7 @@ class TRP_Plugin_Optin {
         $args = array(
             'method' => 'POST',
             'body'   => array(
-                'home_url'              => home_url(),
+                'home_url'              => trp_get_license_site_url(),
                 'product'               => 'trp',
                 'email'                 => self::$plugin_optin_email,
                 'name'                  => self::get_user_name(),

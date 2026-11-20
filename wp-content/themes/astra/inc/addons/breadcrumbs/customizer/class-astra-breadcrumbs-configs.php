@@ -11,6 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Bail if Customizer config base class does not exist.
+if ( ! class_exists( 'Astra_Customizer_Config_Base' ) ) {
+	return;
+}
+
 if ( ! class_exists( 'Astra_Breadcrumbs_Configs' ) ) {
 
 	/**

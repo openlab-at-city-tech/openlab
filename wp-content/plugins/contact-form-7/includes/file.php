@@ -1,13 +1,17 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 /**
  * Validates uploaded files and moves them to the temporary directory.
  *
  * @param array $file An item of `$_FILES`.
- * @param string|array $options Optional. Options to control behavior.
- * @return array|WP_Error Array of file paths, or WP_Error if validation fails.
+ * @param string|array $options Options to control behavior. Not optional.
+ * @param array $uploaded_files A temporary container of uploaded files.
+ * @return bool|WP_Error True if all files are successfully unshipped,
+ *                       or WP_Error if any exception occurs.
  */
-function wpcf7_unship_uploaded_file( $file, $options = '' ) {
+function wpcf7_unship_uploaded_file( $file, $options, &$uploaded_files ) {
 	$filesystem = WPCF7_Filesystem::get_instance();
 
 	$options = wp_parse_args( $options, array(
@@ -35,24 +39,9 @@ function wpcf7_unship_uploaded_file( $file, $options = '' ) {
 		}
 	}
 
-	if ( isset( $options['schema'] ) and isset( $options['name'] ) ) {
-		$context = array(
-			'file' => true,
-			'field' => $options['name'],
-		);
-
-		foreach ( $options['schema']->validate( $context ) as $result ) {
-			if ( is_wp_error( $result ) ) {
-				return $result;
-			}
-		}
-	}
-
 	// Move uploaded file to tmp dir
 	$uploads_dir = wpcf7_upload_tmp_dir();
 	$uploads_dir = wpcf7_maybe_add_random_dir( $uploads_dir );
-
-	$uploaded_files = array();
 
 	foreach ( $names as $key => $name ) {
 		$tmp_name = $tmp_names[$key];
@@ -85,7 +74,7 @@ function wpcf7_unship_uploaded_file( $file, $options = '' ) {
 		$uploaded_files[] = $new_file;
 	}
 
-	return $uploaded_files;
+	return true;
 }
 
 
@@ -211,7 +200,7 @@ function wpcf7_acceptable_filetypes( $types = 'default', $format = 'regex' ) {
 	if ( 'attr' === $format or 'attribute' === $format ) {
 		$types = array_map(
 			static function ( $type ) {
-				if ( false === strpos( $type, '/' ) ) {
+				if ( ! str_contains( $type, '/' ) ) {
 					return sprintf( '.%s', trim( $type, '.' ) );
 				} elseif ( preg_match( '%^([a-z]+)/[*]$%i', $type, $matches ) ) {
 					if (
@@ -235,7 +224,7 @@ function wpcf7_acceptable_filetypes( $types = 'default', $format = 'regex' ) {
 	} elseif ( 'regex' === $format ) {
 		$types = array_map(
 			static function ( $type ) {
-				if ( false === strpos( $type, '/' ) ) {
+				if ( ! str_contains( $type, '/' ) ) {
 					return preg_quote( trim( $type, '.' ) );
 				} elseif ( $type = wpcf7_convert_mime_to_ext( $type ) ) {
 					return $type;

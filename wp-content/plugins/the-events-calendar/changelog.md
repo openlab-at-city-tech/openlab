@@ -1,5 +1,38 @@
 # Changelog
 
+### [6.18.4.1] 2026-11-19
+
+* Fix - Resolved a multisite fatal error, "Cannot redeclare check_upload_size()", that could happen when a plugin or theme loaded WordPress admin files after an Events Calendar database query.
+* Security - Added additional protection to how Venues and Organizers are saved. Props to Dthangws for reporting.
+* Security - Added additional protection to the details of password-protected Events, Venues and Organizers in the WordPress REST API.
+* Security - Added additional protection to the Venue and Organizer details shown on Event pages and in the calendar views.
+* Security - Hardened how dependent form fields look up the field they depend on. Props to ytaero for reporting.
+* Security - Hardened the CSV importer. Props to Cavid Gulaliyev for reporting.
+* Security - Strengthened the permission checks on organizer and venue statuses set through the REST API.
+* Security - Tightened access checks on the calendar export. Props to peppa for reporting.
+* Security - Tightened shortcode handling in the Single Event block. Props to Pham Cong Lap (Clapboiz) of HPT VN for reporting.
+* Tweak - Added filters: `tec_events_editor_password_protected_meta`
+* Tweak - Changed views: `blocks/event-organizer`, `blocks/event-venue`, `blocks/parts/map`, `blocks/parts/organizer`, `blocks/parts/venue`, `integrations/elementor/widgets/event-organizer/details`, `integrations/elementor/widgets/event-venue/single-venue`, `modules/meta/map`, `modules/meta/organizer`, `modules/meta/venue`, `v2/day/event/venue`, `v2/latest-past/event/venue`, `v2/list/event/venue`
+* Language - 1 new strings added, 74 updated, 0 fuzzied, and 0 obsoleted.
+
+### [6.18.4] 2026-11-12
+
+* Fix - Avoided a fatal error when a database table prefix of 31 or more characters pushed the migrations table name past MySQL's 64-character limit, added an admin notice explaining how to shorten the prefix, and stopped the Shepherd tables error notice from causing an error when displayed.
+* Fix - Changed the System Information copy button on the Troubleshooting page to copy plain text, so pasted system details take the destination's text color instead of arriving as invisible white text.
+* Fix - Corrected the arguments passed to the before and after event HTML filters, so a callback that requires both no longer causes a fatal error on single event pages.
+* Fix - Loaded the event editor stylesheets directly into the WordPress 7.1 editor canvas, removing the "added to the iframe incorrectly" browser console warnings.
+* Fix - Loaded the shared block editor stylesheet directly into the WordPress 7.1 editor canvas, removing the "added to the iframe incorrectly" browser console warning.
+* Fix - Prevented a fatal error on sites with Event Aggregator active when a comment query passed its comment type as an array.
+* Fix - Prevented a fatal error when another plugin runs the save_post action with only the post ID.
+* Fix - Prevented a fatal error, and skipped event saves later in the same request, when another plugin runs the save_post action without the post.
+* Fix - Stopped a critical error on the Scheduled Imports tab when Apply was clicked without choosing a bulk action.
+* Security - Hardened the output of the settings page closing form element.
+* Tweak - Pointed the "Learn how to get an active license" link on the Setup Guide page to a working page instead of a removed article.
+* Tweak - Pointed the "Learn how to get live support" link on the Help page to a working page instead of a removed article.
+* Tweak - Pointed the Zapier API keys help link to the Zapier knowledgebase article and removed an outdated link from the Zapier Endpoint Dashboard.
+* Tweak - Removed outdated "Read more" and "Learn more" links from the block editor and URL import settings, and pointed the Meetup API key link to the Integrations Import tab.
+* Language - 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted.
+
 ### [6.18.3.1] 2026-11-05
 
 * Fix - Passed the input attributes a date picker is given, such as its accessible name and disabled state, through to its input field.

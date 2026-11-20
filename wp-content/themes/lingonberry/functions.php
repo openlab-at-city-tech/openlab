@@ -69,7 +69,7 @@ if ( ! function_exists( 'lingonberry_load_javascript_files' ) ) :
 
 		$theme_version = wp_get_theme( 'lingonberry' )->get( 'Version' );
 
-		wp_register_script( 'lingonberry_flexslider', get_template_directory_uri().'/assets/js/flexslider.min.js' );
+		wp_register_script( 'lingonberry_flexslider', get_template_directory_uri() . '/assets/js/flexslider.js', array( 'jquery' ), $theme_version );
 		wp_enqueue_script( 'lingonberry_global', get_template_directory_uri().'/assets/js/global.js', array( 'jquery', 'lingonberry_flexslider' ), $theme_version, true );
 
 		if ( is_singular() ) wp_enqueue_script( 'comment-reply' );
@@ -587,11 +587,16 @@ endif;
 if ( ! function_exists( 'lingonberry_block_editor_styles' ) ) :
 	function lingonberry_block_editor_styles() {
 
+		// Only load in the editor. Hooked to enqueue_block_assets so the styles reach the iframed editor canvas.
+		if ( ! is_admin() ) {
+			return;
+		}
+
 		$theme_version = wp_get_theme( 'lingonberry' )->get( 'Version' );
 		
 		wp_register_style( 'lingonberry-block-editor-styles-font', get_theme_file_uri( '/assets/css/fonts.css' ) );
 		wp_enqueue_style( 'lingonberry-block-editor-styles', get_theme_file_uri( '/assets/css/block-editor-styles.css' ), array( 'lingonberry-block-editor-styles-font' ), $theme_version, 'all' );
 
 	}
-	add_action( 'enqueue_block_editor_assets', 'lingonberry_block_editor_styles', 1 );
+	add_action( 'enqueue_block_assets', 'lingonberry_block_editor_styles', 1 );
 endif;

@@ -11,6 +11,7 @@ use Imagely\NGG\DataMappers\Image as ImageMapper;
 use Imagely\NGG\Display\I18N;
 use Imagely\NGG\DisplayedGallery\SourceManager;
 use Imagely\NGG\DisplayType\ControllerFactory;
+use Imagely\NGG\PrivateGalleries\Visibility;
 use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Util\Transient;
 
@@ -513,6 +514,13 @@ class DisplayedGallery extends Model {
 			}
 		}
 
+		// Private galleries render only on their unlocked client page. Added before the random
+		// source copies the where clauses into its sub-query.
+		$hidden_gallery_ids = $this->get_hidden_gallery_ids();
+		if ( $hidden_gallery_ids ) {
+			$mapper->where( [ 'galleryid NOT IN %s', $hidden_gallery_ids ] );
+		}
+
 		// Adjust the query more based on what source was selected.
   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( in_array( $this->source, [ 'recent', 'recent_images' ] ) ) {
@@ -815,6 +823,19 @@ class DisplayedGallery extends Model {
 			$entity_ids = array_merge( $sortorder, array_diff( $entity_ids, $sortorder ) );
 		}
 
+		// Leave out private galleries outside their client page, the "all galleries" sentinel included.
+		$hidden_gallery_ids = $this->get_hidden_gallery_ids();
+		if ( $hidden_gallery_ids ) {
+			$entity_ids = array_values(
+				array_filter(
+					(array) $entity_ids,
+					static function ( $entity_id ) use ( $hidden_gallery_ids ) {
+						return 'a' === substr( (string) $entity_id, 0, 1 ) || ! in_array( (int) $entity_id, $hidden_gallery_ids, true );
+					}
+				)
+			);
+		}
+
 		// Segment entity ids into two groups - galleries and albums.
 		foreach ( $entity_ids as $entity_id ) {
 			if ( substr( $entity_id, 0, 1 ) == 'a' ) {
@@ -864,6 +885,11 @@ class DisplayedGallery extends Model {
 			->order_by( 'ordered_by', 'DESC' )
 			->run_query();
 
+		if ( ! $id_only && ! is_admin() ) {
+			$galleries = $this->_translate_album_children( $galleries, 'gallery' );
+			$albums    = $this->_translate_album_children( $albums, 'album' );
+		}
+
 		// Reorder entities according to order specified in entity_ids.
 		foreach ( $entity_ids as $entity_id ) {
 			if ( substr( $entity_id, 0, 1 ) == 'a' ) {
@@ -896,6 +922,64 @@ class DisplayedGallery extends Model {
 		// Limit the entities.
 		if ( $limit ) {
 			$retval = array_slice( $retval, $offset, $limit );
+		}
+
+		return $retval;
+	}
+
+	/**
+	 * Gallery ids this displayed gallery must leave out (private galleries outside their page).
+	 *
+	 * @return int[]
+	 */
+	public function get_hidden_gallery_ids() {
+		/**
+		 * Filters the gallery ids left out of a displayed gallery's entity queries.
+		 *
+		 * @param int[]            $hidden            Gallery ids.
+		 * @param DisplayedGallery $displayed_gallery The displayed gallery.
+		 */
+		$hidden = (array) apply_filters( 'ngg_displayed_gallery_hidden_gallery_ids', Visibility::get_hidden_gallery_ids(), $this );
+
+		return array_values( array_filter( array_map( 'intval', $hidden ) ) );
+	}
+
+	/**
+	 * Translates the title and description of an album's child galleries or sub-albums.
+	 *
+	 * These rows come from run_query() without a model, so the mapper's set_defaults() (which
+	 * translates on the front end) never runs for them. Each row is cloned first: the mapper's
+	 * query cache hands back the same objects on a repeated query, and translating them in place
+	 * would leak the translated text into the cache.
+	 *
+	 * @param array  $entities Gallery or album rows.
+	 * @param string $type     'gallery' or 'album'; prefix of the registered WPML string names.
+	 * @return array
+	 */
+	public function _translate_album_children( $entities, $type ) {
+		$retval = [];
+		foreach ( $entities as $entity ) {
+			$entity = clone $entity;
+			$id     = $entity->{$entity->id_field};
+
+			// Album rows carry both name/albumdesc and their title/galdesc aliases; breadcrumbs read name.
+			$fields = 'album' === $type
+				? [
+					'name'      => '_name',
+					'title'     => '_name',
+					'albumdesc' => '_description',
+					'galdesc'   => '_description',
+				]
+				: [
+					'title'   => '_name',
+					'galdesc' => '_description',
+				];
+			foreach ( $fields as $field => $suffix ) {
+				if ( ! empty( $entity->$field ) ) {
+					$entity->$field = I18N::translate( $entity->$field, $type . '_' . $id . $suffix );
+				}
+			}
+			$retval[] = $entity;
 		}
 
 		return $retval;
@@ -1125,6 +1209,11 @@ class DisplayedGallery extends Model {
 					$mapper->select()->where( [ "{$album_key} IN %s", $this->container_ids ] );
 				}
 				$retval = $mapper->run_query();
+
+				// Same run_query() gap as the album children: these rows feed the root breadcrumb.
+				if ( ! is_admin() ) {
+					$retval = $this->_translate_album_children( $retval, 'album' );
+				}
 			}
 		}
 

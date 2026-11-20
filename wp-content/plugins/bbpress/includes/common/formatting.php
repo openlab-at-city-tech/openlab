@@ -10,6 +10,72 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+/** WordPress Content *********************************************************/
+
+/**
+ * Filter shortcodes in bbPress post content in WordPress content loops.
+ *
+ * bbPress renders its post content without running shortcodes, but a theme can
+ * pass the raw content through WordPress's the_content filter. Offer a bbPress
+ * sub-filter for this case without affecting shortcodes in other post types.
+ *
+ * @since 2.6.20 bbPress (r7848)
+ * @since 2.6.21 bbPress (r8046) Remove shortcodes from WordPress feed content.
+ *
+ * @param false|string $output  Short-circuit value from an earlier filter.
+ * @param string       $tag     Shortcode name.
+ * @param array        $attr    Shortcode attributes.
+ * @param array        $matches Shortcode regular expression match.
+ * @return false|string Filtered short-circuit value.
+ */
+function bbp_pre_do_shortcode_tag( $output, $tag, $attr, $matches ) {
+	if ( ! doing_filter( 'the_content' ) ) {
+		return $output;
+	}
+
+	if ( ! in_array( get_post_type(), bbp_get_post_types(), true ) ) {
+		return $output;
+	}
+
+	return apply_filters( 'bbp_pre_do_shortcode_tag', $output, $tag, $attr, $matches );
+}
+
+/**
+ * Prevent shortcodes in bbPress post content unless explicitly allowed.
+ *
+ * The allow-list is empty by default because bbPress does not execute
+ * shortcodes in forum, topic, or reply content on its own content paths.
+ *
+ * @since 2.6.20 bbPress (r7848)
+ *
+ * @param false|string $output  Short-circuit value from an earlier filter.
+ * @param string       $tag     Shortcode name.
+ * @param array        $attr    Shortcode attributes.
+ * @param array        $matches Shortcode regular expression match.
+ * @return false|string Short-circuit value or the literal shortcode.
+ */
+function bbp_prevent_content_shortcodes( $output, $tag, $attr, $matches ) {
+	if ( is_feed() ) {
+		return '';
+	}
+
+	/**
+	 * Filter shortcode tags allowed to run in bbPress post content.
+	 *
+	 * @since 2.6.20 bbPress (r7848)
+	 *
+	 * @param array        $allowed   Allowed shortcode tags. Empty by default.
+	 * @param string|false $post_type Current post type.
+	 */
+	$allowed = (array) apply_filters( 'bbp_allowed_content_shortcodes', array(), get_post_type() );
+
+	if ( ! in_array( $tag, $allowed, true ) ) {
+		$output = $matches[0];
+	}
+
+	return $output;
+}
+
 /** Kses **********************************************************************/
 
 /**
@@ -17,68 +83,71 @@ defined( 'ABSPATH' ) || exit;
  *
  * Allows all users to post links, quotes, code, formatting, lists, and images
  *
- * @since 2.3.0 bbPress (r4603)
+ * @since 2.3.0 bbPress (r4604)
  *
  * @return array Associative array of allowed tags and attributes
  */
 function bbp_kses_allowed_tags() {
 
 	// Filter & return
-	return (array) apply_filters( 'bbp_kses_allowed_tags', array(
+	return (array) apply_filters(
+		'bbp_kses_allowed_tags',
+		array(
 
-		// Links
-		'a' => array(
-			'href'     => true,
-			'title'    => true,
-			'rel'      => true,
-			'target'   => true
-		),
+			// Links
+			'a' => array(
+				'href'   => true,
+				'title'  => true,
+				'rel'    => true,
+				'target' => true
+			),
 
-		// Quotes
-		'blockquote'   => array(
-			'cite'     => true
-		),
+			// Quotes
+			'blockquote' => array(
+				'cite' => true
+			),
 
-		// Code
-		'code'         => array(),
-		'pre'          => array(
-			'class'    => true
-		),
+			// Code
+			'code' => array(),
+			'pre'  => array(
+				'class' => true
+			),
 
-		// Formatting
-		'em'           => array(),
-		'strong'       => array(),
-		'del'          => array(
-			'datetime' => true,
-			'cite'     => true
-		),
-		'ins' => array(
-			'datetime' => true,
-			'cite'     => true
-		),
+			// Formatting
+			'em'     => array(),
+			'strong' => array(),
+			'del'    => array(
+				'datetime' => true,
+				'cite'     => true
+			),
+			'ins' => array(
+				'datetime' => true,
+				'cite'     => true
+			),
 
-		// Lists
-		'ul'           => array(),
-		'ol'           => array(
-			'start'    => true,
-		),
-		'li'           => array(),
+			// Lists
+			'ul' => array(),
+			'ol' => array(
+				'start' => true,
+			),
+			'li' => array(),
 
-		// Images
-		'img'          => array(
-			'src'      => true,
-			'border'   => true,
-			'alt'      => true,
-			'height'   => true,
-			'width'    => true,
+			// Images
+			'img' => array(
+				'src'    => true,
+				'border' => true,
+				'alt'    => true,
+				'height' => true,
+				'width'  => true,
+			)
 		)
-	) );
+	);
 }
 
 /**
  * Custom kses filter for forum topics and replies, for filtering incoming data
  *
- * @since 2.3.0 bbPress (r4603)
+ * @since 2.3.0 bbPress (r4604)
  *
  * @param string $data Content to filter, expected to be escaped with slashes
  * @return string Filtered content
@@ -90,28 +159,140 @@ function bbp_filter_kses( $data = '' ) {
 /**
  * Custom kses filter for forum topics and replies, for raw data
  *
- * @since 2.3.0 bbPress (r4603)
+ * @since 2.3.0 bbPress (r4604)
  *
  * @param string $data Content to filter, expected to not be escaped
  * @return string Filtered content
  */
 function bbp_kses_data( $data = '' ) {
-	return wp_kses( $data , bbp_kses_allowed_tags() );
+	return wp_kses( $data, bbp_kses_allowed_tags() );
 }
 
 /** Formatting ****************************************************************/
 
 /**
+ * Wrap runs of list items that have no list container in displayed content.
+ *
+ * Runs after force_balance_tags(), which closes items but does not supply
+ * missing parent lists. Requires the HTML API available in WordPress 6.9.
+ * Public HTML APIs validate explicit tag structure before wrappers are added.
+ * All original source bytes are retained. Implicit closures, foreign content,
+ * and ambiguous literal list-item tags are left unchanged.
+ * Code examples and block content are excluded from repair. Fragments without
+ * orphan list items and sites using other character encodings are unchanged.
+ * Character references retain their spelling for later formatting filters.
+ * Nested malformed list containers are not reconstructed.
+ *
+ * @since 2.6.21 bbPress (r8135)
+ *
+ * @param string $content Balanced topic or reply content.
+ * @param int    $post_id Optional. Topic or reply ID.
+ * @return string Content with missing unordered list containers supplied.
+ */
+function bbp_wrap_orphan_list_items( $content = '', $post_id = 0 ) {
+	if ( ! class_exists( 'WP_HTML_Processor' ) || false === stripos( $content, '<li' ) || ! preg_match( '/<li(?=[\t\n\f\r \/>])/i', $content ) || has_blocks( $content ) ) {
+		return $content;
+	}
+	if ( ! empty( $post_id ) && has_blocks( get_post_field( 'post_content', $post_id, 'raw' ) ) ) {
+		return $content;
+	}
+	$processor = WP_HTML_Processor::create_fragment( $content );
+	if ( ! is_callable( array( $processor, 'serialize_token' ) ) || ! is_utf8_charset() ) {
+		return $content;
+	}
+	$excluded = array( 'UL', 'OL', 'MENU', 'DIR', 'PRE', 'CODE', 'LISTING' );
+	$orphan = false;
+	// Valid lists need only this initial semantic scan.
+	while ( $processor->next_tag( 'LI' ) ) {
+		if ( ! array_intersect( $excluded, $processor->get_breadcrumbs() ) ) {
+			$orphan = true;
+			break;
+		}
+	}
+	if ( ! $orphan ) {
+		return $content;
+	}
+
+	// Match source boundaries only when lexical and semantic tags agree exactly.
+	$item_pattern = '/<\/?li(?=[\t\n\f\r \/>])/i';
+	$processor = WP_HTML_Processor::create_fragment( $content );
+	$tags = new WP_HTML_Tag_Processor( $content );
+	$query = array( 'tag_closers' => 'visit' );
+	$insertions = array();
+	$search = 0;
+	$depth = 0;
+	$end = 0;
+	while ( $tags->next_tag( $query ) ) {
+		if ( ! $processor->next_tag( $query ) || $tags->get_tag() !== $processor->get_tag() || $tags->is_tag_closer() !== $processor->is_tag_closer() || 'html' !== $processor->get_namespace() ) {
+			return $content;
+		}
+		if ( 'LI' !== $tags->get_tag() ) {
+			continue;
+		}
+		if ( ! preg_match( $item_pattern, $content, $item, PREG_OFFSET_CAPTURE, $search ) || $tags->is_tag_closer() !== ( '/' === $item[0][0][1] ) ) {
+			return $content;
+		}
+		$offset = $item[0][1];
+		$search = $offset + strlen( $item[0][0] );
+		if ( $tags->is_tag_closer() ) {
+			if ( ! preg_match( '/\G<\/li[\t\n\f\r ]*>/i', $content, $closer, 0, $offset ) ) {
+				return $content;
+			}
+			if ( $depth && $processor->get_current_depth() === $depth - 1 ) {
+				$end = $offset + strlen( $closer[0] );
+				$insertions[ $end ] = '</ul>';
+				$depth = 0;
+			}
+		} elseif ( ! array_intersect( $excluded, $processor->get_breadcrumbs() ) ) {
+			if ( $depth ) {
+				return $content;
+			}
+			$gap = $end ? substr( $content, $end, $offset - $end ) : '';
+			$adjacent = '' === trim( $gap, " \t\n\r\f" );
+			// Only whitespace and comments join consecutive items.
+			if ( ! $adjacent && ( false !== strpos( $gap, '<!--' ) || false !== strpos( $gap, '&' ) ) ) {
+				$spacing = new WP_HTML_Tag_Processor( $gap );
+				$adjacent = true;
+				while ( $spacing->next_token() ) {
+					if ( '#comment' !== $spacing->get_token_type() && ( '#text' !== $spacing->get_token_type() || '' !== trim( $spacing->get_modifiable_text(), " \t\n\r\f" ) ) ) {
+						$adjacent = false;
+						break;
+					}
+				}
+			}
+			if ( $end && $adjacent ) {
+				unset( $insertions[ $end ] );
+			} else {
+				$insertions[ $offset ] = '<ul>';
+			}
+			$depth = $processor->get_current_depth();
+		}
+	}
+	if ( $depth || preg_match( $item_pattern, $content, $item, 0, $search ) || $processor->next_tag( $query ) || null !== $processor->get_last_error() || $processor->paused_at_incomplete_token() || $tags->paused_at_incomplete_token() ) {
+		return $content;
+	}
+	// Apply insertions only after the whole fragment passes validation.
+	$output = '';
+	$copied = 0;
+	foreach ( $insertions as $offset => $wrapper ) {
+		$output .= substr( $content, $copied, $offset - $copied );
+		$output .= $wrapper;
+		$copied = $offset;
+	}
+	return $output . substr( $content, $copied );
+}
+
+/**
  * Filter the topic or reply content and output code and pre tags
  *
- * @since 2.3.0 bbPress (r4641)
+ * @since 2.3.0 bbPress (r4642)
  *
  * @param string $content Topic and reply content
  * @return string Partially encoded content
  */
 function bbp_code_trick( $content = '' ) {
 	$content = str_replace( array( "\r\n", "\r" ), "\n", $content );
-	$content = preg_replace_callback( "|(`)(.*?)`|",      'bbp_encode_callback', $content );
+	$content = preg_replace_callback('|(`)(.*?)`|',      'bbp_encode_callback', $content );
 	$content = preg_replace_callback( "!(^|\n)`(.*?)`!s", 'bbp_encode_callback', $content );
 
 	return $content;
@@ -121,7 +302,7 @@ function bbp_code_trick( $content = '' ) {
  * When editing a topic or reply, reverse the code trick so the textarea
  * contains the correct editable content.
  *
- * @since 2.3.0 bbPress (r4641)
+ * @since 2.3.0 bbPress (r4642)
  *
  * @param string $content Topic and reply content
  * @return string Partially encoded content
@@ -130,7 +311,7 @@ function bbp_code_trick_reverse( $content = '' ) {
 
 	// Setup variables
 	$openers = array( '<p>', '<br />' );
-	$content = preg_replace_callback( "!(<pre><code>|<code>)(.*?)(</code></pre>|</code>)!s", 'bbp_decode_callback', $content );
+	$content = preg_replace_callback( '!(<pre><code>|<code>)(.*?)(</code></pre>|</code>)!s', 'bbp_decode_callback', $content );
 
 	// Do the do
 	$content = str_replace( $openers,       '',       $content );
@@ -145,7 +326,7 @@ function bbp_code_trick_reverse( $content = '' ) {
 /**
  * Filter the content and encode any bad HTML tags
  *
- * @since 2.3.0 bbPress (r4641)
+ * @since 2.3.0 bbPress (r4642)
  *
  * @param string $content Topic and reply content
  * @return string Partially encoded content
@@ -188,7 +369,7 @@ function bbp_encode_bad( $content = '' ) {
 /**
  * Callback to encode the tags in topic or reply content
  *
- * @since 2.3.0 bbPress (r4641)
+ * @since 2.3.0 bbPress (r4642)
  *
  * @param array $matches
  * @return string
@@ -196,7 +377,7 @@ function bbp_encode_bad( $content = '' ) {
 function bbp_encode_callback( $matches = array() ) {
 
 	// Trim inline code, not pre blocks (to prevent removing indentation)
-	if ( "`" === $matches[1] ) {
+	if ( '`' === $matches[1] ) {
 		$content = trim( $matches[2] );
 	} else {
 		$content = $matches[2];
@@ -214,7 +395,7 @@ function bbp_encode_callback( $matches = array() ) {
 	$content = '<code>' . $content . '</code>';
 
 	// Wrap blocks in pre tags
-	if ( "`" !== $matches[1] ) {
+	if ( '`' !== $matches[1] ) {
 		$content = "\n<pre>" . $content . "</pre>\n";
 	}
 
@@ -222,9 +403,10 @@ function bbp_encode_callback( $matches = array() ) {
 }
 
 /**
- * Callback to decode the tags in topic or reply content
+ * Callback to decode the tags in forum, topic, or reply content.
  *
- * @since 2.3.0 bbPress (r4641)
+ * @since 2.3.0 bbPress (r4642)
+ * @since 2.6.22 bbPress (r8322) Preserve code containing backticks.
  *
  * @param array $matches
  * @todo Experiment with _wp_specialchars()
@@ -232,10 +414,19 @@ function bbp_encode_callback( $matches = array() ) {
  */
 function bbp_decode_callback( $matches = array() ) {
 
+	// Keep unambiguous HTML when code already contains the shorthand delimiter.
+	if ( false !== strpos( $matches[2], '`' ) ) {
+		$content = str_replace( '<br />', '<coded_br />', $matches[2] );
+		$content = str_replace( '<p>',    '<coded_p>',    $content );
+		$content = str_replace( '</p>',   '</coded_p>',   $content );
+
+		return $matches[1] . $content . $matches[3];
+	}
+
 	// Setup variables
 	$trans_table = array_flip( get_html_translation_table( HTML_ENTITIES ) );
-	$amps        = array( '&#38;','&#038;', '&amp;' );
-	$single      = array( '&#39;','&#039;'          );
+	$amps        = array( '&#38;', '&#038;', '&amp;' );
+	$single      = array( '&#39;', '&#039;'          );
 	$content     = $matches[2];
 	$content     = strtr( $content, $trans_table );
 
@@ -253,7 +444,7 @@ function bbp_decode_callback( $matches = array() ) {
 /**
  * Callback to replace empty HTML tags in a content string
  *
- * @since 2.3.0 bbPress (r4641)
+ * @since 2.3.0 bbPress (r4642)
  *
  * @internal Used by bbp_encode_bad()
  * @param string $content
@@ -269,7 +460,7 @@ function bbp_encode_empty_callback( &$content = '', $key = '', $preg = '' ) {
 /**
  * Callback to replace normal HTML tags in a content string
  *
- * @since 2.3.0 bbPress (r4641)
+ * @since 2.3.0 bbPress (r4642)
  *
  * @internal Used by bbp_encode_bad()
  *
@@ -277,7 +468,7 @@ function bbp_encode_empty_callback( &$content = '', $key = '', $preg = '' ) {
  * @param string $key
  * @param string $preg
  */
-function bbp_encode_normal_callback( &$content = '', $key = '', $preg = '') {
+function bbp_encode_normal_callback( &$content = '', $key = '', $preg = '' ) {
 	if ( strpos( $content, '`' ) !== 0 ) {
 		$content = preg_replace( "|&lt;(/?{$preg})&gt;|i", '<$1>', $content );
 	}
@@ -288,7 +479,7 @@ function bbp_encode_normal_callback( &$content = '', $key = '', $preg = '') {
 /**
  * Catches links so rel=nofollow can be added (on output, not save)
  *
- * @since 2.3.0 bbPress (r4865)
+ * @since 2.4.0 bbPress (r4866)
  *
  * @param string $text Post text
  * @return string $text Text with rel=nofollow added to any links
@@ -300,43 +491,38 @@ function bbp_rel_nofollow( $text = '' ) {
 /**
  * Adds rel=nofollow to a link
  *
- * @since 2.3.0 bbPress (r4865)
+ * @since 2.4.0 bbPress (r4866)
+ * @since 2.6.17 bbPress (r7492) Use the WordPress link relationship callback.
  *
  * @param array $matches
  * @return string $text Link with rel=nofollow added
  */
 function bbp_rel_nofollow_callback( $matches = array() ) {
-	$text     = $matches[1];
-	$atts     = shortcode_parse_atts( $matches[1] );
-	$rel      = 'nofollow';
-	$home_url = home_url();
+	return wp_rel_callback( $matches, 'nofollow' );
+}
 
-	// Bail on links that match the current domain
-	if ( preg_match( '%href=["\'](' . preg_quote( set_url_scheme( $home_url, 'http'  ) ) . ')%i', $text ) ||
-	     preg_match( '%href=["\'](' . preg_quote( set_url_scheme( $home_url, 'https' ) ) . ')%i', $text )
-	) {
-		return "<a {$text}>";
-	}
+/**
+ * Add the ugc link relationship on output, not save.
+ *
+ * @since 2.6.21 bbPress (r8110)
+ *
+ * @param string $text Post text.
+ * @return string Text with the ugc link relationship.
+ */
+function bbp_rel_ugc( $text = '' ) {
+	return preg_replace_callback( '|<a (.+?)>|i', 'bbp_rel_ugc_callback', $text );
+}
 
-	// Avoid collisions with existing "rel" attribute
-	if ( ! empty( $atts['rel'] ) ) {
-		$parts = array_map( 'trim', explode( ' ', $atts['rel'] ) );
-		if ( false === array_search( 'nofollow', $parts ) ) {
-			$parts[] = 'nofollow';
-		}
-
-		$rel = implode( ' ', $parts );
-		unset( $atts['rel'] );
-
-		$html = '';
-		foreach ( $atts as $name => $value ) {
-			$html .= "{$name}=\"{$value}\" ";
-		}
-
-		$text = trim( $html );
-	}
-
-	return "<a {$text} rel=\"{$rel}\">";
+/**
+ * Add the ugc relationship to a user-generated link.
+ *
+ * @since 2.6.21 bbPress (r8112)
+ *
+ * @param array $matches
+ * @return string Link with the ugc relationship.
+ */
+function bbp_rel_ugc_callback( $matches = array() ) {
+	return wp_rel_callback( $matches, 'ugc' );
 }
 
 /** Make Clickable ************************************************************/
@@ -350,7 +536,7 @@ function bbp_rel_nofollow_callback( $matches = array() ) {
  * This custom version of WordPress's make_clickable() skips links inside of
  * pre and code tags.
  *
- * @since 2.4.0 bbPress (r4941)
+ * @since 2.4.0 bbPress (r4942)
  *
  * @param string $text Content to convert URIs.
  * @return string Content with converted URIs.
@@ -363,12 +549,12 @@ function bbp_make_clickable( $text = '' ) {
 	foreach ( $textarr as $piece ) {
 
 		if ( preg_match( '|^<code[\s>]|i', $piece ) || preg_match( '|^<pre[\s>]|i', $piece ) || preg_match( '|^<script[\s>]|i', $piece ) || preg_match( '|^<style[\s>]|i', $piece ) ) {
-			$nested_code_pre++;
+			++$nested_code_pre;
 		} elseif ( $nested_code_pre && ( '</code>' === strtolower( $piece ) || '</pre>' === strtolower( $piece ) || '</script>' === strtolower( $piece ) || '</style>' === strtolower( $piece ) ) ) {
-			$nested_code_pre--;
+			--$nested_code_pre;
 		}
 
-		if ( $nested_code_pre || empty( $piece ) || ( $piece[0] === '<' && ! preg_match( '|^<\s*[\w]{1,20}+://|', $piece ) ) ) {
+		if ( $nested_code_pre || empty( $piece ) || ( '<' === $piece[0] && ! preg_match( '|^<\s*[\w]{1,20}+://|', $piece ) ) ) {
 			$r .= $piece;
 			continue;
 		}
@@ -387,12 +573,12 @@ function bbp_make_clickable( $text = '' ) {
 			$ret = " {$piece} "; // Pad with whitespace to simplify the regexes
 			$ret = apply_filters( 'bbp_make_clickable', $ret, $text );
 			$ret = substr( $ret, 1, -1 ); // Remove our whitespace padding.
-			$r .= $ret;
+			$r  .= $ret;
 		}
 	}
 
 	// Cleanup of accidental links within links
-	return preg_replace( '#(<a([ \r\n\t]+[^>]+?>|>))<a [^>]+?>([^>]+?)</a>([^<]*)</a>#i', "$1$3$4</a>", $r );
+	return preg_replace( '#(<a([ \r\n\t]+[^>]+?>|>))<a [^>]+?>([^>]+?)</a>([^<]*)</a>#i', '$1$3$4</a>', $r );
 }
 
 /**
@@ -526,7 +712,7 @@ function bbp_make_mentions_clickable_callback( $matches = array() ) {
 /**
  * Never let a numeric value be less than zero.
  *
- * @since 2.6.0 bbPress (r6300)
+ * @since 2.6.0 bbPress (r6302)
  *
  * @param int $number
  */
@@ -576,7 +762,7 @@ function bbp_number_format( $number = 0, $decimals = false, $dec_point = '.', $t
 /**
  * A bbPress specific method of formatting numeric values
  *
- * @since 2.1.0 bbPress (r3857)
+ * @since 2.1.0 bbPress (r3858)
  *
  * @param string $number Number to format
  * @param string $decimals Optional. Display decimals
@@ -599,7 +785,7 @@ function bbp_number_format_i18n( $number = 0, $decimals = false ) {
 /**
  * Convert time supplied from database query into specified date format.
  *
- * @since 2.0.0 bbPress (r2544)
+ * @since 2.0.0 bbPress (r2722)
  *
  * @param string $time Time to convert
  * @param string $d Optional. Default is 'U'. Either 'G', 'U', or php date
@@ -628,123 +814,138 @@ function bbp_convert_date( $time, $d = 'U', $translate = false ) {
 function bbp_time_since( $older_date, $newer_date = false, $gmt = false ) {
 	echo bbp_get_time_since( $older_date, $newer_date, $gmt );
 }
-	/**
-	 * Return formatted time to display human readable time difference.
-	 *
-	 * @since 2.0.0 bbPress (r2544)
-	 *
-	 * @param string $older_date Unix timestamp from which the difference begins.
-	 * @param string $newer_date Optional. Unix timestamp from which the
-	 *                            difference ends. False for current time.
-	 * @param int $gmt Optional. Whether to use GMT timezone. Default is false.
-	 *
-	 * @return string Formatted time
-	 */
-	function bbp_get_time_since( $older_date, $newer_date = false, $gmt = false ) {
 
-		// Setup the strings
-		$unknown_text   = apply_filters( 'bbp_core_time_since_unknown_text',   esc_html__( 'sometime',  'bbpress' ) );
-		$right_now_text = apply_filters( 'bbp_core_time_since_right_now_text', esc_html__( 'right now', 'bbpress' ) );
-		$ago_text       = apply_filters( 'bbp_core_time_since_ago_text',       esc_html__( '%s ago',    'bbpress' ) );
+/**
+ * Return formatted time to display human readable time difference.
+ *
+ * @since 2.0.0 bbPress (r2544)
+ *
+ * @param string $older_date Unix timestamp from which the difference begins.
+ * @param string $newer_date Optional. Unix timestamp from which the
+ *                            difference ends. False for current time.
+ * @param int $gmt Optional. Whether to use GMT timezone. Default is false.
+ *
+ * @return string Formatted time
+ */
+function bbp_get_time_since( $older_date, $newer_date = false, $gmt = false ) {
 
-		// array of time period chunks
-		$chunks = array(
-			array( YEAR_IN_SECONDS,   _n_noop( '%s year',   '%s years',   'bbpress' ) ),
-			array( MONTH_IN_SECONDS,  _n_noop( '%s month',  '%s months',  'bbpress' ) ),
-			array( WEEK_IN_SECONDS,   _n_noop( '%s week',   '%s weeks',   'bbpress' ) ),
-			array( DAY_IN_SECONDS,    _n_noop( '%s day',    '%s days',    'bbpress' ) ),
-			array( HOUR_IN_SECONDS,   _n_noop( '%s hour',   '%s hours',   'bbpress' ) ),
-			array( MINUTE_IN_SECONDS, _n_noop( '%s minute', '%s minutes', 'bbpress' ) ),
-			array( 1,                 _n_noop( '%s second', '%s seconds', 'bbpress' ) ),
-		);
+	// Setup the strings
+	$unknown_text   = apply_filters( 'bbp_core_time_since_unknown_text',   esc_html__( 'sometime',  'bbpress' ) );
+	$right_now_text = apply_filters( 'bbp_core_time_since_right_now_text', esc_html__( 'right now', 'bbpress' ) );
+	/* translators: %s: Time period */
+	$ago_text       = apply_filters( 'bbp_core_time_since_ago_text',       esc_html__( '%s ago',    'bbpress' ) );
 
-		// Attempt to parse non-numeric older date
-		if ( ! empty( $older_date ) && ! is_numeric( $older_date ) ) {
-			$time_chunks = explode( ':', str_replace( ' ', ':', $older_date ) );
-			$date_chunks = explode( '-', str_replace( ' ', '-', $older_date ) );
-			$older_date  = gmmktime( (int) $time_chunks[1], (int) $time_chunks[2], (int) $time_chunks[3], (int) $date_chunks[1], (int) $date_chunks[2], (int) $date_chunks[0] );
+	// array of time period chunks
+	$chunks = array(
+		/* translators: %s: Number of years */
+		array( YEAR_IN_SECONDS, _n_noop( '%s year', '%s years', 'bbpress' ) ),
+
+		/* translators: %s: Number of months */
+		array( MONTH_IN_SECONDS, _n_noop( '%s month', '%s months', 'bbpress' ) ),
+
+		/* translators: %s: Number of weeks */
+		array( WEEK_IN_SECONDS, _n_noop( '%s week', '%s weeks', 'bbpress' ) ),
+
+		/* translators: %s: Number of days */
+		array( DAY_IN_SECONDS, _n_noop( '%s day', '%s days', 'bbpress' ) ),
+
+		/* translators: %s: Number of hours */
+		array( HOUR_IN_SECONDS, _n_noop( '%s hour', '%s hours', 'bbpress' ) ),
+
+		/* translators: %s: Number of minutes */
+		array( MINUTE_IN_SECONDS, _n_noop( '%s minute', '%s minutes', 'bbpress' ) ),
+
+		/* translators: %s: Number of seconds */
+		array( 1, _n_noop( '%s second', '%s seconds', 'bbpress' ) ),
+	);
+
+	// Attempt to parse non-numeric older date
+	if ( ! empty( $older_date ) && ! is_numeric( $older_date ) ) {
+		$time_chunks = explode( ':', str_replace( ' ', ':', $older_date ) );
+		$date_chunks = explode( '-', str_replace( ' ', '-', $older_date ) );
+		$older_date  = gmmktime( (int) $time_chunks[1], (int) $time_chunks[2], (int) $time_chunks[3], (int) $date_chunks[1], (int) $date_chunks[2], (int) $date_chunks[0] );
+	}
+
+	// Attempt to parse non-numeric newer date
+	if ( ! empty( $newer_date ) && ! is_numeric( $newer_date ) ) {
+		$time_chunks = explode( ':', str_replace( ' ', ':', $newer_date ) );
+		$date_chunks = explode( '-', str_replace( ' ', '-', $newer_date ) );
+		$newer_date  = gmmktime( (int) $time_chunks[1], (int) $time_chunks[2], (int) $time_chunks[3], (int) $date_chunks[1], (int) $date_chunks[2], (int) $date_chunks[0] );
+	}
+
+	// Set newer date to current time
+	if ( empty( $newer_date ) ) {
+		$newer_date = strtotime( current_time( 'mysql', $gmt ) );
+	}
+
+	// Cast both dates to ints to avoid notices & errors with invalid values
+	$newer_date = intval( $newer_date );
+	$older_date = intval( $older_date );
+
+	// Difference in seconds
+	$since = intval( $newer_date - $older_date );
+
+	// Something went wrong with date calculation and we ended up with a negative date.
+	if ( 0 > $since ) {
+		$output = $unknown_text;
+
+	// We only want to output two chunks of time here, eg:
+	//     x years, xx months
+	//     x days, xx hours
+	// so there's only two bits of calculation below:
+	} else {
+
+		// Default count values
+		$count  = 0;
+		$count2 = 0;
+
+		// Step one: the first chunk
+		for ( $i = 0, $j = count( $chunks ); $i < $j; ++$i ) {
+			$seconds = $chunks[ $i ][0];
+
+			// Finding the biggest chunk (if the chunk fits, break)
+			$count = floor( $since / $seconds );
+			if ( 0 != $count ) {
+				break;
+			}
 		}
 
-		// Attempt to parse non-numeric newer date
-		if ( ! empty( $newer_date ) && ! is_numeric( $newer_date ) ) {
-			$time_chunks = explode( ':', str_replace( ' ', ':', $newer_date ) );
-			$date_chunks = explode( '-', str_replace( ' ', '-', $newer_date ) );
-			$newer_date  = gmmktime( (int) $time_chunks[1], (int) $time_chunks[2], (int) $time_chunks[3], (int) $date_chunks[1], (int) $date_chunks[2], (int) $date_chunks[0] );
-		}
+		// If $i iterates all the way to $j, then the event happened 0 seconds ago
+		if ( ! isset( $chunks[ $i ] ) ) {
+			$output = $right_now_text;
 
-		// Set newer date to current time
-		if ( empty( $newer_date ) ) {
-			$newer_date = strtotime( current_time( 'mysql', $gmt ) );
-		}
-
-		// Cast both dates to ints to avoid notices & errors with invalid values
-		$newer_date = intval( $newer_date );
-		$older_date = intval( $older_date );
-
-		// Difference in seconds
-		$since = intval( $newer_date - $older_date );
-
-		// Something went wrong with date calculation and we ended up with a negative date.
-		if ( 0 > $since ) {
-			$output = $unknown_text;
-
-		// We only want to output two chunks of time here, eg:
-		//     x years, xx months
-		//     x days, xx hours
-		// so there's only two bits of calculation below:
 		} else {
 
-			// Default count values
-			$count  = 0;
-			$count2 = 0;
+			// Set output var
+			$output = sprintf( translate_nooped_plural( $chunks[ $i ][1], $count, 'bbpress' ), bbp_number_format_i18n( $count ) );
 
-			// Step one: the first chunk
-			for ( $i = 0, $j = count( $chunks ); $i < $j; ++$i ) {
-				$seconds = $chunks[ $i ][0];
+			// Step two: the second chunk
+			if ( $i + 2 < $j ) {
+				$seconds2 = $chunks[ $i + 1 ][0];
+				$count2   = floor( ( $since - ( $seconds * $count ) ) / $seconds2 );
 
-				// Finding the biggest chunk (if the chunk fits, break)
-				$count = floor( $since / $seconds );
-				if ( 0 != $count ) {
-					break;
+				// Add to output var
+				if ( 0 != $count2 ) {
+					$output .= _x( ',', 'Separator in time since', 'bbpress' ) . ' ';
+					$output .= sprintf( translate_nooped_plural( $chunks[ $i + 1 ][1], $count2, 'bbpress' ), bbp_number_format_i18n( $count2 ) );
 				}
 			}
 
-			// If $i iterates all the way to $j, then the event happened 0 seconds ago
-			if ( ! isset( $chunks[ $i ] ) ) {
+			// Empty counts, so fallback to right now
+			if ( empty( $count ) && empty( $count2 ) ) {
 				$output = $right_now_text;
-
-			} else {
-
-				// Set output var
-				$output = sprintf( translate_nooped_plural( $chunks[ $i ][1], $count, 'bbpress' ), bbp_number_format_i18n( $count ) );
-
-				// Step two: the second chunk
-				if ( $i + 2 < $j ) {
-					$seconds2 = $chunks[ $i + 1 ][0];
-					$count2   = floor( ( $since - ( $seconds * $count ) ) / $seconds2 );
-
-					// Add to output var
-					if ( 0 != $count2 ) {
-						$output .= _x( ',', 'Separator in time since', 'bbpress' ) . ' ';
-						$output .= sprintf( translate_nooped_plural( $chunks[ $i + 1 ][1], $count2, 'bbpress' ), bbp_number_format_i18n( $count2 ) );
-					}
-				}
-
-				// Empty counts, so fallback to right now
-				if ( empty( $count ) && empty( $count2 ) ) {
-					$output = $right_now_text;
-				}
 			}
 		}
-
-		// Append 'ago' to the end of time-since if not 'right now'
-		if ( $output != $right_now_text ) {
-			$output = sprintf( $ago_text, $output );
-		}
-
-		// Filter & return
-		return apply_filters( 'bbp_get_time_since', $output, $older_date, $newer_date );
 	}
+
+	// Append 'ago' to the end of time-since if not 'right now'
+		if ( $output != $right_now_text ) {
+		$output = sprintf( $ago_text, $output );
+	}
+
+	// Filter & return
+	return apply_filters( 'bbp_get_time_since', $output, $older_date, $newer_date );
+}
 
 /** Revisions *****************************************************************/
 
@@ -788,13 +989,15 @@ function bbp_format_revision_reason( $reason = '' ) {
 /**
  * Format the display name of a user.
  *
- * Abstracts mbstring library check and fallback to utf8_encode().
+ * Prefers wp_is_valid_utf8() from WordPress 6.9, falls back to mbstring
+ * library, and uses seems_utf8() & utf8_encode() as a last resort.
  *
  * @link https://bbpress.trac.wordpress.org/ticket/2141
  *
- * @since 2.6.14
+ * @since 2.6.14 bbPress (r7334)
  *
- * @param string $display_name The author display
+ * @param string $display_name The author display name
+ *
  * @return string
  */
 function bbp_format_user_display_name( $display_name = '' ) {
@@ -802,13 +1005,21 @@ function bbp_format_user_display_name( $display_name = '' ) {
 	// Default return value
 	$retval = $display_name;
 
-	// Use the mbstring library if possible
-	if ( function_exists( 'mb_check_encoding' ) && ! mb_check_encoding( $display_name, 'UTF-8' ) ) {
-		$retval = mb_convert_encoding( $display_name, 'UTF-8', 'ISO-8859-1' );
+	// WordPress 6.9 and higher
+	if ( function_exists( 'wp_is_valid_utf8' ) ) {
+		if ( ! wp_is_valid_utf8( $display_name ) ) {
+			$retval = _wp_utf8_encode_fallback( $display_name );
+		}
 
-	// Fallback to function that (deprecated in PHP8.2)
-	} elseif ( seems_utf8( $display_name ) === false ) {
-		$retval = utf8_encode( $display_name );
+	// Fallback to mbstring library if extension is loaded
+	} elseif ( function_exists( 'mb_check_encoding' ) ) {
+		if ( ! mb_check_encoding( $display_name, 'UTF-8' ) ) {
+			$retval = mb_convert_encoding( $display_name, 'UTF-8', 'ISO-8859-1' );
+		}
+
+	// Fallback to deprecated WordPress & PHP functions
+	} elseif ( seems_utf8( $display_name ) === false ) { // phpcs:ignore WordPress.WP.DeprecatedFunctions.seems_utf8Found -- Compatibility fallback for WordPress versions before 6.9 without mbstring.
+		$retval = utf8_encode( $display_name ); // phpcs:ignore
 	}
 
 	// Return

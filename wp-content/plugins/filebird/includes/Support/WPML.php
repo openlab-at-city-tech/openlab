@@ -7,6 +7,8 @@ use FileBird\Controller\Controller;
 defined( 'ABSPATH' ) || exit;
 
 class WPML extends Controller {
+	private static $instance = null;
+
 	protected $post_translations;
 	private $sitepress;
 	private $lang;
@@ -38,8 +40,33 @@ class WPML extends Controller {
 			add_filter( 'fbv_speedup_get_count_query', '__return_true' );
 			add_filter( 'fbv_all_folders_and_count', array( $this, 'all_folders_and_count_query' ), 10, 2 );
 		}
+
+		if ( self::$instance === null ) {
+			self::$instance = $this;
+		}
 	}
 
+	public static function applyCountQuery( $query, $folder_id, $lang = null ) {
+		global $sitepress;
+		
+		// Check if WPML is active
+		if ( $sitepress === null || get_class( $sitepress ) !== 'SitePress' ) {
+			return $query;
+		}
+		
+		// Get or create instance
+		if ( self::$instance === null ) {
+			return $query; // Instance not initialized yet, return original query
+		}
+		
+		// Check if attachment sync is enabled
+		if ( isset( self::$instance->cpt_sync_options['attachment'] ) && self::$instance->cpt_sync_options['attachment'] == '0' ) {
+			return $query; // Attachment sync disabled, return original query
+		}
+		
+		// Call instance method
+		return self::$instance->fbv_get_count_query( $query, $folder_id, $lang );
+	}
 	public function fbv_data( $data ) {
 		$data['icl_lang'] = apply_filters( 'wpml_current_language', null );
 

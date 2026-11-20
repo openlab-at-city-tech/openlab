@@ -9,12 +9,9 @@ namespace Kadence\Scripts;
 
 use Kadence\Component_Interface;
 use function Kadence\kadence;
-use WP_Post;
 use function add_action;
-use function add_filter;
 use function wp_enqueue_script;
 use function get_theme_file_uri;
-use function get_theme_file_path;
 use function wp_script_add_data;
 use function wp_localize_script;
 
@@ -28,7 +25,7 @@ class Component implements Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'scripts';
 	}
 
@@ -36,19 +33,19 @@ class Component implements Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'action_enqueue_scripts' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'ie_11_support_scripts' ), 60 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'action_enqueue_scripts' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'ie_11_support_scripts' ], 60 );
 	}
 	/**
 	 * Add some very basic support for IE11
 	 */
 	public function ie_11_support_scripts() {
 		if ( apply_filters( 'kadence_add_ie11_support', false ) || kadence()->option( 'ie11_basic_support' ) ) {
-			wp_enqueue_style( 'kadence-ie11', get_theme_file_uri( '/assets/css/ie.min.css' ), array(), KADENCE_VERSION );
+			wp_enqueue_style( 'kadence-ie11', get_theme_file_uri( '/assets/css/ie.min.css' ), [], KADENCE_VERSION );
 			wp_enqueue_script(
 				'kadence-css-vars-poly',
 				get_theme_file_uri( '/assets/js/css-vars-ponyfill.min.js' ),
-				array(),
+				[],
 				KADENCE_VERSION,
 				true
 			);
@@ -57,7 +54,7 @@ class Component implements Component_Interface {
 			wp_enqueue_script(
 				'kadence-ie11',
 				get_theme_file_uri( '/assets/js/ie.min.js' ),
-				array(),
+				[],
 				KADENCE_VERSION,
 				true
 			);
@@ -83,7 +80,7 @@ class Component implements Component_Interface {
 		wp_register_script(
 			'kad-splide',
 			get_theme_file_uri( '/assets/js/splide.min.js' ),
-			array(),
+			[],
 			KADENCE_VERSION,
 			true
 		);
@@ -93,7 +90,7 @@ class Component implements Component_Interface {
 		wp_register_script(
 			'kadence-slide-init',
 			get_theme_file_uri( '/assets/js/splide-init.min.js' ),
-			array( 'kad-splide', 'kadence-navigation' ),
+			[ 'kad-splide', 'kadence-navigation' ],
 			KADENCE_VERSION,
 			true
 		);
@@ -102,20 +99,20 @@ class Component implements Component_Interface {
 		wp_localize_script(
 			'kadence-slide-init',
 			'kadenceSlideConfig',
-			array(
+			[
 				'of'    => __( 'of', 'kadence' ),
 				'to'    => __( 'to', 'kadence' ),
 				'slide' => __( 'Slide', 'kadence' ),
 				'next'  => __( 'Next', 'kadence' ),
 				'prev'  => __( 'Previous', 'kadence' ),
-			)
+			]
 		);
 		if ( kadence()->option( 'lightbox' ) ) {
 			// Enqueue the lightbox script.
 			wp_enqueue_script(
 				'kadence-simplelightbox',
 				get_theme_file_uri( '/assets/js/simplelightbox.min.js' ),
-				array(),
+				[],
 				KADENCE_VERSION,
 				true
 			);
@@ -125,7 +122,7 @@ class Component implements Component_Interface {
 			wp_enqueue_script(
 				'kadence-lightbox-init',
 				get_theme_file_uri( '/assets/js/lightbox-init.min.js' ),
-				array( 'kadence-simplelightbox' ),
+				[ 'kadence-simplelightbox' ],
 				KADENCE_VERSION,
 				true
 			);
@@ -141,7 +138,7 @@ class Component implements Component_Interface {
 		wp_enqueue_script(
 			'kadence-navigation',
 			get_theme_file_uri( '/assets/js/' . $file ),
-			array(),
+			[],
 			KADENCE_VERSION,
 			true
 		);
@@ -150,19 +147,19 @@ class Component implements Component_Interface {
 		wp_localize_script(
 			'kadence-navigation',
 			'kadenceConfig',
-			array(
-				'screenReader' => array(
+			[
+				'screenReader' => [
 					'expand'     => __( 'Child menu', 'kadence' ),
 					'expandOf'   => __( 'Child menu of', 'kadence' ),
 					'collapse'   => __( 'Child menu', 'kadence' ),
 					'collapseOf' => __( 'Child menu of', 'kadence' ),
-				),
-				'breakPoints' => array(
+				],
+				'breakPoints'  => [
 					'desktop' => esc_attr( $breakpoint ),
-					'tablet' => 768,
-				),
+					'tablet'  => 768,
+				],
 				'scrollOffset' => apply_filters( 'kadence_scroll_to_id_additional_offset', 0 ),
-			)
+			]
 		);
 	}
 }

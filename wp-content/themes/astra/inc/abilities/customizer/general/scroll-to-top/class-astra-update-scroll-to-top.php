@@ -49,25 +49,25 @@ class Astra_Update_Scroll_To_Top extends Astra_Abstract_Ability {
 		return array(
 			'type'       => 'object',
 			'properties' => array(
-				'enabled'      => array(
+				'enabled'       => array(
 					'type'        => 'boolean',
 					'description' => 'Enable or disable the scroll-to-top button.',
 				),
-				'position'     => array(
+				'position'      => array(
 					'type'        => 'string',
 					'description' => 'Button position. Options: "right", "left".',
 					'enum'        => array( 'right', 'left' ),
 				),
-				'on_devices'   => array(
+				'on_devices'    => array(
 					'type'        => 'string',
 					'description' => 'Show on which devices. Options: "both", "desktop", "mobile".',
 					'enum'        => array( 'both', 'desktop', 'mobile' ),
 				),
-				'icon_size'    => array(
+				'icon_size'     => array(
 					'type'        => 'integer',
 					'description' => 'Icon size in pixels (1-50).',
 				),
-				'colors'       => array(
+				'colors'        => array(
 					'type'        => 'object',
 					'description' => 'Color settings for the scroll-to-top button.',
 					'properties'  => array(
@@ -166,7 +166,7 @@ class Astra_Update_Scroll_To_Top extends Astra_Abstract_Ability {
 			}
 
 			astra_update_option( 'scroll-to-top-icon-position', $position );
-			$updated           = true;
+			$updated = true;
 			/* translators: %s: position value */
 			$update_messages[] = sprintf( __( 'Position set to %s', 'astra' ), $position );
 		}
@@ -184,7 +184,7 @@ class Astra_Update_Scroll_To_Top extends Astra_Abstract_Ability {
 			}
 
 			astra_update_option( 'scroll-to-top-on-devices', $on_devices );
-			$updated           = true;
+			$updated = true;
 			/* translators: %s: device visibility value */
 			$update_messages[] = sprintf( __( 'Device visibility set to %s', 'astra' ), $on_devices );
 		}
@@ -192,7 +192,7 @@ class Astra_Update_Scroll_To_Top extends Astra_Abstract_Ability {
 		if ( isset( $args['icon_size'] ) ) {
 			$icon_size = absint( $args['icon_size'] );
 			astra_update_option( 'scroll-to-top-icon-size', $icon_size );
-			$updated           = true;
+			$updated = true;
 			/* translators: %d: icon size in pixels */
 			$update_messages[] = sprintf( __( 'Icon size set to %dpx', 'astra' ), $icon_size );
 		}

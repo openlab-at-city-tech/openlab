@@ -897,9 +897,11 @@ class DLM_Settings_Rest {
 			case 'select':
 			case 'radio':
 			case 'enhanced_radio':
-				$options = isset( $field['options'] ) ? array_keys( $field['options'] ) : array();
+				// Numeric option keys become ints in PHP arrays, so compare as strings.
+				$options = isset( $field['options'] ) ? array_map( 'strval', array_keys( $field['options'] ) ) : array();
+				$valid   = empty( $options ) || ( is_scalar( $value ) && in_array( (string) $value, $options, true ) );
 
-				return ( empty( $options ) || in_array( $value, $options, true ) ) ? sanitize_text_field( $value ) : ( isset( $field['std'] ) ? $field['std'] : '' );
+				return $valid ? sanitize_text_field( $value ) : ( isset( $field['std'] ) ? $field['std'] : '' );
 
 			case 'textarea':
 			case 'editor':

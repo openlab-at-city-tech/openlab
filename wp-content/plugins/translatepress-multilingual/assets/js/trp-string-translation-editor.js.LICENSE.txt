@@ -5,8 +5,8 @@
 */
 
 /*!
- * vue-router v4.6.4
- * (c) 2025 Eduardo San Martin Morote
+ * vue-router v4.6.5
+ * (c) 2026 Eduardo San Martin Morote
  * @license MIT
  */
 
@@ -15,31 +15,31 @@
 /*! https://mths.be/he v1.2.0 by @mathias | MIT license */
 
 /**
-* @vue/compiler-core v3.5.44
+* @vue/compiler-core v3.5.45
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/
 
 /**
-* @vue/compiler-dom v3.5.44
+* @vue/compiler-dom v3.5.45
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/
 
 /**
-* @vue/runtime-core v3.5.44
+* @vue/runtime-core v3.5.45
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/
 
 /**
-* @vue/runtime-dom v3.5.44
+* @vue/runtime-dom v3.5.45
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/
 
 /**
-* @vue/shared v3.5.44
+* @vue/shared v3.5.45
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/

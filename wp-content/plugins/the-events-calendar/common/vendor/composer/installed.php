@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'the-events-calendar/tribe-common',
-        'pretty_version' => 'dev-main',
-        'version' => 'dev-main',
-        'reference' => '3da1eb1be17960e744e4ad93bda9e95bdf00c919',
+        'pretty_version' => 'dev-release/M26.typhlosion',
+        'version' => 'dev-release/M26.typhlosion',
+        'reference' => '95f4175f01ef13d94303f607a0b889d6124d4eea',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -179,9 +179,9 @@
             'dev_requirement' => false,
         ),
         'stellarwp/db' => array(
-            'pretty_version' => '1.2.0',
-            'version' => '1.2.0.0',
-            'reference' => 'f92d6ae0bcd74a3f526b023bb2d6ecd13227ef96',
+            'pretty_version' => '1.3.1',
+            'version' => '1.3.1.0',
+            'reference' => 'b7eb19523302c25b40b9a8d6484ab72c900ab5d7',
             'type' => 'library',
             'install_path' => __DIR__ . '/../stellarwp/db',
             'aliases' => array(),
@@ -289,9 +289,9 @@
             'dev_requirement' => false,
         ),
         'the-events-calendar/tribe-common' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
-            'reference' => '3da1eb1be17960e744e4ad93bda9e95bdf00c919',
+            'pretty_version' => 'dev-release/M26.typhlosion',
+            'version' => 'dev-release/M26.typhlosion',
+            'reference' => '95f4175f01ef13d94303f607a0b889d6124d4eea',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

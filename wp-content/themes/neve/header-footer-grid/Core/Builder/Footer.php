@@ -49,7 +49,7 @@ class Footer extends Abstract_Builder {
 					$this->get_property( 'title' ),
 					/* translators: %s link text */
 					sprintf(
-						'<br/><a target="_blank" rel="external noopener noreferrer" href="https://docs.themeisle.com/article/946-neve-doc#footer-builder"><span class="screen-reader-text">%s</span><svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img" viewBox="0 0 512 512" width="12" height="12" style="margin-right: 5px;"><path fill="currentColor" d="M432 320H400a16 16 0 0 0-16 16V448H64V128H208a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16H48A48 48 0 0 0 0 112V464a48 48 0 0 0 48 48H400a48 48 0 0 0 48-48V336A16 16 0 0 0 432 320ZM488 0h-128c-21.4 0-32 25.9-17 41l35.7 35.7L135 320.4a24 24 0 0 0 0 34L157.7 377a24 24 0 0 0 34 0L435.3 133.3 471 169c15 15 41 4.5 41-17V24A24 24 0 0 0 488 0Z"/></svg>%s</a>',
+						'<br/><a target="_blank" rel="external noopener noreferrer" href="' . esc_url( tsdk_utmify( 'https://docs.themeisle.com/neve/neve-doc#build-your-custom-header-footer', 'footer-builder', 'customizer' ) ) . '"><span class="screen-reader-text">%s</span><svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img" viewBox="0 0 512 512" width="12" height="12" style="margin-right: 5px;"><path fill="currentColor" d="M432 320H400a16 16 0 0 0-16 16V448H64V128H208a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16H48A48 48 0 0 0 0 112V464a48 48 0 0 0 48 48H400a48 48 0 0 0 48-48V336A16 16 0 0 0 432 320ZM488 0h-128c-21.4 0-32 25.9-17 41l35.7 35.7L135 320.4a24 24 0 0 0 0 34L157.7 377a24 24 0 0 0 34 0L435.3 133.3 471 169c15 15 41 4.5 41-17V24A24 24 0 0 0 488 0Z"/></svg>%s</a>',
 						esc_html__( '(opens in a new tab)', 'neve' ),
 						esc_html__( 'Read full documentation', 'neve' )
 					)
@@ -162,6 +162,8 @@ class Footer extends Abstract_Builder {
 	 * @access  public
 	 */
 	public function customize_register( WP_Customize_Manager $wp_customize ) {
+		$this->customize_global_footer( $wp_customize );
+
 		if ( $this->has_valid_addons() || ! Migration_Flags::is_new_user_after_v41() ) {
 			return parent::customize_register( $wp_customize );
 		}
@@ -192,8 +194,45 @@ class Footer extends Abstract_Builder {
 				'setting' => 'footer_copyright_content',
 			]
 		);
-		
+
 		return parent::customize_register( $wp_customize );
+	}
+
+	/**
+	 * Registers the footer options section, the counterpart of the global header settings.
+	 *
+	 * @param WP_Customize_Manager $wp_customize The Customize Manager.
+	 *
+	 * @return void
+	 */
+	private function customize_global_footer( WP_Customize_Manager $wp_customize ) {
+		$wp_customize->add_section(
+			'neve_global_footer_settings',
+			[
+				'title'    => __( 'Footer Options', 'neve' ),
+				'priority' => 201,
+				'panel'    => 'hfg_footer',
+			]
+		);
+
+		$wp_customize->add_setting(
+			'neve_disable_footer',
+			[
+				'default'           => false,
+				'transport'         => 'refresh',
+				'sanitize_callback' => 'neve_sanitize_checkbox',
+			]
+		);
+
+		$wp_customize->add_control(
+			'neve_disable_footer',
+			[
+				'label'    => esc_html__( 'Disable Footer', 'neve' ),
+				'section'  => 'neve_global_footer_settings',
+				'type'     => 'neve_toggle_control',
+				'priority' => 5,
+			]
+		);
 	}
 
 	/**

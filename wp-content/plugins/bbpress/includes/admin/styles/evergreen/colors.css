@@ -10,7 +10,6 @@ body {
 a {
   color: #0073aa;
 }
-
 a:hover, a:active, a:focus {
   color: #0096dd;
 }
@@ -31,8 +30,8 @@ input[type=radio]:checked:before {
   background: #56b274;
 }
 
-.wp-core-ui input[type="reset"]:hover,
-.wp-core-ui input[type="reset"]:active {
+.wp-core-ui input[type=reset]:hover,
+.wp-core-ui input[type=reset]:active {
   color: #0096dd;
 }
 
@@ -44,66 +43,53 @@ input[type=radio]:checked:before {
   box-shadow: 0 1px 0 #3b8152;
   text-shadow: 0 -1px 1px #3b8152, 1px 0 1px #3b8152, 0 1px 1px #3b8152, -1px 0 1px #3b8152;
 }
-
 .wp-core-ui .button-primary:hover, .wp-core-ui .button-primary:focus {
   background: #61b77d;
   border-color: #3b8152;
   color: #fff;
   box-shadow: 0 1px 0 #3b8152;
 }
-
 .wp-core-ui .button-primary:focus {
   box-shadow: inset 0 1px 0 #43925d, 0 0 2px 1px #33b3db;
 }
-
 .wp-core-ui .button-primary:active, .wp-core-ui .button-primary.active, .wp-core-ui .button-primary.active:focus, .wp-core-ui .button-primary.active:hover {
   background: #43925d;
   border-color: #3b8152;
   box-shadow: inset 0 2px 0 #3b8152;
 }
-
 .wp-core-ui .button-primary[disabled], .wp-core-ui .button-primary:disabled, .wp-core-ui .button-primary.button-primary-disabled, .wp-core-ui .button-primary.disabled {
   color: #c7d1ca !important;
   background: #469961 !important;
   border-color: #3b8152 !important;
   text-shadow: none !important;
 }
-
 .wp-core-ui .button-primary.button-hero {
   box-shadow: 0 2px 0 #3b8152 !important;
 }
-
 .wp-core-ui .button-primary.button-hero:active {
   box-shadow: inset 0 3px 0 #3b8152 !important;
 }
-
 .wp-core-ui .wp-ui-primary {
   color: #fff;
   background-color: #446950;
 }
-
 .wp-core-ui .wp-ui-text-primary {
   color: #446950;
 }
-
 .wp-core-ui .wp-ui-highlight {
   color: #fff;
   background-color: #56b274;
 }
-
 .wp-core-ui .wp-ui-text-highlight {
   color: #56b274;
 }
-
 .wp-core-ui .wp-ui-notification {
   color: #fff;
   background-color: #36b360;
 }
-
 .wp-core-ui .wp-ui-text-notification {
   color: #36b360;
 }
-
 .wp-core-ui .wp-ui-text-icon {
   color: #f1f3f2;
 }
@@ -183,7 +169,6 @@ input[type=radio]:checked:before {
 #adminmenu .wp-has-current-submenu.opensub .wp-submenu a {
   color: #c7d2cb;
 }
-
 #adminmenu .wp-submenu a:focus, #adminmenu .wp-submenu a:hover,
 #adminmenu .wp-has-current-submenu .wp-submenu a:focus,
 #adminmenu .wp-has-current-submenu .wp-submenu a:hover,
@@ -202,7 +187,6 @@ input[type=radio]:checked:before {
 #adminmenu .wp-has-current-submenu.opensub .wp-submenu li.current a {
   color: #fff;
 }
-
 #adminmenu .wp-submenu li.current a:hover, #adminmenu .wp-submenu li.current a:focus,
 #adminmenu a.wp-has-current-submenu:focus + .wp-submenu li.current a:hover,
 #adminmenu a.wp-has-current-submenu:focus + .wp-submenu li.current a:focus,
@@ -286,7 +270,20 @@ ul#adminmenu > li.current > a.current:after {
 #wpadminbar.nojs .ab-top-menu > li.menupop:hover > .ab-item,
 #wpadminbar .ab-top-menu > li.menupop.hover > .ab-item {
   color: #56b274;
+}
+
+#wpadminbar:not(.mobile) .ab-top-menu > li:hover,
+#wpadminbar .ab-top-menu > li.hover,
+#wpadminbar .ab-top-menu > li:focus-within {
   background: #36533f;
+}
+
+/* Keep the rounded focus link clear so the list item paints its background. */
+#wpadminbar:not(.mobile) .ab-top-menu > li:hover > .ab-item,
+#wpadminbar:not(.mobile) .ab-top-menu > li > .ab-item:focus,
+#wpadminbar.nojq .quicklinks .ab-top-menu > li > .ab-item:focus,
+#wpadminbar .ab-top-menu > li.hover > .ab-item {
+  background: transparent;
 }
 
 #wpadminbar:not(.mobile) > #wp-toolbar li:hover span.ab-label,

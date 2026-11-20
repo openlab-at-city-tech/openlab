@@ -10,407 +10,407 @@ namespace Kadence;
 use Kadence\Theme_Customizer;
 use function Kadence\kadence;
 
-$settings = array(
-	'header_social_tabs' => array(
+$settings = [
+	'header_social_tabs'                 => [
 		'control_type' => 'kadence_tab_control',
 		'section'      => 'header_social',
 		'settings'     => false,
 		'priority'     => 1,
-		'input_attrs'  => array(
-			'general' => array(
+		'input_attrs'  => [
+			'general' => [
 				'label'  => __( 'General', 'kadence' ),
 				'target' => 'header_social',
-			),
-			'design' => array(
+			],
+			'design'  => [
 				'label'  => __( 'Design', 'kadence' ),
 				'target' => 'header_social_design',
-			),
-			'active' => 'general',
-		),
-	),
-	'header_social_tabs_design' => array(
+			],
+			'active'  => 'general',
+		],
+	],
+	'header_social_tabs_design'          => [
 		'control_type' => 'kadence_tab_control',
 		'section'      => 'header_social_design',
 		'settings'     => false,
 		'priority'     => 1,
-		'input_attrs'  => array(
-			'general' => array(
+		'input_attrs'  => [
+			'general' => [
 				'label'  => __( 'General', 'kadence' ),
 				'target' => 'header_social',
-			),
-			'design' => array(
+			],
+			'design'  => [
 				'label'  => __( 'Design', 'kadence' ),
 				'target' => 'header_social_design',
-			),
-			'active' => 'design',
-		),
-	),
-	'header_social_items' => array(
+			],
+			'active'  => 'design',
+		],
+	],
+	'header_social_items'                => [
 		'control_type' => 'kadence_social_control',
 		'section'      => 'header_social',
 		'priority'     => 6,
 		'default'      => kadence()->default( 'header_social_items' ),
 		'label'        => esc_html__( 'Social Items', 'kadence' ),
-		'partial'      => array(
+		'partial'      => [
 			'selector'            => '.header-social-wrap',
 			'container_inclusive' => true,
 			'render_callback'     => 'Kadence\header_social',
-		),
-	),
-	'header_social_show_label' => array(
+		],
+	],
+	'header_social_show_label'           => [
 		'control_type' => 'kadence_switch_control',
 		'sanitize'     => 'kadence_sanitize_toggle',
 		'section'      => 'header_social',
 		'priority'     => 8,
 		'default'      => kadence()->default( 'header_social_show_label' ),
 		'label'        => esc_html__( 'Show Icon Label?', 'kadence' ),
-		'partial'      => array(
+		'partial'      => [
 			'selector'            => '.header-social-wrap',
 			'container_inclusive' => true,
 			'render_callback'     => 'Kadence\header_social',
-		),
-	),
-	'header_social_item_spacing' => array(
+		],
+	],
+	'header_social_item_spacing'         => [
 		'control_type' => 'kadence_range_control',
 		'section'      => 'header_social',
 		'label'        => esc_html__( 'Item Spacing', 'kadence' ),
 		'default'      => kadence()->default( 'header_social_item_spacing' ),
-		'live_method'     => array(
-			array(
+		'live_method'  => [
+			[
 				'type'     => 'css',
 				'selector' => '.header-social-wrap .header-social-inner-wrap',
 				'property' => 'gap',
 				'pattern'  => '$',
 				'key'      => 'size',
-			),
-		),
-		'input_attrs'  => array(
-			'min'        => array(
+			],
+		],
+		'input_attrs'  => [
+			'min'        => [
 				'px'  => 0,
 				'em'  => 0,
 				'rem' => 0,
-			),
-			'max'        => array(
+			],
+			'max'        => [
 				'px'  => 50,
 				'em'  => 3,
 				'rem' => 3,
-			),
-			'step'       => array(
+			],
+			'step'       => [
 				'px'  => 1,
 				'em'  => 0.01,
 				'rem' => 0.01,
-			),
-			'units'      => array( 'px', 'em', 'rem' ),
+			],
+			'units'      => [ 'px', 'em', 'rem' ],
 			'responsive' => false,
-		),
-	),
-	'header_social_style' => array(
+		],
+	],
+	'header_social_style'                => [
 		'control_type' => 'kadence_radio_icon_control',
 		'section'      => 'header_social_design',
 		'priority'     => 10,
 		'default'      => kadence()->default( 'header_social_style' ),
 		'label'        => esc_html__( 'Social Style', 'kadence' ),
-		'live_method'     => array(
-			array(
+		'live_method'  => [
+			[
 				'type'     => 'class',
 				'selector' => '.header-social-inner-wrap',
 				'pattern'  => 'social-style-$',
 				'key'      => '',
-			),
-		),
-		'input_attrs'  => array(
-			'layout' => array(
-				'filled' => array(
+			],
+		],
+		'input_attrs'  => [
+			'layout'     => [
+				'filled'  => [
 					'name' => __( 'Filled', 'kadence' ),
-				),
-				'outline' => array(
+				],
+				'outline' => [
 					'name' => __( 'Outline', 'kadence' ),
-				),
-			),
+				],
+			],
 			'responsive' => false,
-		),
-	),
-	'header_social_icon_size' => array(
+		],
+	],
+	'header_social_icon_size'            => [
 		'control_type' => 'kadence_range_control',
 		'section'      => 'header_social_design',
 		'label'        => esc_html__( 'Icon Size', 'kadence' ),
-		'live_method'     => array(
-			array(
+		'live_method'  => [
+			[
 				'type'     => 'css',
 				'selector' => '.header-social-wrap .header-social-inner-wrap',
 				'property' => 'font-size',
 				'pattern'  => '$',
 				'key'      => 'size',
-			),
-		),
+			],
+		],
 		'default'      => kadence()->default( 'header_social_icon_size' ),
-		'input_attrs'  => array(
-			'min'        => array(
+		'input_attrs'  => [
+			'min'        => [
 				'px'  => 0,
 				'em'  => 0,
 				'rem' => 0,
-			),
-			'max'        => array(
+			],
+			'max'        => [
 				'px'  => 100,
 				'em'  => 12,
 				'rem' => 12,
-			),
-			'step'       => array(
+			],
+			'step'       => [
 				'px'  => 1,
 				'em'  => 0.01,
 				'rem' => 0.01,
-			),
-			'units'      => array( 'px', 'em', 'rem' ),
+			],
+			'units'      => [ 'px', 'em', 'rem' ],
 			'responsive' => false,
-		),
-	),
-	'header_social_brand' => array(
+		],
+	],
+	'header_social_brand'                => [
 		'control_type' => 'kadence_select_control',
 		'section'      => 'header_social_design',
 		'transport'    => 'refresh',
 		'default'      => kadence()->default( 'header_social_brand' ),
 		'label'        => esc_html__( 'Use Brand Colors?', 'kadence' ),
-		'input_attrs'  => array(
-			'options' => array(
-				'' => array(
+		'input_attrs'  => [
+			'options' => [
+				''           => [
 					'name' => __( 'No', 'kadence' ),
-				),
-				'always' => array(
+				],
+				'always'     => [
 					'name' => __( 'Yes', 'kadence' ),
-				),
-				'onhover' => array(
+				],
+				'onhover'    => [
 					'name' => __( 'On Hover', 'kadence' ),
-				),
-				'untilhover' => array(
+				],
+				'untilhover' => [
 					'name' => __( 'Until Hover', 'kadence' ),
-				),
-			),
-		),
-	),
-	'header_social_color' => array(
+				],
+			],
+		],
+	],
+	'header_social_color'                => [
 		'control_type' => 'kadence_color_control',
 		'section'      => 'header_social_design',
 		'label'        => esc_html__( 'Colors', 'kadence' ),
 		'default'      => kadence()->default( 'header_social_color' ),
-		'live_method'     => array(
-			array(
+		'live_method'  => [
+			[
 				'type'     => 'css',
 				'selector' => '#main-header .header-social-wrap a.social-button',
 				'property' => 'color',
 				'pattern'  => '$',
 				'key'      => 'color',
-			),
-			array(
+			],
+			[
 				'type'     => 'css',
 				'selector' => '#main-header .header-social-wrap a.social-button:hover',
 				'property' => 'color',
 				'pattern'  => '$',
 				'key'      => 'hover',
-			),
-		),
-		'input_attrs'  => array(
-			'colors' => array(
-				'color' => array(
+			],
+		],
+		'input_attrs'  => [
+			'colors' => [
+				'color' => [
 					'tooltip' => __( 'Initial Color', 'kadence' ),
 					'palette' => true,
-				),
-				'hover' => array(
+				],
+				'hover' => [
 					'tooltip' => __( 'Hover Color', 'kadence' ),
 					'palette' => true,
-				),
-			),
-		),
-	),
-	'header_social_background' => array(
+				],
+			],
+		],
+	],
+	'header_social_background'           => [
 		'control_type' => 'kadence_color_control',
 		'section'      => 'header_social_design',
 		'label'        => esc_html__( 'Background Colors', 'kadence' ),
 		'default'      => kadence()->default( 'header_social_background' ),
-		'live_method'     => array(
-			array(
+		'live_method'  => [
+			[
 				'type'     => 'css',
 				'selector' => '#main-header .header-social-wrap a.social-button',
 				'property' => 'background',
 				'pattern'  => '$',
 				'key'      => 'color',
-			),
-			array(
+			],
+			[
 				'type'     => 'css',
 				'selector' => '#main-header .header-social-wrap a.social-button:hover',
 				'property' => 'background',
 				'pattern'  => '$',
 				'key'      => 'hover',
-			),
-		),
-		'context'      => array(
-			array(
+			],
+		],
+		'context'      => [
+			[
 				'setting'  => 'header_social_style',
 				'operator' => '=',
 				'value'    => 'filled',
-			),
-		),
-		'input_attrs'  => array(
-			'colors' => array(
-				'color' => array(
+			],
+		],
+		'input_attrs'  => [
+			'colors' => [
+				'color' => [
 					'tooltip' => __( 'Initial Color', 'kadence' ),
 					'palette' => true,
-				),
-				'hover' => array(
+				],
+				'hover' => [
 					'tooltip' => __( 'Hover Color', 'kadence' ),
 					'palette' => true,
-				),
-			),
-		),
-	),
-	'header_social_border_colors' => array(
+				],
+			],
+		],
+	],
+	'header_social_border_colors'        => [
 		'control_type' => 'kadence_color_control',
 		'section'      => 'header_social_design',
 		'label'        => esc_html__( 'Border Colors', 'kadence' ),
 		'default'      => kadence()->default( 'header_social_border' ),
-		'live_method'     => array(
-			array(
+		'live_method'  => [
+			[
 				'type'     => 'css',
 				'selector' => '#main-header .header-social-wrap a.social-button',
 				'property' => 'border-color',
 				'pattern'  => '$',
 				'key'      => 'color',
-			),
-			array(
+			],
+			[
 				'type'     => 'css',
 				'selector' => '#main-header .header-social-wrap a.social-button:hover',
 				'property' => 'border-color',
 				'pattern'  => '$',
 				'key'      => 'hover',
-			),
-		),
-		'input_attrs'  => array(
-			'colors' => array(
-				'color' => array(
+			],
+		],
+		'input_attrs'  => [
+			'colors' => [
+				'color' => [
 					'tooltip' => __( 'Initial Color', 'kadence' ),
 					'palette' => true,
-				),
-				'hover' => array(
+				],
+				'hover' => [
 					'tooltip' => __( 'Hover Color', 'kadence' ),
 					'palette' => true,
-				),
-			),
-		),
-	),
-	'header_social_border' => array(
+				],
+			],
+		],
+	],
+	'header_social_border'               => [
 		'control_type' => 'kadence_border_control',
 		'section'      => 'header_social_design',
 		'label'        => esc_html__( 'Border', 'kadence' ),
 		'default'      => kadence()->default( 'header_social_border' ),
-		'live_method'     => array(
-			array(
+		'live_method'  => [
+			[
 				'type'     => 'css_border',
 				'selector' => '.header-social-wrap a.social-button',
 				'property' => 'border',
 				'pattern'  => '$',
 				'key'      => 'border',
-			),
-		),
-		'input_attrs'  => array(
+			],
+		],
+		'input_attrs'  => [
 			'responsive' => false,
 			'color'      => false,
-		),
-	),
-	'header_social_border_radius' => array(
+		],
+	],
+	'header_social_border_radius'        => [
 		'control_type' => 'kadence_range_control',
 		'section'      => 'header_social_design',
 		'label'        => esc_html__( 'Border Radius', 'kadence' ),
-		'live_method'     => array(
-			array(
+		'live_method'  => [
+			[
 				'type'     => 'css',
 				'selector' => '.header-social-wrap a.social-button',
 				'property' => 'border-radius',
 				'pattern'  => '$',
 				'key'      => 'size',
-			),
-		),
+			],
+		],
 		'default'      => kadence()->default( 'header_social_border_radius' ),
-		'input_attrs'  => array(
-			'min'        => array(
+		'input_attrs'  => [
+			'min'        => [
 				'px'  => 0,
 				'em'  => 0,
 				'rem' => 0,
 				'%'   => 0,
-			),
-			'max'        => array(
+			],
+			'max'        => [
 				'px'  => 100,
 				'em'  => 12,
 				'rem' => 12,
 				'%'   => 100,
-			),
-			'step'       => array(
+			],
+			'step'       => [
 				'px'  => 1,
 				'em'  => 0.01,
 				'rem' => 0.01,
 				'%'   => 1,
-			),
-			'units'      => array( 'px', 'em', 'rem', '%' ),
+			],
+			'units'      => [ 'px', 'em', 'rem', '%' ],
 			'responsive' => false,
-		),
-	),
-	'header_social_typography' => array(
+		],
+	],
+	'header_social_typography'           => [
 		'control_type' => 'kadence_typography_control',
 		'section'      => 'header_social_design',
 		'label'        => esc_html__( 'Font', 'kadence' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting'  => 'header_social_show_label',
 				'operator' => '=',
 				'value'    => true,
-			),
-		),
+			],
+		],
 		'default'      => kadence()->default( 'header_social_typography' ),
-		'live_method'     => array(
-			array(
+		'live_method'  => [
+			[
 				'type'     => 'css_typography',
 				'selector' => '.header-social-wrap a.social-button .social-label',
-				'pattern'  => array(
+				'pattern'  => [
 					'desktop' => '$',
 					'tablet'  => '$',
 					'mobile'  => '$',
-				),
+				],
 				'property' => 'font',
 				'key'      => 'typography',
-			),
-		),
-		'input_attrs'  => array(
-			'id' => 'header_social_typography',
+			],
+		],
+		'input_attrs'  => [
+			'id'      => 'header_social_typography',
 			'options' => 'no-color',
-		),
-	),
-	'header_social_margin' => array(
+		],
+	],
+	'header_social_margin'               => [
 		'control_type' => 'kadence_measure_control',
 		'section'      => 'header_social_design',
 		'priority'     => 10,
 		'default'      => kadence()->default( 'header_social_margin' ),
 		'label'        => esc_html__( 'Margin', 'kadence' ),
-		'live_method'     => array(
-			array(
+		'live_method'  => [
+			[
 				'type'     => 'css',
 				'selector' => '#main-header .header-social-wrap',
 				'property' => 'margin',
 				'pattern'  => '$',
 				'key'      => 'measure',
-			),
-		),
-		'input_attrs'  => array(
+			],
+		],
+		'input_attrs'  => [
 			'responsive' => false,
-		),
-	),
-	'header_social_link_to_social_links' => array(
+		],
+	],
+	'header_social_link_to_social_links' => [
 		'control_type' => 'kadence_focus_button_control',
 		'section'      => 'header_social',
 		'settings'     => false,
 		'priority'     => 25,
 		'label'        => esc_html__( 'Set Social Links', 'kadence' ),
-		'input_attrs'  => array(
+		'input_attrs'  => [
 			'section' => 'kadence_customizer_general_social',
-		),
-	),
-);
+		],
+	],
+];
 
 Theme_Customizer::add_settings( $settings );

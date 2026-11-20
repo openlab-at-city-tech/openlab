@@ -3,7 +3,7 @@
         'name' => 'yoast/duplicate-post',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'b6a92eabe9e2b2f8e46f17c3e89ddfe10983df74',
+        'reference' => '1292b89fc2626e88de7ffc84ea56626b42485139',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'yoast/duplicate-post' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'b6a92eabe9e2b2f8e46f17c3e89ddfe10983df74',
+            'reference' => '1292b89fc2626e88de7ffc84ea56626b42485139',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

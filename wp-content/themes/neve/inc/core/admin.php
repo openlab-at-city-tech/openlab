@@ -196,7 +196,7 @@ class Admin {
 		}
 
 		wp_register_style( 'neve-components', trailingslashit( NEVE_ASSETS_URL ) . 'apps/components/build/style-components.css', [ 'wp-components' ], $deps['version'] );
-		wp_add_inline_style( 'neve-components', Dynamic_Css::get_root_css() );
+		wp_add_inline_style( 'neve-components', wp_strip_all_tags( Dynamic_Css::get_root_css() ) );
 	}
 
 	/**
@@ -264,6 +264,11 @@ class Admin {
 		if ( ! neve_is_new_skin() ) {
 			return $theme_mods;
 		}
+
+		if ( ! class_exists( Mods_Migrator::class ) ) {
+			return $theme_mods;
+		}
+
 		$migrator = new Mods_Migrator( $theme_mods );
 
 		return $migrator->get_migrated_mods();
@@ -686,7 +691,7 @@ class Admin {
 
 		echo '<style>' . wp_kses_post( $style ) . '</style>';
 		$this->dismiss_script();
-		echo '<div class="nv-welcome-notice updated notice ti-about-notice">';
+		echo '<div class="nv-welcome-notice notice ti-about-notice">';
 		echo '<div class="notice-dismiss"></div>';
 		$this->welcome_notice_content();
 		echo '</div>';
@@ -770,7 +775,7 @@ class Admin {
 
 		$notice_picture .= '<div class="overlay">';
 		$notice_picture .= '<span>';
-		$notice_picture .= '<strong>30+</strong> ' . __( 'Starter Sites', 'neve' );
+		$notice_picture .= '<strong>100+</strong> ' . __( 'Starter Sites', 'neve' );
 		$notice_picture .= '</span>';
 		$notice_picture .= '<div class="builder-logos">';
 		$notice_picture .= '<div class="builder-logo">' . $elementor_logo . '</div>';
@@ -1054,8 +1059,16 @@ class Admin {
 
 	/**
 	 * Change Orbit Fox and Otter plugin names to make clear where they are from.
+	 *
+	 * @param array<string, array<string, mixed>>|mixed $plugins the plugin list.
+	 *
+	 * @return array<string, array<string, mixed>> the plugin list with changed names.
 	 */
 	public function change_plugin_names( $plugins ) {
+		if ( ! is_array( $plugins ) ) {
+			$plugins = [];
+		}
+
 		if ( array_key_exists( 'themeisle-companion/themeisle-companion.php', $plugins ) ) {
 			$plugins['themeisle-companion/themeisle-companion.php']['Name'] = 'Orbit Fox Companion by Neve theme';
 		}

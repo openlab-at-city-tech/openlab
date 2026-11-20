@@ -8,7 +8,6 @@ if ( ! defined( 'TADV_ADMIN_PAGE' ) ) {
 	exit;
 }
 
-// TODO
 if ( ! current_user_can( 'manage_options' ) ) {
 	wp_die( 'Invalid request' );
 }
@@ -37,7 +36,6 @@ if ( isset( $_POST['tadv-save'] ) ) {
 } elseif ( isset( $_POST['tadv-import-settings'] ) ) {
 	check_admin_referer( 'tadv-save-buttons-order' );
 
-	// TODO: all users
 	?>
 	<div class="wrap advanced-editor-tools">
 	<h2><?php _e( 'Advanced Editor Tools Settings Import', 'tinymce-advanced' ); ?></h2>
@@ -69,7 +67,6 @@ if ( isset( $_POST['tadv-save'] ) ) {
 } elseif ( isset( $_POST['tadv-import-submit'] ) && ! empty( $_POST['tadv-import'] ) && is_string( $_POST['tadv-import'] ) ) {
 	check_admin_referer( 'tadv-import-settings', 'tadv-import-settings-nonce' );
 
-	// TODO: all users that can have settings
 	$import = json_decode( trim( wp_unslash( $_POST['tadv-import'] ) ), true );
 
 	if ( ! is_array( $import ) ) {
@@ -117,7 +114,6 @@ $all_buttons = $this->get_all_buttons();
 <h2><?php _e( 'Advanced Editor Tools', 'tinymce-advanced' ); ?></h2>
 <?php
 
-// TODO admin || SA
 $this->warn_if_unsupported();
 
 if ( isset( $_POST['tadv-save'] ) && empty( $message ) ) {

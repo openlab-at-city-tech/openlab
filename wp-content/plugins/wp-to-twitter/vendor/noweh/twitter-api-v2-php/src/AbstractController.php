@@ -2,6 +2,8 @@
 namespace Noweh\TwitterApi;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use GuzzleHttp\HandlerStack;
@@ -47,6 +49,9 @@ abstract class AbstractController
     /** @var string */
     private string $bearer_token;
 
+    /** @var bool */
+    protected bool $free_mode = false;
+
     /** @var string|null $next_page_token Next Page Token for API pagination. */
     protected ?string $next_page_token = null;
 
@@ -58,6 +63,9 @@ abstract class AbstractController
 
     /** @var array<string> $post_body */
     protected array $post_body = [];
+
+    /** @var string> $baseUri */
+    private string $api_base_uri;
 
     /**
      * Creates object. Requires an array of settings.
@@ -71,13 +79,19 @@ abstract class AbstractController
         $this->parseSettings($settings);
     }
 
+    private function getAPIBaseURI(): string
+    {
+        return $this->api_base_uri;
+    }
+    
+
     /**
      * Perform the request to Twitter API
      * @param array<string, mixed> $postData
-     * @return mixed
-     * @throws \GuzzleHttp\Exception\GuzzleException|\RuntimeException|\JsonException
+     * @return \stdClass|null
+     * @throws GuzzleException|\RuntimeException|\JsonException
      */
-    public function performRequest(array $postData = [], $withHeaders = false)
+    public function performRequest(array $postData = [], bool $withHeaders = false): ?\stdClass
     {
         try {
             $headers = [
@@ -87,7 +101,7 @@ abstract class AbstractController
 
             if ($this->auth_mode === 0) { // Bearer Token
                 // Inject the Bearer token header
-                $client = new Client(['base_uri' => self::API_BASE_URI]);
+                $client = new Client(['base_uri' => $this->getAPIBaseURI()]);
                 $headers['Authorization'] = 'Bearer ' . $this->bearer_token;
             } elseif ($this->auth_mode === 1) { // OAuth 1.0a User Context
                 // Insert Oauth1 middleware
@@ -100,7 +114,7 @@ abstract class AbstractController
                 ]);
                 $stack->push($middleware);
                 $client = new Client([
-                    'base_uri' => self::API_BASE_URI,
+                    'base_uri' => $this->getAPIBaseURI(),
                     'handler' => $stack,
                     'auth' => 'oauth'
                 ]);
@@ -116,9 +130,10 @@ abstract class AbstractController
                 'json' => count($postData) ? $postData : null,
             ]);
 
+            /** @var \stdClass|null $body */
             $body = json_decode($response->getBody()->getContents(), false, 512, JSON_THROW_ON_ERROR);
 
-            if ($withHeaders) {
+            if ($withHeaders && $body) {
                 $body->headers = $response->getHeaders();
             }
 
@@ -136,16 +151,16 @@ abstract class AbstractController
             return $body;
 
         } catch (ServerException $e) {
-            /** @var \stdClass $payload */
-            $payload = json_decode(str_replace("\n", "", $e->getResponse()->getBody()->getContents()), false, 512,
-                JSON_THROW_ON_ERROR);
-            throw new \RuntimeException($payload->detail, $payload->status);
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-            throw new \RuntimeException($e->getResponse()->getBody()->getContents(), $e->getCode());
+            /** @var \stdClass|null $payload */
+            $payload = json_decode($e->getResponse()->getBody()->getContents(), false, 512, JSON_THROW_ON_ERROR);
+            throw new \RuntimeException($payload->detail ?? $e->getMessage(), $payload->status ?? $e->getCode());
+        } catch (RequestException $e) {
+            throw new \RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
-    private function is_windows(): bool {
+    private function is_windows(): bool
+    {
         return DIRECTORY_SEPARATOR === '\\';
     }
 
@@ -200,6 +215,8 @@ abstract class AbstractController
         $this->bearer_token = $settings['bearer_token'];
         $this->access_token = $settings['access_token'];
         $this->access_token_secret = $settings['access_token_secret'];
+        $this->free_mode = (bool) ($settings['free_mode'] ?? false);
+        $this->api_base_uri = $settings['api_base_uri'] ?? self::API_BASE_URI;
     }
 
     /**

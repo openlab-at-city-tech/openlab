@@ -15,7 +15,7 @@ $current_time = current_time( 'timestamp' );
         esc_html_e('Schedule this slide', 'ml-slider');
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo metaslider_upgrade_pro_small_btn(
-            __( 'Schedule is available in MetaSlider Pro', 'ml-slider' )
+            __( 'Schedule is available in MetaSlider Slideshow Pro', 'ml-slider' )
         );
         ?> 
     </label>

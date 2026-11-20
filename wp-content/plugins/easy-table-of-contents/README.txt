@@ -3,9 +3,9 @@ Contributors: magazine3
 Donate link: https://tocwp.com/
 Tags: table of contents, toc
 Requires at least: 5.0
-Tested up to: 6.9
+Tested up to: 7.1
 Requires PHP: 5.6.20
-Stable tag: 2.0.82.2
+Stable tag: 2.0.90
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -134,6 +134,61 @@ Easy Table Contents is a fork of the excellent [Table of Contents Plus](https://
 4. Activate the plugin on the Plugins admin page.
 
 == Changelog ==
+= 2.0.90 16/11/2026 =
+* Improvement : Create sidebar tabs for every section, for UI improvement #973
+* Added : Option to set rel="nofollow" on table of contents links #974
+* Fixed : TOC missing with Avada and [ez-toc] after updating to 2.0.89 #993
+* Fixed : Settings JSON import always failed with "Import failed: Unknown upload error" #994
+* Fixed : View more is not working when using toc shortcode #992
+
+= 2.0.89 15/10/2026 =
+* Fixed : Long single posts time out or fatal since 2.0.87 because the TOC rendered every block again during the content filter #988
+* Fixed : "Preserve Line Breaks" broken in v2.0.88 due to wp_strip_all_tags() refactor #989
+* Fixed : WoodMart + WPBakery gallery compatibility requested missing .min.css parts and the removed lib-owl-carousel stylesheet, causing 404s on every front-end page
+
+= 2.0.88 16/09/2026 =
+* Fixed : [ez-toc] shortcode causes stray paragraphs and line breaks in content rendered after the article #982
+* Fixed : [ez-toc] shortcode ignores heading_levels and exclude when "SiteNavigation Schema" is enabled on a classic theme #979
+* Fixed : Recent Update version 2.0.87 Causing Underline Issue in Easy TOC #978
+
+= 2.0.87.1 07/09/2026 =
+* Improvement : Optimized feedback form  #981
+
+= 2.0.87 27/08/2026 =
+* Added : Option To Track Table of Contents (TOC) Link Clicks #954
+* Added : Spilt TOC on page when it has large heading .#952
+* Fixed : WooCommerce Classic Checkout Crashes When [ez-toc] Shortcode Is Used on Terms and Conditions Page #905
+* Fixed : TOC content filter re-parses all blocks #910
+* Test  : Test with WordPress 7.1 and update readme.txt #976
+
+= 2.0.86 04/08/2026 =
+* Compatibility : Added compatibility with helpie faq #959
+* Improvement : Enable Sticky TOC on Tablet Independently When Disabled for Mobile #957
+* Accessibility: Missing ARIA roles and labels in Sticky TOC container and toggle button #899
+* Improvement : Plugin Check improvements
+
+= 2.0.85 10/06/2026 =
+* Improvement : Collapsible Sub Headings not working for h3 under h2 #969
+* Improvement: New design for sticky toc  #968
+* Fixed: Easy TOC Conflict with Divi Builder with latest update 2.0.84 #967
+* Fixed: Easy TOC Conflict with Elementor Builder After latest update 2.0.84 #966
+
+= 2.0.84 29/05/2026 =
+* Fixed: EZ TOC includes rendered shortcode HTML when generating heading text and anchor IDs #961
+* Fixed: Auto Insert After 2nd+ Image Breaks WordPress Gallery Closing </figure> Tag #963
+* Fixed: Duplicate TOC Headings Generated on YOOtheme Builder Pages #964
+* Fixed: Auto-Generated TOC No Longer Works with Ultimate FAQ Accordion After Last Update of ETOC #962
+
+
+= 2.0.83 08/05/2026 =
+* Fixed: TOC menu hamburger gets stucked #945
+* Fixed: ETOC widget sticky shodecode not working properly. #921
+* Fixed: Bug while adding short code #953
+* Fixed: Smooth Scroll and exclude from url not working when using data-href option #956
+* Fixed: Divi 5 Compatibility Issue with Easy TOC Causing Fatal Error #955
+* Fixed: Mobile ignores custom width setting when “User Defined” is selected #958
+* Test: Tested upto WordPress 7.0
+
 = 2.0.82.2 26/03/2026 =
 * Fixed: Missing null check for global $post causing PHP warnings in REST API post creation #951
 * Fixed: cn_toc_admin_data is not defined ReferenceError: #950
@@ -229,45 +284,6 @@ Easy Table Contents is a fork of the excellent [Table of Contents Plus](https://
 * Bug: On multisite, When plugin activated, It goes to not found page #802
 * Fix: Need an option for Translating the 'Toggle Table of Content' aria-label' #860
 * Compatibility: We need to make compatibility with YOOtheme. #856
-
-= 2.0.71 09/12/2024 =
-* New: Support for more attributes in shortcode #828
-* New: Automatically short the title in ETOC #830
-* New: Floating layout for Sticky ETOC #844
-* Bug: cookie "ezTOC_hidetoc-0" does not have an appropriate "SameSite" attribute value #822
-* Bug: TOC Short code causing 500 error on Uncode theme #831
-* Bug: The Sticky Toc title does not shift to the right in the option Heading Text Direction selected as Right to Left is selected #833
-* Bug: 'Header Label' Option Not Updating in post individually #837
-* Fix: Issue with "TOC open on load" option in Sticky TOC feature. #815
-* Fix: TOC conflict with Avada Builder plugin and Custom Child Theme #775
-* Fix: Undefined Array Key 'navigation_scroll_bar' in class-eztoc-widgetsticky.php #842
-* Fix: Error in Google search console when enabling Create by Mediavine #841
-* Fix: Compatibility with Customize Post Categories for WPBakery Page Builder plugin & Publisher Theme #843
-* Compatibility: Tested with Wordpress 6.7 #836
-
-= 2.0.70 17/10/2024 =
-* New: One click migration for Table of Contents plus plugin #826
-* New: Add missing parameters in sticky widget shortcode #812
-* Bug: Timber theme TOC links not working on all pages and When ACF compatibility is on homepage gives 500 error #814
-* Bug: Incorrect Symbols Displaying When Adding %PAGE_NAME% as Header Label #816
-* Fix: Preserve-Linebreaks is broken. #806
-
-= 2.0.69.1 05/09/2024 =
-* Fix: Fatal error #803
-
-= 2.0.69 28/08/2024 =
-* Fix: Php warning. #788
-* Bug: Sticky ETOC CSS automatically added in homepage #777
-* Fix: Latest Version 2.0.68.1 causing functionality of "Inline CSS" Option in ETOC. #787
-* Fix: SiteNavigation markup issue with Easy TOC #764
-* Bug: The Sticky toggle appears on the homepage If the device target is set as desktop and its apparency is disabled on the Homepage #789
-* Bug: Generate related keyphrase and Keyphrase synonyms are not appearing if the plugin is active #791
-* Tweak: Clean the autoloaded data "ez-toc-post-content-core-level from the database. #793
-* Fix: Auto TOC not getting insert in Product Category Description #797
-* Fix: Copy Shortcode buttons are not working #798
-
-= 2.0.68.1 21/07/2024 =
-* Fix: Fatal error when inline css is enabled in  version 2.0.68
 
 
 Full changelog available at [changelog.txt](https://plugins.svn.wordpress.org/easy-table-of-contents/trunk/changelog.txt)

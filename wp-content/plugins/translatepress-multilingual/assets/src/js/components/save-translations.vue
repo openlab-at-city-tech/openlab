@@ -181,6 +181,10 @@ import Tooltip from "./tooltip"
 
                     axios.post(this.ajax_url, data)
                         .then(function (response) {
+                            // The preview stays loaded, so its dynamic-translation memory must drop pre-save answers.
+                            if ( self.iframe && self.iframe.defaultView ) {
+                                self.iframe.defaultView.dispatchEvent( new Event( 'trp_translations_saved' ) )
+                            }
                             if ( typeSlug === 'gettext' ) {
                                 axios.get(self.currentURL).then( function( reloadedIframeResponse) {
                                     self.updateIframe(updateIframeData, reloadedIframeResponse.data)

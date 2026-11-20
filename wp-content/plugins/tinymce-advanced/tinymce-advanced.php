@@ -3,8 +3,8 @@
 Plugin Name: Advanced Editor Tools
 Plugin URI: https://wordpress.org/plugins/tinymce-advanced/
 Description: Extends and enhances the block editor (Gutenberg) and the classic editor (TinyMCE).
-Version: 5.9.2
-Requires at least: 5.9
+Version: 5.10.1
+Requires at least: 6.5
 Requires PHP: 5.6
 Author: Automattic
 Author URI: https://automattic.com
@@ -26,7 +26,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along
 with Advanced Editor Tools or WordPress. If not, see https://www.gnu.org/licenses/gpl-2.0.html.
 
-Copyright (c) 2007-2023 Automattic, Inc. All rights reserved.
+Copyright (c) 2007-2026 Automattic, Inc. All rights reserved.
 */
 
 /**
@@ -42,8 +42,8 @@ if ( ! class_exists( 'Advanced_Editor_Tools' ) ) :
 
 class Advanced_Editor_Tools {
 
-	private $required_wp_version = '5.9';
-	private $plugin_version = 5900;
+	private $required_wp_version = '6.5';
+	private $plugin_version = 51010;
 
 	private $user_settings;
 	private $admin_settings;
@@ -783,7 +783,7 @@ class Advanced_Editor_Tools {
 
 		if ( $this->check_admin_setting( 'hybrid_mode' ) || $this->check_admin_setting( 'classic_paragraph_block' ) ) {
 			$strings = array();
-			$dependencies = array( 'wp-element', 'wp-components', 'wp-i18n', 'wp-keycodes', 'wp-blocks', 'wp-edit-post', 'wp-hooks', 'lodash' );
+			$dependencies = array( 'wp-i18n', 'wp-blocks', 'wp-block-library', 'wp-data', 'wp-edit-post', 'wp-element', 'wp-plugins', 'wp-rich-text' );
 			wp_enqueue_script( 'tadv-classic-paragraph', $plugin_url . '/classic-paragraph.js', $dependencies, $this->plugin_version );
 
 			if ( $this->check_admin_setting( 'classic_paragraph_block' ) ) {

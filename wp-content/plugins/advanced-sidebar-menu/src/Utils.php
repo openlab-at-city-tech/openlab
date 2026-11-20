@@ -123,4 +123,35 @@ class Utils implements Rules {
 	public function is_truthy( $value ): bool {
 		return true === $value || 'true' === $value || 1 === $value || '1' === $value || 'checked' === $value || 'on' === $value;
 	}
+
+
+	/**
+	 * Return a unique array of post IDs, removing duplicates and noninteger values.
+	 *
+	 * @since 9.9.0
+	 *
+	 * @param array<\WP_Post|int|string|null|bool> $posts - List of posts to clean.
+	 *
+	 * @return list<int>
+	 */
+	public function clean_post_ids( array $posts ): array {
+		$ids = \array_map( function( $post ): int {
+			if ( \is_int( $post ) ) {
+				return $post;
+			}
+			if ( $post instanceof \WP_Post ) {
+				return $post->ID;
+			}
+			if ( \is_string( $post ) ) {
+				if ( ! \is_numeric( $post ) ) {
+					return 0;
+				}
+				return (int) $post;
+			}
+			return 0;
+		}, $posts );
+
+		$valid = \array_filter( $ids, fn( int $val ) => $val > 0 );
+		return \array_values( \array_unique( $valid ) );
+	}
 }

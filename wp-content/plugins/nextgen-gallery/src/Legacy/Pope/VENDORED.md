@@ -42,6 +42,16 @@ bare relative `require_once('class.*.php')` calls were made `__DIR__`-relative s
 longer depends on `include_path` or the calling file's directory. A provenance docblock was
 added to the same file.
 
+Changed since vendoring:
+
+- `lib/class.pope_cache.php`, `lib/class.component_registry.php` (nextgen-gallery#1248): the
+  cache is kept in memory for the request (`C_Pope_Cache_Memory`, now the default driver) instead
+  of the `pope_cache` file in the system temp directory, which was shared by every install on the
+  host and keyed only by module versions. `C_Pope_Cache_SingleFile` and `C_Pope_Cache_MultiFile`
+  remain as names for the in-memory driver; `POPE_CACHE_DIR` is ignored. The registry's class
+  name => file map, which the autoloader includes from, is always built from the registered
+  module directories and never read from the cache.
+
 Two upstream quirks are preserved deliberately — do not "fix" them without checking callers:
 
 - `POPE_VERSION` is defined as `'0.17'` even at tag `v0.19`.

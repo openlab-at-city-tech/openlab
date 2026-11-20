@@ -90,6 +90,18 @@ class Scan_Status extends Status {
 	}
 
 	/**
+	 * Gets the last Scan status stored on the site, even if it has expired, without asking WordPress.com.
+	 *
+	 * @since 0.9.0
+	 *
+	 * @return Status_Model|null Null when no status has been stored yet.
+	 */
+	public static function get_cached_status() {
+		$scan_data = self::get_from_options();
+		return is_object( $scan_data ) ? self::normalize_api_data( $scan_data ) : null;
+	}
+
+	/**
 	 * Gets the Scan API endpoint
 	 *
 	 * @return WP_Error|string
@@ -174,12 +186,13 @@ class Scan_Status extends Status {
 		$status = new Status_Model(
 			array(
 				'data_source'         => 'scan_api',
-				'status'              => isset( $scan_data->state ) ? $scan_data->state : null,
+				'status'              => $scan_data->state ?? null,
 				'num_threats'         => 0,
 				'num_themes_threats'  => 0,
 				'num_plugins_threats' => 0,
 				'has_unchecked_items' => false,
-				'current_progress'    => isset( $scan_data->current->progress ) ? $scan_data->current->progress : null,
+				'current_progress'    => $scan_data->current->progress ?? null,
+				'last_scan_failed'    => ! empty( $scan_data->most_recent->error ),
 			)
 		);
 
@@ -288,9 +301,9 @@ class Scan_Status extends Status {
 
 					$threat->extension = new Extension_Model(
 						array(
-							'name'    => isset( $scan_threat->extension->name ) ? $scan_threat->extension->name : null,
-							'slug'    => isset( $scan_threat->extension->slug ) ? $scan_threat->extension->slug : null,
-							'version' => isset( $scan_threat->extension->version ) ? $scan_threat->extension->version : null,
+							'name'    => $scan_threat->extension->name ?? null,
+							'slug'    => $scan_threat->extension->slug ?? null,
+							'version' => $scan_threat->extension->version ?? null,
 							'type'    => $scan_threat->extension->type . 's',
 							'checked' => $installed_extension->version === $scan_threat->extension->version,
 						)

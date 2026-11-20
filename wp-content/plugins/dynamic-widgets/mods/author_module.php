@@ -2,7 +2,6 @@
 /**
  * Author Module
  *
- * @version $Id: author_module.php 2829573 2022-12-06 18:56:07Z vivwebs $
  * @copyright 2011 Jacco Drabbe
  */
 

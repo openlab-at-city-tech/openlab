@@ -508,7 +508,7 @@ class TablePress_CSSTidy {
 	 */
 	public function parse( string $a_string ): bool {
 		// Temporarily set locale to en_US in order to handle floats properly.
-		$old = @setlocale( LC_ALL, 0 ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		$old = @setlocale( LC_ALL, '0' ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		@setlocale( LC_ALL, 'C' ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 
 		$at_rules = &$this->data['csstidy']['at_rules'];
@@ -611,7 +611,7 @@ class TablePress_CSSTidy {
 						} elseif ( '{' === $a_string[ $i ] ) {
 							$this->status = 'ip';
 							if ( '' === $this->at ) {
-								$this->at = $this->css_new_media_section( $this->at, self::DEFAULT_AT );
+								$this->at = $this->css_new_media_section( $this->at, (string) self::DEFAULT_AT );
 							}
 							$this->selector = $this->css_new_selector( $this->at, $this->selector );
 							$this->_add_token( self::SEL_START, $this->selector );
@@ -739,7 +739,7 @@ class TablePress_CSSTidy {
 						}
 						if ( ( '}' === $a_string[ $i ] || ';' === $a_string[ $i ] || $pn ) && ! empty( $this->selector ) ) {
 							if ( '' === $this->at ) {
-								$this->at = $this->css_new_media_section( $this->at, self::DEFAULT_AT );
+								$this->at = $this->css_new_media_section( $this->at, (string) self::DEFAULT_AT );
 							}
 
 							// Case settings.

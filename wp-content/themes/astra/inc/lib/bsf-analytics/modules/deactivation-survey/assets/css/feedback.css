@@ -234,3 +234,73 @@
 		transform: rotate( 360deg );
 	}
 }
+
+/* Extra options: a product's own setting, surfaced at deactivation time.
+   Separated from the reasons above so it does not read as another reason. */
+.uds-feedback-form .uds-extra-options {
+	margin: 16px 0 0;
+	padding: 14px 0 0;
+	border: 0;
+	border-top: 1px solid #e5e7eb;
+}
+
+.uds-feedback-form .uds-extra-option {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+}
+
+/* WP admin gives checkboxes their own margins and a near-black border, which
+   pushes the box out of line with a wrapping label and makes it read as heavier
+   than the reason radios above. Match the radios' border, and sit the box on the
+   label's first line. Kept smaller than the 18px radios so it still reads as a
+   different kind of control rather than a sixth reason. The label is a
+   `label for`, so the click target stays the full text either way. */
+.uds-feedback-form .uds-extra-option--checkbox {
+	flex: 0 0 auto;
+	width: 14px;
+	height: 14px;
+	/* WP admin floors checkboxes at min-width 1rem, which would clamp the
+	   width above back up to 16px. */
+	min-width: 14px;
+	margin: 0;
+	/* (line-height 19.5px - 14px box) / 2 */
+	margin-top: 3px;
+	border-color: #d1d5db;
+}
+
+.uds-feedback-form .uds-extra-option--label {
+	margin: 0;
+	font-size: 13px;
+	line-height: 1.5;
+	color: #4b5563;
+}
+
+.uds-feedback-form .uds-extra-option--note {
+	margin: 0;
+	font-size: 13px;
+	line-height: 1.5;
+	color: #6b7280;
+}
+
+.uds-feedback-form .uds-extra-option--error {
+	margin: 8px 0 0;
+	font-size: 12px;
+	color: #b32d2e;
+}
+
+.uds-feedback-form .uds-extra-option--error.hide {
+	display: none;
+}
+
+/* Sits inline at the end of the error sentence, so it reads as the way out
+   rather than a second action competing with the popup's own buttons. */
+.uds-feedback-form .uds-extra-option--proceed {
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	font-size: inherit;
+	text-decoration: underline;
+	cursor: pointer;
+}

@@ -160,9 +160,41 @@ if ( ! class_exists( 'Astra_Blog_Layout_Configs' ) ) {
 					'renderAs'    => 'text',
 					'input_attrs' => array(
 						'dependents' => array(
-							'excerpt' => array( 'blog-excerpt-count' ),
+							'excerpt' => array( 'blog-excerpt-count', 'blog-excerpt-marker', 'blog-excerpt-marker-description' ),
 						),
 					),
+				),
+
+				/**
+				 * Option: Excerpt Truncation Marker
+				 */
+				array(
+					'name'              => 'blog-excerpt-marker',
+					'parent'            => ASTRA_THEME_SETTINGS . '[blog-post-structure]',
+					'section'           => 'section-blog',
+					'title'             => __( 'Truncation Marker', 'astra' ),
+					'default'           => astra_get_option( 'blog-excerpt-marker' ),
+					'type'              => 'sub-control',
+					'control'           => 'ast-text-input',
+					'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_html' ),
+					'linked'            => 'excerpt',
+					'priority'          => 76,
+					'divider'           => array( 'ast_class' => 'ast-top-divider' ),
+				),
+
+				/**
+				 * Option: Excerpt Truncation Marker description
+				 */
+				array(
+					'name'     => 'blog-excerpt-marker-description',
+					'parent'   => ASTRA_THEME_SETTINGS . '[blog-post-structure]',
+					'section'  => 'section-blog',
+					'type'     => 'sub-control',
+					'control'  => 'ast-description',
+					'linked'   => 'excerpt',
+					'priority' => 77,
+					'label'    => '',
+					'help'     => __( 'Shown at the end of trimmed excerpts. Leave empty to hide it.', 'astra' ),
 				),
 
 				/**
@@ -598,25 +630,26 @@ if ( ! class_exists( 'Astra_Blog_Layout_Configs' ) ) {
 				 * Option: Blog Meta Category Divider Type
 				 */
 				array(
-					'name'       => 'blog-post-meta-divider-type',
-					'parent'     => ASTRA_THEME_SETTINGS . '[blog-post-structure]',
-					'section'    => 'section-blog',
-					'title'      => __( 'Divider Type', 'astra' ),
-					'default'    => astra_get_option( 'blog-post-meta-divider-type' ),
-					'type'       => 'sub-control',
-					'transport'  => 'postMessage',
-					'control'    => 'ast-selector',
-					'linked'     => 'title-meta',
-					'priority'   => 75,
-					'choices'    => array(
+					'name'              => 'blog-post-meta-divider-type',
+					'parent'            => ASTRA_THEME_SETTINGS . '[blog-post-structure]',
+					'section'           => 'section-blog',
+					'title'             => __( 'Divider Type', 'astra' ),
+					'default'           => astra_get_option( 'blog-post-meta-divider-type' ),
+					'type'              => 'sub-control',
+					'transport'         => 'postMessage',
+					'control'           => 'ast-selector',
+					'linked'            => 'title-meta',
+					'priority'          => 75,
+					'choices'           => array(
 						'/'    => '/',
 						'-'    => '-',
 						'|'    => '|',
 						'•'    => '•',
 						'none' => __( 'None', 'astra' ),
 					),
-					'responsive' => false,
-					'renderAs'   => 'text',
+					'responsive'        => false,
+					'renderAs'          => 'text',
+					'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_meta_separator' ),
 				),
 
 				/**

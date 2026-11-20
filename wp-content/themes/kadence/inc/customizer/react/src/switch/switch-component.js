@@ -27,6 +27,7 @@ class SwitchComponent extends Component {
 							this.updateValues( value );
 						} }
 					/>
+					{ this.props.control.renderNotice() }
 				</div>
 		);
 	}

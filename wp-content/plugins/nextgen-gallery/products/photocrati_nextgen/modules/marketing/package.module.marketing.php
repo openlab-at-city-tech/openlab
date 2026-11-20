@@ -57,7 +57,7 @@ class A_Marketing_Animations_Form extends Mixin
      *
      * @return string
      */
-    public function get_title() : string
+    public function get_title(): string
     {
         return __('Image Animations', 'nggallery');
     }
@@ -66,7 +66,7 @@ class A_Marketing_Animations_Form extends Mixin
      *
      * @return string
      */
-    public function render() : string
+    public function render(): string
     {
         $medium = 'otheroptions';
         $base = M_Marketing::get_big_hitters_block_base($medium);
@@ -378,7 +378,7 @@ class C_Marketing_Block_Large extends C_Marketing_Block_Base
      *
      * @var array
      */
-    public $links = array();
+    public $links = [];
     /**
      * Block footer.
      *
@@ -450,7 +450,7 @@ class C_Marketing_Block_Popup extends C_Marketing_Block_Base
      *
      * @var array
      */
-    public $links = array();
+    public $links = [];
     /**
      * Block footer.
      *
@@ -552,7 +552,7 @@ class C_Marketing_Block_Two_Columns extends C_Marketing_Block_Base
      *
      * @var array
      */
-    public $links = array();
+    public $links = [];
     /**
      * Block footer.
      *

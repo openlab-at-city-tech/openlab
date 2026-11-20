@@ -1,11 +1,11 @@
 === Miniva ===
 
 Contributors: tajam
-Tags: accessibility-ready, blog, custom-background, custom-header, custom-logo, custom-menu, editor-style, featured-images, footer-widgets, full-width-template, grid-layout, left-sidebar, right-sidebar, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready, two-columns
+Tags: blog, custom-background, custom-header, custom-logo, custom-menu, editor-style, featured-images, footer-widgets, full-width-template, grid-layout, left-sidebar, right-sidebar, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready, two-columns
 
 Requires at least: 4.5
-Tested up to: 6.5
-Stable tag: 1.7.1
+Tested up to: 7.0
+Stable tag: 1.8.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 
@@ -34,6 +34,14 @@ Miniva includes support for the following plugins:
 * AMP
 
 == Changelog ==
+
+= 1.8.0 - Jun 29 2026 =
+* Updated compatibility with WordPress 7.0
+* Fixed block styles
+* Removed accessibility tag
+
+= 1.7.2 - Dec 6 2025 =
+* Updated compatibility with WordPress 6.9
 
 = 1.7.1 - Apr 14 2024 =
 * Fixed styles for calendar block

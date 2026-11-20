@@ -1,21 +1,23 @@
-=== EMC - Easily Embed Calendly Scheduling ===
+=== EMC - Embed Calendly Scheduling With Ease ===
 Contributors: turn2honey
 Donate link: https://simpma.com/emc/pricing/
-Tags: appointment, booking, embed calendar, calendly, scheduling
+Tags: appointment, booking, calendly, scheduling
 Requires at least: 4.6
-Tested up to: 6.9
-Stable tag: 5.5
-Requires PHP: 7.0
+Tested up to: 7.1
+Stable tag: 6.0
+Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Embed Calendly scheduling pages in WordPress and optimize your booking flow with analytics, availability indicator, and conversion tools.
+Embed Calendly scheduling features in WordPress and optimize your booking flow with custom design, availability indicator, and conversion tools.
 
 ## Description
 
 [EMC Scheduling Manager](https://simpma.com/emc/) makes it easy to **embed Calendly scheduling pages into your WordPress website**.
 
 EMC is designed not only to embed scheduling pages, but also to help businesses **improve booking completion** and understand how visitors interact with their scheduling pages.
+
+[Watch Demo](https://simpma.com/emc/#demo)
 
 Add Calendly booking forms anywhere on your site using a simple shortcode. Display your scheduling page inline, open it in a popup, or trigger it from a button — all without writing code.
 
@@ -39,7 +41,13 @@ Perfect for anyone who simply wants to **add a Calendly booking widget to WordPr
 
 ## Pro Version Features (Advanced Scheduling Tools)
 
-**[EMC Pro](https://simpma.com/emc/pricing/)** expands the plugin from a simple embed solution into a booking optimization toolkit, helping you increase completed bookings and understand what drives scheduling activity.
+**[EMC Pro](https://simpma.com/emc/pricing/)** expands the plugin from a simple embed solution into a booking optimization toolkit, helping you create custom booking widget design, increase completed bookings and understand what drives scheduling activity.
+
+### Advanced Customizer
+
+- Customize the booking widget to match your site's design
+- Add custom CSS for greater control over buttons, fonts, colors, spacing, borders, hover states, and positioning
+- Control the widget's position instead of being limited to the default bottom-right placement
 
 ### Business Integrations & Marketing Tracking
 
@@ -48,16 +56,16 @@ Perfect for anyone who simply wants to **add a Calendly booking widget to WordPr
 - **Track marketing campaigns** Pass common UTM parameters like utm_source, utm_medium, utm_campaign, utm_content, and utm_term directly to your booking pages.
 - **CRM-friendly leads** Integrate booking data with your CRM to see exactly which campaigns are converting into booked calls.
 
-### Analytics & Booking Insights
-
-- **Track booking activity and engagement**
-- **Know which channels, pages, and campaigns drive appointments and revenue growth.**
-- **Export analytics data for reporting**
-
 ### Scheduling Workflow Tools
 
 - **View and manage bookings from your WordPress dashboard**
 - **Send automated and manual email reminders from WordPress**
+
+### Analytics & Booking Insights
+
+- **Track booking activity and engagement**
+- **Know which pages drive appointments and growth.**
+- **Export analytics data for reporting**
 
 ### Advanced Embedding Features
 
@@ -71,6 +79,16 @@ Upgrade to EMC Pro to unlock powerful features designed to help you **increase b
 
 [Learn More >>](https://simpma.com/emc/pricing/)
 
+## Installation & Setup
+
+After installing EMC Scheduling Manager:
+
+1. Connect your Calendly account using the **API Key** settings.
+2. Make sure all required API configurations and permissions are accepted when generating your Calendly API key.
+3. Save your API settings.
+4. Run a sync to confirm that your Calendly data is being imported correctly.
+5. Use basic/advanced customizer to configure your scheduling settings.
+
 ## Shortcode
 
 To simply embed a scheduling page, use:
@@ -79,11 +97,15 @@ To simply embed a scheduling page, use:
 
 Example with customization:
 
-`[calendly url="https://calendly.com/example/call" type="2" text="Book Now" text_color="#ffffff" text_size="14" button_style="1" button_size="1" button_color="#2694ea" branding="false" hide_details="false" style_class="custom_form_style"]`
+`[calendly url="https://calendly.com/example/call" type="2" text="Book Now" text_color="#ffffff" text_size="14" button_style="1" button_size="1" button_color="#2694ea" branding="false" hide_details="false"]`
 
 Use the dynamic embedder when you want to display multiple Calendly event types on a single page, allowing visitors to switch between them without reloading the page.
 
 `[calendly_dynamic_embedder url="https://calendly.com/example/call" form_height="600px"]`
+
+(Pro Feature) Make your embed widget fit your existing design
+
+- `style_class` - Custom CSS class to match your theme's design
 
 (Pro Feature) Customize your dynamic embedder with these options
 
@@ -108,6 +130,20 @@ Use the dynamic embedder when you want to display multiple Calendly event types 
 - `text_size` - Text size  
 - `max_slots` - Maximum slots available
 
+## New Availability Shortcode (Free Version)
+
+The free version now includes the `[calendly_availability]` shortcode to display your weekly availability as readable text.
+
+`[calendly_availability theme="default" text_color="#cc3366"]`
+
+Example output:
+"Available on Monday(8am-5pm), Tuesday(9am-5pm), Wednesday(2pm-8pm) ..."
+
+### Parameters
+
+- `theme` - "default" (inline text). Additional themes are reserved for Pro.
+- `text_color` - Hex color applied as an inline text style to the rendered availability text.
+
 ## Customization
 
 Use the **Widget Customizer** under **Dashboard > EMC > Customizer** or configure the shortcode manually.
@@ -121,24 +157,22 @@ Use the **Widget Customizer** under **Dashboard > EMC > Customizer** or configur
 
 - `url` - Calendly scheduling page URL  
 - `text` - Button or link text  
-- `text_color` - Button or link text color  
-- `text_size` - Text size  
-- `button_color` - Button background color  
-- `button_size`
-  - 1 - Small
-  - 2 - Medium
-  - 3 - Large
 
-- `button_style`
-  - 1 - Inline
-  - 2 - Floating
+### Custom CSS
 
-- `branding` - Show or hide branding  
-- `prefill_fields` - Prefill form fields for logged-in users  
-- `hide_cookie_banner` - Hide cookie banner  
-- `hide_details` - Hide event details  
-- `style_class` - Custom CSS class
-- `redirection_url` - Page URL to redirect users to after booking completion (Pro)
+The **Advanced Customizer** allows you to further customize the appearance and positioning of your booking widget using CSS.
+
+You can customize:
+
+- Text color, size, font family, and weight
+- Inline or floating button display
+- Button borders, border radius, and icon
+- Button and text colors
+- Spacing and sizing
+- Hide or show branding
+- Hide or show cookie banner
+- Page URL to redirect users to after booking completion
+- Other widget elements using CSS selectors
 
 ## Built for Booking Conversion
 
@@ -176,7 +210,7 @@ EMC is used by professionals and businesses that rely on scheduled meetings to g
 - **Online educators** scheduling 1:1 sessions or onboarding calls  
 - **WooCommerce store owners** linking products to post-purchase booking flows
 
-Upgrade to Pro to unlock advanced analytics, availability tracking, and booking optimization features.
+Upgrade to Pro to unlock advanced customizer, analytics, availability tracking, and booking optimization features.
 
 == Frequently Asked Questions ==
 
@@ -190,17 +224,14 @@ to any page or post.
 
 = How do I connect to Calendly? =
 
-Enter your Calendly API key in the **API Key tab** on the EMC Scheduling Manager settings page.
+Enter your Calendly API key in the **API Key** tab on the EMC Scheduling Manager settings page.
 
-
-= How do I style my embed widget? =
-
-Go to **Dashboard → EMC → Customizer**, select an event type, and adjust the settings to generate a shortcode.
+> **Important:** When generating your Calendly API key, make sure you accept/enable all required API configurations and permissions. If these are not accepted, EMC may not be able to sync your Calendly data correctly.
 
 
 = How do I add a custom CSS class to the embed? =
 
-Use the `style_class` option:
+For [EMC Pro](https://simpma.com/emc/pricing/) users, use the `style_class` option:
 
 `[calendly url="https://calendly.com/example/call" style_class="custom_form_style"]`
 
@@ -224,6 +255,30 @@ function emcs_show_promotions() {
 `
 
 == Changelog ==
+
+= 6.0 - 17-11-2026 =
+
+- Added [calendly_availability] shortcode for displaying weekly availability summary
+- Tested & ensured compatibility with the latest WordPress version
+
+= 5.9 - 23-09-2026 =
+
+- Added support for EMC Pro advanced customizer
+- Tested & ensured compatibility with the latest WordPress version
+
+= 5.8 - 27-08-2026 =
+
+- Ensured event type sync is backward compatible
+- Tested & ensured compatibility with the latest WordPress version
+
+= 5.7 - 16-07-2026 =
+
+- Tested & ensured compatibility with the latest WordPress version
+
+= 5.6 - 01-06-2026 =
+
+- Improved inline popup button styling
+- Tested & ensured compatibility with the latest WordPress version
 
 = 5.5 - 29-04-2026 =
 
@@ -253,34 +308,3 @@ function emcs_show_promotions() {
 
 - Added dynamic embedder for adding multiple calendars to a page
 - Security and performance improvements
-
-= 4.5 - 21-02-2026 =
-
-- Security fixes
-
-= 4.4 - 05-02-2026 =
-
-- Support for passing UTM and GCLID parameters to Calendly
-- Tested & ensured compatibility with the latest WordPress version
-
-= 4.3 - 26-01-2026 =
-
-- Tested & ensured compatibility with the latest WordPress version
-
-= 4.2 - 17-01-2025 =
-
-- Added prefill field option to customizer
-- Updated readme
-- Adjusted promotion module
-
-= 4.1 - 26-11-2024 =
-
-- Verified compatibility with WordPress updates.
-- Updated readme
-
-= 4.0 - 05-11-2024 =
-
-- UI rebranding and redesign
-- Added shortcode option for prefilling current logged in user info in booking forms.
-- Improved pro version support
-- Improved internationalization supportu

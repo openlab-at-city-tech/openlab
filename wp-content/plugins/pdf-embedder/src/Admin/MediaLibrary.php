@@ -4,6 +4,7 @@ namespace PDFEmbedder\Admin;
 
 use WP_Post;
 use WP_User;
+use PDFEmbedder\Helpers\Check;
 use PDFEmbedder\Helpers\Links;
 
 /**
@@ -68,9 +69,9 @@ class MediaLibrary {
 		}
 
 		$file_url  = wp_get_attachment_url( $attachment->ID );
-		$is_secure = ! strpos( $file_url, '/securepdfs/' ) === false;
+		$is_secure = Check::is_secure_pdf_url( $file_url );
 
-		$secured_value  = '<span class="dashicons dashicons-unlock pdfemb-admin-attachment-meta-icon"></span>' . esc_html__( 'No', 'pdf-embedder-premium' ) . '.&nbsp;';
+		$secured_value  = '<span class="dashicons dashicons-unlock pdfemb-admin-attachment-meta-icon"></span>' . esc_html__( 'No', 'pdf-embedder' ) . '.&nbsp;';
 		$secured_value .= sprintf(
 			wp_kses( /* translators: %s - URL to the settings page. */
 				__( '<a href="%s">Learn more</a>', 'pdf-embedder' ),
@@ -84,13 +85,13 @@ class MediaLibrary {
 		);
 
 		if ( $is_secure ) {
-			$secured_value = '<span class="dashicons dashicons-lock pdfemb-admin-attachment-meta-icon"></span>' . esc_html__( 'Yes', 'pdf-embedder-premium' );
+			$secured_value = '<span class="dashicons dashicons-lock pdfemb-admin-attachment-meta-icon"></span>' . esc_html__( 'Yes', 'pdf-embedder' );
 		}
 
 		$form_fields['pdfemb-secured-lite'] = [
 			'value' => $secured_value,
 			'input' => 'value',
-			'label' => __( 'PDF Secured', 'pdf-embedder-premium' ),
+			'label' => __( 'PDF Secured', 'pdf-embedder' ),
 		];
 
 		$form_fields['pdfemb-tracking-lite'] = [
@@ -131,7 +132,7 @@ class MediaLibrary {
 		}
 
 		$file_url  = wp_get_attachment_url( $attachment->ID );
-		$is_secure = ! strpos( $file_url, '/securepdfs/' ) === false;
+		$is_secure = Check::is_secure_pdf_url( $file_url );
 		?>
 
 		<div class="attachment_field_containers">

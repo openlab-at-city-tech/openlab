@@ -53,4 +53,4 @@
    $(window).on('load', function() {
       $(".nivo-control, .cs-buttons a").wrap("<li></li>");
 	});
-})(jQuery)
+})(window.metaslider_jQuery || jQuery)

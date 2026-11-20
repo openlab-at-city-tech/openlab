@@ -167,6 +167,7 @@ class Astra_API_Init extends WP_REST_Controller {
 				'use_upgrade_notices'   => astra_showcase_upgrade_notices(),
 				'analytics_enabled'     => get_option( 'astra_usage_optin', 'no' ) === 'yes',
 				'show_learn_tab'        => self::get_admin_settings_option( 'show_learn_tab', true ),
+				'show_ai_assistant'     => self::get_admin_settings_option( 'show_ai_assistant', true ),
 				'enable_abilities'      => self::get_admin_settings_option( 'enable_abilities', false ),
 				'enable_edit_abilities' => self::get_admin_settings_option( 'enable_edit_abilities', true ),
 				'enable_mcp_server'     => self::get_admin_settings_option( 'enable_mcp_server', false ),
@@ -283,6 +284,7 @@ class Astra_API_Init extends WP_REST_Controller {
 		$astra_admin_updated_settings         = get_option( self::$option_name, array() );
 		$astra_admin_updated_settings[ $key ] = $value;
 		update_option( self::$option_name, $astra_admin_updated_settings );
+		self::$astra_admin_settings[ $key ] = $value;
 	}
 }
 

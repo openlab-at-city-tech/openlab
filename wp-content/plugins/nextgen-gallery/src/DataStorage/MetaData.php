@@ -149,7 +149,7 @@ class MetaData {
 
 		// return one element if requested.
 		if ( $key ) {
-			return $meta[ $key ];
+			return $this->maybe_escape( $meta[ $key ] );
 		}
 
 		// removed saved parameter we don't need that to show.
@@ -163,11 +163,7 @@ class MetaData {
 		}
 
 		// on request sanitize the output.
-		if ( $this->sanitize == true ) {
-			array_walk( $meta, 'esc_html' );
-		}
-
-		return $meta;
+		return $this->maybe_escape( $meta );
 	}
 
 	/**
@@ -269,15 +265,11 @@ class MetaData {
 		// return one element if requested.
 		if ( $key == true ) {
 			$value = isset( $this->exif_array[ $key ] ) ? $this->exif_array[ $key ] : false;
-			return $value;
+			return $this->maybe_escape( $value );
 		}
 
 		// on request sanitize the output.
-		if ( $this->sanitize == true ) {
-			array_walk( $this->exif_array, 'esc_html' );
-		}
-
-		return $this->exif_array;
+		return $this->maybe_escape( $this->exif_array );
 	}
 
 	/**
@@ -363,15 +355,11 @@ class MetaData {
 
 		// return one element if requested.
 		if ( $key ) {
-			return ( isset( $this->iptc_array[ $key ] ) ) ? $this->iptc_array[ $key ] : null;
+			return $this->maybe_escape( isset( $this->iptc_array[ $key ] ) ? $this->iptc_array[ $key ] : null );
 		}
 
 		// on request sanitize the output.
-		if ( $this->sanitize == true ) {
-			array_walk( $this->iptc_array, 'esc_html' );
-		}
-
-		return $this->iptc_array;
+		return $this->maybe_escape( $this->iptc_array );
 	}
 
 	/**
@@ -516,15 +504,11 @@ class MetaData {
 
 		// return one element if requested.
 		if ( $key != false ) {
-			return isset( $this->xmp_array[ $key ] ) ? $this->xmp_array[ $key ] : false;
+			return $this->maybe_escape( isset( $this->xmp_array[ $key ] ) ? $this->xmp_array[ $key ] : false );
 		}
 
 		// on request sanitize the output.
-		if ( $this->sanitize == true ) {
-			array_walk( $this->xmp_array, 'esc_html' );
-		}
-
-		return $this->xmp_array;
+		return $this->maybe_escape( $this->xmp_array );
 	}
 
 	/**
@@ -708,6 +692,31 @@ class MetaData {
 	 */
 	public function sanitize() {
 		$this->sanitize = true;
+	}
+
+	/**
+	 * HTML-escapes string meta values when sanitize() was requested.
+	 *
+	 * SECURITY (#1109): EXIF/IPTC/XMP values come from the image file and are
+	 * attacker-controllable (an IPTC caption can carry markup). The getters used
+	 * array_walk( $arr, 'esc_html' ), which discards esc_html()'s return value, so
+	 * sanitize() never escaped anything and ImageBrowser templates received raw
+	 * markup. This returns an escaped copy and leaves the cached arrays raw, so a
+	 * later unsanitized read is not double-escaped.
+	 *
+	 * @param mixed $value Meta value or array of values.
+	 * @return mixed
+	 */
+	protected function maybe_escape( $value ) {
+		if ( ! $this->sanitize ) {
+			return $value;
+		}
+
+		if ( is_array( $value ) ) {
+			return array_map( [ $this, 'maybe_escape' ], $value );
+		}
+
+		return is_string( $value ) ? esc_html( $value ) : $value;
 	}
 
 	/**

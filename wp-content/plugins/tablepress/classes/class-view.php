@@ -8,6 +8,8 @@
  * @since 1.0.0
  */
 
+declare(strict_types=1);
+
 // Prohibit direct script loading.
 defined( 'ABSPATH' ) || die( 'No direct script access allowed!' );
 
@@ -97,7 +99,7 @@ abstract class TablePress_View {
 
 		if ( tb_tp_fs()->is_free_plan() ) {
 			$common_content .= '<p>'
-				. sprintf( __( '<a href="%1$s">Support</a> is provided through the <a href="%2$s">WordPress Support Forums</a>.', 'tablepress' ), 'https://tablepress.org/support/', 'https://wordpress.org/support/plugin/tablepress' )
+				. sprintf( __( '<a href="%1$s">Support</a> is provided through the <a href="%2$s">WordPress Support Forums</a>.', 'tablepress' ), 'https://tablepress.org/support/', 'https://wordpress.org/support/plugin/tablepress/' )
 				. ' '
 				. sprintf( __( 'Before asking for support, please carefully read the <a href="%s">Frequently Asked Questions</a>, where you will find answers to the most common questions, and search through the forums.', 'tablepress' ), 'https://tablepress.org/faq/' )
 				. '</p>';
@@ -124,17 +126,21 @@ abstract class TablePress_View {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int|false $result Current value of the user option.
+	 * @param string|int|false $result Current value of the user option.
 	 * @return int New value for the user option.
 	 */
-	public function set_current_screen_layout_columns( /* int|false */ $result ): int {
+	public function set_current_screen_layout_columns( /* string|int|false */ $result ): int {
 		if ( false === $result ) {
 			// The user option does not yet exist.
-			$result = $this->screen_columns;
-		} elseif ( $result > $this->screen_columns ) {
+			return $this->screen_columns;
+		}
+
+		$result = (int) $result;
+		if ( $result > $this->screen_columns ) {
 			// The value of the user option is bigger than what is possible on this screen (e.g. because the number of columns was reduced in an update).
 			$result = $this->screen_columns;
 		}
+
 		return $result;
 	}
 
@@ -158,10 +164,6 @@ abstract class TablePress_View {
 		add_filter( 'admin_footer_text', array( $this, 'add_admin_footer_text' ) );
 
 		TablePress::enqueue_style( 'common', array( 'wp-components' ) );
-		// RTL styles for the admin interface.
-		if ( is_rtl() ) {
-			TablePress::enqueue_style( 'common-rtl', array( 'tablepress-common' ) );
-		}
 
 		// Initialize WP feature pointers for TablePress.
 		$this->_init_wp_pointers();
@@ -170,17 +172,6 @@ abstract class TablePress_View {
 		$this->add_text_box( 'default_nonce_fields', array( $this, 'default_nonce_fields' ), 'header', false );
 		$this->add_text_box( 'action_nonce_field', array( $this, 'action_nonce_field' ), 'header', false );
 		$this->add_text_box( 'action_field', array( $this, 'action_field' ), 'header', false );
-
-		if ( tb_tp_fs()->is_plan_or_trial__premium_only( 'pro' ) && ! tb_tp_fs()->is_paying_or_trial__premium_only() ) {
-			$message = '<span class="dashicons dashicons-warning" style="color:#cc1818"></span> ';
-			$message .= '<strong>' . sprintf( __( 'Your TablePress %s premium license has expired!', 'tablepress' ), tb_tp_fs()->is_plan_or_trial( 'max', true ) ? 'Max' : 'Pro' ) . '</strong> ';
-			$message .= sprintf(
-				__( 'Please <a href="%1$s"><strong>renew your license now</strong></a> to continue receiving direct developer support, new features, and security updates for TablePress.', 'tablepress' ),
-				esc_url( tb_tp_fs()->checkout_url( WP_FS__PERIOD_ANNUALLY, false ) ),
-			);
-
-			$this->add_header_message( $message, 'is-warning not-dismissible' );
-		}
 	}
 
 	/**
@@ -192,7 +183,7 @@ abstract class TablePress_View {
 	 * @param string $css_class Optional. Additional CSS class for the header message.
 	 * @param string $title     Optional. Text for the header title.
 	 */
-	protected function add_header_message( string $text, string $css_class = 'is-success', string $title = '' ): void {
+	protected function add_header_message( string $text, string $css_class = 'is-success notice-success', string $title = '' ): void {
 		if ( ! str_contains( $css_class, 'not-dismissible' ) ) {
 			$css_class .= ' is-dismissible';
 		}
@@ -215,7 +206,7 @@ abstract class TablePress_View {
 	 */
 	protected function process_action_messages( array $action_messages ): void {
 		if ( $this->data['message'] && isset( $action_messages[ $this->data['message'] ] ) ) {
-			$class = ( str_starts_with( $this->data['message'], 'error' ) ) ? 'is-error' : 'is-success';
+			$class = ( str_starts_with( $this->data['message'], 'error' ) ) ? 'is-error notice-error' : 'is-success notice-success';
 
 			if ( '' !== $this->data['error_details'] ) {
 				$this->data['error_details'] = '</p><p>' . sprintf( __( 'Error code: %s', 'tablepress' ), '<code>' . esc_html( $this->data['error_details'] ) . '</code>' );
@@ -360,6 +351,7 @@ abstract class TablePress_View {
 		?>
 		<div id="tablepress-body">
 		<hr class="wp-header-end">
+		<script>document.querySelectorAll('.notice:has(~#tablepress-page)').forEach(e=>document.querySelector('.wp-header-end').after(e));</script>
 		<?php
 		// Print all header messages.
 		foreach ( $this->header_messages as $message ) {
@@ -409,6 +401,7 @@ abstract class TablePress_View {
 	 * @since 1.0.0
 	 */
 	protected function print_nav_tab_menu(): void {
+		$in_promo_period = ( strtotime( '2026-11-22' ) < strtotime( 'today' ) && strtotime( 'today' ) < strtotime( '2026-12-01' ) );
 		$name = __( 'TablePress', 'tablepress' );
 		$filename = 'admin/img/tablepress.svg';
 		?>
@@ -417,13 +410,23 @@ abstract class TablePress_View {
 				<img src="<?php echo plugins_url( $filename, TABLEPRESS__FILE__ ); ?>" alt="<?php esc_attr_e( 'TablePress plugin logo', 'tablepress' ); ?>">
 				<span class="screen-reader-text"><?php echo $name; ?></span>
 			</h1>
-			<?php if ( ! TABLEPRESS_IS_PLAYGROUND_PREVIEW && tb_tp_fs()->is_free_plan() ) : ?>
-				<div class="buttons">
-					<a href="<?php echo esc_url( tb_tp_fs()->pricing_url( WP_FS__PERIOD_ANNUALLY, false ) ); ?>" class="tablepress-button">
-						<span><?php _e( 'Upgrade to Premium', 'tablepress' ); ?></span>
-						<span class="dashicons dashicons-arrow-right-alt"></span>
-					</a>
-				</div>
+			<?php if ( 'list' !== $this->action || ! $this->data['messages']['plugin_update'] || ! $in_promo_period ) : ?>
+				<?php if ( ! TABLEPRESS_IS_PLAYGROUND_PREVIEW ) : ?>
+					<div class="buttons">
+						<a href="<?php echo $in_promo_period ? 'https://tablepress.org/premium/?utm_source=plugin&utm_medium=header&utm_campaign=upgrade-message350&utm_content=button' : esc_url( tb_tp_fs()->pricing_url( WP_FS__PERIOD_ANNUALLY, false ) ); ?>" class="tablepress-button<?php echo $in_promo_period ? ' promo' : ''; ?>">
+							<span>
+								<?php
+								if ( $in_promo_period ) {
+									echo in_array( get_user_locale(), array( 'de_DE', 'de_AT', 'de_CH' ), true ) ? 'Premium: Spare zum Black Friday 25&#8239;%!' : 'Premium: 25% OFF for Black Friday!';
+								} else {
+									_e( 'Upgrade to Premium', 'tablepress' );
+								}
+								?>
+							</span>
+							<span class="dashicons dashicons-arrow-right-alt"></span>
+						</a>
+					</div>
+				<?php endif; ?>
 			<?php endif; ?>
 		</div>
 		<nav id="tablepress-nav">
@@ -458,7 +461,7 @@ abstract class TablePress_View {
 	 */
 	public function textbox_no_javascript( array $data, array $box ): void {
 		?>
-		<div class="notice components-notice is-error hide-if-js">
+		<div class="notice components-notice is-error notice-error hide-if-js">
 			<div class="components-notice__content">
 				<h3><em>
 					<?php _e( 'Attention: Unfortunately, there is a problem!', 'tablepress' ); ?>
@@ -556,14 +559,14 @@ abstract class TablePress_View {
 	public function add_admin_footer_text( /* string */ $content ): string {
 		// Don't use a type hint in the method declaration as many WordPress plugins use the `admin_footer_text` filter without returning a string.
 
-		// Protect against other plugins not returning a string in their filter callbacks.
-		if ( ! is_string( $content ) ) { // @phpstan-ignore function.alreadyNarrowedType (The `is_string()` check is needed as the input is coming from a filter hook.)
+		// Protect against other plugins not returning a string in their filter hook callbacks.
+		if ( ! is_string( $content ) ) {
 			$content = '';
 		}
 
 		/* translators: %s: URL to TablePress website */
 		$content .= ' &bull; ' . sprintf( __( 'Thank you for using <a href="%s">TablePress</a>.', 'tablepress' ), 'https://tablepress.org/' );
-		if ( tb_tp_fs()->is_free_plan() ) {
+		if ( ! tb_tp_fs()->is_paying() ) {
 			/* translators: %s: URL to TablePress premium features */
 			$content .= ' ' . sprintf( __( 'Take a look at the <a href="%s">Premium features</a>!', 'tablepress' ), 'https://tablepress.org/premium/?utm_source=plugin&utm_medium=textlink&utm_content=admin-footer' );
 		}
@@ -643,7 +646,7 @@ abstract class TablePress_View {
 		},
 	};
 
-	$( () => $( '<?php echo $selector; ?>' ).pointer( options ).pointer( 'open' ) );
+	$( () => setTimeout( () => $( '<?php echo $selector; ?>' ).pointer( options ).pointer( 'open' ), 1 ) );
 
 	$( document ).on( 'screen:options:open screen:options:close', () => {
 		setTimeout( () => $( '<?php echo $selector; ?>' ).pointer( 'reposition' ), 210 );

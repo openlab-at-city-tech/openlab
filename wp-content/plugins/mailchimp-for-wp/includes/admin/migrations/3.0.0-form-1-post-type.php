@@ -1,6 +1,6 @@
 <?php
 
-defined('ABSPATH') or exit;
+defined('ABSPATH') || exit;
 
 // get options
 $form_options = get_option('mc4wp_lite_form', []);
@@ -35,9 +35,6 @@ $id = wp_insert_post(
         'post_content' => ( empty($form_options['markup']) ) ? '' : $form_options['markup'],
     ]
 );
-
-// set default_form_id
-update_option('mc4wp_default_form_id', $id);
 
 // set form settings
 $setting_keys = [

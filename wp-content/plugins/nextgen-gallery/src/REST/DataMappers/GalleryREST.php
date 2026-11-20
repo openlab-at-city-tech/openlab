@@ -16,6 +16,7 @@ use Imagely\NGG\DataMappers\Gallery as GalleryMapper;
 use Imagely\NGG\DataMappers\DisplayType as DisplayTypeMapper;
 
 use Imagely\NGG\DataTypes\Gallery;
+use Imagely\NGG\PrivateGalleries\ClientPage;
 use Imagely\NGG\Util\MassAssignment;
 use Imagely\NGG\Util\Security;
 use Imagely\NGG\Util\Transient;
@@ -390,7 +391,7 @@ class GalleryREST {
 			$filters['params'][]        = $author_scope_user;
 		}
 
-		$cache_params  = [
+		$cache_params = [
 			$current_user_id,
 			$author_scope_user, // Distinct cache slot per scope to avoid leaking unowned-cap responses to non-cap callers.
 			$orderby,
@@ -402,6 +403,13 @@ class GalleryREST {
 			$request->get_param( 'search' ),
 			$request->get_param( 'exclude_ids' ),
 		];
+		/**
+		 * Filters the cache key params of the galleries list (Pro adds the expired galleries).
+		 *
+		 * @param array           $cache_params Params.
+		 * @param WP_REST_Request $request      Request.
+		 */
+		$cache_params  = (array) apply_filters( 'ngg_rest_galleries_cache_params', $cache_params, $request );
 		$cache_key     = Transient::create_key( 'rest_galleries', $cache_params );
 		$cached_result = Transient::fetch( $cache_key, false );
 		if ( $cached_result ) {
@@ -417,6 +425,10 @@ class GalleryREST {
 
 		foreach ( $filters['conditions'] as $condition ) {
 			$query->where( $condition );
+		}
+
+		foreach ( $filters['raw_conditions'] as $raw_condition ) {
+			$query->where_raw( $raw_condition );
 		}
 
 		// OR group (match the search term against the title or the ID). The driver parenthesises
@@ -465,6 +477,17 @@ class GalleryREST {
 		}
 		$image_counts = self::get_image_counts_for_galleries( $page_gallery_ids );
 
+		// One query for the client pages the privacy column reads.
+		$client_page_ids = [];
+		foreach ( $galleries as $gallery ) {
+			if ( ! empty( $gallery->is_private ) && (int) $gallery->pageid > 0 ) {
+				$client_page_ids[] = (int) $gallery->pageid;
+			}
+		}
+		if ( $client_page_ids ) {
+			_prime_post_caches( array_unique( $client_page_ids ), false, true );
+		}
+
 		$response = [];
 		foreach ( $galleries as $gallery ) {
 			$gallery_id = (int) $gallery->{$gallery->id_field};
@@ -501,6 +524,7 @@ class GalleryREST {
 	 *
 	 *     @type array $conditions    Array of conditions for query builder.
 	 *                                Each element is [ 'clause', value ].
+	 *     @type array $raw_conditions SQL conditions without values, for where_raw().
 	 *     @type array $where_clauses Array of WHERE clause strings for COUNT query.
 	 *     @type array $params        Array of parameters for COUNT query.
 	 * }
@@ -508,10 +532,11 @@ class GalleryREST {
 	private static function build_filter_conditions( WP_REST_Request $request ) {
 		global $wpdb;
 
-		$conditions    = [];
-		$or_conditions = [];
-		$where_clauses = [];
-		$params        = [];
+		$conditions     = [];
+		$or_conditions  = [];
+		$raw_conditions = [];
+		$where_clauses  = [];
+		$params         = [];
 
 		if ( $request->has_param( 'ecommerce_filter' ) ) {
 			$ecommerce_filter = $request->get_param( 'ecommerce_filter' );
@@ -525,9 +550,15 @@ class GalleryREST {
 		if ( $request->has_param( 'is_private_filter' ) ) {
 			$is_private = (int) $request->get_param( 'is_private_filter' );
 
-			$conditions[]    = [ 'is_private = %d', $is_private ];
-			$where_clauses[] = 'is_private = %d';
-			$params[]        = $is_private;
+			if ( $is_private ) {
+				$conditions[]    = [ 'is_private = %d', $is_private ];
+				$where_clauses[] = 'is_private = %d';
+				$params[]        = $is_private;
+			} else {
+				// Galleries from before the column, or inserted directly, hold NULL and list as public.
+				$raw_conditions[] = '( is_private = 0 OR is_private IS NULL )';
+				$where_clauses[]  = '( is_private = 0 OR is_private IS NULL )';
+			}
 		}
 
 		// Skipped when empty: "title LIKE '%%'" would drop every row with a NULL title. esc_like()
@@ -571,10 +602,11 @@ class GalleryREST {
 		}
 
 		return [
-			'conditions'    => $conditions,
-			'or_conditions' => $or_conditions,
-			'where_clauses' => $where_clauses,
-			'params'        => $params,
+			'conditions'     => $conditions,
+			'or_conditions'  => $or_conditions,
+			'raw_conditions' => $raw_conditions,
+			'where_clauses'  => $where_clauses,
+			'params'         => $params,
 		];
 	}
 
@@ -902,6 +934,16 @@ class GalleryREST {
 			$assignable['name'] = sanitize_title( $assignable['name'] );
 		}
 
+		// is_private and pageid go through the client page service, after the save below.
+		$privacy = ClientPage::extract_assigned( $assignable );
+
+		if ( array_key_exists( 'pageid', $privacy ) ) {
+			$allowed = ClientPage::check_linked_page_change( $gallery, (int) $privacy['pageid'] );
+			if ( is_wp_error( $allowed ) ) {
+				return $allowed;
+			}
+		}
+
 		foreach ( $assignable as $key => $value ) {
 			$gallery->$key = $value;
 		}
@@ -934,6 +976,15 @@ class GalleryREST {
 		try {
 			$mapper->save( $gallery );
 			Transient::flush( 'rest_galleries' );
+
+			if ( $privacy ) {
+				$applied = ClientPage::apply_assigned( $gallery, $privacy );
+				if ( is_wp_error( $applied ) ) {
+					return $applied;
+				}
+				$gallery = $mapper->find( $id );
+			}
+
 			return new WP_REST_Response(
 				[
 					'gallery' => self::prepare_gallery_for_response( $gallery ),
@@ -1231,7 +1282,7 @@ class GalleryREST {
 		// write routes will refuse once the owner's gallery-management capability is revoked.
 		$can_manage = Security::can_manage_owned( $gallery->author, 'nextgen_edit_gallery' );
 
-		return [
+		$item = [
 			'id'           => $gallery->gid,
 			'galleryTitle' => $gallery->title,
 			'shortcode'    => '[imagely id="' . $gallery->gid . '"]',
@@ -1244,7 +1295,18 @@ class GalleryREST {
 			'displayType'  => $gallery->display_type,
 			'canManage'    => $can_manage,
 			'author'       => $gallery->author,
+			'privacy'      => ClientPage::get_status( $gallery ),
+			'clientUrl'    => $can_manage ? ClientPage::get_client_url( $gallery ) : '',
 		];
+
+		/**
+		 * Filters a galleries list row. Fields that grant access must check $can_manage.
+		 *
+		 * @param array   $item       Row.
+		 * @param Gallery $gallery    Gallery entity.
+		 * @param bool    $can_manage Whether the caller may edit the gallery.
+		 */
+		return (array) apply_filters( 'ngg_rest_gallery_list_item', $item, $gallery, $can_manage );
 	}
 
 	/**
@@ -1276,7 +1338,9 @@ class GalleryREST {
 			);
 		}
 
-		return [
+		$can_manage = Security::can_manage_owned( $gallery->author, 'nextgen_edit_gallery' );
+
+		$data = [
 			'gid'                   => $gallery->gid,
 			'name'                  => $gallery->name,
 			'title'                 => $gallery->title,
@@ -1299,7 +1363,19 @@ class GalleryREST {
 			'is_ecommerce_enabled'  => $gallery->is_ecommerce_enabled ?? false,
 			'date_created'          => $gallery->date_created,
 			'date_modified'         => $gallery->date_modified,
+			'privacy'               => ClientPage::get_status( $gallery ),
+			'access_count'          => (int) ( $gallery->access_count ?? 0 ),
+			'last_access_at'        => $gallery->last_access_at ?? null,
 		];
+
+		/**
+		 * Filters a single gallery response. Fields that grant access must check $can_manage.
+		 *
+		 * @param array   $data       Response.
+		 * @param Gallery $gallery    Gallery entity.
+		 * @param bool    $can_manage Whether the caller may edit the gallery.
+		 */
+		return (array) apply_filters( 'ngg_rest_gallery_response', $data, $gallery, $can_manage );
 	}
 
 	/**

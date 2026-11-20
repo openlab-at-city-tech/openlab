@@ -1,3 +1,5 @@
+import { isTemplatesCloudTier } from '../../../shared/utils';
+
 export default {
 	getThemeAction: ( state ) => state.themeAction,
 	getCurrentStep: ( state ) => state.onboardingStep,
@@ -11,17 +13,18 @@ export default {
 	getError: ( state ) => state.error,
 	getPluginOptions: ( state ) => state.pluginOptions,
 	getUserStatus: ( state ) => {
-		const acceptedTiers = [
-			6, 17, 23, 5, 9, 14, 20, 1, 7, 12, 18, 3, 8, 13, 19,
-		];
-
 		return (
 			state.license &&
 			state.license.tier &&
-			acceptedTiers.includes( state.license.tier )
+			isTemplatesCloudTier( state.license.tier )
 		);
 	},
 	getUserCustomSettings: ( state ) => state.userCustomSettings,
 	getTrackingId: ( state ) => state.trackingId,
 	getRefresh: ( state ) => state.refresh,
+	getSortBy: ( state ) => state.sortBy,
+	getRankedOrder: ( state ) => state.rankedOrder,
+	getSearchOrder: ( state ) => state.searchOrder,
+	getSearchFailed: ( state ) => state.searchFailed,
+	getSelectedColors: ( state ) => state.selectedColors,
 };

@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
  * be setup to convert the passwords of users that were migrated from another
  * forum platform.
  *
- * @since 2.6.0 bbPress (r2596)
+ * @since 2.6.0 bbPress (r6601)
  */
 function bbp_setup_admin() {
 	$bbp = bbpress();
@@ -51,7 +51,7 @@ function bbp_setup_admin() {
  * be setup to convert the passwords of users that were migrated from another
  * forum platform.
  *
- * @since 2.6.0 bbPress (r2596)
+ * @since 2.6.0 bbPress (r6601)
  */
 function bbp_setup_converter() {
 	$bbp_admin = bbp_setup_admin();
@@ -80,7 +80,7 @@ function bbp_setup_converter() {
 /**
  * Lookup and return a global variable
  *
- * @since 2.5.8 bbPress (r5814)
+ * @since 2.6.0 bbPress (r5826)
  *
  * @param  string  $name     Name of global variable
  * @param  string  $type     Type of variable to check with `is_a()`
@@ -99,7 +99,7 @@ function bbp_get_global_object( $name = '', $type = '', $default = null ) {
 		$retval = $default;
 
 	// If not the correct type of global
-	} elseif ( ! empty( $type ) && ! is_a( $GLOBALS[ $name ], $type ) ) {
+	} elseif ( ! empty( $type ) && ( ! is_object( $GLOBALS[ $name ] ) || ! is_a( $GLOBALS[ $name ], $type ) ) ) {
 		$retval = $default;
 
 	// Global variable exists
@@ -114,7 +114,7 @@ function bbp_get_global_object( $name = '', $type = '', $default = null ) {
 /**
  * Get the `$wp_query` global without needing to declare it everywhere
  *
- * @since 2.6.0 bbPress (r6582)
+ * @since 2.6.0 bbPress (r6583)
  *
  * @return WP_Roles
  */
@@ -140,12 +140,260 @@ function bbp_get_wp_roles() {
  * class. bbPress supports WordPress's `$wpdb` global by default, and can be
  * filtered to support other configurations if needed.
  *
- * @since 2.5.8 bbPress (r5814)
+ * @since 2.6.0 bbPress (r5826)
  *
  * @return object
  */
 function bbp_db() {
 	return bbp_get_global_object( 'wpdb', 'WPDB' );
+}
+
+/**
+ * Atomically bump a numeric metadata value using compare-and-swap retries.
+ *
+ * Count updates normally require reading a value, changing it in PHP, and
+ * writing it back. Two requests can read the same value and overwrite one
+ * another's changes. This function avoids that lost update by making the write
+ * conditional on the value that was read. If another request changes the value
+ * first, the condition matches no rows, so the current value is read directly
+ * from the database and the calculation is retried.
+ *
+ * The first read uses the WordPress metadata API and its cache. Missing
+ * metadata is added through add_metadata() so its standard lifecycle continues
+ * to run. Existing metadata uses a conditional database update while preserving
+ * the standard update metadata short-circuit filter and before/after actions.
+ * The short-circuit filter runs once against the first sanitized candidate.
+ * Before actions run for every conditional attempt, while after actions run
+ * only after a successful write. Metadata caches are cleared between attempts
+ * and after successful writes. Values are sanitized through sanitize_meta(),
+ * cast to integers, and prevented from falling below zero.
+ *
+ * Retries are bounded and filterable. This function does not lock rows or hold
+ * a database transaction open, and returns false when there is no change, a
+ * database operation fails, or all attempts lose to concurrent writes. It is
+ * intended for uniquely keyed numeric count metadata; WordPress metadata tables
+ * do not enforce uniqueness during simultaneous first-time inserts.
+ *
+ * @since 2.6.17 bbPress (r7468)
+ *
+ * @see https://bbpress.trac.wordpress.org/ticket/3678
+ *
+ * @param string $meta_type  Type of object metadata is for.
+ * @param int    $object_id  ID of the object metadata is for.
+ * @param string $meta_key   Metadata key.
+ * @param int    $difference Amount to add to the stored value.
+ * @param int    $default    Existing value to use when metadata is missing.
+ * @return bool True on success, false on failure or no change.
+ */
+function bbp_bump_count_meta( $meta_type = '', $object_id = 0, $meta_key = '', $difference = 1, $default = 0 ) {
+
+	$object_id  = (int) $object_id;
+	$difference = (int) $difference;
+	$default    = (int) $default;
+
+	// Bail if required values are missing
+	if ( empty( $object_id ) || empty( $meta_key ) || empty( $difference ) ) {
+		return false;
+	}
+
+	/**
+	 * Short-circuits bumping numeric metadata.
+	 *
+	 * Returning a non-null value prevents the normal metadata update.
+	 *
+	 * @since 2.6.17 bbPress (r7468)
+	 *
+	 * @param null|bool $check      Whether to short-circuit the metadata update.
+	 * @param string    $meta_type  Type of object metadata is for.
+	 * @param int       $object_id  ID of the object metadata is for.
+	 * @param string    $meta_key   Metadata key.
+	 * @param int       $difference Amount to add to the stored value.
+	 * @param int       $default    Existing value to use when metadata is missing.
+	 */
+	$check = apply_filters( 'bbp_pre_bump_count_meta', null, $meta_type, $object_id, $meta_key, $difference, $default );
+	if ( null !== $check ) {
+		return (bool) $check;
+	}
+
+	/**
+	 * Filters the metadata types that support atomic count updates.
+	 *
+	 * @since 2.6.17 bbPress (r7468)
+	 *
+	 * @param array  $meta_types Supported metadata types.
+	 * @param string $meta_type  Requested metadata type.
+	 * @param int    $object_id  ID of the object metadata is for.
+	 * @param string $meta_key   Metadata key.
+	 */
+	$meta_types = (array) apply_filters( 'bbp_bump_count_meta_types', array( 'post', 'user', 'term', 'comment' ), $meta_type, $object_id, $meta_key );
+
+	// Bail if the metadata type is unsupported
+	if ( ! in_array( $meta_type, $meta_types, true ) ) {
+		return false;
+	}
+
+	$bbp_db     = bbp_db();
+	$table_name = sanitize_key( $meta_type . 'meta' );
+	$table      = isset( $bbp_db->{$table_name} ) ? $bbp_db->{$table_name} : '';
+	$column     = sanitize_key( $meta_type . '_id' );
+	$id_column  = ( 'user' === $meta_type ) ? 'umeta_id' : 'meta_id';
+
+	// Bail if the metadata table does not exist
+	if ( empty( $table ) ) {
+		return false;
+	}
+
+	/**
+	 * Filters the maximum number of conditional metadata write attempts.
+	 *
+	 * @since 2.6.17 bbPress (r7468)
+	 *
+	 * @param int    $max_attempts Maximum number of attempts.
+	 * @param string $meta_type    Type of object metadata is for.
+	 * @param int    $object_id    ID of the object metadata is for.
+	 * @param string $meta_key     Metadata key.
+	 * @param int    $difference   Amount to add to the stored value.
+	 * @param int    $default      Existing value to use when metadata is missing.
+	 */
+	$max_attempts = (int) apply_filters( 'bbp_bump_count_meta_max_attempts', 5, $meta_type, $object_id, $meta_key, $difference, $default );
+	$max_attempts = max( 1, $max_attempts );
+	$checked      = false;
+	$subtype      = get_object_subtype( $meta_type, $object_id );
+	$count_query  = $bbp_db->prepare( "SELECT meta_value FROM {$table} WHERE meta_key = %s AND {$column} = %d LIMIT 1", $meta_key, $object_id );
+
+	// Retry when another request updates the same value first
+	for ( $attempt = 0; $attempt < $max_attempts; $attempt++ ) {
+		if ( empty( $attempt ) ) {
+			$exists = metadata_exists( $meta_type, $object_id, $meta_key );
+			$count  = $exists
+				? (int) get_metadata( $meta_type, $object_id, $meta_key, true )
+				: $default;
+		} else {
+			$stored = $bbp_db->get_var( $count_query );
+
+			// Bail on a database error
+			if ( ! empty( $bbp_db->last_error ) ) {
+				return false;
+			}
+
+			$exists = null !== $stored;
+			$count  = $exists ? (int) $stored : $default;
+		}
+
+		$new_count = sanitize_meta( $meta_key, bbp_number_not_negative( $count + $difference ), $meta_type, $subtype );
+		$new_count = (int) $new_count;
+
+		// Allow metadata updates to be short-circuited as usual
+		if ( ! $checked ) {
+			$checked = true;
+			$check   = apply_filters( "update_{$meta_type}_metadata", null, $object_id, $meta_key, $new_count, '' );
+
+			if ( null !== $check ) {
+				return (bool) $check;
+			}
+		}
+
+		// Bail if the count is already at its lower bound
+		if ( $new_count === $count ) {
+			if ( ! empty( $attempt ) ) {
+				return false;
+			}
+
+			$stored = $bbp_db->get_var( $count_query );
+
+			// Bail on a database error
+			if ( ! empty( $bbp_db->last_error ) ) {
+				return false;
+			}
+
+			$current_exists = null !== $stored;
+			$current_count  = $current_exists ? (int) $stored : $default;
+
+			if ( ( $current_exists === $exists ) && ( $current_count === $count ) ) {
+				return false;
+			}
+
+			wp_cache_delete( $object_id, $meta_type . '_meta' );
+			continue;
+		}
+
+		// Add missing metadata using the standard WordPress lifecycle
+		if ( ! $exists ) {
+			if ( ! empty( add_metadata( $meta_type, $object_id, $meta_key, $new_count, true ) ) ) {
+				return true;
+			}
+
+			$stored = $bbp_db->get_var( $count_query );
+
+			// Bail if the add failed without a concurrent insert or on a database error
+			if ( ! empty( $bbp_db->last_error ) || ( null === $stored ) ) {
+				return false;
+			}
+
+			wp_cache_delete( $object_id, $meta_type . '_meta' );
+			continue;
+		}
+
+		$meta_ids = $bbp_db->get_col( $bbp_db->prepare( "SELECT {$id_column} FROM {$table} WHERE meta_key = %s AND {$column} = %d", $meta_key, $object_id ) );
+
+		// Bail on a database error
+		if ( ! empty( $bbp_db->last_error ) ) {
+			return false;
+		}
+
+		// Retry if metadata was removed after the cached existence check
+		if ( empty( $meta_ids ) ) {
+			wp_cache_delete( $object_id, $meta_type . '_meta' );
+			continue;
+		}
+
+		// Run the standard actions immediately before the conditional update
+		foreach ( $meta_ids as $meta_id ) {
+			do_action( "update_{$meta_type}_meta", $meta_id, $object_id, $meta_key, $new_count );
+
+			if ( 'post' === $meta_type ) {
+				do_action( 'update_postmeta', $meta_id, $object_id, $meta_key, $new_count );
+			}
+		}
+
+		// Compare count metadata numerically to normalize stored numeric strings
+		$updated = $bbp_db->update(
+			$table,
+			array( 'meta_value' => $new_count ),
+			array(
+				$column      => $object_id,
+				'meta_key'   => $meta_key,
+				'meta_value' => $count
+			),
+			array( '%d' ),
+			array( '%d', '%s', '%d' )
+		);
+
+		// Bail on a database error
+		if ( false === $updated ) {
+			return false;
+		}
+
+		wp_cache_delete( $object_id, $meta_type . '_meta' );
+
+		// Retry when another request updated the count first
+		if ( empty( $updated ) ) {
+			continue;
+		}
+
+		// Run the standard actions immediately after the conditional update
+		foreach ( $meta_ids as $meta_id ) {
+			do_action( "updated_{$meta_type}_meta", $meta_id, $object_id, $meta_key, $new_count );
+
+			if ( 'post' === $meta_type ) {
+				do_action( 'updated_postmeta', $meta_id, $object_id, $meta_key, $new_count );
+			}
+		}
+
+		return true;
+	}
+
+	return false;
 }
 
 /** Pagination ****************************************************************/
@@ -157,21 +405,25 @@ function bbp_db() {
  * rules class. bbPress supports WordPress's `$wp_rewrite` by default, but can
  * be filtered to support other configurations if needed.
  *
- * @since 2.5.8 bbPress (r5814)
+ * @since 2.6.0 bbPress (r5826)
  *
  * @return object
  */
 function bbp_rewrite() {
-	return bbp_get_global_object( 'wp_rewrite', 'WP_Rewrite', (object) array(
-		'root'            => '',
-		'pagination_base' => 'page',
-	) );
+	return bbp_get_global_object(
+		'wp_rewrite',
+		'WP_Rewrite',
+		(object) array(
+			'root'            => '',
+			'pagination_base' => 'page',
+		)
+	);
 }
 
 /**
  * Get the root URL
  *
- * @since 2.5.8 bbPress (r5814)
+ * @since 2.6.0 bbPress (r5823)
  *
  * @return string
  */
@@ -193,7 +445,7 @@ function bbp_get_root_url() {
 /**
  * Get the slug used for paginated requests
  *
- * @since 2.4.0 bbPress (r4926)
+ * @since 2.4.0 bbPress (r4927)
  *
  * @return string
  */
@@ -215,7 +467,7 @@ function bbp_get_paged_slug() {
 /**
  * Is the environment using pretty URLs?
  *
- * @since 2.5.8 bbPress (r5814)
+ * @since 2.6.0 bbPress (r5826)
  *
  * @global object $wp_rewrite The WP_Rewrite object
  *
@@ -244,7 +496,7 @@ function bbp_use_pretty_urls() {
  * never have pagination appended to the end of it, regardless of what the other
  * functions have decided for us.
  *
- * @since 2.6.0 bbPress (r6678)
+ * @since 2.6.0 bbPress (r6680)
  *
  * @param string $pagination_links The HTML links used for pagination
  *
@@ -270,7 +522,7 @@ function bbp_make_first_page_canonical( $pagination_links = '' ) {
  * A convenient wrapper for common calls to paginate_links(), complete with
  * support for parameters that aren't used internally by bbPress.
  *
- * @since 2.6.0 bbPress (r6679)
+ * @since 2.6.0 bbPress (r6680)
  *
  * @param array $args
  *
@@ -284,27 +536,31 @@ function bbp_paginate_links( $args = array() ) {
 		: false;
 
 	// Pagination settings with filter
-	$r = bbp_parse_args( $args, array(
+	$r = bbp_parse_args(
+		$args,
+		array(
 
-		// Used by callers
-		'base'      => '',
-		'total'     => 1,
-		'current'   => bbp_get_paged(),
-		'prev_next' => true,
-		'prev_text' => is_rtl() ? '&rarr;' : '&larr;',
-		'next_text' => is_rtl() ? '&larr;' : '&rarr;',
-		'mid_size'  => 1,
-		'end_size'  => 3,
-		'add_args'  => $add_args,
+			// Used by callers
+			'base'      => '',
+			'total'     => 1,
+			'current'   => bbp_get_paged(),
+			'prev_next' => true,
+			'prev_text' => is_rtl() ? '&rarr;' : '&larr;',
+			'next_text' => is_rtl() ? '&larr;' : '&rarr;',
+			'mid_size'  => 1,
+			'end_size'  => 3,
+			'add_args'  => $add_args,
 
-		// Unused by callers
-		'show_all'           => false,
-		'type'               => 'plain',
-		'format'             => '',
-		'add_fragment'       => '',
-		'before_page_number' => '',
-		'after_page_number'  => ''
-	), 'paginate_links' );
+			// Unused by callers
+			'show_all'           => false,
+			'type'               => 'plain',
+			'format'             => '',
+			'add_fragment'       => '',
+			'before_page_number' => '',
+			'after_page_number'  => ''
+		),
+		'paginate_links'
+	);
 
 	// Return paginated links
 	return bbp_make_first_page_canonical( paginate_links( $r ) );
@@ -330,7 +586,7 @@ function bbp_get_major_wp_version() {
 /**
  * Is this a large bbPress installation?
  *
- * @since 2.6.0 bbPress (r6242)
+ * @since 2.6.0 bbPress (r6243)
  *
  * @return bool True if more than 10000 users, false not
  */
@@ -365,7 +621,7 @@ function bbp_get_total_users() {
  *
  * If not a multisite installation, no switching will occur.
  *
- * @since 2.6.0 bbPress (r6733)
+ * @since 2.6.0 bbPress (r6734)
  *
  * @param int $site_id
  */
@@ -382,7 +638,7 @@ function bbp_switch_to_site( $site_id = 0 ) {
  *
  * If not a multisite installation, no switching will occur.
  *
- * @since 2.6.0 bbPress (r6733)
+ * @since 2.6.0 bbPress (r6734)
  */
 function bbp_restore_current_site() {
 
@@ -397,7 +653,7 @@ function bbp_restore_current_site() {
 /**
  * Generate a default intercept value.
  *
- * @since 2.6.0
+ * @since 2.6.0 bbPress (r6751)
  *
  * @staticvar mixed $rand Null by default, random string on first call
  *
@@ -430,7 +686,7 @@ function bbp_default_intercept() {
 /**
  * Whether a value has been intercepted
  *
- * @since 2.6.0
+ * @since 2.6.0 bbPress (r6751)
  *
  * @param bool $value
  */
@@ -441,7 +697,7 @@ function bbp_is_intercepted( $value = '' ) {
 /**
  * Allow interception of a method or function call.
  *
- * @since 2.6.0
+ * @since 2.6.0 bbPress (r6751)
  *
  * @param string $action Typically the name of the caller function
  * @param array  $args   Typically the results of caller function func_get_args()
@@ -471,7 +727,7 @@ function bbp_maybe_intercept( $action = '', $args = array() ) {
 	$filtered = call_user_func_array( 'apply_filters', $args );
 
 	// Return filtered value, or default if not intercepted
-	return ( $filtered === reset( $r ) )
+	return ( reset( $r ) === $filtered )
 		? $default
 		: $filtered;
 }
@@ -481,7 +737,7 @@ function bbp_maybe_intercept( $action = '', $args = array() ) {
 /**
  * Get an empty datetime value.
  *
- * @since 2.6.6 bbPress (r7094)
+ * @since 2.6.6 bbPress (r7100)
  *
  * @return string
  */

@@ -53,7 +53,10 @@ add_action( 'wp_roles_init',            'bbp_roles_init',             10    );
 add_action( 'wp_enqueue_scripts',       'bbp_enqueue_scripts',        10    );
 add_action( 'wp_head',                  'bbp_head',                   10    );
 add_action( 'wp_footer',                'bbp_footer',                 10    );
+add_action( 'rest_api_init',            'bbp_rest_api_init',          10    );
+add_action( 'xmlrpc_call',              'bbp_xmlrpc_call',            10, 3 );
 add_action( 'transition_post_status',   'bbp_transition_post_status', 10, 3 );
+add_action( 'post_updated',             'bbp_post_updated',           10, 3 );
 
 /**
  * bbp_loaded - Attached to 'plugins_loaded' above
@@ -84,6 +87,16 @@ add_action( 'bbp_init', 'bbp_add_rewrite_rules', 30  );
 add_action( 'bbp_init', 'bbp_add_permastructs',  40  );
 add_action( 'bbp_init', 'bbp_setup_engagements', 50  );
 add_action( 'bbp_init', 'bbp_ready',             999 );
+
+/**
+ * bbp_rest_api_init - Attached to 'rest_api_init' above
+ */
+add_action( 'bbp_rest_api_init', 'bbp_register_rest_attachment_controller', 5 );
+
+/**
+ * bbp_xmlrpc_call - Attached to 'xmlrpc_call' above
+ */
+add_action( 'bbp_xmlrpc_call', 'bbp_validate_xmlrpc_post', 10, 2 );
 
 /**
  * bbp_setup_theme - Attached to 'setup_theme' above
@@ -143,12 +156,13 @@ add_action( 'bbp_footer',   'bbp_swap_no_js_body_class' );
 add_action( 'bbp_ready',  'bbp_setup_akismet',    2  ); // Spam prevention for topics and replies
 
 // Setup BuddyPress using its own hook
-add_action( 'bp_include', 'bbp_setup_buddypress', 10 ); // Social network integration
+add_action( 'bp_init',    'bbp_setup_buddypress', 0  ); // Social network integration
 
 // Try to load the bbpress-functions.php file from the active themes
 add_action( 'bbp_after_setup_theme', 'bbp_load_theme_functions', 10 );
 
 // Widgets
+// phpcs:disable Universal.WhiteSpace.CommaSpacing.TooMuchSpaceAfter
 add_action( 'bbp_widgets_init', array( 'BBP_Login_Widget',   'register_widget' ), 10 );
 add_action( 'bbp_widgets_init', array( 'BBP_Views_Widget',   'register_widget' ), 10 );
 add_action( 'bbp_widgets_init', array( 'BBP_Search_Widget',  'register_widget' ), 10 );
@@ -177,7 +191,12 @@ add_action( 'before_delete_post', 'bbp_delete_forum'  );
 // After Deleted/Trashed/Untrashed Forum
 add_action( 'trashed_post',   'bbp_trashed_forum'   );
 add_action( 'untrashed_post', 'bbp_untrashed_forum' );
-add_action( 'deleted_post',   'bbp_deleted_forum'   );
+add_action( 'deleted_post',   'bbp_deleted_forum', 10, 2 );
+
+// Keep attachments private after permanent deletion
+add_action( 'bbp_delete_forum', 'bbp_make_post_attachments_private' );
+add_action( 'bbp_delete_topic', 'bbp_make_post_attachments_private' );
+add_action( 'bbp_delete_reply', 'bbp_make_post_attachments_private' );
 
 // Auto trash/untrash/delete a forums topics
 add_action( 'bbp_delete_forum',  'bbp_delete_forum_topics',  10 );
@@ -196,6 +215,8 @@ add_action( 'bbp_forum_attributes_metabox_save', 'bbp_save_forum_extras', 2 );
 // New/Edit Reply
 add_action( 'bbp_new_reply',  'bbp_update_reply', 10, 7 );
 add_action( 'bbp_edit_reply', 'bbp_update_reply', 10, 7 );
+add_action( 'bbp_new_reply',  'bbp_update_reply_subscription', 10, 5 );
+add_action( 'bbp_edit_reply', 'bbp_update_reply_subscription', 10, 5 );
 
 // Before Delete/Trash/Untrash Reply
 add_action( 'wp_trash_post',      'bbp_trash_reply'   );
@@ -211,6 +232,8 @@ add_action( 'deleted_post',   'bbp_deleted_reply'   );
 // New/Edit Topic
 add_action( 'bbp_new_topic',  'bbp_update_topic', 10, 5 );
 add_action( 'bbp_edit_topic', 'bbp_update_topic', 10, 5 );
+add_action( 'bbp_new_topic',  'bbp_update_topic_subscription', 10, 4 );
+add_action( 'bbp_edit_topic', 'bbp_update_topic_subscription', 10, 4 );
 
 // Split/Merge Topic
 add_action( 'bbp_merged_topic',     'bbp_merge_topic_count', 1, 3 );
@@ -243,8 +266,14 @@ add_action( 'bbp_trash_forum',  'bbp_remove_forum_from_all_subscriptions' );
 add_action( 'bbp_delete_forum', 'bbp_remove_forum_from_all_subscriptions' );
 
 // Subscription notifications
-add_action( 'bbp_new_reply',    'bbp_notify_topic_subscribers', 11, 5 );
-add_action( 'bbp_new_topic',    'bbp_notify_forum_subscribers', 11, 4 );
+add_action( 'bbp_new_reply',                  'bbp_notify_topic_subscribers',          11, 5 );
+add_action( 'bbp_new_topic',                  'bbp_notify_forum_subscribers',          11, 4 );
+add_action( 'bbp_new_reply',                  'bbp_defer_subscription_notification',   12 );
+add_action( 'bbp_new_topic',                  'bbp_defer_subscription_notification',   12 );
+add_action( 'bbp_transition_post_status',     'bbp_notify_forum_subscribers_on_topic_publication', 11, 3 );
+add_action( 'bbp_transition_post_status',     'bbp_notify_topic_subscribers_on_reply_publication', 11, 3 );
+add_action( 'bbp_deferred_reply_published',   'bbp_notify_topic_subscribers',          11, 5 );
+add_action( 'bbp_deferred_topic_published',   'bbp_notify_forum_subscribers',          11, 4 );
 
 // Sticky
 add_action( 'bbp_stick_topic',     'bbp_unstick_topic' );
@@ -271,75 +300,25 @@ add_action( 'bbp_unspammed_reply',  'bbp_update_reply_walker' );
 add_action( 'bbp_approved_reply',   'bbp_update_reply_walker' );
 add_action( 'bbp_unapproved_reply', 'bbp_update_reply_walker' );
 
-// Update forum reply counts
-add_action( 'bbp_new_reply',        'bbp_increase_forum_reply_count' );
-add_action( 'bbp_untrashed_reply',  'bbp_increase_forum_reply_count' );
-add_action( 'bbp_unspammed_reply',  'bbp_increase_forum_reply_count' );
-add_action( 'bbp_approved_reply',   'bbp_increase_forum_reply_count' );
-add_action( 'bbp_trash_reply',      'bbp_decrease_forum_reply_count' );
-add_action( 'bbp_spam_reply',       'bbp_decrease_forum_reply_count' );
-add_action( 'bbp_unapprove_reply',  'bbp_decrease_forum_reply_count' );
+// Update counts from persisted post status changes
+add_action( 'bbp_transition_post_status', 'bbp_update_forum_visibility_on_transition_post_status', 5, 3 );
+add_action( 'bbp_transition_post_status', 'bbp_update_counts_on_transition_post_status', 10, 3 );
+add_action( 'bbp_transition_post_status', 'bbp_update_forum_subforum_count_on_transition_post_status', 10, 3 );
 
-// Update forum hidden reply counts
-add_action( 'bbp_trashed_reply',    'bbp_increase_forum_reply_count_hidden' );
-add_action( 'bbp_spammed_reply',    'bbp_increase_forum_reply_count_hidden' );
-add_action( 'bbp_unapproved_reply', 'bbp_increase_forum_reply_count_hidden' );
-add_action( 'bbp_untrash_reply',    'bbp_decrease_forum_reply_count_hidden' );
-add_action( 'bbp_unspam_reply',     'bbp_decrease_forum_reply_count_hidden' );
-add_action( 'bbp_approve_reply',    'bbp_decrease_forum_reply_count_hidden' );
-add_action( 'bbp_delete_reply',     'bbp_decrease_forum_reply_count_hidden' );
+// Update parent subforum counts after updates and permanent deletion
+add_action( 'bbp_deleted_forum',   'bbp_reparent_forum_subforums', 9, 2 );
+add_action( 'bbp_deleted_forum',   'bbp_update_parent_forum_subforum_count', 10, 2 );
+add_action( 'bbp_post_updated',    'bbp_update_forum_subforum_counts_on_post_updated', 10, 3 );
 
-// Update forum topic counts
-add_action( 'bbp_new_topic',        'bbp_increase_forum_topic_count' );
-add_action( 'bbp_untrashed_topic',  'bbp_increase_forum_topic_count' );
-add_action( 'bbp_unspammed_topic',  'bbp_increase_forum_topic_count' );
-add_action( 'bbp_approved_topic',   'bbp_increase_forum_topic_count' );
-add_action( 'bbp_trash_topic',      'bbp_decrease_forum_topic_count' );
-add_action( 'bbp_spam_topic',       'bbp_decrease_forum_topic_count' );
-add_action( 'bbp_unapprove_topic',  'bbp_decrease_forum_topic_count' );
+// Update user topic & reply counts
+add_action( 'bbp_deleted_topic', 'bbp_decrease_user_topic_count' );
+add_action( 'bbp_deleted_reply', 'bbp_decrease_user_reply_count' );
+add_action( 'bbp_post_updated',  'bbp_update_counts_on_post_author_change', 10, 3 );
+add_action( 'bbp_post_updated',  'bbp_recalculate_engagements_on_post_author_change', 20, 3 );
 
-// Update forum hidden topic counts
-add_action( 'bbp_trashed_topic',    'bbp_increase_forum_topic_count_hidden' );
-add_action( 'bbp_spammed_topic',    'bbp_increase_forum_topic_count_hidden' );
-add_action( 'bbp_unapproved_topic', 'bbp_increase_forum_topic_count_hidden' );
-add_action( 'bbp_untrash_topic',    'bbp_decrease_forum_topic_count_hidden' );
-add_action( 'bbp_unspam_topic',     'bbp_decrease_forum_topic_count_hidden' );
-add_action( 'bbp_approve_topic',    'bbp_decrease_forum_topic_count_hidden' );
-add_action( 'bbp_delete_topic',     'bbp_decrease_forum_topic_count_hidden' );
-
-// Update topic reply counts
-add_action( 'bbp_new_reply',        'bbp_increase_topic_reply_count' );
-add_action( 'bbp_untrashed_reply',  'bbp_increase_topic_reply_count' );
-add_action( 'bbp_unspammed_reply',  'bbp_increase_topic_reply_count' );
-add_action( 'bbp_approved_reply',   'bbp_increase_topic_reply_count' );
-add_action( 'bbp_trash_reply',      'bbp_decrease_topic_reply_count' );
-add_action( 'bbp_spam_reply',       'bbp_decrease_topic_reply_count' );
-add_action( 'bbp_unapprove_reply',  'bbp_decrease_topic_reply_count' );
-
-// Update topic hidden reply counts
-add_action( 'bbp_trashed_reply',    'bbp_increase_topic_reply_count_hidden' );
-add_action( 'bbp_unapproved_reply', 'bbp_increase_topic_reply_count_hidden' );
-add_action( 'bbp_spammed_reply',    'bbp_increase_topic_reply_count_hidden' );
-add_action( 'bbp_untrash_reply',    'bbp_decrease_topic_reply_count_hidden' );
-add_action( 'bbp_unspam_reply',     'bbp_decrease_topic_reply_count_hidden' );
-add_action( 'bbp_approve_reply',    'bbp_decrease_topic_reply_count_hidden' );
-add_action( 'bbp_delete_reply',     'bbp_decrease_topic_reply_count_hidden' );
-
-// Update forum reply counts for approved/unapproved topics
-add_action( 'bbp_approved_topic',   'bbp_approved_unapproved_topic_update_forum_reply_count' );
-add_action( 'bbp_unapproved_topic', 'bbp_approved_unapproved_topic_update_forum_reply_count' );
-
-// Users topic & reply counts
-add_action( 'bbp_new_topic',     'bbp_increase_user_topic_count' );
-add_action( 'bbp_new_reply',     'bbp_increase_user_reply_count' );
-add_action( 'bbp_untrash_topic', 'bbp_increase_user_topic_count' );
-add_action( 'bbp_untrash_reply', 'bbp_increase_user_reply_count' );
-add_action( 'bbp_unspam_topic',  'bbp_increase_user_topic_count' );
-add_action( 'bbp_unspam_reply',  'bbp_increase_user_reply_count' );
-add_action( 'bbp_trash_topic',   'bbp_decrease_user_topic_count' );
-add_action( 'bbp_trash_reply',   'bbp_decrease_user_reply_count' );
-add_action( 'bbp_spam_topic',    'bbp_decrease_user_topic_count' );
-add_action( 'bbp_spam_reply',    'bbp_decrease_user_reply_count' );
+// Update counts and engagements after WordPress reassigns a deleted user's posts
+add_action( 'delete_user',  'bbp_update_counts_on_user_reassignment', 10, 2 );
+add_action( 'deleted_user', 'bbp_update_counts_on_user_reassignment', 10, 2 );
 
 // Topic status transition helpers for replies
 add_action( 'bbp_trash_topic',   'bbp_trash_topic_replies'   );
@@ -354,10 +333,6 @@ add_action( 'bbp_new_reply', 'bbp_update_topic_engagements', 20 );
 
 add_action( 'bbp_new_reply', 'bbp_update_topic_voice_count', 30 );
 add_action( 'bbp_new_topic', 'bbp_update_topic_voice_count', 30 );
-
-// Topic/reply counts on code insert (unit tests)
-add_action( 'bbp_insert_topic', 'bbp_insert_topic_update_counts', 10, 2 );
-add_action( 'bbp_insert_reply', 'bbp_insert_reply_update_counts', 10, 3 );
 
 // Topic engagements on code insert (unit tests)
 add_action( 'bbp_insert_topic', 'bbp_update_topic_engagements', 20 );
@@ -397,7 +372,6 @@ add_action( 'bbp_spammed_topic',    'bbp_update_topic_voice_count', 30 );
 add_action( 'bbp_unspammed_topic',  'bbp_update_topic_voice_count', 30 );
 add_action( 'bbp_approved_topic',   'bbp_update_topic_voice_count', 30 );
 add_action( 'bbp_unapproved_topic', 'bbp_update_topic_voice_count', 30 );
-add_action( 'bbp_deleted_topic',    'bbp_update_topic_voice_count', 30 );
 
 // User status
 // @todo make these sub-actions
@@ -434,6 +408,8 @@ add_action( 'wpmu_activate_user',  'bbp_user_add_role_on_activate', 10, 3 );
 add_action( 'bbp_template_redirect', 'bbp_forum_enforce_blocked', 1  );
 add_action( 'bbp_template_redirect', 'bbp_forum_enforce_hidden',  1  );
 add_action( 'bbp_template_redirect', 'bbp_forum_enforce_private', 1  );
+add_action( 'bbp_template_redirect', 'bbp_forum_enforce_attachments', 1 );
+add_action( 'bbp_template_redirect', 'bbp_reply_enforce_visibility',   1 );
 add_action( 'bbp_template_redirect', 'bbp_post_request',          10 );
 add_action( 'bbp_template_redirect', 'bbp_get_request',           10 );
 add_action( 'bbp_template_redirect', 'bbp_check_user_edit',       10 );

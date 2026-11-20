@@ -60,7 +60,7 @@ trait StreamDecoratorTrait
     {
         /** @var callable $callable */
         $callable = [$this->stream, $method];
-        $result = \call_user_func_array($callable, $args);
+        $result = $callable(...$args);
         // Always return the wrapped object if the result is a return $this
         return $result === $this->stream ? $this : $result;
     }
@@ -69,12 +69,13 @@ trait StreamDecoratorTrait
         $this->stream->close();
     }
     /**
-     * {@inheritdoc}
-     *
      * @return mixed
      */
     public function getMetadata($key = null)
     {
+        if ($key !== null && !\is_string($key)) {
+            \WpToTwitter_Vendor\trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing %s to StreamInterface::getMetadata() is deprecated; guzzlehttp/psr7 3.0 requires string|null for $key.', \get_debug_type($key));
+        }
         return $this->stream->getMetadata($key);
     }
     public function detach()
@@ -111,14 +112,26 @@ trait StreamDecoratorTrait
     }
     public function seek($offset, $whence = \SEEK_SET) : void
     {
+        if (!\is_int($offset)) {
+            \WpToTwitter_Vendor\trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing %s to StreamInterface::seek() is deprecated; guzzlehttp/psr7 3.0 requires int for $offset.', \get_debug_type($offset));
+        }
+        if (!\is_int($whence)) {
+            \WpToTwitter_Vendor\trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing %s to StreamInterface::seek() is deprecated; guzzlehttp/psr7 3.0 requires int for $whence.', \get_debug_type($whence));
+        }
         $this->stream->seek($offset, $whence);
     }
     public function read($length) : string
     {
+        if (!\is_int($length)) {
+            \WpToTwitter_Vendor\trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing %s to StreamInterface::read() is deprecated; guzzlehttp/psr7 3.0 requires int for $length.', \get_debug_type($length));
+        }
         return $this->stream->read($length);
     }
     public function write($string) : int
     {
+        if (!\is_string($string)) {
+            \WpToTwitter_Vendor\trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing %s to StreamInterface::write() is deprecated; guzzlehttp/psr7 3.0 requires string for $string.', \get_debug_type($string));
+        }
         return $this->stream->write($string);
     }
     /**

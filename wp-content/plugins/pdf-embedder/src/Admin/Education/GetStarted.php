@@ -18,14 +18,14 @@ class GetStarted {
 	 *
 	 * @since 4.7.0
 	 */
-	const OPTION_NAME = 'pdfemb_admin_getstarted_dismissed';
+	public const OPTION_NAME = 'pdfemb_admin_getstarted_dismissed';
 
 	/**
 	 * Assign all hooks to proper places.
 	 *
 	 * @since 4.9.0
 	 */
-	public function hooks() {
+	public function hooks(): void {
 
 		add_action( 'wp_ajax_pdfemb_admin_settings_getstarted_dismiss', [ $this, 'dismiss' ] );
 		add_action( 'wp_ajax_pdfemb_admin_settings_getstarted_open', [ $this, 'open' ] );
@@ -36,7 +36,9 @@ class GetStarted {
 	 *
 	 * @since 4.9.0
 	 */
-	public function dismiss() {
+	public function dismiss(): void {
+
+		check_ajax_referer( 'pdfemb-getstarted', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error();
@@ -52,7 +54,9 @@ class GetStarted {
 	 *
 	 * @since 4.9.0
 	 */
-	public function open() {
+	public function open(): void {
+
+		check_ajax_referer( 'pdfemb-getstarted', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error();
@@ -82,7 +86,7 @@ class GetStarted {
 	 *
 	 * @since 4.9.0
 	 */
-	public function render() {
+	public function render(): void {
 
 		$hide = $this->is_hidden() ? 'hidden' : '';
 		?>
@@ -121,7 +125,7 @@ class GetStarted {
 									]
 								),
 								pdf_embedder()->is_premium()
-									? esc_url( Links::get_utm_link( 'https://wp-pdf.com/docs/premium-instructions-attributes/', 'Admin - GetStarted', 'Shortcode' ) )
+									? esc_url( Links::get_utm_link( 'https://wp-pdf.com/docs/using-the-pdf-embedder-shortcode/', 'Admin - GetStarted', 'Shortcode' ) )
 									: esc_url( Links::get_utm_link( 'https://wp-pdf.com/docs/free-instructions/', 'Admin - GetStarted', 'Shortcode' ) )
 							);
 							?>
@@ -148,7 +152,10 @@ class GetStarted {
 			</div>
 
 			<button class="dismiss" title="<?php esc_attr_e( 'Hide this message', 'pdf-embedder' ); ?>">
-				<?php echo Assets::svg( 'img/admin/getstarted/dismiss.svg' ); ?>
+				<?php
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo Assets::svg( 'img/admin/getstarted/dismiss.svg' );
+				?>
 			</button>
 		</div>
 
@@ -159,6 +166,7 @@ class GetStarted {
 
 					$.post( ajaxurl, {
 						action: 'pdfemb_admin_settings_getstarted_dismiss',
+						nonce: pdfemb_args.getstarted_nonce,
 					} );
 
 					$( '#pdfemb-getstarted' ).slideUp( 'fast', function() {

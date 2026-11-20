@@ -62,7 +62,8 @@ final class Astra_Builder_Customizer {
 		add_action( 'customize_register', array( $this, 'builder_configs' ), 2 );
 		add_action( 'customize_register', array( $this, 'header_configs' ), 2 );
 		add_action( 'customize_register', array( $this, 'footer_configs' ), 2 );
-		add_action( 'customize_register', array( $this, 'update_default_wp_configs' ) );
+		// Priority 11: after core's register_controls (10), which is hooked after this when a manager is built late (e.g. REST).
+		add_action( 'customize_register', array( $this, 'update_default_wp_configs' ), 11 );
 		add_action( 'init', array( $this, 'deregister_menu_locations_widgets' ), 999 );
 		add_action( 'customize_controls_print_footer_scripts', array( $this, 'builder_customizer_preview_styles' ) );
 	}
@@ -205,24 +206,27 @@ final class Astra_Builder_Customizer {
 			return;
 		}
 
-		// Enqueue Builder CSS.
+		$asset_dir  = SCRIPT_DEBUG ? '' : 'minified/';
+		$min_suffix = SCRIPT_DEBUG ? '' : '.min';
+		$rtl_suffix = is_rtl() ? '-rtl' : '';
+
+		// Enqueue Builder CSS ('customizer-preview.css' / 'customizer-preview-rtl.css', or their '.min' copies).
 		wp_enqueue_style(
 			'ahfb-customizer-preview-style',
-			ASTRA_THEME_URI . 'inc/assets/css/customizer-preview.css',
+			ASTRA_THEME_URI . 'inc/assets/css/' . $asset_dir . 'customizer-preview' . $min_suffix . $rtl_suffix . '.css',
 			null,
 			ASTRA_THEME_VERSION
 		);
 
 		// Advanced Dynamic CSS.
-		$js_prefix = SCRIPT_DEBUG ? '' : 'minified/';
-		$js_suffix = SCRIPT_DEBUG ? '' : '.min';
 		wp_enqueue_script(
 			'ahfb-customizer-preview',
-			ASTRA_THEME_URI . 'inc/assets/js/' . $js_prefix . 'customizer-preview' . $js_suffix . '.js',
-			array( 'customize-preview' ),
+			ASTRA_THEME_URI . 'inc/assets/js/' . $asset_dir . 'customizer-preview' . $min_suffix . '.js',
+			array( 'customize-preview', 'wp-i18n' ),
 			ASTRA_THEME_VERSION,
 			true
 		);
+		wp_set_script_translations( 'ahfb-customizer-preview', 'astra' );
 
 		wp_localize_script(
 			'ahfb-customizer-preview',

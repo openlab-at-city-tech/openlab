@@ -5,7 +5,7 @@
  * @category AJAX
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.joedolson.com/wp-to-twitter/
  */
 
@@ -46,6 +46,7 @@ function wpt_ajax_tweet() {
 		}
 		$omitted  = ( isset( $_REQUEST['omit'] ) ) ? map_deep( wp_unslash( $_REQUEST['omit'] ), 'sanitize_text_field' ) : array();
 		$services = wpt_check_connections( false, true );
+		$omit     = array();
 		// The interface has you choose what you want; the DB represents what's omitted.
 		foreach ( array_keys( $services ) as $service ) {
 			if ( ! in_array( $service, $omitted, true ) ) {
@@ -76,12 +77,15 @@ function wpt_ajax_tweet() {
 			$template = sanitize_textarea_field( wp_unslash( $_REQUEST['bluesky_text'] ) );
 			update_post_meta( $post_ID, '_wpt_post_template_bluesky', $template );
 		}
-
 		foreach ( $authors as $auth ) {
-			$auth = ( 'main' === $auth ) ? false : $auth;
+			$notice = '';
+			$auth   = ( 'main' === $auth ) ? false : $auth;
 			switch ( $action ) {
 				case 'tweet':
-					wpt_post_to_service( $sentence, $auth, $post_ID, $media );
+					$results = wpt_post_to_service( $sentence, $auth, $post_ID, $media );
+					foreach ( $results as $result ) {
+						$notice .= ( '' === $notice ) ? $result['notice'] : '; ' . $result['notice'];
+					}
 					break;
 				case 'schedule':
 					wp_schedule_single_event(
@@ -96,8 +100,12 @@ function wpt_ajax_tweet() {
 					);
 					break;
 			}
-			$log     = wpt_get_log( 'wpt_status_message', $post_ID );
-			$message = is_array( $log ) ? $log['message'] : $log;
+			$log = wpt_get_log( 'wpt_status_message', $post_ID );
+			if ( $notice ) {
+				$message = $notice;
+			} else {
+				$message = is_array( $log ) ? $log['message'] : $log;
+			}
 			// Translators: Full text of Update, time scheduled for.
 			$return = ( 'tweet' === $action ) ? $message : sprintf( __( 'Update scheduled: %1$s for %2$s', 'wp-to-twitter' ), '"' . $sentence . '"', $print_schedule );
 			echo esc_html( $return );

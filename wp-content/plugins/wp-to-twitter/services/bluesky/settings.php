@@ -5,15 +5,52 @@
  * @category Bluesky
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.xposterpro.com
  */
 
 /**
+ * Normalize a Bluesky identifier entered in settings.
+ *
+ * Accepts handle, DID, @handle, or bsky.app profile URL, and converts to the
+ * identifier format expected by createSession.
+ *
+ * @param string $identifier Raw identifier.
+ *
+ * @return string Normalized identifier.
+ */
+function wpt_normalize_bluesky_identifier( $identifier ) {
+	$identifier = sanitize_text_field( trim( (string) $identifier ) );
+	if ( '' === $identifier ) {
+		return '';
+	}
+
+	$parts = wp_parse_url( $identifier );
+	if ( is_array( $parts ) && isset( $parts['host'] ) && isset( $parts['path'] ) ) {
+		$path = trim( $parts['path'], '/' );
+		if ( str_contains( $path, 'profile/' ) ) {
+			$segments   = explode( '/', $path );
+			$identifier = end( $segments );
+		}
+	}
+
+	$identifier = ltrim( trim( $identifier ), '@' );
+
+	if ( 0 === stripos( $identifier, 'did:' ) ) {
+		return strtolower( $identifier );
+	}
+
+	$identifier = strtolower( $identifier );
+
+	// Handles allow letters, numbers, dots and hyphens.
+	return preg_replace( '/[^a-z0-9.-]/', '', $identifier );
+}
+
+/**
  * Update Bluesky settings.
  *
- * @param mixed int/boolean   $auth Author.
- * @param mixed array/boolean $post POST data.
+ * @param int|boolean   $auth Author.
+ * @param array|boolean $post POST data.
  */
 function wpt_update_bluesky_settings( $auth = false, $post = false ) {
 	if ( isset( $post['bluesky_settings'] ) ) {
@@ -23,25 +60,30 @@ function wpt_update_bluesky_settings( $auth = false, $post = false ) {
 					wp_die( 'Oops, please try again.' );
 				}
 
-				if ( ! empty( $post['wpt_bluesky_token'] ) ) {
-					$ack  = sanitize_text_field( trim( $post['wpt_bluesky_token'] ) );
-					$user = sanitize_text_field( str_replace( '@', '', trim( $post['wpt_bluesky_username'] ) ) );
+				$ack         = isset( $post['wpt_bluesky_token'] ) ? sanitize_text_field( trim( $post['wpt_bluesky_token'] ) ) : '';
+				$user        = isset( $post['wpt_bluesky_username'] ) ? wpt_normalize_bluesky_identifier( $post['wpt_bluesky_username'] ) : '';
+				$is_masked   = ( false !== stripos( $ack, '***' ) );
+				$stored_pass = ( ! $auth ) ? get_option( 'wpt_bluesky_token', '' ) : get_user_meta( $auth, 'wpt_bluesky_token', true );
 
-					if ( ! $auth ) {
-						// If values are filled with asterisks, do not update; these are masked values.
-						if ( stripos( $ack, '***' ) === false ) {
-							update_option( 'wpt_bluesky_token', $ack );
-							update_option( 'wpt_bluesky_username', $user );
-						}
-					} else {
-						if ( stripos( $ack, '***' ) === false ) {
-							update_user_meta( $auth, 'wpt_bluesky_token', $ack );
-							update_user_meta( $auth, 'wpt_bluesky_username', $user );
-						}
+				if ( ! $auth ) {
+					// Always allow username updates, even if token is masked.
+					update_option( 'wpt_bluesky_username', $user );
+					if ( '' !== $ack && ! $is_masked ) {
+						update_option( 'wpt_bluesky_token', $ack );
+						$stored_pass = $ack;
 					}
+				} else {
+					update_user_meta( $auth, 'wpt_bluesky_username', $user );
+					if ( '' !== $ack && ! $is_masked ) {
+						update_user_meta( $auth, 'wpt_bluesky_token', $ack );
+						$stored_pass = $ack;
+					}
+				}
+
+				if ( '' !== $stored_pass && '' !== $user ) {
 					$message  = 'failed';
 					$validate = array(
-						'password'   => $ack,
+						'password'   => $stored_pass,
 						'identifier' => $user,
 					);
 					$verify   = wpt_bluesky_connection( $auth, $validate );

@@ -32,18 +32,33 @@ class nggSitemaps {
 		// Backward check for older images
 		$p->post_content = NextGEN_shortcodes::convert_shortcode( $p->post_content );
 
-		// Don't process the images in the normal way
+		// Don't process the images in the normal way. Swap the collectors in for every registered
+		// shortcode only while this post is scanned, then put the registrations back: this filter
+		// runs once per sitemap entry, and leaving them swapped broke every other plugin's shortcode
+		// (Envira, Soliloquy, ...) and NextGEN's own [nggallery] for the rest of the request. The
+		// collectors are registered with WordPress directly, not through the NextGEN shortcode
+		// manager, so its [nggallery] / [singlepic] callbacks are never replaced either.
+		global $shortcode_tags;
+		$registered_shortcodes = $shortcode_tags;
 		remove_all_shortcodes();
 
 		// We cannot parse at this point a album, just galleries & single images
-		\Imagely\NGG\Display\Shortcodes::add( 'singlepic', array( &$this, 'add_images' ) );
-		\Imagely\NGG\Display\Shortcodes::add( 'thumb', array( &$this, 'add_images' ) );
-		\Imagely\NGG\Display\Shortcodes::add( 'nggallery', array( &$this, 'add_gallery' ) );
-		\Imagely\NGG\Display\Shortcodes::add( 'imagebrowser', array( &$this, 'add_gallery' ) );
-		\Imagely\NGG\Display\Shortcodes::add( 'slideshow', array( &$this, 'add_gallery' ) );
+		add_shortcode( 'singlepic', array( &$this, 'add_images' ) );
+		add_shortcode( 'thumb', array( &$this, 'add_images' ) );
+		add_shortcode( 'nggallery', array( &$this, 'add_gallery' ) );
+		add_shortcode( 'imagebrowser', array( &$this, 'add_gallery' ) );
+		add_shortcode( 'slideshow', array( &$this, 'add_gallery' ) );
 
-		// Search now for shortcodes
-		do_shortcode( $p->post_content );
+		try {
+			// Search now for shortcodes. Sitemaps are public, so every private gallery is hidden.
+			\Imagely\NGG\PrivateGalleries\Visibility::strictly(
+				static function () use ( $p ) {
+					do_shortcode( $p->post_content );
+				}
+			);
+		} finally {
+			$shortcode_tags = $registered_shortcodes; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- Restores the registrations saved above.
+		}
 
 		return $this->images;
 	}
@@ -73,7 +88,8 @@ class nggSitemaps {
 			}
 		}
 
-		if ($id) {
+		// Private galleries are never published in a sitemap.
+		if ( $id && ! \Imagely\NGG\PrivateGalleries\Visibility::is_hidden( $id ) ) {
 			$gallery_storage = \Imagely\NGG\DataStorage\Manager::get_instance();
 			$image_mapper    = \Imagely\NGG\DataMappers\Image::get_instance();
 			// SECURITY (#1091): filter on `exclude`, exactly as every display type does.
@@ -86,10 +102,12 @@ class nggSitemaps {
 				->where( array( 'galleryid = %s', $id ) )
 				->where( array( 'exclude != %d', 1 ) )
 				->run_query();
+			// run_query() returns plain wp_ngg_pictures rows, which have no `title`
+			// column (#1208). Use the same title the [ngg] sitemap handler emits.
 			foreach ($images as $image) {
 				$this->images[] = array(
 					'src'   =>  $gallery_storage->get_image_url( $image ),
-					'title' =>  $image->title,
+					'title' =>  $image->description ? $image->description : $image->alttext,
 					'alt'   =>  $image->alttext,
 				);
 			}
@@ -118,8 +136,13 @@ class nggSitemaps {
 		}
 
 		$images = nggdb::find_images_in_list( $pids );
+		$hidden = \Imagely\NGG\PrivateGalleries\Visibility::get_hidden_gallery_ids();
 
 		foreach ($images as $image) {
+			if ( in_array( (int) $image->galleryid, $hidden, true ) ) {
+				continue;
+			}
+
 			$newimage        = array();
 			$newimage['src'] = $newimage['sc'] = $image->imageURL;
 			if ( !empty( $image->title ) ) {

@@ -47,20 +47,20 @@ add_action( 'admin_head',              'bbp_admin_head'                    );
 add_action( 'admin_notices',           'bbp_admin_notices'                 );
 add_action( 'menu_order',              'bbp_admin_menu_order'              );
 add_filter( 'custom_menu_order',       'bbp_admin_custom_menu_order'       );
+add_filter( 'admin_body_class',        'bbp_admin_icon_body_class'        );
+add_action( 'bbp_register',            'bbp_register_admin_icons',     1 );
 
 // Hook on to admin_init
-add_action( 'bbp_admin_init', 'bbp_setup_updater',          999 );
 add_action( 'bbp_admin_init', 'bbp_register_importers'          );
 add_action( 'bbp_admin_init', 'bbp_register_admin_styles'       );
 add_action( 'bbp_admin_init', 'bbp_register_admin_scripts'      );
 add_action( 'bbp_admin_init', 'bbp_register_admin_settings'     );
 
-// Hook on to current_screen (only in Site admin, not Network or User)
-if ( is_blog_admin() ) {
-	add_action( 'bbp_current_screen', 'bbp_admin_forums'  );
-	add_action( 'bbp_current_screen', 'bbp_admin_topics'  );
-	add_action( 'bbp_current_screen', 'bbp_admin_replies' );
-}
+// Hook on to current_screen
+add_action( 'bbp_current_screen', 'bbp_admin_forums'  );
+add_action( 'bbp_current_screen', 'bbp_admin_topics'  );
+add_action( 'bbp_current_screen', 'bbp_admin_replies' );
+add_action( 'bbp_current_screen', 'bbp_setup_updater', 999 );
 
 // Initialize the admin area
 add_action( 'bbp_init', 'bbp_setup_admin' );
@@ -114,14 +114,17 @@ add_filter( 'bbp_admin_replies_column_headers', 'bbp_filter_column_headers' );
 add_action( 'load-tools_page_bbp-converter', 'bbp_setup_converter', 2 );
 add_action( 'wp_ajax_bbp_converter_process', 'bbp_setup_converter', 2 );
 
+// Preview reply topic changes
+add_action( 'wp_ajax_bbp_reply_topic_forum', 'bbp_ajax_reply_topic_forum' );
+
 // Add New User
 add_action( 'user_new_form', 'bbp_add_user_form_role_field', 10, 1 );
 
 /**
  * Setup bbPress admin
  *
- * @since 2.0.0 bbPress (r1000)
- * @since 2.6.0 bbPress (r6598) Moved to actions.php
+ * @since 2.0.0 bbPress (r2515)
+ * @since 2.6.0 bbPress (r6601) Moved to actions.php
  */
 function bbp_admin() {
 	return bbp_setup_admin();
@@ -131,7 +134,7 @@ function bbp_admin() {
  * When a new site is created in a multisite installation, run the activation
  * routine on that site
  *
- * @since 2.0.0 bbPress (r3283)
+ * @since 2.0.0 bbPress (r3284)
  *
  * @param int $blog_id
  * @param int $user_id
@@ -176,37 +179,37 @@ function bbp_filter_column_headers( $columns = array() ) {
 	/** Forums ****************************************************************/
 
 	// Forum topic count
-	if ( isset( $columns[ 'bbp_forum_topic_count' ] ) ) {
-		$columns[ 'bbp_forum_topic_count' ] = '<span class="vers bbp_topics_column"  title="' . esc_attr__( 'Topics', 'bbpress' ) . '"><span class="screen-reader-text">' . esc_html__( 'Topics', 'bbpress' ) . '</span></span>';
+	if ( isset( $columns['bbp_forum_topic_count'] ) ) {
+		$columns['bbp_forum_topic_count'] = '<span class="vers bbp_topics_column"  title="' . esc_attr__( 'Topics', 'bbpress' ) . '"><span class="screen-reader-text">' . esc_html__( 'Topics', 'bbpress' ) . '</span></span>';
 	}
 
 	// Forum reply count
-	if ( isset( $columns[ 'bbp_forum_reply_count' ] ) ) {
-		$columns[ 'bbp_forum_reply_count' ] = '<span class="vers bbp_replies_column"  title="' . esc_attr__( 'Replies', 'bbpress' ) . '"><span class="screen-reader-text">' . esc_html__( 'Replies', 'bbpress' ) . '</span></span>';
+	if ( isset( $columns['bbp_forum_reply_count'] ) ) {
+		$columns['bbp_forum_reply_count'] = '<span class="vers bbp_replies_column"  title="' . esc_attr__( 'Replies', 'bbpress' ) . '"><span class="screen-reader-text">' . esc_html__( 'Replies', 'bbpress' ) . '</span></span>';
 	}
 
 	/** Topics ****************************************************************/
 
 	// Topic forum
-	if ( isset( $columns[ 'bbp_topic_forum' ] ) ) {
-		$columns[ 'bbp_topic_forum' ] = '<span class="vers bbp_forums_column"  title="' . esc_attr__( 'Forum', 'bbpress' ) . '"><span class="screen-reader-text">' . esc_html__( 'Forum', 'bbpress' ) . '</span></span>';
+	if ( isset( $columns['bbp_topic_forum'] ) ) {
+		$columns['bbp_topic_forum'] = '<span class="vers bbp_forums_column"  title="' . esc_attr__( 'Forum', 'bbpress' ) . '"><span class="screen-reader-text">' . esc_html__( 'Forum', 'bbpress' ) . '</span></span>';
 	}
 
 	// Topic reply count
-	if ( isset( $columns[ 'bbp_topic_reply_count' ] ) ) {
-		$columns[ 'bbp_topic_reply_count' ] = '<span class="vers bbp_replies_column"  title="' . esc_attr__( 'Replies', 'bbpress' ) . '"><span class="screen-reader-text">' . esc_html__( 'Replies', 'bbpress' ) . '</span></span>';
+	if ( isset( $columns['bbp_topic_reply_count'] ) ) {
+		$columns['bbp_topic_reply_count'] = '<span class="vers bbp_replies_column"  title="' . esc_attr__( 'Replies', 'bbpress' ) . '"><span class="screen-reader-text">' . esc_html__( 'Replies', 'bbpress' ) . '</span></span>';
 	}
 
 	/** Replies ***************************************************************/
 
 	// Reply forum
-	if ( isset( $columns[ 'bbp_reply_forum' ] ) ) {
-		$columns[ 'bbp_reply_forum' ] = '<span class="vers bbp_forums_column"  title="' . esc_attr__( 'Forum', 'bbpress' ) . '"><span class="screen-reader-text">' . esc_html__( 'Forum', 'bbpress' ) . '</span></span>';
+	if ( isset( $columns['bbp_reply_forum'] ) ) {
+		$columns['bbp_reply_forum'] = '<span class="vers bbp_forums_column"  title="' . esc_attr__( 'Forum', 'bbpress' ) . '"><span class="screen-reader-text">' . esc_html__( 'Forum', 'bbpress' ) . '</span></span>';
 	}
 
 	// Reply topic
-	if ( isset( $columns[ 'bbp_reply_topic' ] ) ) {
-		$columns[ 'bbp_reply_topic' ] = '<span class="vers bbp_topics_column"  title="' . esc_attr__( 'Topic', 'bbpress' ) . '"><span class="screen-reader-text">' . esc_html__( 'Topic', 'bbpress' ) . '</span></span>';
+	if ( isset( $columns['bbp_reply_topic'] ) ) {
+		$columns['bbp_reply_topic'] = '<span class="vers bbp_topics_column"  title="' . esc_attr__( 'Topic', 'bbpress' ) . '"><span class="screen-reader-text">' . esc_html__( 'Topic', 'bbpress' ) . '</span></span>';
 	}
 
 	return $columns;
@@ -215,7 +218,7 @@ function bbp_filter_column_headers( $columns = array() ) {
 /**
  * Filter sample permalinks so that certain languages display properly.
  *
- * @since 2.0.0 bbPress (r3336)
+ * @since 2.0.0 bbPress (r3337)
  *
  * @param string $post_link Custom post type permalink
  * @param object $_post Post data object
@@ -267,7 +270,7 @@ function bbp_admin_head() {
 /**
  * Piggy back admin_notices action
  *
- * @since 2.1.0 bbPress (r3766)
+ * @since 2.0.0 bbPress (r2615)
  */
 function bbp_admin_notices() {
 	do_action( 'bbp_admin_notices' );
@@ -285,14 +288,14 @@ function bbp_register_importers() {
 /**
  * Dedicated action to register admin styles
  *
- * @since 2.6.0 bbPress (r6912)
+ * @since 2.6.0 bbPress (r6913)
  */
 function bbp_register_admin_styles() {
 
 	/**
 	 * Action used to register the admin styling
 	 *
-	 * @since 2.1.0
+	 * @since 2.1.0 bbPress (r3766)
 	 * @deprecated 2.6.0
 	 */
 	do_action( 'bbp_register_admin_style' );
@@ -300,7 +303,7 @@ function bbp_register_admin_styles() {
 	/**
 	 * Action used to register all admin styling
 	 *
-	 * @since 2.6.0
+	 * @since 2.6.0 bbPress (r6913)
 	 */
 	do_action( 'bbp_register_admin_styles' );
 }
@@ -308,7 +311,7 @@ function bbp_register_admin_styles() {
 /**
  * Dedicated action to register admin scripts
  *
- * @since 2.6.0 bbPress (r6912)
+ * @since 2.6.0 bbPress (r6913)
  */
 function bbp_register_admin_scripts() {
 	do_action( 'bbp_register_admin_scripts' );
@@ -326,7 +329,7 @@ function bbp_register_admin_settings() {
 /**
  * Dedicated action to output admin tools.php sections
  *
- * @since 2.6.0 bbPress (r6273)
+ * @since 2.6.0 bbPress (r6274)
  */
 function bbp_admin_tool_box() {
 	do_action( 'bbp_admin_tool_box' );
@@ -335,7 +338,7 @@ function bbp_admin_tool_box() {
 /**
  * Dedicated action to hook into the current screen
  *
- * @since 2.6.0 bbPress (r6185)
+ * @since 2.6.0 bbPress (r6186)
  *
  * @param WP_Screen $current_screen
  */

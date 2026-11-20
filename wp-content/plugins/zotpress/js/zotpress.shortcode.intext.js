@@ -213,7 +213,9 @@ jQuery(document).ready(function()
 
 
 				// Then, continue with other requests, if they exist
-				if ( zp_items.meta.request_next != false 
+				if ( zp_items.hasOwnProperty("meta") 
+						&& zp_items.meta.hasOwnProperty("request_next") 
+						&& zp_items.meta.request_next != false 
 						&& zp_items.meta.request_next != "false" )
 				{
 					zp_get_items ( zp_items.meta.request_next, zp_items.meta.request_last, $instance, params, update );
@@ -545,7 +547,8 @@ jQuery(document).ready(function()
 					}
 
 					// Get year or n.d.
-					if ( item_data[item.key].meta.hasOwnProperty("parsedDate") )
+					if ( item_data[item.key].hasOwnProperty("meta")
+							&& item_data[item.key].meta.hasOwnProperty("parsedDate") )
 						item_year = item_data[item.key].meta.parsedDate.substring(0, 4);
 					else
 						item_year = "n.d.";
@@ -677,14 +680,17 @@ jQuery(document).ready(function()
 				// REVIEW: Assumes abbr. author plus full date is "unique"
 				var tempItemDate = "0000";
 				var tempItemYear = "0000";
-				if ( item_data[item.key].meta.hasOwnProperty('parsedDate') ) {
+				if ( item_data[item.key].hasOwnProperty("meta") 
+						&& item_data[item.key].meta.hasOwnProperty('parsedDate') )
+				{
 					tempItemDate = item_data[item.key].meta.parsedDate;
 					tempItemYear = item_data[item.key].meta.parsedDate.substring(0, 4);
 				}
 	
 				// Author
 				var tempAuthor = "";
-				if ( item_data[item.key].meta.hasOwnProperty('creatorSummary') )
+				if ( item_data[item.key].hasOwnProperty("meta") 
+						&& item_data[item.key].meta.hasOwnProperty('creatorSummary') )
 					tempAuthor = item_data[item.key].meta.creatorSummary.replace( /['" ]/g, "-" );
 	
 				intext_citation[cindex]["year"] = tempItemYear;
@@ -766,14 +772,16 @@ jQuery(document).ready(function()
 			var tempItemYear = "0000";
 			// if ( item.data.hasOwnProperty('date') )
 			// 	tempItemDate = item.data.date;
-			if ( item.meta.hasOwnProperty('parsedDate') ) {
+			if ( item.hasOwnProperty("meta")
+					&& item.meta.hasOwnProperty('parsedDate') ) {
 				tempItemDate = item.meta.parsedDate;
 				tempItemYear = item.meta.parsedDate.substring(0, 4);
 			}
 
 			// Author
 			var tempAuthor = "";
-			if ( item.meta.hasOwnProperty('creatorSummary') )
+			if ( item.hasOwnProperty("meta")
+					&& item.meta.hasOwnProperty('creatorSummary') )
 				tempAuthor = item.meta.creatorSummary.replace( /['" ]/g, "-" );
 
 			// Title

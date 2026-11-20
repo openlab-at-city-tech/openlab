@@ -76,6 +76,11 @@ class Float_Widget extends Abstract_Module {
 			return false;
 		}
 
+		// The Support Hub replaces this widget for the products that opted into it.
+		if ( ! empty( apply_filters( $product->get_key() . '_support_hub_metadata', array() ) ) ) {
+			return false;
+		}
+
 		$this->float_widget_data = apply_filters( $product->get_key() . '_float_widget_metadata', array() );
 
 		$can_load = ! empty( $this->float_widget_data );
@@ -163,9 +168,8 @@ class Float_Widget extends Abstract_Module {
 			return;
 		}
 
-		global $themeisle_sdk_max_path;
 		$handle     = 'ti-sdk-float-' . $this->product->get_key();
-		$asset_file = require $themeisle_sdk_max_path . '/assets/js/build/float_widget/float.asset.php';
+		$asset_file = $this->get_asset_file( 'assets/js/build/float_widget/float.asset.php' );
 		$deps       = array_merge( $asset_file['dependencies'], [ 'updates' ] );
 
 		wp_register_script( $handle, $this->get_sdk_uri() . 'assets/js/build/float_widget/float.js', $deps, $asset_file['version'], true );

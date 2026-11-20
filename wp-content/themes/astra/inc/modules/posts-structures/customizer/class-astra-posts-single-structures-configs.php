@@ -935,25 +935,26 @@ class Astra_Posts_Single_Structures_Configs extends Astra_Customizer_Config_Base
 				 * Option: Meta Data Separator.
 				 */
 				array(
-					'name'       => $title_section . '-metadata-separator',
-					'default'    => astra_get_option( $title_section . '-metadata-separator', '/' ),
-					'type'       => 'sub-control',
-					'transport'  => 'postMessage',
-					'parent'     => ASTRA_THEME_SETTINGS . '[' . $title_section . '-structure]',
-					'linked'     => $title_section . '-meta',
-					'section'    => $title_section,
-					'priority'   => 10,
-					'control'    => 'ast-selector',
-					'title'      => __( 'Divider Type', 'astra' ),
-					'choices'    => array(
+					'name'              => $title_section . '-metadata-separator',
+					'default'           => astra_get_option( $title_section . '-metadata-separator', '/' ),
+					'type'              => 'sub-control',
+					'transport'         => 'postMessage',
+					'parent'            => ASTRA_THEME_SETTINGS . '[' . $title_section . '-structure]',
+					'linked'            => $title_section . '-meta',
+					'section'           => $title_section,
+					'priority'          => 10,
+					'control'           => 'ast-selector',
+					'title'             => __( 'Divider Type', 'astra' ),
+					'choices'           => array(
 						'/'    => '/',
 						'-'    => '-',
 						'|'    => '|',
 						'•'    => '•',
 						'none' => __( 'None', 'astra' ),
 					),
-					'responsive' => false,
-					'renderAs'   => 'text',
+					'responsive'        => false,
+					'renderAs'          => 'text',
+					'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_meta_separator' ),
 				),
 
 				/**
@@ -1628,7 +1629,6 @@ class Astra_Posts_Single_Structures_Configs extends Astra_Customizer_Config_Base
 		} else {
 			$title = __( 'Single Banner', 'astra' );
 		}
-		/** @psalm-suppress TooManyArguments */
 		return apply_filters( 'astra_single_post_title', $title . __( ' Title Area', 'astra' ), $post_type );
 	}
 }

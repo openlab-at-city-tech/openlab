@@ -359,7 +359,7 @@ abstract class Block_Abstract {
 	 * @return string
 	 */
 	private function strip_box_shadow( string $wrapper_attributes ): string { //phpcs:ignore LipePlugin.CodeAnalysis.PrivateInClass -- Temporary method.
-		$wrapper_attributes = (string) \preg_replace( '/box-shadow:[^;]+;?/', '', $wrapper_attributes );
+		$wrapper_attributes = (string) \preg_replace( '/box-shadow:[^";]+;?/', '', $wrapper_attributes );
 		return \str_replace( 'style="" ', '', $wrapper_attributes );
 	}
 

@@ -1,0 +1,258 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.7.2] - 2026-11-02
+### Changed
+- Update package dependencies. [#53869]
+
+## [0.7.1] - 2026-10-28
+### Changed
+- Update dependencies.
+
+## [0.7.0] - 2026-10-26
+### Added
+- Link backups to that backup in the Backup dashboard when the new dashboard is on. [#53929]
+- Mark backups that are known to contain security threats on sites hosted on WordPress.com, and open the in-admin restore screen from "Restore backup" when the new Backup dashboard is on. [#53755]
+
+### Fixed
+- Offer an available plan when Security is retired. [#53854]
+- Show an empty date picker on the free plan, instead of a date range it does not apply. Hide backup events on WordPress.com sites without backups. [#53982]
+- Stop logging a "jetpackConfig is missing" console error on the Activity Log page. [#54057]
+
+## [0.6.0] - 2026-10-20
+### Added
+- Add support for WordPress.com Simple sites. [#53330]
+
+## [0.5.1] - 2026-10-19
+### Changed
+- Update dependencies. [#53618]
+- Update package dependencies. [#53004]
+
+## [0.5.0] - 2026-10-12
+### Added
+- Let a link open the log filtered to AI agent actions. [#52895]
+
+## [0.4.6] - 2026-10-07
+### Changed
+- Update dependencies. [#53250]
+
+## [0.4.5] - 2026-10-05
+### Changed
+- Show the connection error notice only when a connection error has been recorded, and the generic notice otherwise. [#52977]
+
+## [0.4.4] - 2026-09-29
+### Changed
+- Update dependencies.
+
+## [0.4.3] - 2026-09-28
+### Changed
+- Update dependencies.
+
+## [0.4.2] - 2026-09-23
+### Changed
+- Use the shared wp-build-polyfills helper to order the screen-ID alias around wp-build's generated enqueue check. [#52583]
+
+## [0.4.1] - 2026-09-21
+### Fixed
+- Dashboard: Restore the admin screen ID after the wp-build enqueue check. [#52471]
+
+## [0.4.0] - 2026-09-18
+### Added
+- Register activity-log as a standalone module, and switch it on by default on sites with no Jetpack plugin. [#52409]
+
+### Changed
+- Exclude source map files from the distributed package. [#52304]
+- Only wire up the admin page and REST routes while the activity-log module is active. [#52409]
+- Update package dependencies. [#52187] [#52401] [#52402]
+
+### Fixed
+- Keep the event and actor icons colored now that @wordpress/icons 16 draws them as strokes. [#52187]
+
+## [0.3.5] - 2026-09-15
+### Changed
+- Update dependencies.
+
+## [0.3.4] - 2026-09-14
+### Changed
+- Internal updates.
+
+## [0.3.3] - 2026-09-09
+### Changed
+- Sidebar: Sort Jetpack menu items alphabetically, pinning My Jetpack to the top and external links and Settings to the bottom. [#52003]
+
+## [0.3.2] - 2026-09-08
+### Changed
+- Update package dependencies. [#51701]
+
+## [0.3.1] - 2026-09-01
+### Changed
+- Update package dependencies. [#51303] [#51802]
+
+## [0.3.0] - 2026-08-26
+### Removed
+- Minimum supported PHP version is now 7.4. [#51515]
+
+### Fixed
+- Ensure table content wraps neatly onto a new line if long. [#51600]
+
+## [0.2.6] - 2026-08-25
+### Changed
+- Update dependencies.
+
+## [0.2.5] - 2026-08-20
+### Changed
+- Update dependencies.
+
+## [0.2.4] - 2026-08-19
+### Changed
+- Update dependencies.
+
+## [0.2.3] - 2026-08-13
+### Changed
+- Update dependencies.
+
+## [0.2.2] - 2026-08-10
+### Changed
+- Update package dependencies. [#50509]
+
+### Fixed
+- Restore PHP 7.2 compatibility for the Activity Log admin page. [#51078]
+
+## [0.2.1] - 2026-08-03
+### Fixed
+- Load JS translation catalogs and stamp the package text domain on the wp-build dashboard bundle. [#50762]
+
+## [0.2.0] - 2026-07-27
+### Changed
+- Build the Activity Log dashboard with wp-build (boot script modules) instead of webpack. [#50714]
+- Update dependencies. [#50719]
+- Update package dependencies. [#50751] [#50753]
+
+### Fixed
+- Send analytics events for Activity Log dashboard interactions by loading the Tracks library. [#50714]
+
+## [0.1.12] - 2026-07-20
+### Changed
+- Update package dependencies. [#50510] [#50529]
+
+### Fixed
+- Register wp-build polyfills so the admin bundle loads on WordPress versions that don't provide the wp-theme script handle. [#50557]
+
+## [0.1.11] - 2026-07-13
+### Added
+- Surface an actionable connection-error notice when the activity log fails to load due to a broken connection. [#50169]
+
+### Changed
+- Update package dependencies. [#49272]
+- Update WPDS design tokens to the @wordpress/theme 0.16/0.17 names (see https://github.com/WordPress/gutenberg/blob/trunk/packages/theme/CHANGELOG.md#0160-2026-06-24 ). [#49272]
+
+## [0.1.10] - 2026-07-06
+### Changed
+- Admin Menu: Move "Activity Log" above "Settings". [#50104]
+- Update package dependencies. [#50097] [#50183]
+
+## [0.1.9] - 2026-06-29
+### Changed
+- Internal updates.
+
+## [0.1.8] - 2026-06-25
+### Changed
+- Update package dependencies. [#49831]
+
+## [0.1.7] - 2026-06-22
+### Changed
+- Update package dependencies. [#49631] [#49691] [#49757]
+
+## [0.1.6] - 2026-06-15
+### Changed
+- Update package dependencies. [#49273] [#49492]
+
+## [0.1.5] - 2026-06-08
+### Changed
+- Update dependencies. [#49354]
+
+## [0.1.4] - 2026-06-01
+### Added
+- Notices: Add notice when the connection state prevents logs from showing. [#48858]
+
+### Changed
+- Update package dependencies. [#48404]
+
+## [0.1.3] - 2026-05-25
+### Changed
+- Update package dependencies. [#48405]
+
+### Fixed
+- Fix upgrade prompt incorrectly shown to sites entitled to the full activity log. [#49067]
+
+## [0.1.2] - 2026-05-19
+### Added
+- Add a "Performed by" filter for narrowing the log by actor, including MCP agents. Filtering is applied server-side so totals and pagination stay correct. [#48594]
+
+### Changed
+- Update dependencies. [#48778]
+
+## [0.1.1] - 2026-05-11
+### Changed
+- Activity Log: Open the Jetpack Cloud Backup restore flow from the "Manage backup" row action instead of showing a disabled placeholder. [#48531]
+- Activity Log: Refresh the free-tier upsell illustration to match Jetpack's branding. [#48531]
+- Activity Log: Rename the row action to "Restore backup" so the label matches what clicking it actually does. [#48531]
+- Components: Use Link from `@wordpress/ui` instead of ExternalLink. [#48529]
+
+## [0.1.0] - 2026-05-04
+### Added
+- Initial release of the Activity Log package: Hosts the Activity Log UI and its REST endpoints directly in WP Admin. [#48244]
+
+### Changed
+- Activity Log: Opt into `<AdminPage unwrapped>` so DataViews can fill the bounded content slot and scroll its table body internally. Header, date picker, and DataViews toolbar stay pinned on short viewports. [#48244]
+
+### Fixed
+- Activity Log: Default the page to the Table layout, load the upsell-callout stylesheet from the main entry, and surface the disabled toolbar + disabled date-range picker on the free tier with upgrade tooltips. [#48418]
+
+## 0.1.0-alpha - unreleased
+
+Initial release.
+
+[0.7.2]: https://github.com/Automattic/jetpack-activity-log/compare/v0.7.1...v0.7.2
+[0.7.1]: https://github.com/Automattic/jetpack-activity-log/compare/v0.7.0...v0.7.1
+[0.7.0]: https://github.com/Automattic/jetpack-activity-log/compare/v0.6.0...v0.7.0
+[0.6.0]: https://github.com/Automattic/jetpack-activity-log/compare/v0.5.1...v0.6.0
+[0.5.1]: https://github.com/Automattic/jetpack-activity-log/compare/v0.5.0...v0.5.1
+[0.5.0]: https://github.com/Automattic/jetpack-activity-log/compare/v0.4.6...v0.5.0
+[0.4.6]: https://github.com/Automattic/jetpack-activity-log/compare/v0.4.5...v0.4.6
+[0.4.5]: https://github.com/Automattic/jetpack-activity-log/compare/v0.4.4...v0.4.5
+[0.4.4]: https://github.com/Automattic/jetpack-activity-log/compare/v0.4.3...v0.4.4
+[0.4.3]: https://github.com/Automattic/jetpack-activity-log/compare/v0.4.2...v0.4.3
+[0.4.2]: https://github.com/Automattic/jetpack-activity-log/compare/v0.4.1...v0.4.2
+[0.4.1]: https://github.com/Automattic/jetpack-activity-log/compare/v0.4.0...v0.4.1
+[0.4.0]: https://github.com/Automattic/jetpack-activity-log/compare/v0.3.5...v0.4.0
+[0.3.5]: https://github.com/Automattic/jetpack-activity-log/compare/v0.3.4...v0.3.5
+[0.3.4]: https://github.com/Automattic/jetpack-activity-log/compare/v0.3.3...v0.3.4
+[0.3.3]: https://github.com/Automattic/jetpack-activity-log/compare/v0.3.2...v0.3.3
+[0.3.2]: https://github.com/Automattic/jetpack-activity-log/compare/v0.3.1...v0.3.2
+[0.3.1]: https://github.com/Automattic/jetpack-activity-log/compare/v0.3.0...v0.3.1
+[0.3.0]: https://github.com/Automattic/jetpack-activity-log/compare/v0.2.6...v0.3.0
+[0.2.6]: https://github.com/Automattic/jetpack-activity-log/compare/v0.2.5...v0.2.6
+[0.2.5]: https://github.com/Automattic/jetpack-activity-log/compare/v0.2.4...v0.2.5
+[0.2.4]: https://github.com/Automattic/jetpack-activity-log/compare/v0.2.3...v0.2.4
+[0.2.3]: https://github.com/Automattic/jetpack-activity-log/compare/v0.2.2...v0.2.3
+[0.2.2]: https://github.com/Automattic/jetpack-activity-log/compare/v0.2.1...v0.2.2
+[0.2.1]: https://github.com/Automattic/jetpack-activity-log/compare/v0.2.0...v0.2.1
+[0.2.0]: https://github.com/Automattic/jetpack-activity-log/compare/v0.1.12...v0.2.0
+[0.1.12]: https://github.com/Automattic/jetpack-activity-log/compare/v0.1.11...v0.1.12
+[0.1.11]: https://github.com/Automattic/jetpack-activity-log/compare/v0.1.10...v0.1.11
+[0.1.10]: https://github.com/Automattic/jetpack-activity-log/compare/v0.1.9...v0.1.10
+[0.1.9]: https://github.com/Automattic/jetpack-activity-log/compare/v0.1.8...v0.1.9
+[0.1.8]: https://github.com/Automattic/jetpack-activity-log/compare/v0.1.7...v0.1.8
+[0.1.7]: https://github.com/Automattic/jetpack-activity-log/compare/v0.1.6...v0.1.7
+[0.1.6]: https://github.com/Automattic/jetpack-activity-log/compare/v0.1.5...v0.1.6
+[0.1.5]: https://github.com/Automattic/jetpack-activity-log/compare/v0.1.4...v0.1.5
+[0.1.4]: https://github.com/Automattic/jetpack-activity-log/compare/v0.1.3...v0.1.4
+[0.1.3]: https://github.com/Automattic/jetpack-activity-log/compare/v0.1.2...v0.1.3
+[0.1.2]: https://github.com/Automattic/jetpack-activity-log/compare/v0.1.1...v0.1.2
+[0.1.1]: https://github.com/Automattic/jetpack-activity-log/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/Automattic/jetpack-activity-log/compare/v0.1.0-alpha...v0.1.0

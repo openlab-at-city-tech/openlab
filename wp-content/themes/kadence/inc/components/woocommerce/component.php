@@ -10,18 +10,18 @@ namespace Kadence\Woocommerce;
 use Kadence\Component_Interface;
 use Kadence\Kadence_CSS;
 use Kadence_Blocks_Frontend;
-use ElementorPro;
+use WPSEO_Primary_Term;
+
 use function Kadence\kadence;
 use function add_action;
 use function add_theme_support;
-use function have_posts;
-use function the_post;
 use function is_search;
 use function get_template_part;
 use function get_post_type;
 use function woocommerce_catalog_ordering;
 use function woocommerce_result_count;
-use WPSEO_Primary_Term;
+use function Kadence\is_shopkit_feature_enabled;
+
 
 /**
  * Class for adding Woocommerce plugin support.
@@ -35,7 +35,7 @@ class Component implements Component_Interface {
 	 *
 	 * @var array
 	 */
-	protected static $google_fonts = array();
+	protected static $google_fonts = [];
 
 	/**
 	 * Holds the bool for cart in header.
@@ -63,7 +63,7 @@ class Component implements Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'woocommerce';
 	}
 
@@ -72,13 +72,13 @@ class Component implements Component_Interface {
 	 */
 	public function initialize() {
 
-		add_filter( 'kadence_dynamic_css', array( $this, 'dynamic_css' ), 20 );
-		add_action( 'wp_head', array( $this, 'frontend_gfonts' ), 80 );
+		add_filter( 'kadence_dynamic_css', [ $this, 'dynamic_css' ], 20 );
+		add_action( 'wp_head', [ $this, 'frontend_gfonts' ], 80 );
 
-		add_action( 'wp_enqueue_scripts', array( $this, 'action_enqueue_scripts' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'action_enqueue_product_scripts' ), 1 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'action_enqueue_scripts' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'action_enqueue_product_scripts' ], 1 );
 
-		add_action( 'after_setup_theme', array( $this, 'action_add_woocommerce_support' ) );
+		add_action( 'after_setup_theme', [ $this, 'action_add_woocommerce_support' ] );
 		// Remove default wrappers.
 		remove_action( 'woocommerce_before_main_content', 'woocommerce_output_content_wrapper' );
 		remove_action( 'woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end' );
@@ -88,112 +88,111 @@ class Component implements Component_Interface {
 		remove_action( 'woocommerce_before_shop_loop', 'woocommerce_result_count', 20 );
 		remove_action( 'woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30 );
 		// Remove default description output.
-		add_action( 'woocommerce_before_main_content', array( $this, 'action_remove_normal_archive_description' ) );
+		add_action( 'woocommerce_before_main_content', [ $this, 'action_remove_normal_archive_description' ] );
 		// Remove Breadcrumbs.
 		remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20, 0 );
 		// Add Product Above Area Breadcrumb.
-		add_action( 'woocommerce_before_single_product', array( $this, 'output_product_above' ), 20 );
+		add_action( 'woocommerce_before_single_product', [ $this, 'output_product_above' ], 20 );
 		// Add Product Above Area title.
-		add_action( 'woocommerce_before_main_content', array( $this, 'output_product_above_title' ), 5 );
+		add_action( 'woocommerce_before_main_content', [ $this, 'output_product_above_title' ], 5 );
 		// Perhaps remove product tab headings.
-		add_filter( 'woocommerce_product_description_heading', array( $this, 'remove_product_tab_heading' ) );
-		add_filter( 'woocommerce_product_additional_information_heading', array( $this, 'remove_product_tab_heading' ) );
+		add_filter( 'woocommerce_product_description_heading', [ $this, 'remove_product_tab_heading' ] );
+		add_filter( 'woocommerce_product_additional_information_heading', [ $this, 'remove_product_tab_heading' ] );
 		// Add custom wrappers.
-		add_action( 'woocommerce_before_main_content', array( $this, 'output_content_wrapper' ) );
-		add_action( 'woocommerce_after_main_content', array( $this, 'output_content_wrapper_end' ) );
+		add_action( 'woocommerce_before_main_content', [ $this, 'output_content_wrapper' ] );
+		add_action( 'woocommerce_after_main_content', [ $this, 'output_content_wrapper_end' ] );
 
-		add_filter( 'woocommerce_single_product_image_gallery_classes', array( $this, 'single_product_image_initial_ratio' ), 20 );
+		add_filter( 'woocommerce_single_product_image_gallery_classes', [ $this, 'single_product_image_initial_ratio' ], 20 );
 		// Remove Default Title.
 		add_filter( 'woocommerce_show_page_title', '__return_false', 20 );
 		// Add Woo archive title meta.
-		add_action( 'woocommerce_before_shop_loop', array( $this, 'archive_loop_top' ), 20 );
+		add_action( 'woocommerce_before_shop_loop', [ $this, 'archive_loop_top' ], 20 );
 		// Add Single product controls.
-		add_action( 'woocommerce_before_single_product', array( $this, 'single_product_layout' ), 20 );
+		add_action( 'woocommerce_before_single_product', [ $this, 'single_product_layout' ], 20 );
 		// Add Single product reviews css.
-		add_action( 'woocommerce_after_single_product_summary', array( $this, 'single_product_comment_css' ), 5 );
+		add_action( 'woocommerce_after_single_product_summary', [ $this, 'single_product_comment_css' ], 5 );
 		// Loop Start.
-		add_filter( 'woocommerce_product_loop_start', array( $this, 'product_loop_start' ), 5 );
-		add_filter( 'kadence_blocks_carousel_woocommerce_product_loop_start', array( $this, 'product_loop_start' ), 5 );
+		add_filter( 'woocommerce_product_loop_start', [ $this, 'product_loop_start' ], 5 );
+		add_filter( 'kadence_blocks_carousel_woocommerce_product_loop_start', [ $this, 'product_loop_start' ], 5 );
 		// Add Post grid class.
-		add_filter( 'post_class', array( $this, 'add_woo_entry_classes' ), 20, 3 );
+		add_filter( 'post_class', [ $this, 'add_woo_entry_classes' ], 20, 3 );
 		// Add category grid class.
-		add_filter( 'product_cat_class', array( $this, 'add_woo_cat_entry_classes' ), 20, 3 );
+		add_filter( 'product_cat_class', [ $this, 'add_woo_cat_entry_classes' ], 20, 3 );
 		// Remove standard link open for products.
 		remove_action( 'woocommerce_before_shop_loop_item', 'woocommerce_template_loop_product_link_open' );
 		remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_product_link_close', 5 );
 		// Image Link.
-		add_action( 'woocommerce_before_shop_loop_item_title', array( $this, 'archive_loop_image_link_open' ), 5 );
-		add_action( 'woocommerce_before_shop_loop_item_title', array( $this, 'archive_loop_second_image' ), 30 );
-		add_action( 'woocommerce_before_shop_loop_item_title', array( $this, 'archive_loop_image_link_close' ), 50 );
+		add_action( 'woocommerce_before_shop_loop_item_title', [ $this, 'archive_loop_image_link_open' ], 5 );
+		add_action( 'woocommerce_before_shop_loop_item_title', [ $this, 'archive_loop_second_image' ], 30 );
+		add_action( 'woocommerce_before_shop_loop_item_title', [ $this, 'archive_loop_image_link_close' ], 50 );
 		// Content Wrap.
-		add_action( 'woocommerce_shop_loop_item_title', array( $this, 'archive_content_wrap_start' ), 5 );
-		add_action( 'woocommerce_after_shop_loop_item', array( $this, 'archive_content_wrap_end' ), 50 );
-		add_action( 'woocommerce_shop_loop_subcategory_title', array( $this, 'archive_content_wrap_start' ), 5 );
-		add_action( 'woocommerce_after_subcategory_title', array( $this, 'archive_content_wrap_end' ), 50 );
+		add_action( 'woocommerce_shop_loop_item_title', [ $this, 'archive_content_wrap_start' ], 5 );
+		add_action( 'woocommerce_after_shop_loop_item', [ $this, 'archive_content_wrap_end' ], 50 );
+		add_action( 'woocommerce_shop_loop_subcategory_title', [ $this, 'archive_content_wrap_start' ], 5 );
+		add_action( 'woocommerce_after_subcategory_title', [ $this, 'archive_content_wrap_end' ], 50 );
 		// Title Link.
 		remove_action( 'woocommerce_shop_loop_item_title', 'woocommerce_template_loop_product_title' );
-		add_action( 'woocommerce_shop_loop_item_title', array( $this, 'archive_title_with_link' ) );
+		add_action( 'woocommerce_shop_loop_item_title', [ $this, 'archive_title_with_link' ] );
 		// Excerpt.
-		add_action( 'woocommerce_after_shop_loop_item_title', array( $this, 'archive_excerpt' ), 20 );
+		add_action( 'woocommerce_after_shop_loop_item_title', [ $this, 'archive_excerpt' ], 20 );
 		add_filter( 'archive_woocommerce_short_description', 'wptexturize' );
 		add_filter( 'archive_woocommerce_short_description', 'wpautop' );
 		add_filter( 'archive_woocommerce_short_description', 'shortcode_unautop' );
 		add_filter( 'archive_woocommerce_short_description', 'do_shortcode', 11 );
 		// Add to cart wrap.
-		add_action( 'woocommerce_after_shop_loop_item', array( $this, 'archive_action_wrap_start' ), 5 );
-		add_action( 'woocommerce_after_shop_loop_item', array( $this, 'archive_action_wrap_end' ), 20 );
+		add_action( 'woocommerce_after_shop_loop_item', [ $this, 'archive_action_wrap_start' ], 5 );
+		add_action( 'woocommerce_after_shop_loop_item', [ $this, 'archive_action_wrap_end' ], 20 );
 		// Add to cart.
-		add_filter( 'woocommerce_product_loop_start', array( $this, 'add_filter_for_add_to_cart_link' ) );
-		add_filter( 'woocommerce_product_loop_end', array( $this, 'remove_filter_for_add_to_cart_link' ) );
+		add_filter( 'woocommerce_product_loop_start', [ $this, 'add_filter_for_add_to_cart_link' ] );
+		add_filter( 'woocommerce_product_loop_end', [ $this, 'remove_filter_for_add_to_cart_link' ] );
 		// Custom templates for blocks.
-		add_action( 'kadence_woocommerce_template_before_block_loop', array( $this, 'add_filter_for_add_to_cart_link' ) );
-		add_action( 'kadence_woocommerce_template_after_block_loop', array( $this, 'add_filter_for_add_to_cart_link' ) );
+		add_action( 'kadence_woocommerce_template_before_block_loop', [ $this, 'add_filter_for_add_to_cart_link' ] );
+		add_action( 'kadence_woocommerce_template_after_block_loop', [ $this, 'add_filter_for_add_to_cart_link' ] );
 		// My Account.
-		add_action( 'woocommerce_before_account_navigation', array( $this, 'myaccount_nav_wrap_start' ), 2 );
-		add_action( 'woocommerce_before_account_navigation', array( $this, 'myaccount_nav_avatar' ), 20 );
-		add_action( 'woocommerce_after_account_navigation', array( $this, 'myaccount_nav_wrap_end' ), 50 );
+		add_action( 'woocommerce_before_account_navigation', [ $this, 'myaccount_nav_wrap_start' ], 2 );
+		add_action( 'woocommerce_before_account_navigation', [ $this, 'myaccount_nav_avatar' ], 20 );
+		add_action( 'woocommerce_after_account_navigation', [ $this, 'myaccount_nav_wrap_end' ], 50 );
 
 		// Cart.
-		add_action( 'woocommerce_before_cart', array( $this, 'cart_form_wrap_before' ) );
-		add_action( 'woocommerce_after_cart', array( $this, 'cart_form_wrap_after' ) );
-		add_action( 'woocommerce_before_cart_table', array( $this, 'cart_summary_title' ) );
+		add_action( 'woocommerce_before_cart', [ $this, 'cart_form_wrap_before' ] );
+		add_action( 'woocommerce_after_cart', [ $this, 'cart_form_wrap_after' ] );
+		add_action( 'woocommerce_before_cart_table', [ $this, 'cart_summary_title' ] );
 		// Move Cross sell below.
 		remove_action( 'woocommerce_cart_collaterals', 'woocommerce_cross_sell_display' );
 		add_action( 'woocommerce_after_cart', 'woocommerce_cross_sell_display' );
 		// Change cross sells columns and limit.
-		add_filter( 'woocommerce_cross_sells_columns', array( $this, 'cross_sell_columns' ), 20 );
-		add_filter( 'woocommerce_cross_sells_total', array( $this, 'cross_sell_limit' ), 20 );
+		add_filter( 'woocommerce_cross_sells_columns', [ $this, 'cross_sell_columns' ], 20 );
+		add_filter( 'woocommerce_cross_sells_total', [ $this, 'cross_sell_limit' ], 20 );
 
-		add_action( 'kadence_before_main_content', array( $this, 'wc_print_notices_none_woo' ) );
+		add_action( 'kadence_before_main_content', [ $this, 'wc_print_notices_none_woo' ] );
 		// Add Fragment Support.
-		add_action( 'init', array( $this, 'check_for_fragment_support' ) );
+		add_action( 'init', [ $this, 'check_for_fragment_support' ] );
 		// Check again for Fragment Support in conditional header.
-		add_action( 'wp', array( $this, 'check_conditional_for_fragment_support' ), 2 );
+		add_action( 'wp', [ $this, 'check_conditional_for_fragment_support' ], 2 );
 
 		// Add my Account Navigation Classes.
-		add_filter( 'body_class', array( $this, 'my_account_body_classes' ) );
+		add_filter( 'body_class', [ $this, 'my_account_body_classes' ] );
 
 		// Add single product Button Classes.
-		add_filter( 'body_class', array( $this, 'single_product_body_classes' ) );
+		add_filter( 'body_class', [ $this, 'single_product_body_classes' ] );
 
 		// Add Store Notice Body Class and handle some placement shuffling for the store notice.
-		add_filter( 'body_class', array( $this, 'woo_extra_body_classes' ) );
+		add_filter( 'body_class', [ $this, 'woo_extra_body_classes' ] );
 		// Filter product blocks grid html.
-		add_filter( 'woocommerce_blocks_product_grid_item_html', array( $this, 'custom_block_html' ), 2, 3 );
+		add_filter( 'woocommerce_blocks_product_grid_item_html', [ $this, 'custom_block_html' ], 2, 3 );
 		// Change related products columns.
-		add_filter( 'woocommerce_output_related_products_args', array( $this, 'related_products_columns' ), 20 );
+		add_filter( 'woocommerce_output_related_products_args', [ $this, 'related_products_columns' ], 20 );
 		// Add js for category toggling.
-		add_filter( 'woocommerce_product_categories_widget_args', array( $this, 'category_widget_toggle_script' ) );
+		add_filter( 'woocommerce_product_categories_widget_args', [ $this, 'category_widget_toggle_script' ] );
 		// Add menu-item class to submenu of woo account nav.
-		add_filter( 'woocommerce_account_menu_item_classes', array( $this, 'add_account_navigation_class' ) );
+		add_filter( 'woocommerce_account_menu_item_classes', [ $this, 'add_account_navigation_class' ] );
 
 		// Replace woocommerce archive description.
 		remove_action( 'woocommerce_archive_description', 'woocommerce_product_archive_description', 10 );
-		add_action( 'woocommerce_archive_description', array( $this, 'add_product_archive_description' ), 10 );
-		add_action( 'init', array( $this, 'setup_shop_content_filter' ), 9 );
+		add_action( 'woocommerce_archive_description', [ $this, 'add_product_archive_description' ], 10 );
+		add_action( 'init', [ $this, 'setup_shop_content_filter' ], 9 );
 		// Shopkit Add filter for block classes.
-		add_filter( 'kadence_shop_kit_product_loop_classes', array( $this, 'add_product_archive_loop_classes_shopkit' ), 10 );
-
+		add_filter( 'kadence_shop_kit_product_loop_classes', [ $this, 'add_product_archive_loop_classes_shopkit' ], 10 );
 	}
 	/**
 	 * Enqueue Frontend Fonts
@@ -206,11 +205,11 @@ class Component implements Component_Interface {
 			$ktblocks_instance = Kadence_Blocks_Frontend::get_instance();
 			foreach ( self::$google_fonts as $key => $font ) {
 				if ( ! array_key_exists( $key, $ktblocks_instance::$gfonts ) ) {
-					$add_font = array(
+					$add_font                           = [
 						'fontfamily'   => $font['fontfamily'],
-						'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : array() ),
-						'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : array() ),
-					);
+						'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : [] ),
+						'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : [] ),
+					];
 					$ktblocks_instance::$gfonts[ $key ] = $add_font;
 				} else {
 					foreach ( $font['fontvariants'] as $variant ) {
@@ -221,7 +220,7 @@ class Component implements Component_Interface {
 				}
 			}
 		} else {
-			add_filter( 'kadence_theme_google_fonts_array', array( $this, 'filter_in_fonts' ) );
+			add_filter( 'kadence_theme_google_fonts_array', [ $this, 'filter_in_fonts' ] );
 		}
 	}
 	/**
@@ -234,11 +233,11 @@ class Component implements Component_Interface {
 		// Enqueue Google Fonts.
 		foreach ( self::$google_fonts as $key => $font ) {
 			if ( ! array_key_exists( $key, $font_array ) ) {
-				$add_font = array(
+				$add_font           = [
 					'fontfamily'   => $font['fontfamily'],
-					'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : array() ),
-					'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : array() ),
-				);
+					'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : [] ),
+					'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : [] ),
+				];
 				$font_array[ $key ] = $add_font;
 			} else {
 				foreach ( $font['fontvariants'] as $variant ) {
@@ -255,8 +254,8 @@ class Component implements Component_Interface {
 	 */
 	public function setup_shop_content_filter() {
 		global $wp_embed;
-		add_filter( 'kadence_theme_shop_content', array( $wp_embed, 'run_shortcode' ), 8 );
-		add_filter( 'kadence_theme_shop_content', array( $wp_embed, 'autoembed'     ), 8 );
+		add_filter( 'kadence_theme_shop_content', [ $wp_embed, 'run_shortcode' ], 8 );
+		add_filter( 'kadence_theme_shop_content', [ $wp_embed, 'autoembed' ], 8 );
 		add_filter( 'kadence_theme_shop_content', 'do_blocks' );
 		add_filter( 'kadence_theme_shop_content', 'wptexturize' );
 		add_filter( 'kadence_theme_shop_content', 'convert_chars' );
@@ -273,7 +272,7 @@ class Component implements Component_Interface {
 			return;
 		}
 
-		if ( is_post_type_archive( 'product' ) && in_array( absint( get_query_var( 'paged' ) ), array( 0, 1 ), true ) ) {
+		if ( is_post_type_archive( 'product' ) && in_array( absint( get_query_var( 'paged' ) ), [ 0, 1 ], true ) ) {
 			$shop_page = get_post( wc_get_page_id( 'shop' ) );
 			if ( $shop_page ) {
 				if ( has_blocks( $shop_page->post_content ) ) {
@@ -284,8 +283,8 @@ class Component implements Component_Interface {
 					// This is needed for the search product block to work.
 					$allowed_html = array_merge(
 						$allowed_html,
-						array(
-							'form'   => array(
+						[
+							'form'   => [
 								'action'         => true,
 								'accept'         => true,
 								'accept-charset' => true,
@@ -293,24 +292,24 @@ class Component implements Component_Interface {
 								'method'         => true,
 								'name'           => true,
 								'target'         => true,
-							),
+							],
 
-							'input'  => array(
+							'input'  => [
 								'type'        => true,
 								'id'          => true,
 								'class'       => true,
 								'placeholder' => true,
 								'name'        => true,
 								'value'       => true,
-							),
+							],
 
-							'button' => array(
+							'button' => [
 								'type'  => true,
 								'class' => true,
 								'label' => true,
-							),
+							],
 
-							'svg'    => array(
+							'svg'    => [
 								'hidden'    => true,
 								'role'      => true,
 								'focusable' => true,
@@ -318,11 +317,11 @@ class Component implements Component_Interface {
 								'width'     => true,
 								'height'    => true,
 								'viewbox'   => true,
-							),
-							'path'   => array(
+							],
+							'path'   => [
 								'd' => true,
-							),
-						)
+							],
+						]
 					);
 					$description = wc_format_content( wp_kses( $shop_page->post_content, $allowed_html ) );
 				}
@@ -393,9 +392,9 @@ class Component implements Component_Interface {
 	 * @return array updated args array.
 	 */
 	public function related_products_columns( $args ) {
-		$columns = absint( kadence()->option( 'product_related_columns' ) );
+		$columns                = absint( kadence()->option( 'product_related_columns' ) );
 		$args['posts_per_page'] = $columns;
-		$args['columns'] = $columns;
+		$args['columns']        = $columns;
 		return $args;
 	}
 	/**
@@ -405,17 +404,17 @@ class Component implements Component_Interface {
 	 * @return array updated classes string.
 	 */
 	public function add_product_archive_loop_classes_shopkit( $classes ) {
-		$product_image_hover_style = kadence()->option( 'product_archive_image_hover_switch' );
-		$product_btn_style = kadence()->option( 'product_archive_button_style' );
-		$hover_style       = 'woo-archive-image-hover-' . esc_attr( $product_image_hover_style );
-		$button_style      = 'woo-archive-btn-' . esc_attr( $product_btn_style );
+		$product_image_hover_style = is_shopkit_feature_enabled( 'feature_image_swap' ) ? 'none' : kadence()->option( 'product_archive_image_hover_switch' );
+		$product_btn_style         = kadence()->option( 'product_archive_button_style' );
+		$hover_style               = 'woo-archive-image-hover-' . esc_attr( $product_image_hover_style );
+		$button_style              = 'woo-archive-btn-' . esc_attr( $product_btn_style );
 		if ( ! empty( $classes ) && is_array( $classes ) ) {
 			$classes[] = $hover_style;
 			$classes[] = $button_style;
-		} else if ( ! empty( $classes ) ) {
-			$classes = array( $hover_style, $button_style, $classes );
+		} elseif ( ! empty( $classes ) ) {
+			$classes = [ $hover_style, $button_style, $classes ];
 		} else {
-			$classes = array( $hover_style, $button_style );
+			$classes = [ $hover_style, $button_style ];
 		}
 		return $classes;
 	}
@@ -428,20 +427,20 @@ class Component implements Component_Interface {
 	 * @return string updated html.
 	 */
 	public function custom_block_html( $html, $data, $product ) {
-		$attributes = array(
+		$attributes = [
 			'aria-label'       => $product->add_to_cart_description(),
 			'data-quantity'    => '1',
 			'data-product_id'  => $product->get_id(),
 			'data-product_sku' => $product->get_sku(),
 			'rel'              => 'nofollow',
 			'class'            => 'wp-block-button__link add_to_cart_button',
-		);
+		];
 
 		if ( $product->supports( 'ajax_add_to_cart' ) && $product->is_purchasable() && ( $product->is_in_stock() || $product->backorders_allowed() ) ) {
 			$attributes['class'] .= ' ajax_add_to_cart';
 		}
-		$product_btn_style = kadence()->option( 'product_archive_button_style' );
-		$product_image_hover_style = kadence()->option( 'product_archive_image_hover_switch' );
+		$product_btn_style         = kadence()->option( 'product_archive_button_style' );
+		$product_image_hover_style = is_shopkit_feature_enabled( 'feature_image_swap' ) ? 'none' : kadence()->option( 'product_archive_image_hover_switch' );
 		if ( 'button' === $product_btn_style ) {
 			$cart_text = sprintf(
 				'<a href="%s" %s>%s</a>',
@@ -457,33 +456,33 @@ class Component implements Component_Interface {
 				esc_html( $product->add_to_cart_text() ) . '' . kadence()->get_icon( 'arrow-right-alt' ) . '' . kadence()->get_icon( 'spinner' ) . '' . kadence()->get_icon( 'check' )
 			);
 		}
-		$action_button = '<div class="wp-block-button wc-block-grid__product-add-to-cart">' . $cart_text . '</div>';
+		$action_button          = '<div class="wp-block-button wc-block-grid__product-add-to-cart">' . $cart_text . '</div>';
 		$secondary_image_output = '';
 		if ( 'none' !== $product_image_hover_style ) {
 			if ( is_a( $product, 'WC_Product' ) ) {
 				$attachment_ids = $product->get_gallery_image_ids();
 				if ( $attachment_ids ) {
-					$attachment_ids     = array_values( $attachment_ids );
-					$secondary_image_id    = $attachment_ids['0'];
-					$secondary_image_alt   = get_post_meta( $secondary_image_id, '_wp_attachment_image_alt', true );
+					$attachment_ids         = array_values( $attachment_ids );
+					$secondary_image_id     = $attachment_ids['0'];
+					$secondary_image_alt    = get_post_meta( $secondary_image_id, '_wp_attachment_image_alt', true );
 					$secondary_image_output = wp_get_attachment_image(
 						$secondary_image_id,
 						apply_filters( 'single_product_archive_thumbnail_size', 'woocommerce_thumbnail' ),
 						false,
-						array(
+						[
 							'class' => 'secondary-product-image attachment-woocommerce_thumbnail attachment-shop-catalog wp-post-image wp-post-image--secondary',
 							'alt'   => $secondary_image_alt,
-						)
+						]
 					);
 				}
 			}
 		}
 		$product_image = $data->image;
 		if ( is_a( $product, 'WC_Product' ) && ! empty( $product_image ) ) {
-			$image_size = apply_filters( 'single_product_archive_thumbnail_size', 'woocommerce_thumbnail' );
+			$image_size    = apply_filters( 'single_product_archive_thumbnail_size', 'woocommerce_thumbnail' );
 			$product_image = $product->get_image( $image_size );
 		}
-		$new_data = (object) array(
+		$new_data             = (object) [
 			'permalink'    => $data->permalink,
 			'image'        => $product_image,
 			'second_image' => $secondary_image_output,
@@ -491,16 +490,16 @@ class Component implements Component_Interface {
 			'rating'       => $data->rating,
 			'price'        => $data->price,
 			'badge'        => $data->badge,
-			'button'       => ( ! empty ( $data->button ) ? $action_button : '' ),
-		);
+			'button'       => ( ! empty( $data->button ) ? $action_button : '' ),
+		];
 		$align_archive_button = 'block-align-button-normal';
 		if ( kadence()->option( 'product_archive_button_align' ) ) {
 			$align_archive_button = 'block-align-buttons-bottom';
 		}
-		$product_style     = kadence()->option( 'product_archive_style' );
-		$action_style      = 'woo-archive-' . esc_attr( $product_style );
-		$button_style      = 'woo-archive-btn-' . esc_attr( $product_btn_style );
-		$hover_style       = 'woo-archive-image-hover-' . esc_attr( $product_image_hover_style );
+		$product_style = kadence()->option( 'product_archive_style' );
+		$action_style  = 'woo-archive-' . esc_attr( $product_style );
+		$button_style  = 'woo-archive-btn-' . esc_attr( $product_btn_style );
+		$hover_style   = 'woo-archive-image-hover-' . esc_attr( $product_image_hover_style );
 		if ( $product_image_hover_style !== 'none' && ! empty( $secondary_image_output ) ) {
 			$product_image_link = 'wc-block-grid__product-link woocommerce-loop-image-link woocommerce-LoopProduct-link woocommerce-loop-product__link product-has-hover-image';
 		} else {
@@ -544,7 +543,7 @@ class Component implements Component_Interface {
 		// Product Single Cat.
 		$category_element = kadence()->option( 'product_content_element_category' );
 		if ( isset( $category_element ) && is_array( $category_element ) && true === $category_element['enabled'] ) {
-			add_action( 'woocommerce_single_product_summary', array( $this, 'woocommerce_product_single_category' ), 3 );
+			add_action( 'woocommerce_single_product_summary', [ $this, 'woocommerce_product_single_category' ], 3 );
 		}
 		// Product Title.
 		$title_element = kadence()->option( 'product_content_element_title' );
@@ -560,10 +559,8 @@ class Component implements Component_Interface {
 		$price_element = kadence()->option( 'product_content_element_price' );
 		if ( isset( $price_element ) && is_array( $price_element ) && false === $price_element['enabled'] ) {
 			remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_price' );
-		} else {
-			if ( isset( $price_element ) && is_array( $price_element ) && true === $price_element['show_shipping'] ) {
-				add_filter( 'woocommerce_get_price_html', array( $this, 'add_shipping_statement_price' ), 10, 2 );
-			}
+		} elseif ( isset( $price_element ) && is_array( $price_element ) && true === $price_element['show_shipping'] ) {
+				add_filter( 'woocommerce_get_price_html', [ $this, 'add_shipping_statement_price' ], 10, 2 );
 		}
 		// Product Excerpt.
 		$excerpt_element = kadence()->option( 'product_content_element_excerpt' );
@@ -578,12 +575,12 @@ class Component implements Component_Interface {
 		// Product Extras.
 		$extras_element = kadence()->option( 'product_content_element_extras' );
 		if ( isset( $extras_element ) && is_array( $extras_element ) && true === $extras_element['enabled'] ) {
-			add_action( 'woocommerce_single_product_summary', array( $this, 'woocommerce_product_single_extras' ), 35 );
+			add_action( 'woocommerce_single_product_summary', [ $this, 'woocommerce_product_single_extras' ], 35 );
 		}
 		// Product Payments.
 		$payments_element = kadence()->option( 'product_content_element_payments' );
 		if ( isset( $payments_element ) && is_array( $payments_element ) && true === $payments_element['enabled'] ) {
-			add_action( 'woocommerce_single_product_summary', array( $this, 'woocommerce_product_single_payments' ), 38 );
+			add_action( 'woocommerce_single_product_summary', [ $this, 'woocommerce_product_single_payments' ], 38 );
 		}
 		// Product Meta.
 		$meta_element = kadence()->option( 'product_content_element_product_meta' );
@@ -653,10 +650,10 @@ class Component implements Component_Interface {
 			$terms     = wp_get_post_terms(
 				$post->ID,
 				'product_cat',
-				array(
+				[
 					'orderby' => 'parent',
 					'order'   => 'DESC',
-				)
+				]
 			);
 			if ( $terms && ! is_wp_error( $terms ) ) {
 				if ( is_array( $terms ) ) {
@@ -666,15 +663,15 @@ class Component implements Component_Interface {
 		}
 		if ( $main_term ) {
 			$term_title = $main_term->name;
-            $term_link = get_term_link( $main_term->slug, 'product_cat' );
+			$term_link  = get_term_link( $main_term->slug, 'product_cat' );
 
-            if ( is_string( $term_link ) ) {
-                echo '<div class="single-product-category">';
-                echo '<a href="' . esc_attr( $term_link ) . '" class="product-single-category single-category">';
-                echo esc_html( $term_title );
-                echo '</a>';
-                echo '</div>';
-            }
+			if ( is_string( $term_link ) ) {
+				echo '<div class="single-product-category">';
+				echo '<a href="' . esc_attr( $term_link ) . '" class="product-single-category single-category">';
+				echo esc_html( $term_title );
+				echo '</a>';
+				echo '</div>';
+			}
 		}
 	}
 	/**
@@ -768,7 +765,7 @@ class Component implements Component_Interface {
 	 * @return string $html the html to end a loop.
 	 */
 	public function remove_filter_for_add_to_cart_link( $html ) {
-		remove_filter( 'woocommerce_loop_add_to_cart_link', array( $this, 'filter_add_to_cart_link_link' ), 10, 3 );
+		remove_filter( 'woocommerce_loop_add_to_cart_link', [ $this, 'filter_add_to_cart_link_link' ], 10, 3 );
 		return $html;
 	}
 	/**
@@ -778,7 +775,7 @@ class Component implements Component_Interface {
 	 * @return string $html the html to start a loop.
 	 */
 	public function add_filter_for_add_to_cart_link( $html ) {
-		add_filter( 'woocommerce_loop_add_to_cart_link', array( $this, 'filter_add_to_cart_link_link' ), 9, 3 );
+		add_filter( 'woocommerce_loop_add_to_cart_link', [ $this, 'filter_add_to_cart_link_link' ], 9, 3 );
 		return $html;
 	}
 
@@ -796,7 +793,7 @@ class Component implements Component_Interface {
 
 			if ( 'above' === $placement ) {
 				if ( kadence()->option( 'woo_store_notice_hide_dismiss' ) ) {
-					add_filter( 'woocommerce_demo_store', array( $this, 'woocommerce_demo_store_remove_dismiss' ), 15, 2 );
+					add_filter( 'woocommerce_demo_store', [ $this, 'woocommerce_demo_store_remove_dismiss' ], 15, 2 );
 				}
 				remove_action( 'wp_body_open', 'woocommerce_demo_store' );
 				add_action( 'kadence_before_header', 'woocommerce_demo_store' );
@@ -806,17 +803,17 @@ class Component implements Component_Interface {
 			$slug = ( is_search() && ! is_post_type_archive( 'product' ) ? 'search' : get_post_type() );
 			if ( empty( $slug ) ) {
 				$queried_object = get_queried_object();
-				if ( property_exists( $queried_object, 'taxonomy' ) ) {
+				if ( is_object( $queried_object ) && property_exists( $queried_object, 'taxonomy' ) ) {
 					$current_tax = get_taxonomy( $queried_object->taxonomy );
 					if ( property_exists( $current_tax, 'object_type' ) ) {
 						$post_types = $current_tax->object_type;
-						$slug = $post_types[0];
+						$slug       = $post_types[0];
 						if ( 'product' === $slug ) {
 							$classes[] = 'tax-woo-product';
 						}
 					}
 				}
-			} else if ( 'product' === $slug ) {
+			} elseif ( 'product' === $slug ) {
 				$classes[] = 'tax-woo-product';
 			}
 		}
@@ -839,7 +836,7 @@ class Component implements Component_Interface {
 	 * @param array $classes Classes for the body element.
 	 * @return array Filtered body classes.
 	 */
-	public function my_account_body_classes( array $classes ) : array {
+	public function my_account_body_classes( array $classes ): array {
 		if ( is_account_page() ) {
 			$classes[] = 'kadence-account-nav-' . esc_attr( kadence()->option( 'woo_account_navigation_layout' ) );
 		}
@@ -851,12 +848,12 @@ class Component implements Component_Interface {
 	 * @param array $classes Classes for the body element.
 	 * @return array Filtered body classes.
 	 */
-	public function single_product_body_classes( array $classes ) : array {
+	public function single_product_body_classes( array $classes ): array {
 		if ( is_product() ) {
 			$cart_element = kadence()->option( 'product_content_element_add_to_cart' );
 			if ( isset( $cart_element ) && is_array( $cart_element ) && isset( $cart_element['button_size'] ) && ! empty( $cart_element['button_size'] ) ) {
 				$size = $cart_element['button_size'];
-			} else if ( kadence()->option( 'product_large_cart_button' ) ) {
+			} elseif ( kadence()->option( 'product_large_cart_button' ) ) {
 				$size = 'large';
 			} else {
 				$size = 'normal';
@@ -882,7 +879,6 @@ class Component implements Component_Interface {
 		$fragments['span.header-cart-empty-check'] = ob_get_clean();
 
 		return $fragments;
-
 	}
 	/**
 	 * Refresh the cart for ajax adds.
@@ -893,13 +889,13 @@ class Component implements Component_Interface {
 		// Get cart items.
 		ob_start();
 
-		?><span class="header-cart-total header-cart-is-empty-<?php echo esc_attr( WC()->cart->get_cart_contents_count() > 0 ? 'false' : 'true' ); ?>"><?php echo wp_kses_post( WC()->cart->get_cart_contents_count() ); ?></span> 
+		?>
+		<span class="header-cart-total header-cart-is-empty-<?php echo esc_attr( WC()->cart->get_cart_contents_count() > 0 ? 'false' : 'true' ); ?>"><?php echo wp_kses_post( WC()->cart->get_cart_contents_count() ); ?></span> 
 		<?php
 
 		$fragments['span.header-cart-total'] = ob_get_clean();
 
 		return $fragments;
-
 	}
 	/**
 	 * Refresh the cart for ajax adds.
@@ -916,20 +912,19 @@ class Component implements Component_Interface {
 		$fragments['div.kadence-mini-cart-refresh'] = ob_get_clean();
 
 		return $fragments;
-
 	}
 	/**
 	 * Checks to see if theme needs to hook into cart fragments.
 	 */
 	public function check_for_fragment_support() {
-		add_filter( 'woocommerce_add_to_cart_fragments', array( $this, 'get_refreshed_fragments_class' ), 11 );
+		add_filter( 'woocommerce_add_to_cart_fragments', [ $this, 'get_refreshed_fragments_class' ], 11 );
 		if ( kadence()->option( 'header_cart_show_total' ) ) {
 			self::$show_cart_total = true;
-			add_filter( 'woocommerce_add_to_cart_fragments', array( $this, 'get_refreshed_fragments_number' ), 11 );
+			add_filter( 'woocommerce_add_to_cart_fragments', [ $this, 'get_refreshed_fragments_number' ], 11 );
 		}
 		if ( 'slide' === kadence()->option( 'header_cart_style' ) || 'slide' === kadence()->option( 'header_mobile_cart_style' ) || 'dropdown' === kadence()->option( 'header_cart_style' ) ) {
 			self::$show_mini_cart = true;
-			add_filter( 'woocommerce_add_to_cart_fragments', array( $this, 'get_refreshed_fragments_mini' ), 11 );
+			add_filter( 'woocommerce_add_to_cart_fragments', [ $this, 'get_refreshed_fragments_mini' ], 11 );
 		}
 	}
 	/**
@@ -938,11 +933,11 @@ class Component implements Component_Interface {
 	public function check_conditional_for_fragment_support() {
 		if ( kadence()->option( 'header_cart_show_total' ) && ! self::$show_cart_total ) {
 			self::$show_cart_total = true;
-			add_filter( 'woocommerce_add_to_cart_fragments', array( $this, 'get_refreshed_fragments_number' ) );
+			add_filter( 'woocommerce_add_to_cart_fragments', [ $this, 'get_refreshed_fragments_number' ] );
 		}
 		if ( ( 'slide' === kadence()->option( 'header_cart_style' ) || 'slide' === kadence()->option( 'header_mobile_cart_style' ) || 'dropdown' === kadence()->option( 'header_cart_style' ) ) && ! self::$show_mini_cart ) {
 			self::$show_mini_cart = true;
-			add_filter( 'woocommerce_add_to_cart_fragments', array( $this, 'get_refreshed_fragments_mini' ) );
+			add_filter( 'woocommerce_add_to_cart_fragments', [ $this, 'get_refreshed_fragments_mini' ] );
 		}
 	}
 	/**
@@ -952,11 +947,11 @@ class Component implements Component_Interface {
 		$in_header = false;
 		$elements  = kadence()->option( 'header_desktop_items' );
 		if ( isset( $elements ) && is_array( $elements ) ) {
-			foreach ( array( 'top', 'main', 'bottom' ) as $row ) {
+			foreach ( [ 'top', 'main', 'bottom' ] as $row ) {
 				if ( isset( $elements[ $row ] ) && is_array( $elements[ $row ] ) ) {
-					foreach ( array( 'left', 'left_center', 'center', 'right_center', 'right' ) as $column ) {
-						if ( isset( $elements[ $row ][ $row . '_' . $column ] ) && is_array( $elements[ $row ][  $row . '_' . $column ] ) ) {
-							if ( in_array( 'cart', $elements[ $row ][  $row . '_' . $column ], true ) ) {
+					foreach ( [ 'left', 'left_center', 'center', 'right_center', 'right' ] as $column ) {
+						if ( isset( $elements[ $row ][ $row . '_' . $column ] ) && is_array( $elements[ $row ][ $row . '_' . $column ] ) ) {
+							if ( in_array( 'cart', $elements[ $row ][ $row . '_' . $column ], true ) ) {
 								$in_header = true;
 								break;
 							}
@@ -975,7 +970,7 @@ class Component implements Component_Interface {
 			wp_enqueue_script(
 				'kadence-product-cls',
 				get_theme_file_uri( '/assets/js/product-cls.min.js' ),
-				array( 'jquery' ),
+				[ 'jquery' ],
 				KADENCE_VERSION,
 				true
 			);
@@ -997,7 +992,7 @@ class Component implements Component_Interface {
 			wp_enqueue_script(
 				'kadence-shop-spinner',
 				get_theme_file_uri( '/assets/js/shop-spinner.min.js' ),
-				array( 'jquery' ),
+				[ 'jquery' ],
 				KADENCE_VERSION,
 				true
 			);
@@ -1009,7 +1004,7 @@ class Component implements Component_Interface {
 			wp_enqueue_script(
 				'kadence-cart-update',
 				get_theme_file_uri( '/assets/js/cart-update.min.js' ),
-				array( 'jquery' ),
+				[ 'jquery' ],
 				KADENCE_VERSION,
 				true
 			);
@@ -1020,7 +1015,7 @@ class Component implements Component_Interface {
 		wp_register_script(
 			'kadence-shop-toggle',
 			get_theme_file_uri( '/assets/js/shop-toggle.min.js' ),
-			array(),
+			[],
 			KADENCE_VERSION,
 			true
 		);
@@ -1029,9 +1024,9 @@ class Component implements Component_Interface {
 		wp_localize_script(
 			'kadence-shop-toggle',
 			'kadenceShopConfig',
-			array(
+			[
 				'siteSlug' => sanitize_title( get_bloginfo( 'name' ) ),
-			)
+			]
 		);
 	}
 
@@ -1119,7 +1114,7 @@ class Component implements Component_Interface {
 	 * @param string $output the loop start.
 	 */
 	public function product_loop_start( $output ) {
-		$columns = absint( wc_get_loop_prop( 'columns' ) );
+		$columns       = absint( wc_get_loop_prop( 'columns' ) );
 		$columns_class = 'content-wrap product-archive grid-cols grid-ss-col-2 grid-sm-col-3 grid-lg-col-4';
 		if ( 1 === $columns ) {
 			if ( is_main_query() && is_archive() && ! wc_get_loop_prop( 'is_shortcode' ) ) {
@@ -1146,9 +1141,9 @@ class Component implements Component_Interface {
 		if ( kadence()->option( 'product_archive_button_align' ) ) {
 			$align_archive_button = 'align-buttons-bottom';
 		}
-		$product_style = kadence()->option( 'product_archive_style' );
-		$product_btn_style = kadence()->option( 'product_archive_button_style' );
-		$product_image_hover_style = kadence()->option( 'product_archive_image_hover_switch' );
+		$product_style             = kadence()->option( 'product_archive_style' );
+		$product_btn_style         = kadence()->option( 'product_archive_button_style' );
+		$product_image_hover_style = is_shopkit_feature_enabled( 'feature_image_swap' ) ? 'none' : kadence()->option( 'product_archive_image_hover_switch' );
 		if ( is_main_query() && is_archive() && wc_get_loop_prop( 'is_paginated' ) && apply_filters( 'kadence_enabled_product_archive_attributes', true, $GLOBALS['woocommerce_loop'] ) ) {
 			$attributes = $this->get_archive_infinite_attributes();
 		} else {
@@ -1176,9 +1171,9 @@ class Component implements Component_Interface {
 	public function archive_loop_image_link_open() {
 		global $product;
 
-		$link = apply_filters( 'woocommerce_loop_product_link', get_the_permalink(), $product ); // phpcs:ignore WPThemeReview.CoreFunctionality.PrefixAllGlobals.NonPrefixedHooknameFound
+		$link            = apply_filters( 'woocommerce_loop_product_link', get_the_permalink(), $product ); // phpcs:ignore WPThemeReview.CoreFunctionality.PrefixAllGlobals.NonPrefixedHooknameFound
 		$has_hover_image = '';
-		if ( 'none' !== kadence()->option( 'product_archive_image_hover_switch' ) ) {
+		if ( ! is_shopkit_feature_enabled( 'feature_image_swap' ) && 'none' !== kadence()->option( 'product_archive_image_hover_switch' ) ) {
 			if ( is_a( $product, 'WC_Product' ) ) {
 				$attachment_ids = $product->get_gallery_image_ids();
 				if ( $attachment_ids ) {
@@ -1198,12 +1193,12 @@ class Component implements Component_Interface {
 	 * Insert a second product image if enabled and if image exists.
 	 */
 	public function archive_loop_second_image() {
-		if ( 'none' !== kadence()->option( 'product_archive_image_hover_switch' ) ) {
+		if ( ! is_shopkit_feature_enabled( 'feature_image_swap' ) && 'none' !== kadence()->option( 'product_archive_image_hover_switch' ) ) {
 			global $product;
 			if ( is_a( $product, 'WC_Product' ) ) {
 				$attachment_ids = $product->get_gallery_image_ids();
 				if ( $attachment_ids ) {
-					$attachment_ids     = array_values( $attachment_ids );
+					$attachment_ids        = array_values( $attachment_ids );
 					$secondary_image_id    = $attachment_ids['0'];
 					$secondary_image_alt   = get_post_meta( $secondary_image_id, '_wp_attachment_image_alt', true );
 					$secondary_image_title = get_the_title( $secondary_image_id );
@@ -1211,11 +1206,11 @@ class Component implements Component_Interface {
 						$secondary_image_id,
 						apply_filters( 'single_product_archive_thumbnail_size', 'woocommerce_thumbnail' ),
 						false,
-						array(
+						[
 							'class' => 'secondary-product-image attachment-woocommerce_thumbnail attachment-shop-catalog wp-post-image wp-post-image--secondary',
 							'alt'   => $secondary_image_alt,
 							'title' => $secondary_image_title,
-						)
+						]
 					);
 				}
 			}
@@ -1281,14 +1276,14 @@ class Component implements Component_Interface {
 	 * @param object $product Product object.
 	 * @param array  $args The Product args.
 	 */
-	public function filter_add_to_cart_link_link( $button, $product, $args = array() ) {
+	public function filter_add_to_cart_link_link( $button, $product, $args = [] ) {
 		$product_btn_style = kadence()->option( 'product_archive_button_style' );
 		if ( 'button' === $product_btn_style ) {
 			$button = sprintf(
 				'<a href="%s" data-quantity="%s" class="%s" %s>%s</a>',
 				esc_url( $product->add_to_cart_url() ),
-				esc_attr( isset( $args['quantity'] ) ? $args['quantity'] : 1 ),
-				esc_attr( isset( $args['class'] ) ? $args['class'] : 'button' ),
+				esc_attr( $args['quantity'] ?? 1 ),
+				esc_attr( $args['class'] ?? 'button' ),
 				isset( $args['attributes'] ) ? wc_implode_html_attributes( $args['attributes'] ) : '',
 				esc_html( $product->add_to_cart_text() ) . '' . kadence()->get_icon( 'spinner' ) . '' . kadence()->get_icon( 'check' )
 			);
@@ -1296,8 +1291,8 @@ class Component implements Component_Interface {
 			$button = sprintf(
 				'<a href="%s" data-quantity="%s" class="%s" %s>%s</a>',
 				esc_url( $product->add_to_cart_url() ),
-				esc_attr( isset( $args['quantity'] ) ? $args['quantity'] : 1 ),
-				esc_attr( isset( $args['class'] ) ? $args['class'] : 'button' ),
+				esc_attr( $args['quantity'] ?? 1 ),
+				esc_attr( $args['class'] ?? 'button' ),
 				isset( $args['attributes'] ) ? wc_implode_html_attributes( $args['attributes'] ) : '',
 				esc_html( $product->add_to_cart_text() ) . '' . kadence()->get_icon( 'arrow-right-alt' ) . '' . kadence()->get_icon( 'spinner' ) . '' . kadence()->get_icon( 'check' )
 			);
@@ -1312,7 +1307,7 @@ class Component implements Component_Interface {
 	 * @param int          $post_id Post ID.
 	 */
 	public function add_woo_entry_classes( $classes, $class = '', $post_id = 0 ) {
-		if ( ! $post_id || ! in_array( get_post_type( $post_id ), array( 'product', 'product_variation' ), true ) ) {
+		if ( ! $post_id || ! in_array( get_post_type( $post_id ), [ 'product', 'product_variation' ], true ) ) {
 			return $classes;
 		}
 		$product = wc_get_product( $post_id );
@@ -1416,7 +1411,7 @@ class Component implements Component_Interface {
 			// Make sure not using elementor template.
 			if ( class_exists( '\ElementorPro\Plugin' ) ) {
 				$conditions_manager = \ElementorPro\Plugin::instance()->modules_manager->get_modules( 'theme-builder' )->get_conditions_manager();
-				$documents = $conditions_manager->get_documents_for_location( 'single' );
+				$documents          = $conditions_manager->get_documents_for_location( 'single' );
 				if ( empty( $documents ) ) {
 					echo '<div class="product-title product-above">';
 					get_template_part( 'template-parts/title/breadcrumb' );
@@ -1480,7 +1475,7 @@ class Component implements Component_Interface {
 	 */
 	public function generate_woo_css() {
 		$css                    = new Kadence_CSS();
-		$media_query            = array();
+		$media_query            = [];
 		$media_query['mobile']  = apply_filters( 'kadence_mobile_media_query', '(max-width: 767px)' );
 		$media_query['tablet']  = apply_filters( 'kadence_tablet_media_query', '(max-width: 1024px)' );
 		$media_query['desktop'] = apply_filters( 'kadence_desktop_media_query', '(min-width: 1025px)' );

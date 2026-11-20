@@ -1,5 +1,8 @@
 <?php
 
+defined('ABSPATH') || exit;
+
+
 /**
  * Class MC4WP_Form_Tags
  *
@@ -112,6 +115,7 @@ class MC4WP_Form_Tags extends MC4WP_Dynamic_Content_Tags
         $default = isset($args['default']) ? $args['default'] : '';
         $key     = $args['key'];
 
+        // phpcs:ignore WordPress.Security.NonceVerification
         $data  = array_merge($_GET, $_POST);
         $value = isset($data[ $key ]) ? $data[ $key ] : $default;
 
@@ -121,6 +125,6 @@ class MC4WP_Form_Tags extends MC4WP_Dynamic_Content_Tags
             $value = join(', ', $value);
         }
 
-        return $value;
+        return wp_unslash($value);
     }
 }

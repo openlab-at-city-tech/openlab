@@ -34,7 +34,7 @@ class BBP_Forums_Component extends BP_Component {
 	/**
 	 * BuddyPress Members component shim
 	 *
-	 * @since 2.0.0
+	 * @since 2.6.14 bbPress (r7306)
 	 *
 	 * @var void|BBP_BuddyPress_Members
 	 */
@@ -43,7 +43,7 @@ class BBP_Forums_Component extends BP_Component {
 	/**
 	 * BuddyPress Activity component shim
 	 *
-	 * @since 2.0.0
+	 * @since 2.6.14 bbPress (r7306)
 	 *
 	 * @var void|BBP_BuddyPress_Members
 	 */
@@ -143,7 +143,7 @@ class BBP_Forums_Component extends BP_Component {
 	/**
 	 * Setup the actions
 	 *
-	 * @since 2.0.0 bbPress (r3395)
+	 * @since 2.2.0 bbPress (r4397)
 	 *
 	 * @access private
 	 * @link https://bbpress.trac.wordpress.org/ticket/2176
@@ -159,7 +159,7 @@ class BBP_Forums_Component extends BP_Component {
 	/**
 	 * Instantiate classes for BuddyPress integration
 	 *
-	 * @since 2.0.0 bbPress (r3395)
+	 * @since 2.6.0 bbPress (r5271)
 	 */
 	public function setup_components() {
 
@@ -181,7 +181,7 @@ class BBP_Forums_Component extends BP_Component {
 	 * Allow the variables, actions, and filters to be modified by third party
 	 * plugins and themes.
 	 *
-	 * @since 2.1.0 bbPress (r3902)
+	 * @since 2.6.0 bbPress (r5271)
 	 */
 	private function fully_loaded() {
 		do_action_ref_array( 'bbp_buddypress_loaded', array( $this ) );
@@ -195,7 +195,7 @@ class BBP_Forums_Component extends BP_Component {
 	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
 
 		// Stop if there is no user displayed or logged in
-		if ( ! is_user_logged_in() && !bp_displayed_user_id() ) {
+		if ( ! is_user_logged_in() && ! bp_displayed_user_id() ) {
 			return;
 		}
 
@@ -260,7 +260,7 @@ class BBP_Forums_Component extends BP_Component {
 		}
 
 		// Favorite topics
-		if ( bbp_is_favorites_active() ){
+		if ( bbp_is_favorites_active() ) {
 			$sub_nav[] = array(
 				'name'            => esc_html__( 'Favorites', 'bbpress' ),
 				'slug'            => bbp_get_user_favorites_slug(),
@@ -393,11 +393,13 @@ class BBP_Forums_Component extends BP_Component {
 			if ( bp_is_my_profile() ) {
 				$bp->bp_options_title = esc_html__( 'Forums', 'bbpress' );
 			} elseif ( bp_is_user() ) {
-				$bp->bp_options_avatar = bp_core_fetch_avatar( array(
-					'item_id' => bp_displayed_user_id(),
-					'type'    => 'thumb'
-				) );
-				$bp->bp_options_title = bp_get_displayed_user_fullname();
+				$bp->bp_options_avatar = bp_core_fetch_avatar(
+					array(
+						'item_id' => bp_displayed_user_id(),
+						'type'    => 'thumb'
+					)
+				);
+				$bp->bp_options_title  = bp_get_displayed_user_fullname();
 			}
 		}
 

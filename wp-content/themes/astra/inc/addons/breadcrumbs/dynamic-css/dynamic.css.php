@@ -545,10 +545,13 @@ function astra_breadcrumb_section_dynamic_css( $dynamic_css, $dynamic_css_filter
 		''
 	);
 
+	// Output line-height on the wrapper itself — its strut caps inline-only third party breadcrumb markup (Yoast, Rank Math), so child-only values below it never apply.
+	$breadcrumb_line_height = astra_get_font_extras( astra_get_option( 'breadcrumb-font-extras', array() ), 'line-height', 'line-height-unit' );
+
 	$css .= astra_parse_css(
 		array(
 			'.ast-breadcrumbs-wrapper' => array(
-				'line-height' => '1.4',
+				'line-height' => '' !== $breadcrumb_line_height ? esc_attr( $breadcrumb_line_height ) : '1.4',
 			),
 		),
 		'',

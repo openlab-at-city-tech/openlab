@@ -2,7 +2,6 @@
 /**
  * Pages Module
  *
- * @version $Id: pages_module.php 2968917 2023-09-19 21:10:22Z vivalex $
  * @copyright 2011 Jacco Drabbe
  */
 

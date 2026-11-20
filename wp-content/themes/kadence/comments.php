@@ -26,7 +26,7 @@ if ( post_password_required() ) {
 }
 kadence()->print_styles( 'kadence-comments' );
 ?>
-<div id="comments" class="comments-area<?php echo ( kadence()->option( 'post_footer_area_boxed' ) ? ' content-bg entry-content-wrap entry' : '' ); ?>">
+<div id="comments" class="comments-area<?php echo kadence()->option( 'post_footer_area_boxed' ) ? ' content-bg entry-content-wrap entry' : ''; ?>">
 	<?php
 	do_action( 'kadence_before_comments' );
 	/**

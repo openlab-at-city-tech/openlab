@@ -90,7 +90,9 @@ class Shortcode_Preview {
 		sort( $sorted );
 		$sorted_shortcode = implode( '<br>', $sorted );
 
-				$output = do_shortcode( $shortcode );
+		// Managers preview their own private galleries here.
+		\Imagely\NGG\PrivateGalleries\Visibility::$preview = true;
+		$output = do_shortcode( $shortcode );
 
 		// Store original GET parameters to append to URLs.
 		$preview_params = [];

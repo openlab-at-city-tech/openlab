@@ -50,7 +50,7 @@ function gutenberg_render_block_core_comment_reply_link( $attributes, $content, 
 
 	// Render nothing if the generated reply link is empty.
 	if ( empty( $comment_reply_link ) ) {
-		return;
+		return '';
 	}
 
 	$classes = array();

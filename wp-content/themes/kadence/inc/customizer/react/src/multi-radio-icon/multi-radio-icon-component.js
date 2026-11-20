@@ -190,6 +190,7 @@ class RadioIconComponent extends Component {
 						</ButtonGroup>
 					) }
 				</ResponsiveControl>
+			{ this.props.control.renderNotice() }
 			</div>
 		);
 	}

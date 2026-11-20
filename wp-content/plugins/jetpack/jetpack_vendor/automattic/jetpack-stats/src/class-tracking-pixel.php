@@ -61,8 +61,8 @@ class Tracking_Pixel {
 			// 2. Set show_on_front = page
 			// 3. Set page_on_front = something
 			// 4. Visit https://example.com/ !
-			$queried_object    = isset( $wp_the_query->queried_object ) ? $wp_the_query->queried_object : null;
-			$queried_object_id = isset( $wp_the_query->queried_object_id ) ? $wp_the_query->queried_object_id : null;
+			$queried_object    = $wp_the_query->queried_object ?? null;
+			$queried_object_id = $wp_the_query->queried_object_id ?? null;
 			try {
 				$post_obj = $wp_the_query->get_queried_object();
 				$post     = $post_obj instanceof WP_Post ? $post_obj->ID : '0';
@@ -80,9 +80,7 @@ class Tracking_Pixel {
 		$url_query = wp_parse_url( wp_unslash( $_SERVER['REQUEST_URI'] ?? '' ), PHP_URL_QUERY );
 		parse_str( (string) $url_query, $url_params );
 		foreach ( self::TRACKED_UTM_PARAMETERS as $utm_parameter ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- UTMs are standardized parameters coming from outside WordPress, adding nonce is not possible
 			if ( isset( $url_params[ $utm_parameter ] ) && is_scalar( $url_params[ $utm_parameter ] ) ) {
-				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- UTMs are standardized parameters coming from outside WordPress, adding nonce is not possible
 				$view_data[ $utm_parameter ] = substr( sanitize_textarea_field( wp_unslash( $url_params[ $utm_parameter ] ) ), 0, 255 );
 			}
 		}
@@ -173,19 +171,152 @@ class Tracking_Pixel {
 	 * @since 0.6.0
 	 *
 	 * @access private
-	 * @param array $data Array of data for the AMP pixel tracker.
+	 * @param array $data Array of options about the site and page for the inline (non-AMP) tracker.
 	 * @return string
 	 */
 	private static function build_stats_details( $data ) {
 		$data_stats_array = self::stats_array_to_string( $data );
 
-		return sprintf(
-			'_stq = window._stq || [];
-_stq.push([ "view", %1$s ]);
+		$pushes = sprintf(
+			'_stq.push([ "view", %1$s ]);
 _stq.push([ "clickTrackerInit", "%2$s", "%3$s" ]);',
 			$data_stats_array,
 			$data['blog'],
 			$data['post']
+		);
+
+		// Without the WP Consent API plugin there is no consent to honor, so the output stays byte-for-byte historical.
+		if ( ! function_exists( 'wp_has_consent' ) ) {
+			return "_stq = window._stq || [];\n" . $pushes;
+		}
+
+		return self::build_consent_gate( $pushes );
+	}
+
+	/**
+	 * Wrap the tracking pushes in a WP Consent API gate, checked in the browser because cached HTML is shared across visitors.
+	 *
+	 * `_jpStatsFire.done` is set before the pushes so a push that throws is never replayed: the
+	 * sender assigns the beacon `src` first, so that view was already counted.
+	 *
+	 * @access private
+	 * @param string $pushes The `_stq.push(...)` statements to gate.
+	 * @return string
+	 */
+	private static function build_consent_gate( $pushes ) {
+		// A stored deny wins: without a consent type, which some banners set only on the first visit, wp_has_consent() ignores it.
+		// Under waitfor_consent_hook the banner sets the type later, and until then wp_has_consent() reads a fallback that can allow.
+		return sprintf(
+			'_stq = window._stq || [];
+function _jpStatsFire() {
+	if ( _jpStatsFire.done ) { return; }
+	_jpStatsFire.done = true;
+	%1$s
+}
+function _jpStatsDenied() {
+	return typeof window.consent_api_get_cookie === "function" && !! window.consent_api &&
+		window.consent_api_get_cookie( window.consent_api.cookie_prefix + "_statistics" ) === "deny";
+}
+function _jpStatsCheck() {
+	if ( typeof window.wp_has_consent !== "function" ) { return; }
+	if ( window.waitfor_consent_hook && typeof window.wp_consent_type === "undefined" ) { return; }
+	var consented;
+	try {
+		consented = ! _jpStatsDenied() && window.wp_has_consent( "statistics" );
+	} catch ( e ) {
+		window.console && console.warn( "Jetpack Stats: wp_has_consent() threw, so Stats waits for a consent change.", e );
+		return;
+	}
+	if ( consented ) { _jpStatsFire(); }
+}
+document.addEventListener( "wp_listen_for_consent_change", function ( event ) {
+	if ( event && event.detail && event.detail.statistics === "allow" ) { _jpStatsFire(); }
+} );
+document.addEventListener( "wp_consent_type_defined", _jpStatsCheck );
+window.addEventListener( "wp_consent_type_defined", _jpStatsCheck );
+window.addEventListener( "load", function () {
+	if ( typeof window.wp_has_consent !== "function" ) {
+		window.console && console.warn( "Jetpack Stats: the WP Consent API script has not loaded, so Stats waits for a consent change." );
+	}
+	_jpStatsCheck();
+}, { once: true } );
+if ( document.readyState === "loading" ) {
+	document.addEventListener( "DOMContentLoaded", _jpStatsCheck, { once: true } );
+} else {
+	_jpStatsCheck();
+}',
+			$pushes
+		);
+	}
+
+	/**
+	 * Add fetchpriority="low" to the Stats script attributes.
+	 *
+	 * Reduces network contention with resources in the critical rendering path (e.g., the LCP
+	 * element image). This benefits Safari and Firefox, which don't automatically assign low
+	 * priority to async/defer scripts (unlike Chrome).
+	 *
+	 * @since 0.19.5
+	 *
+	 * @param array $attributes Script tag attributes.
+	 * @return array Modified attributes.
+	 */
+	public static function add_low_fetchpriority( $attributes ) {
+		// WordPress derives the tag id from the enqueue handle as "{handle}-js", so the
+		// 'jetpack-stats' script (registered in enqueue_stats_script()) prints as
+		// 'jetpack-stats-js'. Keep this in sync if the handle is ever renamed.
+		if ( isset( $attributes['id'] ) && 'jetpack-stats-js' === $attributes['id'] ) {
+			$attributes['fetchpriority'] = 'low';
+		}
+		return $attributes;
+	}
+
+	/**
+	 * Remove the dns-prefetch resource hint for stats.wp.com.
+	 *
+	 * WordPress automatically adds dns-prefetch hints for enqueued script hosts via
+	 * wp_dependencies_unique_hosts(). Since we're deprioritizing the stats script,
+	 * the dns-prefetch is counterproductive — it front-loads DNS resolution for a
+	 * resource we're intentionally delaying.
+	 *
+	 * @since 0.19.5
+	 *
+	 * @param array  $urls          Array of resource hint URLs.
+	 * @param string $relation_type The relation type (dns-prefetch, preconnect, etc.).
+	 * @return array Filtered URLs.
+	 */
+	public static function remove_stats_dns_prefetch( $urls, $relation_type ) {
+		if ( 'dns-prefetch' !== $relation_type ) {
+			return $urls;
+		}
+
+		return array_filter(
+			$urls,
+			static function ( $url ) {
+				// Resource hints can be arrays that carry the URL under an 'href' key.
+				if ( is_array( $url ) ) {
+					$candidate = ( isset( $url['href'] ) && is_string( $url['href'] ) ) ? $url['href'] : '';
+				} elseif ( is_string( $url ) ) {
+					$candidate = $url;
+				} else {
+					return true; // Unknown entry shape; leave it untouched.
+				}
+
+				// dns-prefetch entries arrive in several shapes: WordPress core emits bare
+				// hosts ('stats.wp.com') via wp_dependencies_unique_hosts(), while other
+				// filters may add scheme-relative ('//stats.wp.com') or full URLs. Normalize
+				// each to a host so we drop stats.wp.com exactly without removing look-alike
+				// hosts such as 'mystats.wp.com' or 'stats.wp.com.evil.tld'.
+				if ( str_starts_with( $candidate, '//' ) ) {
+					$host = wp_parse_url( 'https:' . $candidate, PHP_URL_HOST );
+				} elseif ( str_contains( $candidate, '://' ) ) {
+					$host = wp_parse_url( $candidate, PHP_URL_HOST );
+				} else {
+					$host = $candidate; // Bare host form, e.g. 'stats.wp.com'.
+				}
+
+				return ! is_string( $host ) || 'stats.wp.com' !== strtolower( $host );
+			}
 		);
 	}
 
@@ -211,6 +342,8 @@ _stq.push([ "clickTrackerInit", "%2$s", "%3$s" ]);',
 				'strategy'  => 'defer',
 			)
 		);
+		add_filter( 'wp_script_attributes', array( static::class, 'add_low_fetchpriority' ) );
+		add_filter( 'wp_resource_hints', array( static::class, 'remove_stats_dns_prefetch' ), 100, 2 );
 
 		$data = self::build_view_data();
 
@@ -234,13 +367,13 @@ _stq.push([ "clickTrackerInit", "%2$s", "%3$s" ]);',
 	}
 
 	/**
-	 * Gets the stats footer for AMP output.
+	 * Gets the tracking pixel URL for AMP output.
 	 *
 	 * @access private
 	 * @param array $data Array of data for the AMP pixel tracker.
-	 * @return string Returns the footer to add for the Stats tracker in an AMP scenario.
+	 * @return string Returns the URL for the Stats tracker in an AMP scenario.
 	 */
-	private static function get_amp_footer( $data ) {
+	private static function get_amp_pixel_url( $data ) {
 		/**
 		 * Filter the parameters added to the AMP pixel tracking code.
 		 *
@@ -256,8 +389,7 @@ _stq.push([ "clickTrackerInit", "%2$s", "%3$s" ]);',
 		$data['rand'] = 'RANDOM'; // AMP placeholder.
 		$data['ref']  = 'DOCUMENT_REFERRER'; // AMP placeholder.
 		$data         = array_map( 'rawurlencode', $data );
-		$pixel_url    = add_query_arg( $data, 'https://pixel.wp.com/g.gif' );
-		return '<amp-pixel src="' . esc_url( $pixel_url ) . '"></amp-pixel>';
+		return add_query_arg( $data, 'https://pixel.wp.com/g.gif' );
 	}
 
 	/**
@@ -273,8 +405,7 @@ _stq.push([ "clickTrackerInit", "%2$s", "%3$s" ]);',
 			return;
 		}
 
-		$pixel = self::get_amp_footer( $data );
-		echo $pixel; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		printf( '<amp-pixel src="%s"></amp-pixel>', esc_url( self::get_amp_pixel_url( $data ) ) );
 	}
 
 	/**
@@ -321,7 +452,7 @@ _stq.push([ "clickTrackerInit", "%2$s", "%3$s" ]);',
 	 * @param array $data Array of data for the AMP pixel tracker.
 	 */
 	public static function render_amp_footer( $data ) {
-		print self::get_amp_footer( $data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		printf( '<amp-pixel src="%s"></amp-pixel>', esc_url( self::get_amp_pixel_url( $data ) ) );
 	}
 
 	/**

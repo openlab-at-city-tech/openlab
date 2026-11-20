@@ -36,6 +36,7 @@ class Calendars extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * the calendarList.list method. If you want to access the primary calendar of
      * the currently logged in user, use the "primary" keyword.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function clear($calendarId, $optParams = [])
     {
@@ -51,6 +52,7 @@ class Calendars extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * the calendarList.list method. If you want to access the primary calendar of
      * the currently logged in user, use the "primary" keyword.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($calendarId, $optParams = [])
     {
@@ -66,6 +68,7 @@ class Calendars extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * the currently logged in user, use the "primary" keyword.
      * @param array $optParams Optional parameters.
      * @return Calendar
+     * @throws \Google\Service\Exception
      */
     public function get($calendarId, $optParams = [])
     {
@@ -79,6 +82,7 @@ class Calendars extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * @param Calendar $postBody
      * @param array $optParams Optional parameters.
      * @return Calendar
+     * @throws \Google\Service\Exception
      */
     public function insert(Calendar $postBody, $optParams = [])
     {
@@ -96,6 +100,7 @@ class Calendars extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * @param Calendar $postBody
      * @param array $optParams Optional parameters.
      * @return Calendar
+     * @throws \Google\Service\Exception
      */
     public function patch($calendarId, Calendar $postBody, $optParams = [])
     {
@@ -112,6 +117,7 @@ class Calendars extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * @param Calendar $postBody
      * @param array $optParams Optional parameters.
      * @return Calendar
+     * @throws \Google\Service\Exception
      */
     public function update($calendarId, Calendar $postBody, $optParams = [])
     {

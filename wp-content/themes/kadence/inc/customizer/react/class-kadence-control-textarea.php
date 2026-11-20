@@ -28,14 +28,14 @@ class Kadence_Control_Textarea extends WP_Customize_Control {
 	 *
 	 * @var array
 	 */
-	public $default = array();
+	public $default = [];
 
 	/**
 	 * Send to JS.
 	 */
 	public function to_json() {
 		parent::to_json();
-		$this->json['default']     = $this->default;
+		$this->json['default'] = $this->default;
 	}
 	/**
 	 * Empty Render Function to prevent errors.

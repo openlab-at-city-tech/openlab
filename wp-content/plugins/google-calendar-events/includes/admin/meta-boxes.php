@@ -52,6 +52,7 @@ class Meta_Boxes
 		// Load meta boxes to save settings.
 		new Metabox\Settings();
 		new Metabox\Attach_Calendar();
+		new Metabox\Sc_Event_Details();
 		new Metabox\Upgrade_To_Premium();
 		//new Metabox\Newsletter();
 
@@ -63,6 +64,12 @@ class Meta_Boxes
 		// Process meta boxes.
 		add_action('simcal_save_settings_meta', '\SimpleCalendar\Admin\Metaboxes\Settings::save', 10, 2);
 		add_action('simcal_save_attach_calendar_meta', '\SimpleCalendar\Admin\Metaboxes\Attach_Calendar::save', 10, 2);
+		add_action('simcal_save_sc_event_meta', '\SimpleCalendar\Admin\Metaboxes\Sc_Event_Details::save', 10, 2);
+		add_action('admin_notices', '\SimpleCalendar\Admin\Metaboxes\Sc_Event_Details::admin_notices');
+		add_action(
+			'wp_ajax_simcal_geocode_suggest',
+			'\SimpleCalendar\Admin\Metaboxes\Sc_Event_Details::ajax_geocode_suggest',
+		);
 
 		// Save meta boxes data.
 		add_action('save_post', [$this, 'save_meta_boxes'], 1, 2);
@@ -84,7 +91,7 @@ class Meta_Boxes
 			'\SimpleCalendar\Admin\Metaboxes\Settings::html',
 			'calendar',
 			'normal',
-			'core'
+			'core',
 		);
 
 		$addons = apply_filters('simcal_installed_addons', []);
@@ -96,7 +103,7 @@ class Meta_Boxes
 				'\SimpleCalendar\Admin\Metaboxes\Upgrade_To_Premium::html',
 				'calendar',
 				'side',
-				'default'
+				'default',
 			);
 
 			// Removing coupon code + mailing list sign-up for now. 9/26/16
@@ -118,7 +125,16 @@ class Meta_Boxes
 			'\SimpleCalendar\Admin\Metaboxes\Get_Shortcode::html',
 			'calendar',
 			'side',
-			'default'
+			'default',
+		);
+
+		add_meta_box(
+			'simcal-sc-event-details',
+			__('Details', 'google-calendar-events'),
+			'\SimpleCalendar\Admin\Metaboxes\Sc_Event_Details::html',
+			'sc-event',
+			'normal',
+			'high',
 		);
 
 		// Add meta box if there are calendars.
@@ -130,7 +146,7 @@ class Meta_Boxes
 					'\SimpleCalendar\Admin\Metaboxes\Attach_Calendar::html',
 					$post_type,
 					'side',
-					'low'
+					'low',
 				);
 			}
 		}
@@ -186,6 +202,8 @@ class Meta_Boxes
 		// Check the post type.
 		if ('calendar' == $post->post_type) {
 			do_action('simcal_save_settings_meta', $post_id, $post);
+		} elseif ('sc-event' == $post->post_type) {
+			do_action('simcal_save_sc_event_meta', $post_id, $post);
 		} elseif (in_array($post->post_type, $this->post_types)) {
 			do_action('simcal_save_attach_calendar_meta', $post_id, $post);
 		}

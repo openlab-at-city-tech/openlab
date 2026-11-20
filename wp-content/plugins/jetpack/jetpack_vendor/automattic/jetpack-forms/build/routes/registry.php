@@ -15,10 +15,24 @@ return array(
 		'has_content' => true,
 	),
 	array(
+		'name'        => 'response',
+		'path'        => '/response/$responseId',
+		'page'        => 'jetpack-forms-responses',
+		'has_route'   => true,
+		'has_content' => true,
+	),
+	array(
 		'name'        => 'responses',
 		'path'        => '/responses/$view',
 		'page'        => 'jetpack-forms-responses',
 		'has_route'   => true,
 		'has_content' => true,
+	),
+	array(
+		'name'        => 'root',
+		'path'        => '/',
+		'page'        => 'jetpack-forms-responses',
+		'has_route'   => true,
+		'has_content' => false,
 	)
 );

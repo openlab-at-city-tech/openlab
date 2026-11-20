@@ -37,329 +37,329 @@ ob_start();
 </div>
 <?php
 $compontent_tabs = ob_get_clean();
-$settings = array(
-	'header_builder' => array(
+$settings        = [
+	'header_builder'                 => [
 		'control_type' => 'kadence_blank_control',
 		'section'      => 'header_builder',
 		'settings'     => false,
 		'description'  => $builder_tabs,
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting'  => 'blocks_header',
 				'operator' => '!=',
 				'value'    => true,
-			),
-		),
-	),
-	'header_desktop_items' => array(
+			],
+		],
+	],
+	'header_desktop_items'           => [
 		'control_type' => 'kadence_builder_control',
 		'section'      => 'header_builder',
 		'default'      => kadence()->default( 'header_desktop_items' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__device',
 				'value'   => 'desktop',
-			),
-			array(
+			],
+			[
 				'setting'  => 'blocks_header',
 				'operator' => '!=',
 				'value'    => true,
-			),
-		),
-		'partial'      => array(
+			],
+		],
+		'partial'      => [
 			'selector'            => '#masthead',
 			'container_inclusive' => true,
 			'render_callback'     => 'Kadence\header_markup',
-		),
-		'choices'      => array(
-			'logo'          => array(
+		],
+		'choices'      => [
+			'logo'         => [
 				'name'    => esc_html__( 'Logo', 'kadence' ),
 				'section' => 'title_tagline',
-			),
-			'navigation'          => array(
+			],
+			'navigation'   => [
 				'name'    => esc_html__( 'Primary Navigation', 'kadence' ),
 				'section' => 'kadence_customizer_primary_navigation',
-			),
-			'navigation-2'        => array(
+			],
+			'navigation-2' => [
 				'name'    => esc_html__( 'Secondary Navigation', 'kadence' ),
 				'section' => 'kadence_customizer_secondary_navigation',
-			),
-			'search' => array(
+			],
+			'search'       => [
 				'name'    => esc_html__( 'Search', 'kadence' ),
 				'section' => 'kadence_customizer_header_search',
-			),
-			'button'        => array(
+			],
+			'button'       => [
 				'name'    => esc_html__( 'Button', 'kadence' ),
 				'section' => 'kadence_customizer_header_button',
-			),
-			'social'        => array(
+			],
+			'social'       => [
 				'name'    => esc_html__( 'Social', 'kadence' ),
 				'section' => 'kadence_customizer_header_social',
-			),
-			'html'          => array(
+			],
+			'html'         => [
 				'name'    => esc_html__( 'HTML', 'kadence' ),
 				'section' => 'kadence_customizer_header_html',
-			),
-		),
-		'input_attrs'  => array(
+			],
+		],
+		'input_attrs'  => [
 			'group' => 'header_desktop_items',
-			'rows'  => array( 'top', 'main', 'bottom' ),
-			'zones' => array(
-				'top' => array(
+			'rows'  => [ 'top', 'main', 'bottom' ],
+			'zones' => [
+				'top'    => [
 					'top_left'         => is_rtl() ? esc_html__( 'Top - Right', 'kadence' ) : esc_html__( 'Top - Left', 'kadence' ),
 					'top_left_center'  => is_rtl() ? esc_html__( 'Top - Right Center', 'kadence' ) : esc_html__( 'Top - Left Center', 'kadence' ),
 					'top_center'       => esc_html__( 'Top - Center', 'kadence' ),
 					'top_right_center' => is_rtl() ? esc_html__( 'Top - Left Center', 'kadence' ) : esc_html__( 'Top - Right Center', 'kadence' ),
 					'top_right'        => is_rtl() ? esc_html__( 'Top - Left', 'kadence' ) : esc_html__( 'Top - Right', 'kadence' ),
-				),
-				'main' => array(
+				],
+				'main'   => [
 					'main_left'         => is_rtl() ? esc_html__( 'Main - Right', 'kadence' ) : esc_html__( 'Main - Left', 'kadence' ),
 					'main_left_center'  => is_rtl() ? esc_html__( 'Main - Right Center', 'kadence' ) : esc_html__( 'Main - Left Center', 'kadence' ),
 					'main_center'       => esc_html__( 'Main - Center', 'kadence' ),
 					'main_right_center' => is_rtl() ? esc_html__( 'Main - Left Center', 'kadence' ) : esc_html__( 'Main - Right Center', 'kadence' ),
 					'main_right'        => is_rtl() ? esc_html__( 'Main - Left', 'kadence' ) : esc_html__( 'Main - Right', 'kadence' ),
-				),
-				'bottom' => array(
+				],
+				'bottom' => [
 					'bottom_left'         => is_rtl() ? esc_html__( 'Bottom - Right', 'kadence' ) : esc_html__( 'Bottom - Left', 'kadence' ),
 					'bottom_left_center'  => is_rtl() ? esc_html__( 'Bottom - Right Center', 'kadence' ) : esc_html__( 'Bottom - Left Center', 'kadence' ),
 					'bottom_center'       => esc_html__( 'Bottom - Center', 'kadence' ),
 					'bottom_right_center' => is_rtl() ? esc_html__( 'Bottom - Left Center', 'kadence' ) : esc_html__( 'Bottom - Right Center', 'kadence' ),
 					'bottom_right'        => is_rtl() ? esc_html__( 'Bottom - Left', 'kadence' ) : esc_html__( 'Bottom - Right', 'kadence' ),
-				),
-			),
-		),
-	),
-	'header_tab_settings' => array(
+				],
+			],
+		],
+	],
+	'header_tab_settings'            => [
 		'control_type' => 'kadence_blank_control',
 		'section'      => 'header_layout',
 		'settings'     => false,
 		'priority'     => 1,
 		'description'  => $compontent_tabs,
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting'  => 'blocks_header',
 				'operator' => '!=',
 				'value'    => true,
-			),
-		),
-	),
-	'header_desktop_available_items' => array(
+			],
+		],
+	],
+	'header_desktop_available_items' => [
 		'control_type' => 'kadence_available_control',
 		'section'      => 'header_layout',
 		'settings'     => false,
-		'input_attrs'  => array(
-			'group'  => 'header_desktop_items',
-			'zones'  => array( 'top', 'main', 'bottom' ),
-		),
-		'context'      => array(
-			array(
+		'input_attrs'  => [
+			'group' => 'header_desktop_items',
+			'zones' => [ 'top', 'main', 'bottom' ],
+		],
+		'context'      => [
+			[
 				'setting' => '__device',
 				'value'   => 'desktop',
-			),
-			array(
+			],
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-			array(
+			],
+			[
 				'setting'  => 'blocks_header',
 				'operator' => '!=',
 				'value'    => true,
-			),
-		),
-	),
-	'header_mobile_items' => array(
+			],
+		],
+	],
+	'header_mobile_items'            => [
 		'control_type' => 'kadence_builder_control',
 		'section'      => 'header_builder',
 		'transport'    => 'refresh',
 		'default'      => kadence()->default( 'header_mobile_items' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting'  => '__device',
 				'operator' => 'in',
-				'value'    => array( 'tablet', 'mobile' ),
-			),
-			array(
+				'value'    => [ 'tablet', 'mobile' ],
+			],
+			[
 				'setting'  => 'blocks_header',
 				'operator' => '!=',
 				'value'    => true,
-			),
-		),
-		'partial'      => array(
+			],
+		],
+		'partial'      => [
 			'selector'            => '#mobile-header',
 			'container_inclusive' => true,
 			'render_callback'     => 'Kadence\mobile_header',
-		),
-		'choices'      => array(
-			'mobile-logo'          => array(
+		],
+		'choices'      => [
+			'mobile-logo'       => [
 				'name'    => esc_html__( 'Logo', 'kadence' ),
 				'section' => 'title_tagline',
-			),
-			'mobile-navigation' => array(
+			],
+			'mobile-navigation' => [
 				'name'    => esc_html__( 'Mobile Navigation', 'kadence' ),
 				'section' => 'kadence_customizer_mobile_navigation',
-			),
+			],
 			// 'mobile-navigation2'          => array(
-			// 	'name'    => esc_html__( 'Horizontal Navigation', 'kadence' ),
-			// 	'section' => 'mobile_horizontal_navigation',
+			// 'name'    => esc_html__( 'Horizontal Navigation', 'kadence' ),
+			// 'section' => 'mobile_horizontal_navigation',
 			// ),
-			'search' => array(
+			'search'            => [
 				'name'    => esc_html__( 'Search Toggle', 'kadence' ),
 				'section' => 'kadence_customizer_header_search',
-			),
-			'mobile-button'        => array(
+			],
+			'mobile-button'     => [
 				'name'    => esc_html__( 'Button', 'kadence' ),
 				'section' => 'kadence_customizer_mobile_button',
-			),
-			'mobile-social'        => array(
+			],
+			'mobile-social'     => [
 				'name'    => esc_html__( 'Social', 'kadence' ),
 				'section' => 'kadence_customizer_mobile_social',
-			),
-			'mobile-html'          => array(
+			],
+			'mobile-html'       => [
 				'name'    => esc_html__( 'HTML', 'kadence' ),
 				'section' => 'kadence_customizer_mobile_html',
-			),
-			'popup-toggle'          => array(
+			],
+			'popup-toggle'      => [
 				'name'    => esc_html__( 'Trigger', 'kadence' ),
 				'section' => 'kadence_customizer_mobile_trigger',
-			),
-		),
-		'input_attrs'  => array(
+			],
+		],
+		'input_attrs'  => [
 			'group' => 'header_mobile_items',
-			'rows'  => array( 'popup', 'top', 'main', 'bottom' ),
-			'zones' => array(
-				'popup' => array(
+			'rows'  => [ 'popup', 'top', 'main', 'bottom' ],
+			'zones' => [
+				'popup'  => [
 					'popup_content' => esc_html__( 'Popup Content', 'kadence' ),
-				),
-				'top' => array(
+				],
+				'top'    => [
 					'top_left'   => is_rtl() ? esc_html__( 'Top - Right', 'kadence' ) : esc_html__( 'Top - Left', 'kadence' ),
 					'top_center' => esc_html__( 'Top - Center', 'kadence' ),
 					'top_right'  => is_rtl() ? esc_html__( 'Top - Left', 'kadence' ) : esc_html__( 'Top - Right', 'kadence' ),
-				),
-				'main' => array(
+				],
+				'main'   => [
 					'main_left'   => is_rtl() ? esc_html__( 'Main - Right', 'kadence' ) : esc_html__( 'Main - Left', 'kadence' ),
 					'main_center' => esc_html__( 'Main - Center', 'kadence' ),
 					'main_right'  => is_rtl() ? esc_html__( 'Main - Left', 'kadence' ) : esc_html__( 'Main - Right', 'kadence' ),
-				),
-				'bottom' => array(
+				],
+				'bottom' => [
 					'bottom_left'   => is_rtl() ? esc_html__( 'Bottom - Right', 'kadence' ) : esc_html__( 'Bottom - Left', 'kadence' ),
 					'bottom_center' => esc_html__( 'Bottom - Center', 'kadence' ),
 					'bottom_right'  => is_rtl() ? esc_html__( 'Bottom - Left', 'kadence' ) : esc_html__( 'Bottom - Right', 'kadence' ),
-				),
-			),
-		),
-	),
-	'header_mobile_available_items' => array(
+				],
+			],
+		],
+	],
+	'header_mobile_available_items'  => [
 		'control_type' => 'kadence_available_control',
 		'section'      => 'header_layout',
 		'settings'     => false,
-		'input_attrs'  => array(
-			'group'  => 'header_mobile_items',
-			'zones'  => array( 'popup', 'top', 'main', 'bottom' ),
-		),
-		'context'      => array(
-			array(
+		'input_attrs'  => [
+			'group' => 'header_mobile_items',
+			'zones' => [ 'popup', 'top', 'main', 'bottom' ],
+		],
+		'context'      => [
+			[
 				'setting'  => '__device',
 				'operator' => 'in',
-				'value'    => array( 'tablet', 'mobile' ),
-			),
-			array(
+				'value'    => [ 'tablet', 'mobile' ],
+			],
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-			array(
+			],
+			[
 				'setting'  => 'blocks_header',
 				'operator' => '!=',
 				'value'    => true,
-			),
-		),
-	),
-	'header_transparent_link' => array(
+			],
+		],
+	],
+	'header_transparent_link'        => [
 		'control_type' => 'kadence_focus_button_control',
 		'section'      => 'header_layout',
 		'settings'     => false,
 		'priority'     => 20,
 		'label'        => esc_html__( 'Transparent Header', 'kadence' ),
-		'input_attrs'  => array(
+		'input_attrs'  => [
 			'section' => 'kadence_customizer_transparent_header',
-		),
-		'context'      => array(
-			array(
+		],
+		'context'      => [
+			[
 				'setting'  => 'blocks_header',
 				'operator' => '!=',
 				'value'    => true,
-			),
-		),
-	),
-	'header_sticky_link' => array(
+			],
+		],
+	],
+	'header_sticky_link'             => [
 		'control_type' => 'kadence_focus_button_control',
 		'section'      => 'header_layout',
 		'settings'     => false,
 		'priority'     => 20,
 		'label'        => esc_html__( 'Sticky Header', 'kadence' ),
-		'input_attrs'  => array(
+		'input_attrs'  => [
 			'section' => 'kadence_customizer_header_sticky',
-		),
-		'context'      => array(
-			array(
+		],
+		'context'      => [
+			[
 				'setting'  => 'blocks_header',
 				'operator' => '!=',
 				'value'    => true,
-			),
-		),
-	),
-	'header_wrap_background' => array(
+			],
+		],
+	],
+	'header_wrap_background'         => [
 		'control_type' => 'kadence_background_control',
 		'section'      => 'header_layout',
 		'label'        => esc_html__( 'Header Background', 'kadence' ),
 		'default'      => kadence()->default( 'header_wrap_background' ),
-		'live_method'     => array(
-			array(
+		'live_method'  => [
+			[
 				'type'     => 'css_background',
 				'selector' => '#masthead',
 				'property' => 'background',
 				'pattern'  => '$',
 				'key'      => 'base',
-			),
-		),
-		'context'      => array(
-			array(
+			],
+		],
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'design',
-			),
-		),
-		'input_attrs'  => array(
-			'tooltip'  => __( 'Header Background', 'kadence' ),
-		),
-	),
-	'header_mobile_switch' => array(
+			],
+		],
+		'input_attrs'  => [
+			'tooltip' => __( 'Header Background', 'kadence' ),
+		],
+	],
+	'header_mobile_switch'           => [
 		'control_type' => 'kadence_range_control',
 		'section'      => 'header_layout',
 		'transport'    => 'refresh',
 		'label'        => esc_html__( 'Screen size to switch to mobile header', 'kadence' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'design',
-			),
-		),
+			],
+		],
 		'default'      => kadence()->default( 'header_mobile_switch' ),
-		'input_attrs'  => array(
-			'min'        => array(
-				'px'  => 0,
-			),
-			'max'        => array(
-				'px'  => 4000,
-			),
-			'step'       => array(
-				'px'  => 1,
-			),
-			'units'      => array( 'px' ),
+		'input_attrs'  => [
+			'min'        => [
+				'px' => 0,
+			],
+			'max'        => [
+				'px' => 4000,
+			],
+			'step'       => [
+				'px' => 1,
+			],
+			'units'      => [ 'px' ],
 			'responsive' => false,
-		),
-	),
-);
+		],
+	],
+];
 if ( defined( 'KADENCE_BLOCKS_VERSION' ) && version_compare( KADENCE_BLOCKS_VERSION, '3.3.0', '>=' ) ) {
-	$settings['blocks_header'] = array(
+	$settings['blocks_header']    = [
 		'control_type' => 'kadence_switch_control',
 		'sanitize'     => 'kadence_sanitize_toggle',
 		'section'      => 'header_layout',
@@ -368,27 +368,27 @@ if ( defined( 'KADENCE_BLOCKS_VERSION' ) && version_compare( KADENCE_BLOCKS_VERS
 		'default'      => kadence()->default( 'blocks_header' ),
 		'label'        => esc_html__( 'Enable Block Header', 'kadence' ),
 		'transport'    => 'refresh',
-	);
-	$settings['blocks_header_id'] = array(
+	];
+	$settings['blocks_header_id'] = [
 		'control_type' => 'kadence_select_control',
 		'section'      => 'header_layout',
 		'label'        => esc_html__( 'Header Block', 'kadence' ),
 		'transport'    => 'refresh',
 		'priority'     => 30,
 		'default'      => kadence()->default( 'blocks_header_id' ),
-		'input_attrs'  => array(
+		'input_attrs'  => [
 			'options' => kadence()->block_header_options(),
-		),
-		'context'      => array(
-			array(
+		],
+		'context'      => [
+			[
 				'setting'  => 'blocks_header',
 				'operator' => '=',
 				'value'    => true,
-			),
-		),
-	);
+			],
+		],
+	];
 } else {
-	$settings['blocks_header'] = array();
+	$settings['blocks_header'] = [];
 }
 Theme_Customizer::add_settings( $settings );
 

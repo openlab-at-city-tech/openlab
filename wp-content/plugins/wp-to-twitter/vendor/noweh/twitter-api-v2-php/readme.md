@@ -6,7 +6,7 @@
 [![MIT Licensed](https://img.shields.io/github/license/noweh/twitter-api-v2-php)](licence.md)
 [![last version](https://img.shields.io/packagist/v/noweh/twitter-api-v2-php)](https://packagist.org/packages/noweh/twitter-api-v2-php)
 [![Downloads](https://img.shields.io/packagist/dt/noweh/twitter-api-v2-php)](https://packagist.org/packages/noweh/twitter-api-v2-php)
-[![twitter](https://img.shields.io/twitter/follow/Noweh95?style=social)](https://twitter.com/Noweh95)
+[![twitter](https://img.shields.io/twitter/follow/NowehJS?style=social)](https://x.com/NowehJS)
 
 Twitter API V2 is a PHP package which provides an easy and fast access to Twitter REST API for Version 2 endpoints.
 
@@ -52,6 +52,7 @@ Twitter API V2 is a PHP package which provides an easy and fast access to Twitte
         - [Follow a user](#follow-a-user)
         - [Unfollow a user](#unfollow-a-user)
     - [User/Lookup endpoints](#userlookup-endpoints)
+        - [Find me](#find-me) 
         - [Find Twitter Users](#find-twitter-users)
     - [User/Mutes endpoints](#usermutes-endpoints)
         - [Retrieve the users which you've muted](#retrieve-the-users-which-youve-muted)
@@ -89,15 +90,23 @@ Expected settings are as follows:
 ```php
 use Noweh\TwitterApi\Client;
 
-$settings['account_id']
-$settings['access_token'],
-$settings['access_token_secret'],
-$settings['consumer_key'],
-$settings['consumer_secret'],
-$settings['bearer_token']
+$settings = [
+    'account_id' => 'YOUR_ACCOUNT_ID',
+    'access_token' => 'YOUR_ACCESS_TOKEN',
+    'access_token_secret' => 'YOUR_TOKEN_SECRET',
+    'consumer_key' => 'YOUR_CONSUMER_KEY',
+    'consumer_secret' => 'YOUR_CONSUMER_SECRET',
+    'bearer_token' => 'YOUR_BEARER_TOKEN',
+    'free_mode' => false, // Optional
+    'api_base_uri' => 'https://api.twitter.com/2/', // Optional
+]; 
 
 $client = new Client($settings);
 ```
+
+By changing the value of `'api_base_uri'` you can have the requests target a different server, for instance, a simulated one, thus making testing your application in isolation easier.
+
+For a quick mock server setup you can use [mockoon](https://mockoon.com/).
 
 ### API Functionality
 All API calls are triggered when the `performRequest()` method is invoked.
@@ -118,8 +127,7 @@ $response = $this->client->tweet()->create()
     ->performRequest([
         'text' => 'Test Tweet... '
     ],
-    withHeaders: true
-    )
+    withHeaders: true)
 ;
 
 /*
@@ -159,6 +167,19 @@ object(stdClass)#399 (2) {
 }
 */
 ```
+### Free mode
+
+This API can be used in free mode, which allows for a limited usage of the API.
+In this mode, the [Find me](#find-me) method is the only one that can be used.
+You have to set the `free_mode` parameter to `true` when creating the client.
+
+Example:
+```php
+...
+$settings['free_mode'] = true;
+$client = new Client($settings);
+```
+
 ---
 ## Tweets endpoints
 

@@ -5,32 +5,42 @@
     
     class TTO_Interface 
         {
-    
+            
             function Interface()
                 {
                     global $wpdb, $wp_locale;
                     
-                    $taxonomy = isset($_GET['taxonomy']) ? sanitize_key($_GET['taxonomy']) : '';    //phpcs:ignore  WordPress.Security.NonceVerification.Recommended  
-                    $post_type = isset($_GET['post_type']) ? sanitize_key($_GET['post_type']) : ''; //phpcs:ignore  WordPress.Security.NonceVerification.Recommended 
+                    $taxonomy   =   isset($_GET['taxonomy'])        ? sanitize_key($_GET['taxonomy']) : '';    //phpcs:ignore  WordPress.Security.NonceVerification.Recommended  
+                    $post_type  =   isset($_GET['post_type'])       ? sanitize_key($_GET['post_type']) : ''; //phpcs:ignore  WordPress.Security.NonceVerification.Recommended 
+                    $page       =   isset($_REQUEST['page'])        ? preg_replace( '/[^a-zA-Z0-9_\-]/', '', wp_unslash ( $_REQUEST['page'] ) ) : '';
+                    
                     if(empty($post_type))
                         {
+                            $_has_post_type_in_query    =   FALSE;
+                            
                             $screen = get_current_screen();
                             
                             if(isset($screen->post_type)    && !empty($screen->post_type))
                                 $post_type  =   $screen->post_type;
                                 else
                                 {
-                                    switch($screen->parent_file)
+                                    $post_type  =   str_replace ( 'to-interface-', '', $page );
+                                    $post_type  =   preg_replace( '/[^a-zA-Z0-9_\-]/', '', wp_unslash ( $post_type ) );
+                                    
+                                    switch( $post_type )
                                         {
-                                            case "upload.php" :
-                                                                $post_type  =   'attachment';
-                                                                break;
+                                                               
+                                            case "shopp-products"   :
+                                                                        $post_type  =   'shopp_product';
+                                                                        break;
                                                         
                                             default:
-                                                                $post_type  =   'post';   
+                                                                        
                                         }
                                 }       
-                        } 
+                        }
+                        else
+                        $_has_post_type_in_query    =   TRUE; 
                                                     
                     $post_type_data = get_post_type_object($post_type);
                     
@@ -59,13 +69,12 @@
                             switch($post_type)
                                 {
                                     
+                                    case "post" :
+                                                        $current_section_parent_file    =    "edit.php";
+                                                        break;
                                     case "attachment" :
-                                                    $current_section_parent_file    =   "upload.php";
-                                                    break;
-                                                    
-                                    default :
-                                                    $current_section_parent_file    =    "edit.php";
-                                                    break;
+                                                        $current_section_parent_file    =   "upload.php";
+                                                        break;
                                 }
                         
                         
@@ -75,8 +84,11 @@
                             <input type="hidden" name="page" value="to-interface-<?php echo esc_attr($post_type) ?>" />
                             <?php
                         
-                            if (!in_array($post_type, array('post', 'attachment'))) 
-                                echo '<input type="hidden" name="post_type" value="'. esc_attr($post_type) .'" />';
+                            if ( $_has_post_type_in_query )
+                                {
+                                    if (!in_array($post_type, array('post', 'attachment'))) 
+                                        echo '<input type="hidden" name="post_type" value="'. esc_attr($post_type) .'" />';
+                                }
 
                             //output all available taxonomies for this post type
                             
@@ -96,7 +108,7 @@
                                     $taxonomy = current($post_type_taxonomies);
                                 }
                                                     
-                            if (count($post_type_taxonomies) > 1)
+                            if (count($post_type_taxonomies) > 0)
                                 {
                         
                                     ?>
@@ -204,8 +216,6 @@
                                   
                                 jQuery(".save-order").bind( "click", function() {
                                         
-                                        jQuery(this).parent().find('img').show();
-                                    
                                         var mySortable = new Array();
                                         jQuery(".sortable").each(  function(){
                                             
@@ -228,12 +238,72 @@
                                         
                                         //serialize the array
                                         var serialize_data = JSON.stringify( convArrToObj(mySortable));
-                                                                                                    
-                                        jQuery.post( ajaxurl, { action:'update-taxonomy-order', order: serialize_data, nonce : '<?php echo esc_attr ( wp_create_nonce( 'update-taxonomy-order' ) ); ?>' }, function() {
-                                            jQuery("#ajax-response").html('<div class="message updated fade"><p><?php esc_html_e ( "Items Order Updated", 'taxonomy-terms-order' ) ?></p></div>');
-                                            jQuery("#ajax-response div").delay(3000).hide("slow");
+                                                              
+                                        var $button = jQuery(this);
+
+                                        if ($button.data('tto-saving')) {
+                                            return;
+                                        }
+                                        
+                                        jQuery(".save-order").data('tto-saving', true)
+                                            .addClass('disabled')
+                                            .attr('aria-disabled', 'true')
+                                            .css('pointer-events', 'none');
+
+                                        $button.parent().find('img').show();
+
+                                        jQuery.ajax({
+                                            url: ajaxurl,
+                                            type: 'POST',
+                                            dataType: 'json',
+                                            data: {
+                                                action: 'update-taxonomy-order',
+                                                taxonomy: <?php echo wp_json_encode( $taxonomy ); ?>,
+                                                order: serialize_data,
+                                                nonce: <?php echo wp_json_encode( wp_create_nonce( 'update-taxonomy-order' ) ); ?>
+                                            }
+                                        })
+                                        .done(function(response) {
+                                            var message = response && response.data && response.data.message
+                                                ? response.data.message
+                                                : '';
+
+                                            if (!message) {
+                                                return;
+                                            }
+
+                                            jQuery('#ajax-response').empty().append(
+                                                jQuery('<div>', { class: response.success ? 'notice notice-success' : 'notice notice-error' }).append(
+                                                    jQuery('<p>').text(message)
+                                                )
+                                            );
+                                        })
+                                        .fail(function(response) {
+                                            var response = response.responseJSON || {};
+                                            var message = response.data && response.data.message
+                                                ? response.data.message
+                                                : '';
+
+                                            if (!message) {
+                                                return;
+                                            }
+
+                                            jQuery('#ajax-response').empty().append(
+                                                jQuery('<div>', { class: 'notice notice-error' }).append(
+                                                    jQuery('<p>').text(message)
+                                                )
+                                            );
+                                        })
+                                        .always(function() {
                                             jQuery('img.pto_ajax_loading').hide();
+
+                                            jQuery(".save-order").data('tto-saving', false)
+                                                .removeClass('disabled')
+                                                .removeAttr('aria-disabled')
+                                                .css('pointer-events', '');
                                         });
+                                        
+                                        
                                     });
                                 
               

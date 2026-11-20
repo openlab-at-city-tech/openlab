@@ -1138,7 +1138,11 @@
                        (slider.maxW < slider.w) ? (slider.w - (slideMargin * (maxItems - 1)))/maxItems :
                        (slider.vars.itemWidth > slider.w) ? slider.w : slider.vars.itemWidth;
         slider.itemWPlusMargin = slider.itemW + slider.itemM;
-        slider.visible = Math.floor(slider.w / slider.itemWPlusMargin);
+        // Count visible items by content width (no margin after the last one), matching how itemW
+        // is sized above - otherwise this undercounts by one, inflating pagingCount and requiring
+        // an extra arrow click to reach the last slide.
+        // The division is meant to land exactly on an integer, so absorb binary rounding (2.9999999999999996) first.
+        slider.visible = Math.floor((slider.w + slider.itemM) / slider.itemWPlusMargin + 0.0001);
         slider.visible = slider.visible > 0 ? slider.visible : 1;
 
         slider.move = (slider.vars.move > 0 && slider.vars.move < slider.visible ) ? slider.vars.move : slider.visible;
@@ -1155,8 +1159,10 @@
         }
 
         slider.last = slider.pagingCount - 1;
+        // One formula for both cases: it matches the old itemWidth > w branch exactly when itemW === w, and that
+        // branch was wrong once minItems/maxItems had already shrunk itemW below the container - see #2424.
         slider.limit = (slider.pagingCount === 1) ? 0 :
-                       (slider.vars.itemWidth > slider.w) ? (slider.itemW * (slider.count - 1)) + (slideMargin * (slider.count - 1)) : ((slider.itemW + slideMargin) * slider.count) - slider.w - slideMargin;
+                       ((slider.itemW + slideMargin) * slider.count) - slider.w - slideMargin;
       } else {
         slider.itemW = slider.w;
         slider.itemM = slideMargin;

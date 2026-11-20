@@ -41,9 +41,11 @@ if ( ! bbp_is_single_forum() ) : ?>
 
 					<?php
 						if ( bbp_is_topic_edit() ) :
-							printf( esc_html__( 'Now Editing &ldquo;%s&rdquo;', 'bbpress' ), bbp_get_topic_title() );
+						/* translators: %s: Topic title */
+						printf( esc_html__( 'Now Editing &ldquo;%s&rdquo;', 'bbpress' ), bbp_get_topic_title() );
 						else :
 							( bbp_is_single_forum() && bbp_get_forum_title() )
+								/* translators: %s: Forum title */
 								? printf( esc_html__( 'Create New Topic in &ldquo;%s&rdquo;', 'bbpress' ), bbp_get_forum_title() )
 								: esc_html_e( 'Create New Topic', 'bbpress' );
 						endif;
@@ -73,7 +75,7 @@ if ( ! bbp_is_single_forum() ) : ?>
 
 				<?php endif; ?>
 
-				<?php do_action( 'bbp_template_notices' ); ?>
+				<?php do_action( 'bbp_template_notices', 'topic' ); ?>
 
 				<div>
 
@@ -82,7 +84,11 @@ if ( ! bbp_is_single_forum() ) : ?>
 					<?php do_action( 'bbp_theme_before_topic_form_title' ); ?>
 
 					<p>
-						<label for="bbp_topic_title"><?php printf( esc_html__( 'Topic Title (Maximum Length: %d):', 'bbpress' ), bbp_get_title_max_length() ); ?></label><br />
+						<label for="bbp_topic_title"><?php                          printf(
+								/* translators: %d: Maximum allowed length for topic title */
+							esc_html__( 'Topic Title (Maximum Length: %d):', 'bbpress' ),
+							bbp_get_title_max_length()
+						); ?></label><br />
 						<input type="text" id="bbp_topic_title" value="<?php bbp_form_topic_title(); ?>" size="40" name="bbp_topic_title" maxlength="<?php bbp_title_max_length(); ?>" />
 					</p>
 
@@ -116,10 +122,12 @@ if ( ! bbp_is_single_forum() ) : ?>
 						<p>
 							<label for="bbp_forum_id"><?php esc_html_e( 'Forum:', 'bbpress' ); ?></label><br />
 							<?php
-								bbp_dropdown( array(
+							bbp_dropdown(
+								array(
 									'show_none' => esc_html__( '&mdash; No forum &mdash;', 'bbpress' ),
 									'selected'  => bbp_get_form_topic_forum()
-								) );
+								)
+							);
 							?>
 						</p>
 
@@ -127,7 +135,12 @@ if ( ! bbp_is_single_forum() ) : ?>
 
 					<?php endif; ?>
 
-					<?php if ( current_user_can( 'moderate', bbp_get_topic_id() ) ) : ?>
+					<?php
+					$moderation_object_id = bbp_is_topic_edit()
+						? bbp_get_topic_id()
+						: bbp_get_forum_id();
+					?>
+					<?php if ( current_user_can( 'moderate', $moderation_object_id ) ) : ?>
 
 						<?php do_action( 'bbp_theme_before_topic_form_type' ); ?>
 
@@ -227,7 +240,11 @@ if ( ! bbp_is_single_forum() ) : ?>
 	<div id="forum-closed-<?php bbp_forum_id(); ?>" class="bbp-forum-closed">
 		<div class="bbp-template-notice">
 			<ul>
-				<li><?php printf( esc_html__( 'The forum &#8216;%s&#8217; is closed to new topics and replies.', 'bbpress' ), bbp_get_forum_title() ); ?></li>
+				<li><?php                   printf(
+						/* translators: %s: Forum title */
+					esc_html__( 'The forum &#8216;%s&#8217; is closed to new topics and replies.', 'bbpress' ),
+					bbp_get_forum_title()
+				); ?></li>
 			</ul>
 		</div>
 	</div>
@@ -237,14 +254,14 @@ if ( ! bbp_is_single_forum() ) : ?>
 	<div id="no-topic-<?php bbp_forum_id(); ?>" class="bbp-no-topic">
 		<div class="bbp-template-notice">
 			<ul>
-				<li><?php is_user_logged_in()
+				<li><?php ( is_user_logged_in() || ! bbp_is_forums_status( 'open' ) )
 					? esc_html_e( 'You cannot create new topics.',               'bbpress' )
 					: esc_html_e( 'You must be logged in to create new topics.', 'bbpress' );
 				?></li>
 			</ul>
 		</div>
 
-		<?php if ( ! is_user_logged_in() ) : ?>
+		<?php if ( ! is_user_logged_in() && ! bbp_is_forums_status( 'frozen' ) ) : ?>
 
 			<?php bbp_get_template_part( 'form', 'user-login' ); ?>
 

@@ -2,7 +2,6 @@
 /**
  * Browser Module
  *
- * @version $Id: useragent_module.php 402236 2011-06-28 20:46:55Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 

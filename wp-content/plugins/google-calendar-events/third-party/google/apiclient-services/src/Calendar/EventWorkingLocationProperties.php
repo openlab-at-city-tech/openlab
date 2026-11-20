@@ -28,6 +28,10 @@ class EventWorkingLocationProperties extends \SimpleCalendar\plugin_deps\Google\
     protected $officeLocationType = EventWorkingLocationPropertiesOfficeLocation::class;
     protected $officeLocationDataType = '';
     /**
+     * @var string
+     */
+    public $type;
+    /**
      * @param EventWorkingLocationPropertiesCustomLocation
      */
     public function setCustomLocation(EventWorkingLocationPropertiesCustomLocation $customLocation)
@@ -68,6 +72,20 @@ class EventWorkingLocationProperties extends \SimpleCalendar\plugin_deps\Google\
     public function getOfficeLocation()
     {
         return $this->officeLocation;
+    }
+    /**
+     * @param string
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

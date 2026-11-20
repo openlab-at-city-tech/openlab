@@ -10,7 +10,7 @@
 /**
  * Example converter base impoprter template for bbPress
  *
- * @since 2.3.0 bbPress (r4689)
+ * @since 2.4.0 bbPress (r5014)
  *
  * @link Codex Docs https://codex.bbpress.org/import-forums/custom-import
  */
@@ -134,24 +134,24 @@ class Example extends BBP_Converter_Base {
 
 		// Forum dates.
 		$this->field_map[] = array(
-			'to_type'         => 'forum',
-			'to_fieldname'    => 'post_date',
-			'default' => date('Y-m-d H:i:s')
+			'to_type'      => 'forum',
+			'to_fieldname' => 'post_date',
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
-			'to_type'         => 'forum',
-			'to_fieldname'    => 'post_date_gmt',
-			'default' => date('Y-m-d H:i:s')
+			'to_type'      => 'forum',
+			'to_fieldname' => 'post_date_gmt',
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
-			'to_type'         => 'forum',
-			'to_fieldname'    => 'post_modified',
-			'default' => date('Y-m-d H:i:s')
+			'to_type'      => 'forum',
+			'to_fieldname' => 'post_modified',
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
-			'to_type'         => 'forum',
-			'to_fieldname'    => 'post_modified_gmt',
-			'default' => date('Y-m-d H:i:s')
+			'to_type'      => 'forum',
+			'to_fieldname' => 'post_modified_gmt',
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 
 		// Setup the table joins for the forum section
@@ -161,7 +161,7 @@ class Example extends BBP_Converter_Base {
 			'join_tablename'  => 'forums_table',
 			'join_type'       => 'INNER',
 			'join_expression' => 'USING groups_table.forum_id = forums_table.forum_id',
-		//	'from_expression' => 'WHERE forums_table.forum_id != 1',
+			//  'from_expression' => 'WHERE forums_table.forum_id != 1',
 			'to_type'         => 'forum'
 		);
 
@@ -696,7 +696,11 @@ class Example extends BBP_Converter_Base {
 	 * as one value. Array values are auto sanitized by WordPress.
 	 */
 	public function callback_savepass( $field, $row ) {
-		$pass_array = array( 'hash' => $field, 'salt' => $row['salt'] );
+		$pass_array = array(
+			'hash' => $field,
+			'salt' => isset( $row['salt'] ) ? wp_slash( (string) $row['salt'] ) : ''
+		);
+
 		return $pass_array;
 	}
 
@@ -705,7 +709,19 @@ class Example extends BBP_Converter_Base {
 	 * to a pass the user has typed in.
 	 */
 	public function authenticate_pass( $password, $serialized_pass ) {
-		$pass_array = unserialize( $serialized_pass );
-		return ( $pass_array['hash'] == md5( md5( $password ). $pass_array['salt'] ) );
+
+		// Unserialize the password, with safeguards
+		$pass_array = $this->unserialize_pass( $serialized_pass );
+
+		// Bail if missing values
+		if ( ! is_string( $password ) || ! is_array( $pass_array ) || ! isset( $pass_array['hash'], $pass_array['salt'] ) || ! is_string( $pass_array['hash'] ) || ! is_string( $pass_array['salt'] ) ) {
+			return false;
+		}
+
+		// Return comparison
+		return hash_equals(
+			$pass_array['hash'],
+			md5( md5( $password ) . $pass_array['salt'] )
+		);
 	}
 }

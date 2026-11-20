@@ -225,17 +225,11 @@
 		            }
 	            } else if ( $condition->maintype == 'domain' && $condition->name == 'domain' ) {
           			$domains = unserialize($condition->value);
-		         
-					$other_domain = ( $domain ) ? FALSE : TRUE;
-		            foreach ( $domains as $domain ) {
-		            	if ( $DW->hostname == $domain && !$other_domain) {
-				            $domain_tmp = $other_domain;
-		            		$DW->message('Flip switch for domain to ' . ( ($domain_tmp) ? 'TRUE' : 'FALSE' ));
-			            }
-						if ( $DW->hostname != $domain && $other_domain) {
-				            $domain_tmp = false;
-		            		$DW->message('Flip switch for domain to ' . ( ($domain_tmp) ? 'TRUE' : 'FALSE' ));
-			            }
+		            $other_domain = ( $domain ) ? FALSE : TRUE;
+
+		            if ( DWDomain::matches($DW->hostname, $domains) ) {
+			            $domain_tmp = $other_domain;
+			            $DW->message('Flip switch for domain to ' . ( ($domain_tmp) ? 'TRUE' : 'FALSE' ));
 		            }
 
           		} else if ( $condition->maintype == 'ip' && $condition->name == 'ip' && ! is_null($DW->ip_address) ) {
@@ -306,12 +300,11 @@
           	}
           	unset($url_tmp, $other_url);
 
-			if(isset($domain_tmp) && $domain_tmp != $domain ) {
-				$DW->message('Exception triggered for domain, sets display to ' . ( ($domain_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule EDMN1)');
-				$domain = $domain_tmp;
-			}
-			
-			unset($domain_tmp, $other_domain);
+				if ( isset($domain_tmp) && $domain_tmp != $domain ) {
+					$DW->message('Exception triggered for domain, sets display to ' . ( ($domain_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule EDMN1)');
+					$domain = $domain_tmp;
+				}
+				unset($domain_tmp, $other_domain);
 
           	if ( isset($ip_tmp) && $ip_tmp != $ip ) {
           		$DW->message('Exception triggered for ip, sets display to ' . ( ($ip_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule EIP1)');

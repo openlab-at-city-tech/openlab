@@ -7,7 +7,7 @@
  */
 class A_MVC_Factory extends Mixin
 {
-    public function mvc_view($template, $params = array(), $engine = 'php', $context = false, $new_template_path = '')
+    public function mvc_view($template, $params = [], $engine = 'php', $context = false, $new_template_path = '')
     {
         return new C_MVC_View($template, $params, $engine, $context, $new_template_path);
     }
@@ -199,7 +199,7 @@ abstract class C_MVC_Controller extends C_Component
      * @param bool   $return_output (optional).
      * @return string
      */
-    public function render_view($name, $vars = array(), $return_output = false)
+    public function render_view($name, $vars = [], $return_output = false)
     {
         $this->object->render();
         return $this->object->render_partial($name, $vars, $return_output);
@@ -214,7 +214,7 @@ abstract class C_MVC_Controller extends C_Component
      * @param string $new_template_path Path to the new non-POPE file located under the plugin root's '/templates' directory.
      * @return mixed
      */
-    public function render_partial($template, $params = array(), $return_output = false, $context = null, $new_template_path = '')
+    public function render_partial($template, $params = [], $return_output = false, $context = null, $new_template_path = '')
     {
         /**
          * View instance.
@@ -293,7 +293,7 @@ class Mixin_MVC_Controller_Instance_Methods extends Mixin
      * @param string $new_template_path Path to the new non-POPE file located under the plugin root's '/templates' directory.
      * @return mixed
      */
-    public function create_view($template, $params = array(), $context = null, $new_template_path = '')
+    public function create_view($template, $params = [], $context = null, $new_template_path = '')
     {
         if (!$context) {
             $context = $this->object->context;
@@ -327,20 +327,20 @@ class C_MVC_View extends C_Component
      *
      * @var array
      */
-    public $_params = array();
+    public $_params = [];
     /**
      * Queue array.
      *
      * @var array
      */
-    public $_queue = array();
+    public $_queue = [];
     /**
      * New template path.
      *
      * @var string
      */
     public $_new_template = '';
-    public function __construct($template, $params = array(), $engine = 'php', $context = false, $new_template_path = '')
+    public function __construct($template, $params = [], $engine = 'php', $context = false, $new_template_path = '')
     {
         $this->_template = $template;
         $this->_params = (array) $params;

@@ -201,6 +201,18 @@ class Style extends Supervisor
 	{
 		if ($this->isSupervisor) {
 			$pRange = $this->getSelectedCells();
+			if (str_contains($pRange, ',')) {
+				$ranges = explode(',', $pRange);
+				$sheet = $this->getActiveSheet();
+				foreach ($ranges as $range) {
+					$sheet
+						->setSelectedCells(trim($range));
+					$this->applyFromArray($styleArray, $advancedBorders);
+				}
+				$sheet->setSelectedCells($pRange);
+
+				return $this;
+			}
 
 			// Uppercase coordinate and strip any Worksheet reference from the selected range
 			$pRange = strtoupper($pRange);
@@ -431,16 +443,6 @@ class Style extends Supervisor
 					/** @var Style $existingStyle */
 					$newXfIndexes[$oldXfIndex] = $existingStyle->getIndex();
 				} else {
-					if (!isset($newStyle)) {
-						// Handle bug in PHPStan, see https://github.com/phpstan/phpstan/issues/5805
-						// $newStyle should always be defined.
-						// This block might not be needed in the future
-						// @codeCoverageIgnoreStart
-						$newStyle = clone $style;
-						$newStyle->applyFromArray($styleArray);
-						// @codeCoverageIgnoreEnd
-					}
-
 					// we don't have such a cell Xf, need to add
 					$workbook->addCellXf($newStyle);
 					$newXfIndexes[$oldXfIndex] = $newStyle->getIndex();
@@ -699,9 +701,6 @@ class Style extends Supervisor
 	 */
 	public function setQuotePrefix(bool $quotePrefix)
 	{
-		if ($quotePrefix == '') {
-			$quotePrefix = false;
-		}
 		if ($this->isSupervisor) {
 			$styleArray = ['quotePrefix' => $quotePrefix];
 			$this->getActiveSheet()

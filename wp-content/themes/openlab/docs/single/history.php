@@ -28,11 +28,11 @@ if ( ! $bp_docs_do_theme_compat ) : ?>
 					<table class="diff is-split-view">
 						<tr>
 							<td>
-								<span class="alignleft"><?php printf( __( 'Older: %s', 'buddypress-docs' ), bp_docs_history_post_revision_field( 'left', 'post_title' ) ); ?></span>
+								<span class="alignleft"><?php printf( esc_html__( 'Older: %s', 'buddypress-docs' ), esc_html( bp_docs_history_post_revision_field( 'left', 'post_title' ) ) ); ?></span>
 							</td>
 
 							<td>
-								<span class="alignright"><?php printf( __( 'Newer: %s', 'buddypress-docs' ), bp_docs_history_post_revision_field( 'right', 'post_title' ) ); ?></span>
+								<span class="alignright"><?php printf( esc_html__( 'Newer: %s', 'buddypress-docs' ), esc_html( bp_docs_history_post_revision_field( 'right', 'post_title' ) ) ); ?></span>
 							</td>
 						</tr>
 					</table>
@@ -42,19 +42,19 @@ if ( ! $bp_docs_do_theme_compat ) : ?>
 			<tr id="revision">
 				<th scope="row"></th>
 				<th scope="col" class="th-full">
-					<span class="alignleft"><?php printf( __( 'You are currently viewing a revision titled "%1$s", saved on %2$s by %3$s', 'buddypress-docs' ), bp_docs_history_post_revision_field( false, 'post_title' ), bp_format_time( strtotime( bp_docs_history_post_revision_field( false, 'post_date' ) ) ), bp_core_get_userlink( bp_docs_history_post_revision_field( false, 'post_author' ) ) ); ?></span>
+					<span class="alignleft"><?php printf( esc_html__( 'You are currently viewing a revision titled "%1$s", saved on %2$s by %3$s', 'buddypress-docs' ), esc_html( bp_docs_history_post_revision_field( false, 'post_title' ) ), esc_html( bp_format_time( strtotime( bp_docs_history_post_revision_field( false, 'post_date' ) ) ) ), wp_kses_post( bp_core_get_userlink( bp_docs_history_post_revision_field( false, 'post_author' ) ) ) ); ?></span>
 				</th>
 			</tr>
 		<?php endif ?>
 
-		<?php foreach ( _wp_post_revision_fields() as $field => $field_title ) : ?>
+		<?php foreach ( bp_docs_history_get_revision_fields() as $field => $field_title ) : ?>
 			<?php if ( 'diff' == bp_docs_history_action() ) : ?>
-				<tr id="revision-field-<?php echo $field; ?>">
+				<tr id="revision-field-<?php echo esc_attr( $field ); ?>">
 					<th scope="row"><?php echo esc_html( $field_title ); ?></th>
 					<td><div class="pre"><?php echo wp_text_diff( bp_docs_history_post_revision_field( 'left', $field ), bp_docs_history_post_revision_field( 'right', $field ) ) ?></div></td>
 				</tr>
 			<?php elseif ( !bp_docs_history_is_latest() ) : ?>
-				<tr id="revision-field-<?php echo $field; ?>">
+				<tr id="revision-field-<?php echo esc_attr( $field ); ?>">
 					<th scope="row"><?php echo esc_html( $field_title ); ?></th>
 					<td><div class="pre"><?php echo bp_docs_history_post_revision_field( false, $field ) ?></div></td>
 				</tr>

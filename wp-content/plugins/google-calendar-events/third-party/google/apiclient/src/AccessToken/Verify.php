@@ -22,6 +22,7 @@ use DomainException;
 use Exception;
 use SimpleCalendar\plugin_deps\ExpiredException;
 use SimpleCalendar\plugin_deps\Firebase\JWT\ExpiredException as ExpiredExceptionV3;
+use SimpleCalendar\plugin_deps\Firebase\JWT\JWT;
 use SimpleCalendar\plugin_deps\Firebase\JWT\Key;
 use SimpleCalendar\plugin_deps\Firebase\JWT\SignatureInvalidException;
 use SimpleCalendar\plugin_deps\Google\Auth\Cache\MemoryCacheItemPool;
@@ -30,9 +31,9 @@ use SimpleCalendar\plugin_deps\GuzzleHttp\Client;
 use SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface;
 use InvalidArgumentException;
 use LogicException;
+use SimpleCalendar\plugin_deps\phpseclib3\Crypt\AES;
 use SimpleCalendar\plugin_deps\phpseclib3\Crypt\PublicKeyLoader;
-use SimpleCalendar\plugin_deps\phpseclib3\Crypt\RSA\PublicKey;
-// Firebase v2
+use SimpleCalendar\plugin_deps\phpseclib3\Math\BigInteger;
 use SimpleCalendar\plugin_deps\Psr\Cache\CacheItemPoolInterface;
 /**
  * Wrapper around Google Access Tokens which provides convenience functions
@@ -59,7 +60,7 @@ class Verify
      * Instantiates the class, but does not initiate the login flow, leaving it
      * to the discretion of the caller.
      */
-    public function __construct(ClientInterface $http = null, CacheItemPoolInterface $cache = null, $jwt = null)
+    public function __construct(?ClientInterface $http = null, ?CacheItemPoolInterface $cache = null, ?JWT $jwt = null)
     {
         if (null === $http) {
             $http = new Client();
@@ -134,8 +135,8 @@ class Verify
      * Retrieve and cache a certificates file.
      *
      * @param string $url location
-     * @throws \Google\Exception
      * @return array certificates
+     * @throws \Google\Exception
      */
     private function retrieveCertsFromLocation($url)
     {
@@ -178,66 +179,21 @@ class Verify
     }
     private function getJwtService()
     {
-        $jwtClass = 'JWT';
-        if (class_exists('SimpleCalendar\plugin_deps\Firebase\JWT\JWT')) {
-            $jwtClass = 'SimpleCalendar\plugin_deps\Firebase\JWT\JWT';
-        }
-        if (property_exists($jwtClass, 'leeway') && $jwtClass::$leeway < 1) {
+        $jwt = new JWT();
+        if ($jwt::$leeway < 1) {
             // Ensures JWT leeway is at least 1
             // @see https://github.com/google/google-api-php-client/issues/827
-            $jwtClass::$leeway = 1;
+            $jwt::$leeway = 1;
         }
-        // @phpstan-ignore-next-line
-        return new $jwtClass();
+        return $jwt;
     }
     private function getPublicKey($cert)
     {
-        $bigIntClass = $this->getBigIntClass();
-        $modulus = new $bigIntClass($this->jwt->urlsafeB64Decode($cert['n']), 256);
-        $exponent = new $bigIntClass($this->jwt->urlsafeB64Decode($cert['e']), 256);
+        $modulus = new BigInteger($this->jwt->urlsafeB64Decode($cert['n']), 256);
+        $exponent = new BigInteger($this->jwt->urlsafeB64Decode($cert['e']), 256);
         $component = ['n' => $modulus, 'e' => $exponent];
-        if (class_exists('SimpleCalendar\plugin_deps\phpseclib3\Crypt\RSA\PublicKey')) {
-            /** @var PublicKey $loader */
-            $loader = PublicKeyLoader::load($component);
-            return $loader->toString('PKCS8');
-        }
-        $rsaClass = $this->getRsaClass();
-        $rsa = new $rsaClass();
-        $rsa->loadKey($component);
-        return $rsa->getPublicKey();
-    }
-    private function getRsaClass()
-    {
-        if (class_exists('SimpleCalendar\plugin_deps\phpseclib3\Crypt\RSA')) {
-            return 'SimpleCalendar\plugin_deps\phpseclib3\Crypt\RSA';
-        }
-        if (class_exists('SimpleCalendar\plugin_deps\phpseclib\Crypt\RSA')) {
-            return 'SimpleCalendar\plugin_deps\phpseclib\Crypt\RSA';
-        }
-        return 'Crypt_RSA';
-    }
-    private function getBigIntClass()
-    {
-        if (class_exists('SimpleCalendar\plugin_deps\phpseclib3\Math\BigInteger')) {
-            return 'SimpleCalendar\plugin_deps\phpseclib3\Math\BigInteger';
-        }
-        if (class_exists('SimpleCalendar\plugin_deps\phpseclib\Math\BigInteger')) {
-            return 'SimpleCalendar\plugin_deps\phpseclib\Math\BigInteger';
-        }
-        return 'Math_BigInteger';
-    }
-    private function getOpenSslConstant()
-    {
-        if (class_exists('SimpleCalendar\plugin_deps\phpseclib3\Crypt\AES')) {
-            return 'SimpleCalendar\plugin_deps\phpseclib3\Crypt\AES::ENGINE_OPENSSL';
-        }
-        if (class_exists('SimpleCalendar\plugin_deps\phpseclib\Crypt\RSA')) {
-            return 'SimpleCalendar\plugin_deps\phpseclib\Crypt\RSA::MODE_OPENSSL';
-        }
-        if (class_exists('SimpleCalendar\plugin_deps\Crypt_RSA')) {
-            return 'CRYPT_RSA_MODE_OPENSSL';
-        }
-        throw new Exception('Cannot find RSA class');
+        $loader = PublicKeyLoader::load($component);
+        return $loader->toString('PKCS8');
     }
     /**
      * phpseclib calls "phpinfo" by default, which requires special
@@ -254,7 +210,7 @@ class Verify
                 define('MATH_BIGINTEGER_OPENSSL_ENABLED', \true);
             }
             if (!defined('CRYPT_RSA_MODE')) {
-                define('CRYPT_RSA_MODE', constant($this->getOpenSslConstant()));
+                define('CRYPT_RSA_MODE', AES::ENGINE_OPENSSL);
             }
         }
     }

@@ -1,0 +1,401 @@
+/* TranslatePress - Import & Export Translations page: only what trp-back-end-style.css does not provide. */
+
+.trp-ie-cards{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 1280px;
+}
+
+.trp-ie-cards .trp-ie-card{
+    margin-bottom: 0;
+    max-width: none;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.trp-ie-card p{
+    margin: 0 0 16px 0;
+}
+
+.trp-ie-card p:last-child{
+    margin-bottom: 0;
+}
+
+/* Buttons: one height for every action on the page */
+.trp-ie-actions{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin: 16px 0;
+}
+
+#trp-settings-page .trp-ie-page .trp-submit-btn,
+#trp-settings-page .trp-ie-page .trp-button-secondary{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-height: 40px;
+    padding: 4px 16px;
+    line-height: 1.2;
+    text-decoration: none;
+}
+
+#trp-settings__wrap .trp-ie-card .trp-submit-btn:disabled{
+    opacity: .6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* "Generate a new export file": low emphasis, at the end of the row */
+#trp-settings-page .trp-ie-page .trp-ie-link-btn{
+    margin-left: auto;
+    padding: 4px 8px;
+    min-height: 40px;
+    background: none;
+    border: 0;
+    color: var(--trp-settings-accent-color);
+    font-size: var(--trp-settings-primary-font-size);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#trp-settings-page .trp-ie-page .trp-ie-link-btn:hover{
+    text-decoration: none;
+}
+
+/* Notices: flat and white, with a colored edge for the level, like core admin notices */
+.trp-ie-notice{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 16px 0;
+    padding: 10px 12px;
+    background: #fff;
+    border: 1px solid var(--trp-settings-medium-gray-border-color);
+    border-left-width: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+    color: var(--trp-settings-primary-color);
+    font-size: var(--trp-settings-primary-font-size);
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+
+.trp-ie-notice--error{
+    border-left-color: #d63638;
+}
+
+.trp-ie-notice--warning{
+    border-left-color: #dba617;
+}
+
+.trp-ie-notice--info{
+    border-left-color: #72aee6;
+}
+
+.trp-ie-notice--success{
+    border-left-color: #00a32a;
+}
+
+.trp-ie-notice > *{
+    margin: 0;
+}
+
+#trp-settings-page .trp-ie-notice h3.trp-ie-notice__title{
+    margin: 0;
+    font-size: var(--trp-settings-primary-font-size);
+    font-weight: 600;
+    color: inherit;
+}
+
+.trp-ie-list{
+    margin: 4px 0 0 18px;
+    padding: 0;
+    list-style: disc;
+}
+
+.trp-ie-list li{
+    margin: 0 0 2px 0;
+}
+
+.trp-ie-card p.trp-ie-note{
+    margin-top: 16px;
+}
+
+.trp-ie-details{
+    margin-top: 16px;
+}
+
+.trp-ie-details > summary{
+    cursor: pointer;
+    color: var(--trp-settings-accent-color);
+}
+
+.trp-ie-details[open] > summary{
+    margin-bottom: 8px;
+}
+
+/* Tables scroll inside their card on narrow screens */
+.trp-ie-table-wrap{
+    max-width: 100%;
+    overflow-x: auto;
+    margin: 16px 0;
+}
+
+table.trp-ie-table{
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--trp-settings-light-gray-border-color);
+}
+
+table.trp-ie-table th,
+table.trp-ie-table td{
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--trp-settings-light-gray-border-color);
+    font-size: var(--trp-settings-primary-font-size);
+    font-weight: 400;
+    color: var(--trp-settings-primary-color);
+    vertical-align: middle;
+}
+
+table.trp-ie-table .trp-ie-num{
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+table.trp-ie-table thead th{
+    background: var(--trp-settings-bg-light);
+    font-weight: 600;
+}
+
+table.trp-ie-table tbody tr:last-child > *{
+    border-bottom: none;
+}
+
+/* Language tables: capped height with a sticky header; the frame is on the wrapper because collapsed borders do not stick */
+.trp-ie-table-wrap--languages{
+    max-height: 360px;
+    overflow: auto;
+    scrollbar-width: thin;
+    border: 1px solid var(--trp-settings-light-gray-border-color);
+}
+
+.trp-ie-table-wrap--languages table.trp-ie-table{
+    border: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.trp-ie-table-wrap--languages thead th{
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    border-bottom: 0;
+    box-shadow: inset 0 -1px 0 var(--trp-settings-light-gray-border-color);
+}
+
+.trp-ie-field{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+/* Upload area */
+.trp-ie-upload{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin: 16px 0;
+    padding: 32px 24px;
+    background: var(--trp-settings-bg-light);
+    border: 2px dashed var(--trp-settings-medium-gray-border-color);
+    border-radius: var(--trp-settings-radius-high);
+    text-align: center;
+}
+
+.trp-ie-upload:focus-within{
+    border-color: var(--trp-settings-accent-color);
+}
+
+.trp-ie-upload .trp-ie-upload__icon{
+    width: 40px;
+    height: 40px;
+    font-size: 40px;
+    color: var(--trp-settings-accent-color);
+}
+
+.trp-ie-upload input[type="file"]{
+    max-width: 100%;
+    font-size: var(--trp-settings-primary-font-size);
+    color: var(--trp-settings-primary-color);
+    text-align: right;
+}
+
+.trp-ie-upload input[type="file"]::file-selector-button{
+    margin-right: 12px;
+    padding: 8px 12px;
+    border: 1px solid var(--trp-settings-accent-color);
+    border-radius: var(--trp-settings-radius-medium);
+    background: #fff;
+    color: var(--trp-settings-accent-color);
+    font-size: var(--trp-settings-primary-font-size);
+    cursor: pointer;
+}
+
+.trp-ie-upload input[type="file"]::file-selector-button:hover{
+    background: var(--trp-settings-accent-color);
+    color: #fff;
+}
+
+#trp-settings-page .trp-ie-upload .trp-submit-btn{
+    margin-top: 4px;
+}
+
+/* Review */
+.trp-ie-review-heading{
+    margin-top: 0;
+}
+
+.trp-ie-fieldset{
+    margin: 24px 0 0 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+}
+
+.trp-ie-fieldset legend{
+    margin-bottom: 8px;
+    padding: 0;
+}
+
+.trp-ie-fieldset > p.trp-description-text{
+    margin: -4px 0 8px 0;
+}
+
+.trp-ie-choice{
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+.trp-ie-choice input{
+    margin-top: 3px;
+}
+
+.trp-ie-choice > span{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+#trp-settings-page .trp-ie-card .trp-ie-plan{
+    margin-top: 24px;
+}
+
+/* The one irreversible point, right above the button it is about */
+.trp-ie-card p.trp-ie-backup{
+    margin: 24px 0 0 0;
+    padding-left: 12px;
+    border-left: 4px solid #dba617;
+    color: var(--trp-settings-primary-color);
+    font-size: var(--trp-settings-primary-font-size);
+}
+
+/* Progress */
+.trp-ie-progress__wrapper{
+    margin: 16px 0;
+}
+
+.trp-ie-progress{
+    width: 100%;
+    height: 10px;
+    background: var(--trp-settings-disabled-color);
+    border-radius: var(--trp-settings-radius-medium);
+    overflow: hidden;
+}
+
+.trp-ie-progress__bar{
+    width: 0;
+    height: 100%;
+    background: var(--trp-settings-accent-color);
+    transition: width .3s ease;
+}
+
+.trp-ie-progress__meta .spinner,
+[data-trp-ie-summary] .spinner,
+.trp-ie-details .spinner{
+    float: none;
+    margin: 0 8px 0 0;
+    vertical-align: text-bottom;
+}
+
+.trp-ie-progress__meta{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px 16px;
+    margin-top: 8px;
+}
+
+/* Report */
+.trp-ie-counts{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 40px;
+    margin: 16px 0;
+}
+
+.trp-ie-counts dt{
+    font-size: var(--trp-settings-description-font-size);
+    color: var(--trp-settings-description-color);
+}
+
+.trp-ie-counts dd{
+    margin: 2px 0 0 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--trp-settings-primary-color);
+}
+
+@media screen and (max-width: 600px){
+    #trp-settings-page .trp-ie-card{
+        padding: 16px;
+    }
+
+    .trp-ie-actions > *{
+        flex: 1 1 100%;
+    }
+
+    .trp-ie-upload{
+        padding: 24px 16px;
+    }
+
+    table.trp-ie-table th,
+    table.trp-ie-table td{
+        padding: 6px 8px;
+    }
+}
+
+/* Export: the "include the keys" choice turns red once ticked. */
+.trp-ie-export-form .trp-ie-keys-choice{
+    align-items: center;
+}
+
+.trp-ie-export-form .trp-ie-keys-choice input{
+    margin-top: 0;
+}
+
+#trp-settings-page .trp-ie-keys-choice--on .trp-primary-text{
+    color: #d63638;
+}
+
+.trp-ie-export-form .trp-ie-notice{
+    margin-bottom: 16px;
+}

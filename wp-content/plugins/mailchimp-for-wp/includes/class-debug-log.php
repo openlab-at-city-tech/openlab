@@ -84,15 +84,17 @@ class MC4WP_Debug_Log
             return false;
         }
 
-        // obfuscate email addresses in log message since log might be public.
-        $message = mc4wp_obfuscate_email_addresses((string) $message);
+        $message = (string) $message;
 
         // first, get rid of everything between "invisible" tags
         $message = preg_replace('/<(?:style|script|head)>.+?<\/(?:style|script|head)>/is', '', $message);
 
         // then, strip tags (while retaining content of these tags)
-        $message = strip_tags($message);
+        $message = wp_strip_all_tags($message);
         $message = trim($message);
+
+        // obfuscate email addresses in log message since log might be public.
+        $message = mc4wp_obfuscate_email_addresses($message);
 
         /**
          * Modifies the message that is written to the debug log.
@@ -105,6 +107,8 @@ class MC4WP_Debug_Log
             return false;
         }
 
+        $message = mc4wp_truncate_log_message($message);
+
         // generate line
         $level_name = self::get_level_name($level);
         $datetime   = gmdate('Y-m-d H:i:s', time() + ( get_option('gmt_offset', 0) * HOUR_IN_SECONDS ));
@@ -113,7 +117,7 @@ class MC4WP_Debug_Log
         // did we open stream yet?
         if (! is_resource($this->stream)) {
             // attempt to open stream
-            $this->stream = @fopen($this->file, 'c+');
+            $this->stream = @fopen($this->file, 'c+'); // phpcs:ignore
             if (! is_resource($this->stream)) {
                 return false;
             }
@@ -123,7 +127,7 @@ class MC4WP_Debug_Log
             $php_exit_string = '<?php exit; ?>';
             if (strpos($line, $php_exit_string) !== 0) {
                 rewind($this->stream);
-                fwrite($this->stream, $php_exit_string . PHP_EOL . $line);
+                fwrite($this->stream, $php_exit_string . PHP_EOL . $line); // phpcs:ignore
             }
 
             // place pointer at end of file
@@ -134,7 +138,7 @@ class MC4WP_Debug_Log
         flock($this->stream, LOCK_EX);
 
         // write the message to the file
-        fwrite($this->stream, $message);
+        fwrite($this->stream, $message); // phpcs:ignore
 
         // unlock file again, but don't close it for remainder of this request
         flock($this->stream, LOCK_UN);
@@ -206,6 +210,7 @@ class MC4WP_Debug_Log
                 return constant(__CLASS__ . '::' . $level);
             }
 
+            // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Exception text is not direct output and is escaped at render time.
             throw new InvalidArgumentException('Level "' . $level . '" is not defined, use one of: ' . implode(', ', array_keys(self::$levels)));
         }
 
@@ -221,6 +226,7 @@ class MC4WP_Debug_Log
     public static function get_level_name($level)
     {
         if (! isset(self::$levels[ $level ])) {
+            // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Exception text is not direct output and is escaped at render time.
             throw new InvalidArgumentException('Level "' . $level . '" is not defined, use one of: ' . implode(', ', array_keys(self::$levels)));
         }
 
@@ -234,12 +240,12 @@ class MC4WP_Debug_Log
      */
     public function test()
     {
-        $handle   = @fopen($this->file, 'a');
+        $handle   = @fopen($this->file, 'a'); // phpcs:ignore
         $writable = false;
 
         if (is_resource($handle)) {
             $writable = true;
-            fclose($handle);
+            fclose($handle); // phpcs:ignore
         }
 
         return $writable;

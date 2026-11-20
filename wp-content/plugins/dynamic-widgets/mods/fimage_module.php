@@ -1,6 +1,5 @@
 <?php
 	/**
-	 * @version $Id: fimage_module.php 1474291 2016-08-14 20:35:12Z qurl $
 	 * @copyright 2015 Jacco Drabbe
 	 **/
 

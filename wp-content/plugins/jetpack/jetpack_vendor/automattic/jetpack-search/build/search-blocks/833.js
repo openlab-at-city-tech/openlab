@@ -1,0 +1,1 @@
+import*as e from"@wordpress/interactivity";export const __webpack_esm_ids__=[833];export const __webpack_esm_modules__={2833(s,t,r){s.exports=(e=>{const s={};return r.d(s,e),s})({privateApis:()=>e.privateApis,store:()=>e.store})}};

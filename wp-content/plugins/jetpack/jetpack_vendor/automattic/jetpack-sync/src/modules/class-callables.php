@@ -58,6 +58,7 @@ class Callables extends Module {
 		'jetpack_sync_error_idc',
 		'paused_plugins',
 		'paused_themes',
+		'blog_public', // Callable is jetpack_site_visibility; privacy has to travel as fast as the option.
 
 	);
 
@@ -85,6 +86,7 @@ class Callables extends Module {
 		'home'                   => 'home_url',
 		'siteurl'                => 'site_url',
 		'jetpack_active_modules' => 'active_modules',
+		'blog_public'            => 'jetpack_site_visibility',
 	);
 
 	/**
@@ -164,6 +166,9 @@ class Callables extends Module {
 		// gets fired when new code gets installed, updates etc.
 		add_action( 'upgrader_process_complete', array( $this, 'unlock_plugin_action_link_and_callables' ) );
 		add_action( 'update_option_active_plugins', array( $this, 'unlock_plugin_action_link_and_callables' ) );
+		// Deleting an inactive plugin fires neither of the above, so without this the synced
+		// get_plugins callable stays stale until the periodic re-check happens to run.
+		add_action( 'deleted_plugin', array( $this, 'unlock_plugin_action_link_and_callables' ) );
 	}
 
 	/**

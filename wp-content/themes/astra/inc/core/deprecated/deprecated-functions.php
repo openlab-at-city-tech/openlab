@@ -216,3 +216,23 @@ function ast_get_webfont_url( $google_font_url ) {
 	_deprecated_function( __FUNCTION__, '3.7.4', 'astra_get_webfont_url()' );
 	return astra_get_webfont_url( $google_font_url );
 }
+
+/**
+ * Deprecating astra_add_aria_expanded_submenu_items_attr function.
+ *
+ * It added aria-expanded with a string replace over the whole menu item output, which also rewrote mega menu content.
+ *
+ * @since 4.6.15
+ * @deprecated 4.14.1 Use astra_add_aria_expanded_menu_link_attr()
+ * @param string $output The HTML output of the menu item.
+ * @param object $item Menu item data object.
+ * @param int    $depth Depth of the current menu item.
+ * @param array  $args An array of arguments.
+ * @see astra_add_aria_expanded_menu_link_attr()
+ *
+ * @return string Menu item markup output, unchanged.
+ */
+function astra_add_aria_expanded_submenu_items_attr( $output, $item, $depth, $args ) {
+	_deprecated_function( __FUNCTION__, '4.14.1', 'astra_add_aria_expanded_menu_link_attr()' );
+	return $output;
+}

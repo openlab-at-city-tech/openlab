@@ -962,7 +962,9 @@ class DLM_Admin_List_Table extends WP_List_Table {
 			case 'download_title':
 				/** @var DLM_Download_Version $file */
 				$file = $item->get_version();
-				echo '<strong><a class="dlm-file-link row-title" href="' . esc_url( admin_url( 'post.php?post=' . absint( $item->get_id() ) . '&action=edit' ) ) . '">#' . $item->get_id() . ' - ' . esc_html( $item->get_title() ) . '</a></strong>';
+				echo '<strong><a class="row-title" href="' . esc_url( admin_url( 'post.php?post=' . absint( $item->get_id() ) . '&action=edit' ) ) . '">#' . $item->get_id() . ' - ' . esc_html( $item->get_title() ) . '</a>';
+				_post_states( $post );
+				echo '</strong>';
 				if ( $file->get_filename() ) {
 					echo '<a class="dlm-file-link" href="' . esc_url( $item->get_the_download_link() ) . '"><code>' . esc_html( $file->get_filename() );
 					if ( $size = $item->get_version()->get_filesize_formatted() ) {

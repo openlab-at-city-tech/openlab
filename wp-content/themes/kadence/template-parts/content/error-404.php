@@ -17,7 +17,8 @@ namespace Kadence;
 			<?php
 			do_action( 'kadence_404_before_inner_content' );
 
-			get_template_part( 'template-parts/content/page_header' ); ?>
+			get_template_part( 'template-parts/content/page_header' );
+			?>
 			<p>
 				<?php esc_html_e( 'It looks like nothing was found at this location. Maybe try a search?', 'kadence' ); ?>
 			</p>

@@ -126,16 +126,24 @@
 }
 
 .post-ids-tabs .nav-tab-active {
-    border-color: #00d084;
-    background: #00d084;
+    border-color: #007a4d;
+    background: #007a4d;
     color: #fff;
     font-weight: bold;
 }
 
 .post-ids-tabs .nav-tab-active:focus,
 .post-ids-tabs .nav-tab-active:focus:active {
-    outline: none;
     box-shadow: none;
+}
+
+.post-ids-tabs .nav-tab:focus:not(:focus-visible) {
+    outline: none;
+}
+
+.post-ids-tabs .nav-tab:focus-visible {
+    outline: 2px solid #2271b1;
+    outline-offset: 2px;
 }
 
 .post-ids-tabs .tab-content {
@@ -183,4 +191,17 @@
     font-size: 12px;
     text-transform: uppercase;
     z-index: 2;
+}
+/* Checkbox groups are fieldsets for accessibility: keep their previous look */
+#post-types-selection,
+#excluded-blocks-row fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+}
+
+fieldset.checkbox-group {
+    margin: 0;
+    min-width: 0;
 }

@@ -22,7 +22,7 @@ function astra_header_builder_migration() {
 	/**
 	 * All theme options.
 	 */
-	$theme_options = get_option( 'astra-settings', array() );
+	$theme_options = astra_get_raw_options();
 
 	// WordPress sidebar_widgets option.
 	$widget_options = get_option( 'sidebars_widgets', array() );

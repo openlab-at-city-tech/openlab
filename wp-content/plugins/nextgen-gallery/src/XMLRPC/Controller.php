@@ -6,6 +6,7 @@ use Imagely\NGG\DataMappers\Album as AlbumMapper;
 use Imagely\NGG\DataMappers\Gallery as GalleryMapper;
 use Imagely\NGG\DataMappers\Image as ImageMapper;
 use Imagely\NGG\DataStorage\Manager as StorageManager;
+use Imagely\NGG\PrivateGalleries\ClientPage;
 use Imagely\NGG\REST\DataMappers\AlbumREST;
 use Imagely\NGG\Util\MassAssignment;
 use Imagely\NGG\Util\Security;
@@ -431,6 +432,16 @@ class Controller {
 						);
 					}
 
+					// is_private and pageid go through the client page service, after the save.
+					$privacy = ClientPage::extract_assigned( $assignable );
+
+					if ( array_key_exists( 'pageid', $privacy ) ) {
+						$allowed = ClientPage::check_linked_page_change( $gallery, (int) $privacy['pageid'] );
+						if ( is_wp_error( $allowed ) ) {
+							return new \IXR_Error( 409, $allowed->get_error_message() );
+						}
+					}
+
 					foreach ( $assignable as $key => $value ) {
 						$gallery->$key = $value;
 					}
@@ -440,6 +451,13 @@ class Controller {
 					unset( $gallery->abspath );
 
 					$retval = $gallery->save();
+
+					if ( $retval && $privacy ) {
+						$applied = ClientPage::apply_assigned( $gallery, $privacy );
+						if ( is_wp_error( $applied ) ) {
+							$retval = new \IXR_Error( 403, $applied->get_error_message() );
+						}
+					}
 				} else {
 					$retval = new \IXR_Error( 403, "You don't have permission to modify this gallery" );
 				}
@@ -471,7 +489,7 @@ class Controller {
 				$retval = [];
 				foreach ( $mapper->find_all() as $gallery ) {
 					$this->_add_gallery_properties( $gallery );
-					$retval[ $gallery->{$gallery->id_field} ] = (array) $gallery;
+					$retval[ $gallery->{$gallery->id_field} ] = (array) ClientPage::without_secrets( $gallery );
 				}
 			} else {
 				$retval = new \IXR_Error( 401, __( 'Sorry, you must be able to manage galleries', 'nggallery' ) );

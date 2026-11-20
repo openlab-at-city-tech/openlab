@@ -28,7 +28,7 @@ class Kadence_Control_Focus_Button extends WP_Customize_Control {
 	 *
 	 * @var array
 	 */
-	public $input_attrs = array();
+	public $input_attrs = [];
 
 	/**
 	 * Send to JS.

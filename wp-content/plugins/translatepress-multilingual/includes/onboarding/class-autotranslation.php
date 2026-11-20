@@ -209,7 +209,7 @@ class TRP_Step_AutoTranslation implements TRP_Onboarding_Step_Interface {
                 $mtapi_url = (defined('MTAPI_URL') ? MTAPI_URL : 'https://mtapi.translatepress.com');
 
                 $mtapi_server = new TRP_MTAPI_Customer($mtapi_url);
-                $site_status = $mtapi_server->lookup_site($license, home_url());
+                $site_status = $mtapi_server->lookup_site($license, trp_get_license_site_url());
 
                 $site_status['quota'] = isset ($site_status['quota']) ? $site_status['quota'] : 0;
 

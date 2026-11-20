@@ -18,11 +18,13 @@ class ChooseRowsEtc
 	 */
 	public static function transpose(array $array): array
 	{
-		return empty($array) ? [] : (array_map((count($array) === 1) ? (fn ($x) => [$x]) : null, ...$array)); // @phpstan-ignore-line
+		return empty($array) ? [] : (array_map((count($array) === 1) ? (fn ($x) => [$x]) : null, ...$array)); // @phpstan-ignore argument.type (phstan is wrong), argument.type (phpstan is wrong)
 	}
 
-	/** @return mixed[]
-				 * @param mixed $array */
+	/**
+				 * @return mixed[]
+				 * @param mixed $array
+				 */
 				private static function arrayValues($array): array
 	{
 		return is_array($array) ? array_values($array) : [$array];

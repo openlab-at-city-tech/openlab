@@ -8,22 +8,22 @@
 namespace Kadence;
 
 if ( ! is_singular( 'attachment' ) ) {
-?>
+	?>
 
 <article <?php post_class( 'entry content-bg loop-entry' ); ?>>
 	<?php
-		$defaults = array(
+		$defaults        = [
 			'enabled'   => true,
 			'ratio'     => '2-3',
 			'size'      => 'medium_large',
 			'imageLink' => true,
-		);
+		];
 		$slug            = ( is_search() ? 'search' : get_post_type() );
 		$feature_element = kadence()->option( $slug . '_archive_element_feature', $defaults );
 		if ( isset( $feature_element ) && is_array( $feature_element ) && true === $feature_element['enabled'] ) {
 			$feature_element = wp_parse_args( $feature_element, $defaults );
-			$ratio = ( isset( $feature_element['ratio'] ) && ! empty( $feature_element['ratio'] ) ? $feature_element['ratio'] : '2-3' );
-			$size  = ( isset( $feature_element['size'] ) && ! empty( $feature_element['size'] ) ? $feature_element['size'] : 'medium_large' );
+			$ratio           = ( isset( $feature_element['ratio'] ) && ! empty( $feature_element['ratio'] ) ? $feature_element['ratio'] : '2-3' );
+			$size            = ( isset( $feature_element['size'] ) && ! empty( $feature_element['size'] ) ? $feature_element['size'] : 'medium_large' );
 			if ( isset( $feature_element['imageLink'] ) && ! $feature_element['imageLink'] ) {
 				?>
 				<div class="post-thumbnail kadence-thumbnail-ratio-<?php echo esc_attr( $ratio ); ?>">
@@ -33,13 +33,13 @@ if ( ! is_singular( 'attachment' ) ) {
 							get_the_ID(),
 							$size,
 							false,
-							array(
+							[
 								'alt' => the_title_attribute(
-									array(
+									[
 										'echo' => false,
-									)
+									]
 								),
-							)
+							]
 						);
 						?>
 					</div>
@@ -54,21 +54,21 @@ if ( ! is_singular( 'attachment' ) ) {
 							get_the_ID(),
 							$size,
 							false,
-							array(
+							[
 								'alt' => the_title_attribute(
-									array(
+									[
 										'echo' => false,
-									)
+									]
 								),
-							)
+							]
 						);
 						?>
 					</div>
 				</a><!-- .post-thumbnail -->
 				<?php
 			}
-		}		
-	?>
+		}       
+		?>
 	<div class="entry-content-wrap">
 		<?php
 		/**
@@ -83,10 +83,10 @@ if ( ! is_singular( 'attachment' ) ) {
 	</div>
 </article>
 
-<?php
+	<?php
 }
 if ( is_singular( 'attachment' ) ) {
-?>
+	?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'entry' ); ?>>
 	<?php get_template_part( 'template-parts/content/entry_header', get_post_type() ); ?>
@@ -96,7 +96,7 @@ if ( is_singular( 'attachment' ) ) {
 	<?php get_template_part( 'template-parts/content/entry_footer', get_post_type() ); ?>
 </article><!-- #post-<?php the_ID(); ?> -->
 
-<?php
+	<?php
 }
 if ( is_singular( get_post_type() ) ) {
 	// Show attachment navigation only when the attachment has a parent.

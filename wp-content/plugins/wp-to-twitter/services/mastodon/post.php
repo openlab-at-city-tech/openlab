@@ -5,7 +5,7 @@
  * @category Post from WordPress.
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.xposter.com
  */
 
@@ -22,16 +22,16 @@ require_once plugin_dir_path( __FILE__ ) . 'class-wpt-mastodon-api.php';
  * @param int|bool $auth Connection context.
  * @param int      $attachment Attachment ID.
  * @param array    $status Array of posting information.
- * @param int      $id Post ID.
+ * @param int      $post_ID Post ID.
  *
  * @return array
  */
-function wpt_upload_mastodon_media( $connection, $auth, $attachment, $status, $id ) {
+function wpt_upload_mastodon_media( $connection, $auth, $attachment, $status, $post_ID ) {
 	if ( $connection ) {
 		if ( $attachment ) {
 			$allowed = wpt_check_mime_type( $attachment, 'mastodon' );
 			if ( ! $allowed ) {
-				wpt_mail( 'Media upload mime type not accepted by Mastodon', get_post_mime_type( $attachment ), $id );
+				wpt_mail( 'Media upload mime type not accepted by Mastodon', get_post_mime_type( $attachment ), $post_ID );
 
 				return $status;
 			}
@@ -41,13 +41,13 @@ function wpt_upload_mastodon_media( $connection, $auth, $attachment, $status, $i
 			 *
 			 * @hook wpt_uploaded_image_alt
 			 *
-			 * @param {string} $alt_text Text stored in media library as alt.
-			 * @param {int}    $attachment Attachment ID.
+			 * @param string $alt_text Text stored in media library as alt.
+			 * @param int    $attachment Attachment ID.
 			 *
-			 * @return {string}
+			 * @return string
 			 */
 			$alt_text        = apply_filters( 'wpt_uploaded_image_alt', $alt_text, $attachment );
-			$attachment_data = wpt_image_binary( $attachment, $id, 'mastodon' );
+			$attachment_data = wpt_image_binary( $attachment, $post_ID, 'mastodon' );
 			// Return without attempting if fails to fetch image object.
 			if ( ! $attachment_data ) {
 				return $status;
@@ -62,9 +62,9 @@ function wpt_upload_mastodon_media( $connection, $auth, $attachment, $status, $i
 				$media_id              = $response['id'];
 				$status['media_ids[]'] = $media_id;
 
-				wpt_mail( 'Media Uploaded (Mastodon)', "User: $auth, Mastodon Media ID: $media_id, Attachment ID: $attachment" . wpt_format_error( $response ) . wpt_format_error( $request ), $id );
+				wpt_mail( 'Media Uploaded (Mastodon)', "User: $auth, Mastodon Media ID: $media_id, Attachment ID: $attachment" . wpt_format_error( $response ) . wpt_format_error( $request ), $post_ID );
 			} else {
-				wpt_mail( 'Media Upload Failed (Mastodon)', "User: $auth, Attachment ID: $attachment" . wpt_format_error( $response ), $id );
+				wpt_mail( 'Media Upload Failed (Mastodon)', "User: $auth, Attachment ID: $attachment" . wpt_format_error( $response ), $post_ID );
 			}
 		}
 	}
@@ -77,25 +77,25 @@ function wpt_upload_mastodon_media( $connection, $auth, $attachment, $status, $i
  *
  * @param object $connection Connection to Mastodon.
  * @param mixed  $auth Main site or specific author ID.
- * @param int    $id Post ID.
+ * @param int    $post_ID Post ID.
  * @param array  $status Array of information sent to Mastodon.
  *
  * @return array
  */
-function wpt_send_post_to_mastodon( $connection, $auth, $id, $status ) {
+function wpt_send_post_to_mastodon( $connection, $auth, $post_ID, $status ) {
 	$notice = '';
 	/**
 	 * Turn on staging mode. Staging mode is automatically turned on if WPT_STAGING_MODE constant is defined.
 	 *
 	 * @hook wpt_staging_mode
-	 * @param {bool}     $staging_mode True to enable staging mode.
-	 * @param {int|bool} $auth Current author.
-	 * @param {int}      $id Post ID.
-	 * @param {string}   $service Service being put into staging.
+	 * @param bool     $staging_mode True to enable staging mode.
+	 * @param int|bool $auth Current author.
+	 * @param int      $post_ID Post ID.
+	 * @param string   $service Service being put into staging.
 	 *
-	 * @return {bool}
+	 * @return bool
 	 */
-	$staging_mode = apply_filters( 'wpt_staging_mode', false, $auth, $id, 'mastodon' );
+	$staging_mode = apply_filters( 'wpt_staging_mode', false, $auth, $post_ID, 'mastodon' );
 	$status_text  = $status['text'];
 	if ( ( defined( 'WPT_STAGING_MODE' ) && true === WPT_STAGING_MODE ) || $staging_mode ) {
 		// if in staging mode, we'll behave as if the update succeeded, but not send it.
@@ -109,14 +109,14 @@ function wpt_send_post_to_mastodon( $connection, $auth, $id, $status ) {
 		 * Filter the approval to send a Mastodon Toot.
 		 *
 		 * @hook wpt_do_toot
-		 * @param {bool}     $do_toot Return false to cancel this Toot.
-		 * @param {int|bool} $auth Author.
-		 * @param {int}      $id Post ID.
-		 * @param {string}   $text Status update text.
+		 * @param bool     $do_toot Return false to cancel this Toot.
+		 * @param int|bool $auth Author.
+		 * @param int      $post_ID Post ID.
+		 * @param string   $text Status update text.
 		 *
-		 * @return {bool}
+		 * @return bool
 		 */
-		$do_post   = apply_filters( 'wpt_do_toot', true, $auth, $id, $status_text );
+		$do_post   = apply_filters( 'wpt_do_toot', true, $auth, $post_ID, $status_text );
 		$status_id = false;
 		$success   = false;
 		// Change status array to Mastodon expectation.
@@ -127,15 +127,16 @@ function wpt_send_post_to_mastodon( $connection, $auth, $id, $status ) {
 		 *
 		 * @hook wpt_filter_mastodon_status
 		 *
-		 * @param {array}    $status Array of parameters sent to Mastodon.
-		 * @param {int}      $post Post ID being tweeted.
-		 * @param {int|bool} $auth Authoring context.
+		 * @param array    $status Array of parameters sent to Mastodon.
+		 * @param int      $post_ID Post ID being tweeted.
+		 * @param int|bool $auth Authoring context.
 		 *
-		 * @return {array}
+		 * @return array
 		 */
-		$status = apply_filters( 'wpt_filter_mastodon_status', $status, $id, $auth );
+		$status = apply_filters( 'wpt_filter_mastodon_status', $status, $post_ID, $auth );
 		if ( $do_post ) {
 			$return = $connection->post_status( $status );
+			wpt_mail( 'Mastodon Connection Data', print_r( $return, 1 ), $post_ID );
 			if ( isset( $return['id'] ) ) {
 				$success   = true;
 				$http_code = 200;

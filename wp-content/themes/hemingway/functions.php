@@ -593,6 +593,11 @@ endif;
 if ( ! function_exists( 'hemingway_block_editor_styles' ) ) :
 	function hemingway_block_editor_styles() {
 
+		// Only load in the editor. Hooked to enqueue_block_assets so the styles reach the iframed editor canvas.
+		if ( ! is_admin() ) {
+			return;
+		}
+
 		$dependencies = array();
 
 		$google_fonts_url = hemingway_get_google_fonts_url();
@@ -606,5 +611,5 @@ if ( ! function_exists( 'hemingway_block_editor_styles' ) ) :
 		wp_enqueue_style( 'hemingway-block-editor-styles', get_theme_file_uri( '/assets/css/hemingway-block-editor-style.css' ), $dependencies, '1.0', 'all' );
 
 	}
-	add_action( 'enqueue_block_editor_assets', 'hemingway_block_editor_styles' );
+	add_action( 'enqueue_block_assets', 'hemingway_block_editor_styles' );
 endif;

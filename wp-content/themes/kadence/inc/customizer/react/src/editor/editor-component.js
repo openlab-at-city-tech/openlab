@@ -77,6 +77,7 @@ class EditorComponent extends Component {
 				{ this.props.control.params.description && (
 					<span className="customize-control-description">{ this.props.control.params.description }</span>
 				) }
+				{ this.props.control.renderNotice() }
 			</div>
 		);
 	}

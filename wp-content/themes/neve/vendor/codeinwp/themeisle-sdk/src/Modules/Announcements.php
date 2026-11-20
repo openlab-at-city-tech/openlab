@@ -22,8 +22,9 @@ use ThemeisleSDK\Product;
  * Announcement module for the ThemeIsle SDK.
  */
 class Announcements extends Abstract_Module {
-	
+
 	const SALE_DURATION_BLACK_FRIDAY = '+7 days'; // DateTime modifier. (Include Cyber Monday)
+	const MINIMUM_INSTALL_AGE        = 3 * DAY_IN_SECONDS;
 
 	/**
 	 * Mark if the notice was already loaded.
@@ -33,8 +34,15 @@ class Announcements extends Abstract_Module {
 	private static $notice_loaded = false;
 
 	/**
+	 * Mark if the plugin meta link was already loaded.
+	 *
+	 * @var boolean
+	 */
+	private static $meta_link_loaded = false;
+
+	/**
 	 * The product to be used.
-	 * 
+	 *
 	 * @var string
 	 */
 	private static $current_product = '';
@@ -63,15 +71,16 @@ class Announcements extends Abstract_Module {
 	 */
 	public function load( $product ) {
 		$this->product = $product;
-		
+
 		add_filter(
 			'themeisle_sdk_is_black_friday_sale',
 			function( $is_black_friday ) {
 				return $this->is_black_friday_sale( $this->get_current_date() );
 			}
 		);
-		
-		add_action( 'admin_init', array( $this, 'load_announcements' ) );
+
+		add_action( 'admin_menu', array( $this, 'load_announcements' ), 9 );
+		add_action( 'wp_ajax_themeisle_sdk_dismiss_black_friday_notice', array( $this, 'disable_notification_ajax' ) );
 	}
 
 	/**
@@ -80,23 +89,29 @@ class Announcements extends Abstract_Module {
 	 * @return void
 	 */
 	public function load_announcements() {
-		if ( ! $this->is_black_friday_sale( $this->get_current_date() ) ) {
+		$current_date = $this->get_current_date();
+		if ( ! $this->is_black_friday_sale( $current_date ) ) {
 			return;
 		}
-		
+
+		if ( self::MINIMUM_INSTALL_AGE > ( $current_date->getTimestamp() - $this->product->get_install_time() ) ) {
+			return;
+		}
+
 		add_action( 'admin_notices', array( $this, 'black_friday_notice_render' ) );
-		add_action( 'wp_ajax_themeisle_sdk_dismiss_black_friday_notice', array( $this, 'disable_notification_ajax' ) );
+
 		add_action(
 			'themeisle_internal_page',
 			function( $plugin, $page_slug ) {
 				self::$current_product = $plugin;
 			},
 			10,
-			2 
+			2
 		);
+
+		add_filter( 'plugin_row_meta', array( $this, 'add_plugin_meta_links' ), 10, 2 );
+		add_filter( $this->product->get_key() . '_about_us_metadata', array( $this, 'override_about_us_metadata' ), 100 );
 	}
-
-
 
 	/**
 	 * Get the remaining time for the event in a human-readable format.
@@ -176,7 +191,7 @@ class Announcements extends Abstract_Module {
 
 	/**
 	 * Get the notice data.
-	 * 
+	 *
 	 * @return array The notice data.
 	 */
 	public function get_notice_data() {
@@ -187,10 +202,12 @@ class Announcements extends Abstract_Module {
 		if ( ! empty( $this->product ) ) {
 			$utm_location = $this->product->get_friendly_name();
 		}
-		
-		$sale_title   = Loader::$labels['announcements']['black_friday'];
-		$sale_url     = tsdk_translate_link( tsdk_utmify( 'https://themeisle.com/blackfriday/', 'bfcm25', $utm_location ) );
-		$sale_message = sprintf( Loader::$labels['announcements']['max_savings'], '50%' );
+
+		$sale_title = Loader::$labels['announcements']['black_friday'];
+		$sale_url   = tsdk_translate_link( tsdk_utmify( 'https://themeisle.com/blackfriday/', 'bfcm26', $utm_location ) );
+
+		$current_year = $this->get_current_date()->format( 'Y' );
+		$sale_message = sprintf( Loader::$labels['announcements']['max_savings'], $current_year );
 
 		return array(
 			'title'     => $sale_title,
@@ -212,45 +229,57 @@ class Announcements extends Abstract_Module {
 			return;
 		}
 		self::$notice_loaded = true;
-		
+
+		$current_user_id = get_current_user_id();
+
+		if ( ! $this->can_show_notice( $this->get_current_date(), $current_user_id ) ) {
+			return;
+		}
+
 		$all_configs = apply_filters( 'themeisle_sdk_blackfriday_data', array( 'default' => $this->get_notice_data() ) );
 
-		if ( empty( $all_configs ) ) {
+		if ( empty( $all_configs ) || ! is_array( $all_configs ) ) {
 			return;
 		}
 
-		$data = end( $all_configs );
-		
-		if ( ! empty( self::$current_product ) && isset( $all_configs[ self::$current_product ] ) ) {
-			$data = $all_configs[ self::$current_product ];
-		}
+		$data         = isset( $all_configs['default'] ) ? $all_configs['default'] : $this->get_notice_data();
+		$products     = Loader::get_products();
+		$current_time = $this->get_current_date()->getTimestamp();
+		$can_show     = false;
 
-		if ( empty( $data ) || ! is_array( $data ) ) {
-			return;
-		}
-		
-		$current_user_id = get_current_user_id();
-		$can_dismiss     = true;
+		// Check if we have products that are eligible to show the notice with the default data. If the product provide its own config, use it.
+		foreach ( $products as $product ) {
+			$slug = $product->get_slug();
 
-		if ( ! empty( $data['dismiss'] ) ) {
-			$can_dismiss = $data['dismiss'];
-		} else {
-			// Disable by default if we are on a product page.
-			if ( 0 < did_action( 'themeisle_internal_page' ) ) {
-				$can_dismiss = false;
+			if ( self::MINIMUM_INSTALL_AGE < ( $current_time - $product->get_install_time() ) ) {
+				$can_show = true;
+
+				if ( isset( $all_configs[ $slug ] ) && ! empty( $all_configs[ $slug ] ) && is_array( $all_configs[ $slug ] ) ) {
+					$data = $all_configs[ $slug ];
+
+					if ( self::$current_product === $slug ) {
+						$data = $all_configs[ $slug ];
+						break;
+					}
+				}
 			}
 		}
 
-		if ( $can_dismiss && ! $this->can_show_notice( $this->get_current_date(), $current_user_id ) ) {
+		if ( ! $can_show ) {
 			return;
 		}
 
+		$displayed_on_internal_page = 0 < did_action( 'themeisle_internal_page' );
+
+		$title              = ! empty( $data['title'] ) ? $data['title'] : Loader::$labels['announcements']['black_friday'];
+		$time_left_label    = ! empty( $data['time_left'] ) ? $data['time_left'] : '';
+		$message            = ! empty( $data['message'] ) ? $data['message'] : '';
 		$logo_url           = ! empty( $data['logo_url'] ) ? $data['logo_url'] : $this->get_sdk_uri() . 'assets/images/themeisle-logo.png';
 		$cta_label          = ! empty( $data['cta_label'] ) ? $data['cta_label'] : Loader::$labels['announcements']['notice_link_label'];
 		$sale_url           = ! empty( $data['sale_url'] ) ? $data['sale_url'] : '';
-		$hide_other_notices = ! empty( $data['hide_other_notices'] ) ? $data['hide_other_notices'] : ! $can_dismiss;
-		$dismiss_notice_url = wp_nonce_url( 
-			add_query_arg( 
+		$hide_other_notices = ! empty( $data['hide_other_notices'] ) ? $data['hide_other_notices'] : $displayed_on_internal_page;
+		$dismiss_notice_url = wp_nonce_url(
+			add_query_arg(
 				array( 'action' => 'themeisle_sdk_dismiss_black_friday_notice' ),
 				admin_url( 'admin-ajax.php' )
 			),
@@ -260,7 +289,7 @@ class Announcements extends Abstract_Module {
 		if ( empty( $sale_url ) ) {
 			return;
 		}
-		
+
 		if ( ! current_user_can( 'install_plugins' ) ) {
 			$sale_url = remove_query_arg( 'lkey', $sale_url );
 		}
@@ -347,13 +376,13 @@ class Announcements extends Abstract_Module {
 				</div>
 				<div class="themeisle-sale-content">
 					<h4 class="themeisle-sale-title">
-						<?php echo esc_html( $data['title'] ); ?>
+						<?php echo esc_html( $title ); ?>
 						<span class="themeisle-sale-time-left">
-							<?php echo esc_html( $data['time_left'] ); ?>
+							<?php echo esc_html( $time_left_label ); ?>
 						</span>
 					</h4>
 					<p>
-						<?php echo wp_kses_post( $data['message'] ); ?>
+						<?php echo wp_kses_post( $message ); ?>
 					</p>
 				</div>
 				<div class="themeisle-sale-action">
@@ -365,11 +394,9 @@ class Announcements extends Abstract_Module {
 					<?php echo esc_html( $cta_label ); ?>
 					</a>
 				</div>
-				<?php if ( $can_dismiss ) : ?>
 				<a href="<?php echo esc_url( $dismiss_notice_url ); ?>" class="themeisle-sale-dismiss">
 					<span class="dashicons dashicons-dismiss"></span>
 				</a>
-				<?php endif; ?>
 			</div>
 		</div>
 		<script>
@@ -380,7 +407,7 @@ class Announcements extends Abstract_Module {
 				if ( ! bannerRoot || ! saleNotice ) {
 					return;
 				}
-				
+
 				bannerRoot.appendChild(saleNotice);
 			};
 
@@ -405,8 +432,115 @@ class Announcements extends Abstract_Module {
 		if ( empty( $return_page_url ) ) {
 			$return_page_url = admin_url();
 		}
-		
+
 		wp_safe_redirect( $return_page_url );
 		exit;
+	}
+
+	/**
+	 * Add the plugin meta links.
+	 *
+	 * @param array<string, string> $links The plugin meta links.
+	 * @param string                $plugin_file The plugin file.
+	 * @return array<string, string> The plugin meta links.
+	 */
+	public function add_plugin_meta_links( $links, $plugin_file ) {
+		if ( self::$meta_link_loaded ) {
+			return $links;
+		}
+
+		if ( $plugin_file !== plugin_basename( $this->product->get_basefile() ) ) {
+			return $links;
+		}
+
+		$configs = apply_filters( 'themeisle_sdk_blackfriday_data', array( 'default' => $this->get_notice_data() ) );
+
+		if ( empty( $configs ) || ! is_array( $configs ) ) {
+			return $links;
+		}
+
+		$current_slug = $this->product->get_slug();
+		$data         = isset( $configs[ $current_slug ] ) && ! empty( $configs[ $current_slug ] ) && is_array( $configs[ $current_slug ] ) ? $configs[ $current_slug ] : array();
+
+		$plugin_meta_message = '';
+		$plugin_meta_url     = '';
+
+		if ( isset( $data['plugin_meta_targets'] ) && ! empty( $data['plugin_meta_targets'] ) && ! in_array( $current_slug, $data['plugin_meta_targets'] ) ) {
+			return $links; // The current configuration is for another plugins.
+		}
+
+		$plugin_meta_message = ! empty( $data['plugin_meta_message'] ) ? $data['plugin_meta_message'] : '';
+		$plugin_meta_url     = ! empty( $data['sale_url'] ) ? $data['sale_url'] : '';
+
+		if ( empty( $plugin_meta_url ) || empty( $plugin_meta_message ) ) {
+
+			// Check if a configuration is in another plugin.
+			$products = Loader::get_products();
+			foreach ( $products as $product ) {
+				$slug = $product->get_slug();
+
+				if ( $slug === $current_slug || ! isset( $configs[ $slug ] ) || empty( $configs[ $slug ] ) || ! is_array( $configs[ $slug ] ) ) {
+					continue;
+				}
+
+				if ( ! empty( $configs[ $slug ]['plugin_meta_targets'] ) && in_array( $current_slug, $configs[ $slug ]['plugin_meta_targets'] ) ) {
+					$plugin_meta_message = ! empty( $configs[ $slug ]['plugin_meta_message'] ) ? $configs[ $slug ]['plugin_meta_message'] : '';
+					$plugin_meta_url     = ! empty( $configs[ $slug ]['sale_url'] ) ? $configs[ $slug ]['sale_url'] : '';
+					break;
+				}
+			}
+		}
+
+		if ( empty( $plugin_meta_url ) || empty( $plugin_meta_message ) ) {
+			return $links;
+		}
+
+		$links[] = sprintf( '<a class="themeisle-sale-plugin-meta-link" style="color: red;" href="%s" target="_blank">%s</a>', esc_url( $plugin_meta_url ), esc_html( $plugin_meta_message ) );
+
+		self::$meta_link_loaded = true;
+
+		return $links;
+	}
+
+	/**
+	 * Override the About Us upgrade menu during Black Friday.
+	 *
+	 * Registered dynamically during admin_menu when sale is active.
+	 * Only applies if About_Us module is loaded for the product.
+	 *
+	 * @param array<string, mixed> $about_data About Us metadata.
+	 *
+	 * @return array<string, mixed>
+	 */
+	public function override_about_us_metadata( $about_data ) {
+		if ( ! $this->is_black_friday_sale( $this->get_current_date() ) ) {
+			return $about_data;
+		}
+
+		if ( empty( $about_data ) || ! is_array( $about_data ) ) {
+			return $about_data;
+		}
+
+		if ( empty( $about_data['has_upgrade_menu'] ) || true !== $about_data['has_upgrade_menu'] ) {
+			return $about_data;
+		}
+
+		$configs = apply_filters( 'themeisle_sdk_blackfriday_data', array( 'default' => $this->get_notice_data() ) );
+
+		$current_slug = $this->product->get_slug();
+		if ( ! isset( $configs[ $current_slug ] ) || empty( $configs[ $current_slug ] ) || ! is_array( $configs[ $current_slug ] ) ) {
+			return $about_data;
+		}
+
+		$config = $configs[ $current_slug ];
+
+		if ( empty( $config['upgrade_menu_text'] ) || empty( $config['sale_url'] ) ) {
+			return $about_data;
+		}
+
+		$about_data['upgrade_text'] = $config['upgrade_menu_text'];
+		$about_data['upgrade_link'] = $config['sale_url'];
+
+		return $about_data;
 	}
 }

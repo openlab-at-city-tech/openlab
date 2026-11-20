@@ -5,10 +5,29 @@
  * @package WP_Document_Revisions
  */
 
+// direct file access protection.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Admin settings functionality for WP_Document_Revisions_Admin.
  */
 trait WP_Document_Revisions_Admin_Settings {
+
+	/**
+	 * Length of feed key.
+	 *
+	 * @var int
+	 */
+	private static $key_length = 32;
+
+	/**
+	 * User meta key used auth feeds.
+	 *
+	 * @var string
+	 */
+	private static $meta_key = 'document_revisions_feed_key';
 
 	/**
 	 * Sanitize link_date option prior to saving.
@@ -16,9 +35,9 @@ trait WP_Document_Revisions_Admin_Settings {
 	 * @since 3.5.0
 	 *
 	 * @param ?string $link_date value to represent whether to add the year/month into the permalink.
-	 * @return string sanitized value
+	 * @return bool sanitized value (true to add the year/month into the permalink)
 	 */
-	public function sanitize_link_date( ?string $link_date ) {
+	public function sanitize_link_date( ?string $link_date ): bool {
 		return (bool) $link_date;
 	}
 
@@ -93,7 +112,7 @@ trait WP_Document_Revisions_Admin_Settings {
 	 * @return string the feed key
 	 */
 	public function get_feed_key( ?int $user = null ): string {
-		$key = get_user_option( $this->meta_key, $user );
+		$key = get_user_option( self::$meta_key, $user );
 
 		if ( ! $key ) {
 			$key = $this->generate_new_feed_key();
@@ -107,7 +126,6 @@ trait WP_Document_Revisions_Admin_Settings {
 	 * Filters documents from media galleries.
 	 *
 	 * @uses filter_media_where()
-	 * @uses filter_media_join()
 	 */
 	public function filter_from_media(): void {
 		global $pagenow;
@@ -118,7 +136,6 @@ trait WP_Document_Revisions_Admin_Settings {
 		}
 
 		// note: hook late so that unattached filter can hook in, if necessary.
-		add_filter( 'posts_join_paged', array( $this, 'filter_media_join' ) );
 		add_filter( 'posts_where_paged', array( $this, 'filter_media_where' ), 20 );
 	}
 
@@ -140,7 +157,7 @@ trait WP_Document_Revisions_Admin_Settings {
 		// delete revision if there is no content.
 		if ( 0 === strlen( $revision->post_content ) ) {
 			global $wpdr;
-			remove_filter( 'pre_delete_post', array( $wpdr, 'possibly_delete_revision' ), 9999, 3 );
+			remove_filter( 'pre_delete_post', array( $wpdr, 'possibly_delete_revision' ), 9999 );
 			wp_delete_post_revision( $revision_id );
 			add_filter( 'pre_delete_post', array( $wpdr, 'possibly_delete_revision' ), 9999, 3 );
 			return;
@@ -176,7 +193,10 @@ trait WP_Document_Revisions_Admin_Settings {
 		// Since all revisions are deleted with the document, all attachments will get deleted.
 		$attach = $this->get_document( $post_id );
 		if ( ! $attach ) {
-			// no attachment.
+			// no attachment. Still clear the deletion state so later deletions in this request are not treated as part of it.
+			if ( 'document' === $record->post_type ) {
+				self::$attachmts = null;
+			}
 			return;
 		}
 
@@ -195,9 +215,11 @@ trait WP_Document_Revisions_Admin_Settings {
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery
 
+		$wpdr = self::$parent;
 		if ( '1' === $doc_link ) {
-			// have to access the document upload directory, so add it. Also on delete file.
-			add_filter( 'upload_dir', array( self::$parent, 'document_upload_dir_filter' ) );
+			// have to access the document upload directory, so add it. Also on delete file. Make sure we use it.
+			$wpdr::$doc_image = false;
+			add_filter( 'upload_dir', array( $wpdr, 'document_upload_dir_filter' ) );
 			add_filter( 'wp_delete_file', array( $this, 'wp_delete_file' ) );
 
 			// delete_attachment does not delete the attachment if document is outside uploads directory.
@@ -208,7 +230,8 @@ trait WP_Document_Revisions_Admin_Settings {
 			wp_delete_file( $file );
 
 			// have looked for the upload directory, so remove it.
-			remove_filter( 'upload_dir', array( self::$parent, 'document_upload_dir_filter' ) );
+			$wpdr::$doc_image = true;
+			remove_filter( 'upload_dir', array( $wpdr, 'document_upload_dir_filter' ) );
 			remove_filter( 'wp_delete_file', array( $this, 'wp_delete_file' ) );
 
 			// remove attachment ID from list.
@@ -218,18 +241,21 @@ trait WP_Document_Revisions_Admin_Settings {
 		// If multiple files have been uploaded between saves then there will be attached files left [Edge case].
 		if ( 'document' === $record->post_type ) {
 			if ( ! empty( self::$attachmts ) ) {
-				add_filter( 'upload_dir', array( self::$parent, 'document_upload_dir_filter' ) );
+				$wpdr::$doc_image = false;
+				add_filter( 'upload_dir', array( $wpdr, 'document_upload_dir_filter' ) );
 				add_filter( 'wp_delete_file', array( $this, 'wp_delete_file' ) );
 				foreach ( self::$attachmts as $id => $value ) {
+					$post_id = absint( $id );
 					// delete_attachment does not delete the attachment if document is outside uploads directory.
-					$file = get_attached_file( $id );
+					$file = get_attached_file( $post_id );
 
-					wp_delete_attachment( $id, true );
+					wp_delete_attachment( $post_id, true );
 
 					// ensure attachment deleted.
 					wp_delete_file( $file );
 				}
-				remove_filter( 'upload_dir', array( self::$parent, 'document_upload_dir_filter' ) );
+				$wpdr::$doc_image = true;
+				remove_filter( 'upload_dir', array( $wpdr, 'document_upload_dir_filter' ) );
 				remove_filter( 'wp_delete_file', array( $this, 'wp_delete_file' ) );
 			}
 			// set the attachmts to null, so that being null means we are not deleting a document.
@@ -261,6 +287,7 @@ trait WP_Document_Revisions_Admin_Settings {
 	public function dashboard_display(): void {
 		global $wpdr;
 		if ( ! $wpdr ) {
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 			$wpdr = new WP_Document_Revisions();
 		}
 
@@ -297,7 +324,7 @@ trait WP_Document_Revisions_Admin_Settings {
 				printf(
 					esc_html( $format_string ),
 					esc_html( human_time_diff( strtotime( $document->post_modified_gmt ), time() ) ),
-					esc_html( get_the_author_meta( 'display_name', $document->post_author ) ),
+					esc_html( get_the_author_meta( 'display_name', self::$parent->get_revision_author( $document ) ) ),
 					esc_html( ucwords( $document->post_status ) )
 				);
 				?>
@@ -334,6 +361,93 @@ trait WP_Document_Revisions_Admin_Settings {
 			'media',
 			'uploads'
 		);
+		register_setting(
+			'media',
+			'document_notify_enabled',
+			array(
+				'type'              => 'boolean',
+				'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+			)
+		);
+		register_setting( 'media', 'document_notify_recipients', array( $this, 'sanitize_notify_recipients' ) );
+		register_setting(
+			'media',
+			'document_notify_on_state_change',
+			array(
+				'type'              => 'boolean',
+				'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+			)
+		);
+		register_setting(
+			'media',
+			'document_notify_on_new_revision',
+			array(
+				'type'              => 'boolean',
+				'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+			)
+		);
+		add_settings_field(
+			'document_notifications',
+			__( 'Document Notifications', 'wp-document-revisions' ),
+			array( $this, 'document_notifications_cb' ),
+			'media',
+			'uploads'
+		);
+	}
+
+	/**
+	 * Sanitizes a checkbox setting to a boolean.
+	 *
+	 * @since 5.4.0
+	 * @param string|null $value the submitted value (null/absent when unchecked).
+	 * @return bool true if checked.
+	 */
+	public function sanitize_checkbox( ?string $value ): bool {
+		return (bool) $value;
+	}
+
+	/**
+	 * Sanitizes the notification recipients list to newline-separated valid emails.
+	 *
+	 * @since 5.4.0
+	 * @param string|null $value the submitted, comma/whitespace-separated address list.
+	 * @return string newline-separated list of valid email addresses.
+	 */
+	public function sanitize_notify_recipients( ?string $value ): string {
+		$emails = array();
+		foreach ( preg_split( '/[\s,]+/', (string) $value ) as $addr ) {
+			$addr = sanitize_email( trim( (string) $addr ) );
+			if ( is_email( $addr ) ) {
+				$emails[] = $addr;
+			}
+		}
+		return implode( "\n", array_values( array_unique( $emails ) ) );
+	}
+
+	/**
+	 * Renders the Document Notifications settings controls.
+	 *
+	 * @since 5.4.0
+	 */
+	public function document_notifications_cb(): void {
+		?>
+		<label for="document_notify_enabled">
+		<input name="document_notify_enabled" type="checkbox" id="document_notify_enabled" value="1" <?php checked( true, (bool) get_site_option( 'document_notify_enabled', false ) ); ?> />
+		<?php esc_html_e( 'Email notifications when documents change.', 'wp-document-revisions' ); ?></label><br />
+		<p>
+		<label for="document_notify_recipients"><?php esc_html_e( 'Notify these email addresses (one per line or comma-separated):', 'wp-document-revisions' ); ?></label><br />
+		<textarea name="document_notify_recipients" id="document_notify_recipients" rows="3" cols="40" class="large-text code"><?php echo esc_textarea( (string) get_site_option( 'document_notify_recipients', '' ) ); ?></textarea><br />
+		<span class="description"><?php esc_html_e( "The document's author is always notified in addition to this list. Whoever made the change is never notified of their own change.", 'wp-document-revisions' ); ?></span>
+		</p>
+		<p>
+		<label for="document_notify_on_state_change">
+		<input name="document_notify_on_state_change" type="checkbox" id="document_notify_on_state_change" value="1" <?php checked( true, (bool) get_site_option( 'document_notify_on_state_change', true ) ); ?> />
+		<?php esc_html_e( 'Notify when a document changes workflow state.', 'wp-document-revisions' ); ?></label><br />
+		<label for="document_notify_on_new_revision">
+		<input name="document_notify_on_new_revision" type="checkbox" id="document_notify_on_new_revision" value="1" <?php checked( true, (bool) get_site_option( 'document_notify_on_new_revision', false ) ); ?> />
+		<?php esc_html_e( 'Notify when a new revision of a document is saved.', 'wp-document-revisions' ); ?></label>
+		</p>
+		<?php
 	}
 
 	/**
@@ -482,7 +596,7 @@ trait WP_Document_Revisions_Admin_Settings {
 
 		// get link date value.
 		$link_date = ( isset( $_POST['document_link_date'] ) ? sanitize_text_field( wp_unslash( $_POST['document_link_date'] ) ) : '' );
-		$link_date = $this->sanitize_document_link_date( $link_date );
+		$link_date = $this->sanitize_link_date( $link_date );
 
 		// because there's a redirect, and there's no Settings API, force settings errors into a transient.
 		global $wp_settings_errors;
@@ -509,10 +623,14 @@ trait WP_Document_Revisions_Admin_Settings {
 	 * Appends the settings-updated query arg to the network admin settings redirect so that the settings API can work.
 	 *
 	 * @since 1.0
-	 * @param string $location the URL being redirected to.
-	 * @return string the modified location
+	 * @param mixed $location the URL being redirected to.
+	 * @return mixed the modified location
 	 */
-	public function network_settings_redirect( string $location ): string {
+	public function network_settings_redirect( $location ) {
+		if ( ! is_string( $location ) ) {
+			return $location;
+		}
+
 		// Verify redirect string from /wp-admin/network/edit.php line 164.
 		if ( add_query_arg( 'updated', 'true', network_admin_url( 'settings.php' ) ) === $location ) {
 			// append the settings-updated query arg and return.
@@ -553,8 +671,8 @@ trait WP_Document_Revisions_Admin_Settings {
 	 * Callback to create the document slug settings field
 	 */
 	public function document_slug_cb(): void {
-		// phpcs:ignore
-		$year_month = ( get_site_option( 'document_link_date' ) ? '' : '/' . date( 'Y/m' ) );
+		// Same site-local year/month that wp_upload_dir() uses for the upload subdirectory.
+		$year_month = ( $this->document_link_date() ? '' : '/' . wp_date( 'Y/m' ) );
 		?>
 		<code><?php echo esc_html( trailingslashit( home_url() ) ); ?><input name="document_slug" type="text" id="document_slug" value="<?php echo esc_attr( $this->document_slug() ); ?>" class="medium-text" /><?php echo esc_html( $year_month ); ?>/<?php esc_html_e( 'example-document-title', 'wp-document-revisions' ); ?>.txt</code><br />
 		<span class="description">
@@ -573,43 +691,13 @@ trait WP_Document_Revisions_Admin_Settings {
 	public function document_link_date_cb(): void {
 		?>
 		<label for="document_link_date">
-		<input name="document_link_date" type="checkbox" id="document_link_date" value="1" <?php checked( '1', get_site_option( 'document_link_date' ) ); ?> />
+		<input name="document_link_date" type="checkbox" id="document_link_date" value="1" <?php checked( $this->document_link_date() ); ?> />
 		<?php esc_html_e( 'Remove the year and month element /yyyy/mm from the document permalink.', 'wp-document-revisions' ); ?></label><br />
 		<span class="description">
 		<?php esc_html_e( 'By default the document permalink will contain the post year and month.', 'wp-document-revisions' ); ?><br />
 		<?php esc_html_e( 'The delivered rewrite rules support both formats.', 'wp-document-revisions' ); ?>
 		</span>
 		<?php
-	}
-
-	/**
-	 * Binds our post-upload javascript callback to the plupload event
-	 *
-	 * Note: in footer because it has to be called after handler.js is loaded and initialized.
-	 *
-	 * @since 1.2.1
-	 */
-	public function bind_upload_cb(): void {
-		global $pagenow;
-
-		if ( 'media-upload.php' === $pagenow ) {
-			// Change event to load to let all js get loaded/initialised.
-			?>
-			<script type="text/javascript">
-				window.addEventListener('load', function() {
-					if ( typeof window.WPDocumentRevisions === "undefined" ) {
-						var WPDRClass = window.WPDocumentRevisionsClass || (window.parent && window.parent.WPDocumentRevisionsClass);
-						if ( typeof WPDRClass === "function" ) {
-							window.WPDocumentRevisions = new WPDRClass();
-						}
-					}
-					if ( window.WPDocumentRevisions && typeof window.WPDocumentRevisions.bindPostDocumentUploadCB === "function" ) {
-						window.WPDocumentRevisions.bindPostDocumentUploadCB();
-					}
-				});
-			</script>
-			<?php
-		}
 	}
 
 	/**
@@ -624,8 +712,8 @@ trait WP_Document_Revisions_Admin_Settings {
 			$user = get_current_user_id();
 		}
 
-		$key = wp_generate_password( $this->key_length, false, false );
-		update_user_option( $user, $this->meta_key, $key );
+		$key = wp_generate_password( self::$key_length, false, false );
+		update_user_option( $user, self::$meta_key, $key );
 
 		return $key;
 	}
@@ -634,10 +722,17 @@ trait WP_Document_Revisions_Admin_Settings {
 	 * Callback to handle profile updates.
 	 *
 	 * @since 0.5
+	 * @since 5.7.0 Regenerates the key of the user being edited, not the current user's.
+	 * @param int|null $user_id the ID of the user whose profile is being saved.
 	 */
-	public function profile_update_cb(): void {
+	public function profile_update_cb( $user_id = null ): void {
+		$user_id = $user_id ? absint( $user_id ) : get_current_user_id();
+		if ( ! $user_id || ! current_user_can( 'edit_user', $user_id ) ) {
+			return;
+		}
+
 		if ( isset( $_POST['generate-new-feed-key'] ) && isset( $_POST['_document_revisions_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_document_revisions_nonce'] ) ), 'generate-new-feed-key' ) ) {
-			$this->generate_new_feed_key();
+			$this->generate_new_feed_key( $user_id );
 		}
 	}
 
@@ -692,21 +787,24 @@ trait WP_Document_Revisions_Admin_Settings {
 	}
 
 	/**
-	 * Joins wp_posts on itself so posts can be filter by post_parent's type.
+	 * No longer used: filter_media_where() needs no join. Kept so existing
+	 * add_filter()/remove_filter() calls referencing it keep working.
 	 *
+	 * @deprecated 5.5.0
 	 * @param string $join the original join statement.
-	 * @return string the modified join statement
+	 * @return string the unchanged join statement
 	 */
 	public function filter_media_join( string $join ): string {
-		global $wpdb;
-
-		$join .= " LEFT OUTER JOIN {$wpdb->posts} wpdr_post_parent ON wpdr_post_parent.ID = {$wpdb->posts}.post_parent";
-
 		return $join;
 	}
 
 	/**
 	 * Exclude children of documents from query.
+	 *
+	 * Uses an uncorrelated subquery rather than joining wp_posts on itself, so the
+	 * set of document children is built once from the post_parent and
+	 * type_status_date indexes instead of being looked up for every attachment,
+	 * which is slow on large media libraries. (#725)
 	 *
 	 * @param string $where the original where statement.
 	 * @return string the modified where statement
@@ -714,7 +812,7 @@ trait WP_Document_Revisions_Admin_Settings {
 	public function filter_media_where( string $where ): string {
 		global $wpdb;
 
-		$where .= " AND ( wpdr_post_parent.post_type IS NULL OR wpdr_post_parent.post_type != 'document' )";
+		$where .= " AND {$wpdb->posts}.ID NOT IN ( SELECT wpdr_child.ID FROM {$wpdb->posts} wpdr_child WHERE wpdr_child.post_parent IN ( SELECT wpdr_document.ID FROM {$wpdb->posts} wpdr_document WHERE wpdr_document.post_type = 'document' ) )";
 
 		return $where;
 	}
@@ -723,15 +821,45 @@ trait WP_Document_Revisions_Admin_Settings {
 	 * Filters documents from the media grid view when queried via Ajax. This uses
 	 * the same filters from the list view applied in `filter_from_media()`.
 	 *
-	 * @param Object $query the WP_Query object.
-	 * @return mixed
+	 * @param array<string, mixed> $query the attachment query arguments.
+	 * @return array<string, mixed>
 	 */
-	public function filter_from_media_grid( $query ) {
+	public function filter_from_media_grid( array $query ) {
 		// note: hook late so that unattached filter can hook in, if necessary.
-		add_filter( 'posts_join_paged', array( $this, 'filter_media_join' ) );
 		add_filter( 'posts_where_paged', array( $this, 'filter_media_where' ), 20 );
 
 		return $query;
+	}
+
+	/**
+	 * Hides the details of a document attachment in the media modal when the user
+	 * cannot edit its document, as doc_clean_attachment() does for the REST API.
+	 *
+	 * @since 5.7.0
+	 *
+	 * @param array<string, mixed> $response   the attachment data for the media modal.
+	 * @param WP_Post              $attachment the attachment.
+	 * @return array<string, mixed>
+	 */
+	public function clean_attachment_for_js( $response, WP_Post $attachment ) {
+		$parent = (int) $attachment->post_parent;
+		if ( 0 === $parent || 'document' !== get_post_type( $parent ) || current_user_can( 'edit_document', $parent ) ) {
+			return $response;
+		}
+
+		$protected               = __( '<!-- protected -->', 'wp-document-revisions' );
+		$response['title']       = $protected;
+		$response['filename']    = $protected;
+		$response['name']        = $protected;
+		$response['description'] = $protected;
+		$response['caption']     = $protected;
+		$response['url']         = '';
+		$response['link']        = '';
+		$response['sizes']       = array();
+		$response['alt']         = '';
+		unset( $response['filesizeInBytes'], $response['filesizeHumanReadable'], $response['image'], $response['thumb'], $response['originalImageURL'], $response['originalImageName'] );
+
+		return $response;
 	}
 
 	/**
@@ -746,16 +874,16 @@ trait WP_Document_Revisions_Admin_Settings {
 			return;
 		}
 
-		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-		$attachmts       = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT ID FROM {$wpdb->prefix}posts WHERE post_parent = %d AND post_type = 'attachment'",
-				$post_id
-			),
-			ARRAY_A
+		// every status (including trash and auto-draft), matching the previous raw query.
+		$attachmts       = get_children(
+			array(
+				'post_parent' => $post_id,
+				'post_type'   => 'attachment',
+				'post_status' => array_keys( get_post_stati() ),
+				'fields'      => 'ids',
+			)
 		);
-		self::$attachmts = wp_list_pluck( $attachmts, 'ID', 'ID' );
+		self::$attachmts = array_combine( $attachmts, $attachmts );
 	}
 
 	/**
@@ -773,11 +901,12 @@ trait WP_Document_Revisions_Admin_Settings {
 	 *
 	 * @since 0.5
 	 * @param string $file Path to the file to delete.
+	 * @return string the (possibly remapped) file path.
 	 */
 	public function wp_delete_file( string $file ) {
 		global $wpdr;
-		$std_dir = $wpdr::$wp_default_dir['basedir'];
-		$doc_dir = $wpdr::$wpdr_document_dir;
+		$std_dir = $wpdr->default_upload_dir()['basedir'];
+		$doc_dir = $wpdr->document_upload_dir();
 		if ( $doc_dir !== $std_dir ) {
 			$file = str_ireplace( $std_dir, $doc_dir, $file );
 		}
@@ -787,6 +916,8 @@ trait WP_Document_Revisions_Admin_Settings {
 	/**
 	 * Remove all hooks that activate workflow state support
 	 * use filter `document_use_workflow_states` to disable.
+	 *
+	 * @return bool false if workflow states remain enabled, true once disabled.
 	 */
 	public function disable_workflow_states() {
 		if ( self::$parent->use_workflow_states() ) {

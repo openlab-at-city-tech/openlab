@@ -98,6 +98,121 @@
 		},
 
 		/**
+		 * Persist a product's extra options, then report completion.
+		 *
+		 * Called when the user commits by deactivating, not when they tick the
+		 * box, so closing the popup without deactivating changes nothing.
+		 *
+		 * Returns a promise the caller waits on before deactivating, because
+		 * _submitFeedback redirects from inside its own AJAX callback and would
+		 * otherwise cut this short.
+		 *
+		 * Only changed boxes are posted, so an untouched one can never fail and
+		 * block a deactivation. A failure does not deactivate on its own - the
+		 * value here can be a destructive preference and the dangerous
+		 * direction is silent - but it offers "Deactivate anyway", so the
+		 * choice to proceed on the old value is the user's and explicit.
+		 *
+		 * @param {Object} $form The popup's form.
+		 * @param {Object} self  Popup instance.
+		 * @return {Object} jQuery promise, resolved when every field is stored.
+		 */
+		_saveExtraOptions( $form, self ) {
+			// Only boxes the user actually changed. defaultChecked is the state
+			// the server rendered, so an untouched box costs no request - and a
+			// failure can never block a deactivation nobody asked to change.
+			const $boxes = $form
+				.find( '.uds-extra-option--checkbox' )
+				.filter( function () {
+					return $( this ).is( ':checked' ) !== this.defaultChecked;
+				} );
+
+			if ( ! $boxes.length ) {
+				return $.Deferred().resolve().promise();
+			}
+
+			const $error = $form.find( '.uds-extra-option--error' );
+			const $actions = $form.find(
+				'.uds-feedback-submit, .uds-feedback-skip'
+			);
+
+			$error.addClass( 'hide' ).empty();
+			$actions.prop( 'disabled', true );
+
+			const requests = $boxes
+				.map( function () {
+					const $input = $( this );
+
+					return $.ajax( {
+						url: udsVars?.ajaxurl,
+						type: 'POST',
+						// Without this a stalled request never settles, and the
+						// action buttons stay disabled with no way out but a
+						// page reload. A timeout rejects into .fail() instead.
+						timeout: 15000,
+						data: {
+							action: $input.attr( 'data-ajax_action' ),
+							security: $input.attr( 'data-nonce' ),
+							// String '1'/'0' on the wire. A product must compare
+							// strictly: casting would read "no" as true.
+							checked: $input.is( ':checked' ) ? '1' : '0',
+						},
+					} ).then( function ( response ) {
+						return response && response.success
+							? response
+							: $.Deferred().reject().promise();
+					} );
+				} )
+				.get();
+
+			return $.when.apply( $, requests )
+				.done( function () {
+					// Deliberately not re-enabled here: the deactivation redirect
+					// follows immediately, and re-enabling first leaves a window
+					// in which a second click fires a second deactivation.
+					$boxes.each( function () {
+						this.defaultChecked = this.checked;
+					} );
+				} )
+				.fail( function () {
+					$actions.prop( 'disabled', false );
+					self._reportSaveFailure( $form, $error );
+				} );
+		},
+
+		/**
+		 * Report a failed save, and let the user deactivate regardless.
+		 *
+		 * The preference is left as it was, so proceeding is explicit rather
+		 * than silent. Refusing outright would trap someone whose nonce expired
+		 * on a page left open, with no way to deactivate at all.
+		 *
+		 * @param {Object} $form  The popup's form.
+		 * @param {Object} $error The inline error element.
+		 */
+		_reportSaveFailure( $form, $error ) {
+			const proceed = document.createElement( 'button' );
+
+			proceed.type = 'button';
+			proceed.className = 'button-link uds-extra-option--proceed';
+			proceed.textContent = 'Deactivate anyway';
+			proceed.addEventListener( 'click', function () {
+				// Disabled immediately: a second click would fire a second
+				// feedback request and deactivation.
+				proceed.disabled = true;
+				$form.submit();
+			} );
+
+			$error.removeClass( 'hide' ).empty();
+			$error[ 0 ].appendChild(
+				document.createTextNode(
+					'Could not save your preference. '
+				)
+			);
+			$error[ 0 ].appendChild( proceed );
+		},
+
+		/**
 		 * Submits the feedback form and handles the response.
 		 *
 		 * @param {Event}  event - The event that triggered this function.
@@ -135,11 +250,11 @@
 				url: udsVars?.ajaxurl, // URL to send the request to.
 				type: 'POST', // HTTP method.
 				data: formData, // Data to be sent.
-				success( response ) {
-					if ( response.success ) {
-						self._redirectOrReload();
-					}
-					self._hidePopup();
+				success() {
+					// Feedback is best-effort. A success:false reply - an expired
+					// nonce, a remote analytics error - must not leave the plugin
+					// undeactivated with the action buttons still disabled.
+					self._redirectOrReload();
 				},
 				/* eslint-disable */
 				error( xhr, status, error ) {
@@ -220,7 +335,19 @@
 				.on( 'click', function ( event ) {
 					event.preventDefault(); // Prevent default button action.
 					self.buttonAction = $( event.target ).attr( 'data-action' );
-					$( event.target ).closest( self.feedbackForm ).submit();
+
+					const $form = $( event.target ).closest( self.feedbackForm );
+
+					// The save lives here, and that is sufficient: pressing Enter
+					// does not bypass it. Implicit submission dispatches a trusted
+					// click on the form's default button - .uds-feedback-submit,
+					// which carries no type attribute and so is the first submit
+					// button - before the submit event, so this handler runs first.
+					// Measured in Chrome: Enter on a radio or on the extra-options
+					// checkbox logs CLICK:submit then SUBMIT, both isTrusted.
+					self._saveExtraOptions( $form, self ).done( function () {
+						$form.submit();
+					} );
 				} );
 
 			this.feedbackForm.on( 'submit', function ( event ) {

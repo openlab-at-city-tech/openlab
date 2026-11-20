@@ -9,7 +9,7 @@
 $theme_data = wp_get_theme();
 $theme_uri = $theme_data->get( 'ThemeURI' );
 $author_uri = $theme_data->get( 'AuthorURI' );
-$wordpress_uri = '//wordpress.org/';
+$wordpress_uri = '//WordPress.org/';
 return array(
     'title'      =>__( 'Footer Default', 'cv-portfolio-blocks' ),
     'categories' => array( 'cv-portfolio-blocks' ),
@@ -89,7 +89,7 @@ return array(
 
 <!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"scroll-top-button"} -->
-<div class="wp-block-button scroll-top-button"><a class="wp-block-button__link wp-element-button"><span class="dashicons dashicons-arrow-up-alt"></span></a></div>
+<div class="wp-block-button scroll-top-button"><a class="wp-block-button__link wp-element-button"><img class="wp-image-8" style="width: 20px; height: 20px;" src="'.esc_url(get_template_directory_uri()) .'/assets/images/arrow-up.svg" alt=""></a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->'
 );

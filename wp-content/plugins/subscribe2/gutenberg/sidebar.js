@@ -3,13 +3,15 @@
 
 var privateSetting = '';
 
-wp.apiFetch( { path: '/s2/v1/settings/private' } ).then(
+wp.apiFetch( { path: '/s2/v1/editor-setting/private' } ).then(
 	function ( setting ) {
 		privateSetting = setting;
 	}
+).catch(
+	function () {}
 );
 
-wp.apiFetch( { path: '/s2/v1/settings/s2meta_default' } ).then(
+wp.apiFetch( { path: '/s2/v1/editor-setting/s2meta_default' } ).then(
 	function ( setting ) {
 		var s2mail = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' )._s2mail;
 
@@ -23,6 +25,8 @@ wp.apiFetch( { path: '/s2/v1/settings/s2meta_default' } ).then(
 			wp.data.dispatch( 'core/editor' ).savePost();
 		}
 	}
+).catch(
+	function () {}
 );
 
 ( function( plugins, element, i18n, editPost, components, data, compose, apiFetch ) {

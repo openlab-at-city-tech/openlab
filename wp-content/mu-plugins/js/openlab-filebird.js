@@ -2,7 +2,7 @@
 	setTimeout(() => {
 		// Add missing form label.
 		const pageNumberInput = document.querySelector( '.fbdl-layout-control-limit input' );
-		if ( pageNumberInput ) {
+		if ( pageNumberInput && ! pageNumberInput.labels.length ) {
 			const fieldId = 'fbdl-page-number';
 			pageNumberInput.setAttribute( 'id', fieldId );
 

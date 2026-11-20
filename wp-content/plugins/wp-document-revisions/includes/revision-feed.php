@@ -6,17 +6,26 @@
  * @package WP_Document_Revisions
  */
 
+// direct file access protection.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 global $post, $wpdr;
 if ( ! $wpdr ) {
+	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 	$wpdr = new WP_Document_Revisions();
 }
 
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 $rev_query = $wpdr->get_revision_query( $post->ID, true );
 
 // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 @header( 'Content-Type: ' . feed_content_type( 'rss-http' ) . '; charset=' . get_option( 'blog_charset' ), true );
 
-echo '<?xml version="1.0" encoding="' . ent2ncr( esc_attr( get_option( 'blog_charset' ) ) ) . '"?' . '>'; ?>
+echo '<?xml version="1.0" encoding="' . ent2ncr( esc_attr( get_option( 'blog_charset' ) ) ) . '"?' . '>';
+//phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+?>
 
 <rss version="2.0"
 	xmlns:content="http://purl.org/rss/1.0/modules/content/"
@@ -36,7 +45,7 @@ echo '<?xml version="1.0" encoding="' . ent2ncr( esc_attr( get_option( 'blog_cha
 	<atom:link href="<?php self_link(); ?>" rel="self" type="application/rss+xml" />
 	<link><?php bloginfo_rss( 'url' ); ?></link>
 	<description><?php bloginfo_rss( 'description' ); ?></description>
-	<lastBuildDate><?php echo ent2ncr( esc_html( mysql2date( 'D, d M Y H:i:s +0000', get_lastpostmodified( 'GMT' ), false ) ) ); ?></lastBuildDate>
+	<lastBuildDate><?php echo ent2ncr( esc_html( mysql2date( 'D, d M Y H:i:s +0000', get_lastpostmodified( 'gmt' ), false ) ) ); ?></lastBuildDate>
 	<language><?php echo ent2ncr( esc_html( get_option( 'rss_language' ) ) ); ?></language>
 	<sy:updatePeriod><?php echo ent2ncr( esc_html( apply_filters( 'rss_update_period', 'hourly' ) ) ); ?></sy:updatePeriod>
 	<sy:updateFrequency><?php echo ent2ncr( esc_html( apply_filters( 'rss_update_frequency', '1' ) ) ); ?></sy:updateFrequency>
@@ -49,7 +58,7 @@ echo '<?xml version="1.0" encoding="' . ent2ncr( esc_attr( get_option( 'blog_cha
 		<title><?php the_title_rss(); ?></title>
 		<link><?php the_permalink_rss(); ?></link>
 		<pubDate><?php echo ent2ncr( esc_html( mysql2date( 'D, d M Y H:i:s +0000', get_post_time( 'Y-m-d H:i:s', true ), false ) ) ); ?></pubDate>
-		<dc:creator><?php the_author(); ?></dc:creator>
+		<dc:creator><?php echo esc_html( get_the_author_meta( 'display_name', $wpdr->get_revision_author( get_post() ) ) ); ?></dc:creator>
 		<?php the_category_rss( 'rss2' ); ?>
 		<guid isPermaLink="false"><?php the_guid(); ?></guid>
 		<description><![CDATA[<?php the_excerpt_rss(); ?>]]></description>

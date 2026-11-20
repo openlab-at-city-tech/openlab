@@ -5,7 +5,7 @@
  * @category Status Updates
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.joedolson.com/wp-to-twitter/
  */
 
@@ -38,6 +38,9 @@ function wpt_post_info( $post_ID ) {
 	$categories = get_the_category( $post_ID );
 	$cats       = array();
 	$cat_descs  = array();
+	$cat_names  = array();
+
+	$category_descriptions = array();
 	if ( is_array( $categories ) ) {
 		if ( count( $categories ) > 0 ) {
 			$category = $categories[0]->cat_name;
@@ -53,9 +56,9 @@ function wpt_post_info( $post_ID ) {
 		 *
 		 * @hook wpt_twitter_category_names
 		 *
-		 * @param {array} $cats Array of category names attached to this status update.
+		 * @param array $cats Array of category names attached to this status update.
 		 *
-		 * @return {array}
+		 * @return array
 		 */
 		$cat_names = implode( ' ', apply_filters( 'wpt_twitter_category_names', $cats ) );
 		/**
@@ -63,9 +66,9 @@ function wpt_post_info( $post_ID ) {
 		 *
 		 * @hook wpt_twitter_category_descs
 		 *
-		 * @param {array} $cats Array of category descriptions attached to this status update.
+		 * @param array $cats Array of category descriptions attached to this status update.
 		 *
-		 * @return {array}
+		 * @return array
 		 */
 		$category_descriptions = implode( ' ', apply_filters( 'wpt_twitter_category_descs', $cat_descs ) );
 	} else {
@@ -100,10 +103,10 @@ function wpt_post_info( $post_ID ) {
 	 *
 	 * @hook wpt_post_info
 	 *
-	 * @param {array}   $values Existing values.
-	 * @param {integer} $post_ID Post ID.
+	 * @param array   $values Existing values.
+	 * @param integer $post_ID Post ID.
 	 *
-	 * @return {array}  $values
+	 * @return array  $values
 	 */
 	$values = apply_filters( 'wpt_post_info', $values, $post_ID );
 
@@ -134,7 +137,7 @@ function wpt_short_url( $post_id ) {
  *
  * @param int $post_ID Post ID.
  *
- * @return Link to use for this URL.
+ * @return string Link to use for this URL.
  */
 function wpt_link( $post_ID ) {
 	$ex_link       = false;
@@ -171,10 +174,10 @@ function wpt_generate_hash_tags( $post_ID ) {
 	 *
 	 * @hook wpt_hash_source
 	 *
-	 * @param {array} $tags Array of post terms.
-	 * @param {int}   $post_ID Post ID.
+	 * @param array $tags Array of post terms.
+	 * @param int   $post_ID Post ID.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	$tags = apply_filters( 'wpt_hash_source', $tags, $post_ID );
 	if ( $tags && count( $tags ) > 0 ) {
@@ -232,10 +235,10 @@ function wpt_generate_hash_tags( $post_ID ) {
 					 *
 					 * @hook wpt_tag_default
 					 *
-					 * @param {string} $char Character used to convert tags into hashtags.
-					 * @param {int}    $t_id Term ID.
+					 * @param string $char Character used to convert tags into hashtags.
+					 * @param int    $t_id Term ID.
 					 *
-					 * @return {string}
+					 * @return string
 					 */
 					$newtag = apply_filters( 'wpt_tag_default', '#', $t_id ) . $tag;
 			}

@@ -58,10 +58,15 @@ class M_NextGen_Other_Options extends C_Base_Module {
 			$forms['roles_and_capabilities'] = 'A_Roles_Form';
 		}
 
-		$forms += [
-			'miscellaneous' => 'A_Miscellaneous_Form',
-			'reset'         => 'A_Reset_Form',
-		];
+		$forms['miscellaneous'] = 'A_Miscellaneous_Form';
+
+		// The page itself is gated on the delegable 'NextGEN Change options' capability, but a
+		// reset uninstalls the plugins and wipes every stored setting, gateway credentials
+		// included, so only an administrator is offered it (#1162). The controller only
+		// dispatches actions to registered forms, so this also refuses the POST.
+		if ( current_user_can( 'manage_options' ) ) {
+			$forms['reset'] = 'A_Reset_Form';
+		}
 
 		$form_manager = \Imagely\NGG\Admin\FormManager::get_instance();
 		foreach ( $forms as $form => $adapter ) {

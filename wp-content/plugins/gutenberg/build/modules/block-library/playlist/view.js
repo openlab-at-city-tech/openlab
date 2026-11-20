@@ -1,484 +1,1055 @@
-// packages/block-library/build-module/playlist/view.mjs
-import { store, getContext, getElement } from "@wordpress/interactivity";
+import { getContext, getElement, store } from "@wordpress/interactivity";
 
-// node_modules/colord/index.mjs
-var r = { grad: 0.9, turn: 360, rad: 360 / (2 * Math.PI) };
-var t = function(r2) {
-  return "string" == typeof r2 ? r2.length > 0 : "number" == typeof r2;
+// node_modules/.store/colord@2.10.0-Qx66Amv6c9C3nDPQDizV6Q/node_modules/colord/index.mjs
+for (var r = {
+	grad: .9,
+	turn: 360,
+	rad: 360 / (2 * Math.PI)
+}, t = function(r) {
+	return "string" == typeof r ? r.length > 0 : "number" == typeof r;
+}, n = function(r, t, n) {
+	return void 0 === t && (t = 0), void 0 === n && (n = Math.pow(10, t)), Math.round(n * r) / n + 0;
+}, u = function(r, t, n) {
+	return void 0 === t && (t = 0), void 0 === n && (n = 1), r > n ? n : r > t ? r : t;
+}, e = function(r) {
+	return (r = isFinite(r) ? r % 360 : 0) < 0 ? r + 360 : r;
+}, o = function(r, t) {
+	return void 0 === t && (t = 0), n(r, t) % 360;
+}, a = function(r) {
+	return {
+		r: u(r.r, 0, 255),
+		g: u(r.g, 0, 255),
+		b: u(r.b, 0, 255),
+		a: u(r.a)
+	};
+}, i = function(r) {
+	return {
+		r: n(r.r),
+		g: n(r.g),
+		b: n(r.b),
+		a: n(r.a, 3)
+	};
+}, s = /^#([0-9a-f]{3,8})$/i, d = function(r, t) {
+	var n = r.charCodeAt(t);
+	return (15 & n) + 9 * (n >> 6);
+}, h = function(r, t) {
+	return d(r, t) << 4 | d(r, t + 1);
+}, b = [], f = 0; f < 256; f++) b.push((f < 16 ? "0" : "") + f.toString(16));
+var g = function(r) {
+	return b[u(r, 0, 255)];
 };
-var n = function(r2, t3, n2) {
-  return void 0 === t3 && (t3 = 0), void 0 === n2 && (n2 = Math.pow(10, t3)), Math.round(n2 * r2) / n2 + 0;
+var c = function(r) {
+	var t = r.r, n = r.g, u = r.b, e = r.a, o = Math.max(t, n, u), a = o - Math.min(t, n, u), i = a ? o === t ? (n - u) / a : o === n ? 2 + (u - t) / a : 4 + (t - n) / a : 0;
+	return {
+		h: 60 * (i < 0 ? i + 6 : i),
+		s: o ? a / o * 100 : 0,
+		v: o / 255 * 100,
+		a: e
+	};
 };
-var e = function(r2, t3, n2) {
-  return void 0 === t3 && (t3 = 0), void 0 === n2 && (n2 = 1), r2 > n2 ? n2 : r2 > t3 ? r2 : t3;
+var v = function(r) {
+	var t = r.h, n = r.s, u = r.v, e = r.a;
+	t = t / 360 * 6, n /= 100, u /= 100;
+	var o = Math.floor(t), a = u * (1 - n), i = u * (1 - (t - o) * n), s = u * (1 - (1 - t + o) * n), d = o % 6;
+	return {
+		r: 255 * [
+			u,
+			i,
+			a,
+			a,
+			s,
+			u
+		][d],
+		g: 255 * [
+			s,
+			u,
+			u,
+			i,
+			a,
+			a
+		][d],
+		b: 255 * [
+			a,
+			a,
+			s,
+			u,
+			u,
+			i
+		][d],
+		a: e
+	};
 };
-var u = function(r2) {
-  return (r2 = isFinite(r2) ? r2 % 360 : 0) > 0 ? r2 : r2 + 360;
+var l = function(r) {
+	return {
+		h: e(r.h),
+		s: u(r.s, 0, 100),
+		l: u(r.l, 0, 100),
+		a: u(r.a)
+	};
 };
-var a = function(r2) {
-  return { r: e(r2.r, 0, 255), g: e(r2.g, 0, 255), b: e(r2.b, 0, 255), a: e(r2.a) };
+var p = function(r) {
+	return {
+		h: o(r.h),
+		s: n(r.s),
+		l: n(r.l),
+		a: n(r.a, 3)
+	};
 };
-var o = function(r2) {
-  return { r: n(r2.r), g: n(r2.g), b: n(r2.b), a: n(r2.a, 3) };
+var m$1 = function(r) {
+	return v((n = (t = r).s, {
+		h: t.h,
+		s: (n *= ((u = t.l) < 50 ? u : 100 - u) / 100) > 0 ? 2 * n / (u + n) * 100 : 0,
+		v: u + n,
+		a: t.a
+	}));
+	var t, n, u;
 };
-var i = /^#([0-9a-f]{3,8})$/i;
-var s = function(r2) {
-  var t3 = r2.toString(16);
-  return t3.length < 2 ? "0" + t3 : t3;
+var y = function(r) {
+	return {
+		h: (t = c(r)).h,
+		s: (e = (200 - (n = t.s)) * (u = t.v) / 100) > 0 && e < 200 ? n * u / 100 / (e <= 100 ? e : 200 - e) * 100 : 0,
+		l: e / 2,
+		a: t.a
+	};
+	var t, n, u, e;
 };
-var h = function(r2) {
-  var t3 = r2.r, n2 = r2.g, e2 = r2.b, u2 = r2.a, a2 = Math.max(t3, n2, e2), o2 = a2 - Math.min(t3, n2, e2), i2 = o2 ? a2 === t3 ? (n2 - e2) / o2 : a2 === n2 ? 2 + (e2 - t3) / o2 : 4 + (t3 - n2) / o2 : 0;
-  return { h: 60 * (i2 < 0 ? i2 + 6 : i2), s: a2 ? o2 / a2 * 100 : 0, v: a2 / 255 * 100, a: u2 };
+var N$1 = /^hsla?\(\s*([+-]?(?:\d*\.\d+|\d+))(deg|rad|grad|turn)?\s*,\s*([+-]?(?:\d*\.\d+|\d+))%\s*,\s*([+-]?(?:\d*\.\d+|\d+))%\s*(?:,\s*([+-]?(?:\d*\.\d+|\d+))(%)?\s*)?\)$/i;
+var x$1 = /^hsla?\(\s*([+-]?(?:\d*\.\d+|\d+))(deg|rad|grad|turn)?\s+([+-]?(?:\d*\.\d+|\d+))%\s+([+-]?(?:\d*\.\d+|\d+))%\s*(?:\/\s*([+-]?(?:\d*\.\d+|\d+))(%)?\s*)?\)$/i;
+var M = /^rgba?\(\s*([+-]?(?:\d*\.\d+|\d+))(%)?\s*,\s*([+-]?(?:\d*\.\d+|\d+))(%)?\s*,\s*([+-]?(?:\d*\.\d+|\d+))(%)?\s*(?:,\s*([+-]?(?:\d*\.\d+|\d+))(%)?\s*)?\)$/i;
+var H$1 = /^rgba?\(\s*([+-]?(?:\d*\.\d+|\d+))(%)?\s+([+-]?(?:\d*\.\d+|\d+))(%)?\s+([+-]?(?:\d*\.\d+|\d+))(%)?\s*(?:\/\s*([+-]?(?:\d*\.\d+|\d+))(%)?\s*)?\)$/i;
+var $$1 = {
+	string: [
+		[function(r) {
+			if (!s.test(r)) return null;
+			var t = r.length;
+			return t <= 5 ? {
+				r: 17 * d(r, 1),
+				g: 17 * d(r, 2),
+				b: 17 * d(r, 3),
+				a: 5 === t ? n(17 * d(r, 4) / 255, 2) : 1
+			} : 7 === t || 9 === t ? {
+				r: h(r, 1),
+				g: h(r, 3),
+				b: h(r, 5),
+				a: 9 === t ? n(h(r, 7) / 255, 2) : 1
+			} : null;
+		}, "hex"],
+		[function(r) {
+			var t = M.exec(r) || H$1.exec(r);
+			return t ? t[2] !== t[4] || t[4] !== t[6] ? null : a({
+				r: Number(t[1]) / (t[2] ? 100 / 255 : 1),
+				g: Number(t[3]) / (t[4] ? 100 / 255 : 1),
+				b: Number(t[5]) / (t[6] ? 100 / 255 : 1),
+				a: void 0 === t[7] ? 1 : Number(t[7]) / (t[8] ? 100 : 1)
+			}) : null;
+		}, "rgb"],
+		[function(t) {
+			var n = N$1.exec(t) || x$1.exec(t);
+			if (!n) return null;
+			var u, e;
+			return m$1(l({
+				h: (u = n[1], e = n[2], void 0 === e && (e = "deg"), Number(u) * (r[e] || 1)),
+				s: Number(n[3]),
+				l: Number(n[4]),
+				a: void 0 === n[5] ? 1 : Number(n[5]) / (n[6] ? 100 : 1)
+			}));
+		}, "hsl"]
+	],
+	object: [
+		[function(r) {
+			var n = r.r, u = r.g, e = r.b, o = r.a, i = void 0 === o ? 1 : o;
+			return t(n) && t(u) && t(e) ? a({
+				r: Number(n),
+				g: Number(u),
+				b: Number(e),
+				a: Number(i)
+			}) : null;
+		}, "rgb"],
+		[function(r) {
+			var n = r.h, u = r.s, e = r.l, o = r.a, a = void 0 === o ? 1 : o;
+			if (!t(n) || !t(u) || !t(e)) return null;
+			return m$1(l({
+				h: Number(n),
+				s: Number(u),
+				l: Number(e),
+				a: Number(a)
+			}));
+		}, "hsl"],
+		[function(r) {
+			var n = r.h, o = r.s, a = r.v, i = r.a, s = void 0 === i ? 1 : i;
+			if (!t(n) || !t(o) || !t(a)) return null;
+			return v(function(r) {
+				return {
+					h: e(r.h),
+					s: u(r.s, 0, 100),
+					v: u(r.v, 0, 100),
+					a: u(r.a)
+				};
+			}({
+				h: Number(n),
+				s: Number(o),
+				v: Number(a),
+				a: Number(s)
+			}));
+		}, "hsv"]
+	]
 };
-var b = function(r2) {
-  var t3 = r2.h, n2 = r2.s, e2 = r2.v, u2 = r2.a;
-  t3 = t3 / 360 * 6, n2 /= 100, e2 /= 100;
-  var a2 = Math.floor(t3), o2 = e2 * (1 - n2), i2 = e2 * (1 - (t3 - a2) * n2), s2 = e2 * (1 - (1 - t3 + a2) * n2), h2 = a2 % 6;
-  return { r: 255 * [e2, i2, o2, o2, s2, e2][h2], g: 255 * [s2, e2, e2, i2, o2, o2][h2], b: 255 * [o2, o2, s2, e2, e2, i2][h2], a: u2 };
+var j$1 = function(r, t) {
+	for (var n = 0; n < t.length; n++) {
+		var u = t[n][0](r);
+		if (u) return [u, t[n][1]];
+	}
+	return [null, void 0];
 };
-var g = function(r2) {
-  return { h: u(r2.h), s: e(r2.s, 0, 100), l: e(r2.l, 0, 100), a: e(r2.a) };
+var w = function(r) {
+	return "string" == typeof r ? j$1(r.trim(), $$1.string) : "object" == typeof r && null !== r ? j$1(r, $$1.object) : [null, void 0];
 };
-var d = function(r2) {
-  return { h: n(r2.h), s: n(r2.s), l: n(r2.l), a: n(r2.a, 3) };
+var k = function(r, t) {
+	var n = y(r);
+	return {
+		h: n.h,
+		s: u(n.s + 100 * t, 0, 100),
+		l: n.l,
+		a: n.a
+	};
 };
-var f = function(r2) {
-  return b((n2 = (t3 = r2).s, { h: t3.h, s: (n2 *= ((e2 = t3.l) < 50 ? e2 : 100 - e2) / 100) > 0 ? 2 * n2 / (e2 + n2) * 100 : 0, v: e2 + n2, a: t3.a }));
-  var t3, n2, e2;
+var E$1 = function(r) {
+	return (299 * r.r + 587 * r.g + 114 * r.b) / 1e3 / 255;
 };
-var c = function(r2) {
-  return { h: (t3 = h(r2)).h, s: (u2 = (200 - (n2 = t3.s)) * (e2 = t3.v) / 100) > 0 && u2 < 200 ? n2 * e2 / 100 / (u2 <= 100 ? u2 : 200 - u2) * 100 : 0, l: u2 / 2, a: t3.a };
-  var t3, n2, e2, u2;
+var R$1 = function(r, t) {
+	var n = y(r);
+	return {
+		h: n.h,
+		s: n.s,
+		l: u(n.l + 100 * t, 0, 100),
+		a: n.a
+	};
 };
-var l = /^hsla?\(\s*([+-]?\d*\.?\d+)(deg|rad|grad|turn)?\s*,\s*([+-]?\d*\.?\d+)%\s*,\s*([+-]?\d*\.?\d+)%\s*(?:,\s*([+-]?\d*\.?\d+)(%)?\s*)?\)$/i;
-var p = /^hsla?\(\s*([+-]?\d*\.?\d+)(deg|rad|grad|turn)?\s+([+-]?\d*\.?\d+)%\s+([+-]?\d*\.?\d+)%\s*(?:\/\s*([+-]?\d*\.?\d+)(%)?\s*)?\)$/i;
-var v = /^rgba?\(\s*([+-]?\d*\.?\d+)(%)?\s*,\s*([+-]?\d*\.?\d+)(%)?\s*,\s*([+-]?\d*\.?\d+)(%)?\s*(?:,\s*([+-]?\d*\.?\d+)(%)?\s*)?\)$/i;
-var m = /^rgba?\(\s*([+-]?\d*\.?\d+)(%)?\s+([+-]?\d*\.?\d+)(%)?\s+([+-]?\d*\.?\d+)(%)?\s*(?:\/\s*([+-]?\d*\.?\d+)(%)?\s*)?\)$/i;
-var y = { string: [[function(r2) {
-  var t3 = i.exec(r2);
-  return t3 ? (r2 = t3[1]).length <= 4 ? { r: parseInt(r2[0] + r2[0], 16), g: parseInt(r2[1] + r2[1], 16), b: parseInt(r2[2] + r2[2], 16), a: 4 === r2.length ? n(parseInt(r2[3] + r2[3], 16) / 255, 2) : 1 } : 6 === r2.length || 8 === r2.length ? { r: parseInt(r2.substr(0, 2), 16), g: parseInt(r2.substr(2, 2), 16), b: parseInt(r2.substr(4, 2), 16), a: 8 === r2.length ? n(parseInt(r2.substr(6, 2), 16) / 255, 2) : 1 } : null : null;
-}, "hex"], [function(r2) {
-  var t3 = v.exec(r2) || m.exec(r2);
-  return t3 ? t3[2] !== t3[4] || t3[4] !== t3[6] ? null : a({ r: Number(t3[1]) / (t3[2] ? 100 / 255 : 1), g: Number(t3[3]) / (t3[4] ? 100 / 255 : 1), b: Number(t3[5]) / (t3[6] ? 100 / 255 : 1), a: void 0 === t3[7] ? 1 : Number(t3[7]) / (t3[8] ? 100 : 1) }) : null;
-}, "rgb"], [function(t3) {
-  var n2 = l.exec(t3) || p.exec(t3);
-  if (!n2) return null;
-  var e2, u2, a2 = g({ h: (e2 = n2[1], u2 = n2[2], void 0 === u2 && (u2 = "deg"), Number(e2) * (r[u2] || 1)), s: Number(n2[3]), l: Number(n2[4]), a: void 0 === n2[5] ? 1 : Number(n2[5]) / (n2[6] ? 100 : 1) });
-  return f(a2);
-}, "hsl"]], object: [[function(r2) {
-  var n2 = r2.r, e2 = r2.g, u2 = r2.b, o2 = r2.a, i2 = void 0 === o2 ? 1 : o2;
-  return t(n2) && t(e2) && t(u2) ? a({ r: Number(n2), g: Number(e2), b: Number(u2), a: Number(i2) }) : null;
-}, "rgb"], [function(r2) {
-  var n2 = r2.h, e2 = r2.s, u2 = r2.l, a2 = r2.a, o2 = void 0 === a2 ? 1 : a2;
-  if (!t(n2) || !t(e2) || !t(u2)) return null;
-  var i2 = g({ h: Number(n2), s: Number(e2), l: Number(u2), a: Number(o2) });
-  return f(i2);
-}, "hsl"], [function(r2) {
-  var n2 = r2.h, a2 = r2.s, o2 = r2.v, i2 = r2.a, s2 = void 0 === i2 ? 1 : i2;
-  if (!t(n2) || !t(a2) || !t(o2)) return null;
-  var h2 = (function(r3) {
-    return { h: u(r3.h), s: e(r3.s, 0, 100), v: e(r3.v, 0, 100), a: e(r3.a) };
-  })({ h: Number(n2), s: Number(a2), v: Number(o2), a: Number(s2) });
-  return b(h2);
-}, "hsv"]] };
-var N = function(r2, t3) {
-  for (var n2 = 0; n2 < t3.length; n2++) {
-    var e2 = t3[n2][0](r2);
-    if (e2) return [e2, t3[n2][1]];
-  }
-  return [null, void 0];
-};
-var x = function(r2) {
-  return "string" == typeof r2 ? N(r2.trim(), y.string) : "object" == typeof r2 && null !== r2 ? N(r2, y.object) : [null, void 0];
-};
-var M = function(r2, t3) {
-  var n2 = c(r2);
-  return { h: n2.h, s: e(n2.s + 100 * t3, 0, 100), l: n2.l, a: n2.a };
-};
-var H = function(r2) {
-  return (299 * r2.r + 587 * r2.g + 114 * r2.b) / 1e3 / 255;
-};
-var $ = function(r2, t3) {
-  var n2 = c(r2);
-  return { h: n2.h, s: n2.s, l: e(n2.l + 100 * t3, 0, 100), a: n2.a };
-};
-var j = (function() {
-  function r2(r3) {
-    this.parsed = x(r3)[0], this.rgba = this.parsed || { r: 0, g: 0, b: 0, a: 1 };
-  }
-  return r2.prototype.isValid = function() {
-    return null !== this.parsed;
-  }, r2.prototype.brightness = function() {
-    return n(H(this.rgba), 2);
-  }, r2.prototype.isDark = function() {
-    return H(this.rgba) < 0.5;
-  }, r2.prototype.isLight = function() {
-    return H(this.rgba) >= 0.5;
-  }, r2.prototype.toHex = function() {
-    return r3 = o(this.rgba), t3 = r3.r, e2 = r3.g, u2 = r3.b, i2 = (a2 = r3.a) < 1 ? s(n(255 * a2)) : "", "#" + s(t3) + s(e2) + s(u2) + i2;
-    var r3, t3, e2, u2, a2, i2;
-  }, r2.prototype.toRgb = function() {
-    return o(this.rgba);
-  }, r2.prototype.toRgbString = function() {
-    return r3 = o(this.rgba), t3 = r3.r, n2 = r3.g, e2 = r3.b, (u2 = r3.a) < 1 ? "rgba(" + t3 + ", " + n2 + ", " + e2 + ", " + u2 + ")" : "rgb(" + t3 + ", " + n2 + ", " + e2 + ")";
-    var r3, t3, n2, e2, u2;
-  }, r2.prototype.toHsl = function() {
-    return d(c(this.rgba));
-  }, r2.prototype.toHslString = function() {
-    return r3 = d(c(this.rgba)), t3 = r3.h, n2 = r3.s, e2 = r3.l, (u2 = r3.a) < 1 ? "hsla(" + t3 + ", " + n2 + "%, " + e2 + "%, " + u2 + ")" : "hsl(" + t3 + ", " + n2 + "%, " + e2 + "%)";
-    var r3, t3, n2, e2, u2;
-  }, r2.prototype.toHsv = function() {
-    return r3 = h(this.rgba), { h: n(r3.h), s: n(r3.s), v: n(r3.v), a: n(r3.a, 3) };
-    var r3;
-  }, r2.prototype.invert = function() {
-    return w({ r: 255 - (r3 = this.rgba).r, g: 255 - r3.g, b: 255 - r3.b, a: r3.a });
-    var r3;
-  }, r2.prototype.saturate = function(r3) {
-    return void 0 === r3 && (r3 = 0.1), w(M(this.rgba, r3));
-  }, r2.prototype.desaturate = function(r3) {
-    return void 0 === r3 && (r3 = 0.1), w(M(this.rgba, -r3));
-  }, r2.prototype.grayscale = function() {
-    return w(M(this.rgba, -1));
-  }, r2.prototype.lighten = function(r3) {
-    return void 0 === r3 && (r3 = 0.1), w($(this.rgba, r3));
-  }, r2.prototype.darken = function(r3) {
-    return void 0 === r3 && (r3 = 0.1), w($(this.rgba, -r3));
-  }, r2.prototype.rotate = function(r3) {
-    return void 0 === r3 && (r3 = 15), this.hue(this.hue() + r3);
-  }, r2.prototype.alpha = function(r3) {
-    return "number" == typeof r3 ? w({ r: (t3 = this.rgba).r, g: t3.g, b: t3.b, a: r3 }) : n(this.rgba.a, 3);
-    var t3;
-  }, r2.prototype.hue = function(r3) {
-    var t3 = c(this.rgba);
-    return "number" == typeof r3 ? w({ h: r3, s: t3.s, l: t3.l, a: t3.a }) : n(t3.h);
-  }, r2.prototype.isEqual = function(r3) {
-    return this.toHex() === w(r3).toHex();
-  }, r2;
-})();
-var w = function(r2) {
-  return r2 instanceof j ? r2 : new j(r2);
+var q$1 = function() {
+	function r(r) {
+		this.parsed = w(r)[0], this.rgba = this.parsed || {
+			r: 0,
+			g: 0,
+			b: 0,
+			a: 1
+		};
+	}
+	return r.prototype.isValid = function() {
+		return null !== this.parsed;
+	}, r.prototype.brightness = function() {
+		return n(E$1(this.rgba), 2);
+	}, r.prototype.isDark = function() {
+		return E$1(this.rgba) < .5;
+	}, r.prototype.isLight = function() {
+		return E$1(this.rgba) >= .5;
+	}, r.prototype.toHex = function() {
+		return r = i(this.rgba), t = r.r, u = r.g, e = r.b, a = (o = r.a) < 1 ? g(n(255 * o)) : "", "#" + g(t) + g(u) + g(e) + a;
+		var r, t, u, e, o, a;
+	}, r.prototype.toRgb = function() {
+		return i(this.rgba);
+	}, r.prototype.toRgbString = function() {
+		return r = i(this.rgba), t = r.r, n = r.g, u = r.b, (e = r.a) < 1 ? "rgba(" + t + ", " + n + ", " + u + ", " + e + ")" : "rgb(" + t + ", " + n + ", " + u + ")";
+		var r, t, n, u, e;
+	}, r.prototype.toHsl = function() {
+		return p(y(this.rgba));
+	}, r.prototype.toHslString = function() {
+		return r = p(y(this.rgba)), t = r.h, n = r.s, u = r.l, (e = r.a) < 1 ? "hsla(" + t + ", " + n + "%, " + u + "%, " + e + ")" : "hsl(" + t + ", " + n + "%, " + u + "%)";
+		var r, t, n, u, e;
+	}, r.prototype.toHsv = function() {
+		return r = c(this.rgba), {
+			h: o(r.h),
+			s: n(r.s),
+			v: n(r.v),
+			a: n(r.a, 3)
+		};
+		var r;
+	}, r.prototype.invert = function() {
+		return A({
+			r: 255 - (r = this.rgba).r,
+			g: 255 - r.g,
+			b: 255 - r.b,
+			a: r.a
+		});
+		var r;
+	}, r.prototype.saturate = function(r) {
+		return void 0 === r && (r = .1), A(k(this.rgba, r));
+	}, r.prototype.desaturate = function(r) {
+		return void 0 === r && (r = .1), A(k(this.rgba, -r));
+	}, r.prototype.grayscale = function() {
+		return A(k(this.rgba, -1));
+	}, r.prototype.lighten = function(r) {
+		return void 0 === r && (r = .1), A(R$1(this.rgba, r));
+	}, r.prototype.darken = function(r) {
+		return void 0 === r && (r = .1), A(R$1(this.rgba, -r));
+	}, r.prototype.rotate = function(r) {
+		return void 0 === r && (r = 15), this.hue(y(this.rgba).h + r);
+	}, r.prototype.alpha = function(r) {
+		return "number" == typeof r ? A({
+			r: (t = this.rgba).r,
+			g: t.g,
+			b: t.b,
+			a: r
+		}) : n(this.rgba.a, 3);
+		var t;
+	}, r.prototype.hue = function(r) {
+		var t = y(this.rgba);
+		return "number" == typeof r ? A({
+			h: r,
+			s: t.s,
+			l: t.l,
+			a: t.a
+		}) : o(t.h);
+	}, r.prototype.isEqual = function(r) {
+		return this.toHex() === A(r).toHex();
+	}, r;
+}();
+var A = function(r) {
+	return r instanceof q$1 ? r : new q$1(r);
 };
 
-// packages/block-library/node_modules/@arraypress/waveform-player/dist/waveform-player.esm.js
-function L(t3) {
-  let e2 = {};
-  if (t3.dataset.url && (e2.url = t3.dataset.url), t3.dataset.height && (e2.height = parseInt(t3.dataset.height)), t3.dataset.samples && (e2.samples = parseInt(t3.dataset.samples)), t3.dataset.preload && (e2.preload = t3.dataset.preload), t3.dataset.waveformStyle && (e2.waveformStyle = t3.dataset.waveformStyle), t3.dataset.barWidth && (e2.barWidth = parseInt(t3.dataset.barWidth)), t3.dataset.barSpacing && (e2.barSpacing = parseInt(t3.dataset.barSpacing)), t3.dataset.buttonAlign && (e2.buttonAlign = t3.dataset.buttonAlign), t3.dataset.colorPreset && (e2.colorPreset = t3.dataset.colorPreset), t3.dataset.waveformColor && (e2.waveformColor = t3.dataset.waveformColor), t3.dataset.progressColor && (e2.progressColor = t3.dataset.progressColor), t3.dataset.buttonColor && (e2.buttonColor = t3.dataset.buttonColor), t3.dataset.buttonHoverColor && (e2.buttonHoverColor = t3.dataset.buttonHoverColor), t3.dataset.textColor && (e2.textColor = t3.dataset.textColor), t3.dataset.textSecondaryColor && (e2.textSecondaryColor = t3.dataset.textSecondaryColor), t3.dataset.backgroundColor && (e2.backgroundColor = t3.dataset.backgroundColor), t3.dataset.borderColor && (e2.borderColor = t3.dataset.borderColor), t3.dataset.color && (e2.waveformColor = t3.dataset.color), t3.dataset.theme && (e2.colorPreset = t3.dataset.theme), t3.dataset.autoplay && (e2.autoplay = t3.dataset.autoplay === "true"), t3.dataset.showTime && (e2.showTime = t3.dataset.showTime === "true"), t3.dataset.showHoverTime && (e2.showHoverTime = t3.dataset.showHoverTime === "true"), t3.dataset.showBpm && (e2.showBPM = t3.dataset.showBpm === "true"), t3.dataset.singlePlay && (e2.singlePlay = t3.dataset.singlePlay === "true"), t3.dataset.playOnSeek && (e2.playOnSeek = t3.dataset.playOnSeek === "true"), t3.dataset.title && (e2.title = t3.dataset.title), t3.dataset.subtitle && (e2.subtitle = t3.dataset.subtitle), t3.dataset.album && (e2.album = t3.dataset.album), t3.dataset.artwork && (e2.artwork = t3.dataset.artwork), t3.dataset.waveform && (e2.waveform = t3.dataset.waveform), t3.dataset.markers) try {
-    e2.markers = JSON.parse(t3.dataset.markers);
-  } catch (i2) {
-    console.warn("Invalid markers JSON:", i2);
-  }
-  if (t3.dataset.playbackRate && (e2.playbackRate = parseFloat(t3.dataset.playbackRate)), t3.dataset.showPlaybackSpeed !== void 0 && (e2.showPlaybackSpeed = t3.dataset.showPlaybackSpeed === "true"), t3.dataset.playbackRates) try {
-    e2.playbackRates = JSON.parse(t3.dataset.playbackRates);
-  } catch (i2) {
-    console.warn("Invalid playbackRates JSON:", i2);
-  }
-  return t3.dataset.enableMediaSession !== void 0 && (e2.enableMediaSession = t3.dataset.enableMediaSession === "true"), e2;
+// node_modules/.store/@arraypress/waveform-player@1.27.0-5lSg0kJG4ah83J6WIqLUFw/node_modules/@arraypress/waveform-player/dist/waveform-player-no-autoinit.esm.js
+function $() {
+	return typeof window < "u" && typeof document < "u";
 }
-function P(t3) {
-  if (!t3 || isNaN(t3)) return "0:00";
-  let e2 = Math.floor(t3 / 60), i2 = Math.floor(t3 % 60);
-  return `${e2}:${i2.toString().padStart(2, "0")}`;
+function q(e) {
+	let t = -1 / 0;
+	for (let i = 0; i < e.length; i++) e[i] > t && (t = e[i]);
+	return t;
 }
-function A(t3) {
-  let e2 = t3 || Math.random().toString();
-  return btoa(e2.substring(0, 10)).replace(/[^a-zA-Z0-9]/g, "");
+function S(e) {
+	return String(e ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
-function R(t3) {
-  if (!t3) return "Audio";
-  let e2 = t3.split("/");
-  return e2[e2.length - 1].split(".")[0].replace(/[-_]/g, " ").replace(/\b\w/g, (s2) => s2.toUpperCase());
+function U(e) {
+	return S(typeof e == "number" ? `${e}px` : e);
 }
-function C(...t3) {
-  let e2 = {};
-  for (let i2 of t3) for (let a2 in i2) i2[a2] !== null && i2[a2] !== void 0 && (e2[a2] = i2[a2]);
-  return e2;
+function it(e) {
+	if (typeof e != "string" || e === "") return !1;
+	try {
+		let t = new URL(e, "http://localhost/");
+		return t.protocol === "http:" || t.protocol === "https:";
+	} catch {
+		return !1;
+	}
 }
-function B(t3, e2) {
-  let i2;
-  return function(...s2) {
-    let n2 = () => {
-      clearTimeout(i2), t3(...s2);
-    };
-    clearTimeout(i2), i2 = setTimeout(n2, e2);
-  };
+function m(e, t = 0, i = 1) {
+	return Math.max(t, Math.min(e, i));
 }
-function S(t3, e2) {
-  if (t3.length === e2) return t3;
-  if (t3.length === 0 || e2 === 0) return [];
-  let i2 = [];
-  if (e2 > t3.length) {
-    let a2 = (t3.length - 1) / (e2 - 1);
-    for (let s2 = 0; s2 < e2; s2++) {
-      let n2 = s2 * a2, r2 = Math.floor(n2), o2 = Math.ceil(n2), h2 = n2 - r2;
-      if (o2 >= t3.length) i2.push(t3[t3.length - 1]);
-      else if (r2 === o2) i2.push(t3[r2]);
-      else {
-        let l2 = t3[r2] * (1 - h2) + t3[o2] * h2;
-        i2.push(l2);
-      }
-    }
-  } else {
-    let a2 = t3.length / e2;
-    for (let s2 = 0; s2 < e2; s2++) {
-      let n2 = Math.floor(s2 * a2), r2 = Math.floor((s2 + 1) * a2), o2 = 0, h2 = 0;
-      for (let l2 = n2; l2 <= r2 && l2 < t3.length; l2++) t3[l2] > o2 && (o2 = t3[l2]), h2++;
-      if (h2 === 0) {
-        let l2 = Math.min(Math.round(s2 * a2), t3.length - 1);
-        o2 = t3[l2];
-      }
-      i2.push(o2);
-    }
-  }
-  return i2;
+function _(e, t = null, i = {}) {
+	let { min: s = -1 / 0, max: r = 1 / 0, integer: a = !1 } = i, o = typeof e == "number" ? e : typeof e == "string" && e.trim() !== "" ? Number(e) : NaN;
+	if (!Number.isFinite(o)) return t;
+	let n = m(o, s, r);
+	return a ? Math.round(n) : n;
 }
-function x2(t3, e2, i2, a2, s2) {
-  let n2 = window.devicePixelRatio || 1, r2 = s2.barWidth * n2, o2 = s2.barSpacing * n2, h2 = Math.floor(e2.width / (r2 + o2)), l2 = S(i2, h2), d2 = e2.height, p2 = a2 * e2.width;
-  t3.clearRect(0, 0, e2.width, e2.height);
-  for (let y2 = 0; y2 < l2.length; y2++) {
-    let f2 = y2 * (r2 + o2);
-    if (f2 + r2 > e2.width) break;
-    let c2 = l2[y2] * d2 * 0.9, m2 = d2 - c2;
-    t3.fillStyle = s2.color, t3.fillRect(f2, m2, r2, c2);
-  }
-  t3.save(), t3.beginPath(), t3.rect(0, 0, p2, d2), t3.clip();
-  for (let y2 = 0; y2 < l2.length; y2++) {
-    let f2 = y2 * (r2 + o2);
-    if (f2 > p2) break;
-    let c2 = l2[y2] * d2 * 0.9, m2 = d2 - c2;
-    t3.fillStyle = s2.progressColor, t3.fillRect(f2, m2, r2, c2);
-  }
-  t3.restore();
+function H(e, t = null) {
+	if (Array.isArray(e)) return e;
+	if (typeof e == "string" && e.trim().startsWith("[")) try {
+		let i = JSON.parse(e);
+		if (Array.isArray(i)) return i;
+	} catch {}
+	return t;
 }
-function q(t3, e2, i2, a2, s2) {
-  let n2 = window.devicePixelRatio || 1, r2 = s2.barWidth * n2, o2 = s2.barSpacing * n2, h2 = Math.floor(e2.width / (r2 + o2)), l2 = S(i2, h2), d2 = e2.height, p2 = d2 / 2, y2 = a2 * e2.width;
-  t3.clearRect(0, 0, e2.width, e2.height);
-  for (let f2 = 0; f2 < l2.length; f2++) {
-    let c2 = f2 * (r2 + o2);
-    if (c2 + r2 > e2.width) break;
-    let m2 = l2[f2] * d2 * 0.45;
-    t3.fillStyle = s2.color, t3.fillRect(c2, p2 - m2, r2, m2), t3.fillRect(c2, p2, r2, m2);
-  }
-  t3.save(), t3.beginPath(), t3.rect(0, 0, y2, d2), t3.clip();
-  for (let f2 = 0; f2 < l2.length; f2++) {
-    let c2 = f2 * (r2 + o2);
-    if (c2 > y2) break;
-    let m2 = l2[f2] * d2 * 0.45;
-    t3.fillStyle = s2.progressColor, t3.fillRect(c2, p2 - m2, r2, m2), t3.fillRect(c2, p2, r2, m2);
-  }
-  t3.restore();
+function D(e, t = {}) {
+	let { min: i = -1 / 0, max: s = 1 / 0, fallback: r = null } = t, a = H(e);
+	if (!a && typeof e == "string" && e.trim() !== "" && (a = e.split(/[,\s]+/)), !a) return r;
+	let o = a.map((n) => _(n)).filter((n) => n !== null && n >= i && n <= s);
+	return o.length ? o : r;
 }
-function $2(t3, e2, i2, a2, s2) {
-  let n2 = e2.width, r2 = e2.height, o2 = r2 / 2, h2 = r2 * 0.35;
-  t3.clearRect(0, 0, n2, r2);
-  let l2 = (d2, p2, y2 = 1, f2 = false) => {
-    f2 && (t3.shadowBlur = 12, t3.shadowColor = d2), t3.strokeStyle = d2, t3.lineWidth = p2, t3.lineCap = "round", t3.lineJoin = "round", t3.beginPath(), t3.moveTo(0, o2);
-    let c2 = [], m2 = Math.floor(i2.length * y2);
-    for (let u2 = 0; u2 < m2; u2++) {
-      let v2 = u2 / (i2.length - 1) * n2, k = i2[u2], b2 = Math.sin(u2 * 0.1) * k, w2 = o2 + b2 * h2;
-      c2.push({ x: v2, y: w2 });
-    }
-    for (let u2 = 0; u2 < c2.length - 1; u2++) {
-      let v2 = c2[u2].x + (c2[u2 + 1].x - c2[u2].x) * 0.5, k = c2[u2].y, b2 = c2[u2 + 1].x - (c2[u2 + 1].x - c2[u2].x) * 0.5, w2 = c2[u2 + 1].y;
-      t3.bezierCurveTo(v2, k, b2, w2, c2[u2 + 1].x, c2[u2 + 1].y);
-    }
-    t3.stroke(), f2 && (t3.shadowBlur = 0);
-  };
-  t3.strokeStyle = "rgba(255, 255, 255, 0.03)", t3.lineWidth = 0.5, t3.beginPath(), t3.moveTo(0, o2), t3.lineTo(n2, o2), t3.stroke();
-  for (let d2 = 0; d2 <= 10; d2++) {
-    let p2 = n2 / 10 * d2;
-    t3.beginPath(), t3.moveTo(p2, 0), t3.lineTo(p2, r2), t3.stroke();
-  }
-  l2(s2.color, 2, 1, false), a2 > 0 && l2(s2.progressColor, 3, a2, true);
+function st(e, t, i = null) {
+	return t.includes(e) ? e : i;
 }
-function U(t3, e2, i2, a2, s2) {
-  let n2 = window.devicePixelRatio || 1, r2 = (s2.barWidth || 3) * n2, o2 = (s2.barSpacing || 1) * n2, h2 = Math.floor(e2.width / (r2 + o2)), l2 = S(i2, h2), d2 = e2.height, p2 = 4 * n2, y2 = 2 * n2, f2 = a2 * e2.width, c2 = d2 / 2;
-  t3.clearRect(0, 0, e2.width, e2.height);
-  for (let m2 = 0; m2 < l2.length; m2++) {
-    let u2 = m2 * (r2 + o2);
-    if (u2 + r2 > e2.width) break;
-    let v2 = l2[m2] * d2 * 0.9, k = Math.floor(v2 / (p2 + y2));
-    t3.fillStyle = u2 < f2 ? s2.progressColor : s2.color;
-    for (let b2 = 0; b2 < k; b2++) {
-      let w2 = b2 * (p2 + y2);
-      t3.fillRect(u2, c2 - w2 - p2, r2, p2), b2 > 0 && t3.fillRect(u2, c2 + w2, r2, p2);
-    }
-  }
+function rt(e) {
+	if (typeof e == "string") {
+		let t = e.trim().toLowerCase();
+		return t !== "" && t !== "false" && t !== "0";
+	}
+	return !!e;
 }
-function F(t3, e2, i2, a2, s2) {
-  let n2 = window.devicePixelRatio || 1, r2 = (s2.barWidth || 2) * n2, o2 = (s2.barSpacing || 3) * n2, h2 = Math.floor(e2.width / (r2 + o2)), l2 = S(i2, h2), d2 = e2.height, p2 = Math.max(1.5 * n2, r2 / 2), y2 = a2 * e2.width, f2 = d2 / 2;
-  t3.clearRect(0, 0, e2.width, e2.height);
-  for (let c2 = 0; c2 < l2.length; c2++) {
-    let m2 = c2 * (r2 + o2) + r2 / 2;
-    if (m2 > e2.width) break;
-    let u2 = l2[c2] * d2 * 0.9;
-    t3.fillStyle = m2 < y2 ? s2.progressColor : s2.color, t3.beginPath(), t3.arc(m2, f2 - u2 / 2, p2, 0, Math.PI * 2), t3.fill(), t3.beginPath(), t3.arc(m2, f2 + u2 / 2, p2, 0, Math.PI * 2), t3.fill();
-  }
+function kt(e) {
+	return e === void 0 ? void 0 : e === "true";
 }
-function N2(t3, e2, i2, a2, s2) {
-  let n2 = e2.width, r2 = e2.height, o2 = r2 / 2, h2 = 4, l2 = h2 / 2;
-  if (t3.clearRect(0, 0, n2, r2), t3.fillStyle = s2.color || "rgba(255, 255, 255, 0.2)", t3.beginPath(), t3.moveTo(l2, o2 - h2 / 2), t3.lineTo(n2 - l2, o2 - h2 / 2), t3.arc(n2 - l2, o2, h2 / 2, -Math.PI / 2, Math.PI / 2), t3.lineTo(l2, o2 + h2 / 2), t3.arc(l2, o2, h2 / 2, Math.PI / 2, -Math.PI / 2), t3.closePath(), t3.fill(), a2 > 0) {
-    let d2 = Math.max(l2 * 2, a2 * n2);
-    t3.shadowBlur = 8, t3.shadowColor = s2.progressColor, t3.fillStyle = s2.progressColor || "rgba(255, 255, 255, 0.9)", t3.beginPath(), t3.moveTo(l2, o2 - h2 / 2), t3.lineTo(d2 - l2, o2 - h2 / 2), t3.arc(d2 - l2, o2, h2 / 2, -Math.PI / 2, Math.PI / 2), t3.lineTo(l2, o2 + h2 / 2), t3.arc(l2, o2, h2 / 2, Math.PI / 2, -Math.PI / 2), t3.closePath(), t3.fill(), t3.shadowBlur = 0;
-    let p2 = 8, y2 = d2;
-    t3.shadowBlur = 4, t3.shadowColor = "rgba(0, 0, 0, 0.3)", t3.shadowOffsetY = 2, t3.fillStyle = "#ffffff", t3.beginPath(), t3.arc(y2, o2, p2, 0, Math.PI * 2), t3.fill(), t3.shadowBlur = 0, t3.shadowOffsetY = 0, t3.fillStyle = s2.progressColor || "rgba(255, 255, 255, 0.9)", t3.beginPath(), t3.arc(y2, o2, p2 * 0.4, 0, Math.PI * 2), t3.fill();
-  }
+function et(e) {
+	if (typeof e == "string" && e.trim().startsWith("[")) try {
+		return JSON.parse(e);
+	} catch {}
+	return e;
 }
-var Y = { bars: x2, mirror: q, line: $2, blocks: U, dots: F, seekbar: N2 };
-function W(t3, e2, i2, a2, s2) {
-  (Y[s2.waveformStyle] || x2)(t3, e2, i2, a2, s2);
+function I(e) {
+	let t = {}, i = (o, n = o) => {
+		let l = kt(e.dataset[n]);
+		l !== void 0 && (t[o] = l);
+	}, s = (o, n = o, l = !1) => {
+		let h = e.dataset[n];
+		h && (t[o] = l ? parseFloat(h) : parseInt(h, 10));
+	}, r = (o, n = o) => {
+		let l = e.dataset[n];
+		l && (t[o] = /^\d+(\.\d+)?$/.test(l.trim()) ? parseFloat(l) : l);
+	}, a = (o, n = o) => {
+		let l = e.dataset[n];
+		if (!l) return;
+		let h = H(l);
+		h ? t[o] = h : console.warn(`[WaveformPlayer] Invalid ${n} attribute, expected a JSON array:`, l);
+	};
+	if (e.dataset.src && (t.url = e.dataset.src), e.dataset.url && (t.url = e.dataset.url), s("height"), s("samples"), e.dataset.preload && (t.preload = e.dataset.preload), e.dataset.crossOrigin && (t.crossOrigin = e.dataset.crossOrigin), e.dataset.audioMode && (t.audioMode = e.dataset.audioMode), e.dataset.style && (t.waveformStyle = e.dataset.style), e.dataset.waveformStyle && (t.waveformStyle = e.dataset.waveformStyle), e.dataset.waveformGradient && (t.waveformGradient = e.dataset.waveformGradient), s("barWidth"), s("barSpacing"), s("barRadius"), e.dataset.buttonAlign && (t.buttonAlign = e.dataset.buttonAlign), e.dataset.layout && (t.layout = e.dataset.layout), e.dataset.buttonStyle && (t.buttonStyle = e.dataset.buttonStyle), r("buttonSize"), r("buttonRadius"), e.dataset.colorPreset && (t.colorPreset = e.dataset.colorPreset), e.dataset.waveformColor && (t.waveformColor = et(e.dataset.waveformColor)), e.dataset.progressColor && (t.progressColor = et(e.dataset.progressColor)), e.dataset.color && (t.waveformColor = e.dataset.color), e.dataset.theme && (t.colorPreset = e.dataset.theme), i("autoplay"), i("showControls"), i("showInfo"), i("showTime"), i("showHoverTime"), i("seekHandle"), i("showBPM", "showBpm"), s("bpm"), i("singlePlay"), i("playOnSeek"), e.dataset.title && (t.title = e.dataset.title), e.dataset.artist && (t.artist = e.dataset.artist), e.dataset.album && (t.album = e.dataset.album), e.dataset.artwork && (t.artwork = e.dataset.artwork), e.dataset.artworkPosition && (t.artworkPosition = e.dataset.artworkPosition), e.dataset.waveform && (t.waveform = e.dataset.waveform), a("markers"), s("playbackRate", "playbackRate", !0), i("showPlaybackSpeed"), e.dataset.playbackRates) {
+		let o = D(e.dataset.playbackRates);
+		o ? t.playbackRates = o : console.warn("[WaveformPlayer] Invalid playbackRates attribute:", e.dataset.playbackRates);
+	}
+	return i("enableMediaSession"), i("showMarkers"), i("accessibleSeek"), e.dataset.seekLabel && (t.seekLabel = e.dataset.seekLabel), e.dataset.seekValueText && (t.seekValueText = e.dataset.seekValueText), e.dataset.errorText && (t.errorText = e.dataset.errorText), e.dataset.playPauseLabel && (t.playPauseLabel = e.dataset.playPauseLabel), e.dataset.speedLabel && (t.speedLabel = e.dataset.speedLabel), e.dataset.artworkAlt && (t.artworkAlt = e.dataset.artworkAlt), e.dataset.unknownTrackText && (t.unknownTrackText = e.dataset.unknownTrackText), e.dataset.playIcon && (t.playIcon = e.dataset.playIcon), e.dataset.pauseIcon && (t.pauseIcon = e.dataset.pauseIcon), t;
 }
-function I(t3) {
-  try {
-    let e2 = t3.getChannelData(0), i2 = t3.sampleRate, a2 = j2(e2, i2);
-    if (a2.length < 2) return 120;
-    let s2 = [];
-    for (let h2 = 1; h2 < a2.length; h2++) s2.push((a2[h2] - a2[h2 - 1]) / i2);
-    let n2 = {};
-    s2.forEach((h2) => {
-      let l2 = 60 / h2, d2 = Math.round(l2 / 3) * 3;
-      d2 > 60 && d2 < 200 && (n2[d2] = (n2[d2] || 0) + 1);
-    });
-    let r2 = 0, o2 = 120;
-    for (let [h2, l2] of Object.entries(n2)) l2 > r2 && (r2 = l2, o2 = parseInt(h2));
-    return o2 < 70 && n2[o2 * 2] ? o2 *= 2 : o2 > 160 && n2[Math.round(o2 / 2)] && (o2 = Math.round(o2 / 2)), o2 - 1;
-  } catch (e2) {
-    return console.warn("BPM detection failed:", e2), null;
-  }
+function at(e, ...t) {
+	let i = 0;
+	return e.replace(/%(?:(\d+)\$)?s/g, (s, r) => {
+		return t[r ? Number(r) - 1 : i++] ?? s;
+	});
 }
-function j2(t3, e2) {
-  let s2 = [], n2 = 0;
-  for (let r2 = 0; r2 < t3.length - 2048; r2 += 1024) {
-    let o2 = 0;
-    for (let d2 = r2; d2 < r2 + 2048; d2++) o2 += t3[d2] * t3[d2];
-    o2 = o2 / 2048;
-    let h2 = o2 - n2, l2 = n2 * 1.8 + 0.01;
-    if (h2 > l2 && o2 > 0.01) {
-      let d2 = s2[s2.length - 1] || 0, p2 = e2 * 0.15;
-      r2 - d2 > p2 && s2.push(r2);
-    }
-    n2 = o2 * 0.8 + n2 * 0.2;
-  }
-  return s2;
+function E(e) {
+	let t = Number(e);
+	if (!t || !Number.isFinite(t) || t < 0) return "0:00";
+	let i = Math.floor(t / 3600), s = Math.floor(t % 3600 / 60), r = Math.floor(t % 60);
+	return i > 0 ? `${i}:${s.toString().padStart(2, "0")}:${r.toString().padStart(2, "0")}` : `${s}:${r.toString().padStart(2, "0")}`;
 }
-function V(t3, e2 = 200) {
-  let i2 = t3.length / e2, a2 = ~~(i2 / 10) || 1, s2 = t3.numberOfChannels, n2 = [];
-  for (let o2 = 0; o2 < s2; o2++) {
-    let h2 = t3.getChannelData(o2);
-    for (let l2 = 0; l2 < e2; l2++) {
-      let d2 = ~~(l2 * i2), p2 = ~~(d2 + i2), y2 = 0, f2 = 0;
-      for (let m2 = d2; m2 < p2; m2 += a2) {
-        let u2 = h2[m2];
-        u2 > f2 && (f2 = u2), u2 < y2 && (y2 = u2);
-      }
-      let c2 = Math.max(Math.abs(f2), Math.abs(y2));
-      (o2 === 0 || c2 > n2[l2]) && (n2[l2] = c2);
-    }
-  }
-  let r2 = Math.max(...n2);
-  return r2 > 0 ? n2.map((o2) => o2 / r2) : n2;
+var vt = 0;
+function ot(e) {
+	let t = e || "audio", i = 5381;
+	for (let s = 0; s < t.length; s++) i = (i << 5) + i + t.charCodeAt(s) | 0;
+	return `wp_${(i >>> 0).toString(36)}_${(vt++).toString(36)}`;
 }
-async function M2(t3, e2 = 200, i2 = false) {
-  try {
-    let a2 = new (window.AudioContext || window.webkitAudioContext)(), n2 = await (await fetch(t3)).arrayBuffer(), r2 = await a2.decodeAudioData(n2), o2 = V(r2, e2);
-    o2 = J(o2);
-    let h2 = null;
-    return i2 && (h2 = await I(r2)), a2.close(), { peaks: o2, bpm: h2 };
-  } catch (a2) {
-    throw console.error("Failed to generate waveform:", a2), a2;
-  }
+function O(e) {
+	if (!e) return "Audio";
+	let t = e.split("/");
+	return t[t.length - 1].split(".")[0].replace(/[-_]/g, " ").replace(/\b\w/g, (r) => r.toUpperCase());
 }
-function D(t3 = 200) {
-  let e2 = [];
-  for (let i2 = 0; i2 < t3; i2++) {
-    let a2 = Math.random() * 0.5 + 0.3, s2 = Math.sin(i2 / t3 * Math.PI * 4) * 0.2;
-    e2.push(Math.max(0.1, Math.min(1, a2 + s2)));
-  }
-  return e2;
+function j(e) {
+	if (typeof e != "string") return null;
+	let t = e.match(/rgba?\(\s*([\d.]+)\s*[,\s]\s*([\d.]+)\s*[,\s]\s*([\d.]+)\s*(?:[,/]\s*([\d.]+)(%?))?/i);
+	if (!t) return null;
+	let i = Number(t[1]), s = Number(t[2]), r = Number(t[3]);
+	if (!Number.isFinite(i) || !Number.isFinite(s) || !Number.isFinite(r)) return null;
+	let a = t[4] === void 0 ? 1 : Number(t[4]);
+	return Number.isFinite(a) ? (t[5] === "%" && (a /= 100), {
+		r: i,
+		g: s,
+		b: r,
+		a: m(a, 0, 1)
+	}) : null;
 }
-function J(t3, e2 = 0.95) {
-  let i2 = Math.max(...t3);
-  if (i2 === 0 || i2 > e2) return t3;
-  let a2 = e2 / i2;
-  return t3.map((s2) => s2 * a2);
+function nt(e) {
+	let t = j(e);
+	return !t || t.a <= 0 ? null : (t.r * 299 + t.g * 587 + t.b * 114) / 1e3;
 }
-function G() {
-  let t3 = document.documentElement, e2 = document.body;
-  if (t3.classList.contains("dark") || t3.classList.contains("dark-mode") || t3.classList.contains("theme-dark") || t3.getAttribute("data-theme") === "dark" || t3.getAttribute("data-color-scheme") === "dark" || e2.classList.contains("dark") || e2.classList.contains("dark-mode") || e2.getAttribute("data-theme") === "dark") return "dark";
-  if (t3.classList.contains("light") || t3.classList.contains("light-mode") || t3.classList.contains("theme-light") || t3.getAttribute("data-theme") === "light" || t3.getAttribute("data-color-scheme") === "light" || e2.classList.contains("light") || e2.classList.contains("light-mode") || e2.getAttribute("data-theme") === "light") return "light";
-  try {
-    let a2 = getComputedStyle(document.body).backgroundColor.match(/\d+/g);
-    if (a2 && a2.length >= 3) {
-      let [s2, n2, r2] = a2.map(Number), o2 = (s2 * 299 + n2 * 587 + r2 * 114) / 1e3;
-      if (o2 > 128) return "light";
-      if (o2 < 128) return "dark";
-    }
-  } catch {
-  }
-  if (window.matchMedia) {
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
-    if (window.matchMedia("(prefers-color-scheme: light)").matches) return "light";
-  }
-  return "dark";
+function V(...e) {
+	let t = {};
+	for (let i of e) for (let s in i) i[s] !== null && i[s] !== void 0 && (t[s] = i[s]);
+	return t;
 }
-var E = { dark: { waveformColor: "rgba(255, 255, 255, 0.3)", progressColor: "rgba(255, 255, 255, 0.9)", buttonColor: "rgba(255, 255, 255, 0.9)", buttonHoverColor: "rgba(255, 255, 255, 1)", textColor: "#ffffff", textSecondaryColor: "rgba(255, 255, 255, 0.6)", backgroundColor: "rgba(255, 255, 255, 0.03)", borderColor: "rgba(255, 255, 255, 0.1)" }, light: { waveformColor: "rgba(0, 0, 0, 0.2)", progressColor: "rgba(0, 0, 0, 0.8)", buttonColor: "rgba(0, 0, 0, 0.8)", buttonHoverColor: "rgba(0, 0, 0, 0.9)", textColor: "#333333", textSecondaryColor: "rgba(0, 0, 0, 0.6)", backgroundColor: "rgba(0, 0, 0, 0.02)", borderColor: "rgba(0, 0, 0, 0.1)" } };
-function z(t3) {
-  if (t3 && E[t3]) return E[t3];
-  let e2 = G();
-  return E[e2];
+function lt(e, t) {
+	let i;
+	return function(...r) {
+		let a = () => {
+			clearTimeout(i), e(...r);
+		};
+		clearTimeout(i), i = setTimeout(a, t);
+	};
 }
-var O = { url: "", height: 60, samples: 200, preload: "metadata", playbackRate: 1, showPlaybackSpeed: false, playbackRates: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2], buttonAlign: "auto", waveformStyle: "mirror", barWidth: 2, barSpacing: 0, colorPreset: null, waveformColor: null, progressColor: null, buttonColor: null, buttonHoverColor: null, textColor: null, textSecondaryColor: null, backgroundColor: null, borderColor: null, autoplay: false, showTime: true, showHoverTime: false, showBPM: false, singlePlay: true, playOnSeek: true, enableMediaSession: true, markers: [], showMarkers: true, title: null, subtitle: null, artwork: null, album: "", playIcon: '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M8 5v14l11-7z"/></svg>', pauseIcon: '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>', onLoad: null, onPlay: null, onPause: null, onEnd: null, onError: null, onTimeUpdate: null };
-var H2 = { bars: { barWidth: 3, barSpacing: 1 }, mirror: { barWidth: 2, barSpacing: 0 }, line: { barWidth: 2, barSpacing: 0 }, blocks: { barWidth: 4, barSpacing: 2 }, dots: { barWidth: 3, barSpacing: 3 }, seekbar: { barWidth: 1, barSpacing: 0 } };
-var g2 = class t2 {
-  static instances = /* @__PURE__ */ new Map();
-  static currentlyPlaying = null;
-  constructor(e2, i2 = {}) {
-    if (this.container = typeof e2 == "string" ? document.querySelector(e2) : e2, !this.container) throw new Error("WaveformPlayer: Container element not found");
-    let a2 = L(this.container);
-    this.options = C(O, a2, i2);
-    let s2 = z(this.options.colorPreset);
-    for (let [r2, o2] of Object.entries(s2)) (this.options[r2] === null || this.options[r2] === void 0) && (this.options[r2] = o2);
-    let n2 = H2[this.options.waveformStyle];
-    n2 && (a2.barWidth === void 0 && i2.barWidth === void 0 && (this.options.barWidth = n2.barWidth), a2.barSpacing === void 0 && i2.barSpacing === void 0 && (this.options.barSpacing = n2.barSpacing)), this.audio = null, this.canvas = null, this.ctx = null, this.waveformData = [], this.progress = 0, this.isPlaying = false, this.isLoading = false, this.hasError = false, this.updateTimer = null, this.resizeObserver = null, this.id = this.container.id || A(this.options.url), t2.instances.set(this.id, this), this.init(), setTimeout(() => {
-      this.container.dispatchEvent(new CustomEvent("waveformplayer:ready", { bubbles: true, detail: { player: this, url: this.options.url } }));
-    }, 100);
-  }
-  init() {
-    this.createDOM(), this.createAudio(), this.initPlaybackSpeed(), this.initKeyboardControls(), this.bindEvents(), this.setupResizeObserver(), requestAnimationFrame(() => {
-      this.resizeCanvas(), this.options.url && this.load(this.options.url).then(() => {
-        this.options.autoplay && this.play();
-      }).catch((e2) => {
-        console.error("Failed to load audio:", e2);
-      });
-    });
-  }
-  createDOM() {
-    this.container.innerHTML = "", this.container.className = "waveform-player";
-    let e2 = this.options.buttonAlign;
-    e2 === "auto" && (this.options.waveformStyle === "bars" ? e2 = "bottom" : e2 = "center"), this.container.innerHTML = `
-  <div class="waveform-player-inner">
-    <div class="waveform-body">
-      <div class="waveform-track waveform-align-${e2}">
-        <button class="waveform-btn" aria-label="Play/Pause" style="
-            border-color: ${this.options.buttonColor};
-            color: ${this.options.buttonColor};
-        ">
+function B(e, t) {
+	if (e.length === t) return e;
+	if (e.length === 0 || t === 0) return [];
+	let i = [];
+	if (t > e.length) {
+		let s = (e.length - 1) / (t - 1);
+		for (let r = 0; r < t; r++) {
+			let a = r * s, o = Math.floor(a), n = Math.ceil(a), l = a - o;
+			if (n >= e.length) i.push(e[e.length - 1]);
+			else if (o === n) i.push(e[o]);
+			else {
+				let h = e[o] * (1 - l) + e[n] * l;
+				i.push(h);
+			}
+		}
+	} else {
+		let s = e.length / t;
+		for (let r = 0; r < t; r++) {
+			let a = Math.floor(r * s), o = Math.floor((r + 1) * s), n = 0, l = 0;
+			for (let h = a; h <= o && h < e.length; h++) e[h] > n && (n = e[h]), l++;
+			if (l === 0) n = e[Math.min(Math.round(r * s), e.length - 1)];
+			i.push(n);
+		}
+	}
+	return i;
+}
+function P(e, t, i, s) {
+	if (!Array.isArray(t)) return t;
+	if (t.length < 2) return t[0];
+	let r = i.width, a = i.height, o = s && s.waveformGradient, [n, l, h, c] = o === "horizontal" ? [
+		0,
+		0,
+		r,
+		0
+	] : o === "diagonal" ? [
+		0,
+		0,
+		r,
+		a
+	] : [
+		0,
+		0,
+		0,
+		a
+	];
+	try {
+		let d = e.createLinearGradient(n, l, h, c);
+		return t.forEach((w, y) => d.addColorStop(y / (t.length - 1), w)), d;
+	} catch {
+		return t[0];
+	}
+}
+function x(e, t, i, s, r, a) {
+	if ((Array.isArray(a) ? a.some((n) => n > 0) : a > 0) && typeof e.roundRect == "function") {
+		let n = Math.min(s / 2, Math.abs(r) / 2), l = (h) => m(h, 0, n);
+		e.beginPath(), e.roundRect(t, i, s, r, Array.isArray(a) ? a.map(l) : l(a)), e.fill();
+	} else e.fillRect(t, i, s, r);
+}
+function dt(e, t) {
+	return (e.barRadius || 0) * t;
+}
+function St(e, t) {
+	let i = dt(e, t);
+	return [
+		i,
+		i,
+		0,
+		0
+	];
+}
+function ht(e, t, i, s, r) {
+	let a = r / 2;
+	e.beginPath(), e.moveTo(t, s - a), e.lineTo(i - a, s - a), e.arc(i - a, s, a, -Math.PI / 2, Math.PI / 2), e.lineTo(t, s + a), e.arc(t, s, a, Math.PI / 2, -Math.PI / 2), e.closePath();
+}
+function G(e, t, i, s, r) {
+	let a = window.devicePixelRatio || 1, o = r.barWidth * a, n = r.barSpacing * a, h = B(i, Math.floor(t.width / (o + n))), c = t.height, d = s * t.width, w = St(r, a), y = P(e, r.color, t, r), b = P(e, r.progressColor, t, r);
+	e.clearRect(0, 0, t.width, t.height), e.fillStyle = y;
+	for (let f = 0; f < h.length; f++) {
+		let p = f * (o + n);
+		if (p + o > t.width) break;
+		let g = h[f] * c * .9;
+		x(e, p, c - g, o, g, w);
+	}
+	e.save(), e.beginPath(), e.rect(0, 0, d, c), e.clip(), e.fillStyle = b;
+	for (let f = 0; f < h.length; f++) {
+		let p = f * (o + n);
+		if (p > d) break;
+		let g = h[f] * c * .9;
+		x(e, p, c - g, o, g, w);
+	}
+	e.restore();
+}
+function Et(e, t, i, s, r) {
+	let a = window.devicePixelRatio || 1, o = r.barWidth * a, n = r.barSpacing * a, h = B(i, Math.floor(t.width / (o + n))), c = t.height, d = c / 2, w = s * t.width, y = dt(r, a), b = [
+		y,
+		y,
+		0,
+		0
+	], f = [
+		0,
+		0,
+		y,
+		y
+	], p = P(e, r.color, t, r), g = P(e, r.progressColor, t, r);
+	e.clearRect(0, 0, t.width, t.height), e.fillStyle = p;
+	for (let u = 0; u < h.length; u++) {
+		let k = u * (o + n);
+		if (k + o > t.width) break;
+		let v = h[u] * c * .45;
+		x(e, k, d - v, o, v, b), x(e, k, d, o, v, f);
+	}
+	e.save(), e.beginPath(), e.rect(0, 0, w, c), e.clip(), e.fillStyle = g;
+	for (let u = 0; u < h.length; u++) {
+		let k = u * (o + n);
+		if (k > w) break;
+		let v = h[u] * c * .45;
+		x(e, k, d - v, o, v, b), x(e, k, d, o, v, f);
+	}
+	e.restore();
+}
+function Pt(e, t, i, s, r) {
+	let a = t.width, o = t.height, n = o / 2, l = o * .35;
+	e.clearRect(0, 0, a, o);
+	let h = (c, d, w = 1, y = !1) => {
+		let b = P(e, c, t, r), f = Array.isArray(c) ? c[c.length - 1] : c;
+		y && (e.shadowBlur = 12, e.shadowColor = f), e.strokeStyle = b, e.lineWidth = d, e.lineCap = "round", e.lineJoin = "round", e.beginPath(), e.moveTo(0, n);
+		let p = [], g = Math.floor(i.length * w);
+		for (let u = 0; u < g; u++) {
+			let k = u / (i.length - 1) * a, v = i[u], A = Math.sin(u * .1) * v, L = n + A * l;
+			p.push({
+				x: k,
+				y: L
+			});
+		}
+		for (let u = 0; u < p.length - 1; u++) {
+			let k = p[u].x + (p[u + 1].x - p[u].x) * .5, v = p[u].y, A = p[u + 1].x - (p[u + 1].x - p[u].x) * .5, L = p[u + 1].y;
+			e.bezierCurveTo(k, v, A, L, p[u + 1].x, p[u + 1].y);
+		}
+		e.stroke(), y && (e.shadowBlur = 0);
+	};
+	e.strokeStyle = "rgba(255, 255, 255, 0.03)", e.lineWidth = .5, e.beginPath(), e.moveTo(0, n), e.lineTo(a, n), e.stroke();
+	for (let c = 0; c <= 10; c++) {
+		let d = a / 10 * c;
+		e.beginPath(), e.moveTo(d, 0), e.lineTo(d, o), e.stroke();
+	}
+	h(r.color, 2, 1, !1), s > 0 && h(r.progressColor, 3, s, !0);
+}
+function ct(e, t, i, s, r) {
+	let a = window.devicePixelRatio || 1, o = (r.barWidth || 3) * a, n = (r.barSpacing || 1) * a, h = B(i, Math.floor(t.width / (o + n))), c = t.height, d = 4 * a, w = 2 * a, y = s * t.width, b = c / 2, f = P(e, r.color, t, r), p = P(e, r.progressColor, t, r);
+	e.clearRect(0, 0, t.width, t.height);
+	for (let g = 0; g < h.length; g++) {
+		let u = g * (o + n);
+		if (u + o > t.width) break;
+		let k = h[g] * c * .9, v = Math.floor(k / (d + w));
+		e.fillStyle = u < y ? p : f;
+		for (let A = 0; A < v; A++) {
+			let L = A * (d + w);
+			e.fillRect(u, b - L - d, o, d), A > 0 && e.fillRect(u, b + L, o, d);
+		}
+	}
+}
+function ut(e, t, i, s, r) {
+	let a = window.devicePixelRatio || 1, o = (r.barWidth || 2) * a, n = (r.barSpacing || 3) * a, h = B(i, Math.floor(t.width / (o + n))), c = t.height, d = Math.max(1.5 * a, o / 2), w = s * t.width, y = c / 2, b = P(e, r.color, t, r), f = P(e, r.progressColor, t, r);
+	e.clearRect(0, 0, t.width, t.height);
+	for (let p = 0; p < h.length; p++) {
+		let g = p * (o + n) + o / 2;
+		if (g > t.width) break;
+		let u = h[p] * c * .9;
+		e.fillStyle = g < w ? f : b, e.beginPath(), e.arc(g, y - u / 2, d, 0, Math.PI * 2), e.fill(), e.beginPath(), e.arc(g, y + u / 2, d, 0, Math.PI * 2), e.fill();
+	}
+}
+function Tt(e, t, i, s, r) {
+	let a = t.width, o = t.height, n = o / 2, l = 4, h = l / 2, c = !!r.seekActive;
+	if (e.clearRect(0, 0, a, o), e.fillStyle = P(e, r.color, t, r) || "rgba(255, 255, 255, 0.2)", ht(e, h, a, n, l), e.fill(), s > 0) {
+		let d = Math.max(4, s * a);
+		e.save(), e.globalAlpha = r.seekHandle && !c ? .7 : 1, e.fillStyle = P(e, r.progressColor, t, r) || "rgba(255, 255, 255, 0.9)", ht(e, h, d, n, l), e.fill(), e.restore();
+	}
+}
+var At = {
+	bars: G,
+	bar: G,
+	mirror: Et,
+	line: Pt,
+	blocks: ct,
+	block: ct,
+	dots: ut,
+	dot: ut,
+	seekbar: Tt
+};
+function pt(e, t, i, s, r) {
+	(At[r.waveformStyle] || G)(e, t, i, s, r);
+}
+function ft(e) {
+	try {
+		let t = e.getChannelData(0), i = e.sampleRate, s = Mt(t, i);
+		if (s.length < 2) return 120;
+		let r = [];
+		for (let l = 1; l < s.length; l++) r.push((s[l] - s[l - 1]) / i);
+		let a = {};
+		r.forEach((l) => {
+			let h = 60 / l, c = Math.round(h / 3) * 3;
+			c > 60 && c < 200 && (a[c] = (a[c] || 0) + 1);
+		});
+		let o = 0, n = 120;
+		for (let [l, h] of Object.entries(a)) h > o && (o = h, n = parseInt(l));
+		return n < 70 && a[n * 2] ? n *= 2 : n > 160 && a[Math.round(n / 2)] && (n = Math.round(n / 2)), n - 1;
+	} catch (t) {
+		return console.warn("[WaveformPlayer] BPM detection failed:", t), null;
+	}
+}
+function Mt(e, t) {
+	let r = [], a = 0;
+	for (let o = 0; o < e.length - 2048; o += 1024) {
+		let n = 0;
+		for (let c = o; c < o + 2048; c++) n += e[c] * e[c];
+		n = n / 2048;
+		if (n - a > a * 1.8 + .01 && n > .01) {
+			let c = r[r.length - 1] || 0, d = t * .15;
+			o - c > d && r.push(o);
+		}
+		a = n * .8 + a * .2;
+	}
+	return r;
+}
+function Ct(e, t = 1800) {
+	let i = e.length / t, s = e.numberOfChannels, r = [];
+	for (let o = 0; o < s; o++) {
+		let n = e.getChannelData(o);
+		for (let l = 0; l < t; l++) {
+			let h = ~~(l * i), c = ~~(h + i), d = 0, w = 0;
+			for (let b = h; b < c; b++) {
+				let f = n[b];
+				f > w && (w = f), f < d && (d = f);
+			}
+			let y = Math.max(Math.abs(w), Math.abs(d));
+			(o === 0 || y > r[l]) && (r[l] = y);
+		}
+	}
+	let a = q(r);
+	return a > 0 ? r.map((o) => o / a) : r;
+}
+async function K(e, t = 1800, i = !1) {
+	let s;
+	try {
+		s = new (window.AudioContext || window.webkitAudioContext)();
+		let o = await (await fetch(e)).arrayBuffer(), n = await s.decodeAudioData(o), l = Ct(n, t);
+		l = Lt(l);
+		let h = null;
+		return i && (h = ft(n)), {
+			peaks: l,
+			bpm: h
+		};
+	} finally {
+		s && s.close();
+	}
+}
+function mt(e = 1800) {
+	let t = [];
+	for (let i = 0; i < e; i++) {
+		let s = Math.random() * .5 + .3, r = Math.sin(i / e * Math.PI * 4) * .2;
+		t.push(m(s + r, .1, 1));
+	}
+	return t;
+}
+function Lt(e, t = .95) {
+	let i = q(e);
+	if (i === 0 || i > t) return e;
+	let s = t / i;
+	return e.map((r) => r * s);
+}
+var Y = 128;
+function yt(e) {
+	let t = document.documentElement, i = document.body;
+	return t.classList.contains(e) || t.classList.contains(`${e}-mode`) || t.classList.contains(`theme-${e}`) || t.getAttribute("data-theme") === e || t.getAttribute("data-color-scheme") === e || i.classList.contains(e) || i.classList.contains(`${e}-mode`) || i.getAttribute("data-theme") === e;
+}
+function _t(e) {
+	let t = 0, i = 0;
+	for (let s = e; s && s.nodeType === 1 && i < .995; s = s.parentElement) {
+		let r = j(getComputedStyle(s).backgroundColor);
+		if (!r || r.a <= 0) continue;
+		let a = r.a * (1 - i);
+		t += (r.r * 299 + r.g * 587 + r.b * 114) / 1e3 * a, i += a;
+	}
+	return {
+		sum: t,
+		alpha: i
+	};
+}
+function xt() {
+	let e = nt(getComputedStyle(document.body).color);
+	if (e !== null) return e > Y ? "dark" : "light";
+	if (window.matchMedia) {
+		if (window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
+		if (window.matchMedia("(prefers-color-scheme: light)").matches) return "light";
+	}
+	return "dark";
+}
+function R(e) {
+	if (yt("dark")) return "dark";
+	if (yt("light")) return "light";
+	try {
+		let { sum: i, alpha: s } = _t(e && e.nodeType === 1 ? e : document.body), r = xt(), a = i + (r === "dark" ? 0 : 255) * (1 - s);
+		return a > Y ? "light" : a < Y ? "dark" : r;
+	} catch {
+		return "dark";
+	}
+}
+var C = {
+	dark: {
+		waveformColor: "rgba(255, 255, 255, 0.3)",
+		progressColor: "rgba(255, 255, 255, 0.9)"
+	},
+	light: {
+		waveformColor: "rgba(0, 0, 0, 0.2)",
+		progressColor: "rgba(0, 0, 0, 0.8)"
+	}
+};
+function X(e, t) {
+	if (e && C[e]) return C[e];
+	return C[R(t)];
+}
+var W = {
+	url: "",
+	height: 64,
+	samples: 1800,
+	preload: "metadata",
+	crossOrigin: null,
+	audioMode: "self",
+	playbackRate: 1,
+	showPlaybackSpeed: !1,
+	playbackRates: [
+		.5,
+		.75,
+		1,
+		1.25,
+		1.5,
+		1.75,
+		2
+	],
+	buttonAlign: "auto",
+	layout: "default",
+	buttonStyle: "circle",
+	buttonSize: null,
+	buttonRadius: null,
+	waveformStyle: "mirror",
+	barWidth: 2,
+	barSpacing: 0,
+	barRadius: 1,
+	waveformGradient: "vertical",
+	colorPreset: null,
+	waveformColor: null,
+	progressColor: null,
+	autoplay: !1,
+	showControls: !0,
+	showInfo: !0,
+	showTime: !0,
+	showHoverTime: !1,
+	seekHandle: !1,
+	showBPM: !1,
+	bpm: null,
+	singlePlay: !0,
+	playOnSeek: !0,
+	enableMediaSession: !0,
+	markers: [],
+	showMarkers: !0,
+	accessibleSeek: !0,
+	seekLabel: null,
+	seekValueText: null,
+	title: null,
+	artist: null,
+	artwork: null,
+	artworkPosition: "info",
+	album: "",
+	errorText: "Unable to load audio",
+	playPauseLabel: "Play/Pause",
+	speedLabel: "Playback speed",
+	artworkAlt: "Album artwork",
+	unknownTrackText: "Unknown Track",
+	playIcon: "<svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\"><path d=\"M8 5v14l11-7z\"/></svg>",
+	pauseIcon: "<svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\"><path d=\"M6 4h4v16H6zM14 4h4v16h-4z\"/></svg>",
+	onLoad: null,
+	onPlay: null,
+	onPause: null,
+	onEnd: null,
+	onError: null,
+	onTimeUpdate: null,
+	onNextTrack: null,
+	onPreviousTrack: null
+};
+var Q = {
+	bars: {
+		barWidth: 3,
+		barSpacing: 1
+	},
+	mirror: {
+		barWidth: 2,
+		barSpacing: 2
+	},
+	line: {
+		barWidth: 2,
+		barSpacing: 0
+	},
+	blocks: {
+		barWidth: 4,
+		barSpacing: 2
+	},
+	dots: {
+		barWidth: 3,
+		barSpacing: 3
+	},
+	seekbar: {
+		barWidth: 1,
+		barSpacing: 0
+	}
+};
+var Z = [
+	"auto",
+	"top",
+	"center",
+	"bottom"
+];
+var N = .25;
+var F = 4;
+var Rt = {
+	buttonAlign: Z,
+	layout: ["default", "preview"],
+	buttonStyle: ["circle", "minimal"],
+	artworkPosition: ["info", "button"],
+	waveformStyle: Object.keys(Q),
+	waveformGradient: [
+		"vertical",
+		"horizontal",
+		"diagonal"
+	],
+	audioMode: ["self", "external"],
+	preload: [
+		"none",
+		"metadata",
+		"auto"
+	],
+	colorPreset: Object.keys(C),
+	crossOrigin: ["anonymous", "use-credentials"]
+};
+var Dt = {
+	height: {
+		min: 1,
+		integer: !0
+	},
+	samples: {
+		min: 1,
+		integer: !0
+	},
+	barWidth: { min: 0 },
+	barSpacing: { min: 0 },
+	barRadius: { min: 0 },
+	bpm: { min: 1 },
+	playbackRate: {
+		min: N,
+		max: F
+	}
+};
+var Bt = [
+	"autoplay",
+	"showControls",
+	"showInfo",
+	"showTime",
+	"showHoverTime",
+	"seekHandle",
+	"showBPM",
+	"singlePlay",
+	"playOnSeek",
+	"enableMediaSession",
+	"showMarkers",
+	"accessibleSeek",
+	"showPlaybackSpeed"
+];
+var Ht = [
+	"onLoad",
+	"onPlay",
+	"onPause",
+	"onEnd",
+	"onError",
+	"onTimeUpdate",
+	"onNextTrack",
+	"onPreviousTrack"
+];
+function J(e, t) {
+	console.warn(`[WaveformPlayer] Invalid ${e} option, using default:`, t);
+}
+function z(e) {
+	let t = H(e);
+	return t ? t.reduce((i, s) => {
+		let r = s && typeof s == "object" ? _(s.time, null, { min: 0 }) : null;
+		return r === null ? (J("marker", s), i) : (i.push({
+			...s,
+			time: r,
+			label: s.label == null ? "" : s.label
+		}), i);
+	}, []) : (e != null && J("markers", e), []);
+}
+function tt(e) {
+	let t = (s) => e[s] != null, i = (s) => {
+		J(s, e[s]), e[s] = W[s];
+	};
+	for (let [s, r] of Object.entries(Dt)) {
+		if (!t(s)) continue;
+		let a = _(e[s], null, r);
+		a === null ? i(s) : e[s] = a;
+	}
+	for (let [s, r] of Object.entries(Rt)) t(s) && st(e[s], r) === null && i(s);
+	for (let s of Bt) e[s] = rt(e[s]);
+	for (let s of Ht) t(s) && typeof e[s] != "function" && i(s);
+	if (t("playbackRates")) {
+		let s = D(e.playbackRates, {
+			min: N,
+			max: F,
+			fallback: null
+		});
+		s === null ? i("playbackRates") : e.playbackRates = s;
+	}
+	e.markers = z(e.markers);
+	for (let s of ["buttonSize", "buttonRadius"]) {
+		if (!t(s)) continue;
+		let r = e[s];
+		(typeof r == "number" ? Number.isFinite(r) : typeof r == "string" && r.trim() !== "") || i(s);
+	}
+	for (let s of ["waveformColor", "progressColor"]) {
+		if (!t(s)) continue;
+		let r = e[s];
+		(typeof r != "string" || r.trim() === "") && !Array.isArray(r) && i(s);
+	}
+	return e;
+}
+var It = "data:image/svg+xml," + encodeURIComponent("<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><rect width=\"24\" height=\"24\" rx=\"4\" fill=\"#71717a\" fill-opacity=\"0.15\"/><g fill=\"none\" stroke=\"#a1a1aa\" stroke-width=\"1.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"8\" cy=\"17\" r=\"2.2\"/><circle cx=\"17\" cy=\"15\" r=\"2.2\"/><path d=\"M10.2 17V7l9-1.6v9\"/></g></svg>");
+var gt = 5;
+var wt = 10;
+var Ot = "button, a[href], input, [role=\"slider\"]";
+var T = class e {
+	static instances = /* @__PURE__ */ new Map();
+	static currentlyPlaying = null;
+	constructor(t, i = {}) {
+		if (this.container = typeof t == "string" ? document.querySelector(t) : t, !this.container) throw new Error("[WaveformPlayer] Container element not found");
+		let s = I(this.container), r = { ...i };
+		r.style && !r.waveformStyle && (r.waveformStyle = r.style), r.src && !r.url && (r.url = r.src), this.options = tt(V(W, s, r));
+		let a = X(this.options.colorPreset, this.container);
+		this._autoTheme = this.options.colorPreset == null || !C[this.options.colorPreset], this._presetKeys = [], this._scheme = this.options.colorPreset && C[this.options.colorPreset] ? this.options.colorPreset : R(this.container);
+		for (let [n, l] of Object.entries(a)) (this.options[n] === null || this.options[n] === void 0) && (this.options[n] = l, this._presetKeys.push(n));
+		let o = Q[this.options.waveformStyle];
+		o && (s.barWidth === void 0 && i.barWidth === void 0 && (this.options.barWidth = o.barWidth), s.barSpacing === void 0 && i.barSpacing === void 0 && (this.options.barSpacing = o.barSpacing)), this.audio = null, this.canvas = null, this.ctx = null, this.waveformData = [], this.progress = 0, this._activeMarkerIndex = -1, this._markerLabelTimer = null, this.isPlaying = !1, this.isLoading = !1, this.hasError = !1, this.updateTimer = null, this.resizeObserver = null, this._ac = new AbortController(), this.id = this.container.id || ot(this.options.url), e.instances.set(this.id, this), e._watchTheme();
+		try {
+			this.init();
+		} catch (n) {
+			throw e.instances.delete(this.id), this._ac.abort(), n;
+		}
+		setTimeout(() => {
+			this._emit("waveformplayer:ready", {
+				player: this,
+				url: this.options.url
+			});
+		}, 100);
+	}
+	_emit(t, i, s = !1) {
+		let r = new CustomEvent(t, {
+			bubbles: !0,
+			cancelable: s,
+			detail: i
+		});
+		return this.container.dispatchEvent(r), r;
+	}
+	_requestSeek(t) {
+		this._emit("waveformplayer:request-seek", {
+			...this._buildTrackDetail(),
+			percent: t
+		}, !0).defaultPrevented || (this.progress = t, this.drawWaveform?.());
+	}
+	init() {
+		this.createDOM(), this.createAudio(), this.initPlaybackSpeed(), this.initKeyboardControls(), this.initSeekControl(), this.bindEvents(), this.setupResizeObserver(), requestAnimationFrame(() => {
+			this.resizeCanvas(), this.options.url && this.load(this.options.url).then(() => {
+				this.options.autoplay && this.play()?.catch(() => {});
+			}).catch((t) => {
+				console.error("[WaveformPlayer] Failed to load audio:", t);
+			});
+		});
+	}
+	createDOM() {
+		this.container.innerHTML = "", this.container.className = "waveform-player";
+		let t = Z.includes(this.options.buttonAlign) ? this.options.buttonAlign : "auto";
+		t === "auto" && (this.options.waveformStyle === "bars" ? t = "bottom" : t = "center"), this.options.layout === "preview" && this.container.classList.add("waveform-layout-preview"), this.container.classList.toggle("waveform-theme-light", this._scheme === "light");
+		let s = [];
+		this.options.buttonSize != null && s.push(`--wfp-btn-size: ${U(this.options.buttonSize)}`), this.options.buttonRadius != null && s.push(`--wfp-btn-radius: ${U(this.options.buttonRadius)}`);
+		let r = s.length ? ` style="${s.join("; ")};"` : "", a = this.options.artworkPosition === "button" && this.options.artwork, o = a ? `<img class="waveform-btn-artwork" src="${S(this.options.artwork)}" alt="" aria-hidden="true">` : "", n = this.options.showControls ? `
+        <button class="waveform-btn${this.options.buttonStyle === "minimal" ? " waveform-btn-minimal" : ""}${a ? " waveform-btn-has-artwork" : ""}" aria-label="${S(this.options.playPauseLabel)}"${r}>
+          ${o}
           <span class="waveform-icon-play">${this.options.playIcon}</span>
           <span class="waveform-icon-pause" style="display:none;">${this.options.pauseIcon}</span>
         </button>
-        
-        <div class="waveform-container">
-          <canvas></canvas>
-          <div class="waveform-markers"></div>
-          <div class="waveform-loading" style="display:none;"></div>
-          <div class="waveform-error" style="display:none;">
-            <span class="waveform-error-text">Unable to load audio</span>
-          </div>
-        </div>
-      </div>
-      
+        ` : "", l = this.options.showInfo ? `
       <div class="waveform-info">
-        ${this.options.artwork ? `
-          <img class="waveform-artwork" src="${this.options.artwork}" alt="Album artwork" style="
+        ${this.options.artworkPosition !== "button" && this.options.artwork ? `
+          <img class="waveform-artwork" src="${S(this.options.artwork)}" alt="${S(this.options.artworkAlt)}" style="
             width: 40px;
             height: 40px;
             border-radius: 4px;
@@ -487,468 +1058,1215 @@ var g2 = class t2 {
           ">
         ` : ""}
         <div class="waveform-text">
-          <span class="waveform-title" style="color: ${this.options.textColor};"></span>
-          ${this.options.subtitle ? `<span class="waveform-subtitle" style="color: ${this.options.textSecondaryColor};">${this.options.subtitle}</span>` : ""}
+          <span class="waveform-title"></span>
+          ${this.options.artist ? `<span class="waveform-artist">${S(this.options.artist)}</span>` : ""}
         </div>
-        <div style="display: flex; align-items: center; gap: 1rem;">
+        <div class="waveform-meta" style="display: flex; align-items: center; gap: 1rem;">
           ${this.options.showBPM ? `
-            <span class="waveform-bpm" style="color: ${this.options.textSecondaryColor}; display: none;">
+            <span class="waveform-bpm" style="display: none;">
               <span class="bpm-value">--</span> BPM
             </span>
           ` : ""}
           ${this.options.showPlaybackSpeed ? `
             <div class="waveform-speed">
-              <button class="speed-btn" aria-label="Playback speed">
+              <button class="speed-btn" aria-label="${S(this.options.speedLabel)}" aria-haspopup="menu" aria-expanded="false">
                 <span class="speed-value">1x</span>
               </button>
-              <div class="speed-menu" style="display: none;">
-                ${this.options.playbackRates.map((i2) => `<button class="speed-option" data-rate="${i2}">${i2}x</button>`).join("")}
+              <div class="speed-menu" role="menu" aria-label="${S(this.options.speedLabel)}" style="display: none;">
+                ${this.options.playbackRates.map((h) => `<button class="speed-option" role="menuitemradio" tabindex="-1" aria-checked="false" data-rate="${h}">${h}x</button>`).join("")}
               </div>
             </div>
           ` : ""}
           ${this.options.showTime ? `
-            <span class="waveform-time" style="color: ${this.options.textSecondaryColor};">
+            <span class="waveform-time">
               <span class="time-current">0:00</span> / <span class="time-total">0:00</span>
             </span>
           ` : ""}
         </div>
       </div>
+        ` : "";
+		this.container.innerHTML = `
+  <div class="waveform-player-inner">
+    <div class="waveform-body">
+      <div class="waveform-track waveform-align-${t}">
+        ${n}
+        
+        <div class="waveform-container">
+          <canvas></canvas>
+          <div class="waveform-markers"></div>
+          <div class="waveform-loading" style="display:none;"></div>
+          <div class="waveform-error" style="display:none;" role="alert">
+            <span class="waveform-error-text">${S(this.options.errorText)}</span>
+          </div>
+        </div>
+      </div>
+      
+      ${l}
     </div>
   </div>
-`, this.playBtn = this.container.querySelector(".waveform-btn"), this.canvas = this.container.querySelector("canvas"), this.ctx = this.canvas.getContext("2d"), this.titleEl = this.container.querySelector(".waveform-title"), this.subtitleEl = this.container.querySelector(".waveform-subtitle"), this.artworkEl = this.container.querySelector(".waveform-artwork"), this.currentTimeEl = this.container.querySelector(".time-current"), this.totalTimeEl = this.container.querySelector(".time-total"), this.bpmEl = this.container.querySelector(".waveform-bpm"), this.bpmValueEl = this.container.querySelector(".bpm-value"), this.loadingEl = this.container.querySelector(".waveform-loading"), this.errorEl = this.container.querySelector(".waveform-error"), this.markersContainer = this.container.querySelector(".waveform-markers"), this.speedBtn = this.container.querySelector(".speed-btn"), this.speedMenu = this.container.querySelector(".speed-menu"), this.resizeCanvas();
-  }
-  createAudio() {
-    this.audio = new Audio(), this.audio.preload = this.options.preload || "metadata", this.audio.crossOrigin = "anonymous";
-  }
-  initPlaybackSpeed() {
-    this.options.playbackRate && this.options.playbackRate !== 1 && (this.audio.playbackRate = this.options.playbackRate), this.options.showPlaybackSpeed && this.initSpeedControls();
-  }
-  initSpeedControls() {
-    let e2 = this.container.querySelector(".speed-btn"), i2 = this.container.querySelector(".speed-menu");
-    !e2 || !i2 || (e2.addEventListener("click", (a2) => {
-      a2.stopPropagation(), i2.style.display = i2.style.display === "none" ? "block" : "none";
-    }), document.addEventListener("click", () => {
-      i2.style.display = "none";
-    }), i2.addEventListener("click", (a2) => {
-      if (a2.stopPropagation(), a2.target.classList.contains("speed-option")) {
-        let s2 = parseFloat(a2.target.dataset.rate);
-        this.setPlaybackRate(s2), i2.style.display = "none";
-      }
-    }), this.updateSpeedUI());
-  }
-  initKeyboardControls() {
-    this.container.setAttribute("tabindex", "-1"), this.container.addEventListener("click", () => {
-      t2.getAllInstances().forEach((e2) => {
-        e2 !== this && e2.container.setAttribute("tabindex", "-1");
-      }), this.container.setAttribute("tabindex", "0"), this.container.focus();
-    }), this.container.addEventListener("keydown", (e2) => {
-      if (document.activeElement !== this.container) return;
-      let i2 = e2.key, a2 = this.audio.currentTime;
-      if (i2 >= "0" && i2 <= "9") {
-        e2.preventDefault(), this.seekToPercent(parseInt(i2) / 10);
-        return;
-      }
-      let s2 = { " ": () => this.togglePlay(), ArrowLeft: () => this.seekTo(Math.max(0, a2 - 5)), ArrowRight: () => this.seekTo(Math.min(this.audio.duration, a2 + 5)), ArrowUp: () => this.setVolume(Math.min(1, this.audio.volume + 0.1)), ArrowDown: () => this.setVolume(Math.max(0, this.audio.volume - 0.1)), m: () => this.audio.muted = !this.audio.muted, M: () => this.audio.muted = !this.audio.muted };
-      s2[i2] && (e2.preventDefault(), s2[i2]());
-    });
-  }
-  initMediaSession() {
-    !("mediaSession" in navigator) || !this.options.enableMediaSession || (navigator.mediaSession.metadata = new MediaMetadata({ title: this.options.title || "Unknown Track", artist: this.options.subtitle || "", album: this.options.album || "", artwork: this.options.artwork ? [{ src: this.options.artwork, sizes: "512x512", type: "image/jpeg" }] : [] }), navigator.mediaSession.setActionHandler("play", () => this.play()), navigator.mediaSession.setActionHandler("pause", () => this.pause()), navigator.mediaSession.setActionHandler("seekbackward", () => {
-      this.seekTo(Math.max(0, this.audio.currentTime - 10));
-    }), navigator.mediaSession.setActionHandler("seekforward", () => {
-      this.seekTo(Math.min(this.audio.duration, this.audio.currentTime + 10));
-    }), navigator.mediaSession.setActionHandler("seekto", (e2) => {
-      e2.seekTime !== null && this.seekTo(e2.seekTime);
-    }));
-  }
-  bindEvents() {
-    this.playBtn.addEventListener("click", () => this.togglePlay()), this.audio.addEventListener("loadstart", () => this.setLoading(true)), this.audio.addEventListener("loadedmetadata", () => this.onMetadataLoaded()), this.audio.addEventListener("canplay", () => this.setLoading(false)), this.audio.addEventListener("play", () => this.onPlay()), this.audio.addEventListener("pause", () => this.onPause()), this.audio.addEventListener("ended", () => this.onEnded()), this.audio.addEventListener("error", (e2) => this.onError(e2)), this.canvas.addEventListener("click", (e2) => this.handleCanvasClick(e2)), this.resizeHandler = B(() => this.resizeCanvas(), 100), window.addEventListener("resize", this.resizeHandler);
-  }
-  setupResizeObserver() {
-    "ResizeObserver" in window && (this.resizeObserver = new ResizeObserver(() => {
-      this.resizeCanvas();
-    }), this.canvas?.parentElement && this.resizeObserver.observe(this.canvas.parentElement));
-  }
-  async load(e2) {
-    try {
-      this.setLoading(true), this.progress = 0, this.hasError = false, this.audio.src = e2, await new Promise((a2, s2) => {
-        let n2 = () => {
-          this.audio.removeEventListener("loadedmetadata", n2), this.audio.removeEventListener("error", r2), a2();
-        }, r2 = (o2) => {
-          this.audio.removeEventListener("loadedmetadata", n2), this.audio.removeEventListener("error", r2), s2(o2);
-        };
-        this.audio.addEventListener("loadedmetadata", n2), this.audio.addEventListener("error", r2);
-      });
-      let i2 = this.options.title || R(e2);
-      if (this.titleEl && (this.titleEl.textContent = i2), this.options.waveform) this.setWaveformData(this.options.waveform);
-      else try {
-        let a2 = await M2(e2, this.options.samples, this.options.showBPM);
-        this.waveformData = a2.peaks, a2.bpm && (this.detectedBPM = a2.bpm, this.updateBPMDisplay());
-      } catch (a2) {
-        console.warn("Using placeholder waveform:", a2), this.waveformData = D(this.options.samples);
-      }
-      this.drawWaveform(), this.renderMarkers(), this.initMediaSession(), this.options.onLoad && this.options.onLoad(this);
-    } catch (i2) {
-      console.error("Failed to load audio:", i2), this.onError(i2);
-    } finally {
-      this.setLoading(false);
-    }
-  }
-  async loadTrack(e2, i2 = null, a2 = null, s2 = {}) {
-    this.isPlaying && this.pause(), this.audio.src = "", this.audio.load(), this.hasError = false, this.errorEl && (this.errorEl.style.display = "none"), this.canvas && (this.canvas.style.opacity = "1"), this.playBtn && (this.playBtn.disabled = false), this.progress = 0, this.waveformData = [], this.options = C(this.options, { url: e2, title: i2 || this.options.title, subtitle: a2 || this.options.subtitle, ...s2 }), s2.preload && (this.audio.preload = s2.preload), this.subtitleEl && (a2 ? (this.subtitleEl.textContent = a2, this.subtitleEl.style.display = "") : a2 === "" && (this.subtitleEl.style.display = "none")), s2.artwork && this.artworkEl && (this.artworkEl.src = s2.artwork), s2.markers && (this.options.markers = s2.markers), await this.load(e2), this.play();
-  }
-  setWaveformData(e2) {
-    if (typeof e2 == "string") try {
-      let i2 = JSON.parse(e2);
-      this.waveformData = Array.isArray(i2) ? i2 : [];
-    } catch {
-      this.waveformData = e2.split(",").map(Number);
-    }
-    else this.waveformData = Array.isArray(e2) ? e2 : [];
-    this.drawWaveform();
-  }
-  drawWaveform() {
-    !this.ctx || this.waveformData.length === 0 || W(this.ctx, this.canvas, this.waveformData, this.progress, { ...this.options, waveformStyle: this.options.waveformStyle || "bars", color: this.options.waveformColor, progressColor: this.options.progressColor });
-  }
-  resizeCanvas() {
-    if (!this.canvas || this.isDestroying) return;
-    let e2 = window.devicePixelRatio || 1, i2 = this.canvas.getBoundingClientRect();
-    this.canvas.width = i2.width * e2, this.canvas.height = this.options.height * e2, this.canvas.style.height = this.options.height + "px", this.canvas.parentElement.style.height = this.options.height + "px", this.drawWaveform();
-  }
-  renderMarkers() {
-    !this.options.showMarkers || !this.options.markers?.length || !this.markersContainer || (this.markersContainer.innerHTML = "", !(!this.audio || !this.audio.duration || this.audio.duration === 0) && this.options.markers.forEach((e2, i2) => {
-      if (e2.time > this.audio.duration) {
-        console.warn(`Marker "${e2.label}" at ${e2.time}s exceeds audio duration of ${this.audio.duration}s`);
-        return;
-      }
-      let a2 = e2.time / this.audio.duration * 100, s2 = document.createElement("button");
-      s2.className = "waveform-marker", s2.style.left = `${a2}%`, s2.style.backgroundColor = e2.color || "rgba(255, 255, 255, 0.5)", s2.setAttribute("aria-label", e2.label), s2.setAttribute("data-time", e2.time);
-      let n2 = document.createElement("span");
-      n2.className = "waveform-marker-tooltip", n2.textContent = e2.label, s2.appendChild(n2), s2.addEventListener("click", (r2) => {
-        r2.stopPropagation(), this.seekTo(e2.time), this.options.playOnSeek && !this.isPlaying && this.play();
-      }), this.markersContainer.appendChild(s2);
-    }));
-  }
-  handleCanvasClick(e2) {
-    if (!this.audio.duration) return;
-    let i2 = this.canvas.getBoundingClientRect(), a2 = e2.clientX - i2.left, s2 = Math.max(0, Math.min(1, a2 / i2.width));
-    this.seekToPercent(s2);
-  }
-  setLoading(e2) {
-    this.isLoading = e2, this.loadingEl && (this.loadingEl.style.display = e2 ? "block" : "none");
-  }
-  onMetadataLoaded() {
-    this.isDestroying || (this.totalTimeEl && (this.totalTimeEl.textContent = P(this.audio.duration)), this.renderMarkers());
-  }
-  onPlay() {
-    if (this.isDestroying) return;
-    this.isPlaying = true, this.playBtn.classList.add("playing");
-    let e2 = this.playBtn.querySelector(".waveform-icon-play"), i2 = this.playBtn.querySelector(".waveform-icon-pause");
-    e2 && (e2.style.display = "none"), i2 && (i2.style.display = "flex"), this.startSmoothUpdate(), this.container.dispatchEvent(new CustomEvent("waveformplayer:play", { bubbles: true, detail: { player: this, url: this.options.url } })), this.options.onPlay && this.options.onPlay(this);
-  }
-  onPause() {
-    if (this.isDestroying) return;
-    this.isPlaying = false, this.playBtn.classList.remove("playing");
-    let e2 = this.playBtn.querySelector(".waveform-icon-play"), i2 = this.playBtn.querySelector(".waveform-icon-pause");
-    e2 && (e2.style.display = "flex"), i2 && (i2.style.display = "none"), this.stopSmoothUpdate(), this.container.dispatchEvent(new CustomEvent("waveformplayer:pause", { bubbles: true, detail: { player: this, url: this.options.url } })), this.options.onPause && this.options.onPause(this);
-  }
-  onEnded() {
-    this.isDestroying || (this.progress = 0, this.audio.currentTime = 0, this.drawWaveform(), this.currentTimeEl && (this.currentTimeEl.textContent = "0:00"), this.container.dispatchEvent(new CustomEvent("waveformplayer:ended", { bubbles: true, detail: { player: this, url: this.options.url } })), this.onPause(), this.options.onEnd && this.options.onEnd(this));
-  }
-  onError(e2) {
-    this.isDestroying || (console.error("Audio error:", e2), this.hasError = true, this.setLoading(false), this.errorEl && (this.errorEl.style.display = "flex"), this.canvas && (this.canvas.style.opacity = "0.2"), this.playBtn && (this.playBtn.disabled = true), this.options.onError && this.options.onError(e2, this));
-  }
-  startSmoothUpdate() {
-    this.stopSmoothUpdate();
-    let e2 = () => {
-      this.isPlaying && this.audio.duration && (this.updateProgress(), this.updateTimer = requestAnimationFrame(e2));
-    };
-    this.updateTimer = requestAnimationFrame(e2);
-  }
-  stopSmoothUpdate() {
-    this.updateTimer && (cancelAnimationFrame(this.updateTimer), this.updateTimer = null);
-  }
-  updateProgress() {
-    if (!this.audio.duration) return;
-    let e2 = this.audio.currentTime / this.audio.duration;
-    Math.abs(e2 - this.progress) > 1e-3 && (this.progress = e2, this.drawWaveform()), this.currentTimeEl && (this.currentTimeEl.textContent = P(this.audio.currentTime)), this.container.dispatchEvent(new CustomEvent("waveformplayer:timeupdate", { bubbles: true, detail: { player: this, currentTime: this.audio.currentTime, duration: this.audio.duration, url: this.options.url } })), this.options.onTimeUpdate && this.options.onTimeUpdate(this.audio.currentTime, this.audio.duration, this);
-  }
-  updateBPMDisplay() {
-    this.bpmEl && this.bpmValueEl && this.detectedBPM && (this.bpmValueEl.textContent = Math.round(this.detectedBPM), this.bpmEl.style.display = "inline-flex");
-  }
-  updateSpeedUI() {
-    let e2 = this.container.querySelector(".speed-value");
-    if (e2) {
-      let i2 = this.audio.playbackRate;
-      e2.textContent = i2 === 1 ? "1x" : `${i2}x`;
-    }
-    this.container.querySelectorAll(".speed-option").forEach((i2) => {
-      i2.classList.toggle("active", parseFloat(i2.dataset.rate) === this.audio.playbackRate);
-    });
-  }
-  play() {
-    this.options.singlePlay && t2.currentlyPlaying && t2.currentlyPlaying !== this && t2.currentlyPlaying.pause(), t2.currentlyPlaying = this, this.audio.play();
-  }
-  pause() {
-    t2.currentlyPlaying === this && (t2.currentlyPlaying = null), this.audio.pause();
-  }
-  togglePlay() {
-    this.isPlaying ? this.pause() : this.play();
-  }
-  seekTo(e2) {
-    this.audio && this.audio.duration && (this.audio.currentTime = Math.max(0, Math.min(e2, this.audio.duration)), this.updateProgress());
-  }
-  seekToPercent(e2) {
-    this.audio && this.audio.duration && (this.audio.currentTime = this.audio.duration * Math.max(0, Math.min(1, e2)), this.updateProgress());
-  }
-  setVolume(e2) {
-    this.audio && (this.audio.volume = Math.max(0, Math.min(1, e2)));
-  }
-  setPlaybackRate(e2) {
-    if (!this.audio) return;
-    let i2 = Math.max(0.5, Math.min(2, e2));
-    this.audio.playbackRate = i2, this.options.playbackRate = i2, this.updateSpeedUI();
-  }
-  destroy() {
-    this.isDestroying = true, this.pause(), this.stopSmoothUpdate(), this.resizeObserver && (this.resizeObserver.disconnect(), this.resizeObserver = null), this.resizeHandler && (window.removeEventListener("resize", this.resizeHandler), this.resizeHandler = null), t2.instances.delete(this.id), t2.currentlyPlaying === this && (t2.currentlyPlaying = null), this.audio && (this.audio.pause(), this.audio.src = "", this.audio.load(), this.audio = null), this.container.innerHTML = "", this.canvas = null, this.ctx = null, this.playBtn = null, this.waveformData = [];
-  }
-  static getInstance(e2) {
-    if (typeof e2 == "string") {
-      let i2 = this.instances.get(e2);
-      if (i2) return i2;
-      let a2 = document.getElementById(e2);
-      if (a2) return Array.from(this.instances.values()).find((s2) => s2.container === a2);
-    }
-    if (e2 instanceof HTMLElement) return Array.from(this.instances.values()).find((i2) => i2.container === e2);
-  }
-  static getAllInstances() {
-    return Array.from(this.instances.values());
-  }
-  static destroyAll() {
-    this.instances.forEach((e2) => e2.destroy()), this.instances.clear();
-  }
-  static async generateWaveformData(e2, i2 = 200) {
-    try {
-      return (await M2(e2, i2)).peaks;
-    } catch (a2) {
-      throw console.error("Failed to generate waveform:", a2), a2;
-    }
-  }
+`, this.playBtn = this.container.querySelector(".waveform-btn"), this.canvas = this.container.querySelector("canvas"), this.ctx = this.canvas.getContext("2d"), this.titleEl = this.container.querySelector(".waveform-title"), this.artistEl = this.container.querySelector(".waveform-artist"), this.artworkEl = this.container.querySelector(".waveform-artwork, .waveform-btn-artwork"), this.bindArtworkFallback(this.artworkEl), this.currentTimeEl = this.container.querySelector(".time-current"), this.totalTimeEl = this.container.querySelector(".time-total"), this.bpmEl = this.container.querySelector(".waveform-bpm"), this.bpmValueEl = this.container.querySelector(".bpm-value"), this.loadingEl = this.container.querySelector(".waveform-loading"), this.errorEl = this.container.querySelector(".waveform-error"), this.markersContainer = this.container.querySelector(".waveform-markers"), this.speedBtn = this.container.querySelector(".speed-btn"), this.speedMenu = this.container.querySelector(".speed-menu"), this.resizeCanvas(), this.updateBPMDisplay();
+	}
+	bindArtworkFallback(t) {
+		t && t.addEventListener("error", () => {
+			t.src.startsWith("data:") || (t.src = It);
+		}, { signal: this._ac.signal });
+	}
+	createArtworkElement() {
+		let t = document.createElement("img");
+		return t.className = "waveform-artwork", t.style.width = "40px", t.style.height = "40px", t.style.borderRadius = "4px", t.style.objectFit = "cover", t.style.flexShrink = "0", this.bindArtworkFallback(t), t;
+	}
+	createButtonArtworkElement() {
+		let t = document.createElement("img");
+		return t.className = "waveform-btn-artwork", t.alt = "", t.setAttribute("aria-hidden", "true"), this.bindArtworkFallback(t), t;
+	}
+	createArtistElement() {
+		let t = document.createElement("span");
+		return t.className = "waveform-artist", t;
+	}
+	syncArtist(t) {
+		if (this.options.artist = t || null, !!this.options.showInfo) {
+			if (!t) {
+				this.artistEl?.remove(), this.artistEl = null;
+				return;
+			}
+			if (!this.artistEl) {
+				let i = this.container.querySelector(".waveform-title");
+				if (!i) return;
+				this.artistEl = this.createArtistElement(), i.after(this.artistEl);
+			}
+			this.artistEl.textContent = t, this.artistEl.style.display = "";
+		}
+	}
+	syncButtonArtwork(t) {
+		if (this.playBtn) {
+			if (!t) {
+				this.artworkEl?.remove(), this.artworkEl = null, this.playBtn.classList.remove("waveform-btn-has-artwork");
+				return;
+			}
+			this.artworkEl || (this.artworkEl = this.createButtonArtworkElement(), this.playBtn.prepend(this.artworkEl)), this.artworkEl.src = t, this.playBtn.classList.add("waveform-btn-has-artwork");
+		}
+	}
+	syncArtwork(t, i = "") {
+		if (this.options.artwork = t || null, this.options.artworkAlt = i || "", this.options.artworkPosition === "button") {
+			this.syncButtonArtwork(this.options.artwork);
+			return;
+		}
+		if (this.options.showInfo) {
+			if (!t) {
+				this.artworkEl?.remove(), this.artworkEl = null;
+				return;
+			}
+			if (!this.artworkEl) {
+				let s = this.container.querySelector(".waveform-text");
+				if (!s) return;
+				this.artworkEl = this.createArtworkElement(), s.before(this.artworkEl);
+			}
+			this.artworkEl.src = t, this.artworkEl.alt = i || "";
+		}
+	}
+	createAudio() {
+		if (this.options.audioMode === "external") {
+			this.audio = null;
+			return;
+		}
+		this.audio = new Audio(), this.audio.preload = this.options.preload || "metadata", this.options.crossOrigin && (this.audio.crossOrigin = this.options.crossOrigin);
+	}
+	initPlaybackSpeed() {
+		this.audio && this.options.playbackRate && this.options.playbackRate !== 1 && (this.audio.playbackRate = this.options.playbackRate), this.options.showPlaybackSpeed && this.initSpeedControls();
+	}
+	initSpeedControls() {
+		let t = this.container.querySelector(".speed-btn"), i = this.container.querySelector(".speed-menu");
+		if (!t || !i) return;
+		let s = () => Array.from(i.querySelectorAll(".speed-option")), r = () => i.style.display !== "none", a = (l) => {
+			if (i.style.display = l ? "block" : "none", t.setAttribute("aria-expanded", l ? "true" : "false"), l) {
+				let h = s();
+				(h.find((c) => c.getAttribute("aria-checked") === "true") || h[0])?.focus();
+			}
+		}, o = (l) => {
+			let h = s();
+			h.length && h[(l + h.length) % h.length].focus();
+		}, n = (l) => {
+			this.setPlaybackRate(parseFloat(l.dataset.rate)), a(!1), t.focus();
+		};
+		t.addEventListener("click", (l) => {
+			l.stopPropagation(), a(!r());
+		}, { signal: this._ac.signal }), document.addEventListener("click", () => a(!1), { signal: this._ac.signal }), i.addEventListener("click", (l) => {
+			l.stopPropagation();
+			let h = l.target.closest(".speed-option");
+			h && n(h);
+		}, { signal: this._ac.signal }), t.closest(".waveform-speed")?.addEventListener("keydown", (l) => {
+			let h = s(), c = h.indexOf(document.activeElement);
+			if (!r()) {
+				(l.key === "ArrowDown" || l.key === "ArrowUp") && document.activeElement === t && (l.preventDefault(), a(!0));
+				return;
+			}
+			switch (l.key) {
+				case "ArrowDown":
+					l.preventDefault(), o(c < 0 ? 0 : c + 1);
+					break;
+				case "ArrowUp":
+					l.preventDefault(), o(c < 0 ? h.length - 1 : c - 1);
+					break;
+				case "Home":
+					l.preventDefault(), o(0);
+					break;
+				case "End":
+					l.preventDefault(), o(h.length - 1);
+					break;
+				case "Escape":
+					l.preventDefault(), a(!1), t.focus();
+					break;
+				case "Tab": a(!1);
+			}
+		}, { signal: this._ac.signal }), this.updateSpeedUI();
+	}
+	initKeyboardControls() {
+		this.container.setAttribute("tabindex", "-1"), this.container.addEventListener("click", (t) => {
+			t.target.closest(Ot) || (e.getAllInstances().forEach((i) => {
+				i !== this && i.container.setAttribute("tabindex", "-1");
+			}), this.container.setAttribute("tabindex", "0"), this.container.focus());
+		}, { signal: this._ac.signal }), this.container.addEventListener("keydown", (t) => {
+			if (document.activeElement !== this.container) return;
+			let i = t.key, s = !!this.audio, r = s ? this.audio.currentTime : 0;
+			if (s && i >= "0" && i <= "9") {
+				t.preventDefault(), this.seekToPercent(parseInt(i) / 10);
+				return;
+			}
+			let a = { " ": () => this.togglePlay() };
+			s && (a.ArrowLeft = () => this.seekTo(m(r - 5, 0, this.audio.duration)), a.ArrowRight = () => this.seekTo(m(r + 5, 0, this.audio.duration)), a.ArrowUp = () => this.setVolume(m(this.audio.volume + .1)), a.ArrowDown = () => this.setVolume(m(this.audio.volume - .1)), a.m = a.M = () => this.audio.muted = !this.audio.muted), a[i] && (t.preventDefault(), a[i]());
+		}, { signal: this._ac.signal });
+	}
+	initSeekControl() {
+		this.options.accessibleSeek && (this.seekEl = this.container.querySelector(".waveform-container"), this.seekEl && (this.seekEl.setAttribute("role", "slider"), this.seekEl.setAttribute("tabindex", "0"), this.seekEl.setAttribute("aria-valuemin", "0"), this.applySeekLabel(), this.updateSeekAccessibility(), this.seekEl.addEventListener("keydown", (t) => {
+			if (t.key === " " || t.key === "Spacebar") {
+				t.preventDefault(), t.stopPropagation(), this.togglePlay();
+				return;
+			}
+			let i = this.getSeekDuration();
+			if (!i) return;
+			let s = this.getSeekCurrentTime(), r;
+			switch (t.key) {
+				case "ArrowLeft":
+				case "ArrowDown":
+					r = s - gt;
+					break;
+				case "ArrowRight":
+				case "ArrowUp":
+					r = s + gt;
+					break;
+				case "PageDown":
+					r = s - wt;
+					break;
+				case "PageUp":
+					r = s + wt;
+					break;
+				case "Home":
+					r = 0;
+					break;
+				case "End":
+					r = i;
+					break;
+				default: return;
+			}
+			t.preventDefault(), t.stopPropagation(), this.seekToSeconds(r);
+		}, { signal: this._ac.signal })));
+	}
+	getSeekDuration() {
+		return this.options.audioMode === "external" ? this._extDuration || 0 : this.audio && Number.isFinite(this.audio.duration) ? this.audio.duration : 0;
+	}
+	getSeekCurrentTime() {
+		return this.options.audioMode === "external" ? this.progress * (this._extDuration || 0) : this.audio && Number.isFinite(this.audio.currentTime) ? this.audio.currentTime : 0;
+	}
+	seekToSeconds(t) {
+		let i = this.getSeekDuration();
+		if (!i) return;
+		let s = m(t, 0, i);
+		if (this.options.audioMode === "external") {
+			this._requestSeek(s / i), this.updateSeekAccessibility();
+			return;
+		}
+		this.seekTo(s);
+	}
+	applySeekLabel(t = this.options.title) {
+		if (!this.seekEl) return;
+		let i = this.options.seekLabel || t || "Seek";
+		this.seekEl.setAttribute("aria-label", i);
+	}
+	updateSeekAccessibility() {
+		if (!this.seekEl) return;
+		let t = this.getSeekDuration(), i = Math.min(this.getSeekCurrentTime(), t);
+		this.seekEl.setAttribute("aria-valuemax", String(Math.round(t))), this.seekEl.setAttribute("aria-valuenow", String(Math.round(i))), this.seekEl.setAttribute("aria-valuetext", at(this.options.seekValueText || "%1$s of %2$s", E(i), E(t)));
+	}
+	initMediaSession() {
+		if (!("mediaSession" in navigator) || !this.options.enableMediaSession || !this.audio) return;
+		this._applyMediaMetadata(), navigator.mediaSession.setActionHandler("play", () => this.play()), navigator.mediaSession.setActionHandler("pause", () => this.pause()), navigator.mediaSession.setActionHandler("seekbackward", () => {
+			this.seekTo(m(this.audio.currentTime - 10, 0, this.audio.duration));
+		}), navigator.mediaSession.setActionHandler("seekforward", () => {
+			this.seekTo(m(this.audio.currentTime + 10, 0, this.audio.duration));
+		}), navigator.mediaSession.setActionHandler("seekto", (s) => {
+			s.seekTime !== null && this.seekTo(s.seekTime);
+		});
+		let t = this.options.onNextTrack, i = this.options.onPreviousTrack;
+		try {
+			navigator.mediaSession.setActionHandler("nexttrack", typeof t == "function" ? () => t(this) : null);
+		} catch {}
+		try {
+			navigator.mediaSession.setActionHandler("previoustrack", typeof i == "function" ? () => i(this) : null);
+		} catch {}
+	}
+	_applyMediaMetadata() {
+		!("mediaSession" in navigator) || !this.options.enableMediaSession || (navigator.mediaSession.metadata = new MediaMetadata({
+			title: this.options.title || this.options.unknownTrackText,
+			artist: this.options.artist || "",
+			album: this.options.album || "",
+			artwork: this.options.artwork ? [{
+				src: this.options.artwork,
+				sizes: "512x512",
+				type: "image/jpeg"
+			}] : []
+		}));
+	}
+	_updateMediaSession(t) {
+		if (!(!("mediaSession" in navigator) || !this.options.enableMediaSession || !this.audio)) try {
+			t === "playing" && this.initMediaSession(), navigator.mediaSession.playbackState = t;
+			let i = this.audio.duration;
+			navigator.mediaSession.setPositionState && i && isFinite(i) && navigator.mediaSession.setPositionState({
+				duration: i,
+				playbackRate: this.audio.playbackRate || 1,
+				position: m(this.audio.currentTime, 0, i)
+			});
+		} catch {}
+	}
+	bindEvents() {
+		this.playBtn && this.playBtn.addEventListener("click", () => this.togglePlay()), this.audio && (this.audio.addEventListener("loadstart", () => this.setLoading(!0)), this.audio.addEventListener("loadedmetadata", () => this.onMetadataLoaded()), this.audio.addEventListener("canplay", () => this.setLoading(!1)), this.audio.addEventListener("play", () => this.onPlay()), this.audio.addEventListener("pause", () => this.onPause()), this.audio.addEventListener("ended", () => this.onEnded()), this.audio.addEventListener("error", (i) => this.onError(i))), this.canvas.addEventListener("click", (i) => this.handleCanvasClick(i)), this._dragging = !1, this._seekHover = !1, this._handleNear = !1, this.canvas.addEventListener("pointerenter", () => {
+			this._seekHover = !0, this.drawWaveform(), this._updateSeekHandle();
+		}), this.canvas.addEventListener("pointerleave", () => {
+			this._seekHover = !1, this._handleNear = !1, this._dragging || this._hideHoverTip(), this.drawWaveform(), this._updateSeekHandle();
+		}), this.canvas.addEventListener("pointerdown", (i) => {
+			if (!(i.pointerType === "mouse" && i.button !== 0)) {
+				this._dragging = !0;
+				try {
+					this.canvas.setPointerCapture(i.pointerId);
+				} catch {}
+				this._scrubTo(i.clientX);
+			}
+		}), this.canvas.addEventListener("pointermove", (i) => {
+			if (this._dragging) {
+				this._scrubTo(i.clientX);
+				return;
+			}
+			let s = this.canvas.getBoundingClientRect();
+			s.width && (this._handleNear = Math.abs(i.clientX - s.left - this.progress * s.width) <= 10, this._updateSeekHandle());
+		});
+		let t = (i) => {
+			if (this._dragging) {
+				this._dragging = !1, this._suppressClick = !0;
+				try {
+					this.canvas.releasePointerCapture(i.pointerId);
+				} catch {}
+				this._seekFromPointer(i.clientX), !this._seekHover && !this.options.showHoverTime && this._hideHoverTip(), this._updateSeekHandle();
+			}
+		};
+		this.canvas.addEventListener("pointerup", t), this.canvas.addEventListener("pointercancel", t), this.setupHoverTime(), this.setupSeekHandle(), this.resizeHandler = lt(() => this.resizeCanvas(), 100), window.addEventListener("resize", this.resizeHandler);
+	}
+	setupResizeObserver() {
+		"ResizeObserver" in window && (this.resizeObserver = new ResizeObserver(() => {
+			this.resizeCanvas();
+		}), this.canvas?.parentElement && this.resizeObserver.observe(this.canvas.parentElement));
+	}
+	async load(t) {
+		try {
+			this.setLoading(!0), this.progress = 0, this.hasError = !1, this.container.classList.remove("waveform-is-placeholder");
+			let i = !!this.options.waveform;
+			i && this.setWaveformData(this.options.waveform);
+			let s = this.options.title || O(t);
+			if (this.titleEl && (this.titleEl.textContent = s), this.applySeekLabel(s), this.audio && (this.audio.src = t, this.audio.preload !== "none" && await new Promise((r, a) => {
+				let o = () => {
+					this.audio.removeEventListener("loadedmetadata", o), this.audio.removeEventListener("error", n), r();
+				}, n = (l) => {
+					this.audio.removeEventListener("loadedmetadata", o), this.audio.removeEventListener("error", n), a(l);
+				};
+				this.audio.addEventListener("loadedmetadata", o), this.audio.addEventListener("error", n);
+			})), !i) try {
+				let r = await K(t, this.options.samples, this.options.showBPM);
+				this.waveformData = r.peaks, r.bpm && (this.detectedBPM = r.bpm, this.updateBPMDisplay());
+			} catch (r) {
+				console.warn("[WaveformPlayer] Using placeholder waveform:", r), this.waveformData = mt(this.options.samples), this.container.classList.add("waveform-is-placeholder");
+			}
+			this.drawWaveform(), this.renderMarkers(), this.options.onLoad && this.options.onLoad(this);
+		} catch (i) {
+			this.onError(i);
+		} finally {
+			this.setLoading(!1);
+		}
+	}
+	async loadTrack(t, i = null, s = null, r = {}) {
+		let a = Object.prototype.hasOwnProperty.call(r, "artwork"), o = Object.prototype.hasOwnProperty.call(r, "artworkAlt");
+		this.isPlaying && this.pause(), this.audio && (this.audio.src = "", this.audio.load()), this.hasError = !1, this.errorEl && (this.errorEl.style.display = "none"), this.canvas && (this.canvas.style.opacity = "1"), this.playBtn && (this.playBtn.disabled = !1), this.progress = 0, this.waveformData = [], this.options = tt(V(this.options, {
+			url: t,
+			title: i === null ? this.options.title : i,
+			artist: s === null ? this.options.artist : s,
+			...r
+		})), a && (this.options.artwork = r.artwork || null), o ? this.options.artworkAlt = r.artworkAlt || "" : a && (this.options.artworkAlt = this.options.artwork ? W.artworkAlt : ""), r.preload && this.audio && (this.audio.preload = this.options.preload), r.crossOrigin && this.audio && (this.audio.crossOrigin = this.options.crossOrigin), s !== null && this.syncArtist(s), (a || o) && this.syncArtwork(a ? r.artwork : this.options.artwork, o ? r.artworkAlt : this.options.artworkAlt), this.options.markers = r.markers ? z(r.markers) : [], this.options.waveform = r.waveform || null, await this.load(t), r.autoplay !== !1 && this.play()?.catch(() => {});
+	}
+	setWaveformData(t) {
+		if (typeof t == "string" && t.trim().endsWith(".json")) {
+			fetch(t.trim()).then((i) => i.json()).then((i) => {
+				this.waveformData = Array.isArray(i) ? i : i.peaks || [], i.markers && !this.options.markers?.length && (this.options.markers = z(i.markers), this.renderMarkers()), this.drawWaveform();
+			}).catch(() => {});
+			return;
+		}
+		this.waveformData = D(t, { fallback: [] }), this.drawWaveform();
+	}
+	drawWaveform() {
+		!this.ctx || this.waveformData.length === 0 || pt(this.ctx, this.canvas, this.waveformData, this.progress, {
+			...this.options,
+			waveformStyle: this.options.waveformStyle || "bars",
+			color: this.options.waveformColor,
+			progressColor: this.options.progressColor,
+			seekActive: this._seekHover || this._dragging
+		});
+	}
+	resizeCanvas() {
+		if (!this.canvas || this.isDestroying) return;
+		let t = window.devicePixelRatio || 1, i = this.canvas.parentElement.getBoundingClientRect();
+		this.canvas.width = i.width * t, this.canvas.height = this.options.height * t, this.canvas.parentElement.style.height = this.options.height + "px", this.drawWaveform();
+	}
+	renderMarkers() {
+		if (!this.markersContainer || (this.markersContainer.innerHTML = "", this._activeMarkerIndex = -1, clearTimeout(this._markerLabelTimer), !this.options.showMarkers || !this.options.markers?.length)) return;
+		let t = this.getSeekDuration();
+		t && this.options.markers.forEach((i, s) => {
+			if (i.time > t) {
+				console.warn(`[WaveformPlayer] Marker "${i.label}" at ${i.time}s exceeds audio duration of ${t}s`);
+				return;
+			}
+			let r = i.time / t * 100, a = document.createElement("button");
+			a.className = "waveform-marker", a.style.left = `${r}%`, a.style.backgroundColor = i.color || "rgba(255, 255, 255, 0.5)", a.setAttribute("aria-label", i.label), a.setAttribute("data-time", i.time);
+			let o = document.createElement("span");
+			o.className = "waveform-marker-tooltip", o.textContent = i.label, a.appendChild(o), a.addEventListener("click", (n) => {
+				n.stopPropagation(), this.seekTo(i.time), this.options.playOnSeek && !this.isPlaying && this.play();
+			}), this.markersContainer.appendChild(a);
+		});
+	}
+	setActiveMarker(t) {
+		if (!this.markersContainer) return;
+		this.markersContainer.querySelectorAll(".waveform-marker").forEach((s, r) => s.classList.toggle("active", r === t));
+	}
+	updateActiveMarker() {
+		if (!this.markersContainer) return;
+		let t = this.markersContainer.querySelectorAll(".waveform-marker");
+		if (!t.length) return;
+		let i = this.getSeekDuration(), s = i ? this.progress * i : 0, r = -1, a = -1 / 0;
+		t.forEach((o, n) => {
+			let l = parseFloat(o.getAttribute("data-time"));
+			Number.isFinite(l) && l <= s + .05 && l > a && (a = l, r = n);
+		}), r !== this._activeMarkerIndex && (this._activeMarkerIndex = r, this.setActiveMarker(r), clearTimeout(this._markerLabelTimer), t.forEach((o, n) => o.classList.toggle("show-label", n === r)), r >= 0 && (this._markerLabelTimer = setTimeout(() => {
+			this.markersContainer?.querySelectorAll(".waveform-marker").forEach((o) => o.classList.remove("show-label"));
+		}, 2500)));
+	}
+	setupHoverTime() {
+		if (!this.seekEl) return;
+		let t = document.createElement("div");
+		t.className = "waveform-hover-time", t.setAttribute("aria-hidden", "true"), this.seekEl.appendChild(t), this.hoverTimeEl = t, this.options.showHoverTime && (this.seekEl.addEventListener("pointermove", (i) => {
+			this._dragging || this._updateHoverTip(i.clientX);
+		}), this.seekEl.addEventListener("pointerleave", () => {
+			this._dragging || this._hideHoverTip();
+		}));
+	}
+	_updateHoverTip(t) {
+		let i = this.hoverTimeEl;
+		if (!i) return;
+		let s = this.getSeekDuration();
+		if (!s) {
+			i.style.opacity = "0";
+			return;
+		}
+		let r = this.canvas.getBoundingClientRect(), a = m((t - r.left) / r.width);
+		i.textContent = E(a * s), i.style.left = a * 100 + "%", i.style.opacity = "1";
+	}
+	_hideHoverTip() {
+		this.hoverTimeEl && (this.hoverTimeEl.style.opacity = "0");
+	}
+	_scrubTo(t) {
+		let i = this.canvas.getBoundingClientRect();
+		if (!i.width) return;
+		this.progress = m((t - i.left) / i.width), this.drawWaveform(), this._updateSeekHandle();
+		let s = this.getSeekDuration();
+		s && this.currentTimeEl ? (this.currentTimeEl.textContent = E(this.progress * s), this._hideHoverTip()) : this._updateHoverTip(t);
+	}
+	setupSeekHandle() {
+		if (!this.options.seekHandle || this.options.waveformStyle !== "seekbar" || !this.seekEl) return;
+		let t = document.createElement("div");
+		t.className = "waveform-seek-handle", t.setAttribute("aria-hidden", "true"), this.seekEl.appendChild(t), this.seekHandleEl = t;
+	}
+	_updateSeekHandle() {
+		let t = this.seekHandleEl;
+		t && (t.style.left = this.progress * 100 + "%", t.classList.toggle("is-visible", this._seekHover || this._dragging), t.classList.toggle("is-active", this._dragging || this._handleNear));
+	}
+	handleCanvasClick(t) {
+		if (this._suppressClick) {
+			this._suppressClick = !1;
+			return;
+		}
+		this._seekFromPointer(t.clientX);
+	}
+	_seekFromPointer(t) {
+		let i = this.canvas.getBoundingClientRect();
+		if (!i.width) return;
+		let s = m((t - i.left) / i.width);
+		if (this.options.audioMode === "external") {
+			this._requestSeek(s);
+			return;
+		}
+		!this.audio || !this.audio.duration || this.seekToPercent(s);
+	}
+	setLoading(t) {
+		if (this.isLoading = t, this.loadingEl) {
+			let i = t && this.waveformData.length === 0;
+			this.loadingEl.style.display = i ? "block" : "none";
+		}
+		this.seekEl && this.seekEl.setAttribute("aria-busy", t ? "true" : "false");
+	}
+	onMetadataLoaded() {
+		this.isDestroying || (this.totalTimeEl && (this.totalTimeEl.textContent = E(this.audio.duration)), this.renderMarkers(), this.updateSeekAccessibility());
+	}
+	setPlayButtonState(t) {
+		if (!this.playBtn) return;
+		this.playBtn.classList.toggle("playing", t);
+		let i = this.playBtn.querySelector(".waveform-icon-play"), s = this.playBtn.querySelector(".waveform-icon-pause");
+		i && (i.style.display = t ? "none" : "flex"), s && (s.style.display = t ? "flex" : "none");
+	}
+	onPlay() {
+		this.isDestroying || (this.isPlaying = !0, this.setPlayButtonState(!0), this.startSmoothUpdate(), this._updateMediaSession("playing"), this._emit("waveformplayer:play", {
+			player: this,
+			url: this.options.url
+		}), this.options.onPlay && this.options.onPlay(this));
+	}
+	onPause() {
+		this.isDestroying || (this.isPlaying = !1, this.setPlayButtonState(!1), this.stopSmoothUpdate(), this._updateMediaSession("paused"), this._emit("waveformplayer:pause", {
+			player: this,
+			url: this.options.url
+		}), this.options.onPause && this.options.onPause(this));
+	}
+	onEnded() {
+		if (this.isDestroying) return;
+		let t = this.audio.duration;
+		this.progress = 0, this.audio.currentTime = 0, this.drawWaveform(), this.currentTimeEl && (this.currentTimeEl.textContent = "0:00"), this._emit("waveformplayer:ended", {
+			player: this,
+			url: this.options.url,
+			currentTime: t,
+			duration: t
+		}), this.onPause(), this.options.onEnd && this.options.onEnd(this);
+	}
+	onError(t) {
+		this.isDestroying || (console.error("[WaveformPlayer] Audio error:", t), this.hasError = !0, this.setLoading(!1), this.errorEl && (this.errorEl.style.display = "flex"), this.canvas && (this.canvas.style.opacity = "0.2"), this.playBtn && (this.playBtn.disabled = !0), this.options.onError && this.options.onError(t, this));
+	}
+	startSmoothUpdate() {
+		this.stopSmoothUpdate();
+		let t = () => {
+			this.isPlaying && this.audio && this.audio.duration && (this.updateProgress(), this.updateTimer = requestAnimationFrame(t));
+		};
+		this.updateTimer = requestAnimationFrame(t);
+	}
+	stopSmoothUpdate() {
+		this.updateTimer && (cancelAnimationFrame(this.updateTimer), this.updateTimer = null);
+	}
+	updateProgress() {
+		if (!this.audio || !this.audio.duration || this._dragging) return;
+		let t = this.audio.currentTime / this.audio.duration;
+		Math.abs(t - this.progress) > .001 && (this.progress = t, this.drawWaveform(), this._updateSeekHandle()), this.currentTimeEl && (this.currentTimeEl.textContent = E(this.audio.currentTime)), this._emit("waveformplayer:timeupdate", {
+			player: this,
+			currentTime: this.audio.currentTime,
+			duration: this.audio.duration,
+			progress: this.progress,
+			url: this.options.url
+		}), this.options.onTimeUpdate && this.options.onTimeUpdate(this.audio.currentTime, this.audio.duration, this), this.updateActiveMarker(), this.updateSeekAccessibility();
+	}
+	updateBPMDisplay() {
+		let t = this.options.bpm || this.detectedBPM;
+		this.bpmEl && this.bpmValueEl && t && (this.bpmValueEl.textContent = Math.round(t), this.bpmEl.style.display = "inline-flex");
+	}
+	refreshTheme() {
+		if (!this._autoTheme) return;
+		this._scheme = R(this.container);
+		let t = X(this.options.colorPreset, this.container);
+		for (let i of this._presetKeys || []) i in t && (this.options[i] = t[i]);
+		this._applyThemeColors();
+	}
+	_applyThemeColors() {
+		this.container.classList.toggle("waveform-theme-light", this._scheme === "light"), this.canvas && this.drawWaveform();
+	}
+	static _watchTheme() {
+		if (e._themeWatch || typeof document > "u") return;
+		let t = () => requestAnimationFrame(() => {
+			e.instances.forEach((a) => {
+				try {
+					a.refreshTheme();
+				} catch {}
+			});
+		}), i = {
+			attributes: !0,
+			attributeFilter: [
+				"class",
+				"data-theme",
+				"data-color-scheme",
+				"style"
+			]
+		}, s = new MutationObserver(t);
+		s.observe(document.documentElement, i), document.body && s.observe(document.body, i);
+		let r = null;
+		try {
+			r = window.matchMedia("(prefers-color-scheme: dark)"), r.addEventListener("change", t);
+		} catch {}
+		e._themeWatch = {
+			obs: s,
+			mq: r,
+			refresh: t
+		};
+	}
+	updateSpeedUI() {
+		if (!this.audio) return;
+		let t = this.container.querySelector(".speed-value");
+		if (t) {
+			let i = this.audio.playbackRate;
+			t.textContent = i === 1 ? "1x" : `${i}x`;
+		}
+		this.container.querySelectorAll(".speed-option").forEach((i) => {
+			let s = parseFloat(i.dataset.rate) === this.audio.playbackRate;
+			i.classList.toggle("active", s), i.setAttribute("aria-checked", s ? "true" : "false");
+		});
+	}
+	play() {
+		if (this.options.singlePlay && e.currentlyPlaying && e.currentlyPlaying !== this && e.currentlyPlaying.pause(), this.options.audioMode === "external") {
+			this._emit("waveformplayer:request-play", this._buildTrackDetail(), !0).defaultPrevented || (e.currentlyPlaying = this);
+			return;
+		}
+		return e.currentlyPlaying = this, this.audio.play();
+	}
+	pause() {
+		if (e.currentlyPlaying === this && (e.currentlyPlaying = null), this.options.audioMode === "external") {
+			this._emit("waveformplayer:request-pause", this._buildTrackDetail(), !0);
+			return;
+		}
+		this.audio.pause();
+	}
+	_buildTrackDetail() {
+		return {
+			url: this.options.url,
+			title: this.options.title,
+			artist: this.options.artist,
+			artwork: this.options.artwork,
+			markers: this.options.markers,
+			waveform: this.options.waveform,
+			id: this.id,
+			player: this
+		};
+	}
+	setPlayingState(t) {
+		let i = this.isPlaying;
+		this.isPlaying = !!t, this.setPlayButtonState(this.isPlaying), this.isPlaying && !i ? (this.startSmoothUpdate?.(), this._emit("waveformplayer:play", {
+			player: this,
+			url: this.options.url
+		}), this.options.onPlay && this.options.onPlay(this)) : !this.isPlaying && i && (this.stopSmoothUpdate?.(), this._emit("waveformplayer:pause", {
+			player: this,
+			url: this.options.url
+		}), this.options.onPause && this.options.onPause(this));
+	}
+	setProgress(t, i) {
+		!i || i <= 0 || (this.progress = m(t / i), this.currentTimeEl && (this.currentTimeEl.textContent = E(t)), this._extDuration = i, this.totalTimeEl && (!this.totalTimeEl.dataset._extSet || this.totalTimeEl.dataset._extDur !== String(i)) && (this.totalTimeEl.textContent = E(i), this.totalTimeEl.dataset._extSet = "1", this.totalTimeEl.dataset._extDur = String(i)), this.drawWaveform?.(), this.updateActiveMarker(), this._emit("waveformplayer:timeupdate", {
+			player: this,
+			currentTime: t,
+			duration: i,
+			progress: this.progress,
+			url: this.options.url
+		}), this.options.onTimeUpdate && this.options.onTimeUpdate(t, i, this), this.progress >= 1 ? this._extEnded || (this._extEnded = !0, this._emit("waveformplayer:ended", {
+			player: this,
+			url: this.options.url,
+			currentTime: i,
+			duration: i
+		}), this.options.onEnd && this.options.onEnd(this)) : this._extEnded = !1, this.updateSeekAccessibility());
+	}
+	togglePlay() {
+		this.isPlaying ? this.pause() : this.play();
+	}
+	seekTo(t) {
+		this.audio && this.audio.duration && (this.audio.currentTime = m(t, 0, this.audio.duration), this.updateProgress());
+	}
+	seekToPercent(t) {
+		this.audio && this.audio.duration && (this.audio.currentTime = this.audio.duration * m(t), this.updateProgress());
+	}
+	setVolume(t) {
+		let i = Number(t);
+		this.audio && Number.isFinite(i) && (this.audio.volume = m(i));
+	}
+	setPlaybackRate(t) {
+		if (!this.audio) return;
+		let i = _(t, null, {
+			min: N,
+			max: F
+		});
+		i !== null && (this.audio.playbackRate = i, this.options.playbackRate = i, this.updateSpeedUI());
+	}
+	destroy() {
+		this.isDestroying = !0, this._emit("waveformplayer:destroy", {
+			player: this,
+			url: this.options.url
+		}), this.pause(), this.stopSmoothUpdate(), clearTimeout(this._markerLabelTimer), this._ac?.abort(), this.resizeObserver && (this.resizeObserver.disconnect(), this.resizeObserver = null), this.resizeHandler && (window.removeEventListener("resize", this.resizeHandler), this.resizeHandler = null), e.instances.delete(this.id), e.currentlyPlaying === this && (e.currentlyPlaying = null), this.audio && (this.audio.pause(), this.audio.src = "", this.audio.load(), this.audio = null), this.container.innerHTML = "", delete this.container.dataset.waveformInitialized, this.canvas = null, this.ctx = null, this.playBtn = null, this.waveformData = [];
+	}
+	static getInstance(t) {
+		if (typeof t == "string") {
+			let i = this.instances.get(t);
+			if (i) return i;
+			let s = document.getElementById(t);
+			if (s) return Array.from(this.instances.values()).find((r) => r.container === s);
+		}
+		if (t instanceof HTMLElement) return Array.from(this.instances.values()).find((i) => i.container === t);
+	}
+	static getAllInstances() {
+		return Array.from(this.instances.values());
+	}
+	static destroyAll() {
+		this.instances.forEach((t) => t.destroy()), this.instances.clear();
+	}
+	static async generateWaveformData(t, i = 1800) {
+		try {
+			return (await K(t, i)).peaks;
+		} catch (s) {
+			throw console.error("[WaveformPlayer] Failed to generate waveform:", s), s;
+		}
+	}
+	static getPeaksUrl(t) {
+		if (!t) return;
+		let i = t.replace(/\.(mp3|wav|ogg|flac|m4a|aac)(\?[^#]*)?(#.*)?$/i, ".json$2$3");
+		return i === t ? void 0 : i;
+	}
 };
-function T() {
-  if (typeof document > "u") return;
-  document.querySelectorAll("[data-waveform-player]").forEach((e2) => {
-    if (e2.dataset.waveformInitialized !== "true") try {
-      new g2(e2), e2.dataset.waveformInitialized = "true";
-    } catch (i2) {
-      console.error("Failed to initialize WaveformPlayer:", i2, e2);
-    }
-  });
+T.utils = {
+	formatTime: E,
+	extractTitleFromUrl: O,
+	escapeHtml: S,
+	isSafeHref: it,
+	parseDataAttributes: I,
+	detectColorScheme: R
+};
+function bt(e) {
+	if (!(e.dataset.waveformInitialized === "true" || T.getInstance(e))) try {
+		new T(e), e.dataset.waveformInitialized = "true";
+	} catch (t) {
+		console.error("[WaveformPlayer] Failed to initialize:", t, e);
+	}
 }
-typeof document < "u" && (document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", T) : T());
-g2.init = T;
-typeof window < "u" && (window.WaveformPlayer = g2);
-var lt = g2;
+function Wt(e = document) {
+	if (!$()) return;
+	let t = e || document;
+	t.matches?.("[data-waveform-player]") && bt(t), t.querySelectorAll("[data-waveform-player]").forEach(bt);
+}
+T.init = Wt;
+$() && (window.WaveformPlayer = T);
+var ie = T;
 
 // packages/block-library/build-module/utils/waveform-utils.mjs
-var DEFAULT_WAVEFORM_HEIGHT = 100;
-function getComputedStyle2(element) {
-  return element.ownerDocument.defaultView.getComputedStyle(element);
+/**
+* Shared utilities for waveform audio player functionality.
+* Used by both the WaveformPlayer component (editor) and view.js (frontend).
+*/
+/**
+* Configuration constants.
+* Note: DEFAULT_WAVEFORM_HEIGHT should match $waveform-player-height in style.scss.
+*/
+const DEFAULT_WAVEFORM_HEIGHT = 100;
+const DEFAULT_SEEK_LABEL = "Seek";
+/**
+* Get computed style for an element, using ownerDocument for iframe compatibility.
+*
+* @param {Element} element - The element to get styles from.
+* @return {CSSStyleDeclaration} The computed style.
+*/
+function getComputedStyle$1(element) {
+	return element.ownerDocument.defaultView.getComputedStyle(element);
 }
-function getWaveformColors(element) {
-  const textColor = getComputedStyle2(element).color;
-  const waveformColor = w(textColor).alpha(0.3).toRgbString();
-  const progressColor = w(textColor).alpha(0.6).toRgbString();
-  return { textColor, waveformColor, progressColor };
+function getTopLevelGradientParts(gradientValue) {
+	const match = gradientValue?.trim().match(/^[\w-]+-gradient\((.*)\)$/i);
+	if (!match) return [];
+	const parts = [];
+	let depth = 0;
+	let current = "";
+	for (const character of match[1]) {
+		if (character === "(") ++depth;
+		else if (character === ")") --depth;
+		if (character === "," && depth === 0) {
+			parts.push(current.trim());
+			current = "";
+			continue;
+		}
+		current += character;
+	}
+	if (current.trim()) parts.push(current.trim());
+	return parts;
 }
-function createWaveformContainer({
-  url,
-  title,
-  artist,
-  artwork,
-  waveformColor,
-  progressColor,
-  buttonColor,
-  height = DEFAULT_WAVEFORM_HEIGHT
-}) {
-  const container = document.createElement("div");
-  container.setAttribute("data-waveform-player", "");
-  container.setAttribute("data-url", url);
-  container.setAttribute("data-height", String(height));
-  container.setAttribute("data-waveform-style", "bars");
-  container.setAttribute("data-waveform-color", waveformColor);
-  container.setAttribute("data-progress-color", progressColor);
-  container.setAttribute("data-button-color", buttonColor);
-  container.setAttribute("data-text-color", buttonColor);
-  container.setAttribute("data-text-secondary-color", buttonColor);
-  if (title) {
-    container.setAttribute("data-title", title);
-  }
-  if (artist) {
-    container.setAttribute("data-subtitle", artist);
-  }
-  if (artwork) {
-    container.setAttribute("data-artwork", artwork);
-  }
-  return container;
+function getLeadingColorFunction(value) {
+	const match = value.match(/^([\w-]+)\(/);
+	if (!match) return;
+	if (![
+		"color",
+		"color-mix",
+		"hsl",
+		"hsla",
+		"hwb",
+		"lab",
+		"lch",
+		"oklab",
+		"oklch",
+		"rgb",
+		"rgba",
+		"var"
+	].includes(match[1].toLowerCase())) return;
+	let depth = 0;
+	let foundOpeningParenthesis = false;
+	for (let index = 0; index < value.length; index++) {
+		const character = value[index];
+		if (character === "(") {
+			foundOpeningParenthesis = true;
+			++depth;
+		} else if (character === ")") --depth;
+		if (foundOpeningParenthesis && depth === 0) return value.slice(0, index + 1);
+	}
 }
+function getColorStopValue(gradientPart) {
+	const colorFunction = getLeadingColorFunction(gradientPart);
+	if (colorFunction) return colorFunction;
+	const [possibleColor] = gradientPart.split(/\s+/);
+	if (A(possibleColor).isValid()) return possibleColor;
+}
+function getWaveformGradientDirection(gradientValue) {
+	const direction = getTopLevelGradientParts(gradientValue)[0];
+	const angleMatch = direction?.match(/^(-?\d+(?:\.\d+)?)deg$/i);
+	if (angleMatch) {
+		const angle = (Number(angleMatch[1]) % 360 + 360) % 360;
+		if (angle === 90 || angle === 270) return "horizontal";
+		if (angle === 0 || angle === 180) return "vertical";
+		return "diagonal";
+	}
+	if (!direction?.startsWith("to ")) return;
+	const sideOrCorner = direction.toLowerCase().replace(/^to\s+/, "");
+	const hasHorizontalSide = sideOrCorner.includes("left") || sideOrCorner.includes("right");
+	const hasVerticalSide = sideOrCorner.includes("top") || sideOrCorner.includes("bottom");
+	if (hasHorizontalSide && hasVerticalSide) return "diagonal";
+	if (hasHorizontalSide) return "horizontal";
+	if (hasVerticalSide) return "vertical";
+}
+function resolveColorValue(element, colorValue) {
+	if (!colorValue || A(colorValue).isValid()) return colorValue;
+	const colorResolver = element.ownerDocument.createElement("span");
+	colorResolver.style.color = colorValue;
+	if (!colorResolver.style.color) return colorValue;
+	element.appendChild(colorResolver);
+	const resolvedColor = getComputedStyle$1(colorResolver).color;
+	colorResolver.remove();
+	return resolvedColor && A(resolvedColor).isValid() ? resolvedColor : colorValue;
+}
+function getResolvedGradientStops(element, gradientValue) {
+	const stops = getWaveformGradientStops(gradientValue)?.map((colorValue) => resolveColorValue(element, colorValue)).filter((colorValue) => A(colorValue).isValid());
+	return stops?.length > 1 ? stops : void 0;
+}
+function applyAlpha(colorValue, alpha) {
+	if (Array.isArray(colorValue)) return colorValue.map((color) => A(color).alpha(alpha).toRgbString());
+	return A(colorValue).alpha(alpha).toRgbString();
+}
+function getRepresentativeColor(colorValue) {
+	if (Array.isArray(colorValue)) return colorValue[colorValue.length - 1];
+	return colorValue;
+}
+function getWaveformGradientStops(gradientValue) {
+	const stops = getTopLevelGradientParts(gradientValue).map(getColorStopValue).filter(Boolean);
+	return stops.length > 1 ? stops : void 0;
+}
+function serializeColorValue(colorValue) {
+	return Array.isArray(colorValue) ? JSON.stringify(colorValue) : colorValue;
+}
+/**
+* Get all colors needed for the waveform player based on the element's styles.
+*
+* @param {Element} element               - The element to derive colors from.
+* @param {string}  waveformColorValue    - The base waveform color value to use.
+* @param {string}  textColorValue        - The text color value to use.
+* @param {string}  waveformGradientValue - The waveform gradient value to use.
+* @return {Object} Object containing textColor, waveformColor, progressColor.
+*/
+function getWaveformColors(element, waveformColorValue, textColorValue, waveformGradientValue) {
+	const textColor = textColorValue || getComputedStyle$1(element).color;
+	const waveformGradientStops = getResolvedGradientStops(element, waveformGradientValue);
+	const waveformBaseColor = waveformGradientStops || waveformColorValue || textColor;
+	const waveformColor = applyAlpha(waveformBaseColor, .3);
+	const progressColor = applyAlpha(waveformBaseColor, .6);
+	const waveformGradient = waveformGradientStops ? getWaveformGradientDirection(waveformGradientValue) : void 0;
+	return {
+		textColor,
+		waveformColor,
+		progressColor,
+		...waveformGradient && { waveformGradient }
+	};
+}
+/**
+* Create a waveform container element with the specified attributes.
+*
+* @param {Object} options                  - The options for the container.
+* @param {string} options.url              - The audio URL.
+* @param {string} options.title            - The track title.
+* @param {string} options.artist           - The track artist.
+* @param {string} options.artwork          - The track image URL.
+* @param {string} options.waveformColor    - The waveform bar color.
+* @param {string} options.progressColor    - The progress indicator color.
+* @param {string} options.waveformGradient - The waveform gradient direction.
+* @param {string} options.buttonColor      - The play button color.
+* @param {string} options.seekLabel        - Accessible label for the seek control.
+* @param {string} options.seekValueText    - Accessible value-text template for the seek control (e.g. '%1$s of %2$s').
+* @param {number} options.height           - The waveform height in pixels.
+* @param {string} options.waveformStyle    - The visualization style (bars, mirror, line, blocks, dots, seekbar).
+* @return {Element} The configured container element.
+*/
+function createWaveformContainer({ url, title, artist, artwork, waveformColor, progressColor, waveformGradient, buttonColor, seekLabel, seekValueText, height = DEFAULT_WAVEFORM_HEIGHT, waveformStyle = "bars" }) {
+	const container = document.createElement("div");
+	container.setAttribute("data-waveform-player", "");
+	container.setAttribute("data-url", url);
+	container.setAttribute("data-height", String(height));
+	container.setAttribute("data-waveform-style", waveformStyle);
+	container.setAttribute("data-waveform-color", serializeColorValue(waveformColor));
+	container.setAttribute("data-progress-color", serializeColorValue(progressColor));
+	if (waveformGradient) container.setAttribute("data-waveform-gradient", waveformGradient);
+	container.setAttribute("data-button-color", buttonColor);
+	container.setAttribute("data-seek-label", getSeekControlLabel(seekLabel));
+	if (seekValueText) container.setAttribute("data-seek-value-text", seekValueText);
+	container.setAttribute("data-text-color", buttonColor);
+	container.setAttribute("data-text-secondary-color", buttonColor);
+	if (title) container.setAttribute("data-title", title);
+	if (artist) container.setAttribute("data-artist", artist);
+	if (artwork) container.setAttribute("data-artwork", artwork);
+	return container;
+}
+/**
+* Apply custom styles to a generated waveform player.
+*
+* @param {Element} container                 - The generated player container.
+* @param {Object}  styles                    - The player styles.
+* @param {string}  styles.backgroundColor    - The waveform area background color.
+* @param {string}  styles.backgroundGradient - The waveform area background gradient.
+* @param {string}  styles.textColor          - The player text color.
+* @param {string}  styles.playButtonColor    - The play button color.
+* @param {string}  styles.playButtonGradient - The play button gradient.
+*/
+function applyWaveformPlayerStyles(container, { backgroundColor, backgroundGradient, textColor, playButtonColor, playButtonGradient } = {}) {
+	const waveformContainer = container.querySelector(".waveform-container");
+	const playButton = container.querySelector(".waveform-btn");
+	const playButtonBaseColor = getRepresentativeColor(getResolvedGradientStops(container, playButtonGradient) || playButtonColor);
+	if (playButtonBaseColor) container.style.setProperty("--wfp-button-color", playButtonBaseColor);
+	else container.style.removeProperty("--wfp-button-color");
+	if (textColor) {
+		container.style.setProperty("--wfp-text-color", textColor);
+		container.style.setProperty("--wfp-text-secondary-color", textColor);
+	} else {
+		container.style.removeProperty("--wfp-text-color");
+		container.style.removeProperty("--wfp-text-secondary-color");
+	}
+	if (playButton) {
+		if (playButtonGradient) playButton.style.background = playButtonGradient;
+		else playButton.style.removeProperty("background");
+	}
+	if (waveformContainer) {
+		if (backgroundGradient) waveformContainer.style.background = backgroundGradient;
+		else if (backgroundColor) {
+			waveformContainer.style.removeProperty("background");
+			waveformContainer.style.backgroundColor = backgroundColor;
+		} else {
+			waveformContainer.style.removeProperty("background");
+			waveformContainer.style.removeProperty("background-color");
+		}
+	}
+}
+/**
+* Apply contrasting color to SVG icon paths for visibility.
+* The icons should contrast with the button background.
+*
+* @param {Element} container   - The waveform container element.
+* @param {string}  buttonColor - The button background color.
+*/
 function styleSvgIcons(container, buttonColor) {
-  const isButtonDark = w(buttonColor).isDark();
-  const iconColor = isButtonDark ? "#ffffff" : "#000000";
-  const svgPaths = container.querySelectorAll("svg path");
-  svgPaths.forEach((path) => {
-    path.style.fill = iconColor;
-  });
+	const iconColor = A(buttonColor).isDark() ? "#ffffff" : "#000000";
+	container.querySelectorAll("svg path").forEach((path) => {
+		path.style.fill = iconColor;
+	});
 }
+/**
+* Set up play button accessibility: aria-label that toggles on play/pause.
+*
+* @param {Element} container    - The waveform container element.
+* @param {Object}  labels       - Button labels.
+* @param {string}  labels.play  - Label for the play state.
+* @param {string}  labels.pause - Label for the pause state.
+*/
 function setupPlayButtonAccessibility(container, { play: playLabel = "Play", pause: pauseLabel = "Pause" } = {}) {
-  const playBtn = container.querySelector(".waveform-btn");
-  if (!playBtn) {
-    return;
-  }
-  playBtn.setAttribute("aria-label", playLabel);
-  const onPlay = () => playBtn.setAttribute("aria-label", pauseLabel);
-  const onPause = () => playBtn.setAttribute("aria-label", playLabel);
-  container.addEventListener("waveformplayer:play", onPlay);
-  container.addEventListener("waveformplayer:pause", onPause);
-  container.addEventListener("waveformplayer:ended", onPause);
-  return () => {
-    container.removeEventListener("waveformplayer:play", onPlay);
-    container.removeEventListener("waveformplayer:pause", onPause);
-    container.removeEventListener("waveformplayer:ended", onPause);
-  };
+	const playBtn = container.querySelector(".waveform-btn");
+	if (!playBtn) return;
+	playBtn.setAttribute("aria-label", playLabel);
+	const onPlay = () => playBtn.setAttribute("aria-label", pauseLabel);
+	const onPause = () => playBtn.setAttribute("aria-label", playLabel);
+	container.addEventListener("waveformplayer:play", onPlay);
+	container.addEventListener("waveformplayer:pause", onPause);
+	container.addEventListener("waveformplayer:ended", onPause);
+	return () => {
+		container.removeEventListener("waveformplayer:play", onPlay);
+		container.removeEventListener("waveformplayer:pause", onPause);
+		container.removeEventListener("waveformplayer:ended", onPause);
+	};
 }
+/**
+* Get the accessible label for the waveform seek control.
+*
+* @param {string} label - Accessible label for the seek control.
+* @return {string} The provided label or translated fallback.
+*/
+function getSeekControlLabel(label) {
+	return label || DEFAULT_SEEK_LABEL;
+}
+/**
+* Update the waveform seek control label.
+*
+* @param {Object} instance - The WaveformPlayer instance.
+* @param {string} label    - Accessible label for the seek control.
+*/
+function updateSeekControlLabel(instance, label) {
+	const seekLabel = getSeekControlLabel(label);
+	instance.options.seekLabel = seekLabel;
+	instance.applySeekLabel?.(seekLabel);
+	const seekControl = instance?.container?.querySelector(".waveform-container");
+	if (seekControl) seekControl.setAttribute("aria-label", seekLabel);
+}
+/**
+* Show the current artwork as the play button background.
+*
+* @param {Element} container  - The waveform player container element.
+* @param {string}  artworkUrl - The track image URL.
+*/
+function setupPlayButtonArtwork(container, artworkUrl) {
+	if (!artworkUrl) {
+		container.classList.remove("has-play-button-artwork");
+		container.style.removeProperty("--wp--playlist--play-button-artwork");
+		return;
+	}
+	container.classList.add("has-play-button-artwork");
+	container.style.setProperty("--wp--playlist--play-button-artwork", `url(${JSON.stringify(artworkUrl)})`);
+}
+/**
+* Log play errors, filtering out expected AbortError.
+*
+* @param {Error} error - The error from play().
+*/
 function logPlayError(error) {
-  if (error.name === "AbortError") {
-    return;
-  }
-  console.error("Playlist play error:", error);
+	if (error.name === "AbortError") return;
+	console.error("Playlist play error:", error);
 }
-function initWaveformPlayer(element, { src, title, artist, image, autoPlay, onEnded, labels }) {
-  const { textColor, waveformColor, progressColor } = getWaveformColors(element);
-  const container = createWaveformContainer({
-    url: src,
-    title,
-    artist,
-    artwork: image,
-    waveformColor,
-    progressColor,
-    buttonColor: textColor
-  });
-  element.appendChild(container);
-  const instance = new lt(container);
-  let cleanupAccessibility;
-  const handlers = {
-    ready: () => {
-      styleSvgIcons(container, textColor);
-      cleanupAccessibility = setupPlayButtonAccessibility(
-        container,
-        labels
-      );
-      if (autoPlay) {
-        instance.play()?.catch(logPlayError);
-      }
-    },
-    ended: () => onEnded?.()
-  };
-  container.addEventListener("waveformplayer:ready", handlers.ready);
-  container.addEventListener("waveformplayer:ended", handlers.ended);
-  return {
-    instance,
-    container,
-    destroy: () => {
-      cleanupAccessibility?.();
-      container.removeEventListener(
-        "waveformplayer:ready",
-        handlers.ready
-      );
-      container.removeEventListener(
-        "waveformplayer:ended",
-        handlers.ended
-      );
-      instance.destroy();
-      container.remove();
-    }
-  };
+/**
+* Initialize a WaveformPlayer instance on an element.
+*
+* This is the shared core logic used by both the React component (editor)
+* and the Interactivity API (frontend).
+*
+* @param {Element}  element                       - The container element (must be in DOM).
+* @param {Object}   options                       - Configuration options.
+* @param {string}   options.src                   - The audio file URL.
+* @param {string}   options.title                 - The track title.
+* @param {string}   options.artist                - The artist name.
+* @param {string}   options.image                 - The track image URL.
+* @param {string}   options.imageAlt              - The track image alt text.
+* @param {string}   options.waveformColor         - The waveform color.
+* @param {string}   options.waveformGradient      - The waveform gradient.
+* @param {string}   options.textColor             - The player text color.
+* @param {string}   options.backgroundColor       - The player background color.
+* @param {string}   options.backgroundGradient    - The player background gradient.
+* @param {boolean}  options.autoPlay              - Whether to auto-play when ready.
+* @param {Function} options.onEnded               - Callback when track ends.
+* @param {Object}   options.labels                - Translated button labels.
+* @param {string}   options.waveformStyle         - Waveform style (bars, mirror, line, blocks, dots, seekbar).
+* @param {boolean}  options.showPlayButtonArtwork - Whether to show artwork on the play button.
+* @return {Object} Object with instance, container, and destroy function.
+*/
+function initWaveformPlayer(element, { src, title, artist, image, imageAlt, waveformColor: waveformColorValue, waveformGradient: waveformGradientValue, textColor: textColorValue, backgroundColor, backgroundGradient, autoPlay, onEnded, labels, waveformStyle, showPlayButtonArtwork = false }) {
+	const playerArtwork = showPlayButtonArtwork ? void 0 : image;
+	const { textColor, waveformColor, progressColor, waveformGradient } = getWaveformColors(element, waveformColorValue, textColorValue, waveformGradientValue);
+	const waveformButtonColor = getRepresentativeColor(getResolvedGradientStops(element, waveformGradientValue) || waveformColorValue);
+	const container = createWaveformContainer({
+		url: src,
+		title,
+		artist,
+		artwork: playerArtwork,
+		waveformColor,
+		progressColor,
+		waveformGradient,
+		buttonColor: textColor,
+		seekLabel: title || labels?.seek,
+		seekValueText: labels?.seekValueText,
+		waveformStyle
+	});
+	element.appendChild(container);
+	const instance = new ie(container);
+	if (instance.artworkEl) instance.artworkEl.alt = imageAlt || "";
+	applyWaveformPlayerStyles(container, {
+		backgroundColor,
+		backgroundGradient,
+		textColor,
+		playButtonColor: showPlayButtonArtwork ? void 0 : waveformButtonColor,
+		playButtonGradient: showPlayButtonArtwork ? void 0 : waveformGradientValue
+	});
+	let cleanupPlayButtonAccessibility;
+	const handlers = {
+		ready: () => {
+			styleSvgIcons(container, waveformButtonColor || textColor);
+			if (showPlayButtonArtwork) setupPlayButtonArtwork(container, image);
+			cleanupPlayButtonAccessibility = setupPlayButtonAccessibility(container, labels);
+			if (autoPlay) instance.play()?.catch(logPlayError);
+		},
+		ended: () => onEnded?.()
+	};
+	container.addEventListener("waveformplayer:ready", handlers.ready);
+	container.addEventListener("waveformplayer:ended", handlers.ended);
+	return {
+		instance,
+		container,
+		destroy: () => {
+			cleanupPlayButtonAccessibility?.();
+			container.removeEventListener("waveformplayer:ready", handlers.ready);
+			container.removeEventListener("waveformplayer:ended", handlers.ended);
+			instance.destroy();
+			container.remove();
+		}
+	};
 }
 
 // packages/block-library/build-module/playlist/view.mjs
-var playerState = /* @__PURE__ */ new WeakMap();
-var { state } = store(
-  "core/playlist",
-  {
-    state: {
-      playlists: {},
-      get isCurrentTrack() {
-        const { currentId, uniqueId } = getContext();
-        return currentId === uniqueId;
-      }
-    },
-    actions: {
-      changeTrack() {
-        const context = getContext();
-        context.currentId = context.uniqueId;
-      }
-    },
-    callbacks: {
-      initWaveformPlayer() {
-        const context = getContext();
-        const { ref } = getElement();
-        if (!context.currentId || !ref) {
-          return;
-        }
-        const track = state.playlists[context.playlistId]?.tracks[context.currentId];
-        if (!track?.url) {
-          return;
-        }
-        const existing = playerState.get(ref);
-        if (existing?.url === track.url) {
-          return;
-        }
-        const shouldAutoPlay = !!existing?.url;
-        initPlayer(ref, track, shouldAutoPlay, context);
-      }
-    }
-  },
-  { lock: true }
-);
+/**
+* Store player state for each element.
+*/
+const playerState = /* @__PURE__ */ new WeakMap();
+const playlistPlayerState = /* @__PURE__ */ new Map();
+const { state } = store("core/playlist", {
+	state: {
+		playlists: {},
+		get isCurrentTrack() {
+			const { currentId, trackId } = getContext();
+			return currentId === trackId;
+		},
+		get isCurrentTrackPlaying() {
+			const { currentId, isPlaying, trackId } = getContext();
+			return currentId === trackId && !!isPlaying;
+		},
+		get trackButtonActionLabel() {
+			const { labelPauseTrack, labelSelectTrack } = getContext();
+			return state.isCurrentTrackPlaying ? labelPauseTrack : labelSelectTrack;
+		}
+	},
+	actions: { changeTrack() {
+		const context = getContext();
+		if (context.currentId === context.trackId) {
+			const player = playlistPlayerState.get(context.playlistId)?.instance;
+			if (player?.isPlaying) {
+				context.isPlaying = false;
+				player.pause();
+			} else player?.play()?.catch(logPlayError);
+			return;
+		}
+		context.isPlaying = false;
+		context.currentId = context.trackId;
+	} },
+	callbacks: { initWaveformPlayer() {
+		const context = getContext();
+		const { ref } = getElement();
+		if (!context.currentId || !ref) return;
+		const track = state.playlists[context.playlistId]?.tracks[context.currentId];
+		if (!track?.url) return;
+		const existing = playerState.get(ref);
+		if (existing?.url === track.url) return;
+		initPlayer(ref, track, !!existing?.url, context);
+	} }
+}, { lock: true });
+/**
+* Initialize the waveform player for a given element.
+*
+* @param {Element} ref            - The container element.
+* @param {Object}  track          - The track data.
+* @param {boolean} shouldAutoPlay - Whether to auto-play after initialization.
+* @param {Object}  context        - The Interactivity API context.
+*/
 function initPlayer(ref, track, shouldAutoPlay, context) {
-  const existing = playerState.get(ref);
-  if (existing?.instance) {
-    existing.instance.loadTrack(track.url, track.title, track.artist, {
-      artwork: track.image
-    }).then(() => {
-      existing.url = track.url;
-      if (shouldAutoPlay) {
-        existing.instance.play()?.catch(logPlayError);
-      }
-    }).catch(logPlayError);
-    return;
-  }
-  const labels = {
-    play: ref.dataset.labelPlay,
-    pause: ref.dataset.labelPause
-  };
-  const player = initWaveformPlayer(ref, {
-    src: track.url,
-    title: track.title,
-    artist: track.artist,
-    image: track.image,
-    autoPlay: shouldAutoPlay,
-    labels,
-    onEnded: () => {
-      const currentIndex = context.tracks.findIndex(
-        (uniqueId) => uniqueId === context.currentId
-      );
-      const nextTrack = context.tracks[currentIndex + 1];
-      if (nextTrack) {
-        context.currentId = nextTrack;
-      }
-    }
-  });
-  playerState.set(ref, {
-    url: track.url,
-    instance: player.instance,
-    destroy: player.destroy
-  });
+	const existing = playerState.get(ref);
+	const showPlayButtonArtwork = context.showPlayButtonArtwork === true;
+	const playerArtwork = showPlayButtonArtwork ? "" : track.image;
+	if (existing?.instance) {
+		if (!!existing.instance.artworkEl !== !!playerArtwork) {
+			existing.destroy?.();
+			playerState.delete(ref);
+		} else {
+			playlistPlayerState.set(context.playlistId, existing);
+			existing.instance.loadTrack(track.url, track.title, track.artist, {
+				artwork: playerArtwork,
+				artworkAlt: playerArtwork ? track.imageAlt : ""
+			}).then(() => {
+				existing.url = track.url;
+				if (existing.instance.artworkEl) existing.instance.artworkEl.alt = track.imageAlt || "";
+				updateSeekControlLabel(existing.instance, track.title || ref.dataset.labelSeek);
+				if (showPlayButtonArtwork) setupPlayButtonArtwork(existing.container, track.image);
+				if (shouldAutoPlay) existing.instance.play()?.catch(logPlayError);
+			}).catch(logPlayError);
+			return;
+		}
+	}
+	const labels = {
+		play: ref.dataset.labelPlay,
+		pause: ref.dataset.labelPause,
+		seek: ref.dataset.labelSeek,
+		seekValueText: ref.dataset.labelSeekValue
+	};
+	const player = initWaveformPlayer(ref, {
+		src: track.url,
+		title: track.title,
+		artist: track.artist,
+		image: track.image,
+		imageAlt: track.imageAlt,
+		waveformColor: ref.dataset.waveformPlayerColor,
+		waveformGradient: ref.dataset.waveformPlayerGradient,
+		backgroundColor: ref.dataset.waveformPlayerBackgroundColor,
+		backgroundGradient: ref.dataset.waveformPlayerBackgroundGradient,
+		autoPlay: shouldAutoPlay,
+		labels,
+		waveformStyle: context.waveformStyle,
+		showPlayButtonArtwork,
+		onEnded: () => {
+			const currentIndex = context.tracks.findIndex((trackId) => trackId === context.currentId);
+			const nextTrack = context.tracks[currentIndex + 1];
+			if (nextTrack) context.currentId = nextTrack;
+		}
+	});
+	const setIsPlaying = (isPlaying) => {
+		context.isPlaying = isPlaying;
+	};
+	const onPlay = () => setIsPlaying(true);
+	const onPause = () => setIsPlaying(false);
+	player.container.addEventListener("waveformplayer:play", onPlay);
+	player.container.addEventListener("waveformplayer:pause", onPause);
+	player.container.addEventListener("waveformplayer:ended", onPause);
+	const destroy = () => {
+		player.container.removeEventListener("waveformplayer:play", onPlay);
+		player.container.removeEventListener("waveformplayer:pause", onPause);
+		player.container.removeEventListener("waveformplayer:ended", onPause);
+		player.destroy();
+	};
+	const nextState = {
+		url: track.url,
+		instance: player.instance,
+		container: player.container,
+		destroy
+	};
+	playerState.set(ref, nextState);
+	playlistPlayerState.set(context.playlistId, nextState);
 }
+
 //# sourceMappingURL=view.js.map

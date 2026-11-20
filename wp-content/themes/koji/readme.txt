@@ -2,11 +2,18 @@
 Contributors: Anlino
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=anders%40andersnoren%2ese&lc=US&item_name=Free%20WordPress%20Themes%20from%20Anders%20Noren&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 4.5
-Tested up to: 6.4
-Requires PHP: 5.4
+Tested up to: 7.1
+Requires PHP: 7.4
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+A clean and lightweight theme for bloggers, with a masonry grid on archive pages.
+
+
+== Description ==
+
+Koji is a clean and lightweight theme for bloggers. It features a masonry grid on the archive pages, a beautiful and minimal design, Block Editor/Gutenberg support, widget areas in the sidebar and the footer, infinite scroll loading that can be set to load more posts on button click or when the visitor reaches the bottom of the page, settings for what post meta to display on archive pages and on single posts, icon links to social media pages, custom logo support, a search overlay that can be accessed from any page, and much more. Demo: https://koji.andersnoren.se
 
 
 == Installation ==
@@ -45,9 +52,18 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 4. Click the blue "Publish" button. The search toggle in the sidebar/mobile menu will now be hidden.
 
 
+== Frequently Asked Questions ==
+
+= Where can I get support? =
+Post your question in the Koji support forum on WordPress.org: https://wordpress.org/support/theme/koji/
+
+= Where can I request a feature or report a bug? =
+Open an issue in the Koji GitHub repository: https://github.com/andersnoren/koji
+
+
 == Copyright ==
 
-Koji WordPress Theme, (C) 2024 Anders Norén.
+Koji WordPress Theme, (C) 2018-2026 Anders Norén.
 Koji is distributed under the terms of the GNU GPL.
 
 This program is free software: you can redistribute it and/or modify
@@ -91,6 +107,40 @@ Source: https://feathericons.com
 
 
 == Changelog ==
+
+Version 2.2.3 (2026-11-03)
+-------------------------
+- Updated Requires PHP in style.css to 7.4, to match readme.txt (the requirement was raised in 2.2).
+- Search overlay: Focus is now returned to the search toggle when the search is closed, with the close button or the Escape key.
+- Replaced deprecated jQuery methods (.keyup(), .resize(), .click() and .focus()) with .on() and .trigger().
+- Fixed the block editor styles not loading in the iframed editor, and set their version to the theme version.
+- Updated the demo URL in README.md.
+- Added the Requires at least header to style.css.
+- Added Description, FAQ and Upgrade Notice sections to the readme.
+
+Version 2.2.2 (2026-08-26)
+-------------------------
+- Bumped "Tested up to" to 7.1.
+- Security: Fixed a broken access control vulnerability in the AJAX "load more" handler that could allow unauthenticated users to query and expose non-public content on archive pages.
+- Security: Added nonce verification to the AJAX load more request to prevent forged cross-site requests to the endpoint.
+- NEW: The lazy loading pagination is now limited to a whitelisted set of supported post types. It default to `post`, `page`, `product`, `jetpack-portfolio`, and `any` (search). It can be extended by hooking into the `koji_allowed_post_types_for_lazy_loading` filter.
+
+Version 2.2.1 (2026-08-05)
+-------------------------
+- Removed the accessibility-ready theme tag.
+- Removed the accessibility.txt file from the theme folder.
+
+Version 2.2 (2026-06-06)
+-------------------------
+- Updated Requires PHP to 7.4.
+- Updated Tested up to to 7.0.
+- Updated theme description with the new URL for the theme demo page.
+- Updated to meet new requirements for the accessibility-ready theme tag.
+	- Improved focus styles.
+	- Updated search overlay with a focus loop for keyboard navigation.
+	- Updated heading structure to prevent skipped levels.
+	- Updated the load more button to be more explicit about what's being loaded.
+	- Added the accessibility.txt file to the theme folder.
 
 Version 2.1 (2024-02-23)
 -------------------------
@@ -375,3 +425,9 @@ Version 1.01 (2018-10-05)
 
 Version 1.00 (2018-09-29)
 -------------------------
+
+
+== Upgrade Notice ==
+
+= 2.2.3 =
+Fixes the block editor styles in the iframed editor.

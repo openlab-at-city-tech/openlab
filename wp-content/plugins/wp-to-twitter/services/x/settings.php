@@ -5,7 +5,7 @@
  * @category OAuth
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.xposterpro.com
  */
 
@@ -56,9 +56,9 @@ function wtt_oauth_test( $auth = false, $context = '' ) {
 /**
  * Get user verification hash.
  *
- * @param mixed int $auth Current author.
+ * @param int|false $auth Current author.
  *
- * @return author hash.
+ * @return string author hash.
  */
 function wpt_get_user_verification( $auth ) {
 	if ( get_option( 'jd_individual_twitter_users' ) !== '1' ) {
@@ -138,8 +138,8 @@ function wtt_oauth_credentials_to_hash( $auth = false ) {
 /**
  * Update OAuth settings.
  *
- * @param mixed int/boolean   $auth Author.
- * @param mixed array/boolean $post POST data.
+ * @param int|boolean   $auth Author.
+ * @param array|boolean $post POST data.
  */
 function wpt_update_oauth_settings( $auth = false, $post = false ) {
 	if ( isset( $post['oauth_settings'] ) ) {
@@ -161,52 +161,74 @@ function wpt_update_oauth_settings( $auth = false, $post = false ) {
 						}
 					}
 				}
-				if ( ! empty( $post['wtt_app_consumer_key'] )
-					&& ! empty( $post['wtt_app_consumer_secret'] )
-					&& ! empty( $post['wtt_oauth_token'] )
-					&& ! empty( $post['wtt_oauth_token_secret'] )
-					&& ! empty( $post['wtt_bearer_token'] )
-				) {
-					$ack = sanitize_text_field( trim( $post['wtt_app_consumer_key'] ) );
-					$acs = sanitize_text_field( trim( $post['wtt_app_consumer_secret'] ) );
-					$ot  = sanitize_text_field( trim( $post['wtt_oauth_token'] ) );
-					$ots = sanitize_text_field( trim( $post['wtt_oauth_token_secret'] ) );
-					$bt  = sanitize_text_field( trim( $post['wtt_bearer_token'] ) );
+				$ack_input = isset( $post['wtt_app_consumer_key'] ) ? sanitize_text_field( trim( $post['wtt_app_consumer_key'] ) ) : '';
+				$acs_input = isset( $post['wtt_app_consumer_secret'] ) ? sanitize_text_field( trim( $post['wtt_app_consumer_secret'] ) ) : '';
+				$ot_input  = isset( $post['wtt_oauth_token'] ) ? sanitize_text_field( trim( $post['wtt_oauth_token'] ) ) : '';
+				$ots_input = isset( $post['wtt_oauth_token_secret'] ) ? sanitize_text_field( trim( $post['wtt_oauth_token_secret'] ) ) : '';
+				$bt_input  = isset( $post['wtt_bearer_token'] ) ? sanitize_text_field( trim( $post['wtt_bearer_token'] ) ) : '';
 
-					if ( ! $auth ) {
-						// If values are filled with asterisks, do not update; these are masked values.
-						if ( stripos( $ack, '***' ) === false ) {
-							update_option( 'app_consumer_key', $ack );
-						}
-						if ( stripos( $acs, '***' ) === false ) {
-							update_option( 'app_consumer_secret', $acs );
-						}
-						if ( stripos( $ot, '***' ) === false ) {
-							update_option( 'oauth_token', $ot );
-						}
-						if ( stripos( $ots, '***' ) === false ) {
-							update_option( 'oauth_token_secret', $ots );
-						}
-						if ( stripos( $bt, '***' ) === false ) {
-							update_option( 'bearer_token', $bt );
-						}
-					} else {
-						if ( stripos( $ack, '***' ) === false ) {
-							update_user_meta( $auth, 'app_consumer_key', $ack );
-						}
-						if ( stripos( $acs, '***' ) === false ) {
-							update_user_meta( $auth, 'app_consumer_secret', $acs );
-						}
-						if ( stripos( $ot, '***' ) === false ) {
-							update_user_meta( $auth, 'oauth_token', $ot );
-						}
-						if ( stripos( $ots, '***' ) === false ) {
-							update_user_meta( $auth, 'oauth_token_secret', $ots );
-						}
-						if ( stripos( $bt, '***' ) === false ) {
-							update_user_meta( $auth, 'bearer_token', $bt );
-						}
+				if ( ! $auth ) {
+					$ack_stored = get_option( 'app_consumer_key', '' );
+					$acs_stored = get_option( 'app_consumer_secret', '' );
+					$ot_stored  = get_option( 'oauth_token', '' );
+					$ots_stored = get_option( 'oauth_token_secret', '' );
+					$bt_stored  = get_option( 'bearer_token', '' );
+
+					if ( '' !== $ack_input && stripos( $ack_input, '***' ) === false ) {
+						update_option( 'app_consumer_key', $ack_input );
+						$ack_stored = $ack_input;
 					}
+					if ( '' !== $acs_input && stripos( $acs_input, '***' ) === false ) {
+						update_option( 'app_consumer_secret', $acs_input );
+						$acs_stored = $acs_input;
+					}
+					if ( '' !== $ot_input && stripos( $ot_input, '***' ) === false ) {
+						update_option( 'oauth_token', $ot_input );
+						$ot_stored = $ot_input;
+					}
+					if ( '' !== $ots_input && stripos( $ots_input, '***' ) === false ) {
+						update_option( 'oauth_token_secret', $ots_input );
+						$ots_stored = $ots_input;
+					}
+					if ( '' !== $bt_input && stripos( $bt_input, '***' ) === false ) {
+						update_option( 'bearer_token', $bt_input );
+						$bt_stored = $bt_input;
+					}
+				} else {
+					$ack_stored = get_user_meta( $auth, 'app_consumer_key', true );
+					$acs_stored = get_user_meta( $auth, 'app_consumer_secret', true );
+					$ot_stored  = get_user_meta( $auth, 'oauth_token', true );
+					$ots_stored = get_user_meta( $auth, 'oauth_token_secret', true );
+					$bt_stored  = get_user_meta( $auth, 'bearer_token', true );
+
+					if ( '' !== $ack_input && stripos( $ack_input, '***' ) === false ) {
+						update_user_meta( $auth, 'app_consumer_key', $ack_input );
+						$ack_stored = $ack_input;
+					}
+					if ( '' !== $acs_input && stripos( $acs_input, '***' ) === false ) {
+						update_user_meta( $auth, 'app_consumer_secret', $acs_input );
+						$acs_stored = $acs_input;
+					}
+					if ( '' !== $ot_input && stripos( $ot_input, '***' ) === false ) {
+						update_user_meta( $auth, 'oauth_token', $ot_input );
+						$ot_stored = $ot_input;
+					}
+					if ( '' !== $ots_input && stripos( $ots_input, '***' ) === false ) {
+						update_user_meta( $auth, 'oauth_token_secret', $ots_input );
+						$ots_stored = $ots_input;
+					}
+					if ( '' !== $bt_input && stripos( $bt_input, '***' ) === false ) {
+						update_user_meta( $auth, 'bearer_token', $bt_input );
+						$bt_stored = $bt_input;
+					}
+				}
+
+				if ( ! empty( $ack_stored )
+					&& ! empty( $acs_stored )
+					&& ! empty( $ot_stored )
+					&& ! empty( $ots_stored )
+					&& ! empty( $bt_stored )
+				) {
 					$message    = 'failed';
 					$connection = wpt_oauth_connection( $auth, '1.1' );
 					if ( $connection ) {
@@ -336,7 +358,7 @@ function wtt_connect_oauth( $auth = false ) {
 		sprintf(
 			// translators: URL for more information.
 			__(
-				'As of February 6th, 2026, <a href="%s">X.com no longer offers a free tier</a>. Add a funding mechanism to continue using X.com.',
+				'As of February 6th, 2026, <a href="%s">X.com no longer offers a free tier</a>. Add a funding mechanism at X to continue using X.com.',
 				'wp-to-twitter'
 			),
 			'https://xposterpro.com/connecting-xposter-and-x-com/'
@@ -372,14 +394,14 @@ function wtt_connect_oauth( $auth = false ) {
 						<li><?php esc_html_e( 'Click "Next" to move to the Keys & Tokens step.', 'wp-to-twitter' ); ?></li>
 					</ul>
 				</li>
-				<li><?php esc_html_e( 'Copy your API Key and API Key secret.', 'wp-to-twitter' ); ?>
+				<li><?php esc_html_e( 'Copy your Consumer Key and Consumer Key secret.', 'wp-to-twitter' ); ?>
 				<div class="tokens auth-fields">
 				<p>
-					<label for="wtt_app_consumer_key"><?php esc_html_e( 'API Key', 'wp-to-twitter' ); ?></label>
+					<label for="wtt_app_consumer_key"><?php esc_html_e( 'Consumer Key', 'wp-to-twitter' ); ?></label>
 					<input type="text" size="45" name="wtt_app_consumer_key" id="wtt_app_consumer_key" value="<?php echo esc_attr( wpt_mask_attr( $ack ) ); ?>" />
 				</p>
 				<p>
-					<label for="wtt_app_consumer_secret"><?php esc_html_e( 'API Key Secret', 'wp-to-twitter' ); ?></label>
+					<label for="wtt_app_consumer_secret"><?php esc_html_e( 'Consumer Key Secret', 'wp-to-twitter' ); ?></label>
 					<input type="text" size="45" name="wtt_app_consumer_secret" id="wtt_app_consumer_secret" value="<?php echo esc_attr( wpt_mask_attr( $acs ) ); ?>" />
 				</p>
 				</div>

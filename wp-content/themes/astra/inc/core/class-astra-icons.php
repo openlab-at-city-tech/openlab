@@ -222,9 +222,6 @@ class Astra_Icons {
 			'icon-' . $icon,
 		);
 
-		/**
-		 * @psalm-suppress TooManyArguments
-		 */
 		$output = apply_filters(
 			'astra_svg_icon', // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 			sprintf(

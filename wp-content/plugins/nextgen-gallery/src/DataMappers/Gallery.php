@@ -8,6 +8,8 @@ use Imagely\NGG\DataTypes\Gallery as GalleryType;
 
 use Imagely\NGG\DataMapper\TableDriver;
 use Imagely\NGG\Display\I18N;
+use Imagely\NGG\PrivateGalleries\ClientPage;
+use Imagely\NGG\PrivateGalleries\Registry as PrivateGalleries;
 use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Util\Transient;
 
@@ -18,6 +20,14 @@ use Imagely\NGG\Util\Transient;
  * and gallery-specific functionality.
  */
 class Gallery extends TableDriver {
+
+	/**
+	 * Per-gallery display type setting keys the admin form saved under the wrong name, mapped to the
+	 * key the display type reads: [ display type => [ legacy key => key ] ].
+	 */
+	const LEGACY_SETTING_KEYS = [
+		'photocrati-nextgen_pro_blog_gallery' => [ 'image_spacing' => 'spacing' ],
+	];
 
 	/**
 	 * Singleton instance of the Gallery mapper.
@@ -81,6 +91,10 @@ class Gallery extends TableDriver {
 
 		$this->define_column( 'is_ecommerce_enabled', 'TINYINT', 0 );
 
+		// Client page unlocks by logged-out visitors; written only by PrivateGalleries\Gate.
+		$this->define_column( 'access_count', 'INT', 0 );
+		$this->define_column( 'last_access_at', 'DATETIME' );
+
 		if ( \C_NextGEN_Bootstrap::get_pro_api_version() < 4.0 ) {
 			$this->define_column( 'pricelist_id', 'BIGINT', 0, true );
 		}
@@ -120,8 +134,10 @@ class Gallery extends TableDriver {
 		$retval = $this->select()->where( [ 'slug = %s', $sanitized_slug ] )->limit( 1 )->run_query();
 
 		// NextGen used to turn "This & That" into "this-&amp;-that" when assigning gallery slugs.
+		// Retry once; recursing never ended (str_replace() re-adds '&').
 		if ( empty( $retval ) && strpos( $slug, '&' ) !== false ) {
-			return $this->get_by_slug( str_replace( '&', '&amp;', $slug ) );
+			$escaped = sanitize_title( str_replace( '&', '&amp;', $slug ) );
+			$retval  = $this->select()->where( [ 'slug = %s', $escaped ] )->limit( 1 )->run_query();
 		}
 
 		return reset( $retval );
@@ -193,6 +209,31 @@ class Gallery extends TableDriver {
 	}
 
 	/**
+	 * Moves a per-gallery setting stored under a key the admin form used by mistake to the key the
+	 * display type reads. The Customize tab saved Pro Blog spacing as image_spacing, which the Pro Blog
+	 * renderer never reads (nextgen-gallery-pro#554). The form now saves spacing, so a stored
+	 * image_spacing is always the value the user entered there.
+	 *
+	 * @param string $type_name Display type name.
+	 * @param array  $settings  Stored settings for that display type on one gallery.
+	 * @return array
+	 */
+	public static function normalize_display_type_settings( $type_name, $settings ) {
+		if ( ! is_array( $settings ) ) {
+			return $settings;
+		}
+
+		foreach ( self::LEGACY_SETTING_KEYS[ $type_name ] ?? [] as $legacy_key => $key ) {
+			if ( array_key_exists( $legacy_key, $settings ) ) {
+				$settings[ $key ] = $settings[ $legacy_key ];
+				unset( $settings[ $legacy_key ] );
+			}
+		}
+
+		return $settings;
+	}
+
+	/**
 	 * Fills missing display types in the given per-gallery settings with the current global defaults.
 	 * Presentation-only (admin UI); never persisted onto the gallery.
 	 *
@@ -213,19 +254,48 @@ class Gallery extends TableDriver {
 			// is_ecommerce_enabled is a gallery-level column, not a per-display-type setting.
 			unset( $sanitized_defaults['is_ecommerce_enabled'] );
 
+			// A misnamed key left in the global settings is dropped rather than moved: moving it would
+			// overwrite the gallery's own value for the real key.
+			foreach ( array_keys( self::LEGACY_SETTING_KEYS[ $type_name ] ?? [] ) as $legacy_key ) {
+				unset( $sanitized_defaults[ $legacy_key ] );
+			}
+
 			// Fill at the key level: a partially-customized type keeps its stored values but has its
 			// untouched keys filled from the current global, so the admin UI shows live global values
 			// (not stale client-side defaults) for keys the migration stripped as default-equal.
 			$settings[ $type_name ] = isset( $settings[ $type_name ] ) && is_array( $settings[ $type_name ] )
-				? array_merge( $sanitized_defaults, $settings[ $type_name ] )
+				? array_merge( $sanitized_defaults, self::normalize_display_type_settings( $type_name, $settings[ $type_name ] ) )
 				: $sanitized_defaults;
 		}
 
 		return $settings;
 	}
 
+	/**
+	 * Leaves the access counters out of updates, so a save never overwrites a newer count.
+	 *
+	 * @param object $entity Gallery entity.
+	 * @return array
+	 */
+	public function _convert_to_table_data( $entity ) {
+		$data = parent::_convert_to_table_data( $entity );
+
+		if ( ! empty( $data['gid'] ) ) {
+			unset( $data['access_count'], $data['last_access_at'] );
+		}
+
+		return $data;
+	}
+
 	public function save_entity( $entity ) {
 		$storage = StorageManager::get_instance();
+
+		// Only PrivateGalleries\ClientPage may change the page or the flag of a set up private gallery.
+		$gid = (int) ( $entity->{$this->get_primary_key_column()} ?? 0 );
+		if ( $gid > 0 && ! ClientPage::is_writing() && PrivateGalleries::is_private( $gid ) ) {
+			$entity->pageid     = PrivateGalleries::page_for( $gid );
+			$entity->is_private = 1;
+		}
 
 		// Set dates using WordPress functions.
 		$current_time = current_time( 'mysql', true );
@@ -293,6 +363,7 @@ class Gallery extends TableDriver {
 			}
 			Transient::flush( 'displayed_gallery_rendering' );
 			Transient::flush( 'rest_galleries' );
+			PrivateGalleries::rebuild();
 		}
 
 		return $retval;
@@ -365,6 +436,7 @@ class Gallery extends TableDriver {
 				do_action( 'ngg_delete_gallery', $entity );
 				Transient::flush( 'displayed_gallery_rendering' );
 				Transient::flush( 'rest_galleries' );
+				PrivateGalleries::rebuild();
 			}
 		}
 

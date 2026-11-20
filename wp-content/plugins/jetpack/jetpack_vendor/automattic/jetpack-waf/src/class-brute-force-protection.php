@@ -102,11 +102,11 @@ class Brute_Force_Protection {
 	public $last_response;
 
 	/**
-	 * Block login with math, default is 1.
+	 * Block login with math, default is 0.
 	 *
 	 * @var int
 	 */
-	private $block_login_with_math;
+	private $block_login_with_math = 0;
 
 	/**
 	 * Singleton implementation
@@ -114,7 +114,7 @@ class Brute_Force_Protection {
 	 * @return object
 	 */
 	public static function instance() {
-		if ( ! is_a( self::$instance, 'Brute_Force_Protection' ) ) {
+		if ( ! self::$instance instanceof self ) {
 			self::$instance = new Brute_Force_Protection();
 		}
 
@@ -142,6 +142,7 @@ class Brute_Force_Protection {
 
 		// This is a backup in case $pagenow fails for some reason.
 		add_action( 'login_form', array( $this, 'check_login_ability' ), 1 );
+		add_action( 'login_form', array( $this, 'render_login_attempt_token' ), 2 );
 
 		// Runs a script every day to clean up expired transients so they don't
 		// clog up our users' databases.
@@ -149,7 +150,7 @@ class Brute_Force_Protection {
 		add_action( 'jp_purge_transients_cron', array( '\Automattic\Jetpack\Waf\Brute_Force_Protection\Brute_Force_Protection_Transient_Cleanup', 'jp_purge_transients' ) );
 
 		// Load math fallback after math page form submission.
-		if ( isset( $_POST['jetpack_protect_process_math_form'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- POST request just determines if we need to use Math for Authentication.
+		if ( isset( $_POST['jetpack_protect_process_math_form'] ) ) {
 
 			new Brute_Force_Protection_Math_Authenticate();
 		}
@@ -172,7 +173,8 @@ class Brute_Force_Protection {
 			global $pagenow;
 			$brute_force_protection = self::instance();
 
-			if ( isset( $pagenow ) && 'wp-login.php' === $pagenow ) {
+			// Set-password links stay reachable so new users can finish registering; logins are still checked on `authenticate`.
+			if ( isset( $pagenow ) && 'wp-login.php' === $pagenow && ! $brute_force_protection->is_valid_password_reset_request() ) {
 				$brute_force_protection->check_login_ability();
 			}
 		}
@@ -242,7 +244,11 @@ class Brute_Force_Protection {
 	public function maybe_get_protect_key() {
 		if ( get_site_option( 'jetpack_protect_activating', false ) && ! get_site_option( 'jetpack_protect_key', false ) ) {
 			$key = $this->get_protect_key();
-			delete_site_option( 'jetpack_protect_activating' );
+
+			if ( ! empty( $key ) ) {
+				delete_site_option( 'jetpack_protect_activating' );
+			}
+
 			return $key;
 		}
 
@@ -260,7 +266,7 @@ class Brute_Force_Protection {
 		$updated_recently = $this->get_transient( 'jpp_headers_updated_recently' );
 
 		if ( ! $force ) {
-			if ( isset( $_GET['protect_update_headers'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- this doesn't change anything, just forces the once-a-day check to run via force if set.
+			if ( isset( $_GET['protect_update_headers'] ) ) {
 				$force = true;
 			}
 		}
@@ -525,7 +531,7 @@ class Brute_Force_Protection {
 	 * @return void
 	 */
 	public function log_failed_attempt( $username, $error = null ) {
-		$username = $username ?? '';
+		$username ??= '';
 
 		// Skip if Account protection password validation error.
 		if ( is_object( $error ) && isset( $error->errors['password_detection_validation_error'] ) ) {
@@ -586,7 +592,8 @@ class Brute_Force_Protection {
 			$user = get_user_by( 'login', $user_login );
 		}
 
-		$this->protect_call( 'successful_login', array( 'roles' => $user->roles ) );
+		$roles = $user instanceof \WP_User ? $user->roles : array();
+		$this->protect_call( 'successful_login', array( 'roles' => $roles ) );
 	}
 
 	/**
@@ -594,26 +601,43 @@ class Brute_Force_Protection {
 	 *
 	 * If we are using our math fallback, authenticate via math-fallback.php
 	 *
-	 * @param string $user     - the user.
+	 * @param mixed  $user     - the current authentication result.
 	 * @param string $username - the username.
 	 * @param string $password - the password.
 	 *
-	 * @return string $user
+	 * @return mixed $user
 	 */
 	public function check_preauth( $user = 'Not Used By Protect', $username = 'Not Used By Protect', $password = 'Not Used By Protect' ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
-		$allow_login = $this->check_login_ability( true );
-		$use_math    = $this->get_transient( 'brute_use_math' );
-
-		if ( ! $allow_login ) {
+		if ( ! $this->check_login_ability( true ) ) {
 			$this->block_with_math();
 		}
 
-		if ( ( 1 == $use_math || 1 == $this->block_login_with_math ) && isset( $_POST['log'] ) ) { // phpcs:ignore Universal.Operators.StrictComparisons.LooseEqual, WordPress.Security.NonceVerification.Missing -- POST request just determines if we use math authentication.
+		if ( $this->math_required() && isset( $_POST['log'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- POST request just determines if we use math authentication.
 
 			Brute_Force_Protection_Math_Authenticate::math_authenticate();
 		}
 
 		return $user;
+	}
+
+	/**
+	 * Add a token to a login form that Protect is not asking to solve math for.
+	 */
+	public function render_login_attempt_token() {
+		if ( $this->math_required() ) {
+			return;
+		}
+
+		( new Brute_Force_Protection_Login_Attempt_Token( $this ) )->render_field();
+	}
+
+	/**
+	 * Whether this request must pass the math check, after a soft block or an unreachable Protect API.
+	 *
+	 * @return bool
+	 */
+	private function math_required() {
+		return 1 === $this->block_login_with_math || 1 === (int) $this->get_transient( 'brute_use_math' );
 	}
 
 	/**
@@ -877,6 +901,36 @@ class Brute_Force_Protection {
 	}
 
 	/**
+	 * Whether this is a wp-login.php set-password request carrying a valid reset key.
+	 *
+	 * Core moves the key from the link into a cookie on the first request, so both are checked.
+	 *
+	 * @since 0.29.3
+	 *
+	 * @return bool
+	 */
+	public function is_valid_password_reset_request() {
+		// phpcs:disable WordPress.Security.NonceVerification -- Read-only; core validates the reset key itself.
+		$action = isset( $_REQUEST['action'] ) && is_string( $_REQUEST['action'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['action'] ) ) : '';
+		if ( 'rp' !== $action && 'resetpass' !== $action ) {
+			return false;
+		}
+
+		$rp_cookie = defined( 'COOKIEHASH' ) ? 'wp-resetpass-' . COOKIEHASH : '';
+		if ( isset( $_GET['key'] ) && isset( $_GET['login'] ) && is_string( $_GET['key'] ) && is_string( $_GET['login'] ) ) {
+			$key   = wp_unslash( $_GET['key'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Passed to check_password_reset_key().
+			$login = wp_unslash( $_GET['login'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Passed to check_password_reset_key().
+		} elseif ( $rp_cookie && isset( $_COOKIE[ $rp_cookie ] ) && is_string( $_COOKIE[ $rp_cookie ] ) && 0 < strpos( $_COOKIE[ $rp_cookie ], ':' ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Only checked for a separator.
+			list( $login, $key ) = explode( ':', wp_unslash( $_COOKIE[ $rp_cookie ] ), 2 ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Passed to check_password_reset_key().
+		} else {
+			return false;
+		}
+		// phpcs:enable WordPress.Security.NonceVerification
+
+		return ! is_wp_error( check_password_reset_key( $key, $login ) );
+	}
+
+	/**
 	 * Kill a login attempt
 	 */
 	public function kill_login() {
@@ -907,7 +961,7 @@ class Brute_Force_Protection {
 			// translators: variable is the IP address that was flagged.
 			$die_string = sprintf( __( 'Your IP (%1$s) has been flagged for potential security violations.', 'jetpack-waf' ), str_replace( 'http://', '', esc_url( 'http://' . $ip ) ) );
 			wp_die(
-				$die_string, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url used when forming string.
+				$die_string,
 				esc_html__( 'Login Blocked by Jetpack', 'jetpack-waf' ),
 				array( 'response' => 403 )
 			);
@@ -954,15 +1008,11 @@ class Brute_Force_Protection {
 	 * @return int
 	 */
 	public function get_main_blog_jetpack_id() {
-		if ( ! is_main_site() ) {
-			switch_to_blog( $this->get_main_blog_id() );
-			$id = Jetpack_Options::get_option( 'id', false );
-			restore_current_blog();
-		} else {
-			$id = Jetpack_Options::get_option( 'id' );
-		}
-
-		return $id;
+		return $this->on_main_site(
+			static function () {
+				return Jetpack_Options::get_option( 'id' );
+			}
+		);
 	}
 
 	/**
@@ -1109,15 +1159,60 @@ class Brute_Force_Protection {
 	 * @return bool False if value was not set and true if value was set.
 	 */
 	public function set_transient( $transient, $value, $expiration ) {
-		if ( is_multisite() && ! is_main_site() ) {
-			switch_to_blog( $this->get_main_blog_id() );
-			$return = set_transient( $transient, $value, $expiration );
-			restore_current_blog();
+		return $this->on_main_site(
+			static function () use ( $transient, $value, $expiration ) {
+				return set_transient( $transient, $value, $expiration );
+			}
+		);
+	}
 
-			return $return;
+	/**
+	 * Claim a login attempt token, succeeding only for the first request that claims it.
+	 *
+	 * Writes the options table directly: add_option() upserts, so concurrent claims could all succeed.
+	 *
+	 * @param string $claim_name Claim name, stored as a transient the daily purge removes.
+	 * @param int    $expiration Time until expiration in seconds.
+	 *
+	 * @return bool Whether this request made the claim.
+	 */
+	public function add_login_attempt_claim( $claim_name, $expiration ) {
+		return $this->on_main_site(
+			static function () use ( $claim_name, $expiration ) {
+				global $wpdb;
+
+				$insert = "INSERT IGNORE INTO {$wpdb->options} (option_name, option_value, autoload) VALUES (%s, %s, 'off')";
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared -- Atomic insert-if-absent has no core API; $insert is prepared here.
+				$wpdb->query( $wpdb->prepare( $insert, '_transient_' . $claim_name, '1' ) );
+				if ( 1 !== (int) $wpdb->rows_affected ) {
+					return false;
+				}
+
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared -- See above.
+				$wpdb->query( $wpdb->prepare( $insert, '_transient_timeout_' . $claim_name, (string) ( time() + $expiration ) ) );
+
+				return true;
+			}
+		);
+	}
+
+	/**
+	 * Run a callback on the network's main site, where Protect keeps its transients.
+	 *
+	 * @param callable $callback Callback to run.
+	 *
+	 * @return mixed The callback's return value.
+	 */
+	private function on_main_site( $callback ) {
+		if ( ! is_multisite() || is_main_site() ) {
+			return $callback();
 		}
 
-		return set_transient( $transient, $value, $expiration );
+		switch_to_blog( $this->get_main_blog_id() );
+		$return = $callback();
+		restore_current_blog();
+
+		return $return;
 	}
 
 	/**
@@ -1129,15 +1224,11 @@ class Brute_Force_Protection {
 	 * @return bool true if successful, false otherwise
 	 */
 	public function delete_transient( $transient ) {
-		if ( is_multisite() && ! is_main_site() ) {
-			switch_to_blog( $this->get_main_blog_id() );
-			$return = delete_transient( $transient );
-			restore_current_blog();
-
-			return $return;
-		}
-
-		return delete_transient( $transient );
+		return $this->on_main_site(
+			static function () use ( $transient ) {
+				return delete_transient( $transient );
+			}
+		);
 	}
 
 	/**
@@ -1149,15 +1240,11 @@ class Brute_Force_Protection {
 	 * @return mixed Value of transient.
 	 */
 	public function get_transient( $transient ) {
-		if ( is_multisite() && ! is_main_site() ) {
-			switch_to_blog( $this->get_main_blog_id() );
-			$return = get_transient( $transient );
-			restore_current_blog();
-
-			return $return;
-		}
-
-		return get_transient( $transient );
+		return $this->on_main_site(
+			static function () use ( $transient ) {
+				return get_transient( $transient );
+			}
+		);
 	}
 
 	/**

@@ -1,9 +1,8 @@
 # Neve #
 **Contributors:** [themeisle](https://profiles.wordpress.org/themeisle)  
-**Tags:** blog,block-patterns, custom-logo, e-commerce, rtl-language-support, grid-layout, one-column, two-columns, custom-background, custom-colors, custom-header, custom-menu, featured-image-header, featured-images, flexible-header, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready, accessibility-ready, wide-blocks, block-styles, footer-widgets, portfolio, left-sidebar, right-sidebar  
+**Tags:** blog, block-patterns, custom-logo, e-commerce, rtl-language-support, grid-layout, one-column, two-columns, custom-background, custom-colors, custom-menu, featured-image-header, featured-images, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready, accessibility-ready, wide-blocks, block-styles, footer-widgets, portfolio, left-sidebar, right-sidebar  
 **Requires at least:** 5.5  
-**Tested up to:** 6.4  
-**Stable tag:** trunk  
+**Tested up to:** 7.1  
 **Requires PHP:** 7.0  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -18,6 +17,175 @@ Neve WordPress theme, Copyright 2018 Themeisle
 Neve is distributed under the terms of the GNU GPLv2 or later
 
 ## Changelog ##
+
+##### [Version 4.2.19](https://github.com/Codeinwp/neve/compare/v4.2.18...v4.2.19) (2026-11-06)
+
+- Updated dependencies
+
+
+
+
+##### [Version 4.2.18](https://github.com/Codeinwp/neve/compare/v4.2.17...v4.2.18) (2026-11-04)
+
+- Fixed duplicate H1 headings on pages with hidden titles
+- Fixed palette colors with surrounding spaces not saving
+- Fixed legacy block button colors saved as RGB or HSL
+- Added a Help panel to make it easier to contact support and find answers
+- Updated dependencies
+
+
+
+
+##### [Version 4.2.17](https://github.com/Codeinwp/neve/compare/v4.2.16...v4.2.17) (2026-10-21)
+
+- Fixed Customizer freezing when WooCommerce is inactive
+- Fixed Customizer font previews using local fonts when hosted locally
+- Fixed cart coupon errors sharing the controls row
+- Fixed Customizer colors accepting HTML inside gradient values
+- Fixed block styles overriding theme defaults in the editor
+- Fixed Customizer error when saving responsive header settings
+- Fixed letter spacing control handling
+- Fixed the imported content width metadata
+- Fixed blank Neve dashboard when link opened Starter Sites tab
+- Added global Customizer toggles to disable header and footer
+- Fixed AMP submenu toggle accessibility
+- Updated dependencies
+
+
+
+
+##### [Version 4.2.16](https://github.com/Codeinwp/neve/compare/v4.2.15...v4.2.16) (2026-10-07)
+
+- Improves mobile dropdown labels to keep text after less-than signs.
+- Fixes header search and palette icons showing button boxes.
+
+
+
+
+##### [Version 4.2.15](https://github.com/Codeinwp/neve/compare/v4.2.14...v4.2.15) (2026-10-01)
+
+- Fixed menu caret buttons showing a rounded background and shadow instead of the plain arrow.
+- Fixed header cart, My Account, and Wishlist icons ignoring their configured hover color.
+
+
+
+
+##### [Version 4.2.14](https://github.com/Codeinwp/neve/compare/v4.2.13...v4.2.14) (2026-09-29)
+
+- Fixed Elementor pages losing Neve palette colors after CSS regeneration.
+- Added AI agent support: let AI assistants read and change your Neve settings.
+
+
+
+
+##### [Version 4.2.13](https://github.com/Codeinwp/neve/compare/v4.2.12...v4.2.13) (2026-09-24)
+
+- Improved Neve accessibility with keyboard-ready menus, stronger contrast, and better page reflow.
+
+
+
+
+##### [Version 4.2.12](https://github.com/Codeinwp/neve/compare/v4.2.11...v4.2.12) (2026-09-14)
+
+- Fixed archive pages crashing when post content order data is stored as an array.
+- Fixed fatal errors when unavailable Pro navigation files load.
+- Fixed Neve page options reverting after you save them in the block editor.
+- Fixed site errors when a navigation walker is unavailable.
+- Fixed duplicate Footer Menu IDs in responsive footer layouts.
+- Fixed dashboard errors when the changelog handler is unavailable.
+- Fixed Customizer preview crashes when color settings receive array values.
+- Fixed Customizer crashes when Header Footer Grid components cannot be resolved.
+- Fixed mobile off-canvas carts that did not open after adding products.
+- Fixed the editor title not dimming when you disable the page title.
+- Fixed right-edge dropdown menus opening beside their parent items.
+- Fixed manual excerpt links disappearing on blog and archive pages.
+- Fixed Elementor global color requests that return errors.
+- Fixed the Customizer crash when a single-post element order is stored as an array.
+- Fixed the faint shadow line below transparent headers.
+- Fixed header logo errors when saved logo data is an array.
+- Fixed page crashes when a Google Fonts filter returns an invalid list.
+- Fixed frontend CSS errors when legacy responsive typography settings use array values.
+- Fixed checkout labels using readable typography when form label settings are empty.
+- Fixed page errors when scroll-to-top settings are unavailable.
+- Fixed frontend pages failing when saved responsive container widths are invalid.
+
+
+
+
+##### [Version 4.2.11](https://github.com/Codeinwp/neve/compare/v4.2.10...v4.2.11) (2026-08-12)
+
+- Fixed a fatal error on the header cart icon and cart magic tags when WooCommerce was active but its cart object was not available, such as during REST or cron requests.
+- Fixed wide and full-width blocks nested in sidebars or column blocks losing their side spacing.
+- Fixed a crash on the Plugins screen when the installed plugin list was not available.
+- Improved stability by preventing fatal errors when a theme class file is missing or unreadable.
+
+
+
+
+##### [Version 4.2.10](https://github.com/Codeinwp/neve/compare/v4.2.9...v4.2.10) (2026-07-29)
+
+- Fixed the Related Products slider staying a plain grid on products that have no gallery images.
+- Updated dependencies
+
+
+
+
+##### [Version 4.2.9](https://github.com/Codeinwp/neve/compare/v4.2.8...v4.2.9) (2026-07-22)
+
+- Fixed a JavaScript conflict with third-party scripts that could stop the site logo from switching correctly between light and dark color palettes.
+- Fixed an error that could prevent the mobile menu from opening when certain optimization plugins delay the loading of scripts.
+- Fixed an issue where posts with manually written excerpts ignored the excerpt length setting and were missing the Read More link on blog and archive pages.
+- Fixed an issue where menu items with quotes in their titles could break the mobile submenu toggle button.
+- Fixed full-width images displaying with a small gap on each side instead of stretching edge to edge.
+- Updated dependencies
+
+
+
+
+##### [Version 4.2.8](https://github.com/Codeinwp/neve/compare/v4.2.7...v4.2.8) (2026-07-08)
+
+- Fixed issue with alignment styles of wide full-width blocks
+
+
+
+
+##### [Version 4.2.7](https://github.com/Codeinwp/neve/compare/v4.2.6...v4.2.7) (2026-06-30)
+
+- Updated Starter Site
+- Updated dependencies
+
+
+
+
+##### [Version 4.2.6](https://github.com/Codeinwp/neve/compare/v4.2.5...v4.2.6) (2026-06-22)
+
+- Responsive Controls and UI Enhancements
+- Navigation and Mini Cart Improvements
+- Gutenberg Block and Sidebar Compatibility
+- Google Fonts Library Updates
+
+
+
+
+##### [Version 4.2.5](https://github.com/Codeinwp/neve/compare/v4.2.4...v4.2.5) (2026-06-12)
+
+- Added New Starter site content
+
+
+
+
+##### [Version 4.2.4](https://github.com/Codeinwp/neve/compare/v4.2.3...v4.2.4) (2026-05-21)
+
+- 100+ NEW Starter Sites
+- Fixed button shadow options not applying in the customizer when you first add the Button component
+- Ensured compatibility with PPOM plugin popup button
+- Fixed infinite scroll displaying incorrect posts in Archive page of CPT
+- Fixed issue where disabling Sticky header option was not possible when using multiple headers
+- Improved compatibility with WP 7.0
+- Updated dependencies
+
+
+
 
 ##### [Version 4.2.3](https://github.com/Codeinwp/neve/compare/v4.2.2...v4.2.3) (2026-03-09)
 
@@ -56,7 +224,7 @@ New Features
 - Integrated installation of Login Customizer, Cookie Notice, Duplicate Page, and Custom Fonts/Scripts modules
 - New Maintenance and Coming Soon custom layouts [PRO]
 - Admin Dashboard Customizer module to personalize the WordPress admin experience (Menu, Admin Bar, Custom Pages) [Agency]
-- Included premium WP Landing Kit wordpress plugin [Agency]
+- Included premium WP Landing Kit WordPress plugin [Agency]
 
 Enhancements
 

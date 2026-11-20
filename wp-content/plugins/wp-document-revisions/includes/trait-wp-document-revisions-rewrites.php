@@ -5,6 +5,11 @@
  * @package WP_Document_Revisions
  */
 
+// direct file access protection.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Rewrite rules and permalink functionality for WP_Document_Revisions.
  */
@@ -25,10 +30,14 @@ trait WP_Document_Revisions_Rewrites {
 	 * Adds document rewrite rules to the rewrite array.
 	 *
 	 * @since 0.5
-	 * @param Array $rules rewrite rules.
-	 * @return Array rewrite rules
+	 * @param mixed $rules rewrite rules. `transient_rewrite_rules` passes false when the rules aren't cached.
+	 * @return mixed rewrite rules
 	 */
-	public function revision_rewrite( array $rules ): array {
+	public function revision_rewrite( $rules ) {
+		if ( ! is_array( $rules ) ) {
+			return $rules;
+		}
+
 		$slug = $this->document_slug();
 
 		// remove any previous versions of file matches (will be added back if same).
@@ -79,20 +88,42 @@ trait WP_Document_Revisions_Rewrites {
 
 
 	/**
+	 * Whether document permalinks omit the /yyyy/mm date element.
+	 *
+	 * The network settings page saves this with update_site_option(), like the
+	 * document slug and upload directory, so read it the same way. A per-site value
+	 * saved from the Media settings screen is used only when no network value exists.
+	 *
+	 * @since 5.6.0
+	 * @return bool
+	 */
+	public function document_link_date(): bool {
+		$link_date = get_network_option( null, 'document_link_date', null );
+		if ( null === $link_date ) {
+			$link_date = get_option( 'document_link_date' );
+		}
+
+		return (bool) $link_date;
+	}
+
+	/**
 	 * Builds document post type permalink.
 	 *
 	 * @since 0.5
-	 * @param string $link      original permalink.
-	 * @param object $document  post object.
-	 * @param bool   $leavename whether to leave the %document% placeholder.
-	 * @return string the real permalink
+	 * @param mixed $link      original permalink.
+	 * @param mixed $document  post object.
+	 * @param mixed $leavename whether to leave the %document% placeholder.
+	 * @return mixed the real permalink
 	 */
-	public function permalink( string $link, object $document, bool $leavename ): string {
+	public function permalink( $link, $document = null, $leavename = false ) {
 		global $wp_rewrite;
 		$revision_num = false;
+		if ( ! $document instanceof WP_Post ) {
+			$document = is_numeric( $document ) && $document > 0 ? get_post( (int) $document ) : null;
+		}
 
 		// if this isn't our post type, kick.
-		if ( ! $this->verify_post_type( $document ) ) {
+		if ( ! is_string( $link ) || ! $document || ! $this->verify_post_type( $document ) ) {
 			return $link;
 		}
 
@@ -104,24 +135,33 @@ trait WP_Document_Revisions_Rewrites {
 			$document          = $parent;
 		}
 
-		// if no permastruct.
+		/**
+		 * Filters the home_url() for WPML and translated documents.
+		 *
+		 * @param string  $home_url generated permalink.
+		 * @param WP_Post $document document object.
+		 */
+		$home_url = apply_filters( 'document_home_url', home_url(), $document );
+
+		// if no permastruct. Use the front-end URL, not site_url(), which points at the WordPress
+		// install directory (e.g. /wp/ on Bedrock) rather than the site.
 		if ( '' === $wp_rewrite->permalink_structure || empty( $document->post_name ) || in_array( $document->post_status, array( 'pending', 'draft' ), true ) ) {
-			$link = site_url( '?post_type=document&p=' . $document->ID );
+			// add_query_arg() keeps any query string the document_home_url filter added (e.g. ?lang=fr).
+			$base = false === strpos( $home_url, '?' ) ? trailingslashit( $home_url ) : $home_url;
+			$link = add_query_arg(
+				array(
+					'post_type' => 'document',
+					'p'         => $document->ID,
+				),
+				$base
+			);
 			if ( $revision_num ) {
 				$link = add_query_arg( 'revision', $revision_num, $link );
 			}
 		} else {
-			/**
-			 * Filters the home_url() for WPML and translated documents.
-			 *
-			 * @param string  $home_url generated permalink.
-			 * @param WP_Post $document document object.
-			 */
-			$home_url = apply_filters( 'document_home_url', home_url(), $document );
-
 			// build documents(/yyyy/mm)/slug.
 			$extension  = $this->get_file_type( $document );
-			$year_month = ( get_option( 'document_link_date' ) ? '' : '/' . str_replace( '-', '/', substr( $document->post_date, 0, 7 ) ) );
+			$year_month = ( $this->document_link_date() ? '' : '/' . str_replace( '-', '/', substr( $document->post_date, 0, 7 ) ) );
 
 			$link  = trailingslashit( $home_url ) . $this->document_slug() . $year_month . '/';
 			$link .= ( $leavename ) ? '%document%' : $document->post_name;
@@ -133,8 +173,8 @@ trait WP_Document_Revisions_Rewrites {
 		/**
 		 * Filters the Document permalink.
 		 *
-		 * @param string $link     generated permalink.
-		 * @param object $document Post object.
+		 * @param string  $link     generated permalink.
+		 * @param WP_Post $document Post object.
 		 */
 		$link = apply_filters( 'document_permalink', $link, $document );
 
@@ -146,8 +186,8 @@ trait WP_Document_Revisions_Rewrites {
 	 * Tells WP to recognize document query vars.
 	 *
 	 * @since 0.5
-	 * @param array $vars the query vars.
-	 * @return array the modified query vars
+	 * @param string[] $vars the query vars.
+	 * @return string[] the modified query vars
 	 */
 	public function add_query_var( array $vars ): array {
 		$vars[] = 'revision';
@@ -231,13 +271,13 @@ trait WP_Document_Revisions_Rewrites {
 	 * Hides file's true location from users in the Gallery.
 	 *
 	 * @since 0.5
-	 * @param string $link URL to file's tru location.
-	 * @param int    $id attachment ID.
-	 * @return string empty string
+	 * @param mixed $link URL to file's tru location.
+	 * @param mixed $id attachment ID.
+	 * @return mixed empty string
 	 */
-	public function attachment_link_filter( string $link, int $id ): string {
+	public function attachment_link_filter( $link, $id = 0 ) {
 
-		if ( ! $this->verify_post_type( $id ) ) {
+		if ( ! is_numeric( $id ) || (int) $id <= 0 || ! $this->verify_post_type( (int) $id ) ) {
 			return $link;
 		}
 
@@ -248,46 +288,29 @@ trait WP_Document_Revisions_Rewrites {
 	 * Rewrites a file URL to its public URL.
 	 *
 	 * @since 0.5
-	 * @param array $file file object from WP.
-	 * @return array modified file array
+	 * @param array<string, mixed> $file file object from WP.
+	 * @return array<string, mixed> modified file array
 	 */
 	public function rewrite_file_url( array $file ): array {
-		// verify that this is a document.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		if ( ! isset( $_POST['post_id'] ) || ! $this->verify_post_type( sanitize_text_field( wp_unslash( $_POST['post_id'] ) ) ) ) {
-			self::$doc_image = true;
+		// verify this is a document load as self::$doc_image has been set false if a WPDR document.
+		if ( self::$doc_image ) {
+			// not a WPDR Document.
 			return $file;
 		}
 
-		// Ignore if dealing with thumbnail on document page. (Document has $_POST['type'] = 'file').
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		if ( ! isset( $_POST['type'] ) || 'file' !== $_POST['type'] ) {
-			self::$doc_image = true;
-			return $file;
+		// Resolve the parent document for the public URL. During an (async) upload the
+		// global $post is not reliably the parent document, so prefer the explicit
+		// upload target sent with the request and fall back to the global only if absent.
+		// The upload is itself nonce-verified by core/media_handle_upload; this is a
+		// read-only lookup of the upload target, so the nonce sniff is suppressed.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$parent = isset( $_REQUEST['post_id'] ) ? absint( wp_unslash( $_REQUEST['post_id'] ) ) : 0;
+		if ( ! $parent ) {
+			global $post;
+			$parent = $post;
 		}
 
-		global $pagenow;
-
-		if ( 'async-upload.php' === $pagenow ) {
-			// got past cookie, but still may be in thumbnail code.
-			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
-			$trace     = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
-			$functions = array(
-				'wp_ajax_get_post_thumbnail_html',
-				'_wp_post_thumbnail_html',
-				'post_thumbnail_meta_box',
-			);
-			foreach ( $trace as $traceline ) {
-				if ( in_array( $traceline['function'], $functions, true ) ) {
-					self::$doc_image = true;
-					return $file;
-				}
-			}
-		}
-
-		self::$doc_image = false;
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$file['url'] = get_permalink( sanitize_text_field( wp_unslash( $_POST['post_id'] ) ) );
+		$file['url'] = get_permalink( $parent );
 
 		return $file;
 	}
@@ -296,8 +319,8 @@ trait WP_Document_Revisions_Rewrites {
 	 * Tells WP to recognize workflow_state as a query vars.
 	 *
 	 * @since 3.3.0
-	 * @param array $vars the query vars.
-	 * @return array the modified query vars
+	 * @param string[] $vars the query vars.
+	 * @return string[] the modified query vars
 	 */
 	public function add_qv_workflow_state( array $vars ): array {
 		$vars[] = 'workflow_state';
@@ -311,12 +334,12 @@ trait WP_Document_Revisions_Rewrites {
 	 * Because documents end with a phaux file extension, we don't want that unless there is a named extension
 	 * Removes trailing slash from documents, while allowing all other SEO goodies to continue working.
 	 *
-	 * @param String $redirect the redirect URL.
-	 * @param Object $request  the request object.
-	 * @return String the redirect URL without the trailing slash
+	 * @param mixed $redirect    the redirect URL. Another filter may already have set it to false to cancel the redirect.
+	 * @param mixed $do_redirect whether to redirect.
+	 * @return mixed the redirect URL without the trailing slash
 	 */
-	public function redirect_canonical_filter( string $redirect, $request ): string {  // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
-		if ( ! $this->verify_post_type() ) {
+	public function redirect_canonical_filter( $redirect, $do_redirect = true ) {  // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+		if ( ! is_string( $redirect ) || '' === $redirect || ! $this->verify_post_type() ) {
 			return $redirect;
 		}
 
@@ -355,13 +378,14 @@ trait WP_Document_Revisions_Rewrites {
 
 		// update the post name with the slug and then the guid - direct in the database.
 		$doc            = get_post( $post_id );
+		$old_slug       = $doc->post_name;
 		$slug           = wp_unique_post_slug( $slug, $post_id, $doc->post_status, 'document', 0 );
 		$doc->post_name = $slug;
-		$guid           = $this->permalink( $doc->guid, $doc, false, '' );
+		$guid           = $this->permalink( $doc->guid, $doc, false );
 
 		global $wpdb;
 		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery
-		$post_table = "{$wpdb->prefix}posts";
+		$post_table = "{$wpdb->posts}";
 		$sql        = $wpdb->prepare(
 			"UPDATE `$post_table` SET `post_name` = %s, guid = %s WHERE `id` = %d ",
 			$slug,
@@ -372,8 +396,73 @@ trait WP_Document_Revisions_Rewrites {
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery
 		$this->clear_cache( $post_id, $doc, true );
 
+		if ( $old_slug !== $slug ) {
+			$this->record_old_slug( $post_id, $old_slug, $slug, $doc->post_status );
+
+			/**
+			 * Fires after a document's slug is changed from the edit screen.
+			 *
+			 * @since 5.6.0
+			 *
+			 * @param int    $post_id  the document ID.
+			 * @param string $slug     the new slug.
+			 * @param string $old_slug the previous slug.
+			 */
+			do_action( 'document_permalink_updated', $post_id, $slug, $old_slug );
+		}
+
 		// phpcs:ignore WordPress.Security.EscapeOutput
 		wp_die( wp_kses_post( get_sample_permalink_html( $post_id, $title, $slug ) ) );
+	}
+
+	/**
+	 * Remembers a document's previous slug so its old URL redirects to the new one.
+	 *
+	 * The slug is written directly to the database above, so core's
+	 * wp_check_for_changed_slugs() never sees the change. This mirrors it, but for any
+	 * status that has a pretty permalink (private documents too), not just published.
+	 * wp_old_slug_redirect() then redirects the old URL.
+	 *
+	 * @since 5.6.0
+	 * @param int    $post_id     the document ID.
+	 * @param string $old_slug    the previous slug.
+	 * @param string $slug        the new slug.
+	 * @param string $post_status the document status.
+	 */
+	private function record_old_slug( int $post_id, string $old_slug, string $slug, string $post_status ): void {
+		// Drafts and pending documents use ?p= links, so there's no old URL to redirect.
+		if ( '' === $old_slug || in_array( $post_status, array( 'draft', 'pending', 'auto-draft' ), true ) ) {
+			return;
+		}
+
+		$old_slugs = (array) get_post_meta( $post_id, '_wp_old_slug', false );
+		if ( ! in_array( $old_slug, $old_slugs, true ) ) {
+			add_post_meta( $post_id, '_wp_old_slug', $old_slug );
+		}
+
+		// The new slug is no longer an old one.
+		if ( in_array( $slug, $old_slugs, true ) ) {
+			delete_post_meta( $post_id, '_wp_old_slug', $slug );
+		}
+	}
+
+	/**
+	 * Stops old slug redirects to documents the visitor can't see.
+	 *
+	 * Core's wp_old_slug_redirect() doesn't check the post status, so an old URL of a
+	 * private document would redirect anyone to its new URL, revealing the new slug.
+	 *
+	 * @since 5.7.0
+	 * @param int $id the post ID found for the old slug (0 if none).
+	 * @return int the post ID, or 0 to cancel the redirect.
+	 */
+	public function old_slug_redirect_post_id( $id ) {
+		$id = absint( $id );
+		if ( $id && 'document' === get_post_type( $id ) && ! $this->can_list_document( $id ) ) {
+			return 0;
+		}
+
+		return $id;
 	}
 
 	/**

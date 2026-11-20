@@ -4,9 +4,9 @@ namespace FileBird;
 defined( 'ABSPATH' ) || exit;
 
 use FileBird\Classes\Review;
+use FileBird\Classes\Helpers;
 use FileBird\Classes\Schedule as FilebirdSchedule;
 use FileBird\Install;
-use FileBird\Model\Folder as FolderModel;
 use FileBird\Utils\Singleton;
 
 /**
@@ -34,8 +34,10 @@ class Plugin {
 	}
 
 	public static function runBackup() {
-		$folders = FolderModel::exportAll();
-		update_option( 'filebird_backup_' . date( 'Y_m_d_H_i_s' ), $folders, false );
+		if ( ! FilebirdSchedule::isAutoBackupEnabled() ) {
+			return;
+		}
+		Helpers::backupFileBird( 'before_update', NJFB_VERSION );
 		self::$hasBackup = true;
 	}
 

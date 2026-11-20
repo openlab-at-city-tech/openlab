@@ -34,7 +34,7 @@ class TableReader
 	{
 		$this->tableAttributes = $this->tableXml->attributes() ?? [];
 		// Remove all "$" in the table range
-		$tableRange = (string) preg_replace('/\$/', '', $this->tableAttributes['ref'] ?? '');
+		$tableRange = (string) preg_replace('/\$/', '', (string) ($this->tableAttributes['ref'] ?? ''));
 		if (str_contains($tableRange, ':')) {
 			$this->readTable($tableRange, $tableStyles, $dxfs);
 		}
@@ -60,7 +60,8 @@ class TableReader
 		$this->readTableStyle($table, $this->tableXml->tableStyleInfo, $tableStyles, $dxfs);
 
 		(new AutoFilter($table, $this->tableXml))->load();
-		$this->worksheet->addTable($table);
+		// The cells come from the file, and a read filter may have skipped the totals row
+		$this->worksheet->addTable($table, false);
 	}
 
 	/**
@@ -100,6 +101,10 @@ class TableReader
 
 				if ($attributes['totalsRowFunction']) {
 					$column->setTotalsRowFunction((string) $attributes['totalsRowFunction']);
+				}
+
+				if ($tableColumn->totalsRowFormula) {
+					$column->setTotalsRowFormula((string) $tableColumn->totalsRowFormula);
 				}
 			}
 

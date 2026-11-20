@@ -46,7 +46,7 @@ class Astra_Posts_Structure_Markup {
 	 */
 	public function astra_archive_custom_title( $title ) {
 		$post_type    = astra_get_post_type();
-		$custom_title = astra_get_option( 'ast-dynamic-archive-' . $post_type . '-custom-title', '' );
+		$custom_title = astra_get_i18n_option( 'ast-dynamic-archive-' . $post_type . '-custom-title', astra_get_archive_banner_translation( $post_type, 'title' ) );
 		return ! empty( $custom_title ) ? $custom_title : $title;
 	}
 

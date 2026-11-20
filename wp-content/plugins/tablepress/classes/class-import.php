@@ -8,6 +8,8 @@
  * @since 1.0.0
  */
 
+declare(strict_types=1);
+
 use TablePress\Import\File;
 
 // Prohibit direct script loading.
@@ -244,6 +246,10 @@ class TablePress_Import {
 			}
 
 			$file->extension = strtolower( pathinfo( $file->name, PATHINFO_EXTENSION ) );
+			if ( '' === $file->extension ) {
+				// If the file name has no extension, try to get it from the location (as WordPress tries adding an extension to that based on the MIME type, e.g. when downloading files).
+				$file->extension = strtolower( pathinfo( $file->location, PATHINFO_EXTENSION ) );
+			}
 
 			if ( function_exists( 'mime_content_type' ) ) {
 				$mime_type = mime_content_type( $file->location );

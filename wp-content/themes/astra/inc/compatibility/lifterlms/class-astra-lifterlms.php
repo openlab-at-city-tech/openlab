@@ -276,8 +276,8 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) {
 					<div class="llms_review" style="background-color:<?php echo esc_attr( $styles['background-color'] ); ?>;">
 						<h5 style="color:<?php echo esc_attr( $styles['title-color'] ); ?>;"><strong><?php echo esc_html( get_the_title( $post->ID ) ); ?></strong></h5>
 						<?php /* translators: 1 Author Name. */ ?>
-						<h6 style="color:<?php echo esc_attr( $styles['text-color'] ); ?>;"><?php echo esc_html( sprintf( __( 'By: %s', 'astra' ), get_the_author_meta( 'display_name', get_post_field( 'post_author', $post->ID ) ) ) ); ?></h6>
-						<p style="color:<?php echo esc_attr( $styles['text-color'] ); ?>;"><?php echo wp_kses_post( get_post_field( 'post_content', $post->ID ) ); ?></p>
+						<h6 style="color:<?php echo esc_attr( $styles['text-color'] ); ?>;"><?php echo esc_html( sprintf( __( 'By: %s', 'astra' ), get_the_author_meta( 'display_name', absint( $post->post_author ) ) ) ); ?></h6>
+						<p style="color:<?php echo esc_attr( $styles['text-color'] ); ?>;"><?php echo wp_kses_post( $post->post_content ); ?></p>
 					</div>
 					<?php
 				}

@@ -91,6 +91,7 @@
 
 .customize-control-ast-selector .ast-alignment-inner-wrap .components-button:focus:not( :disabled ) {
 	box-shadow: none;
+	outline: none;
 }
 
 .customize-control-ast-selector .components-button .ahfb-icon-set {
@@ -416,7 +417,9 @@
 
 .customize-control-ast-button-link .ast-button-link,
 .ast-upgrade-pro-wrap .ast-button-link {
-	display: block;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	padding: 8px 18px;
 	border-radius: 30px;
 	border: 1px solid #5c2ede;
@@ -425,7 +428,6 @@
 	font-size: 13px !important;
 	font-weight: 400;
 	line-height: 13px !important;
-	text-align: center;
 	cursor: pointer;
 	gap: 12px;
 }
@@ -647,6 +649,8 @@
 #customize-control-astra-color-palettes .astra-color-picker-wrap {
 	position: absolute;
 	z-index: 999;
+	top: calc(100% - 12px);
+	left: 0;
 	right: 0;
 	width: 100%;
 	display: none;
@@ -684,12 +688,20 @@
 .ast-color-palette-wrapper .ast-single-palette-wrap {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	gap: 8px;
 }
 
 .ast-single-palette-wrap .components-button.astra-color-icon-indicate .component-color-indicator.astra-advanced-color-indicate {
 	width: 25px;
 	height: 25px;
+}
+
+#customize-control-astra-color-palettes .ast-adv-toggle-icon {
+	top: 2px;
+	width: 24px;
+	height: 24px;
 }
 
 #customize-control-astra-color-palettes .ast-color-palette-wrapper .ast-color-picker-wrap:first-child {
@@ -874,6 +886,7 @@ section.ast-palette-presets-inner-wrap {
 
 #customize-control-astra-color-palettes .ast-color-palette-wrapper {
 	clear: both;
+	position: relative;
 }
 
 #customize-controls .customize-section-title.is-in-view.is-sticky {
@@ -921,56 +934,6 @@ section.ast-palette-presets-inner-wrap {
     fill: transparent;
 }
 
-.ast-color-picker-custom-tooltip {
-	position: absolute;
-	top: -30px;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	width: 100%;
-	height: 100%;
-}
-
-.ast-color-picker-custom-tooltip[data-title]::after {
-	content: attr( data-title );
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	padding: 1ch 1.5ch;
-	border-radius: 0.3ch;
-	box-shadow: 0 1em 2em -0.5em rgb( 0 0 0 / 35% );
-	background: var( --ast-customizer-primary-color );
-	color: var( --ast-customizer-secondary-text-color );
-	z-index: 1000;
-	bottom: calc( 100% + 5px );
-	text-align: center;
-	animation: tooltips-vert 0.3s ease-out forwards;
-	text-transform: none;
-	font-size: 0.9em;
-	line-height: 1;
-	user-select: none;
-	pointer-events: none;
-	position: absolute;
-	display: none;
-	opacity: 0;
-	left: 50%;
-	transform: translate( -50%, -0.5em );
-}
-
-.ast-single-palette-wrap > :last-child .ast-color-picker-custom-tooltip[data-title]::after {
-	left: -16px;
-}
-
-.ast-color-picker-custom-tooltip-wrapper {
-	position: relative;
-}
-
-.ast-color-picker-wrap:hover + .ast-color-picker-custom-tooltip-wrapper .ast-color-picker-custom-tooltip[data-title]::after {
-	display: flex;
-	white-space: break-spaces;
-	inline-size: max-content;
-}
-
 .ast-color-palette .components-popover.components-tooltip {
 	position: relative !important;
 	left: 5px !important;
@@ -1005,7 +968,7 @@ section.ast-palette-presets-inner-wrap {
 	height: 13px;
 }
 
-.customize-control .ast-palette-label-wrap .palette-name-input {
+.customize-control .ast-color-palette-wrap .ast-palette-label-wrap .palette-name-input {
 	min-height: auto;
 	box-shadow: none;
 	border: none;
@@ -1025,14 +988,187 @@ section.ast-palette-presets-inner-wrap {
     border-color: var(--ast-customizer-primary-color);
 }
 
-/* .ast-preset-palette-item.bigword {
-    justify-content: flex-end;
-    padding: 0px;
-} */
+/* Custom global colors - add button. */
+#customize-control-astra-color-palettes .ast-palette-add-color-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	align-self: start;
+}
 
-/* .bigword .ast-palette-individual-item-wrap {
-    margin-right: -5px;
-} */
+#customize-control-astra-color-palettes .ast-palette-add-color {
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	border: 1px dashed var( --ast-customizer-text-color );
+	background: transparent;
+	color: var( --ast-customizer-text-color );
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+}
+
+#customize-control-astra-color-palettes .ast-description.ast-customizer-notice {
+	display: flex;
+	align-items: flex-start;
+	gap: 5px;
+	color: var( --ast-customizer-input-text-color );
+	background: var( --ast-customizer-notice-background );
+	border: 1px solid var( --ast-customizer-border-color );
+	padding: 14px;
+	border-radius: 4px;
+}
+
+#customize-control-astra-color-palettes .ast-description.ast-customizer-notice svg {
+	color: var( --ast-customizer-primary-color );
+}
+
+#customize-control-astra-color-palettes .ast-description.ast-customizer-notice p {
+	padding: 0;
+	margin: 0;
+	font-size: 11px;
+	line-height: 16px;
+	font-weight: 400;
+}
+
+#customize-control-astra-color-palettes .ast-palette-add-color:hover,
+#customize-control-astra-color-palettes .ast-palette-add-color:focus {
+	border-style: solid;
+	border-color: var( --ast-customizer-primary-color );
+	color: var( --ast-customizer-primary-color );
+	outline: none;
+}
+
+/* Custom global colors - remove confirmation panel, anchored like the picker popover. */
+#customize-control-astra-color-palettes .ast-custom-color-remove-confirm {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	z-index: 1000;
+	margin-top: 10px;
+	padding: 14px;
+	background: #ffffff;
+	border-radius: 4px;
+	box-shadow: 0 6px 24px 0 #0000003d;
+}
+
+#customize-control-astra-color-palettes .ast-custom-color-remove-confirm .ast-remove-confirm-body {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+}
+
+#customize-control-astra-color-palettes .ast-custom-color-remove-confirm .ast-remove-confirm-icon svg {
+	width: 18px;
+	height: 18px;
+	margin-top: 1px;
+	color: #F59E0B;
+}
+
+#customize-control-astra-color-palettes .ast-custom-color-remove-confirm p {
+	margin: 0 0 6px;
+	font-size: 12px;
+	font-weight: 600;
+	color: var( --ast-customizer-text-color );
+}
+
+#customize-control-astra-color-palettes .ast-custom-color-remove-confirm .ast-remove-confirm-help {
+	font-weight: 400;
+	margin-bottom: 12px;
+	color: var( --ast-customizer-input-text-color );
+}
+
+#customize-control-astra-color-palettes .ast-custom-color-remove-confirm .ast-remove-confirm-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+}
+
+/* Custom global colors - name row inside the picker popover. */
+#customize-control-astra-color-palettes .ast-picker-reset-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.ast-color-var-copy {
+	display: flex;
+	margin: 0 20px 12px 0;
+	padding: 4px;
+	border: none;
+	border-radius: 2px;
+	background: none;
+	color: #50575e;
+	cursor: pointer;
+}
+
+.ast-color-var-copy:hover {
+	background: #f0f0f1;
+	color: #1e1e1e;
+}
+
+.ast-custom-color-header {
+	display: flex;
+	align-items: center;
+}
+
+#customize-control-astra-color-palettes .ast-custom-color-header .ast-custom-color-name-input {
+	flex: 1;
+	min-width: 0;
+	height: 30px;
+	padding: 0 8px;
+	text-align: center;
+	border: 1px solid transparent;
+	box-shadow: none;
+	background: transparent;
+}
+
+#customize-control-astra-color-palettes .ast-custom-color-header .ast-custom-color-name-input:focus {
+	border-color: transparent;
+	box-shadow: none;
+	outline: none;
+}
+
+/* Text inputs match :focus-visible even on mouse click, so mouse-initiated focus is tagged via .ast-mouse-focus in JS. */
+#customize-control-astra-color-palettes .ast-custom-color-header .ast-custom-color-name-input:focus-visible:not( .ast-mouse-focus ) {
+	border-color: var( --ast-customizer-primary-color );
+}
+
+/* Custom global colors - hover-revealed remove badge on the swatch. */
+#customize-control-astra-color-palettes .ast-single-palette-wrap .color-button-wrap {
+	position: relative;
+}
+
+#customize-control-astra-color-palettes .ast-single-palette-wrap .ast-custom-color-remove {
+	position: absolute;
+	/* The 25px indicator button overflows its 15px-tall .color-button-wrap upward, so the swatch's top corner sits 17px above the wrap. */
+	top: -17px;
+	right: -5px;
+	width: 14px;
+	height: 14px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	border: 1px dashed #000000;
+	border-radius: 50%;
+	background: #ffffff;
+	color: #000000;
+	cursor: pointer;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.15s ease;
+	z-index: 2;
+}
+
+#customize-control-astra-color-palettes .ast-single-palette-wrap .ast-color-picker-wrap:hover .ast-custom-color-remove,
+#customize-control-astra-color-palettes .ast-single-palette-wrap .ast-custom-color-remove:focus {
+	opacity: 1;
+	visibility: visible;
+}
 
 /* Button Icons SVG */
 .astra-control-field.astra-color-control .components-button svg {
@@ -1101,6 +1237,7 @@ section.ast-palette-presets-inner-wrap {
 	background-image: linear-gradient( 45deg, #ddd 25%, transparent 0 ), linear-gradient( -45deg, #ddd 25%, transparent 0 ), linear-gradient( 45deg, transparent 75%, #ddd 0 ), linear-gradient( -45deg, transparent 75%, #ddd 0 );
 	background-size: 10px 10px;
 	background-position: 0 0, 0 5px, 5px -5px, -5px 0;
+	border: none;
 }
 
 /** Color */
@@ -1329,17 +1466,24 @@ section.ast-palette-presets-inner-wrap {
 	flex: inherit;
 }
 
-.astra-popover-color .components-circular-option-picker__option:focus::after {
-	width: auto;
-	height: auto;
-}
-
 .components-circular-option-picker__option:after {
     box-shadow: none;
 }
 
 .astra-popover-color .components-h-stack .components-circular-option-picker__option-wrapper {
 	margin-right: 0;
+}
+
+.astra-popover-color .components-circular-option-picker__swatches:not(:has(.components-circular-option-picker__swatches)) {
+	display: grid;
+	grid-template-columns: repeat(9, minmax(0, 1fr));
+	justify-items: center;
+	row-gap: 6px;
+}
+
+.astra-popover-color .components-circular-option-picker__option-wrapper > svg {
+	inset: 0;
+	margin: auto;
 }
 
 .astra-popover-color .components-color-picker .react-colorful__hue,
@@ -1423,7 +1567,7 @@ section.ast-palette-presets-inner-wrap {
 .ast-clear-btn-inside-picker.components-button,
 .ast-reset-btn-inside-picker.components-button,
 .astra-popover-tabs .ast-clear-btn-inside-picker.components-button {
-	margin: 5px 20px 20px 15px;
+	margin: 0 20px 12px 12px;
 	padding: 0 8px;
 	border: 1px solid #ccc;
 	box-shadow: none;
@@ -1445,6 +1589,10 @@ section.ast-palette-presets-inner-wrap {
 }
 
 /* Reset Button CSS */
+.ast-reset-btn.components-button {
+	border-width: 0;
+}
+
 .ast-color-btn-reset-wrap {
 	position: absolute;
 	right: 36px;
@@ -1941,6 +2089,10 @@ textarea {
 
 #customize-controls .components-base-control .components-base-control__field {
 	margin-bottom: 0;
+}
+
+#customize-controls .components-base-control .components-base-control__field .components-input-control__container {
+	width: 100%;
 }
 
 #customize-controls .components-base-control .components-base-control__field .components-input-control__backdrop {
@@ -3040,7 +3192,7 @@ li.customize-control.ast-top-section-spacing {
 	background: var( --ast-customizer-color-9 );
 }
 
-@media screen and (max-width: 1600px) {
+@media screen and ( max-width: 1600px ) {
 	.ast-typo-presets .ast-typo-preset-item {
 		height: 75px;
 	}
@@ -3186,6 +3338,13 @@ div .ast-field-settings-modal .customize-control-ast-font-extras {
 	color: var( --ast-customizer-primary-color );
 }
 
+.ast-font-extras-wrapper .ast-units-wrapper,
+.ast-font-spacing-wrapper .ast-units-wrapper {
+	position: relative;
+	top: auto;
+	right: auto;
+}
+
 .ast-font-styling-second {
 	display: flex;
 	justify-content: space-between;
@@ -3214,7 +3373,7 @@ div .ast-field-settings-modal .customize-control-ast-font-extras {
 
 .ast-font-transform-wrapper div.active,
 .ast-font-decoration-wrapper div.active {
-	background-color: #0284c7;
+	background-color: var( --ast-customizer-primary-color );
 	color: #fff;
 	cursor: pointer;
 }
@@ -3224,7 +3383,7 @@ div .ast-field-settings-modal .customize-control-ast-font-extras {
 }
 
 .ast-font-item-type:hover {
-	background-color: #0284c7;
+	background-color: var( --ast-customizer-primary-color );
 	color: #fff;
 	cursor: pointer;
 }
@@ -3250,8 +3409,9 @@ div .ast-field-settings-modal .customize-control-ast-font-extras {
 }
 
 .customize-control-ast-radio-image .modern-layout label:hover svg,
-.components-button-group.ahfb-radio-container-control label:hover svg, .input-wrapper.ast-alignment-wrapper .ast-alignment-inner-wrap:hover {
-	background-color: var( --ast-customizer-color-13);
+.components-button-group.ahfb-radio-container-control label:hover svg,
+.input-wrapper.ast-alignment-wrapper .ast-alignment-inner-wrap:hover {
+	background-color: var( --ast-customizer-color-13 );
 }
 
 .ast-font-transform-container,
@@ -3260,22 +3420,22 @@ div .ast-field-settings-modal .customize-control-ast-font-extras {
 	flex: 1;
 }
 
-@media (min-width: 1601px) {
-   .ast-font-styling-second .ast-font-decoration-container > .ast-control-tooltip {
-        margin-left: 106px;
-    }
+@media ( min-width: 1601px ) {
+	.ast-font-styling-second .ast-font-decoration-container > .ast-control-tooltip {
+		margin-left: 106px;
+	}
 }
 
-@media (min-width: 1600px) and (max-width: 1700px) {
-    .ast-font-decoration-container > .ast-control-tooltip {
-        margin-left: 86px;
-    }
+@media ( min-width: 1600px ) and ( max-width: 1700px ) {
+	.ast-font-decoration-container > .ast-control-tooltip {
+		margin-left: 86px;
+	}
 }
 
-@media (min-width: 1700px) and (max-width: 1800px) {
-    .ast-font-decoration-container > .ast-control-tooltip {
-        margin-left: 96px;
-    }
+@media ( min-width: 1700px ) and ( max-width: 1800px ) {
+	.ast-font-decoration-container > .ast-control-tooltip {
+		margin-left: 96px;
+	}
 }
 
 .ast-font-decoration-container > .ast-control-tooltip {
@@ -3314,11 +3474,11 @@ div .ast-field-settings-modal .customize-control-ast-font-extras {
 }
 
 .ast-font-decoration-container .ast-tooltip {
-    margin-left: -50px !important;
+	margin-left: -50px !important;
 }
 
-.ast-font-decoration-container .ast-tooltip[data-title]::before{
-	bottom: calc(100% + 9px);
+.ast-font-decoration-container .ast-tooltip[data-title]::before {
+	bottom: calc( 100% + 9px );
 }
 
 .ast-customizer-font-varient-wrap {
@@ -3453,9 +3613,6 @@ li#customize-control-astra-settings-header-preset-style .customizer-text {
 	color: var( --ast-customizer-primary-color );
 }
 
-.ast-header-preset-item:hover svg rect {
-}
-
 .ast-header-preset-item {
 	cursor: pointer;
 }
@@ -3468,7 +3625,9 @@ li#customize-control-astra-settings-header-preset-style .customizer-text {
 }
 
 #customize-control-astra-settings-header-preset-style .ast-adv-toggle-icon {
-	top: -5px;
+	top: -3px;
+	width: 24px;
+	height: 24px;
 }
 
 .ast-field-settings-wrap .customize-control-ast-heading {
@@ -3920,7 +4079,7 @@ li#customize-control-astra-settings-header-preset-style .customizer-text {
 }
 
 .ast-multiselector-inner-wrap:hover {
-    background: var(--ast-customizer-color-11);
+	background: var( --ast-customizer-color-11 );
 }
 
 .customize-control-ast-multi-selector .ast-multiselector-inner-wrap span[label] {
@@ -3961,7 +4120,7 @@ li#customize-control-astra-settings-header-preset-style .customizer-text {
 	margin: 5px;
 	align-items: center;
 	padding: 5px;
-	height: 30px;
+	min-height: 30px;
 	border-radius: 0;
 }
 
@@ -5193,7 +5352,7 @@ li#customize-control-astra-settings-header-preset-style .customizer-text {
 	order: 2;
 	margin-bottom: 16px;
 	background: #e5e7eb;
-	height: 30px;
+	height: 32px;
 	padding-right: 5px;
 	padding-left: 5px;
 	border-top-right-radius: 2px;
@@ -5439,6 +5598,14 @@ li#customize-control-astra-settings-header-preset-style .customizer-text {
 	margin: 0;
 }
 
+.customize-control select,
+.customize-control input:not([type="checkbox"]):not([type="radio"]),
+.customize-control textarea,
+.customize-control-content .components-text-control__input {
+	height: auto;
+	min-height: 32px;
+}
+
 .customize-control-radio input {
 	border-radius: 50%;
 }
@@ -5489,8 +5656,8 @@ li#customize-control-astra-settings-header-preset-style .customizer-text {
 .ast-adv-toggle-icon {
 	right: 2px;
 	position: absolute;
-	width: 20px;
-	height: 20px;
+	width: auto;
+	height: auto;
 	font-size: 18px;
 	border-radius: 2px;
 	padding: 4px;
@@ -5762,14 +5929,11 @@ li#customize-control-astra-settings-header-preset-style .customizer-text {
 	border: none;
 }
 
-.astra-popover-tabs .components-button {
+.astra-popover-tabs .components-tab-panel__tabs > .components-button {
 	align-items: center;
 	flex: 1 1 auto;
 	justify-content: center;
 	margin: 0 0;
-	padding: 0;
-	border: 1px solid #ccc;
-	transition: background-color 140ms linear;
 }
 
 .astra-popover-tabs .components-tab-panel__tabs-item:first-child {
@@ -6044,6 +6208,10 @@ li#customize-control-astra-settings-header-preset-style .customizer-text {
 .customize-control-ast-responsive-slider input[type="number"]::-webkit-outer-spin-button {
 	appearance: auto !important;
 	-webkit-appearance: auto !important;
+}
+
+.ast-slider-wrap:has(input[type="range"]:focus) .components-range-control__root {
+    z-index: 1;
 }
 
 .customize-control-ast-sortable .sortable {
@@ -6460,7 +6628,7 @@ li#customize-control-astra-settings-header-preset-style .customizer-text {
 	text-align: right;
 }
 
-/* Wordpress 6.1 Compatibility CSS for toggle UI */
+/* WordPress 6.1 Compatibility CSS for toggle UI */
 .components-toggle-control .components-base-control__field {
 	display: flex;
 	margin-bottom: 12px;
@@ -6475,6 +6643,7 @@ li#customize-control-astra-settings-header-preset-style .customizer-text {
 	opacity: 1;
 	width: 16px;
 	height: 16px;
+	min-height: auto;
 	background-color: transparent;
 	border: 1px solid var( --ast-customizer-color-7 );
 	box-shadow: none;

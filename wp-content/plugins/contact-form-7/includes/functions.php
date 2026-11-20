@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 /**
  * Returns path to a plugin file.
  *
@@ -724,7 +726,8 @@ function wpcf7_superglobal_server( $key, $default = '' ) {
  *
  * @param string $superglobal A superglobal type.
  * @param string $key Array key.
- * @return string|array|null Sanitized value.
+ * @return string|array|null Sanitized value. Null if the array key
+ *                           doesn't exist.
  */
 function wpcf7_superglobal( $superglobal, $key ) {
 	$superglobals = array(
@@ -739,11 +742,13 @@ function wpcf7_superglobal( $superglobal, $key ) {
 			$superglobals[$superglobal][$key],
 			static function ( $val ) {
 				$val = wp_unslash( $val );
-				$val = wp_check_invalid_utf8( $val );
+				$val = wp_scrub_utf8( $val );
 				$val = wp_kses_no_null( $val );
 				$val = wpcf7_strip_whitespaces( $val );
 				return $val;
 			}
 		);
 	}
+
+	return null;
 }

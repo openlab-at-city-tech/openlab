@@ -14,7 +14,7 @@ do_action( 'bbp_template_before_user_subscriptions' ); ?>
 
 <?php if ( bbp_is_subscriptions_active() ) : ?>
 
-	<?php if ( bbp_is_user_home() || current_user_can( 'edit_user', bbp_get_displayed_user_id() ) ) : ?>
+	<?php if ( bbp_current_user_can_manage_engagements( 'subscription' ) ) : ?>
 
 		<div id="bbp-user-subscriptions" class="bbp-user-subscriptions">
 

@@ -72,6 +72,7 @@ export function jQueryPDFEmbedder( cmapURL ) {
 
 			params.url = pdf;
 			params.cMapUrl = cmapURL;
+			params.cMapPacked = true;
 
 			// Do not allow scripts execution in FontMatrix used for rendering glyphs.
 			params.isEvalSupported = false;
@@ -79,7 +80,7 @@ export function jQueryPDFEmbedder( cmapURL ) {
 			// See https://github.com/mozilla/pdf.js/issues/3768
 			params.verbosity = 0;
 
-			var loadingTask = pdfjsLib.getDocument( params, cmapURL );
+			var loadingTask = pdfjsLib.getDocument( params );
 
 			loadingTask.promise.then(
 				function( pdfDoc_ ) {

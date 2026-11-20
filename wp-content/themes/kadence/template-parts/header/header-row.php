@@ -9,7 +9,8 @@ namespace Kadence;
 
 $row = get_query_var( 'row' );
 ?>
-<div class="<?php echo esc_attr( header_row_class( $row ) ); ?>" data-section="kadence_customizer_header_<?php echo esc_attr( $row ); ?>"<?php
+<div class="<?php echo esc_attr( header_row_class( $row ) ); ?>" data-section="kadence_customizer_header_<?php echo esc_attr( $row ); ?>"
+<?php
 if ( 'main' === $row && 'main' === kadence()->option( 'header_sticky' ) ) {
 	echo ' data-shrink="' . ( kadence()->option( 'header_sticky_shrink' ) ? 'true' : 'false' ) . '"';
 	if ( kadence()->option( 'header_sticky_shrink' ) ) {
@@ -19,11 +20,12 @@ if ( 'main' === $row && 'main' === kadence()->option( 'header_sticky' ) ) {
 if ( $row && $row === kadence()->option( 'header_sticky' ) ) {
 	echo ' data-reveal-scroll-up="' . ( kadence()->option( 'header_reveal_scroll_up' ) ? 'true' : 'false' ) . '"';
 }
-?>>
+?>
+>
 	<div class="site-header-row-container-inner">
 		<?php kadence()->customizer_quick_link(); ?>
 		<div class="site-container">
-			<div class="site-<?php echo esc_attr( $row ); ?>-header-inner-wrap site-header-row <?php echo ( kadence()->has_side_columns( $row ) ? 'site-header-row-has-sides' : 'site-header-row-only-center-column' ); ?> <?php echo ( kadence()->has_center_column( $row ) ? 'site-header-row-center-column' : 'site-header-row-no-center' ); ?>">
+			<div class="site-<?php echo esc_attr( $row ); ?>-header-inner-wrap site-header-row <?php echo kadence()->has_side_columns( $row ) ? 'site-header-row-has-sides' : 'site-header-row-only-center-column'; ?> <?php echo kadence()->has_center_column( $row ) ? 'site-header-row-center-column' : 'site-header-row-no-center'; ?>">
 				<?php if ( kadence()->has_side_columns( $row ) ) { ?>
 					<div class="site-header-<?php echo esc_attr( $row ); ?>-section-left site-header-section site-header-section-left">
 						<?php

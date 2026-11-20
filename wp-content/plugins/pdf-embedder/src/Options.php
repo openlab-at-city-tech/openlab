@@ -128,6 +128,19 @@ class Options {
 	}
 
 	/**
+	 * Drop the in-memory options cache so the next {@see get()} call re-reads
+	 * from the DB. Use after writing the options row out-of-band (e.g. via
+	 * `update_option()` directly) — {@see save()} keeps the cache coherent
+	 * on its own.
+	 *
+	 * @since 5.0.0
+	 */
+	public function reset_cache(): void {
+
+		$this->options = [];
+	}
+
+	/**
 	 * Check if the option exists in the database.
 	 *
 	 * @since 4.9.2
@@ -192,11 +205,19 @@ class Options {
 	 * The validation is done in steps according to each plan priority.
 	 *
 	 * @since 4.9.0
+	 * @since 5.0.0 Added the `render` saving context for inline atts on the front end.
 	 *
 	 * @param array $validated Validated options.
 	 * @param array $input     Original options coming from the request.
      */
 	public function validate_options( array $validated, array $input ): array {
+
+		// Render-time validation of inline shortcode/block/widget atts. Only the keys
+		// the user actually passed are returned, so the caller can layer them on top of
+		// the merged defaults+DB options without erasing settings the user didn't override.
+		if ( $this->saving_context === 'render' ) {
+			return $this->validate_options_render( $input );
+		}
 
 		/**
 		 * Just return the data from DB when we are validating settings elsewhere.
@@ -205,6 +226,18 @@ class Options {
 		if ( $this->saving_context !== 'settings' ) {
 			return $this->get_from_db();
 		}
+
+		return $this->validate_options_settings( $input );
+	}
+
+	/**
+	 * Validate the Lite settings page input on admin save.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param array $input Raw POST input from the Lite settings form.
+	 */
+	private function validate_options_settings( array $input ): array { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
 
 		$validated = $this->clean_options_from_defaults();
 
@@ -274,6 +307,57 @@ class Options {
 		} else {
 			pdf_embedder()->tasks()->cancel( SendUsageTask::ACTION );
 			$validated['usagetracking'] = self::LITE_DEFAULTS['usagetracking'];
+		}
+
+		return $validated;
+	}
+
+	/**
+	 * Validate inline shortcode/block/widget atts against the Lite defaults.
+	 *
+	 * Only the keys present in `$input` are returned. Keys the user did not pass inline
+	 * are intentionally absent so they fall through to the merged defaults+DB layer in
+	 * `Viewer::set_options()` rather than being overwritten with hard-coded defaults.
+	 * No side effects (`add_settings_error`, task cancellation) — the settings-context
+	 * validator has those, this one is pure validation suitable for the front end.
+	 *
+	 * `usagetracking` is intentionally not validated here: it's a global admin setting
+	 * with no per-instance meaning and should never be passed inline.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param array $input User-provided inline atts (already prefixed with `pdfemb_`).
+	 */
+	private function validate_options_render( array $input ): array {
+
+		$validated = [];
+
+		if ( isset( $input['pdfemb_width'] ) ) {
+			$width = strtolower( trim( (string) $input['pdfemb_width'] ) );
+
+			$validated['pdfemb_width'] = ( is_numeric( $width ) || $width === 'max' || $width === 'auto' )
+				? $width
+				: self::LITE_DEFAULTS['pdfemb_width'];
+		}
+
+		if ( isset( $input['pdfemb_height'] ) ) {
+			$height = strtolower( trim( (string) $input['pdfemb_height'] ) );
+
+			$validated['pdfemb_height'] = ( is_numeric( $height ) || $height === 'max' || $height === 'auto' )
+				? $height
+				: self::LITE_DEFAULTS['pdfemb_height'];
+		}
+
+		if ( isset( $input['pdfemb_toolbar'] ) ) {
+			$validated['pdfemb_toolbar'] = in_array( $input['pdfemb_toolbar'], [ 'top', 'bottom', 'both', 'none' ], true )
+				? $input['pdfemb_toolbar']
+				: self::LITE_DEFAULTS['pdfemb_toolbar'];
+		}
+
+		if ( isset( $input['pdfemb_toolbarfixed'] ) ) {
+			$validated['pdfemb_toolbarfixed'] = in_array( $input['pdfemb_toolbarfixed'], [ 'on', 'off' ], true )
+				? $input['pdfemb_toolbarfixed']
+				: self::LITE_DEFAULTS['pdfemb_toolbarfixed'];
 		}
 
 		return $validated;

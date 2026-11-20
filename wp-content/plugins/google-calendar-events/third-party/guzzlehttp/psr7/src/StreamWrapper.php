@@ -36,7 +36,11 @@ final class StreamWrapper
         } else {
             throw new \InvalidArgumentException('The stream must be readable, ' . 'writable, or both.');
         }
-        return fopen('guzzle://stream', $mode, \false, self::createStreamContext($stream));
+        $resource = @fopen('guzzle://stream', $mode, \false, self::createStreamContext($stream));
+        if ($resource === \false) {
+            throw new \RuntimeException('Unable to create stream resource');
+        }
+        return $resource;
     }
     /**
      * Creates a stream context that can be used to open a stream as a php stream resource.
@@ -73,6 +77,10 @@ final class StreamWrapper
     public function stream_write(string $data): int
     {
         return $this->stream->write($data);
+    }
+    public function stream_flush(): bool
+    {
+        return \true;
     }
     public function stream_tell(): int
     {

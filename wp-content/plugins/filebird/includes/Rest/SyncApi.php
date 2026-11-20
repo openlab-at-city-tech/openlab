@@ -33,6 +33,16 @@ class SyncApi {
 
 		register_rest_route(
 			NJFB_REST_URL,
+			'restore-backup',
+			array(
+				'methods'             => \WP_REST_Server::CREATABLE,
+				'callback'            => array( $this->controller, 'restoreBackup' ),
+				'permission_callback' => array( $this, 'permission_callback' ),
+			)
+		);
+
+		register_rest_route(
+			NJFB_REST_URL,
 			'import-csv-detail',
 			array(
 				'methods'             => \WP_REST_Server::CREATABLE,

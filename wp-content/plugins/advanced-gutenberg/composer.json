@@ -15,8 +15,15 @@
         "preferred-install": {
             "*": "dist"
         },
+        "platform": {
+            "php": "8.3"
+        },
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "publishpress/dev-workspace": true,
+            "php-http/discovery": true,
+            "phpstan/extension-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "composer/installers": true
         }
     },
     "minimum-stability": "stable",
@@ -25,58 +32,36 @@
         "php": ">=7.2.5"
     },
     "require-dev": {
-        "automattic/vipwpcs": "^2.3",
-        "publishpress/publishpress-phpcs-standards": "dev-main",
-        "publishpress/translations": "^1.0.0",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
-        "squizlabs/php_codesniffer": "^3.6",
-        "wp-cli/i18n-command": "^2.4",
-        "overtrue/phplint": "^9.6"
+        "publishpress/dev-workspace": "^1.0"
     },
     "scripts": {
-        "build": "build zip",
-        "build:dir": "build dir",
-        "build:clean": "build clean",
+        "build:js": [
+            "webpack --mode development",
+            "@minify:js"
+        ],
+        "build:js-dev": "webpack --mode development --watch",
         "build:css": "sass assets/scss/:assets/css/ --style=compressed --no-source-map",
         "build:css-dev": "sass assets/scss/:assets/css/ -w",
-        "build:js-dev": "webpack --mode development --watch",
-        "build:js": "webpack --mode production",
         "minify:js-main": "uglifyjs assets/js/main.js --output assets/js/main.min.js",
         "minify:js-settings": "uglifyjs assets/js/settings.js --output assets/js/settings.min.js",
-        "info:versions": "bash ./dev-workspace/scripts/dependency-versions.sh",
-        "check:longpath": "longpath .",
-        "check:lint": "phplint",
-        "check:cs": "phpcs",
-        "fix:cs": "phpcbf --standard=.phpcs.xml",
-        "fix:php": [
-            "php-cs-fixer fix .",
-            "@fix:cs"
-        ],
-        "config:phpcs": "phpcs --config-set installed_paths \"../../phpcsstandards/phpcsutils,../../phpcsstandards/phpcsextra,../../automattic/vipwpcs,../../phpcompatibility/php-compatibility,../../sirbrillig/phpcs-variable-analysis,../../publishpress/publishpress-phpcs-standards/standards,../../wp-coding-standards/wpcs\"",
-        "translate": "vendor/bin/publishpress-translate --languages=de_DE,fi,fil,id_ID,ja,ko_KR,nl_NL,ru_RU,yor",
-        "translate:dry-run": "vendor/bin/publishpress-translate --dry-run",
-        "translate:download": "vendor/bin/publishpress-translate --download",
-        "translate:upload": "vendor/bin/publishpress-translate --upload",
-        "translate:custom": "vendor/bin/publishpress-translate --languages",
-        "translate:force": "vendor/bin/publishpress-translate --force",
-        "translate:force-custom": "vendor/bin/publishpress-translate --force --languages",
-        "translate:repair-plurals": "php vendor/bin/publishpress-translate --repair-plurals",
-        "translate:compile": [
-            "@translate:mo",
-            "@translate:json",
-            "@translate:php"
-        ],
-        "translate:pot": "wp i18n make-pot . ./languages/advanced-gutenberg.pot --domain=advanced-gutenberg --exclude=dev-workspace,.wordpress-org,.github,dist,tests,lib,tmp,doc,*.js.map --allow-root",
-        "translate:mo": "wp i18n make-mo ./languages ./languages --allow-root",
-        "translate:json": "bash ./dev-workspace/scripts/lang-make-json.sh",
-        "translate:php": "bash ./dev-workspace/scripts/lang-make-php.sh",
-        "pre-autoload-dump": "composer dumpautoload --working-dir=./lib",
-        "pre-update-cmd": "composer update --working-dir=./lib",
-        "pre-install-cmd": "composer install --working-dir=./lib"
+        "minify:js-blocks": "uglifyjs assets/blocks/blocks.js --compress --mangle --comments '/^!|@preserve|@license|@cc_on/' --output assets/blocks/blocks.min.js",
+        "minify:js-frontend": "uglifyjs assets/blocks/frontend.js --compress --mangle --comments '/^!|@preserve|@license|@cc_on/' --output assets/blocks/frontend.min.js",
+        "minify:js-codemirror": "uglifyjs assets/js/codemirror/lib/codemirror.js --compress --mangle --comments all --output assets/js/codemirror/lib/codemirror.min.js",
+        "minify:js": [
+            "@minify:js-main",
+            "@minify:js-settings",
+            "@minify:js-blocks",
+            "@minify:js-frontend",
+            "@minify:js-codemirror"
+        ]
     },
     "extra": {
         "plugin-name": "publishpress-blocks",
         "plugin-slug": "advanced-gutenberg",
-        "plugin-folder": "advanced-gutenberg"
+        "plugin-folder": "advanced-gutenberg",
+        "version-constant": "ADVANCED_GUTENBERG_VERSION",
+        "plugin-lang-domain": "advanced-gutenberg",
+        "plugin-github-repo": "publishpress/publishpress-blocks",
+        "plugin-composer-package": "publishpress/publishpress-blocks"
     }
 }

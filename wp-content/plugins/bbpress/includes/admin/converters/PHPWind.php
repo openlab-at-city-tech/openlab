@@ -10,7 +10,7 @@
 /**
  * Implementation of PHPWind Forum converter.
  *
- * @since 2.5.0 bbPress (r5142)
+ * @since 2.5.0 bbPress (r5143)
  *
  * @link Codex Docs https://codex.bbpress.org/import-forums/phpwind
  */
@@ -146,24 +146,24 @@ class PHPWind extends BBP_Converter_Base {
 		);
 		// Forum dates.
 		$this->field_map[] = array(
-			'to_type'      => 'bbs_forum',
+			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
-			'to_type'      => 'bbs_forum',
+			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date_gmt',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
-			'to_type'      => 'bbs_forum',
+			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
-			'to_type'      => 'bbs_forum',
+			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified_gmt',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 
 		/** Topic Section *****************************************************/
@@ -296,7 +296,7 @@ class PHPWind extends BBP_Converter_Base {
 			'callback_method' => 'callback_datetime'
 		);
 
-		// Topic status (Open or Closed, PHPWind v9.x 0=no, 1=closed & 2=open)
+		// Topic status (PHPWind v9.x bitmask: 1=locked & 2=closed)
 		$this->field_map[] = array(
 			'from_tablename'  => 'bbs_threads',
 			'from_fieldname'  => 'tpcstatus',
@@ -408,7 +408,7 @@ class PHPWind extends BBP_Converter_Base {
 
 		// Store old user id (Stored in usermeta)
 		$this->field_map[] = array(
-			'from_tablename' => 'user',
+			'from_tablename' => 'windid_user',
 			'from_fieldname' => 'uid',
 			'to_type'        => 'user',
 			'to_fieldname'   => '_bbp_old_user_id'
@@ -416,21 +416,20 @@ class PHPWind extends BBP_Converter_Base {
 
 		// Store old user password (Stored in usermeta serialized with salt)
 		$this->field_map[] = array(
-			'from_tablename'  => 'user',
+			'from_tablename'  => 'windid_user',
 			'from_fieldname'  => 'password',
 			'to_type'         => 'user',
-			'to_fieldname'    => '_bbp_password'
-//			'callback_method' => 'callback_savepass'
+			'to_fieldname'    => '_bbp_password',
+			'callback_method' => 'callback_savepass'
 		);
 
 		// Store old user salt (This is only used for the SELECT row info for the above password save)
-/*		$this->field_map[] = array(
-			'from_tablename' => 'user',
-			'from_fieldname' => 'pass',
+		$this->field_map[] = array(
+			'from_tablename' => 'windid_user',
+			'from_fieldname' => 'salt',
 			'to_type'        => 'user',
 			'to_fieldname'   => ''
 		);
-*/
 		// User password verify class (Stored in usermeta for verifying password)
 		$this->field_map[] = array(
 			'to_type'      => 'user',
@@ -440,7 +439,7 @@ class PHPWind extends BBP_Converter_Base {
 
 		// User name.
 		$this->field_map[] = array(
-			'from_tablename' => 'user',
+			'from_tablename' => 'windid_user',
 			'from_fieldname' => 'username',
 			'to_type'        => 'user',
 			'to_fieldname'   => 'user_login'
@@ -448,7 +447,7 @@ class PHPWind extends BBP_Converter_Base {
 
 		// User nice name.
 		$this->field_map[] = array(
-			'from_tablename' => 'user',
+			'from_tablename' => 'windid_user',
 			'from_fieldname' => 'username',
 			'to_type'        => 'user',
 			'to_fieldname'   => 'user_nicename'
@@ -456,7 +455,7 @@ class PHPWind extends BBP_Converter_Base {
 
 		// User email.
 		$this->field_map[] = array(
-			'from_tablename' => 'user',
+			'from_tablename' => 'windid_user',
 			'from_fieldname' => 'email',
 			'to_type'        => 'user',
 			'to_fieldname'   => 'user_email'
@@ -464,7 +463,7 @@ class PHPWind extends BBP_Converter_Base {
 
 		// User registered.
 		$this->field_map[] = array(
-			'from_tablename'  => 'user',
+			'from_tablename'  => 'windid_user',
 			'from_fieldname'  => 'regdate',
 			'to_type'         => 'user',
 			'to_fieldname'    => 'user_registered',
@@ -473,10 +472,13 @@ class PHPWind extends BBP_Converter_Base {
 
 		// User display name.
 		$this->field_map[] = array(
-			'from_tablename' => 'user',
-			'from_fieldname' => 'realname',
-			'to_type'        => 'user',
-			'to_fieldname'   => 'display_name'
+			'from_tablename'  => 'windid_user_info',
+			'from_fieldname'  => 'realname',
+			'join_tablename'  => 'windid_user',
+			'join_type'       => 'LEFT',
+			'join_expression' => 'ON windid_user.uid = windid_user_info.uid',
+			'to_type'         => 'user',
+			'to_fieldname'    => 'display_name'
 		);
 	}
 
@@ -489,12 +491,16 @@ class PHPWind extends BBP_Converter_Base {
 	}
 
 	/**
-	 * This method is to save the salt and password together.  That
-	 * way when we authenticate it we can get it out of the database
-	 * as one value. Array values are auto sanitized by WordPress.
+	 * Save the salt and password together so both values are available during
+	 * authentication. Pre-slash the salt because WordPress removes one layer of
+	 * slashes when storing user metadata.
 	 */
 	public function callback_savepass( $field, $row ) {
-		$pass_array = array( 'hash' => $field, 'salt' => $row['salt'] );
+		$pass_array = array(
+			'hash' => $field,
+			'salt' => wp_slash( isset( $row['salt'] ) ? (string) $row['salt'] : '' )
+		);
+
 		return $pass_array;
 	}
 
@@ -503,8 +509,141 @@ class PHPWind extends BBP_Converter_Base {
 	 * to a pass the user has typed in.
 	 */
 	public function authenticate_pass( $password, $serialized_pass ) {
-		$pass_array = unserialize( $serialized_pass );
-		return ( $pass_array['hash'] == md5( md5( $password ). $pass_array['salt'] ) );
+		if ( ! is_string( $password ) || ! is_string( $serialized_pass ) ) {
+			return false;
+		}
+
+		// Unserialize the password, with safeguards
+		$pass_array = $this->unserialize_pass( $serialized_pass );
+
+		// Bail if missing values
+		if ( ! is_array( $pass_array ) || ! isset( $pass_array['hash'], $pass_array['salt'] ) || ! is_string( $pass_array['hash'] ) || ! is_string( $pass_array['salt'] ) ) {
+			return false;
+		}
+
+		// Return comparison
+		return hash_equals(
+			$pass_array['hash'],
+			md5( md5( $password ) . $pass_array['salt'] )
+		);
+	}
+
+	/**
+	 * Upgrade password metadata written by earlier PHPWind imports.
+	 *
+	 * Earlier imports stored PHPWind's random synchronization token instead of
+	 * its login hash and salt. New imports use the parent callback and serialized
+	 * metadata containing the login hash and salt.
+	 *
+	 * @param string      $username    WordPress user login.
+	 * @param string      $password    Unslashed password for PHPWind.
+	 * @param string|null $wp_password Optional slashed password for WordPress.
+	 */
+	public function callback_pass( $username = '', $password = '', $wp_password = null ) {
+		$user = get_user_by( 'login', $username );
+
+		if ( ! empty( $user ) && '' === $user->user_pass ) {
+			$stored_hash = get_user_meta( $user->ID, '_bbp_password', true );
+
+			if ( is_string( $stored_hash ) && preg_match( '/^[a-f0-9]{32}$/i', $stored_hash ) ) {
+				$serialized_pass = $this->get_source_password( $user, $stored_hash );
+
+				if ( is_string( $serialized_pass ) && $this->authenticate_pass( $password, $serialized_pass ) ) {
+					$this->upgrade_user_pass( $user->ID, is_null( $wp_password ) ? $password : $wp_password );
+				}
+
+				return;
+			}
+		}
+
+		parent::callback_pass( $username, $password, $wp_password );
+	}
+
+	/**
+	 * Upgrade a PHPWind hash copied directly into wp_users by an old import.
+	 *
+	 * Those imports stored PHPWind's random synchronization token, not its login
+	 * hash. Match that token against the retained source row before retrieving
+	 * the login hash and salt from WindID.
+	 *
+	 * @param WP_User     $user        WordPress user.
+	 * @param string      $password    Unslashed password for PHPWind.
+	 * @param string|null $wp_password Optional slashed password for WordPress.
+	 */
+	public function callback_user_pass( $user, $password, $wp_password = null ) {
+		if ( ! ( $user instanceof WP_User ) || ! is_string( $password ) || ! preg_match( '/^[a-f0-9]{32}$/i', $user->user_pass ) ) {
+			return;
+		}
+
+		$wp_password = is_null( $wp_password ) ? $password : $wp_password;
+
+		// Do not replace a password that WordPress or a password plugin already
+		// recognizes, regardless of the stored hash format.
+		if ( wp_check_password( $wp_password, $user->user_pass, $user->ID ) ) {
+			return;
+		}
+
+		$serialized_pass = $this->get_source_password( $user, $user->user_pass );
+
+		if ( is_string( $serialized_pass ) && $this->authenticate_pass( $password, $serialized_pass ) ) {
+			$this->upgrade_user_pass( $user->ID, $wp_password );
+		}
+	}
+
+	/**
+	 * Retrieve login metadata for a token written by an earlier import.
+	 *
+	 * @param WP_User $user        WordPress user.
+	 * @param string  $stored_hash Random token stored by the earlier import.
+	 * @return string|bool Serialized password metadata, or false on failure.
+	 */
+	private function get_source_password( $user, $stored_hash ) {
+		$old_user_id = (int) get_user_meta( $user->ID, '_bbp_old_user_id', true );
+		if ( $old_user_id < 1 || get_transient( 'bbp_phpwind_source_connection_failed' ) ) {
+			return false;
+		}
+
+		// Block concurrent login attempts while the source connection or query is pending.
+		// Keep the backoff when either fails, so an unavailable source cannot stall
+		// every login attempt for an imported username.
+		set_transient( 'bbp_phpwind_source_connection_failed', 1, 5 * MINUTE_IN_SECONDS );
+
+		if ( ! $this->opdb->db_connect( false ) ) {
+			return false;
+		}
+
+		$legacy_table = $this->opdb->prefix . 'user';
+		$windid_table = $this->opdb->prefix . 'windid_user';
+		$source_user = $this->opdb->get_row(
+			$this->opdb->prepare( "SELECT legacy.password AS legacy_password, windid.password, windid.salt FROM {$legacy_table} AS legacy INNER JOIN {$windid_table} AS windid ON windid.uid = legacy.uid WHERE legacy.uid = %d LIMIT 1", $old_user_id ),
+			ARRAY_A
+		);
+		if ( empty( $this->opdb->last_error ) ) {
+			delete_transient( 'bbp_phpwind_source_connection_failed' );
+		}
+
+		if ( ! is_array( $source_user ) || ! isset( $source_user['legacy_password'], $source_user['password'], $source_user['salt'] ) || ! is_string( $source_user['legacy_password'] ) || ! is_string( $source_user['password'] ) || ! is_string( $source_user['salt'] ) || ! hash_equals( $stored_hash, $source_user['legacy_password'] ) ) {
+			return false;
+		}
+
+		return serialize(
+			array(
+				'hash' => $source_user['password'],
+				'salt' => $source_user['salt'],
+			)
+		);
+	}
+
+	/**
+	 * Replace a verified PHPWind hash with a WordPress password.
+	 *
+	 * @param int    $user_id  WordPress user ID.
+	 * @param string $password Password to hash for WordPress.
+	 */
+	private function upgrade_user_pass( $user_id, $password ) {
+		wp_set_password( $password, $user_id );
+		delete_user_meta( $user_id, '_bbp_password' );
+		delete_user_meta( $user_id, '_bbp_class' );
 	}
 
 	/**
@@ -539,31 +678,23 @@ class PHPWind extends BBP_Converter_Base {
 	 * Translate the post status from PHPWind v9.x numerics to WordPress's strings.
 	 *
 	 * @param int $status PHPWind v9.x numeric topic status
-	 * @return string WordPress safe
+	 * @return string WordPress topic status.
 	 */
-	public function callback_topic_status( $status = 2 ) {
-		switch ( $status ) {
-			case 1 :
-				$status = 'closed';
-				break;
+	public function callback_topic_status( $status = 0 ) {
+		// PHPWind stores locked (0b0001) and closed (0b0010) flags in tpcstatus. bbPress represents either state as closed.
+		$locked_or_closed_mask = 0b0011;
 
-			case 2  :
-			default :
-				$status = 'publish';
-				break;
-		}
-		return $status;
+		return ( (int) $status & $locked_or_closed_mask ) ? 'closed' : 'publish';
 	}
 
 	/**
 	 * Verify the topic/reply count.
 	 *
 	 * @param int $count PHPWind v9.x topic/reply counts
-	 * @return string WordPress safe
+	 * @return int Non-negative reply count.
 	 */
 	public function callback_topic_reply_count( $count = 1 ) {
-		$count = absint( (int) $count - 1 );
+		$count = absint( $count );
 		return $count;
 	}
-
 }

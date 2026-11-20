@@ -2,8 +2,8 @@
 
 	Theme Name: Hamilton
     Text Domain: hamilton
-	Version: 2.1.2
-	Description: Hamilton is a clean WordPress portfolio theme for creatives. It displays posts in a beautiful image grid that can be set to either two or three columns, which makes it a perfect fit for photographers, illustrators or graphic designers looking for a theme for their portfolio. It also features Block Editor/Gutenberg support, a dark mode, custom background color support, a resume page template, responsive design, Jetpack infinite scroll support, editor styling, and much more. Demo: https://andersnoren.se/themes/hamilton/
+	Version: 2.1.4
+	Description: Hamilton is a clean WordPress portfolio theme for creatives. It displays posts in a beautiful image grid that can be set to either two or three columns, which makes it a perfect fit for photographers, illustrators or graphic designers looking for a theme for their portfolio. It also features Block Editor/Gutenberg support, a dark mode, custom background color support, a resume page template, responsive design, Jetpack infinite scroll support, editor styling, and much more. Demo: https://hamilton.andersnoren.se
 	Tags: blog, two-columns, three-columns, custom-menu, featured-images, threaded-comments, translation-ready, grid-layout, custom-background, custom-logo, editor-style, sticky-post, theme-options, portfolio, photography, block-styles, wide-blocks
 	Author: Anders Norén
 	Author URI: https://andersnoren.se
@@ -12,7 +12,7 @@
 	Theme URI: https://andersnoren.se/teman/hamilton-wordpress-theme/
 	Requires at least: 4.5
 	Requires PHP: 5.4
-	Tested up to: 6.0
+	Tested up to: 7.1
 	
 	All files, unless otherwise stated, are released under the GNU General Public License
 	version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html)
@@ -149,8 +149,6 @@ body.lock-screen {
 }
 
 body * {
-        -webkit-box-sizing: border-box; 
-        -moz-box-sizing: border-box; 
 	box-sizing: border-box; 
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-font-smoothing: antialiased;
@@ -185,9 +183,7 @@ img {
 	color: #FFF;
 }
 
-input::-webkit-input-placeholder { color: #767676; }
-input:-ms-input-placeholder { color: #767676; }
-input::-moz-placeholder { color: #767676; }
+input::placeholder { color: #767676; opacity: 1; }
 
 
 /* -------------------------------------------------------------------------------- */
@@ -515,8 +511,7 @@ input[type="submit"] {
     padding: 16px 24px 18px;
 	text-align: center;
 	transition: background-color .2s ease-in-out;
-	-moz-appearance: none;
-	-webkit-appearance: none;
+	appearance: none;
 }
 
 .wp-block-button__link {
@@ -855,6 +850,7 @@ a {
 	justify-content: flex-end;
 	margin: -10px 0 0 -40px;
 	position: relative;
+	text-underline-offset: 0.2em;
 	z-index: 1;
 }
 
@@ -897,6 +893,12 @@ a {
 
 .alt-nav li a {
 	display: block;
+	text-decoration: none;
+}
+
+.alt-nav li a:hover,
+.alt-nav li a:focus {
+	text-decoration: underline;
 }
 
 .alt-nav ul {
@@ -956,10 +958,6 @@ a {
 
 .dark-mode .alt-nav ul a { 
 	color: #000; 
-}
-
-.alt-nav ul a:hover {
-	text-decoration: none;
 }
 
 .alt-nav ul li:hover { background: rgba( 255, 255, 255, 0.2 ); }
@@ -1087,15 +1085,8 @@ a {
 }
 
 .post-preview header {
-		display: -webkit-box;
-		display: -ms-flexbox;
 	display: flex;
-		-webkit-box-orient: vertical;
-		-webkit-box-direction: normal;
-		-ms-flex-direction: column;
 	flex-direction: column;
-		-webkit-box-pack: center;
-		-ms-flex-pack: center;
 	justify-content: center;
 	opacity: 0;
 	overflow: hidden;
@@ -2139,7 +2130,6 @@ p.has-drop-cap:not(:focus):first-letter {
 
 .infinite-loader:before, 
 .infinite-loader:after {
-		-webkit-animation: sk-bounce 2.0s infinite ease-in-out;
 	animation: sk-bounce 2.0s infinite ease-in-out;
 	background: rgba( 0, 0, 0, .25 );
 	border-radius: 50%;
@@ -2158,21 +2148,13 @@ p.has-drop-cap:not(:focus):first-letter {
 }
 
 .infinite-loader:after {
-		-webkit-animation-delay: -1.0s;
 	animation-delay: -1.0s;
-}
-
-@-webkit-keyframes sk-bounce {
-	0%, 100% { -webkit-transform: scale(0.0) }
-	50% { -webkit-transform: scale(1.0) }
 }
 
 @keyframes sk-bounce {
 	0%, 100% { 
-			-webkit-transform: scale(0.0);
 		transform: scale(0.0);
 	} 50% { 
-			-webkit-transform: scale(1.0);
 		transform: scale(1.0);
 	}
 }
@@ -2486,7 +2468,7 @@ p.has-drop-cap:not(:focus):first-letter {
 		margin-bottom: 50px;
 	}
 	
-	@supports ( display: -webkit-flex ) or ( display: -moz-flex ) or ( display: flex ) {
+	@supports ( display: flex ) {
 		.page-header {
 			min-height: 150px;
 		}

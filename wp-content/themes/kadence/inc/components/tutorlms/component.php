@@ -13,11 +13,7 @@ use Kadence_Blocks_Frontend;
 use function Kadence\kadence;
 use function add_action;
 use function add_filter;
-use function have_posts;
-use function the_post;
-use function is_search;
 use function get_template_part;
-use function get_post_type;
 
 /**
  * Class for adding TutorLMS plugin support.
@@ -30,13 +26,13 @@ class Component implements Component_Interface {
 	 *
 	 * @var array
 	 */
-	protected static $google_fonts = array();
+	protected static $google_fonts = [];
 	/**
 	 * Gets the unique identifier for the theme component.
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'tutorlms';
 	}
 
@@ -44,29 +40,29 @@ class Component implements Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'tutorlms_styles' ), 60 );
-		add_filter( 'kadence_theme_options_defaults', array( $this, 'add_option_defaults' ) );
-		add_filter( 'kadence_dynamic_css', array( $this, 'dynamic_css' ), 20 );
-		add_action( 'wp_head', array( $this, 'frontend_gfonts' ), 80 );
-		add_filter( 'body_class', array( $this, 'filter_body_classes' ) );
+		add_action( 'wp_enqueue_scripts', [ $this, 'tutorlms_styles' ], 60 );
+		add_filter( 'kadence_theme_options_defaults', [ $this, 'add_option_defaults' ] );
+		add_filter( 'kadence_dynamic_css', [ $this, 'dynamic_css' ], 20 );
+		add_action( 'wp_head', [ $this, 'frontend_gfonts' ], 80 );
+		add_filter( 'body_class', [ $this, 'filter_body_classes' ] );
 		// Courses.
 		// Outer Wrap.
-		add_action( 'tutor_course/single/before/wrap', array( $this, 'output_course_content_wrapper' ) );
-		add_action( 'tutor_course/single/after/wrap', array( $this, 'output_course_content_wrapper_end' ) );
-		add_action( 'tutor_course/single/enrolled/before/wrap', array( $this, 'output_course_content_wrapper_enrolled' ) );
-		add_action( 'tutor_course/single/enrolled/after/wrap', array( $this, 'output_course_content_wrapper_end' ) );
+		add_action( 'tutor_course/single/before/wrap', [ $this, 'output_course_content_wrapper' ] );
+		add_action( 'tutor_course/single/after/wrap', [ $this, 'output_course_content_wrapper_end' ] );
+		add_action( 'tutor_course/single/enrolled/before/wrap', [ $this, 'output_course_content_wrapper_enrolled' ] );
+		add_action( 'tutor_course/single/enrolled/after/wrap', [ $this, 'output_course_content_wrapper_end' ] );
 		// Inner.
-		add_action( 'tutor_course/single/before/inner-wrap', array( $this, 'output_inner_content_wrapper' ) );
-		add_action( 'tutor_course/single/after/inner-wrap', array( $this, 'output_inner_content_wrapper_end' ) );
-		add_action( 'tutor_course/single/enrolled/before/inner-wrap', array( $this, 'output_inner_content_wrapper_enrolled' ) );
-		add_action( 'tutor_course/single/enrolled/after/inner-wrap', array( $this, 'output_inner_content_wrapper_end' ), 80 );
+		add_action( 'tutor_course/single/before/inner-wrap', [ $this, 'output_inner_content_wrapper' ] );
+		add_action( 'tutor_course/single/after/inner-wrap', [ $this, 'output_inner_content_wrapper_end' ] );
+		add_action( 'tutor_course/single/enrolled/before/inner-wrap', [ $this, 'output_inner_content_wrapper_enrolled' ] );
+		add_action( 'tutor_course/single/enrolled/after/inner-wrap', [ $this, 'output_inner_content_wrapper_end' ], 80 );
 		// Pages.
-		add_action( 'tutor_dashboard/before/wrap', array( $this, 'output_content_wrapper' ) );
-		add_action( 'tutor_dashboard/after/wrap', array( $this, 'output_content_wrapper_end' ) );
-		add_action( 'tutor_student/before/wrap', array( $this, 'output_content_wrapper' ) );
-		add_action( 'tutor_student/after/wrap', array( $this, 'output_content_wrapper_end' ) );
-		add_action( 'tutor_course/archive/before/wrap', array( $this, 'output_content_wrapper' ) );
-		add_action( 'tutor_course/archive/after/wrap', array( $this, 'output_content_wrapper_end' ) );
+		add_action( 'tutor_dashboard/before/wrap', [ $this, 'output_content_wrapper' ] );
+		add_action( 'tutor_dashboard/after/wrap', [ $this, 'output_content_wrapper_end' ] );
+		add_action( 'tutor_student/before/wrap', [ $this, 'output_content_wrapper' ] );
+		add_action( 'tutor_student/after/wrap', [ $this, 'output_content_wrapper_end' ] );
+		add_action( 'tutor_course/archive/before/wrap', [ $this, 'output_content_wrapper' ] );
+		add_action( 'tutor_course/archive/after/wrap', [ $this, 'output_content_wrapper_end' ] );
 	}
 	/**
 	 * Outputs the above header tutor lead.
@@ -82,7 +78,7 @@ class Component implements Component_Interface {
 			$is_enrolled = tutor_utils()->is_enrolled();
 			( isset( $is_enrolled ) && $is_enrolled ) ? tutor_course_enrolled_lead_info() : tutor_course_lead_info();
 			// remove normal Lead template.
-			add_filter( 'should_tutor_load_template', array( $this, 'remove_lead_template' ), 10, 3 );
+			add_filter( 'should_tutor_load_template', [ $this, 'remove_lead_template' ], 10, 3 );
 		} else {
 			get_template_part( 'tutor/single/course/lead-info' );
 		}
@@ -108,7 +104,7 @@ class Component implements Component_Interface {
 		echo '<div class="entry content-bg single-entry"><div class="entry-content-wrap">';
 		if ( 'above' === kadence()->option( 'courses_title_layout' ) ) {
 			// remove normal Lead template.
-			add_filter( 'should_tutor_load_template', array( $this, 'remove_lead_template' ), 10, 3 );
+			add_filter( 'should_tutor_load_template', [ $this, 'remove_lead_template' ], 10, 3 );
 			// Add content lead template.
 			if ( defined( 'TUTOR_VERSION' ) && ! ( version_compare( TUTOR_VERSION, '2.0.0' ) >= 0 ) ) {
 				get_template_part( 'tutor/single/course/enrolled/content-lead-info' );
@@ -122,7 +118,7 @@ class Component implements Component_Interface {
 		echo '<div class="entry content-bg single-entry"><div class="entry-content-wrap">';
 		if ( 'above' === kadence()->option( 'courses_title_layout' ) ) {
 			// remove normal Lead template.
-			add_filter( 'should_tutor_load_template', array( $this, 'remove_lead_template' ), 10, 3 );
+			add_filter( 'should_tutor_load_template', [ $this, 'remove_lead_template' ], 10, 3 );
 			// Add content lead template.
 			if ( defined( 'TUTOR_VERSION' ) && ! ( version_compare( TUTOR_VERSION, '2.0.0' ) >= 0 ) ) {
 				get_template_part( 'tutor/single/course/content-lead-info' );
@@ -141,7 +137,7 @@ class Component implements Component_Interface {
 	public function output_course_content_wrapper_enrolled() {
 		kadence()->print_styles( 'kadence-content' );
 		remove_action( 'kadence_entry_hero', 'Kadence\kadence_entry_header', 10, 2 );
-		add_action( 'kadence_entry_hero', array( $this, 'header_lead_enrolled' ), 10, 2 );
+		add_action( 'kadence_entry_hero', [ $this, 'header_lead_enrolled' ], 10, 2 );
 		/**
 		 * Hook for Hero Section
 		 */
@@ -154,7 +150,7 @@ class Component implements Component_Interface {
 	public function output_course_content_wrapper() {
 		kadence()->print_styles( 'kadence-content' );
 		remove_action( 'kadence_entry_hero', 'Kadence\kadence_entry_header', 10, 2 );
-		add_action( 'kadence_entry_hero', array( $this, 'header_lead' ), 10, 2 );
+		add_action( 'kadence_entry_hero', [ $this, 'header_lead' ], 10, 2 );
 		/**
 		 * Hook for Hero Section
 		 */
@@ -197,7 +193,7 @@ class Component implements Component_Interface {
 	 * Add some css styles for tutorlms
 	 */
 	public function tutorlms_styles() {
-		wp_enqueue_style( 'kadence-tutorlms', get_theme_file_uri( '/assets/css/tutorlms.min.css' ), array(), KADENCE_VERSION );
+		wp_enqueue_style( 'kadence-tutorlms', get_theme_file_uri( '/assets/css/tutorlms.min.css' ), [], KADENCE_VERSION );
 	}
 	/**
 	 * Add Defaults
@@ -208,88 +204,88 @@ class Component implements Component_Interface {
 	 */
 	public function add_option_defaults( $defaults ) {
 		// Tutor.
-		$tutor_addons = array(
-			'courses_title_layout'       => 'normal',
-			'courses_title_inner_layout' => 'standard',
-			'courses_title_align'        => 'left',
-			'courses_enroll_overlay'     => true,
-			'courses_title_height'       => array(
-				'size' => array(
+		$tutor_addons = [
+			'courses_title_layout'                     => 'normal',
+			'courses_title_inner_layout'               => 'standard',
+			'courses_title_align'                      => 'left',
+			'courses_enroll_overlay'                   => true,
+			'courses_title_height'                     => [
+				'size' => [
 					'mobile'  => '',
 					'tablet'  => '',
 					'desktop' => 375,
-				),
-				'unit' => array(
+				],
+				'unit' => [
 					'mobile'  => 'px',
 					'tablet'  => 'px',
 					'desktop' => 'px',
-				),
-			),
-			'courses_title_font' => array(
-				'size' => array(
+				],
+			],
+			'courses_title_font'                       => [
+				'size'       => [
 					'desktop' => '',
-				),
-				'lineHeight' => array(
+				],
+				'lineHeight' => [
 					'desktop' => '',
-				),
-				'family'  => 'inherit',
-				'google'  => false,
-				'weight'  => '',
-				'variant' => '',
-				'color'   => '',
-			),
-			'courses_layout'           => 'right',
-			'courses_content_style'    => 'boxed',
-			'courses_vertical_padding' => 'show',
-			'courses_archive_title'            => true,
-			'courses_archive_title_layout'     => 'above',
-			'courses_archive_layout'           => 'normal',
-			'courses_archive_sidebar_id'       => 'sidebar-primary',
-			'courses_archive_content_style'    => 'unboxed',
-			'courses_archive_vertical_padding' => 'show',
-			'courses_archive_title_inner_layout' => 'standard',
-			'courses_archive_title_elements'        => array( 'breadcrumb', 'title' ),
-			'courses_archive_title_element_title'   => array(
+				],
+				'family'     => 'inherit',
+				'google'     => false,
+				'weight'     => '',
+				'variant'    => '',
+				'color'      => '',
+			],
+			'courses_layout'                           => 'right',
+			'courses_content_style'                    => 'boxed',
+			'courses_vertical_padding'                 => 'show',
+			'courses_archive_title'                    => true,
+			'courses_archive_title_layout'             => 'above',
+			'courses_archive_layout'                   => 'normal',
+			'courses_archive_sidebar_id'               => 'sidebar-primary',
+			'courses_archive_content_style'            => 'unboxed',
+			'courses_archive_vertical_padding'         => 'show',
+			'courses_archive_title_inner_layout'       => 'standard',
+			'courses_archive_title_elements'           => [ 'breadcrumb', 'title' ],
+			'courses_archive_title_element_title'      => [
 				'enabled' => true,
-			),
-			'courses_archive_title_element_breadcrumb' => array(
-				'enabled' => false,
+			],
+			'courses_archive_title_element_breadcrumb' => [
+				'enabled'    => false,
 				'show_title' => true,
-			),
+			],
 			// 'courses_title_elements'      => array( 'breadcrumb', 'reviews', 'title', 'meta' ),
 			// 'courses_title_element_title' => array(
-			// 	'enabled' => true,
+			// 'enabled' => true,
 			// ),
 			// 'courses_title_element_breadcrumb' => array(
-			// 	'enabled' => false,
+			// 'enabled' => false,
 			// ),
 			// 'courses_title_element_reviews' => array(
-			// 	'enabled' => true,
+			// 'enabled' => true,
 			// ),
 			// 'courses_title_element_meta' => array(
-			// 	'id'                => 'meta',
-			// 	'enabled'           => false,
-			// 	'author'            => true,
-			// 	'authorImage'       => true,
-			// 	'authorEnableLabel' => true,
-			// 	'authorLabel'       => '',
-			// 	'courseLevel'       => true,
-			// 	'courseShare'       => false,
+			// 'id'                => 'meta',
+			// 'enabled'           => false,
+			// 'author'            => true,
+			// 'authorImage'       => true,
+			// 'authorEnableLabel' => true,
+			// 'authorLabel'       => '',
+			// 'courseLevel'       => true,
+			// 'courseShare'       => false,
 			// ),
 			// 'header_html2_typography' => array(
-			// 	'size' => array(
-			// 		'desktop' => '',
-			// 	),
-			// 	'lineHeight' => array(
-			// 		'desktop' => '',
-			// 	),
-			// 	'family'  => 'inherit',
-			// 	'google'  => false,
-			// 	'weight'  => '',
-			// 	'variant' => '',
-			// 	'color'   => '',
+			// 'size' => array(
+			// 'desktop' => '',
 			// ),
-		);
+			// 'lineHeight' => array(
+			// 'desktop' => '',
+			// ),
+			// 'family'  => 'inherit',
+			// 'google'  => false,
+			// 'weight'  => '',
+			// 'variant' => '',
+			// 'color'   => '',
+			// ),
+		];
 		$defaults = array_merge(
 			$defaults,
 			$tutor_addons
@@ -307,11 +303,11 @@ class Component implements Component_Interface {
 			$ktblocks_instance = Kadence_Blocks_Frontend::get_instance();
 			foreach ( self::$google_fonts as $key => $font ) {
 				if ( ! array_key_exists( $key, $ktblocks_instance::$gfonts ) ) {
-					$add_font = array(
+					$add_font                           = [
 						'fontfamily'   => $font['fontfamily'],
-						'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : array() ),
-						'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : array() ),
-					);
+						'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : [] ),
+						'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : [] ),
+					];
 					$ktblocks_instance::$gfonts[ $key ] = $add_font;
 				} else {
 					foreach ( $font['fontvariants'] as $variant ) {
@@ -322,7 +318,7 @@ class Component implements Component_Interface {
 				}
 			}
 		} else {
-			add_filter( 'kadence_theme_google_fonts_array', array( $this, 'filter_in_fonts' ) );
+			add_filter( 'kadence_theme_google_fonts_array', [ $this, 'filter_in_fonts' ] );
 		}
 	}
 	/**
@@ -335,11 +331,11 @@ class Component implements Component_Interface {
 		// Enqueue Google Fonts.
 		foreach ( self::$google_fonts as $key => $font ) {
 			if ( ! array_key_exists( $key, $font_array ) ) {
-				$add_font = array(
+				$add_font           = [
 					'fontfamily'   => $font['fontfamily'],
-					'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : array() ),
-					'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : array() ),
-				);
+					'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : [] ),
+					'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : [] ),
+				];
 				$font_array[ $key ] = $add_font;
 			} else {
 				foreach ( $font['fontvariants'] as $variant ) {
@@ -371,7 +367,7 @@ class Component implements Component_Interface {
 	 */
 	public function generate_tutor_css() {
 		$css                    = new Kadence_CSS();
-		$media_query            = array();
+		$media_query            = [];
 		$media_query['mobile']  = apply_filters( 'kadence_mobile_media_query', '(max-width: 767px)' );
 		$media_query['tablet']  = apply_filters( 'kadence_tablet_media_query', '(max-width: 1024px)' );
 		$media_query['desktop'] = apply_filters( 'kadence_desktop_media_query', '(min-width: 1025px)' );
@@ -467,7 +463,7 @@ class Component implements Component_Interface {
 	 * @param array $classes Classes for the body element.
 	 * @return array Filtered body classes.
 	 */
-	public function filter_body_classes( array $classes ) : array {
+	public function filter_body_classes( array $classes ): array {
 		if ( is_singular( 'courses' ) ) {
 			$classes[] = 'courses-sidebar-overlay-' . ( kadence()->option( 'courses_enroll_overlay' ) ? 'true' : 'false' );
 		}

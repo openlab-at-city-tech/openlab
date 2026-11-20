@@ -190,11 +190,13 @@ function astra_pagination_css( $dynamic_css ) {
                     float: left;
                     text-align: left;
                 }
-                @media (max-width: 768px) {
-                    .ast-pagination .next.page-numbers .page-navigation {
-                        padding-left: 0;
-                    }
-                }';
+            }
+
+            @media (max-width: 768px) {
+                .ast-pagination .next.page-numbers .page-navigation {
+                    padding-left: 0;
+                }
+            }';
 
 			if ( ! Astra_Builder_Helper::apply_flex_based_css() ) {
 				$pagination_static_css .= '

@@ -2,14 +2,11 @@
 
 namespace RebelCode\Spotlight\Instagram\Modules;
 
-use Dhii\Services\Factories\Constructor;
 use Dhii\Services\Factories\Value;
 use Dhii\Services\Factory;
 use Psr\Container\ContainerInterface;
-use RebelCode\Spotlight\Instagram\Di\ArrayExtension;
 use RebelCode\Spotlight\Instagram\Module;
 use RebelCode\Spotlight\Instagram\Wp\Asset;
-use WP_Block_Type;
 
 /**
  * The module that adds the Spotlight block type to the WordPress block editor.
@@ -25,11 +22,15 @@ class WpBlockModule extends Module
      */
     public function run(ContainerInterface $c): void
     {
-        add_action('enqueue_block_editor_assets', function () use ($c) {
-            // Register block assets
+        add_action('init', function () use ($c) {
+            // Make editor styles available before WordPress collects iframe assets.
             Asset::register('sli-wp-block-js', $c->get('editor_script'));
             Asset::register('sli-wp-block-css', $c->get('editor_style'));
 
+            register_block_type($c->get('metadata_path'), $c->get('args'));
+        });
+
+        add_action('enqueue_block_editor_assets', function () use ($c) {
             // Makes sure script config is localized
             do_action('spotlight/instagram/localize_config');
 
@@ -46,12 +47,11 @@ class WpBlockModule extends Module
     public function getFactories(): array
     {
         return [
-            'type' => new Constructor(WP_Block_Type::class, ['id', 'args']),
-            'id' => new Value('spotlight/instagram'),
+            'metadata_path' => new Factory(['@plugin/dir'], function ($dir) {
+                return $dir . '/ui/block.json';
+            }),
             'args' => new Factory(['render_fn'], function ($renderFn) {
                 return [
-                    'editor_script' => 'sli-wp-block-js',
-                    'editor_style' => 'sli-wp-block-css',
                     'render_callback' => $renderFn,
                 ];
             }),
@@ -70,10 +70,16 @@ class WpBlockModule extends Module
             'script_deps' => new Value([
                 'sli-admin-common',
                 'sli-editor',
+                'wp-blocks',
+                'wp-block-editor',
+                'wp-components',
+                'wp-element',
+                'wp-i18n',
             ]),
             'style_deps' => new Value([
                 'sli-admin-common',
                 'sli-editor',
+                'wp-components',
             ]),
             'render_fn' => new Factory(['@shortcode/callback'], function ($shortcode) {
                 return function ($attrs) use ($shortcode) {
@@ -85,19 +91,6 @@ class WpBlockModule extends Module
                         : '';
                 };
             }),
-        ];
-    }
-
-    /**
-     * @inheritDoc
-     *
-     * @since 0.3
-     */
-    public function getExtensions(): array
-    {
-        return [
-            // Register the block type to WordPress
-            'wp/block_types' => new ArrayExtension(['type']),
         ];
     }
 }

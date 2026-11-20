@@ -72,6 +72,7 @@ body {
 .akismet-section-header__label {
 	color: var(--akismet-color-charcoal);
 	font-weight: 600;
+	margin: 0;
 	padding-left: 0.2em;
 }
 
@@ -99,6 +100,11 @@ body {
 	padding-left: 2px;
 	text-decoration: none;
 	vertical-align: middle;
+}
+
+/* The icon sits too low against the help panel line-height; align it to the top there. */
+#contextual-help-wrap .akismet-external-link::after {
+	vertical-align: top;
 }
 
 /* Need this specificity to override the existing header rule */
@@ -153,9 +159,11 @@ body {
 }
 
 .akismet-new-snapshot__item {
-	border-top: 1px solid var(--akismet-color-border-light);
 	border-left: 1px solid var(--akismet-color-border-light);
-	padding: 1em;
+	border-top: 1px solid var(--akismet-color-border-light);
+	flex: 1 0 33.33%;
+	margin-bottom: 0;
+	padding: 1em 1.5em;
 }
 
 .akismet-new-snapshot li:first-child {
@@ -165,13 +173,6 @@ body {
 .akismet-new-snapshot__list {
 	display: flex;
 	margin-bottom: 0;
-}
-
-.akismet-new-snapshot__item {
-	flex: 1 0 33.33%;
-	margin-bottom: 0;
-	padding-left: 1.5em;
-	padding-right: 1.5em;
 }
 
 .akismet-new-snapshot__chart {
@@ -228,10 +229,6 @@ body {
 
 .akismet-lower .inside {
 	padding: 0;
-}
-
-.akismet-section-header__label {
-	margin: 0;
 }
 
 .akismet-settings__row {
@@ -753,16 +750,12 @@ h3.akismet-enter-api-key-box__header {
 	.akismet-settings__row input[type="checkbox"],
 	.akismet-settings__row input[type="radio"] {
 		height: 24px;
+		margin-top: 0;
 		width: 24px;
 	}
 
 	.akismet-settings__row-label-text {
 		padding-left: 0.8em;
-	}
-
-	.akismet-settings__row input[type="checkbox"],
-	.akismet-settings__row input[type="radio"] {
-		margin-top: 0;
 	}
 
 	.akismet-activate {

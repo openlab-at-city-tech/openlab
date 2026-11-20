@@ -151,6 +151,7 @@ function name_directory_show_list()
                 'email_for_submission'          => sanitize_email($_POST['email_for_submission']),
                 'name_term'                     => sanitize_text_field($_POST['name_term']),
                 'name_term_singular'            => sanitize_text_field($_POST['name_term_singular']),
+                'submitted_by_term'             => sanitize_text_field($_POST['submitted_by_term']),
                 'check_submitted_names_first'   => intval($_POST['check_submitted_names_first']),
             ),
             array('id' => intval($_POST['dir_id']))
@@ -198,9 +199,10 @@ function name_directory_show_list()
                     'email_for_submission'          => sanitize_text_field($_POST['email_for_submission']),
                     'name_term'                     => sanitize_text_field($_POST['name_term']),
                     'name_term_singular'            => sanitize_text_field($_POST['name_term_singular']),
+                    'submitted_by_term'             => sanitize_text_field($_POST['submitted_by_term']),
                     'check_submitted_names_first'   => (int)$_POST['check_submitted_names_first'],
                 ),
-                array('%s', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%s', '%s', '%s', '%d')
+                array('%s', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%s', '%s', '%s', '%s', '%d')
             );
 
             echo "<div class='updated'><p>"
@@ -500,13 +502,19 @@ function name_directory_edit($mode = 'edit')
                 <td><input type="text" name="name_term_singular" value="<?php echo (! empty($directory['name_term_singular']) ? $directory['name_term_singular'] : ''); ?>" size="20"></td>
             </tr>
             <tr>
+                <th valign="top"><?php echo __('Submitter term', 'name-directory'); ?><br>
+                    <small><?php echo __('Alternative for the submitter label, i.e. Club member', 'name-directory'); ?></small></th>
+                <td><input type="text" name="submitted_by_term" value="<?php echo (! empty($directory['submitted_by_term']) ? esc_attr($directory['submitted_by_term']) : ''); ?>" size="20">
+                    <br>
+                    <small><?php echo __('If you provide an alternative, your website will not display "Submitted by:", but: ', 'name-directory'); ?> "<i>Club member: Henk</i>"</small></td>
+            </tr>
+            <tr>
                 <td>
                     <?php wp_nonce_field( 'name_directory_dirmanagement','name_directory_adminnonce' ); ?>
                 </td>
                 <td>
                     <input type="submit" name="submit" class="button button-primary button-large"
                            value="<?php echo $button_text; ?>" />
-
                     <a class='button button-large' href='<?php echo $overview_url; ?>'>
                         <?php echo __('Cancel', 'name-directory'); ?>
                     </a>
@@ -542,7 +550,7 @@ function name_directory_names()
 
     if(! empty($_GET['delete_name']) && is_numeric($_GET['delete_name']) && check_admin_referer('name-directory-action','secnonce'))
     {
-        $name = $wpdb->get_var(sprintf("SELECT `name` FROM %s WHERE id=%d", $name_directory_table_directory_name, $_GET['delete_name']));
+        $name = $wpdb->get_var(sprintf("SELECT `name` FROM %s WHERE id=%d", $name_directory_table_directory_name, intval($_GET['delete_name'])));
         $wpdb->delete($name_directory_table_directory_name, array('id' => $_GET['delete_name']), array('%d'));
         echo "<div class='updated'><p>"
             . sprintf(__('Name %s deleted', 'name-directory'), "<i>" . esc_html($name) . "</i>")
@@ -568,6 +576,7 @@ function name_directory_names()
                 'name'          => wp_kses_post(stripslashes($_POST['name'])),
                 'letter'        => name_directory_get_first_char($_POST['name']),
                 'description'   => wp_kses_post(stripslashes($description)),
+                'shortcodes_enabled' => ! empty($_POST['shortcodes_enabled']) ? 1 : 0,
                 'published'     => (int)$_POST['published'],
                 'submitted_by'  => wp_kses_post($_POST['submitted_by']),
             ),
@@ -576,7 +585,7 @@ function name_directory_names()
 
         if($_POST['action'] == "name_directory_ajax_names")
         {
-            $refresh_url = str_replace('edit_name=', '', $_SERVER['HTTP_REFERER']);
+            $refresh_url = esc_url(str_replace('edit_name=', '', $_SERVER['HTTP_REFERER']));
             echo '<p>';
             echo sprintf(__('Name %s updated', 'name-directory'), "<i>" . esc_html($_POST['name']) . "</i>");
             echo '. <small><i>' . __('Will be visible when the page is refreshed.', 'name-directory') . '</i> ';
@@ -622,10 +631,11 @@ function name_directory_names()
                 'name'          => wp_kses_post($_POST['name']),
                 'letter'        => name_directory_get_first_char(wp_kses_post($_POST['name'])),
                 'description'   => wp_kses_post($description),
+                'shortcodes_enabled' => ! empty($_POST['shortcodes_enabled']) ? 1 : 0,
                 'published'     => (int)$_POST['published'],
                 'submitted_by'  => wp_kses_post($_POST['submitted_by']),
             ),
-            array('%d', '%s', '%s', '%s', '%d', '%s')
+            array('%d', '%s', '%s', '%s', '%d', '%d', '%s')
         );
 
         if($_POST['action'] == "name_directory_ajax_names")
@@ -714,7 +724,7 @@ function name_directory_names()
     if(! empty($_GET['edit_name']))
     {
         $name = $wpdb->get_row(sprintf("SELECT * FROM `%s` WHERE `id` = %d",
-            $name_directory_table_directory_name, $_GET['edit_name']), ARRAY_A);
+                    $name_directory_table_directory_name, intval($_GET['edit_name'])), ARRAY_A);
         $table_heading = __('Edit a name', 'name-directory');
         $save_button_txt = __('Save name', 'name-directory');
         $show_all_names = false;
@@ -723,7 +733,7 @@ function name_directory_names()
     {
         $table_heading = __('Add a new name', 'name-directory');
         $save_button_txt = __('Add name', 'name-directory');
-        $name = array('name' => null, 'description' => '', 'submitted_by' => null);
+        $name = array('name' => null, 'description' => '', 'submitted_by' => null, 'shortcodes_enabled' => 0);
     }
 
     ?>
@@ -783,6 +793,13 @@ function name_directory_names()
                         wp_editor($name['description'], 'description', array('textarea_rows' => 5, 'textarea_name' => 'description'));
                     }
                     ?>
+                    <br>
+                    <label>
+                        <input type="checkbox" name="shortcodes_enabled" value="1" <?php echo ! empty($name['shortcodes_enabled']) ? 'checked="checked"' : ''; ?>>
+                        <?php echo __('Allow shortcodes in this description', 'name-directory'); ?>
+                    </label>
+                    <br>
+                    <small><?php echo __('Disabled by default for new entries. Only enable this for descriptions you trust.', 'name-directory'); ?></small>
                     <small><strong><?php echo __('Please be careful!', 'name-directory'); ?></strong>
                         <?php echo __('HTML markup is allowed here, but please be aware it may affect the way Name Directory or a name is displayed. Also, features like "Read more" may behave differently if you use i.e. images or tables in the description of an image.', 'name-directory'); ?></small></td>
             </tr>
@@ -819,7 +836,7 @@ function name_directory_names()
     <?php
 
     /* Don't show all the names when the user explicitly started the adding-mode */
-    if(! empty($_GET['display_all_names']) && htmlspecialchars($_GET['display_all_names']) == "no")
+    if(! empty($_GET['display_all_names']) && sanitize_text_field($_GET['display_all_names']) == "no")
     {
         $show_all_names = false;
     }
@@ -841,8 +858,8 @@ function name_directory_names()
         $search_value = '';
         if(! empty($_GET['s']))
         {
-            $search_value = htmlspecialchars($_GET['s']);
-            $name_filter['containing'] = $search_value;
+            $search_value = esc_attr($_GET['s']);
+            $name_filter['containing'] = $_GET['s'];
 
             $names = name_directory_get_directory_names($directory, $name_filter);
             $num_names = count($names);
@@ -865,7 +882,7 @@ function name_directory_names()
             {
                 continue;
             }
-            echo "<input type='hidden' name='" . htmlspecialchars($key_name) . "' value='" . htmlspecialchars($value) . "' />";
+            echo "<input type='hidden' name='" . esc_attr($key_name) . "' value='" . esc_attr($value) . "' />";
         }
         echo "<input type='search' class='tagsdiv newtag' name='s' id='name-directory-search-input-box' value='" . $search_value . "' placeholder='" . __('Search', 'name-directory') . "...' />";
         echo "<input type='submit' id='name-directory-search-input-button' class='button' value='" . __('Search name', 'name-directory') . "' />";
@@ -1125,10 +1142,11 @@ function name_directory_import()
                     'name'          => sanitize_text_field($prepared_row['name']),
                     'letter'        => name_directory_get_first_char($prepared_row['name']),
                     'description'   => ! empty($prepared_row['description']) ? wp_kses_post($prepared_row['description']) : '',
+                    'shortcodes_enabled' => 0,
                     'published'     => ! empty($prepared_row['published']) ? $prepared_row['published'] : '',
                     'submitted_by'  => ! empty($prepared_row['submitted_by']) ? sanitize_text_field($prepared_row['submitted_by']) : '',
                 ),
-                array('%d', '%s', '%s', '%s', '%d', '%s')
+                array('%d', '%s', '%s', '%s', '%d', '%d', '%s')
             );
 
             if($db_res === false)

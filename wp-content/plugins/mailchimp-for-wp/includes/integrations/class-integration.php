@@ -1,5 +1,7 @@
 <?php
 
+defined('ABSPATH') || exit;
+
 /**
  * Class MC4WP_Integration
  *
@@ -71,16 +73,17 @@ abstract class MC4WP_Integration
     protected function get_default_options()
     {
         return [
-            'css'               => 0,
-            'double_optin'      => 1,
-            'enabled'           => 0,
-            'implicit'          => 0,
-            'label'             => __('Sign me up for the newsletter!', 'mailchimp-for-wp'),
-            'lists'             => [],
-            'precheck'          => 0,
-            'replace_interests' => 0,
-            'update_existing'   => 0,
-            'wrap_p'            => 1,
+            'css'                      => 0,
+            'double_optin'             => 1,
+            'enabled'                  => 0,
+            'implicit'                 => 0,
+            'label'                    => __('Sign me up for the newsletter!', 'mailchimp-for-wp'),
+            'lists'                    => [],
+            'precheck'                 => 0,
+            'replace_interests'        => 0,
+            'update_existing'          => 0,
+            'update_only_empty_fields' => 0,
+            'wrap_p'                   => 1,
         ];
     }
 
@@ -155,6 +158,7 @@ abstract class MC4WP_Integration
         // replace selector by integration specific selector so the css affects just this checkbox
         $css = str_ireplace('__INTEGRATION_SLUG__', $this->slug, $css);
 
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS must be printed as raw stylesheet content.
         printf('<style>%s</style>', $css);
     }
 
@@ -176,7 +180,7 @@ abstract class MC4WP_Integration
         // run saved value through gettext filter
         // this allows people to use a plugin like Loco Translate to translate this message
         // without updating the setting itself
-        $label = __($label, 'mailchimp-for-wp');
+        $label = __($label, 'mailchimp-for-wp'); // phpcs:ignore
 
         /**
          * Filters the checkbox label
@@ -209,7 +213,7 @@ abstract class MC4WP_Integration
      */
     protected function get_wrapper_attributes()
     {
-        $classes = join(' ', $this->wrapper_classes);
+        $classes    = join(' ', $this->wrapper_classes);
         $html_attrs = [
             'class' => "mc4wp-checkbox mc4wp-checkbox-{$this->slug} $classes",
         ];
@@ -264,6 +268,7 @@ abstract class MC4WP_Integration
      */
     public function output_checkbox()
     {
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Checkbox HTML is intentionally rendered.
         echo $this->get_checkbox_html();
     }
 
@@ -290,7 +295,7 @@ abstract class MC4WP_Integration
 
         ob_start();
 
-        echo '<!-- Mailchimp for WordPress v', MC4WP_VERSION,' - https://www.mc4wp.com/ -->';
+        echo '<!-- Mailchimp for WordPress v', esc_html(MC4WP_VERSION), ' - https://www.mc4wp.com/ -->';
 
         /** @ignore */
         do_action('mc4wp_integration_before_checkbox_wrapper', $this);
@@ -303,12 +308,14 @@ abstract class MC4WP_Integration
 
         // Hidden field to make sure "0" is sent to server
         echo '<input type="hidden" name="', esc_attr($this->checkbox_name), '" value="0" />';
-        echo "<$wrapper_tag $wrapper_attrs>";
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Wrapper attributes are escaped in array_to_attr_string().
+        printf('<%1$s %2$s>', tag_escape($wrapper_tag), $wrapper_attrs);
         echo '<label>';
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Checkbox attributes are escaped in array_to_attr_string().
         echo '<input type="checkbox" name="', esc_attr($this->checkbox_name), '" value="1" ', $this->get_checkbox_attributes(), '>';
-        echo '<span>', $this->get_label_text(), '</span>';
+        echo '<span>', wp_kses_post($this->get_label_text()), '</span>';
         echo '</label>';
-        echo "</$wrapper_tag>";
+        printf('</%s>', tag_escape($wrapper_tag));
 
         /** @ignore */
         do_action('mc4wp_integration_after_checkbox_wrapper', $this);
@@ -337,12 +344,24 @@ abstract class MC4WP_Integration
 
         // get lists from request, if set.
         if (! empty($data['_mc4wp_lists'])) {
-            $lists = $data['_mc4wp_lists'];
+            $requested_lists = $data['_mc4wp_lists'];
 
             // ensure lists is an array
-            if (! is_array($lists)) {
-                $lists = explode(',', $lists);
-                $lists = array_map('trim', $lists);
+            if (! is_array($requested_lists)) {
+                $requested_lists = explode(',', (string) $requested_lists);
+                $requested_lists = array_map('trim', $requested_lists);
+            }
+
+            // only accept lists that are selected in the integration settings
+            $requested_lists = array_filter(
+                $requested_lists,
+                function ($list_id) use ($lists) {
+                    return is_string($list_id) && in_array($list_id, (array) $lists, true);
+                }
+            );
+
+            if (! empty($requested_lists)) {
+                $lists = array_values($requested_lists);
             }
         }
 
@@ -390,15 +409,8 @@ abstract class MC4WP_Integration
      */
     protected function subscribe(array $data, $related_object_id = 0)
     {
-        $integration = $this;
-        $slug        = $this->slug;
-        $mailchimp   = new MC4WP_MailChimp();
-        $log         = $this->get_log();
-        $list_ids    = $this->get_lists();
-
-        /** @var null|MC4WP_MailChimp_Subscriber $subscriber */
-        $subscriber = null;
-        $result     = false;
+        $log      = $this->get_log();
+        $list_ids = $this->get_lists();
 
         // validate lists
         if (empty($list_ids)) {
@@ -421,9 +433,59 @@ abstract class MC4WP_Integration
          * @param array $data
          * @param int $related_object_id
          */
-        $data = apply_filters("mc4wp_integration_{$slug}_data", $data, $related_object_id);
+        $data = apply_filters("mc4wp_integration_{$this->slug}_data", $data, $related_object_id);
 
-        $email_type = mc4wp_get_email_type();
+        $args = [
+            'integration_slug'  => $this->slug,
+            'data'              => $data,
+            'related_object_id' => $related_object_id,
+            'list_ids'          => $list_ids,
+            'ip_signup'         => mc4wp_get_request_ip_address(),
+            'email_type'        => mc4wp_get_email_type(),
+            'options'           => [
+                'double_optin'            => $this->options['double_optin'],
+                'update_existing'         => $this->options['update_existing'],
+                'update_only_empty_fields' => $this->options['update_only_empty_fields'],
+                'replace_interests'       => $this->options['replace_interests'],
+            ],
+        ];
+
+        if (function_exists('as_enqueue_async_action')) {
+            as_enqueue_async_action('mc4wp_integration_subscribe', [$args]);
+        } else {
+            wp_schedule_single_event(time(), 'mc4wp_integration_subscribe', [$args]);
+        }
+
+        return true;
+    }
+
+    /**
+     * Process background subscription
+     *
+     * @param array $args
+     * @return boolean
+     */
+    public function process_background_subscribe(array $args)
+    {
+        $data              = $args['data'];
+        $related_object_id = $args['related_object_id'];
+        $list_ids          = $args['list_ids'];
+        $email_type        = $args['email_type'];
+        $ip_signup         = $args['ip_signup'];
+        $options           = $this->options;
+
+        if (! empty($args['options']) && is_array($args['options'])) {
+            $options = array_merge($options, $args['options']);
+        }
+
+        $integration = $this;
+        $slug        = $this->slug;
+        $mailchimp   = new MC4WP_MailChimp();
+        $log         = $this->get_log();
+
+        /** @var null|MC4WP_MailChimp_Subscriber $subscriber */
+        $subscriber = null;
+        $result     = false;
 
         $mapper = new MC4WP_List_Data_Mapper($data, $list_ids);
 
@@ -431,9 +493,9 @@ abstract class MC4WP_Integration
         $map = $mapper->map();
 
         foreach ($map as $list_id => $subscriber) {
-            $subscriber->status     = $this->options['double_optin'] ? 'pending' : 'subscribed';
+            $subscriber->status     = $options['double_optin'] ? 'pending' : 'subscribed';
             $subscriber->email_type = $email_type;
-            $subscriber->ip_signup  = mc4wp_get_request_ip_address();
+            $subscriber->ip_signup  = $ip_signup;
 
             /** @ignore documented elsewhere */
             $subscriber = apply_filters('mc4wp_subscriber_data', $subscriber);
@@ -464,7 +526,7 @@ abstract class MC4WP_Integration
                 continue;
             }
 
-            $result = $mailchimp->list_subscribe($list_id, $subscriber->email_address, $subscriber->to_array(), $this->options['update_existing'], $this->options['replace_interests']);
+            $result = $mailchimp->list_subscribe($list_id, $subscriber->email_address, $subscriber->to_array(), $options['update_existing'], $options['replace_interests'], $options['update_only_empty_fields']);
         }
 
         // if result failed, show error message
@@ -558,6 +620,7 @@ abstract class MC4WP_Integration
      */
     public function get_data()
     {
+        // phpcs:ignore WordPress.Security.NonceVerification -- explicitly not using a nonce here
         return array_merge((array) $_GET, (array) $_POST);
     }
 
@@ -584,7 +647,7 @@ abstract class MC4WP_Integration
      */
     protected function get_log()
     {
-        return mc4wp('log');
+        return mc4wp_get_service('log');
     }
 
     /**
@@ -592,6 +655,6 @@ abstract class MC4WP_Integration
      */
     protected function get_api()
     {
-        return mc4wp('api');
+        return mc4wp_get_service('api');
     }
 }

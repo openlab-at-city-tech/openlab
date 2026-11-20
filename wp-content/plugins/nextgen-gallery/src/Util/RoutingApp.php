@@ -1260,7 +1260,8 @@ class RoutingApp {
 
 		// Is the parameter already part of the request? If so, modify that parameter.
 		$segment = $this->get_parameter_segment( $key, $id, $url );
-		if ( $segment && is_array( $segment ) ) {
+		// An array request value is no segment; explode() would fatal.
+		if ( $segment && is_array( $segment ) && isset( $segment['segment'], $segment['source'] ) && is_string( $segment['segment'] ) ) {
 			extract( $segment );
 
 			if ( $source == 'querystring' ) {

@@ -260,8 +260,8 @@ class Akismet_Compatible_Plugins {
 	private static function sanitize_compatible_plugin_response( array $plugins = array() ): array {
 		foreach ( $plugins as $key => $plugin ) {
 			$plugins[ $key ]             = array_map( 'sanitize_text_field', $plugin );
-			$plugins[ $key ]['help_url'] = sanitize_url( $plugins[ $key ]['help_url'] );
-			$plugins[ $key ]['logo']     = sanitize_url( $plugins[ $key ]['logo'] );
+			$plugins[ $key ]['help_url'] = esc_url_raw( $plugins[ $key ]['help_url'] );
+			$plugins[ $key ]['logo']     = esc_url_raw( $plugins[ $key ]['logo'] );
 		}
 
 		return $plugins;

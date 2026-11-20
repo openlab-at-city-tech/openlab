@@ -2,8 +2,8 @@
 // Exit if accessed directly
 defined('ABSPATH') || exit;
 
-include_once(EMCS_DIR . 'includes/embed.php');
-include_once(EMCS_DIR . 'includes/dynamic-embedder.php');
+include_once(EMCS_INCLUDES . 'embed.php');
+include_once(EMCS_INCLUDES . 'dynamic-embedder.php');
 
 class EMCS_Shortcode
 {
@@ -46,14 +46,13 @@ class EMCS_Shortcode
             'url'               => '',
             'type'              => 1,
             'text'              => 'Schedule a call with me',
-            'text_color'        => '#000000',
-            'text_size'         => '12px',
+            'text_color'        => '#f67b2b',
+            'text_size'         => '18px',
             'form_height'       => '400px',
             'form_width'        => '600px',
-            'button_color'      => '#001F3F',
+            'button_color'      => '#171e6c',
             'button_style'      => 1,
             'button_size'       => 1,
-            'style_class'       => '',
             'branding'          => 0,
             'hide_details'      => 0,
             'hide_cookie_banner' => 0,
@@ -74,7 +73,6 @@ class EMCS_Shortcode
         $atts['button_color']     = preg_replace('/[^#a-zA-Z0-9]/', '', sanitize_text_field($atts['button_color']));
         $atts['button_style']     = intval($atts['button_style']);
         $atts['button_size']      = intval($atts['button_size']);
-        $atts['style_class']      = sanitize_text_field($atts['style_class']);
         $atts['branding']         = intval($atts['branding']);
         $atts['hide_details']     = intval($atts['hide_details']);
         $atts['cookie_banner']    = intval($atts['hide_cookie_banner']);

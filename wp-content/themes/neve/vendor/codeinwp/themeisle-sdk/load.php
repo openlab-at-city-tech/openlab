@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	return;
 }
 // Current SDK version and path.
-$themeisle_sdk_version = '3.3.51';
+$themeisle_sdk_version = '3.3.73';
 $themeisle_sdk_path    = dirname( __FILE__ );
 
 global $themeisle_sdk_max_version;
@@ -71,6 +71,85 @@ if ( ! function_exists( 'themeisle_sdk_load_latest' ) ) :
 	}
 endif;
 add_action( 'init', 'themeisle_sdk_load_latest' );
+
+if ( ! function_exists( 'themeisle_sdk_crash_sentinel' ) ) :
+	/**
+	 * Early crash sentinel: minimal shutdown-time capture of fatal errors
+	 * originating from a registered ThemeIsle product directory.
+	 *
+	 * Runs only when the full crash reporter module never registered (e.g. the
+	 * fatal happened during plugin bootstrap, before the SDK loaded on init).
+	 * Stores one raw record locally; the module sanitizes and adopts it on the
+	 * next normal load. Never outputs, never exits, fails silently.
+	 *
+	 * Must stay parseable on PHP 5.4, like the rest of this file.
+	 */
+	function themeisle_sdk_crash_sentinel() {
+		if ( defined( 'THEMEISLE_SDK_CRASH_HANDLER' ) ) {
+			return;
+		}
+		if ( defined( 'WP_SANDBOX_SCRAPING' ) && WP_SANDBOX_SCRAPING ) {
+			return;
+		}
+		if ( ! function_exists( 'apply_filters' ) || ! function_exists( 'get_option' ) || ! function_exists( 'update_option' ) || ! function_exists( 'add_option' ) ) {
+			return;
+		}
+		$error = error_get_last();
+		if ( empty( $error ) || ! isset( $error['type'] ) || ! in_array( (int) $error['type'], array( E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR ), true ) ) {
+			return;
+		}
+		$error_file = isset( $error['file'] ) ? str_replace( '\\', '/', (string) $error['file'] ) : '';
+		if ( '' === $error_file ) {
+			return;
+		}
+		$products = apply_filters( 'themeisle_sdk_products', array() );
+		if ( empty( $products ) || ! is_array( $products ) ) {
+			return;
+		}
+		foreach ( $products as $basefile ) {
+			$product_dir = rtrim( str_replace( '\\', '/', dirname( (string) $basefile ) ), '/' ) . '/';
+			if ( '/' === $product_dir || 0 !== strpos( $error_file, $product_dir ) ) {
+				continue;
+			}
+			$key    = str_replace( '-', '_', strtolower( trim( basename( $product_dir ) ) ) );
+			$option = $key . '_crash_data';
+			$data   = get_option( $option, array() );
+			if ( ! is_array( $data ) ) {
+				$data = array();
+			}
+			if ( ! isset( $data['raw'] ) || ! is_array( $data['raw'] ) ) {
+				$data['raw'] = array();
+			}
+			if ( count( $data['raw'] ) >= 3 ) {
+				return;
+			}
+			foreach ( $data['raw'] as $record ) {
+				if ( isset( $record['file'] ) && isset( $record['line'] ) && $record['file'] === $error_file && (int) $record['line'] === (int) $error['line'] ) {
+					return;
+				}
+			}
+			$data['raw'][] = array(
+				'type'    => (int) $error['type'],
+				'message' => substr( isset( $error['message'] ) ? (string) $error['message'] : '', 0, 2000 ),
+				'file'    => $error_file,
+				'line'    => isset( $error['line'] ) ? (int) $error['line'] : 0,
+				'time'    => time(),
+			);
+			if ( false === get_option( $option, false ) ) {
+				add_option( $option, $data, '', 'no' );
+			} else {
+				update_option( $option, $data );
+			}
+
+			return;
+		}
+	}
+endif;
+
+if ( empty( $GLOBALS['themeisle_sdk_crash_sentinel'] ) ) {
+	$GLOBALS['themeisle_sdk_crash_sentinel'] = true;
+	register_shutdown_function( 'themeisle_sdk_crash_sentinel' );
+}
 
 if ( ! function_exists( 'tsdk_utmify' ) ) {
 	/**
@@ -215,6 +294,13 @@ if ( ! function_exists( 'tsdk_translate_link' ) ) {
 		$url, $type = 'path', $available_languages = [
 			'de_DE'        => 'de',
 			'de_DE_formal' => 'de',
+			'es_ES'        => 'es',
+			'fr_FR'        => 'fr',
+			'it_IT'        => 'it',
+			'ja'           => 'ja',
+			'nl_NL'        => 'nl',
+			'nl_NL_formal' => 'nl',
+			'ro_RO'        => 'ro',
 		]
 	) {
 		$language = get_user_locale();

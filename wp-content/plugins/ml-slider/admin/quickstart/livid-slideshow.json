@@ -1,0 +1,103 @@
+{
+    "0": {
+        "title": "Livid Slideshow",
+        "original_id": 19087,
+        "meta": {
+            "logtivity_last_logged": "1789486428",
+            "ml-slider_settings": "a:125:{s:5:\"title\";s:13:\"New Slideshow\";s:4:\"type\";s:4:\"flex\";s:6:\"random\";s:5:\"false\";s:8:\"cssClass\";s:0:\"\";s:8:\"printCss\";s:4:\"true\";s:7:\"printJs\";s:4:\"true\";s:5:\"width\";i:700;s:6:\"height\";i:394;s:3:\"spw\";i:7;s:3:\"sph\";i:5;s:5:\"delay\";i:3000;s:6:\"sDelay\";i:30;s:7:\"opacity\";d:0.7;s:10:\"titleSpeed\";i:500;s:6:\"effect\";s:5:\"slide\";s:12:\"extra_effect\";s:4:\"none\";s:10:\"navigation\";s:4:\"true\";s:15:\"filmstrip_delay\";i:7000;s:24:\"filmstrip_animationSpeed\";i:600;s:5:\"links\";s:4:\"true\";s:10:\"hoverPause\";s:4:\"true\";s:5:\"theme\";s:0:\"\";s:9:\"direction\";s:10:\"horizontal\";s:7:\"reverse\";s:5:\"false\";s:8:\"keyboard\";s:4:\"true\";s:5:\"touch\";s:4:\"true\";s:14:\"animationSpeed\";i:600;s:8:\"prevText\";s:8:\"Previous\";s:8:\"nextText\";s:4:\"Next\";s:6:\"slices\";i:15;s:6:\"center\";s:5:\"false\";s:9:\"smartCrop\";s:4:\"true\";s:15:\"smartCropSource\";s:9:\"slideshow\";s:10:\"imageWidth\";i:400;s:11:\"imageHeight\";i:400;s:12:\"cropMultiply\";s:4:\"true\";s:12:\"smoothHeight\";s:5:\"false\";s:12:\"carouselMode\";s:5:\"false\";s:12:\"infiniteLoop\";s:5:\"false\";s:14:\"carouselMargin\";i:5;s:8:\"minItems\";i:2;s:8:\"maxItems\";i:0;s:24:\"carouselItems_smartphone\";i:0;s:20:\"carouselItems_tablet\";i:0;s:20:\"carouselItems_laptop\";i:0;s:21:\"carouselItems_desktop\";i:0;s:11:\"forceHeight\";s:5:\"false\";s:16:\"firstSlideFadeIn\";s:5:\"false\";s:6:\"easing\";s:6:\"linear\";s:8:\"autoPlay\";s:4:\"true\";s:4:\"loop\";s:12:\"continuously\";s:11:\"thumb_width\";i:150;s:12:\"thumb_height\";i:100;s:17:\"responsive_thumbs\";s:4:\"true\";s:15:\"thumb_min_width\";i:100;s:12:\"thumb_layout\";s:4:\"grid\";s:9:\"fullWidth\";s:4:\"true\";s:14:\"forceFullWidth\";s:5:\"false\";s:15:\"fullWidthTarget\";s:4:\"body\";s:10:\"noConflict\";s:4:\"true\";s:23:\"mobileArrows_smartphone\";s:5:\"false\";s:19:\"mobileArrows_tablet\";s:5:\"false\";s:19:\"mobileArrows_laptop\";s:5:\"false\";s:20:\"mobileArrows_desktop\";s:5:\"false\";s:27:\"mobileNavigation_smartphone\";s:5:\"false\";s:23:\"mobileNavigation_tablet\";s:5:\"false\";s:23:\"mobileNavigation_laptop\";s:5:\"false\";s:24:\"mobileNavigation_desktop\";s:5:\"false\";s:24:\"mobileCaption_smartphone\";s:5:\"false\";s:20:\"mobileCaption_tablet\";s:5:\"false\";s:20:\"mobileCaption_laptop\";s:5:\"false\";s:21:\"mobileCaption_desktop\";s:5:\"false\";s:26:\"mobileSlideshow_smartphone\";s:5:\"false\";s:22:\"mobileSlideshow_tablet\";s:5:\"false\";s:22:\"mobileSlideshow_laptop\";s:5:\"false\";s:23:\"mobileSlideshow_desktop\";s:5:\"false\";s:8:\"ariaLive\";s:4:\"true\";s:11:\"ariaCurrent\";s:4:\"true\";s:8:\"tabIndex\";s:4:\"true\";s:9:\"pausePlay\";s:5:\"false\";s:11:\"progressBar\";s:5:\"false\";s:7:\"loading\";s:5:\"false\";s:8:\"lazyLoad\";s:5:\"false\";s:8:\"playText\";s:0:\"\";s:9:\"pauseText\";s:0:\"\";s:9:\"container\";s:5:\"false\";s:20:\"container_background\";s:19:\"rgba(255,255,255,0)\";s:20:\"containerPadding_top\";i:10;s:22:\"containerPadding_right\";i:10;s:23:\"containerPadding_bottom\";i:10;s:21:\"containerPadding_left\";i:10;s:19:\"containerMargin_top\";i:10;s:22:\"containerMargin_bottom\";i:30;s:7:\"navStep\";i:1;s:8:\"lightbox\";s:5:\"false\";s:17:\"lightbox_captions\";s:6:\"global\";s:19:\"lightbox_navigation\";s:6:\"global\";s:18:\"lightbox_open_with\";s:6:\"global\";s:6:\"filter\";s:0:\"\";s:19:\"style_corner_radius\";i:0;s:18:\"style_border_width\";i:0;s:18:\"style_border_style\";s:5:\"solid\";s:18:\"style_border_color\";s:0:\"\";s:16:\"style_box_shadow\";s:4:\"none\";s:13:\"style_opacity\";i:100;s:12:\"style_rotate\";s:1:\"0\";s:10:\"style_flip\";s:4:\"none\";s:13:\"layer_scaling\";s:11:\"up_and_down\";s:16:\"watermarkEnabled\";s:5:\"false\";s:14:\"watermarkImage\";s:0:\"\";s:17:\"watermarkPosition\";s:11:\"bottomRight\";s:14:\"watermarkWidth\";s:3:\"150\";s:15:\"watermarkMargin\";s:2:\"20\";s:16:\"watermarkOpacity\";s:3:\"100\";s:10:\"smartphone\";i:480;s:6:\"tablet\";i:768;s:6:\"laptop\";i:1024;s:7:\"desktop\";i:1440;s:17:\"lightbox_pro_zoom\";s:6:\"global\";s:23:\"lightbox_pro_fullscreen\";s:6:\"global\";s:21:\"lightbox_pro_autoplay\";s:6:\"global\";s:30:\"lightbox_pro_autoplay_interval\";s:4:\"4000\";s:18:\"lightbox_pro_pager\";s:6:\"global\";s:12:\"showPlayText\";s:5:\"false\";s:15:\"theme_customize\";a:23:{s:12:\"arrows_color\";s:16:\"rgb(107,102,254)\";s:18:\"arrows_color_hover\";s:21:\"rgba(255,255,255,0.9)\";s:11:\"arrows_icon\";s:16:\"rgb(255,255,255)\";s:17:\"arrows_icon_hover\";s:16:\"rgb(107,102,254)\";s:26:\"arrows_focus_outline_color\";s:4:\"#fff\";s:16:\"navigation_color\";s:22:\"rgba(255,255,255,0.95)\";s:22:\"navigation_color_hover\";s:19:\"rgba(255,255,255,0)\";s:23:\"navigation_color_active\";s:19:\"rgba(255,255,255,0)\";s:23:\"navigation_border_color\";s:22:\"rgba(255,255,255,0.95)\";s:29:\"navigation_border_color_hover\";s:22:\"rgba(255,255,255,0.95)\";s:30:\"navigation_border_color_active\";s:22:\"rgba(255,255,255,0.95)\";s:23:\"navigation_number_color\";s:16:\"rgb(107,102,254)\";s:29:\"navigation_number_color_hover\";s:7:\"#ffffff\";s:30:\"navigation_number_color_active\";s:7:\"#ffffff\";s:18:\"caption_background\";s:15:\"rgba(0,0,0,0.8)\";s:18:\"caption_text_color\";s:7:\"#ffffff\";s:19:\"caption_links_color\";s:7:\"#ffffff\";s:11:\"play_button\";s:7:\"#000000\";s:17:\"play_button_hover\";s:7:\"#000000\";s:16:\"play_button_icon\";s:7:\"#ffffff\";s:22:\"play_button_icon_hover\";s:7:\"#ffffff\";s:20:\"slideshow_background\";s:19:\"rgba(255,255,255,0)\";s:28:\"slideshow_progress_bar_color\";s:4:\"#fff\";}}",
+            "metaslider_slideshow_theme": "a:7:{s:6:\"folder\";s:6:\"bubble\";s:5:\"title\";s:6:\"Bubble\";s:4:\"type\";s:4:\"free\";s:8:\"supports\";a:4:{i:0;s:4:\"flex\";i:1;s:10:\"responsive\";i:2;s:4:\"nivo\";i:3;s:4:\"coin\";}s:4:\"tags\";a:3:{i:0;s:5:\"light\";i:1;s:4:\"bold\";i:2;s:5:\"round\";}s:11:\"description\";s:87:\"A fun, circular design to brighten up your site. This theme works well with dark images\";s:6:\"images\";a:5:{i:0;s:34:\"timothy-eberly-728185-unsplash.jpg\";i:1;s:30:\"wabi-jayme-578762-unsplash.jpg\";i:2;s:32:\"ella-olsson-1094090-unsplash.jpg\";i:3;s:34:\"fabio-mangione-236846-unsplash.jpg\";i:4;s:34:\"victoria-shes-1096105-unsplash.jpg\";}}"
+        },
+        "slides": [
+            {
+                "original_id": 19122,
+                "order": 0,
+                "post_excerpt": "",
+                "image": "livid-video-thumbnail-https-livid-com-watch-xq2dz8ak-gij-2",
+                "image_alt": "Livid video thumbnail - https:\/\/livid.com\/watch\/xQ2dZ8AK-Gij",
+                "meta": {
+                    "logtivity_last_logged": "1789485014",
+                    "ml-slider_type": "livid",
+                    "ml-slider_livid_url": "https:\/\/livid.com\/watch\/xQ2dZ8AK-Gij",
+                    "ml-slider_settings": "a:5:{s:4:\"mute\";s:2:\"on\";s:8:\"controls\";s:2:\"on\";s:8:\"autoPlay\";s:2:\"on\";s:4:\"loop\";s:3:\"off\";s:8:\"lazyLoad\";s:3:\"off\";}",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_first_loop_only": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": ""
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2026\/09\/livid-f7b0b455d0b3157abcdaf7ee203e7f94-1-scaled.jpg"
+            },
+            {
+                "original_id": 19124,
+                "order": 1,
+                "post_excerpt": "",
+                "image": "livid-video-thumbnail-https-livid-com-watch-cflnrok3om5e",
+                "image_alt": "Livid video thumbnail - https:\/\/livid.com\/watch\/CflnROk3Om5E",
+                "meta": {
+                    "logtivity_last_logged": "1789485024",
+                    "ml-slider_type": "livid",
+                    "ml-slider_livid_url": "https:\/\/livid.com\/watch\/CflnROk3Om5E",
+                    "ml-slider_settings": "a:5:{s:4:\"mute\";s:2:\"on\";s:8:\"controls\";s:2:\"on\";s:8:\"autoPlay\";s:2:\"on\";s:4:\"loop\";s:3:\"off\";s:8:\"lazyLoad\";s:3:\"off\";}",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_first_loop_only": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": ""
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2026\/09\/livid-55d1427ce2e9e3c024dc6666d757aa0c.jpg"
+            },
+            {
+                "original_id": 19134,
+                "order": 2,
+                "post_excerpt": "",
+                "image": "livid-video-thumbnail-https-livid-com-watch-0lnx4yfslubm",
+                "image_alt": "Livid video thumbnail - https:\/\/livid.com\/watch\/0LNx4YFSLuBm",
+                "meta": {
+                    "logtivity_last_logged": "1789485063",
+                    "ml-slider_type": "livid",
+                    "ml-slider_livid_url": "https:\/\/livid.com\/watch\/0LNx4YFSLuBm",
+                    "ml-slider_settings": "a:5:{s:4:\"mute\";s:2:\"on\";s:8:\"controls\";s:2:\"on\";s:8:\"autoPlay\";s:2:\"on\";s:4:\"loop\";s:3:\"off\";s:8:\"lazyLoad\";s:3:\"off\";}",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_first_loop_only": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": ""
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2026\/09\/livid-6e8788a26aca8ba5cfd1b0b43861688e-scaled.jpg"
+            },
+            {
+                "original_id": 19142,
+                "order": 3,
+                "post_excerpt": "",
+                "image": "livid-video-thumbnail-https-livid-com-watch-jbihyibp1bb4",
+                "image_alt": "Livid video thumbnail - https:\/\/livid.com\/watch\/jbIHYIBp1bb4",
+                "meta": {
+                    "logtivity_last_logged": "1789485132",
+                    "ml-slider_type": "livid",
+                    "ml-slider_livid_url": "https:\/\/livid.com\/watch\/jbIHYIBp1bb4",
+                    "ml-slider_settings": "a:5:{s:4:\"mute\";s:2:\"on\";s:8:\"controls\";s:2:\"on\";s:8:\"autoPlay\";s:2:\"on\";s:4:\"loop\";s:3:\"off\";s:8:\"lazyLoad\";s:3:\"off\";}",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_first_loop_only": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": ""
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2026\/09\/livid-3d75155fbf5fff250db951f88dc92ba1.jpg"
+            }
+        ]
+    },
+    "metadata": {
+        "version": "3.113.0-beta.1",
+        "date": "2026\/09\/15",
+        "domain": "https:\/\/demo.metaslider.com",
+        "environment": "production"
+    }
+}

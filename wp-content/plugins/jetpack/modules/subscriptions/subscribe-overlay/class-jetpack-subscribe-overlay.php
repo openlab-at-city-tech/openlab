@@ -186,6 +186,11 @@ HTML;
 			return false;
 		}
 
+		// The overlay only appears on the blog home and front page.
+		if ( ! is_home() && ! is_front_page() ) {
+			return false;
+		}
+
 		// Needed because Elementor editor makes is_admin() return false
 		// See https://coreysalzano.com/wordpress/why-elementor-disobeys-is_admin/
 		// Ignore nonce warning as just checking if is set
@@ -208,13 +213,13 @@ HTML;
 			return false;
 		}
 
-		// Don't show if user is subscribed to blog.
+		// Don't show if user is subscribed to blog or awaiting subscription confirmation.
 		require_once __DIR__ . '/../views.php';
-		if ( ! class_exists( 'Jetpack_Memberships' ) || Jetpack_Memberships::is_current_user_subscribed() ) {
+		if ( ! class_exists( 'Jetpack_Memberships' ) || Jetpack_Memberships::is_current_user_subscribed() || Jetpack_Memberships::user_is_pending_subscriber() ) {
 			return false;
 		}
 
-		return is_home() || is_front_page();
+		return true;
 	}
 }
 

@@ -782,14 +782,9 @@ class NeutralizeStoredExecutableFilenames {
 	 * @return bool
 	 */
 	private static function table_exists( $table ) {
-		global $wpdb;
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$found = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table ) ) );
-
-		// A failed probe is not an absent table, so the caller carries on and the scan's own error
-		// handling decides.
-		return $found === $table || (bool) $wpdb->last_error;
+		// A failed probe (null) is not an absent table, so the caller carries on and the scan's
+		// own error handling decides. Not SHOW TABLES LIKE: see Util\Schema::table_exists() (#1059).
+		return false !== \Imagely\NGG\Util\Schema::table_exists( $table );
 	}
 
 	/**

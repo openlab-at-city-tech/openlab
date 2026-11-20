@@ -582,7 +582,7 @@ class TRP_Url_Converter {
 
         // Only when SEO Pack is not active, allow WooCommerce links to be translated. Otherwise, SEO Pack will handle this
         /* fix links for woocommerce on language switcher for product categories and product tags */
-        if( class_exists( 'WooCommerce' ) && !class_exists( 'TRP_IN_Seo_Pack' ) && $lang_from_url_string !== $language ){
+        if( trp_class_exists( 'WooCommerce' ) && !trp_class_exists( 'TRP_IN_Seo_Pack' ) && $lang_from_url_string !== $language ){
             $english_woocommerce_slugs = array('product-category', 'product-tag', 'product');
             foreach ($english_woocommerce_slugs as $english_woocommerce_slug){
                 // current woo slugs are based on the localized default language OR the current language
@@ -932,7 +932,7 @@ class TRP_Url_Converter {
      */
     public function woocommerce_filter_permalinks_on_other_languages( $rewrite_rules ){
         // Only when SEO Pack add-on is disabled. Otherwise, SEO Pack uses a different system to handle this
-        if ( class_exists( 'WooCommerce' ) && !class_exists( 'TRP_IN_Seo_Pack' ) ) {
+        if ( trp_class_exists( 'WooCommerce' ) && !trp_class_exists( 'TRP_IN_Seo_Pack' ) ) {
             global $TRP_LANGUAGE;
 
             if( $TRP_LANGUAGE != $this->settings['default-language'] ){
@@ -1054,7 +1054,7 @@ class TRP_Url_Converter {
      */
     public function delete_woocommerce_transient_permalink($value){
         // Only when SEO Pack add-on is disabled. Otherwise, SEO Pack uses a different system to handle this
-        if( class_exists( 'WooCommerce' ) && !class_exists( 'TRP_IN_Seo_Pack' ) ) {
+        if( trp_class_exists( 'WooCommerce' ) && !trp_class_exists( 'TRP_IN_Seo_Pack' ) ) {
             $english_woocommerce_slugs = array( 'product-category', 'product-tag', 'product', 'default_language_wc_permalink_structure', 'current_language_wc_permalink_structure' );
 
             foreach ( $english_woocommerce_slugs as $english_woocommerce_slug ) {

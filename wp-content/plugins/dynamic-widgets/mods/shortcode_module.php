@@ -2,7 +2,6 @@
 /**
  * Shortcode Module
  *
- * @version $Id: shortcode_module.php 1218814 2015-08-12 06:37:21Z qurl $
  * @copyright 2015 Jacco Drabbe
  */
 

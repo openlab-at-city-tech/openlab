@@ -16,6 +16,7 @@ class MetaSlider_Gutenberg
     {
         add_action('enqueue_block_editor_assets', array($this,'enqueue_block_scripts'));
         add_action('enqueue_block_assets', array($this,'enqueue_block_styles'));
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- filter_var() with FILTER_VALIDATE_BOOLEAN only matches known true/false strings, unaffected by slashing.
         if (isset($_REQUEST['override_preview_style']) && filter_var($_REQUEST['override_preview_style'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)) {
             add_filter('metaslider_preview_styles', array($this, 'preview_styles'));
         }

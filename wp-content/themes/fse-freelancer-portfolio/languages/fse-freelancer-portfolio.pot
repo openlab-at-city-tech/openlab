@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: FSE Freelancer Portfolio 3.1.7\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/fse-freelancer-portfolio\n"
+"Report-Msgid-Bugs-To: https://WordPress.org/support/theme/fse-freelancer-portfolio\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #. Theme URI of the theme
 #: style.css
-msgid "https://www.cretathemes.com/products/free-freelancer-wordpress-theme"
+msgid "https://www.cretathemes.com/products/free-freelancer-WordPress-theme"
 msgstr ""
 
 #. Description of the theme
@@ -42,7 +42,7 @@ msgid "https://cretathemes.com/"
 msgstr ""
 
 #: functions.php:23
-msgid "https://www.cretathemes.com/products/portfolio-wordpress-theme"
+msgid "https://www.cretathemes.com/products/portfolio-WordPress-theme"
 msgstr ""
 
 #: functions.php:24
@@ -55,19 +55,19 @@ msgid "https://pattern.cretathemes.com/pro-guide/fse-freelancer-portfolio/"
 msgstr ""
 
 #: functions.php:27
-msgid "https://wordpress.org/support/theme/fse-freelancer-portfolio/"
+msgid "https://WordPress.org/support/theme/fse-freelancer-portfolio/"
 msgstr ""
 
 #: functions.php:28
-msgid "https://wordpress.org/support/theme/fse-freelancer-portfolio/reviews/#new-post"
+msgid "https://WordPress.org/support/theme/fse-freelancer-portfolio/reviews/#new-post"
 msgstr ""
 
 #: functions.php:29
-msgid "https://www.cretathemes.com/products/wordpress-theme-bundle"
+msgid "https://www.cretathemes.com/products/WordPress-theme-bundle"
 msgstr ""
 
 #: functions.php:30
-msgid "https://www.cretathemes.com/collections/wordpress-block-themes"
+msgid "https://www.cretathemes.com/collections/WordPress-block-themes"
 msgstr ""
 
 #: functions.php:130
@@ -263,7 +263,7 @@ msgid " OFF on WordPress Block Themes! Use Code: "
 msgstr ""
 
 #: inc/get-started/get-started.php:93
-msgid "“SUMMER25”"
+msgid "“HALLOWEEN25”"
 msgstr ""
 
 #: inc/get-started/get-started.php:94

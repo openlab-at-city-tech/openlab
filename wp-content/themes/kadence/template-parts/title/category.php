@@ -38,10 +38,10 @@ if ( false === $main_term ) {
 	$terms     = wp_get_post_terms(
 		$post->ID,
 		'product_cat',
-		array(
+		[
 			'orderby' => 'parent',
 			'order'   => 'DESC',
-		)
+		]
 	);
 	if ( $terms && ! is_wp_error( $terms ) ) {
 		if ( is_array( $terms ) ) {

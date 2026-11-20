@@ -13,23 +13,19 @@ class PdfFile {
 	 * Get the PDF file ID by its URL.
 	 *
 	 * @since 4.8.0
+	 * @since 5.0.1 Switched from a `guid` match to `attachment_url_to_postid()`.
 	 *
 	 * @param string $url The URL of the attachment.
 	 */
 	public static function get_id_by_url( string $url ): int {
 
-		global $wpdb;
-
-		// Get the attachment ID by its URL.
-		$pdf_id = wp_cache_get( 'pdfemb_url_to_id_' . md5( $url ) );
+		$cache_key = 'pdfemb_url_to_id_' . md5( $url );
+		$pdf_id    = wp_cache_get( $cache_key );
 
 		if ( empty( $pdf_id ) ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-			$pdf_id = $wpdb->get_var(
-				$wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = 'attachment' AND guid = %s;", $url )
-			);
+			$pdf_id = attachment_url_to_postid( $url );
 
-			wp_cache_set( 'pdfemb_url_to_id_' . md5( $url ), $pdf_id );
+			wp_cache_set( $cache_key, $pdf_id );
 		}
 
 		return (int) $pdf_id;

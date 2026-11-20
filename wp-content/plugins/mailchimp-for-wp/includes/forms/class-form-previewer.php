@@ -1,5 +1,8 @@
 <?php
 
+defined('ABSPATH') || exit;
+
+
 class MC4WP_Form_Previewer
 {
     public function add_hooks()
@@ -25,12 +28,15 @@ class MC4WP_Form_Previewer
 
     public function load_preview()
     {
+        @ini_set('display_errors', 0); // phpcs:ignore
+
         // clear output, some plugin or hooked code might have thrown errors by now.
         if (ob_get_level() > 0) {
             ob_end_clean();
         }
 
-        $form_id = (int) $_GET['mc4wp_preview_form'];
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+        $form_id = (int) ($_GET['mc4wp_preview_form'] ?? 0);
         status_header(200);
 
         require __DIR__ . '/views/preview.php';

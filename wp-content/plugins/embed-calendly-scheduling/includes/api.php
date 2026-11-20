@@ -9,6 +9,9 @@ class EMCS_API
     private $api_version;
     private $api_key;
 
+    public const calendly_v1_base_url = 'https://calendly.com/api/v1';
+    public const calendly_v2_base_url = 'https://api.calendly.com';
+
     public function __construct($api_version, $api_key)
     {
         $this->api_version = $api_version;
@@ -29,6 +32,10 @@ class EMCS_API
     {
         $calendly_events  = EMCS_API::connect('/users/me/event_types', $this->api_key);
         $events_data = array();
+
+        if (is_wp_error($calendly_events)) {
+            return $calendly_events;
+        }
 
         if (empty($calendly_events->data)) {
             return false;
@@ -52,9 +59,19 @@ class EMCS_API
 
     protected function emcs_get_events_v2()
     {
-        $user = (isset($this->get_current_user()->resource)) ? $this->get_current_user()->resource->uri : '';
+        $current_user = $this->get_current_user();
+
+        if (is_wp_error($current_user)) {
+            return $current_user;
+        }
+
+        $user = (isset($current_user->resource)) ? $current_user->resource->uri : '';
         $calendly_events  = EMCS_API::connect('/event_types', $this->api_key, $user);
         $events_data = array();
+
+        if (is_wp_error($calendly_events)) {
+            return $calendly_events;
+        }
 
         if (empty($calendly_events->collection)) {
             return false;
@@ -86,12 +103,12 @@ class EMCS_API
     {
 
         if ($this->api_version === 'v2') {
-            $url     = 'https://api.calendly.com' . $endpoint;
+            $url     = EMCS_API::calendly_v2_base_url . $endpoint;
             $headers = array(
                 'Authorization' => 'Bearer ' . $api_key,
             );
         } else {
-            $url     = 'https://calendly.com/api/v1' . $endpoint;
+            $url     = EMCS_API::calendly_v1_base_url . $endpoint;
             $headers = array(
                 'X-Token' => $api_key,
             );
@@ -105,17 +122,36 @@ class EMCS_API
 
         // If v2 and user is provided, append as query param
         if ($this->api_version === 'v2' && ! empty($user)) {
-            $url = add_query_arg('user', rawurlencode($user), $url);
+            $url = add_query_arg('user', $user, $url);
         }
 
         $response = wp_remote_request($url, $args);
 
         if (is_wp_error($response)) {
-            return false;
+            return $response;
         }
 
         $body = wp_remote_retrieve_body($response);
+        $status_code = wp_remote_retrieve_response_code($response);
+        $decoded = json_decode($body);
 
-        return json_decode($body);
+        // If HTTP status indicates an error, return a WP_Error with the
+        // response body so callers can display a friendly message.
+        if ($status_code >= 400) {
+            $message = $body;
+            if (isset($decoded->error)) {
+                $message = $decoded->error;
+            }
+            if (isset($decoded->title)) {
+                $message = $decoded->title;
+            }
+            return new WP_Error(
+                'emcs_calendly_api_error',
+                $message,
+                array('http_code' => $status_code)
+            );
+        }
+
+        return $decoded;
     }
 }

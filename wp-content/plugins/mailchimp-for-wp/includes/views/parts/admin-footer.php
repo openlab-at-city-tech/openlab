@@ -1,4 +1,4 @@
-<?php defined('ABSPATH') or exit;
+<?php defined('ABSPATH') || exit;
 
 function _mc4wp_admin_translation_notice()
 {
@@ -13,7 +13,7 @@ function _mc4wp_admin_translation_notice()
 
 function _mc4wp_admin_github_notice()
 {
-    if (strpos($_SERVER['HTTP_HOST'], 'localhost') === false && ! WP_DEBUG) {
+    if (false === WP_DEBUG) {
         return;
     }
 

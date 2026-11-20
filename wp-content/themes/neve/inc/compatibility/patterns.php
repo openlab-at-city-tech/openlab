@@ -22,7 +22,6 @@ class Patterns {
 		'dark-header-centered-content',
 		'two-columns-image-text',
 		'three-columns-images-text',
-		'three-columns-images-text',
 		'three-columns-images-texts-content',
 		'four-columns-team-members',
 		'two-columns-centered-content',
@@ -48,10 +47,15 @@ class Patterns {
 			return;
 		}
 		foreach ( $this->patterns as $pattern ) {
-			register_block_pattern(
-				'neve/' . $pattern,
-				require __DIR__ . '/block-patterns/' . $pattern . '.php'
-			);
+			$pattern_args = neve_require_array( __DIR__ . '/block-patterns/' . $pattern . '.php' );
+
+			// a pattern file that is missing or malformed skips that pattern
+			// rather than taking down the whole init hook
+			if ( empty( $pattern_args ) ) {
+				continue;
+			}
+
+			register_block_pattern( 'neve/' . $pattern, $pattern_args );
 		}
 	}
 

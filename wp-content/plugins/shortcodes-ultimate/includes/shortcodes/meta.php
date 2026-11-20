@@ -37,7 +37,7 @@ su_add_shortcode(
 			'filter' => array(
 				'default' => '',
 				'name' => __('Filter', 'shortcodes-ultimate'),
-				'desc' => __('You can apply custom filter to the retrieved value. Enter here function name. Your function must accept one argument and return modified value. Name of your function must include word <b>filter</b>. Example function: ', 'shortcodes-ultimate') . "<br /><pre><code style='display:block;padding:5px'>function my_custom_filter( \$value ) {\n\treturn 'Value is: ' . \$value;\n}</code></pre>",
+				'desc' => __('You can apply custom filter to the retrieved value. Enter here function name. Your function must accept one argument and return modified value. Register your function using the <b>su/shortcode/allowed_filters</b> hook before using it here. Only allow functions that are safe to call with author-controlled values. Example: ', 'shortcodes-ultimate') . "<br /><pre><code style='display:block;padding:5px'>function my_custom_filter( \$value ) {\n\treturn 'Value is: ' . \$value;\n}\nadd_filter( 'su/shortcode/allowed_filters', function ( \$filters ) {\n\t\$filters[] = 'my_custom_filter';\n\treturn \$filters;\n} );</code></pre>",
 			),
 		),
 		'desc' => __('Post meta', 'shortcodes-ultimate'),

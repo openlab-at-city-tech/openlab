@@ -7,6 +7,11 @@ defined( 'ABSPATH' ) || exit;
 class acf_field_filebird extends acf_field {
 	protected static $instance = null;
 
+	public $name;
+	public $label;
+	public $category;
+	public $defaults;
+
 	public static function getInstance() {
 		if ( null == self::$instance ) {
 			self::$instance = new self();

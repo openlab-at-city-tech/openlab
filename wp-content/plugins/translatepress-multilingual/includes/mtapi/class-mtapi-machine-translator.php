@@ -250,7 +250,7 @@ class TRP_MTAPI_Machine_Translator extends TRP_Machine_Translator {
             if ( $status === 'valid' ) {
                 require_once("class-mtapi-customer.php");
                 $mtapi_server = new TRP_MTAPI_Customer( $this->get_api_url() );
-                $site_status  = $mtapi_server->lookup_site( $license, home_url() );
+                $site_status  = $mtapi_server->lookup_site( $license, trp_get_license_site_url() );
                 if ( !empty( $site_status ) && !empty( $site_status['status'] ) && $site_status['status'] === "active" ) {
                     $is_error       = false;
                     $return_message = '';

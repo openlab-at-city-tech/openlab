@@ -244,10 +244,10 @@ function videopress_get_transcoding_status( $post_id ) {
 	$info = (object) $meta['file_statuses'];
 
 	$status = array(
-		'std_mp4' => isset( $info->mp4 ) ? $info->mp4 : null,
-		'std_ogg' => isset( $info->ogg ) ? $info->ogg : null,
-		'dvd_mp4' => isset( $info->dvd ) ? $info->dvd : null,
-		'hd_mp4'  => isset( $info->hd ) ? $info->hd : null,
+		'std_mp4' => $info->mp4 ?? null,
+		'std_ogg' => $info->ogg ?? null,
+		'dvd_mp4' => $info->dvd ?? null,
+		'hd_mp4'  => $info->hd ?? null,
 	);
 
 	return $status;
@@ -275,11 +275,29 @@ function videopress_build_url( $guid ) {
  * callback from the VideoPress servers.
  *
  * @since 4.4
- * @param string $title The post_title.
- * @param string $guid The VideoPress guid.
+ * @since 0.58.0 Accepts a minimum attachment ID supplied by VideoPress.
+ * @param string      $title The post_title.
+ * @param string|null $guid Optional VideoPress guid.
+ * @param int         $minimum_attachment_id Optional lowest attachment ID allowed by VideoPress.
  * @return int|WP_Error
  */
-function videopress_create_new_media_item( $title, $guid = null ) {
+function videopress_create_new_media_item( $title, $guid = null, $minimum_attachment_id = 0 ) {
+	global $wpdb;
+
+	$minimum_attachment_id = filter_var(
+		$minimum_attachment_id,
+		FILTER_VALIDATE_INT,
+		array(
+			'options' => array(
+				'min_range' => 0,
+				'max_range' => PHP_INT_MAX - 1,
+			),
+		)
+	);
+	if ( false === $minimum_attachment_id ) {
+		return new WP_Error( 'videopress_invalid_minimum_attachment_id', __( 'Unable to allocate a video attachment ID.', 'jetpack-videopress-pkg' ) );
+	}
+
 	$post = array(
 		'post_type'      => 'attachment',
 		'post_mime_type' => 'video/videopress',
@@ -288,7 +306,28 @@ function videopress_create_new_media_item( $title, $guid = null ) {
 		'guid'           => videopress_build_url( $guid ),
 	);
 
-	$media_id = wp_insert_post( $post );
+	if ( $minimum_attachment_id > 1 ) {
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Allocation needs the current highest ID across all post types and statuses.
+		$maximum = $wpdb->get_var( "SELECT COALESCE(MAX(ID), 0) FROM $wpdb->posts" );
+		if ( null === $maximum || $wpdb->last_error ) {
+			return new WP_Error( 'videopress_attachment_id_lookup_failed', __( 'Unable to allocate a video attachment ID.', 'jetpack-videopress-pkg' ) );
+		}
+		if ( (int) $maximum < $minimum_attachment_id ) {
+			$post['import_id'] = $minimum_attachment_id;
+		}
+	}
+
+	$media_id = wp_insert_post( $post, true );
+	if ( is_wp_error( $media_id ) ) {
+		return $media_id;
+	}
+	// import_id is only a suggestion; verify the ID WordPress actually allocated.
+	if ( ! $media_id || $media_id < $minimum_attachment_id ) {
+		if ( $media_id ) {
+			wp_delete_attachment( $media_id, true ); // This call's new placeholder has no VideoPress binding yet.
+		}
+		return new WP_Error( 'videopress_attachment_id_allocation_failed', __( 'Unable to allocate a video attachment ID.', 'jetpack-videopress-pkg' ) );
+	}
 
 	add_post_meta( $media_id, 'videopress_status', 'initiated' );
 
@@ -376,6 +415,11 @@ function videopress_update_meta_data( $post_id ) {
 	}
 
 	$info = (object) $meta['videopress'];
+
+	// Without a guid there is no video to query for.
+	if ( ! isset( $info->guid ) ) {
+		return false;
+	}
 
 	$result = Client::wpcom_json_api_request_as_blog( 'videos/' . $info->guid );
 
@@ -488,11 +532,15 @@ function videopress_make_resumable_upload_path( $blog_id ) {
  * This is a mock of the internal VideoPress method, which is meant to duplicate the functionality
  * of the WPCOM API, so that the Jetpack REST API returns the same data with no modifications.
  *
- * @param int $blog_id Blog ID.
- * @param int $post_id Post ID.
+ * @param int  $blog_id    Blog ID.
+ * @param int  $post_id    Post ID.
+ * @param bool $cache_bust Ignored. The real WPCOM function caches reads for 12 hours and this
+ *                         param forces a fresh read; the mock reads local postmeta directly.
+ *                         Mirrored here so IS_WPCOM call sites can pass it without the shared
+ *                         signature diverging from the real one.
  * @return stdClass
  */
-function video_get_info_by_blogpostid( $blog_id, $post_id ) {
+function video_get_info_by_blogpostid( $blog_id, $post_id, $cache_bust = false ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- see docblock.
 	$post = get_post( $post_id );
 
 	$video_info                  = new stdClass();
@@ -525,10 +573,14 @@ function video_get_info_by_blogpostid( $blog_id, $post_id ) {
 
 	if ( $meta && isset( $meta['videopress'] ) ) {
 		$videopress_meta             = $meta['videopress'];
-		$video_info->rating          = isset( $videopress_meta['rating'] ) ? $videopress_meta['rating'] : null;
-		$video_info->allow_download  = isset( $videopress_meta['allow_download'] ) ? $videopress_meta['allow_download'] : 0;
-		$video_info->display_embed   = isset( $videopress_meta['display_embed'] ) ? $videopress_meta['display_embed'] : 0;
+		$video_info->rating          = $videopress_meta['rating'] ?? null;
+		$video_info->allow_download  = $videopress_meta['allow_download'] ?? 0;
+		$video_info->display_embed   = $videopress_meta['display_embed'] ?? 0;
 		$video_info->privacy_setting = ! isset( $videopress_meta['privacy_setting'] ) ? VIDEOPRESS_PRIVACY::SITE_DEFAULT : $videopress_meta['privacy_setting'];
+
+		if ( ! empty( $videopress_meta['finished'] ) ) {
+			$video_info->finish_date_gmt = gmdate( 'Y-m-d H:i:s', (int) $videopress_meta['finished'] );
+		}
 	}
 
 	/** Make sure we are keeping some meta keys updated for filtering purposes */
@@ -537,10 +589,6 @@ function video_get_info_by_blogpostid( $blog_id, $post_id ) {
 	}
 	if ( get_post_meta( $post_id, 'videopress_privacy_setting', true ) !== $video_info->privacy_setting ) {
 		update_post_meta( $post_id, 'videopress_privacy_setting', $video_info->privacy_setting );
-	}
-
-	if ( videopress_is_finished_processing( $post_id ) ) {
-		$video_info->finish_date_gmt = gmdate( 'Y-m-d H:i:s' );
 	}
 
 	return $video_info;
@@ -602,17 +650,21 @@ function video_format_done( $info, $format ) {
  *
  * @param string $guid VideoPress GUID.
  * @param string $format Video format.
- * @return string
+ * @return string|null The poster image URL, or null if it cannot be resolved.
  */
 function video_image_url_by_guid( $guid, $format ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 
 	$post = videopress_get_post_by_guid( $guid );
 
-	if ( is_wp_error( $post ) ) {
+	if ( is_wp_error( $post ) || ! $post ) {
 		return null;
 	}
 
 	$meta = wp_get_attachment_metadata( $post->ID );
+
+	if ( ! is_array( $meta ) || ! isset( $meta['videopress']['poster'] ) ) {
+		return null;
+	}
 
 	$poster = apply_filters( 'jetpack_photon_url', $meta['videopress']['poster'] );
 
@@ -662,12 +714,16 @@ function videopress_get_post_id_by_guid( $guid ) {
 	}
 
 	$args = array(
-		'post_type'      => 'attachment',
-		'post_mime_type' => 'video/videopress',
-		'post_status'    => 'inherit',
-		'no_found_rows'  => true,
-		'fields'         => 'ids',
-		'meta_query'     => array(
+		'post_type'              => 'attachment',
+		'post_mime_type'         => 'video/videopress',
+		'post_status'            => 'inherit',
+		'no_found_rows'          => true,
+		'fields'                 => 'ids',
+		// A GUID identifies the same attachment regardless of the current language.
+		'suppress_filters'       => true,
+		// Prevent WPML Media Translation from re-enabling attachment query filters.
+		'force_suppress_filters' => true,
+		'meta_query'             => array(
 			array(
 				'key'     => 'videopress_guid',
 				'value'   => $guid,

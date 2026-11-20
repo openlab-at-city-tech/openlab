@@ -22,6 +22,18 @@ if (!defined('ABSPATH')) {
 class System_Status extends Admin_Page
 {
 	/**
+	 * Whether the report has been rendered in the current request.
+	 *
+	 * Each active add-on bootstraps the Tools page again, creating another
+	 * instance of this class that hooks another copy of `html()` onto the
+	 * same action. Shared across instances so the report prints only once.
+	 *
+	 * @access private
+	 * @var bool
+	 */
+	private static $rendered = false;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 3.0.0
@@ -51,17 +63,24 @@ class System_Status extends Admin_Page
 	 */
 	public function html()
 	{
+		if (self::$rendered) {
+			return;
+		}
+		self::$rendered = true;
 		?>
 		<div id="simcal-system-status-report">
-			<p><?php _e('Please copy and paste this information when contacting support:', 'google-calendar-events'); ?> </p>
+			<p><?php esc_html_e(
+   	'Please copy and paste this information when contacting support:',
+   	'google-calendar-events',
+   ); ?> </p>
 			<textarea readonly="readonly" onclick="this.select();"></textarea>
-			<p><?php _e(
+			<p><?php esc_html_e(
    	'You can also download your information as a text file to attach, or simply view it below.',
-   	'google-calendar-events'
+   	'google-calendar-events',
    ); ?></p>
-			<p><a href="#" id="simcal-system-status-report-download" class="button button-primary"><?php _e(
+			<p><a href="#" id="simcal-system-status-report-download" class="button button-primary"><?php esc_html_e(
    	'Download System Report',
-   	'google-calendar-events'
+   	'google-calendar-events',
    ); ?></a></p>
 		</div>
 		<hr>
@@ -119,12 +138,13 @@ class System_Status extends Admin_Page
   	$memory =
   		'<mark class="error">' .
   		sprintf(
+  			/* translators: 1: memory limit, 2: Codex URL for increasing PHP memory */
   			__(
   				'%1$s - It is recomendend to set memory to at least 64MB. See: <a href="%2$s" target="_blank">Increasing memory allocated to PHP</a>',
-  				'google-calendar-events'
+  				'google-calendar-events',
   			),
   			$memory_export,
-  			'http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP'
+  			'http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP',
   		) .
   		'</mark>';
   } else {
@@ -201,19 +221,11 @@ class System_Status extends Admin_Page
 
   include_once ABSPATH . 'wp-admin/includes/theme-install.php';
 
-  if (version_compare($wp_version, '3.4', '<')) {
-  	$active_theme = get_theme_data(get_stylesheet_directory() . '/style.css');
-  	$theme_name = '<a href="' . $active_theme['URI'] . '" target="_blank">' . $active_theme['Name'] . '</a>';
-  	$theme_version = $active_theme['Version'];
-  	$theme_author = '<a href="' . $active_theme['AuthorURI'] . '" target="_blank">' . $active_theme['Author'] . '</a>';
-  	$theme_export = $active_theme['Name'] . ' - ' . $theme_version;
-  } else {
-  	$active_theme = wp_get_theme();
-  	$theme_name = '<a href="' . $active_theme->ThemeURI . '" target="_blank">' . $active_theme->Name . '</a>';
-  	$theme_version = $active_theme->Version;
-  	$theme_author = $active_theme->Author;
-  	$theme_export = $active_theme->Name . ' - ' . $theme_version;
-  }
+  $active_theme = wp_get_theme();
+  $theme_name = '<a href="' . $active_theme->ThemeURI . '" target="_blank">' . $active_theme->Name . '</a>';
+  $theme_version = $active_theme->Version;
+  $theme_author = $active_theme->Author;
+  $theme_export = $active_theme->Name . ' - ' . $theme_version;
 
   $theme_update_version = $theme_version;
 
@@ -230,6 +242,7 @@ class System_Status extends Admin_Page
   		'<mark class="error">' .
   		$theme_version .
   		' (' .
+  		/* translators: %s: available theme version number */
   		sprintf(__('%s is available', 'google-calendar-events'), esc_html($theme_update_version)) .
   		')</mark>';
   } else {
@@ -249,21 +262,17 @@ class System_Status extends Admin_Page
   $parent_theme = $parent_theme_export = '-';
 
   if ($is_child_theme) {
-  	if (version_compare($wp_version, '3.4', '<')) {
-  		$parent_theme = $parent_theme_export = $active_theme['Template'];
-  	} else {
-  		$parent = wp_get_theme($active_theme->Template);
-  		$parent_theme = '<dl>';
-  		$parent_theme .= '<dt>' . __('Name', 'google-calendar-events') . '</dt>';
-  		$parent_theme .= '<dd>' . $parent->Name . '</dd>';
-  		$parent_theme .= '<dt>' . __('Author', 'google-calendar-events') . '</dt>';
-  		$parent_theme .= '<dd>' . $parent->Author . '</dd>';
-  		$parent_theme .= '<dt>' . __('Version', 'google-calendar-events') . '</dt>';
-  		$parent_theme .= '<dd>' . $parent->Version . '</dd>';
-  		$parent_theme .= '</dl>';
+  	$parent = wp_get_theme($active_theme->Template);
+  	$parent_theme = '<dl>';
+  	$parent_theme .= '<dt>' . __('Name', 'google-calendar-events') . '</dt>';
+  	$parent_theme .= '<dd>' . $parent->Name . '</dd>';
+  	$parent_theme .= '<dt>' . __('Author', 'google-calendar-events') . '</dt>';
+  	$parent_theme .= '<dd>' . $parent->Author . '</dd>';
+  	$parent_theme .= '<dt>' . __('Version', 'google-calendar-events') . '</dt>';
+  	$parent_theme .= '<dd>' . $parent->Version . '</dd>';
+  	$parent_theme .= '</dl>';
 
-  		$parent_theme_export = strip_tags($parent->Name) . ' - ' . $parent->Version;
-  	}
+  	$parent_theme_export = wp_strip_all_tags($parent->Name) . ' - ' . $parent->Version;
   }
 
   $sections['theme'] = [
@@ -323,6 +332,7 @@ class System_Status extends Admin_Page
   							'<mark class="error">' .
   							$plugin_version .
   							' (' .
+  							/* translators: %s: available plugin version number */
   							sprintf(__('%s is available', 'google-calendar-events'), esc_html($plugin_update_version)) .
   							')</mark>';
   					} else {
@@ -339,9 +349,9 @@ class System_Status extends Admin_Page
   		$plugin .= '<dd>' . $plugin_version . '</dd>';
   		$plugin .= '</dl>';
 
-  		$sections['plugins'][sanitize_key(strip_tags($plugin_name))] = [
+  		$sections['plugins'][sanitize_key(wp_strip_all_tags($plugin_name))] = [
   			'label' => $plugin_name,
-  			'label_export' => strip_tags($plugin_data['Title']),
+  			'label_export' => wp_strip_all_tags($plugin_data['Title']),
   			'result' => $plugin,
   			'result_export' => $plugin_data['Version'],
   		];
@@ -371,8 +381,9 @@ class System_Status extends Admin_Page
   	$php = '<mark class="ok">' . PHP_VERSION . '</mark>';
   }
 
-  if ($wpdb->use_mysqli) {
-  	$mysql = @mysqli_get_server_info($wpdb->dbh);
+  $mysql_version = $wpdb->db_version();
+  if ($mysql_version) {
+  	$mysql = $mysql_version;
   } else {
   	$mysql = '<mark class="error">' . __('Cannot connect to MySQL database.', 'google-calendar-events') . '</mark>';
   }
@@ -388,6 +399,7 @@ class System_Status extends Admin_Page
   if ('UTC' !== $default_timezone) {
   	$server_timezone =
   		'<mark class="error">' .
+  		/* translators: %s: server timezone name */
   		sprintf(__('Server default timezone is %s - it should be UTC', 'google-calendar-events'), $default_timezone) .
   		'</mark>';
   } else {
@@ -587,9 +599,9 @@ class System_Status extends Admin_Page
   foreach ($panels as $panel => $v):
   	if (isset($sections[$panel])): ?>
 				<table class="widefat simcal-system-status-report-panel">
-					<thead class="<?php echo $panel; ?>">
+					<thead class="<?php echo esc_attr($panel); ?>">
 						<tr>
-							<th colspan="3" data-export="<?php echo $v['export']; ?>"><?php echo $v['label']; ?></th>
+							<th colspan="3" data-export="<?php echo esc_attr($v['export']); ?>"><?php echo esc_html($v['label']); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -600,10 +612,14 @@ class System_Status extends Admin_Page
         $result_export = isset($cell['result_export']) ? $cell['result_export'] : $cell['result'];
         ?>
 								<td class="tooltip"><?php echo isset($cell['tooltip'])
-        	? ' <i class="simcal-icon-help simcal-help-tip" data-tip="' . $cell['tooltip'] . '"></i> '
+        	? ' <i class="simcal-icon-help simcal-help-tip" data-tip="' . esc_attr($cell['tooltip']) . '"></i> '
         	: ''; ?></td>
-								<td class="label" data-export="<?php echo trim($label_export); ?>"><?php echo $cell['label']; ?></td>
-								<td class="result" data-export="<?php echo trim($result_export); ?>"><?php echo $cell['result']; ?></td>
+								<td class="label" data-export="<?php echo esc_attr(trim($label_export)); ?>"><?php echo wp_kses_post(
+	$cell['label'],
+); ?></td>
+								<td class="result" data-export="<?php echo esc_attr(trim($result_export)); ?>"><?php echo wp_kses_post(
+	$cell['result'],
+); ?></td>
 							</tr>
 						<?php endforeach; ?>
 					</tbody>
@@ -677,8 +693,10 @@ class System_Status extends Admin_Page
 			jQuery( '#simcal-system-status-report-download' ).on( 'click', function() {
 				var file = new Blob( [ report ], { type: 'text/plain' } );
 				jQuery( this ).attr( 'href', URL.createObjectURL( file ) );
-				jQuery( this ).attr( 'download', '<?php echo sanitize_title(
-    	str_replace(['http://', 'https://'], '', get_bloginfo('url')) . '-system-report-' . date('Y-m-d', time())
+				jQuery( this ).attr( 'download', '<?php echo esc_attr(
+    	sanitize_title(
+    		str_replace(['http://', 'https://'], '', get_bloginfo('url')) . '-system-report-' . gmdate('Y-m-d', time()),
+    	),
     ); ?>' );
 			} );
 

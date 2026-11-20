@@ -96,13 +96,13 @@ function su_error_message( $title = '', $message = '', $echo = false ) {
 	}
 
 	if ( $title ) {
-		$title = "<strong>{$title}:</strong> ";
+		$title = '<strong>' . esc_html( $title ) . ':</strong> ';
 	}
 
 	$output = sprintf(
 		'<p class="su-error" style="padding:5px 10px;color:#8f3a35;border-left:3px solid #8f3a35;background:#fff7f6;line-height:1.35">%1$s%2$s</p>',
 		$title,
-		$message
+		wp_kses_post( $message )
 	);
 
 	if ( $echo ) {
@@ -133,14 +133,26 @@ function su_current_user_can_insert() {
 }
 
 /**
- * Validate filter callback name.
+ * Check whether a shortcode filter callback is explicitly allowed.
  *
  * @since  5.0.5
  * @param string  $filter Filter callback name.
- * @return boolean         True if filter name contains word 'filter', False otherwise.
+ * @return boolean         True if the callback is allowed, False otherwise.
  */
 function su_is_filter_safe( $filter ) {
-	return is_string( $filter ) && false !== strpos( $filter, 'filter' );
+	if ( ! is_string( $filter ) || '' === $filter ) {
+		return false;
+	}
+
+	/**
+	 * Allow trusted PHP code to register callbacks for shortcode filter attributes.
+	 * Only add callbacks that are safe to call with author-controlled values.
+	 *
+	 * @param string[] $allowed_filters Allowed function names. Empty by default.
+	 */
+	$allowed_filters = apply_filters( 'su/shortcode/allowed_filters', array() );
+
+	return is_array( $allowed_filters ) && in_array( $filter, $allowed_filters, true );
 }
 
 /**
@@ -412,9 +424,28 @@ function su_sanitize_css_value( $value, $default = 'none' ) {
  */
 function su_get_current_url() {
 
-	$protocol = is_ssl() ? 'https' : 'http';
+	$home = wp_parse_url( home_url() );
+	$url  = $home['scheme'] . '://' . $home['host'];
 
-	return esc_url( "{$protocol}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}" );
+	if ( isset( $home['port'] ) ) {
+		$url .= ':' . $home['port'];
+	}
+
+	// REQUEST_URI already includes the home path on subdirectory installations.
+	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '/';
+
+	return esc_url( $url . $request_uri );
+
+}
+
+/**
+ * Check whether the current request is a Live Preview request.
+ *
+ * @return bool
+ */
+function su_is_live_preview_request() {
+
+	return isset($_GET['live_preview']);
 
 }
 

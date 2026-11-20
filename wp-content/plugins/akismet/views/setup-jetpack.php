@@ -79,16 +79,12 @@ $user_status = $akismet_user->status ?? null;
 				<?php
 				echo wp_kses(
 					sprintf(
-						/* translators: The placeholder is a URL. */
-						__( 'Want to use a different account? <a href="%s" class="akismet-external-link">Visit akismet.com</a> to set it up and get your API key.', 'akismet' ),
-						esc_url( 'https://akismet.com/get?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=jetpack_flow_different_account' )
+						/* translators: 1: URL, 2: hidden screen-reader text noting the link opens in a new tab. */
+						__( 'Want to use a different account? <a href="%1$s" class="akismet-external-link" target="_blank" rel="noopener">Visit akismet.com%2$s</a> to set it up and get your API key.', 'akismet' ),
+						esc_url( 'https://akismet.com/get?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=jetpack_flow_different_account' ),
+						Akismet::get_new_tab_screen_reader_html()
 					),
-					array(
-						'a' => array(
-							'href'  => array(),
-							'class' => array(),
-						),
-					)
+					Akismet_Admin::get_link_kses_allowed_elements()
 				);
 				?>
 			</p>

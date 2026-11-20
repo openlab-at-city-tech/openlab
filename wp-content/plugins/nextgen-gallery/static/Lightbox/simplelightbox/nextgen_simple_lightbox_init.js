@@ -112,9 +112,17 @@ jQuery(function ($) {
 		return title.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 	};
 
+	// Links NextGEN rendered carry .ngg-simplelightbox; only their captions may hold markup.
+	var isNextgenLink = function (el) {
+		return !!el && el.classList.contains('ngg-simplelightbox');
+	};
+
 	// Function to sanitize captions in the DOM elements.
-	var sanitizeCaptions = function () {
-		$('.ngg-simplelightbox').each(function () {
+	// SECURITY (#1188): pass the FINAL selector, after nextgen_lightbox_filter_selector() has
+	// widened it. The links it adds (any a > img, e.g. a comment link around a smilie) are not
+	// sanitized here: their title is plain text and nggCaptionHTML shows it as text.
+	var sanitizeCaptions = function ($elements) {
+		$elements.filter('.ngg-simplelightbox').each(function () {
 			var caption = $(this).attr('title');
 			if (caption) {
 				// Sanitize the caption and update the element attribute.
@@ -329,13 +337,13 @@ jQuery(function ($) {
 		history: false,
 		animationSlide: false,
 		animationSpeed: 100,
-		captionSelector: 'self'
+		captionSelector: 'self',
+		nggCaptionHTML: isNextgenLink
 	};
 
 	var nextgen_simplelightbox_init = function () {
-		sanitizeCaptions();
-
 		selector = nextgen_lightbox_filter_selector($, $('.ngg-simplelightbox'));
+		sanitizeCaptions(selector);
 		if (selector.length > 0) {
 			lightbox = selector.simpleLightbox(nextgen_simplebox_options);
 			attachTikTokHandlers(selector);
@@ -351,9 +359,8 @@ jQuery(function ($) {
 			lightbox.destroy();
 		}
 
-		sanitizeCaptions();
-
 		selector = nextgen_lightbox_filter_selector($, $('.ngg-simplelightbox'));
+		sanitizeCaptions(selector);
 		if (selector.length > 0) {
 			lightbox = selector.simpleLightbox(nextgen_simplebox_options);
 			attachTikTokHandlers(selector);

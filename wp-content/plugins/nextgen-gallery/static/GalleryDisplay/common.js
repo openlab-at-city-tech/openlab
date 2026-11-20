@@ -27,6 +27,11 @@
 						skip = false;
 					});
 
+				// The response is injected into the page, so only fetch it from this site. Other links navigate normally.
+				if (this.origin !== window.location.origin) {
+					skip = true;
+				}
+
 				if (!skip) {
 					event.preventDefault();
 				} else {

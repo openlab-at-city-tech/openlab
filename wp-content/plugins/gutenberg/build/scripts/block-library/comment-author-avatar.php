@@ -51,20 +51,20 @@ function gutenberg_render_block_core_comment_author_avatar( $attributes, $conten
 
 	$avatar_block = get_avatar(
 		$comment,
-		null,
+		max( (int) $width, (int) $height ),
 		'',
 		$alt,
 		array(
 			'height'     => $height,
 			'width'      => $width,
-			'extra_attr' => sprintf( 'style="%1s"', $styles ),
+			'extra_attr' => sprintf( 'style="%s"', $styles ),
 			'class'      => $classes,
 		)
 	);
 	if ( isset( $spacing_attributes ) ) {
-		return sprintf( '<div style="%1s">%2s</div>', esc_attr( $spacing_string ), $avatar_block );
+		return sprintf( '<div style="%1$s">%2$s</div>', esc_attr( $spacing_string ), $avatar_block );
 	}
-	return sprintf( '<div>%1s</div>', $avatar_block );
+	return sprintf( '<div>%s</div>', $avatar_block );
 }
 
 /**

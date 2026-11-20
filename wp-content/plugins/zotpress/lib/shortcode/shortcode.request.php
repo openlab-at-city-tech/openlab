@@ -906,6 +906,7 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 
 				// Check open lib next
 				// REVIEW: Will break if Open Library is down!
+				// 7.4.3: Added fixes via André Lambelet, e.g., https, headers
 				if ( $zpr["showimage"] === "openlib" )
 				{
 					$zp_showimage_keys = explode( ",", $zp_showimage_keys );
@@ -915,13 +916,23 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 						if ( ! in_array( $data->key,  $zp_showimage_keys )
 								&& ( isset($data->data->ISBN) && $data->data->ISBN != "" ) )
 						{
-							$openlib_url = "http://covers.openlibrary.org/b/isbn/".$data->data->ISBN."-M.jpg";
+							$openlib_url = "https://covers.openlibrary.org/b/isbn/".$data->data->ISBN."-M.jpg";
 
 							// First, get the headers
 							$openlib_headers = @get_headers( $openlib_url );
 
 							// And make sure Open Library / the source is online
-							if ( $openlib_headers[0] == "HTTP/1.1 302 Found" )
+							// if ( $openlib_headers[0] == "HTTP/1.1 302 Found" )
+							$openlib_status = isset($openlib_headers[0]) ? $openlib_headers[0] : '';
+							$openlib_ctype  = '';
+							foreach ( $openlib_headers as $h ) {
+								if ( stripos( $h, 'content-type:' ) === 0 ) {
+									$openlib_ctype = strtolower( $h );
+									break;
+								}
+							}
+							if ( ( strpos($openlib_status, '200') !== false && strpos($openlib_ctype, 'image/jpeg') !== false )
+									|| strpos($openlib_status, '302') !== false )
 							{
 								$zp_all_the_data[$id]->image = array( $openlib_url );
 
@@ -1061,6 +1072,7 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 
 				if ( $zp_updateneeded )
 					$zp_output .= '<span class="ZP_UPDATENEEDED ZP_ATTR">true</span>';
+				$zp_output .= '<span class="ZP_CACHETIMER ZP_ATTR">'.get_option("Zotpress_DefaultCacheTimer").'</span>';
 
 				// $zp_output .= '<span class="ZP_USED_CACHE ZP_ATTR">true</span>';
 				$zp_output .= '<span class="ZP_JSON ZP_ATTR">'.rawurlencode($zp_json_encoded).'</span>';

@@ -311,6 +311,361 @@ class Security {
 	}
 
 	/**
+	 * Contains a local watermark image path to the install.
+	 *
+	 * Accepted roots: ABSPATH, WP_CONTENT_DIR (relocated wp-content) and the uploads
+	 * directory (which may live outside both, e.g. Bedrock or a mounted volume). Shared
+	 * by the thumbnail renderers and the REST preview so preview and real thumbnails
+	 * accept the same paths.
+	 *
+	 * Callers must open the returned path, not the one they passed in: contain_path()
+	 * collapses "../" lexically, but the OS follows a symlink before applying "..", so
+	 * "uploads/../../x.png" with a symlinked uploads directory would otherwise pass the
+	 * check and read a file outside the install.
+	 *
+	 * @param string $path Absolute path to contain.
+	 * @return string|null Canonical contained path, or null when it is outside every root.
+	 */
+	public static function contain_watermark_path( $path ) {
+		if ( ! is_string( $path ) || '' === $path ) {
+			return null;
+		}
+
+		$roots = [ ABSPATH ];
+		if ( defined( 'WP_CONTENT_DIR' ) ) {
+			$roots[] = WP_CONTENT_DIR;
+		}
+		$upload_dir = \wp_upload_dir( null, false );
+		if ( ! empty( $upload_dir['basedir'] ) ) {
+			$roots[] = $upload_dir['basedir'];
+		}
+
+		foreach ( $roots as $root ) {
+			$contained = self::contain_path( $path, $root );
+			if ( null !== $contained ) {
+				return $contained;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Sanitizes a watermark setting ("wmPath" or "wmFont") for storage or rendering.
+	 *
+	 * Shared by every route that accepts these values (REST settings, the legacy
+	 * settings form and the legacy preview AJAX) so they cannot drift apart.
+	 *
+	 * - wmFont is a file name inside the bundled fonts directory: any wrapper is
+	 *   refused and only the basename is kept.
+	 * - wmPath may be an http(s) URL (the documented "HTTP url" option, #1104; the
+	 *   sinks fetch it with wp_safe_remote_get()). Every other wrapper (phar://,
+	 *   file://, php://, data://, ...) is refused (#1084, object injection / LFI).
+	 *   A local path is kept only when it can resolve inside the install, by the same
+	 *   candidates and roots the render sinks use, so an in-root "../" (Bedrock's
+	 *   "../app/uploads/x.png") survives and an escaping one does not.
+	 *
+	 * @param string $key   "wmPath" or "wmFont".
+	 * @param mixed  $value Submitted value.
+	 * @return string Sanitized value, or '' when refused.
+	 */
+	public static function sanitize_watermark_option( $key, $value ) {
+		if ( ! is_string( $value ) ) {
+			return '';
+		}
+
+		// Not sanitize_text_field(): it strips "%XX" octets, which breaks a URL such as
+		// "My%20Logo.png". Tags, line breaks, tabs and NULs are still removed.
+		$sanitized  = trim( (string) preg_replace( '/[\r\n\t\0]+/', '', \wp_strip_all_tags( \wp_check_invalid_utf8( $value ) ) ) );
+		$normalized = str_replace( '\\', '/', $sanitized );
+
+		if ( 'wmFont' === $key ) {
+			// A font is a bare file name from the bundled list; refuse anything else
+			// rather than cut it down to a different name the admin did not choose.
+			if ( false !== strpos( $normalized, '/' ) || in_array( $normalized, [ '.', '..' ], true ) ) {
+				return '';
+			}
+			return $normalized;
+		}
+
+		if ( '' === $sanitized ) {
+			return '';
+		}
+
+		if ( false !== strpos( $normalized, '://' ) ) {
+			return preg_match( '#^https?://#i', $normalized ) ? \esc_url_raw( $sanitized, [ 'http', 'https' ] ) : '';
+		}
+
+		// A scheme with no "//" ("data:", "javascript:", ...). A Windows drive letter
+		// ("C:/...") is a single character and stays a local path.
+		if ( preg_match( '#^[a-z][a-z0-9+.\-]+:#i', $normalized ) ) {
+			return '';
+		}
+
+		$fs = Filesystem::get_instance();
+		if ( ! self::is_allowed_watermark_path( $sanitized, $fs->join_paths( $fs->get_document_root( 'content' ), $sanitized ) ) ) {
+			return '';
+		}
+
+		return $sanitized;
+	}
+
+	/**
+	 * Resolves a saved local watermark path to a contained file that exists.
+	 *
+	 * A relative path is relative to the site root (the form's documented meaning);
+	 * the content-root form is tried next. Each candidate is contained before it is
+	 * probed, and the absolute test is a string test, not path_is_absolute(), which
+	 * runs realpath() on its argument. Probing a raw value first would touch any path
+	 * it names: on Windows a UNC path ("\\host\share\x.png") opens an SMB connection
+	 * to that host and sends the server's NTLM hash (#1084).
+	 *
+	 * @param string $path         Local watermark path, no scheme.
+	 * @param string $content_path The same path joined onto the content root by the
+	 *                             caller's filesystem helper (a string operation).
+	 * @return string|null Canonical contained path to open, or null when no candidate
+	 *                     is inside the install or none exists.
+	 */
+	public static function resolve_watermark_path( $path, $content_path ) {
+		if ( ! is_string( $path ) || '' === $path ) {
+			return null;
+		}
+
+		foreach ( self::watermark_path_candidates( $path, $content_path ) as $candidate ) {
+			$contained = self::contain_watermark_path( $candidate );
+			if ( null !== $contained && is_file( $contained ) ) {
+				return $contained;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Maps an http(s) watermark URL that points at this site to the file it serves.
+	 *
+	 * A watermark URL on the site's own domain (a media-library URL, or any file under
+	 * the uploads, plugins, content or site root) is read from disk instead of being
+	 * downloaded. Downloading it means a request from the server back to itself, which
+	 * many shared hosts and WAFs refuse, so the preview and Set Watermark could fail
+	 * on a file that sits on the same disk (#1104). It also saves one HTTP request per
+	 * image in a bulk job.
+	 *
+	 * The scheme is ignored (http and https serve the same file); host and port must
+	 * match. The decoded path is contained with contain_watermark_path(), so "%2e%2e/"
+	 * or a symlink cannot reach outside the install. Only image extensions are mapped,
+	 * so a URL that is really a script is never read as a file.
+	 *
+	 * @param string $url Watermark URL.
+	 * @return string|null Canonical local path of an existing file, or null when the URL
+	 *                     is not on this site (callers then download it).
+	 */
+	public static function watermark_url_to_local_path( $url ) {
+		if ( ! is_string( $url ) || ! preg_match( '#^https?://#i', $url ) ) {
+			return null;
+		}
+
+		$parts = \wp_parse_url( $url );
+		if ( empty( $parts['host'] ) || empty( $parts['path'] ) || isset( $parts['user'] ) || isset( $parts['pass'] ) ) {
+			return null;
+		}
+
+		$extension = strtolower( (string) pathinfo( $parts['path'], PATHINFO_EXTENSION ) );
+		if ( ! in_array( $extension, [ 'png', 'jpg', 'jpeg', 'gif', 'webp' ], true ) ) {
+			return null;
+		}
+
+		$host = strtolower( $parts['host'] );
+		$port = isset( $parts['port'] ) ? (int) $parts['port'] : null;
+
+		foreach ( self::own_site_url_bases() as $base ) {
+			list( $base_url, $base_dir ) = $base;
+
+			$base_parts = \wp_parse_url( $base_url );
+			if ( empty( $base_parts['host'] ) || strtolower( $base_parts['host'] ) !== $host ) {
+				continue;
+			}
+			if ( ( isset( $base_parts['port'] ) ? (int) $base_parts['port'] : null ) !== $port ) {
+				continue;
+			}
+
+			$base_path = isset( $base_parts['path'] ) ? rtrim( $base_parts['path'], '/' ) : '';
+			if ( 0 !== strpos( $parts['path'], $base_path . '/' ) ) {
+				continue;
+			}
+
+			$relative = rawurldecode( substr( $parts['path'], strlen( $base_path ) + 1 ) );
+			if ( '' === $relative || false !== strpos( $relative, "\0" ) ) {
+				continue;
+			}
+
+			$contained = self::contain_watermark_path( \trailingslashit( \wp_normalize_path( $base_dir ) ) . $relative );
+			if ( null !== $contained && is_file( $contained ) ) {
+				return $contained;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * URL prefixes of this site and the directories they serve, most specific first.
+	 *
+	 * @return array<int, array{0: string, 1: string}>
+	 */
+	private static function own_site_url_bases() {
+		$bases = [];
+
+		$upload_dir = \wp_upload_dir( null, false );
+		if ( ! empty( $upload_dir['baseurl'] ) && ! empty( $upload_dir['basedir'] ) ) {
+			$bases[] = [ $upload_dir['baseurl'], $upload_dir['basedir'] ];
+		}
+		if ( defined( 'WP_PLUGIN_DIR' ) ) {
+			$bases[] = [ \plugins_url(), WP_PLUGIN_DIR ];
+		}
+		if ( defined( 'WP_CONTENT_DIR' ) ) {
+			$bases[] = [ \content_url(), WP_CONTENT_DIR ];
+		}
+		$bases[] = [ \site_url(), ABSPATH ];
+
+		// home_url() serves ABSPATH too when WordPress is not in a subdirectory (it may
+		// differ from site_url() only by host, e.g. a mapped domain).
+		$home_path = (string) \wp_parse_url( \home_url(), PHP_URL_PATH );
+		$site_path = (string) \wp_parse_url( \site_url(), PHP_URL_PATH );
+		if ( rtrim( $home_path, '/' ) === rtrim( $site_path, '/' ) ) {
+			$bases[] = [ \home_url(), ABSPATH ];
+		}
+
+		return $bases;
+	}
+
+	/**
+	 * Opens a watermark image for compositing: the one loader every thumbnail renderer
+	 * uses, so Set Watermark, upload auto-watermarking, dynamic thumbnails and the
+	 * settings preview read the same file the same way (#1104).
+	 *
+	 * - An http(s) URL on this site is read from disk (watermark_url_to_local_path()).
+	 * - Any other http(s) URL is fetched with wp_safe_remote_get(), which refuses
+	 *   internal and loopback hosts, closing the SSRF that imagecreatefrompng()'s own
+	 *   fopen wrapper would allow.
+	 * - Every other wrapper (phar://, file://, php://, data://, ...) is refused: opening
+	 *   one reads or deserialises attacker-chosen data (#1084).
+	 * - A local path is contained to the install with resolve_watermark_path().
+	 *
+	 * The bytes go through imagecreatefromstring(), so PNG, JPEG, GIF and WebP all work
+	 * wherever they come from (a remote URL always accepted any of them).
+	 *
+	 * @param string $path Saved watermark path or URL.
+	 * @return \GdImage|resource|false The image, or false when it cannot be loaded.
+	 */
+	public static function load_watermark_image( $path ) {
+		if ( ! is_string( $path ) || '' === $path ) {
+			return false;
+		}
+
+		$normalized = str_replace( '\\', '/', $path );
+		$body       = false;
+
+		if ( false !== strpos( $normalized, '://' ) ) {
+			if ( ! preg_match( '#^https?://#i', $normalized ) ) {
+				return false;
+			}
+
+			$local = self::watermark_url_to_local_path( $path );
+			if ( null !== $local ) {
+				$body = @file_get_contents( $local ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			} else {
+				$response = \wp_safe_remote_get( $path, [ 'timeout' => 10 ] );
+				if ( \is_wp_error( $response ) || 200 !== (int) \wp_remote_retrieve_response_code( $response ) ) {
+					return false;
+				}
+				$body = \wp_remote_retrieve_body( $response );
+			}
+		} else {
+			$fs        = Filesystem::get_instance();
+			$contained = self::resolve_watermark_path( $path, $fs->join_paths( $fs->get_document_root( 'content' ), $path ) );
+			if ( null === $contained ) {
+				return false;
+			}
+			$body = @file_get_contents( $contained ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		}
+
+		if ( ! is_string( $body ) || '' === $body ) {
+			return false;
+		}
+
+		$image = @imagecreatefromstring( $body ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+
+		return $image ? $image : false;
+	}
+
+	/**
+	 * Whether a local watermark path can resolve inside the install.
+	 *
+	 * The save-time twin of resolve_watermark_path(): the same candidates and roots,
+	 * without the existence check (a file may be uploaded after the path is saved), so
+	 * settings validation keeps exactly the paths the sinks would accept (including a
+	 * "../" that stays inside, e.g. Bedrock's "../app/uploads/x.png") and refuses the
+	 * rest. The one exception is an absolute path read against the content root, which
+	 * must exist (see below).
+	 *
+	 * @param string $path         Local watermark path, no scheme.
+	 * @param string $content_path The same path joined onto the content root.
+	 * @return bool
+	 */
+	public static function is_allowed_watermark_path( $path, $content_path ) {
+		if ( ! is_string( $path ) || '' === $path ) {
+			return false;
+		}
+
+		$is_absolute = self::is_absolute_watermark_path( $path );
+
+		foreach ( self::watermark_path_candidates( $path, $content_path ) as $index => $candidate ) {
+			$contained = self::contain_watermark_path( $candidate );
+			if ( null === $contained ) {
+				continue;
+			}
+			// An absolute path joined onto the content root is always inside it, so on
+			// its own that would accept "/tmp/x.png" or "//host/x.png". Accept that form
+			// only when the file is really there ("/uploads/x.png", which the sinks have
+			// always resolved against the content root). Checked after containment, so
+			// nothing outside the install is probed.
+			if ( 1 === $index && $is_absolute && ! is_file( $contained ) ) {
+				continue;
+			}
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Whether a local watermark path is absolute (leading slash or backslash, or a
+	 * Windows drive). A string test, not path_is_absolute(), which runs realpath().
+	 *
+	 * @param string $path Local watermark path.
+	 * @return bool
+	 */
+	private static function is_absolute_watermark_path( $path ) {
+		return 1 === preg_match( '#^(?:[/\\\\]|[A-Za-z]:[/\\\\])#', $path );
+	}
+
+	/**
+	 * Candidate absolute paths for a local watermark path: the path itself when it is
+	 * absolute (else joined onto ABSPATH), then the content-root form.
+	 *
+	 * @param string $path         Local watermark path.
+	 * @param string $content_path The same path joined onto the content root.
+	 * @return string[]
+	 */
+	private static function watermark_path_candidates( $path, $content_path ) {
+		return [
+			self::is_absolute_watermark_path( $path ) ? $path : ABSPATH . ltrim( $path, '/\\' ),
+			$content_path,
+		];
+	}
+
+	/**
 	 * Resolves the deepest existing ancestor of a path through realpath() and
 	 * re-attaches the segments that do not exist yet.
 	 *

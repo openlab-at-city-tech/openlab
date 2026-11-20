@@ -106,7 +106,7 @@ function trp_mtapi_add_settings( $mt_settings ){
         $mtapi_url = (defined('MTAPI_URL')  ? MTAPI_URL : 'https://mtapi.translatepress.com' );
 
         $mtapi_server = new TRP_MTAPI_Customer($mtapi_url);
-		$site_status = $mtapi_server->lookup_site($license, home_url());
+		$site_status = $mtapi_server->lookup_site($license, trp_get_license_site_url());
 
         $site_status['quota'] = isset ( $site_status['quota'] ) ? $site_status['quota'] : 0;
 
@@ -246,7 +246,7 @@ function trp_mtapi_sync_license_call( $license_key ) {
         $api_params = array(
             'edd_action' => 'sync_mtapi_license',
             'license'    => $license_key,
-            'url'        => home_url(),
+            'url'        => trp_get_license_site_url(),
             'version'    => TRP_PLUGIN_VERSION
         );
         $store_url  = trp_mtapi_get_store_url();
@@ -275,7 +275,7 @@ function trp_ai_recheck_quota(){
 
                         require_once("class-mtapi-customer.php");
                         $mtapi_server = new TRP_MTAPI_Customer($mtapi_url);
-                        $site_status = $mtapi_server->lookup_site($license, home_url());
+                        $site_status = $mtapi_server->lookup_site($license, trp_get_license_site_url());
 
                         $site_status['quota'] = isset ( $site_status['quota'] ) ? $site_status['quota'] : 0;
                         $quota = intval(ceil($site_status['quota'] / 5));

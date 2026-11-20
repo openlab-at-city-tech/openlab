@@ -21,7 +21,6 @@ function Zotpress_zotpressInTextBib ($atts)
     */
 
     $atts = shortcode_atts(array(
-    // extract(shortcode_atts(array(
         'style' => false,
         'sortby' => "default",
         'sort' => false,
@@ -51,37 +50,6 @@ function Zotpress_zotpressInTextBib ($atts)
 
     ), $atts);
 
-    // array_push($_GET, shortcode_atts(array(
-    //     'style' => false,
-    //     'sortby' => "default",
-    //     'sort' => false,
-    //     'order' => false,
-
-    //     'image' => false,
-    //     'images' => false,
-    //     'showimage' => "no",
-    //     'showtags' => "no",
-
-    //     'title' => "no",
-
-    //     'download' => "no",
-    //     'downloadable' => false,
-    //     'notes' => false,
-    //     'abstract' => false,
-    //     'abstracts' => false,
-    //     'cite' => false,
-    //     'citeable' => false,
-
-    //     'target' => false,
-	// 	'urlwrap' => false,
-
-	// 	'highlight' => false,
-    //     'forcenumber' => false,
-    //     'forcenumbers' => false
-
-    // ), $atts));
-
-
     global $post, $wpdb;
 
 
@@ -93,79 +61,24 @@ function Zotpress_zotpressInTextBib ($atts)
     $zpr = Zotpress_prep_ajax_request_vars($wpdb, $atts);
 
     // FORMAT PARAMETERS
-    // $style = str_replace('"','',html_entity_decode($zpr['style']));
-    // $sortby = str_replace('"','',html_entity_decode($zpr['sortby']));
     $style = $zpr['style'];
-    $sortby = strtolower($zpr['sortby']);
 
-    // if ($order) {
-    //     $order = str_replace('"','',html_entity_decode($zpr['order']));
-    // } elseif ($sort) {
-    //     $order = str_replace('"','',html_entity_decode($zpr['sort']));
-    // } else $order = "asc";
+    $sortby = strtolower($zpr['sortby']);
     $order = strtolower($zpr['order']);
 
-    // Show image
-    // if ($showimage) $showimage = str_replace('"','',html_entity_decode($zpr['showimage']));
-    // if ($image) $showimage = str_replace('"','',html_entity_decode($zpr['image']));
-    // if ($images) $showimage = str_replace('"','',html_entity_decode($zpr['images']));
-
-    // if ($showimage == "yes" || $showimage == "true" || $showimage === true) {
-    //     $showimage = true;
-    // } elseif ($showimage === "openlib") {
-    //     $showimage = "openlib";
-    // } else $showimage = false;
     $showimage = $zpr['showimage'];
-
-    // Show tags
-    // $showtags = $showtags == "yes" || $showtags == "true" || $showtags === true;
     $showtags = $zpr["showtags"];
-
-    // $title = str_replace('"','',html_entity_decode($zpr['title']));
-    $title = $zpr['title'];
-
-    // if ($download) {
-    //     $download = str_replace('"','',html_entity_decode($zpr['download']));
-    // } elseif ($downloadable) {
-    //     $download = str_replace('"','',html_entity_decode($zpr['downloadable']));
-    // }
-    // if ($downloadable) {
-        // $downloadable = str_replace('"','',html_entity_decode($zpr['downloadable']));
-    // }
-    // $download = $download == "yes" || $download == "true" || $download === true;
-    $downloadable = $zpr['downloadable'];
-
-    // $shownotes = str_replace('"','',html_entity_decode($zpr['shownotes']));
     $shownotes = $zpr['shownotes'];
 
-    // if ($abstracts) {
-    //     $abstracts = str_replace('"','',html_entity_decode($zpr['abstracts']));
-    // } elseif ($abstract) {
-    //     $abstracts = str_replace('"','',html_entity_decode($zpr['abstract']));
-    // }
+    $downloadable = $zpr['downloadable'];
     $abstracts = $zpr['showabstracts'];
-
-    // if ($citeable) {
-    //     $citeable = str_replace('"','',html_entity_decode($zpr['citeable']));
-    // } elseif ($cite) {
-    //     $citeable = str_replace('"','',html_entity_decode($zpr['cite']));
-    // }
     $citeable = $zpr["citeable"];
 
-    // if ($target == "new" || $target == "yes" || $target == "_blank" || $target == "true" || $target === true) $target = true;
-    // else $target = false;
-    $target = $zpr["target"];
-
-    // $urlwrap = $urlwrap == "title" || $urlwrap == "image" ? str_replace('"','',html_entity_decode($zpr['urlwrap'])) : false;
+    $title = $zpr['title'];
     $urlwrap = $zpr['urlwrap'];
-
-    // $highlight = $highlight ? str_replace('"','',html_entity_decode($zpr['highlight'])) : false;
+    $target = $zpr["target"];
     $highlight = $zpr["highlight"];
 
-    // if ($forcenumber == "yes" || $forcenumber == "true" || $forcenumber === true)
-    //     $forcenumber = true;
-    // if ($forcenumbers == "yes" || $forcenumbers == "true" || $forcenumbers === true)
-    //     $forcenumber = true;
     $forcenumber = $zpr["request_start"];
 
     // Set up request vars

@@ -13,7 +13,6 @@ use function Kadence\kadence;
 use function add_action;
 use function add_filter;
 use function register_sidebar;
-use function is_active_sidebar;
 use function dynamic_sidebar;
 
 /**
@@ -58,7 +57,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'layout';
 	}
 
@@ -66,16 +65,16 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_filter( 'body_class', array( $this, 'filter_body_classes' ) );
-		add_action( 'widgets_init', array( $this, 'action_register_sidebars' ) );
-		add_filter( 'register_sidebar_defaults', array( $this, 'change_sidebar_default_args' ) );
+		add_filter( 'body_class', [ $this, 'filter_body_classes' ] );
+		add_action( 'widgets_init', [ $this, 'action_register_sidebars' ] );
+		add_filter( 'register_sidebar_defaults', [ $this, 'change_sidebar_default_args' ] );
 	}
 
 	/**
 	 * Registers the sidebars.
 	 */
 	public function action_register_sidebars() {
-		$widgets = array(
+		$widgets = [
 			'sidebar-primary'   => __( 'Sidebar 1', 'kadence' ),
 			'sidebar-secondary' => __( 'Sidebar 2', 'kadence' ),
 			'footer1'           => __( 'Footer 1', 'kadence' ),
@@ -84,13 +83,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			'footer4'           => __( 'Footer 4', 'kadence' ),
 			'footer5'           => __( 'Footer 5', 'kadence' ),
 			'footer6'           => __( 'Footer 6', 'kadence' ),
-		);
+		];
 
 		foreach ( $widgets as $id => $name ) {
 			register_sidebar(
 				apply_filters(
 					'kadence_widget_area_args',
-					array(
+					[
 						'name'          => $name,
 						'id'            => $id,
 						'description'   => esc_html__( 'Add widgets here.', 'kadence' ),
@@ -98,7 +97,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 						'after_widget'  => '</section>',
 						'before_title'  => '<h2 class="widget-title">',
 						'after_title'   => '</h2>',
-					)
+					]
 				)
 			);
 		}
@@ -112,12 +111,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	public function change_sidebar_default_args( $defaults ) {
 		$args = apply_filters(
 			'kadence_widget_area_args',
-			array(
+			[
 				'before_widget' => '<section id="%1$s" class="widget %2$s">',
 				'after_widget'  => '</section>',
 				'before_title'  => '<h2 class="widget-title">',
 				'after_title'   => '</h2>',
-			)
+			]
 		);
 		$args = wp_parse_args( $args, $defaults );
 		return $args;
@@ -130,32 +129,32 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *               a callable or an array with key 'callable'. This approach is used to reserve the possibility of
 	 *               adding support for further arguments in the future.
 	 */
-	public function template_tags() : array {
-		return array(
-			'get_layout'                => array( $this, 'get_layout' ),
-			'get_boxed'                 => array( $this, 'get_boxed' ),
-			'get_title_layout'          => array( $this, 'get_title_layout' ),
-			'show_hero_title'           => array( $this, 'show_hero_title' ),
-			'show_in_content_title'     => array( $this, 'show_in_content_title' ),
-			'get_feature'               => array( $this, 'get_feature' ),
-			'show_feature'              => array( $this, 'show_feature' ),
-			'show_feature_above'        => array( $this, 'show_feature_above' ),
-			'show_feature_below'        => array( $this, 'show_feature_below' ),
-			'get_feature_position'      => array( $this, 'get_feature_position' ),
-			'show_comments'             => array( $this, 'show_comments' ),
-			'show_post_navigation'      => array( $this, 'show_post_navigation' ),
-			'has_sidebar'               => array( $this, 'has_sidebar' ),
-			'sidebar_id'                => array( $this, 'sidebar_id' ),
-			'sidebar_side'              => array( $this, 'sidebar_side' ),
-			'sidebar_id_class'          => array( $this, 'sidebar_id_class' ),
-			'display_sidebar'           => array( $this, 'display_sidebar' ),
-			'desk_transparent_header'   => array( $this, 'desk_transparent_header' ),
-			'mobile_transparent_header' => array( $this, 'mobile_transparent_header' ),
-			'has_header'                => array( $this, 'has_header' ),
-			'has_header_styles'         => array( $this, 'has_header_styles' ),
-			'has_footer'                => array( $this, 'has_footer' ),
-			'has_content'               => array( $this, 'has_content' ),
-		);
+	public function template_tags(): array {
+		return [
+			'get_layout'                => [ $this, 'get_layout' ],
+			'get_boxed'                 => [ $this, 'get_boxed' ],
+			'get_title_layout'          => [ $this, 'get_title_layout' ],
+			'show_hero_title'           => [ $this, 'show_hero_title' ],
+			'show_in_content_title'     => [ $this, 'show_in_content_title' ],
+			'get_feature'               => [ $this, 'get_feature' ],
+			'show_feature'              => [ $this, 'show_feature' ],
+			'show_feature_above'        => [ $this, 'show_feature_above' ],
+			'show_feature_below'        => [ $this, 'show_feature_below' ],
+			'get_feature_position'      => [ $this, 'get_feature_position' ],
+			'show_comments'             => [ $this, 'show_comments' ],
+			'show_post_navigation'      => [ $this, 'show_post_navigation' ],
+			'has_sidebar'               => [ $this, 'has_sidebar' ],
+			'sidebar_id'                => [ $this, 'sidebar_id' ],
+			'sidebar_side'              => [ $this, 'sidebar_side' ],
+			'sidebar_id_class'          => [ $this, 'sidebar_id_class' ],
+			'display_sidebar'           => [ $this, 'display_sidebar' ],
+			'desk_transparent_header'   => [ $this, 'desk_transparent_header' ],
+			'mobile_transparent_header' => [ $this, 'mobile_transparent_header' ],
+			'has_header'                => [ $this, 'has_header' ],
+			'has_header_styles'         => [ $this, 'has_header_styles' ],
+			'has_footer'                => [ $this, 'has_footer' ],
+			'has_content'               => [ $this, 'has_content' ],
+		];
 	}
 
 	/**
@@ -502,7 +501,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$transparent = ( kadence()->option( 'transparent_header_enable' ) ? 'enable' : 'disable' );
 		if ( ( is_singular() || is_front_page() ) && ! is_home() ) {
 			if ( is_front_page() ) {
-				$post_id = get_option( 'page_on_front' );
+				$post_id    = get_option( 'page_on_front' );
 				$post_type  = 'page';
 				$trans_type = 'page';
 			} else {
@@ -541,7 +540,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				$option_trans = kadence()->option( 'transparent_header_' . $trans_type, null );
 				if ( true === $option_trans ) {
 					$transparent = 'disable';
-				} else if ( is_null( $option_trans ) ) {
+				} elseif ( is_null( $option_trans ) ) {
 					$transparent = 'disable';
 				}
 			}
@@ -642,8 +641,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				$trans_type   = 'archive';
 			} elseif ( is_home() && ! is_front_page() ) {
 				if ( get_query_var( 'tribe_events_front_page' ) ) {
-					$archive_type = 'tribe_events_archive';
-					$trans_type   = 'archive';
+					$archive_type       = 'tribe_events_archive';
+					$trans_type         = 'archive';
 					$tribe_option_trans = kadence()->option( 'transparent_header_tribe_events_archive', true );
 					if ( true === $tribe_option_trans ) {
 						$temp_transparent = 'disable';
@@ -723,8 +722,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				$archive_type = 'course_archive';
 				$trans_type   = 'archive';
 			} elseif ( is_post_type_archive( 'tribe_events' ) ) {
-				$archive_type = 'tribe_events_archive';
-				$trans_type   = 'archive';
+				$archive_type       = 'tribe_events_archive';
+				$trans_type         = 'archive';
 				$tribe_option_trans = kadence()->option( 'transparent_header_tribe_events_archive', true );
 				if ( true === $tribe_option_trans ) {
 					$temp_transparent = 'disable';
@@ -746,20 +745,20 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				$trans_type   = 'archive';
 			} elseif ( is_search() ) {
 				$archive_type = 'search_archive';
-				$trans_type = 'archive';
+				$trans_type   = 'archive';
 			} elseif ( is_404() ) {
 				$archive_type = '404';
-				$trans_type = 'archive';
+				$trans_type   = 'archive';
 			} elseif ( is_category() || is_tag() ) {
 				$archive_type = 'post_archive';
-				$trans_type = 'archive';
+				$trans_type   = 'archive';
 			} elseif ( is_tax( 'knowledgebase_cat' ) ) {
 				$archive_type = 'knowledgebase_archive';
-				$trans_type = 'archive';
+				$trans_type   = 'archive';
 			} else {
-				$post_type  = get_post_type();
+				$post_type    = get_post_type();
 				$archive_type = $post_type . '_archive';
-				$trans_type = 'archive';
+				$trans_type   = 'archive';
 			}
 			// Sidebar ID.
 			if ( isset( $archivesidebar ) && ! empty( $archivesidebar ) && 'default' !== $archivesidebar && 'defualt' !== $archivesidebar ) {
@@ -799,7 +798,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				}
 			}
 			if ( is_404() ) {
-				$title = 'normal';
+				$title       = 'normal';
 				$transparent = 'disable';
 			}
 			// Archive Feature.
@@ -858,7 +857,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				}
 			}
 		}
-		$return_array = array(
+		return [
 			'layout'           => $layout,
 			'boxed'            => $boxed,
 			'feature'          => $feature,
@@ -874,8 +873,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			'footer'           => $footer,
 			'header'           => $header,
 			'content'          => $content,
-		);
-		return $return_array;
+		];
 	}
 	/**
 	 * Adds custom classes to indicate whether a sidebar is present to the array of body classes.
@@ -883,7 +881,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @param array $classes Classes for the body element.
 	 * @return array Filtered body classes.
 	 */
-	public function filter_body_classes( array $classes ) : array {
+	public function filter_body_classes( array $classes ): array {
 		if ( self::no_header() ) {
 			$classes[] = 'no-header';
 		}

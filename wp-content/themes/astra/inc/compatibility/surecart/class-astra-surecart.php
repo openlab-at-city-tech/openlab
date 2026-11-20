@@ -331,7 +331,7 @@ class Astra_SureCart {
 		if ( $this->shop_page_id !== $post_id ) {
 			return $title;
 		}
-		$custom_title = astra_get_option( 'ast-dynamic-archive-' . $this->post_type . '-custom-title', '' );
+		$custom_title = astra_get_i18n_option( 'ast-dynamic-archive-' . $this->post_type . '-custom-title', astra_get_archive_banner_translation( $this->post_type, 'title' ) );
 		return ! empty( $custom_title ) ? $custom_title : $title;
 	}
 

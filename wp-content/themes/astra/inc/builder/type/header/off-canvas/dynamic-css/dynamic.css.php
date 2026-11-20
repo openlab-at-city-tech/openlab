@@ -167,6 +167,7 @@ function astra_off_canvas_static_css() {
 		display: flex;
 		justify-content: flex-end;
 		min-height: calc( 1.2em + 24px);
+		flex-shrink: 0;
 	}
 	.ast-mobile-popup-drawer .ast-mobile-popup-header .menu-toggle-close {
 		background: transparent;

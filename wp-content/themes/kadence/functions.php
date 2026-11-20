@@ -9,8 +9,8 @@
  * @package kadence
  */
 
-define( 'KADENCE_VERSION', '1.4.5' );
-define( 'KADENCE_MINIMUM_WP_VERSION', '6.0' );
+define( 'KADENCE_VERSION', '1.6.0' );
+define( 'KADENCE_MINIMUM_WP_VERSION', '6.6' );
 define( 'KADENCE_MINIMUM_PHP_VERSION', '7.4' );
 
 // Bail if requirements are not met.
@@ -18,6 +18,9 @@ if ( version_compare( $GLOBALS['wp_version'], KADENCE_MINIMUM_WP_VERSION, '<' ) 
 	require get_template_directory() . '/inc/back-compat.php';
 	return;
 }
+// Load the prefixed container libraries.
+require get_template_directory() . '/vendor/vendor-prefixed/autoload.php';
+
 // Include WordPress shims.
 require get_template_directory() . '/inc/wordpress-shims.php';
 

@@ -56,7 +56,7 @@ function bbp_remove_user_from_object( $object_id = 0, $user_id = 0, $rel_key = '
 /**
  * Remove a user id from all objects
  *
- * @since 2.6.0 bbPress (r6109)
+ * @since 2.6.0 bbPress (r6517)
  *
  * @param int    $user_id  The user id
  * @param string $rel_key  The relationship key
@@ -75,7 +75,7 @@ function bbp_remove_user_from_all_objects( $user_id = 0, $rel_key = '', $rel_typ
 /**
  * Remove an object from all users
  *
- * @since 2.6.0 bbPress (r6109)
+ * @since 2.6.0 bbPress (r6544)
  *
  * @param int    $object_id The object id
  * @param int    $user_id   The user id
@@ -95,7 +95,7 @@ function bbp_remove_object_from_all_users( $object_id = 0, $rel_key = '', $rel_t
 /**
  * Remove all users from all objects
  *
- * @since 2.6.0 bbPress (r6109)
+ * @since 2.6.0 bbPress (r6520)
  *
  * @param string $rel_key  The relationship key
  * @param string $rel_type The relationship type (usually 'post')
@@ -153,7 +153,7 @@ function bbp_is_object_of_user( $object_id = 0, $user_id = 0, $rel_key = '', $re
 /**
  * Get the query part responsible for JOINing objects to user IDs
  *
- * @since 2.6.0 bbPress (r6747)
+ * @since 2.6.0 bbPress (r6739)
  *
  * @param array  $args      Default query arguments
  * @param string $context   Additional context
@@ -174,7 +174,7 @@ function bbp_get_user_object_query( $args = array(), $context = '', $rel_key = '
 /**
  * Get the users who have engaged in a topic
  *
- * @since 2.6.0 bbPress (r6320)
+ * @since 2.6.0 bbPress (r6311)
  *
  * @param int $topic_id Optional. Topic id
  *
@@ -194,6 +194,7 @@ function bbp_get_topic_engagements( $topic_id = 0 ) {
  * See: https://bbpress.trac.wordpress.org/ticket/3083
  *
  * @since 2.6.0 bbPress (r6522)
+ * @since 2.6.17 bbPress (r7468) Honor filtered public reply statuses.
  *
  * @param int $topic_id
  *
@@ -202,28 +203,36 @@ function bbp_get_topic_engagements( $topic_id = 0 ) {
 function bbp_get_topic_engagements_raw( $topic_id = 0 ) {
 
 	// Default variables
-	$topic_id = bbp_get_topic_id( $topic_id );
-	$bbp_db   = bbp_db();
-	$statii   = "'" . implode( "', '", bbp_get_public_topic_statuses() ) . "'";
+	$topic_id       = bbp_get_topic_id( $topic_id );
+	$bbp_db         = bbp_db();
+	$topic_type     = bbp_get_topic_post_type();
+	$reply_type     = bbp_get_reply_post_type();
+	$topic_statuses = array_unique( array_filter( bbp_get_public_topic_statuses() ) );
+	$reply_statuses = array_unique( array_filter( bbp_get_public_reply_statuses() ) );
+	$sql            = array();
+	$values         = array();
 
-	// A cool UNION query!
-	$sql = "
-SELECT DISTINCT( post_author ) FROM (
-	SELECT post_author FROM {$bbp_db->posts}
-		WHERE ( ID = %d AND post_status IN ({$statii}) AND post_type = %s )
-UNION
-	SELECT post_author FROM {$bbp_db->posts}
-		WHERE ( post_parent = %d AND post_status = %s AND post_type = %s )
-) as u1";
+	// Add the topic author for countable topic statuses
+	if ( ! empty( $topic_statuses ) ) {
+		$placeholders = implode( ', ', array_fill( 0, count( $topic_statuses ), '%s' ) );
+		$sql[]        = "SELECT post_author FROM {$bbp_db->posts} WHERE ID = %d AND post_status IN ( {$placeholders} ) AND post_type = %s";
+		$values       = array_merge( $values, array( $topic_id ), $topic_statuses, array( $topic_type ) );
+	}
 
-	// Prepare & get results
-	$query   = $bbp_db->prepare( $sql, $topic_id, bbp_get_topic_post_type(), $topic_id, bbp_get_public_status_id(), bbp_get_reply_post_type() );
-	$results = $bbp_db->get_col( $query );
+	// Add reply authors for countable reply statuses
+	if ( ! empty( $reply_statuses ) ) {
+		$placeholders = implode( ', ', array_fill( 0, count( $reply_statuses ), '%s' ) );
+		$sql[]        = "SELECT post_author FROM {$bbp_db->posts} WHERE post_parent = %d AND post_status IN ( {$placeholders} ) AND post_type = %s";
+		$values       = array_merge( $values, array( $topic_id ), $reply_statuses, array( $reply_type ) );
+	}
+
+	// Query unique topic and reply authors
+	$results = ! empty( $sql )
+		? $bbp_db->get_col( $bbp_db->prepare( implode( ' UNION ', $sql ), $values ) )
+		: array();
 
 	// Parse results into voices
-	$engagements = ! is_wp_error( $results )
-		? wp_parse_id_list( array_filter( $results ) )
-		: array();
+	$engagements = wp_parse_id_list( array_filter( $results ) );
 
 	// Filter & return
 	return (array) apply_filters( 'bbp_get_topic_engagements_raw', $engagements, $topic_id );
@@ -232,8 +241,8 @@ UNION
 /**
  * Get a user's topic engagements
  *
- * @since 2.6.0 bbPress (r6320)
- * @since 2.6.0 bbPress (r6618) Signature changed to accept an array of arguments
+ * @since 2.6.0 bbPress (r6311)
+ * @since 2.6.0 bbPress (r6619) Signature changed to accept an array of arguments
  *
  * @param array $args Optional. Arguments to pass into bbp_has_replies()
  *
@@ -250,7 +259,7 @@ function bbp_get_user_engagements( $args = array() ) {
 /**
  * Check if a user is engaged in a topic or not
  *
- * @since 2.6.0 bbPress (r6320)
+ * @since 2.6.0 bbPress (r6311)
  *
  * @param int $user_id Optional. User id
  * @param int $topic_id Optional. Topic id
@@ -274,7 +283,7 @@ function bbp_is_user_engaged( $user_id = 0, $topic_id = 0 ) {
  * frequently used within a loop, those verifications were moved upstream to
  * improve performance on topics with many engaged users.
  *
- * @since 2.6.0 bbPress (r6320)
+ * @since 2.6.0 bbPress (r6311)
  *
  * @param int $user_id Optional. User id
  * @param int $topic_id Optional. Topic id
@@ -306,7 +315,7 @@ function bbp_add_user_engagement( $user_id = 0, $topic_id = 0 ) {
 /**
  * Remove a topic from user's engagements
  *
- * @since 2.6.0 bbPress (r6320)
+ * @since 2.6.0 bbPress (r6311)
  *
  * @param int $user_id Optional. User id
  * @param int $topic_id Optional. Topic id
@@ -397,7 +406,7 @@ function bbp_recalculate_topic_engagements( $topic_id = 0, $force = false ) {
  * Hooked to 'bbp_new_topic' and 'bbp_new_reply', this gets the post author and
  * if not anonymous, passes it into bbp_add_user_engagement().
  *
- * @since 2.6.0 bbPress (r6526)
+ * @since 2.6.0 bbPress (r6529)
  *
  * @param int $topic_id
  */
@@ -439,12 +448,95 @@ function bbp_update_topic_engagements( $topic_id = 0 ) {
 	return bbp_add_user_engagement( $author_id, $topic_id );
 }
 
+/** Engagement Toggles ********************************************************/
+
+/**
+ * Check whether the current user can manage a user's engagements.
+ *
+ * With no user ID, this function uses the displayed user and returns false if
+ * no user is displayed.
+ *
+ * @since 2.6.20 bbPress (r7849)
+ *
+ * @param string $engagement Favorite or subscription. Defaults to the current
+ *                           favorites or subscriptions view.
+ * @param int    $user_id    User ID. Defaults to the displayed user.
+ * @return bool Whether the current user can manage the user's engagements.
+ */
+function bbp_current_user_can_manage_engagements( $engagement = '', $user_id = 0 ) {
+	if ( empty( $engagement ) ) {
+		if ( bbp_is_favorites() ) {
+			$engagement = 'favorite';
+		} elseif ( bbp_is_subscriptions() ) {
+			$engagement = 'subscription';
+		}
+	}
+
+	$user_id         = ! empty( $user_id )
+		? bbp_get_user_id( $user_id, false, false )
+		: (int) bbp_get_displayed_user_id();
+	$current_user_id = bbp_get_current_user_id();
+	$retval          = in_array( $engagement, array( 'favorite', 'subscription' ), true )
+		&& ! empty( $user_id )
+		&& ( ( $user_id === $current_user_id ) || current_user_can( 'edit_user', $user_id ) );
+
+	// Filter & return.
+	return (bool) apply_filters( 'bbp_current_user_can_manage_engagements', $retval, $engagement, $user_id, $current_user_id );
+}
+
+/**
+ * Check whether the current user can toggle a favorite or subscription.
+ *
+ * Only topics may be favorited. Topics and forums may be subscribed to, and
+ * the user must be able to read both a topic and its containing forum when
+ * adding an engagement. Existing engagements may be removed after visibility
+ * changes.
+ *
+ * @since 2.6.19 bbPress (r7643)
+ * @since 2.6.20 bbPress (r7849) Added the `$user_id` parameter.
+ *
+ * @param int    $object_id   Post ID.
+ * @param string $object_type Metadata object type; only post is supported.
+ * @param string $engagement  Favorite or subscription.
+ * @param string $action      Add or remove.
+ * @param int    $user_id     User ID. Defaults to the current user.
+ * @return bool Whether the current user can toggle the engagement.
+ */
+function bbp_current_user_can_toggle_engagement( $object_id = 0, $object_type = 'post', $engagement = 'subscription', $action = 'add', $user_id = 0 ) {
+	$user_id = ! empty( $user_id )
+		? bbp_get_user_id( $user_id, false, false )
+		: bbp_get_current_user_id();
+
+	if ( empty( $user_id ) || ( 'post' !== $object_type ) || ! in_array( $action, array( 'add', 'remove' ), true ) || ! bbp_current_user_can_manage_engagements( $engagement, $user_id ) ) {
+		return false;
+	}
+
+	$post = get_post( $object_id );
+
+	if ( empty( $post ) ) {
+		return false;
+	}
+
+	if ( bbp_get_topic_post_type() === $post->post_type ) {
+		$forum_id = bbp_get_topic_forum_id( $post->ID );
+
+		return ! empty( $forum_id )
+			&& bbp_is_forum( $forum_id )
+			&& in_array( $engagement, array( 'favorite', 'subscription' ), true )
+			&& ( ( 'remove' === $action ) || ( current_user_can( 'read_topic', $post->ID ) && current_user_can( 'read_forum', $forum_id ) ) );
+	}
+
+	return ( 'subscription' === $engagement )
+		&& ( bbp_get_forum_post_type() === $post->post_type )
+		&& ( ( 'remove' === $action ) || current_user_can( 'read_forum', $post->ID ) );
+}
+
 /** Favorites *****************************************************************/
 
 /**
  * Get the users who have made the topic favorite
  *
- * @since 2.0.0 bbPress (r2658)
+ * @since 2.0.0 bbPress (r2668)
  *
  * @param int $topic_id Optional. Topic id
  *
@@ -462,7 +554,7 @@ function bbp_get_topic_favoriters( $topic_id = 0 ) {
  * Get a user's favorite topics
  *
  * @since 2.0.0 bbPress (r2652)
- * @since 2.6.0 bbPress (r6618) Signature changed to accept an array of arguments
+ * @since 2.6.0 bbPress (r6619) Signature changed to accept an array of arguments
  *
  * @param array $args Optional. Arguments to pass into bbp_has_topics()
  *
@@ -571,6 +663,8 @@ function bbp_remove_user_favorite( $user_id, $topic_id ) {
 /**
  * Handles the front end adding and removing of favorite topics
  *
+ * @since 2.6.20 bbPress (r8025) Use the displayed user on favorites views.
+ *
  * @param string $action The requested action to compare this function to
  */
 function bbp_favorites_handler( $action = '' ) {
@@ -600,11 +694,14 @@ function bbp_favorites_handler( $action = '' ) {
 	}
 
 	// What action is taking place?
-	$topic_id = bbp_get_topic_id( $_GET['object_id'] );
-	$user_id  = bbp_get_user_id( 0, true, true );
+	$topic_id     = bbp_get_topic_id( $_GET['object_id'] );
+	$user_id      = bbp_is_favorites()
+		? bbp_get_displayed_user_id()
+		: bbp_get_current_user_id();
+	$toggle_action = ( 'bbp_favorite_remove' === $action ) ? 'remove' : 'add';
 
 	// Check for empty topic
-	if ( empty( $topic_id ) ) {
+	if ( empty( $topic_id ) || ! bbp_current_user_can_toggle_engagement( $topic_id, 'post', 'favorite', $toggle_action ) ) {
 		bbp_add_error( 'bbp_favorite_topic_id', __( '<strong>Error</strong>: No topic was found. Which topic are you marking/unmarking as favorite?', 'bbpress' ) );
 
 	// Check nonce
@@ -612,7 +709,7 @@ function bbp_favorites_handler( $action = '' ) {
 		bbp_add_error( 'bbp_favorite_nonce', __( '<strong>Error</strong>: Are you sure you wanted to do that?', 'bbpress' ) );
 
 	// Check current user's ability to edit the user
-	} elseif ( ! current_user_can( 'edit_user', $user_id ) ) {
+	} elseif ( ! bbp_current_user_can_manage_engagements( 'favorite', $user_id ) ) {
 		bbp_add_error( 'bbp_favorite_permission', __( '<strong>Error</strong>: You do not have permission to edit favorites for that user.', 'bbpress' ) );
 	}
 
@@ -667,7 +764,7 @@ function bbp_favorites_handler( $action = '' ) {
 /**
  * Get the users who have subscribed
  *
- * @since 2.6.0 bbPress (r5156)
+ * @since 2.6.0 bbPress (r6544)
  *
  * @param int $object_id Optional. ID of object (forum, topic, or something else)
  */
@@ -681,8 +778,8 @@ function bbp_get_subscribers( $object_id = 0, $type = 'post' ) {
 /**
  * Get a user's subscribed topics
  *
- * @since 2.0.0 bbPress (r2668)
- * @since 2.6.0 bbPress (r6618) Signature changed to accept an array of arguments
+ * @since 2.5.0 bbPress (r5156)
+ * @since 2.6.0 bbPress (r6619) Signature changed to accept an array of arguments
  *
  * @param array $args Optional. Arguments to pass into bbp_has_topics()
  *
@@ -702,7 +799,7 @@ function bbp_get_user_topic_subscriptions( $args = array() ) {
  * Get a user's subscribed forums
  *
  * @since 2.5.0 bbPress (r5156)
- * @since 2.6.0 bbPress (r6618) Signature changed to accept an array of arguments
+ * @since 2.6.0 bbPress (r6619) Signature changed to accept an array of arguments
  *
  * @param array $args Optional. Arguments to pass into bbp_has_forums()
  *
@@ -721,7 +818,7 @@ function bbp_get_user_forum_subscriptions( $args = array() ) {
 /**
  * Check if an object (forum or topic) is in user's subscription list or not
  *
- * @since 2.5.0 bbPress (r5156)
+ * @since 2.0.0 bbPress (r2668)
  *
  * @param int $user_id Optional. User id
  * @param int $object_id Optional. Object id
@@ -738,7 +835,7 @@ function bbp_is_user_subscribed( $user_id = 0, $object_id = 0, $type = 'post' ) 
 /**
  * Add a user subscription
  *
- * @since 2.5.0 bbPress (r5156)
+ * @since 2.0.0 bbPress (r2668)
  * @since 2.6.0 bbPress (r6544) Added $type parameter
  *
  * @param int    $user_id   Optional. User id
@@ -772,7 +869,7 @@ function bbp_add_user_subscription( $user_id = 0, $object_id = 0, $type = 'post'
 /**
  * Remove a user subscription
  *
- * @since 2.5.0 bbPress (r5156)
+ * @since 2.0.0 bbPress (r2668)
  * @since 2.6.0 bbPress (r6544) Added $type parameter
  *
  * @param int    $user_id   Optional. User id
@@ -804,10 +901,65 @@ function bbp_remove_user_subscription( $user_id = 0, $object_id = 0, $type = 'po
 }
 
 /**
+ * Apply a topic form's subscription choice for its author.
+ *
+ * @since 2.6.20 bbPress (r7766)
+ *
+ * @param int $author_id Topic or reply author ID.
+ * @param int $topic_id Topic ID.
+ */
+function bbp_update_user_topic_subscription( $author_id = 0, $topic_id = 0 ) {
+
+	// Bail if subscriptions are disabled or the form has no valid target
+	if ( ! bbp_is_subscriptions_active() || empty( $author_id ) || empty( $topic_id ) ) {
+		return;
+	}
+
+	$subscribed = bbp_is_user_subscribed( $author_id, $topic_id );
+	$subscheck  = ! empty( $_POST['bbp_topic_subscription'] ) && ( 'bbp_subscribe' === $_POST['bbp_topic_subscription'] );
+
+	if ( $subscribed && ! $subscheck ) {
+		bbp_remove_user_subscription( $author_id, $topic_id );
+	} elseif ( ! $subscribed && $subscheck ) {
+		bbp_add_user_subscription( $author_id, $topic_id );
+	}
+}
+
+/**
+ * Apply a topic form's subscription choice after saving the topic.
+ *
+ * @since 2.6.20 bbPress (r7766)
+ *
+ * @param int   $topic_id Topic ID.
+ * @param int   $forum_id Forum ID.
+ * @param array $anonymous_data Anonymous author data.
+ * @param int   $author_id Topic author ID.
+ */
+function bbp_update_topic_subscription( $topic_id = 0, $forum_id = 0, $anonymous_data = array(), $author_id = 0 ) {
+	bbp_update_user_topic_subscription( $author_id, $topic_id );
+}
+
+/**
+ * Apply a reply form's subscription choice after saving the reply.
+ *
+ * @since 2.6.20 bbPress (r7766)
+ *
+ * @param int   $reply_id Reply ID.
+ * @param int   $topic_id Topic ID.
+ * @param int   $forum_id Forum ID.
+ * @param array $anonymous_data Anonymous author data.
+ * @param int   $author_id Reply author ID.
+ */
+function bbp_update_reply_subscription( $reply_id = 0, $topic_id = 0, $forum_id = 0, $anonymous_data = array(), $author_id = 0 ) {
+	bbp_update_user_topic_subscription( $author_id, $topic_id );
+}
+
+/**
  * Handles the front end toggling of user subscriptions
  *
- * @since 2.0.0 bbPress (r2790)
- * @since 2.6.l bbPress (r6543)
+ * @since 2.0.0 bbPress (r2668)
+ * @since 2.6.0 bbPress (r6544)
+ * @since 2.6.20 bbPress (r8025) Use the displayed user on subscriptions views.
  *
  * @param string $action The requested action to compare this function to
  */
@@ -838,22 +990,26 @@ function bbp_subscriptions_handler( $action = '' ) {
 	}
 
 	// Get required data
-	$user_id     = bbp_get_current_user_id();
+	$user_id     = bbp_is_subscriptions()
+		? bbp_get_displayed_user_id()
+		: bbp_get_current_user_id();
 	$object_id   = absint( $_GET['object_id'] );
-	$object_type = ! empty( $_GET['object_type'] )
-		? sanitize_key( $_GET['object_type'] )
-		: 'post';
+	$object_type = 'post';
+	if ( ! empty( $_GET['object_type'] ) ) {
+		$object_type = is_string( $_GET['object_type'] ) ? sanitize_key( $_GET['object_type'] ) : '';
+	}
+	$toggle_action = ( 'bbp_unsubscribe' === $action ) ? 'remove' : 'add';
 
 	// Check for empty topic
-	if ( empty( $object_id ) ) {
+	if ( empty( $object_id ) || ! bbp_current_user_can_toggle_engagement( $object_id, $object_type, 'subscription', $toggle_action ) ) {
 		bbp_add_error( 'bbp_subscription_object_id', __( '<strong>Error</strong>: Not found. What are you subscribing/unsubscribing to?', 'bbpress' ) );
 
 	// Check nonce
-	} elseif ( ! bbp_verify_nonce_request( 'toggle-subscription_' . $object_id ) ) {
+	} elseif ( ! bbp_verify_nonce_request( 'toggle-subscription_post_' . $object_id ) && ! bbp_verify_nonce_request( 'toggle-subscription_' . $object_id ) ) {
 		bbp_add_error( 'bbp_subscription_object_id', __( '<strong>Error</strong>: Are you sure you wanted to do that?', 'bbpress' ) );
 
 	// Check current user's ability to edit the user
-	} elseif ( ! current_user_can( 'edit_user', $user_id ) ) {
+	} elseif ( ! bbp_current_user_can_manage_engagements( 'subscription', $user_id ) ) {
 		bbp_add_error( 'bbp_subscription_permission', __( '<strong>Error</strong>: You do not have permission to edit subscriptions of that user.', 'bbpress' ) );
 	}
 
@@ -921,7 +1077,7 @@ function bbp_subscriptions_handler( $action = '' ) {
  * it is available here for your convenience, using the most efficient query
  * parameters available inside of the various query APIs.
  *
- * @since 2.6.0 bbPress (r6606)
+ * @since 2.6.0 bbPress (r6607)
  *
  * @param int    $user_id   The user id
  * @param string $rel_key   The relationship key
@@ -934,14 +1090,18 @@ function bbp_get_user_object_ids( $args = array() ) {
 	$object_ids = $defaults = array();
 
 	// Parse arguments
-	$r = bbp_parse_args( $args, array(
-		'user_id'     => 0,
-		'object_type' => bbp_get_topic_post_type(),
-		'rel_key'     => '',
-		'rel_type'    => 'post',
-		'filter'      => 'user_object_ids',
-		'args'        => array()
-	), 'get_user_object_ids' );
+	$r = bbp_parse_args(
+		$args,
+		array(
+			'user_id'     => 0,
+			'object_type' => bbp_get_topic_post_type(),
+			'rel_key'     => '',
+			'rel_type'    => 'post',
+			'filter'      => 'user_object_ids',
+			'args'        => array()
+		),
+		'get_user_object_ids'
+	);
 
 	// Sanitize arguments
 	$r['user_id']     = bbp_get_user_id( $r['user_id'] );
@@ -956,20 +1116,21 @@ function bbp_get_user_object_ids( $args = array() ) {
 			'fields'         => 'ids',
 			'post_type'      => $r['object_type'],
 			'posts_per_page' => -1,
-			'meta_query'     => array( array(
-				'key'     => $r['rel_key'],
-				'value'   => $r['user_id'],
-				'compare' => 'NUMERIC'
-			),
-
-			// Performance
-			'nopaging'               => true,
-			'suppress_filters'       => true,
-			'update_post_term_cache' => false,
-			'update_post_meta_cache' => false,
-			'ignore_sticky_posts'    => true,
-			'no_found_rows'          => true
-		) );
+			'meta_query'     => array(
+				array(
+					'key'     => $r['rel_key'],
+					'value'   => $r['user_id'],
+					'compare' => 'NUMERIC'
+				),
+				// Performance
+				'nopaging'               => true,
+				'suppress_filters'       => true,
+				'update_post_term_cache' => false,
+				'update_post_meta_cache' => false,
+				'ignore_sticky_posts'    => true,
+				'no_found_rows'          => true
+			)
+		);
 	}
 
 	// Parse arguments
@@ -995,29 +1156,33 @@ function bbp_get_user_object_ids( $args = array() ) {
  * @return array Return array of forum ids, or empty array
  */
 function bbp_get_moderator_forum_ids( $user_id = 0 ) {
-	return bbp_get_user_object_ids( array(
-		'user_id'     => $user_id,
-		'rel_key'     => '_bbp_moderator_id',
-		'object_type' => bbp_get_forum_post_type(),
-		'filter'      => 'moderator_forum_ids'
-	) );
+	return bbp_get_user_object_ids(
+		array(
+			'user_id'     => $user_id,
+			'rel_key'     => '_bbp_moderator_id',
+			'object_type' => bbp_get_forum_post_type(),
+			'filter'      => 'moderator_forum_ids'
+		)
+	);
 }
 
 /**
  * Get a user's engaged topic ids
  *
- * @since 2.6.0 bbPress (r6320)
+ * @since 2.6.0 bbPress (r6311)
  *
  * @param int $user_id Optional. User id
  *
  * @return array Return array of topic ids, or empty array
  */
 function bbp_get_user_engaged_topic_ids( $user_id = 0 ) {
-	return bbp_get_user_object_ids( array(
-		'user_id' => $user_id,
-		'rel_key' => '_bbp_engagement',
-		'filter'  => 'user_engaged_topic_ids'
-	) );
+	return bbp_get_user_object_ids(
+		array(
+			'user_id' => $user_id,
+			'rel_key' => '_bbp_engagement',
+			'filter'  => 'user_engaged_topic_ids'
+		)
+	);
 }
 
 /**
@@ -1030,11 +1195,13 @@ function bbp_get_user_engaged_topic_ids( $user_id = 0 ) {
  * @return array Return array of favorite topic ids, or empty array
  */
 function bbp_get_user_favorites_topic_ids( $user_id = 0 ) {
-	return bbp_get_user_object_ids( array(
-		'user_id' => $user_id,
-		'rel_key' => '_bbp_favorite',
-		'filter'  => 'user_favorites_topic_ids'
-	) );
+	return bbp_get_user_object_ids(
+		array(
+			'user_id' => $user_id,
+			'rel_key' => '_bbp_favorite',
+			'filter'  => 'user_favorites_topic_ids'
+		)
+	);
 }
 
 /**
@@ -1047,12 +1214,14 @@ function bbp_get_user_favorites_topic_ids( $user_id = 0 ) {
  * @return array Return array of subscribed forum ids, or empty array
  */
 function bbp_get_user_subscribed_forum_ids( $user_id = 0 ) {
-	return bbp_get_user_object_ids( array(
-		'user_id'     => $user_id,
-		'rel_key'     => '_bbp_subscription',
-		'object_type' => bbp_get_forum_post_type(),
-		'filter'      => 'user_subscribed_forum_ids'
-	) );
+	return bbp_get_user_object_ids(
+		array(
+			'user_id'     => $user_id,
+			'rel_key'     => '_bbp_subscription',
+			'object_type' => bbp_get_forum_post_type(),
+			'filter'      => 'user_subscribed_forum_ids'
+		)
+	);
 }
 
 /**
@@ -1065,11 +1234,13 @@ function bbp_get_user_subscribed_forum_ids( $user_id = 0 ) {
  * @return array Return array of subscribed topic ids, or empty array
  */
 function bbp_get_user_subscribed_topic_ids( $user_id = 0 ) {
-	return bbp_get_user_object_ids( array(
-		'user_id' => $user_id,
-		'rel_key' => '_bbp_subscription',
-		'filter'  => 'user_subscribed_topic_ids'
-	) );
+	return bbp_get_user_object_ids(
+		array(
+			'user_id' => $user_id,
+			'rel_key' => '_bbp_subscription',
+			'filter'  => 'user_subscribed_topic_ids'
+		)
+	);
 }
 
 /** Deprecated ****************************************************************/
@@ -1207,7 +1378,7 @@ function bbp_add_user_forum_subscription( $user_id = 0, $forum_id = 0 ) {
  * frequently used within a loop, those verifications were moved upstream to
  * improve performance on topics with many engaged users.
  *
- * @since 2.0.0 bbPress (r2668)
+ * @since 2.5.0 bbPress (r5156)
  * @deprecated 2.6.0 bbPress (r6543)
  *
  * @param int $user_id Optional. User id

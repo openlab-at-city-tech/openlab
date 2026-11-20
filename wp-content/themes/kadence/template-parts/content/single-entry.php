@@ -53,10 +53,10 @@ if ( is_singular( get_post_type() ) ) {
 		the_post_navigation(
 			apply_filters(
 				'kadence_post_navigation_args',
-				array(
+				[
 					'prev_text' => '<div class="post-navigation-sub"><small>' . kadence()->get_icon( 'arrow-left-alt' ) . esc_html__( 'Previous', 'kadence' ) . '</small></div>%title',
 					'next_text' => '<div class="post-navigation-sub"><small>' . esc_html__( 'Next', 'kadence' ) . kadence()->get_icon( 'arrow-right-alt' ) . '</small></div>%title',
-				)
+				]
 			)
 		);
 		if ( kadence()->option( 'post_footer_area_boxed' ) ) {

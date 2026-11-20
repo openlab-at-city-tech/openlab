@@ -58,9 +58,15 @@ class Core {
 			if ( $is_converted !== '1' ) {
 				if ( ConvertController::countOldFolders() > 0 && ! isset( $_GET['autorun'] ) ) {
 					add_filter( 'fbv_update_database_notice', '__return_true' );
+					add_filter( 'fbv_data', array( $this, 'fbv_data_update_database_notice' ) );
 				}
 			}
 		}
+	}
+
+	public function fbv_data_update_database_notice( $data ) {
+		$data['update_database_notice'] = true;
+		return $data;
 	}
 
 	public function wordpress_vip_css_concat_filter( $do_concat, $handle ) {

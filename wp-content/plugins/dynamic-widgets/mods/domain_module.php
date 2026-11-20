@@ -3,7 +3,6 @@
  * URL Module
  * Can't use DWOpts object because value = the serialized values
  *
- * @version $Id: domain_module.php 2968917 2023-09-19 21:10:22Z vivalex $
  * @copyright 2017 Jacco Drabbe
  */
 

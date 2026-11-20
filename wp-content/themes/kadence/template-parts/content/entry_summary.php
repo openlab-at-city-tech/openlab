@@ -17,17 +17,18 @@ if ( isset( $excerpt_element ) && is_array( $excerpt_element ) && true === $exce
 	<div class="entry-summary">
 		<?php
 		if ( true === kadence()->sub_option( $slug . '_archive_element_excerpt', 'fullContent' ) ) {
-			global $more; $more = 0;
+			global $more;
+			$more = 0;
 			the_content(
 				sprintf(
 					wp_kses(
 						/* translators: %s: Name of current post. Only visible to screen readers */
 						__( 'Read More<span class="screen-reader-text"> "%s"</span>', 'kadence' ),
-						array(
-							'span' => array(
-								'class' => array(),
-							),
-						)
+						[
+							'span' => [
+								'class' => [],
+							],
+						]
 					),
 					get_the_title()
 				)

@@ -26,6 +26,35 @@ use Imagely\NGG\DataMappers\Gallery as GalleryMapper;
  * @package Imagely\NGG\REST\DataMappers
  */
 class SettingsREST {
+
+	/**
+	 * Rows hydrated per batch by sweep_rows().
+	 *
+	 * @var int
+	 */
+	const SWEEP_BATCH = 200;
+
+	/**
+	 * Rows the watermark preview will scan, per end of the table, for a sample image.
+	 *
+	 * Per #1154 the scan is bounded as well as the memory: a missing preview beats
+	 * a request that walks a huge library on every watermark change.
+	 *
+	 * @var int
+	 */
+	const PREVIEW_SCAN_LIMIT = 200;
+
+	/**
+	 * Largest images table the preview will still walk end to end.
+	 *
+	 * Below this the scan costs little and the cap can only do harm: runs of rows
+	 * whose file is missing (#1045, #1108) can fill both capped windows while a
+	 * usable image sits between them, which find_all() would have found.
+	 *
+	 * @var int
+	 */
+	const PREVIEW_FULL_SCAN_MAX = 5000;
+
 	/**
 	 * Register the REST API routes for settings
 	 */
@@ -265,6 +294,18 @@ class SettingsREST {
 		// Convert to string for processing
 		$string_value = (string) $value;
 
+		// SECURITY: the watermark image path and font name must never persist as a
+		// stream wrapper or a traversing path. Without this, a "phar://" or
+		// "../../../../etc/..." wmPath saved into ngg_options reaches the watermark sink
+		// for every anonymous visitor of a watermarked gallery (object injection on
+		// PHP <= 7.4, SSRF, and arbitrary readable-PNG disclosure). wmFont is a file name
+		// inside the bundled fonts directory, never a path. These run before the
+		// value-based HTML/newline branches below, which would otherwise return a
+		// "../x.png<x>" or newline-carrying value without reaching these checks.
+		if ( 'wmFont' === $key || 'wmPath' === $key ) {
+			return \Imagely\NGG\Util\Security::sanitize_watermark_option( $key, $string_value );
+		}
+
 		// Fields that should preserve HTML and newlines
 		if ( self::should_preserve_html( $key, $string_value ) ) {
 			return wp_kses_post( $string_value );
@@ -383,13 +424,108 @@ class SettingsREST {
 	}
 
 	/**
+	 * Settings keys only a manage_options caller may read or write (gateway credentials, licence keys).
+	 *
+	 * Lives in the free plugin so the gate survives Pro being deactivated (#1163).
+	 *
+	 * @return string[]
+	 */
+	public static function admin_only_setting_keys() {
+		$keys = [
+			'ecommerce_cheque_enable',
+			'ecommerce_cheque_instructions',
+			'ecommerce_paypal_enable',
+			'ecommerce_paypal_sandbox',
+			'ecommerce_paypal_email',
+			'ecommerce_paypal_username',
+			'ecommerce_paypal_password',
+			'ecommerce_paypal_signature',
+			'ecommerce_paypal_std_enable',
+			'ecommerce_paypal_std_sandbox',
+			'ecommerce_paypal_std_email',
+			'ecommerce_test_gateway_enable',
+			'ecommerce_stripe_enable',
+			'ecommerce_stripe_key_public',
+			'ecommerce_stripe_key_private',
+			'ecommerce_stripe_webhook_secret',
+			'ecommerce_stripe_webhook_hash',
+			'ecommerce_stripe_webhook_in_sync',
+			'ecommerce_stripe_connect_enable',
+			'ecommerce_paypal_checkout_enable',
+			'ecommerce_paypal_checkout_sandbox',
+			'ecommerce_paypal_checkout_client_id',
+			'ecommerce_paypal_checkout_client_secret',
+			'ecommerce_paypal_checkout_notification_id',
+			'ecommerce_paypal_checkout_notification_hash',
+			'ecommerce_braintree_enable',
+			'ecommerce_braintree_sandbox',
+			'ecommerce_braintree_merchant_id',
+			'ecommerce_braintree_public_key',
+			'ecommerce_braintree_private_key',
+			'ecommerce_braintree_enable_paypal',
+			'ecommerce_braintree_pass_client_data',
+			'ecommerce_studio_email',
+			'ecommerce_email_notification_recipient',
+			'license_key',
+			'imagely_license_key',
+			'stripe_cus_id',
+			'stripe_card_info',
+		];
+
+		/**
+		 * Filters the settings keys withheld from callers without manage_options.
+		 *
+		 * @param string[] $keys Setting keys.
+		 */
+		return (array) apply_filters( 'ngg_settings_rest_admin_only_keys', $keys );
+	}
+
+	/**
+	 * Settings array with admin-only keys removed for a caller without manage_options.
+	 *
+	 * @param array $data Settings array.
+	 * @return array
+	 */
+	protected static function redact_admin_only_settings( array $data ) {
+		if ( current_user_can( 'manage_options' ) ) {
+			return $data;
+		}
+		return array_diff_key( $data, array_flip( self::admin_only_setting_keys() ) );
+	}
+
+	/**
 	 * Get all settings
 	 *
 	 * @return \WP_REST_Response
 	 */
 	public static function get_settings() {
 		$settings = Settings::get_instance();
-		return new WP_REST_Response( $settings->to_array(), 200 );
+		return new WP_REST_Response( self::redact_admin_only_settings( $settings->to_array() ), 200 );
+	}
+
+	/**
+	 * Drops a wmPath/wmFont the watermark validator refuses from a settings request.
+	 *
+	 * The stored value is kept and the rest of the request still saves. Refusing the
+	 * whole request instead would block every other setting: the admin app sends the
+	 * full settings object on every change, from tabs that hold their own (possibly
+	 * stale) copy, so a refused path could never be told apart from a real edit
+	 * (#487). Storing '' instead would silently switch watermarking off. The admin
+	 * sees the refusal where the path is edited: the Watermarking tab previews every
+	 * change through get_watermark_preview(), which reports "not allowed".
+	 *
+	 * @param array $new_settings Request settings; refused watermark keys are removed.
+	 * @return void
+	 */
+	protected static function drop_refused_watermark_values( array &$new_settings ) {
+		foreach ( [ 'wmPath', 'wmFont' ] as $key ) {
+			if ( ! isset( $new_settings[ $key ] ) || ! is_string( $new_settings[ $key ] ) || '' === trim( $new_settings[ $key ] ) ) {
+				continue;
+			}
+			if ( '' === \Imagely\NGG\Util\Security::sanitize_watermark_option( $key, $new_settings[ $key ] ) ) {
+				unset( $new_settings[ $key ] );
+			}
+		}
 	}
 
 	/**
@@ -422,6 +558,13 @@ class SettingsREST {
 		if ( ! is_array( $new_settings ) ) {
 			$new_settings = [];
 		}
+		if ( ! current_user_can( 'manage_options' ) && array_intersect_key( $new_settings, array_flip( self::admin_only_setting_keys() ) ) ) {
+			return new WP_Error(
+				'settings_admin_only',
+				__( 'Payment gateway and license settings can only be changed by a site administrator.', 'nggallery' ),
+				[ 'status' => 403 ]
+			);
+		}
 		if ( is_multisite() && isset( $new_settings['gallerypath'] ) && ! is_main_site() && ! is_super_admin() ) {
 			unset( $new_settings['gallerypath'] );
 		}
@@ -431,6 +574,7 @@ class SettingsREST {
 				return $gallerypath_validation;
 			}
 		}
+		self::drop_refused_watermark_values( $new_settings );
 		$settings = Settings::get_instance();
 
 		foreach ( $new_settings as $key => $value ) {
@@ -453,7 +597,7 @@ class SettingsREST {
 			 */
 			do_action( 'ngg_settings_updated', $new_settings, $settings );
 
-			return new WP_REST_Response( $settings->to_array(), 200 );
+			return new WP_REST_Response( self::redact_admin_only_settings( $settings->to_array() ), 200 );
 		} catch ( \Exception $e ) {
 			return new WP_Error(
 				'settings_update_failed',
@@ -509,7 +653,7 @@ class SettingsREST {
 				return $gallerypath_validation;
 			}
 		}
-
+		self::drop_refused_watermark_values( $new_settings );
 		$settings = GlobalSettings::get_instance();
 
 		foreach ( $new_settings as $key => $value ) {
@@ -528,6 +672,123 @@ class SettingsREST {
 				[ 'status' => 500 ]
 			);
 		}
+	}
+
+	/**
+	 * The error returned for a watermark path outside the install.
+	 *
+	 * @return WP_Error
+	 */
+	private static function watermark_path_not_allowed() {
+		return new WP_Error(
+			'invalid_watermark_image',
+			__( 'Watermark image path is not allowed.', 'nggallery' ),
+			[ 'status' => 400 ]
+		);
+	}
+
+	/**
+	 * Raises the last database error, so a failed read is not read as end of table.
+	 *
+	 * The detail is logged rather than returned: these routes answer anyone holding
+	 * 'NextGEN Change options', which a site may delegate well below administrator.
+	 *
+	 * @throws \RuntimeException When the last query failed.
+	 */
+	private static function throw_on_db_error() {
+		global $wpdb;
+
+		if ( empty( $wpdb->last_error ) ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+		error_log( 'NextGEN Gallery: a settings sweep query failed — ' . $wpdb->last_error );
+
+		throw new \RuntimeException( esc_html__( 'A database error interrupted the request.', 'nggallery' ) );
+	}
+
+	/**
+	 * Walks a mapper's table, hydrating SWEEP_BATCH rows at a time.
+	 *
+	 * Keyset paging on the primary key, so peak memory is one batch of models
+	 * rather than the whole table. Mapper caching is off for the duration:
+	 * cached batches accumulate every row in the object cache and undo this.
+	 *
+	 * Direction only matters to a capped sweep, and then only because rows whose file
+	 * is missing cluster: a failed import or upload leaves orphans at the newest end
+	 * (#1045, #1108), while migrations leave them at the oldest. A capped caller that
+	 * cares reads from both ends rather than betting on one. The uncapped callers read
+	 * every row either way.
+	 *
+	 * @param \Imagely\NGG\DataMapper\TableDriver $mapper   Mapper owning the table.
+	 * @param callable                            $callback Receives one model; return false to stop.
+	 * @param string                              $where    Extra predicate, placeholders only.
+	 * @param array                               $binds    Values for $where.
+	 * @param int                                 $max      Stop after this many rows; 0 for the whole table.
+	 * @param bool                                $newest   Walk highest key first instead of lowest.
+	 * @return int Rows visited.
+	 * @throws \RuntimeException When a page cannot be read.
+	 */
+	private static function sweep_rows( $mapper, callable $callback, $where = '', $binds = [], $max = 0, $newest = false ) {
+		global $wpdb;
+
+		$table   = esc_sql( $mapper->get_table_name() );
+		$key     = esc_sql( $mapper->get_primary_key_column() );
+		$cached  = $mapper->use_cache;
+		$edge    = $newest ? PHP_INT_MAX : 0;
+		$compare = $newest ? '<' : '>';
+		$order   = $newest ? 'DESC' : 'ASC';
+		$scanned = 0;
+		$visited = 0;
+
+		$mapper->use_cache = false;
+
+		$sql = "SELECT `{$key}` FROM `{$table}` WHERE `{$key}` {$compare} %d {$where} ORDER BY `{$key}` {$order} LIMIT %d";
+
+		try {
+			do {
+				$limit = $max > 0 ? min( self::SWEEP_BATCH, $max - $scanned ) : self::SWEEP_BATCH;
+
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber -- Identifiers escaped; placeholder count follows $where, and a mismatch is caught below.
+				$query = $wpdb->prepare( $sql, array_merge( [ $edge ], $binds, [ $limit ] ) );
+
+				// prepare() answers a placeholder/bind mismatch with null, and wpdb runs an empty
+				// query without setting last_error, so this would otherwise look like an empty page.
+				if ( empty( $query ) ) {
+					throw new \RuntimeException( esc_html__( 'A database error interrupted the request.', 'nggallery' ) );
+				}
+
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared -- $query is prepare()'s own output, checked above; keys are not worth caching.
+				$ids = $wpdb->get_col( $query );
+				self::throw_on_db_error();
+
+				$ids   = array_map( 'intval', (array) $ids );
+				$batch = count( $ids );
+
+				if ( ! $batch ) {
+					break;
+				}
+
+				$scanned += $batch;
+				$models   = $mapper->find_all( [ "{$key} IN %s", $ids ] );
+				self::throw_on_db_error();
+
+				foreach ( $models as $model ) {
+					++$visited;
+					if ( false === $callback( $model ) ) {
+						return $visited;
+					}
+				}
+
+				// Ids come back in scan order, so the last one is this page's edge.
+				$edge = (int) end( $ids );
+			} while ( $batch === $limit && ( 0 === $max || $scanned < $max ) );
+		} finally {
+			$mapper->use_cache = $cached;
+		}
+
+		return $visited;
 	}
 
 	/**
@@ -583,26 +844,26 @@ class SettingsREST {
 
 			// Allow either absolute URLs, absolute filesystem paths, or server-relative paths.
 			$is_url = is_string( $wm_path ) && preg_match( '/^https?:\/\//i', $wm_path );
-			$is_abs = is_string( $wm_path ) && ( 0 === strpos( $wm_path, '/' ) || preg_match( '/^[A-Za-z]:[\\\\\/]*/', $wm_path ) );
 			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf -- URL case has no file check.
 			if ( $is_url ) {
 				// URL will be downloaded later; no file_exists check here.
-			} elseif ( $is_abs ) {
-				// Absolute filesystem path must exist
-				if ( ! file_exists( $wm_path ) ) {
-					return new WP_Error(
-						'invalid_watermark_image',
-						__( 'Watermark image file does not exist.', 'nggallery' ),
-						[ 'status' => 400 ]
-					);
-				}
 			} else {
-				// Treat as server-relative path under ABSPATH
-				$full_path = ABSPATH . ltrim( $wm_path, '/' );
-				if ( ! file_exists( $full_path ) ) {
+				// SECURITY (#1084): contain before probing, with the same candidates and
+				// roots as settings save and the render sinks, so the preview accepts the
+				// same local paths a real thumbnail uses. Checking existence first let a
+				// settings user test whether any server path exists from the 400 message.
+				$fs           = \Imagely\NGG\Util\Filesystem::get_instance();
+				$content_path = $fs->join_paths( $fs->get_document_root( 'content' ), $wm_path );
+				// sanitize_watermark_option() also refuses non-http wrappers (phar://, …).
+				if ( '' === \Imagely\NGG\Util\Security::sanitize_watermark_option( 'wmPath', $wm_path ) ) {
+					return self::watermark_path_not_allowed();
+				}
+				// One message for "missing" and "outside the install": only in-root
+				// candidates are probed, so the answer never depends on an outside file.
+				if ( null === \Imagely\NGG\Util\Security::resolve_watermark_path( $wm_path, $content_path ) ) {
 					return new WP_Error(
 						'invalid_watermark_image',
-						__( 'Watermark image file does not exist.', 'nggallery' ),
+						__( 'Watermark image file does not exist inside the WordPress install.', 'nggallery' ),
 						[ 'status' => 400 ]
 					);
 				}
@@ -610,40 +871,72 @@ class SettingsREST {
 		}
 
 		try {
+			global $wpdb;
+
 			// Get NextGen managers
 			$mapper  = ImageMapper::get_instance();
 			$storage = StorageManager::get_instance();
 
-			// Find the first available NextGen image
-			$images = $mapper->find_all();
-
-			if ( empty( $images ) ) {
-				return new WP_Error(
-					'no_images_found',
-					__( 'No images found in NextGen Gallery. Please add images to a gallery first.', 'nggallery' ),
-					[ 'status' => 400 ]
-				);
-			}
-
+			// One sample image, found in bounded batches and within a bounded scan. find_all()
+			// loaded every row in the images table to pick a single image and exhausted memory
+			// on large libraries.
 			$original_image = null;
 
-			// Look for the first usable image
-			foreach ( $images as $image ) {
-				// Skip dynamic thumbnails and thumbs
-				if ( strpos( $image->filename, '-nggid' ) === false && strpos( $image->filename, 'thumbs-' ) !== 0 ) {
-					// Verify the image file actually exists
-					$image_path = $storage->get_image_abspath( $image );
-					if ( $image_path && file_exists( $image_path ) ) {
-						$original_image = $image;
-						break;
-					}
+			// Dynamic thumbnails and thumbs are excluded in SQL rather than skipped in PHP.
+			$take_first = function ( $image ) use ( $storage, &$original_image ) {
+				// Verify the image file actually exists
+				$image_path = $storage->get_image_abspath( $image );
+				if ( $image_path && file_exists( $image_path ) ) {
+					$original_image = $image;
+					return false;
+				}
+			};
+
+			// Only a library too big to walk needs the cap. A failed count reads as 0 and
+			// leaves the scan uncapped, which is the safe direction: slower, never wrong.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name comes from the mapper and is escaped.
+			$library = (int) $wpdb->get_var( 'SELECT COUNT(*) FROM `' . esc_sql( $mapper->get_table_name() ) . '`' );
+			$budget  = $library > self::PREVIEW_FULL_SCAN_MAX ? self::PREVIEW_SCAN_LIMIT : 0;
+
+			// Capped, rows with no file on disk cluster at one end or the other, so a single
+			// window can miss a healthy library. Read the oldest rows, then the newest; both
+			// ends have to be exhausted before the preview gives up. Uncapped, one pass is
+			// the whole table.
+			$candidates = 0;
+
+			foreach ( $budget > 0 ? [ false, true ] : [ false ] as $newest ) {
+				$candidates += self::sweep_rows(
+					$mapper,
+					$take_first,
+					'AND `filename` NOT LIKE %s AND `filename` NOT LIKE %s',
+					[ '%-nggid%', 'thumbs-%' ],
+					$budget,
+					$newest
+				);
+
+				if ( $original_image ) {
+					break;
 				}
 			}
 
 			if ( ! $original_image ) {
+				// An empty library and one whose files are all missing get different codes.
+				// count() reads through the mapper cache, so ask the unfiltered sweep instead.
+				$has_any = $candidates > 0 || self::sweep_rows(
+					$mapper,
+					function () {
+						return false;
+					},
+					'',
+					[],
+					1
+				) > 0;
+
 				return new WP_Error(
-					'no_usable_images',
-					__( 'No usable images found for preview generation.', 'nggallery' ),
+					$has_any ? 'no_usable_images' : 'no_images_found',
+					$has_any
+						? __( 'No usable images found for preview generation.', 'nggallery' )
+						: __( 'No images found in NextGen Gallery. Please add images to a gallery first.', 'nggallery' ),
 					[ 'status' => 400 ]
 				);
 			}
@@ -656,6 +949,18 @@ class SettingsREST {
 			if ( 'image' === ( $watermark_options['wmType'] ?? '' ) && ! empty( $final_wm_path ) ) {
 				$is_url = is_string( $final_wm_path ) && preg_match( '/^https?:\/\//i', $final_wm_path );
 				$is_abs = is_string( $final_wm_path ) && ( 0 === strpos( $final_wm_path, '/' ) || preg_match( '/^[A-Za-z]:[\\\\\/]*/', $final_wm_path ) );
+				if ( $is_url ) {
+					// A URL on this site is read from disk, exactly as Set Watermark reads it
+					// (Security::load_watermark_image()), so the preview neither downloads
+					// it nor refuses it because the site's own host resolves to a private
+					// address (#1104). It then takes the local-path checks below.
+					$own_site_file = \Imagely\NGG\Util\Security::watermark_url_to_local_path( $final_wm_path );
+					if ( null !== $own_site_file ) {
+						$final_wm_path = $own_site_file;
+						$is_url        = false;
+						$is_abs        = true;
+					}
+				}
 				if ( $is_url ) {
 					// Download remote watermark image to uploads folder for preview use
 					$upload_dir  = wp_upload_dir();
@@ -773,13 +1078,20 @@ class SettingsREST {
 					$tmp_download_path = $tmp_path;
 				} elseif ( $is_abs ) {
 					// Path-traversal hardening: resolve symlinks/.. segments and constrain absolute paths to ABSPATH or the uploads dir only.
-					$real_wm_path  = realpath( $final_wm_path ); // realpath normalizes ../ and resolves symlinks before allowlist check.
+					// SECURITY (#1084): realpath() the contained candidate, never the raw value: on
+					// Windows a raw UNC path would open SMB to that host before the checks below.
+					$fs            = \Imagely\NGG\Util\Filesystem::get_instance();
+					$resolved_path = \Imagely\NGG\Util\Security::resolve_watermark_path( $final_wm_path, $fs->join_paths( $fs->get_document_root( 'content' ), $final_wm_path ) );
+					$real_wm_path  = null === $resolved_path ? false : realpath( $resolved_path ); // realpath normalizes ../ and resolves symlinks before allowlist check.
 					$upload_dir    = wp_upload_dir();
 					$real_abspath  = realpath( ABSPATH ); // Normalize ABSPATH too so string prefix match is apples-to-apples.
 					$real_uploads  = isset( $upload_dir['basedir'] ) ? realpath( $upload_dir['basedir'] ) : false; // Uploads dir may live outside ABSPATH on some installs.
 					$under_abspath = ( $real_wm_path && $real_abspath && 0 === strpos( trailingslashit( $real_wm_path ), trailingslashit( $real_abspath ) ) ); // trailingslashit prevents partial dir-name match (e.g. /var/www/html_secret matching /var/www/html).
 					$under_uploads = ( $real_wm_path && $real_uploads && 0 === strpos( trailingslashit( $real_wm_path ), trailingslashit( $real_uploads ) ) ); // Allow uploads dir when outside ABSPATH.
-					if ( ! $real_wm_path || ( ! $under_abspath && ! $under_uploads ) ) {
+					// wp-content may be relocated outside ABSPATH; the render sinks accept it too.
+					$real_content  = defined( 'WP_CONTENT_DIR' ) ? realpath( WP_CONTENT_DIR ) : false;
+					$under_content = ( $real_wm_path && $real_content && 0 === strpos( trailingslashit( $real_wm_path ), trailingslashit( $real_content ) ) );
+					if ( ! $real_wm_path || ( ! $under_abspath && ! $under_uploads && ! $under_content ) ) {
 						// Reject arbitrary filesystem reads (e.g. /etc/passwd) via watermark path — prior code copied any readable file into a public previews dir.
 						return new WP_Error(
 							'invalid_watermark_image',
@@ -844,7 +1156,7 @@ class SettingsREST {
 				'wmXpos'    => intval( $watermark_options['wmXpos'] ?? 0 ),
 				'wmYpos'    => intval( $watermark_options['wmYpos'] ?? 0 ),
 				'wmPath'    => sanitize_text_field( $final_wm_path ),
-				'wmFont'    => sanitize_text_field( $watermark_options['wmFont'] ?? 'arial.ttf' ),
+				'wmFont'    => \Imagely\NGG\Util\Security::sanitize_watermark_option( 'wmFont', $watermark_options['wmFont'] ?? 'arial.ttf' ),
 				'wmSize'    => intval( $watermark_options['wmSize'] ?? 30 ),
 				'wmColor'   => sanitize_text_field( $watermark_options['wmColor'] ?? 'ffffff' ),
 				'wmOpaque'  => intval( $watermark_options['wmOpaque'] ?? 33 ),
@@ -919,6 +1231,22 @@ class SettingsREST {
 			);
 		}
 
+		// Non-admins must not wipe admin-only keys: refuse ecommerce, downgrade all, restore after.
+		$preserved = [];
+		if ( ! current_user_can( 'manage_options' ) ) {
+			if ( 'ecommerce' === $settings_type ) {
+				return new WP_Error(
+					'settings_admin_only',
+					__( 'Payment gateway and license settings can only be changed by a site administrator.', 'nggallery' ),
+					[ 'status' => 403 ]
+				);
+			}
+			if ( 'all' === $settings_type ) {
+				$settings_type = 'non_ecommerce';
+			}
+			$preserved = array_intersect_key( Settings::get_instance()->to_array(), array_flip( self::admin_only_setting_keys() ) );
+		}
+
 		try {
 			global $wpdb;
 
@@ -947,6 +1275,14 @@ class SettingsREST {
 						__( 'Invalid settings type. Must be "all", "non_ecommerce", or "ecommerce".', 'nggallery' ),
 						[ 'status' => 400 ]
 					);
+			}
+
+			if ( $preserved ) {
+				$settings = Settings::get_instance();
+				foreach ( $preserved as $key => $value ) {
+					$settings->set( $key, $value );
+				}
+				$settings->save();
 			}
 
 			return new WP_REST_Response(
@@ -1117,13 +1453,13 @@ class SettingsREST {
 			$storage_manager = StorageManager::get_instance();
 			$gallery_mapper  = GalleryMapper::get_instance();
 
-			// Get all galleries
-			$galleries = $gallery_mapper->find_all();
-
-			// Clear cache for each gallery
-			foreach ( $galleries as $gallery ) {
-				$storage_manager->flush_cache( $gallery );
-			}
+			// Clear cache gallery by gallery, one bounded batch at a time.
+			self::sweep_rows(
+				$gallery_mapper,
+				function ( $gallery ) use ( $storage_manager ) {
+					$storage_manager->flush_cache( $gallery );
+				}
+			);
 
 			// Clear WordPress transients
 			global $wpdb;
@@ -1162,10 +1498,27 @@ class SettingsREST {
 			$image_mapper    = ImageMapper::get_instance();
 			$storage_manager = StorageManager::get_instance();
 
-			// Get all images
-			$images = $image_mapper->find_all();
+			$success_count = 0;
+			$error_count   = 0;
 
-			if ( empty( $images ) ) {
+			// Regenerate one bounded batch at a time; find_all() held every image model in
+			// memory for the whole sweep.
+			$total_count = self::sweep_rows(
+				$image_mapper,
+				function ( $image ) use ( $storage_manager, &$success_count, &$error_count ) {
+					try {
+						if ( $storage_manager->generate_thumbnail( $image ) ) {
+							++$success_count;
+						} else {
+							++$error_count;
+						}
+					} catch ( \Exception $e ) {
+						++$error_count;
+					}
+				}
+			);
+
+			if ( 0 === $total_count ) {
 				return new WP_REST_Response(
 					[
 						'success' => true,
@@ -1175,26 +1528,6 @@ class SettingsREST {
 					200
 				);
 			}
-
-			$success_count = 0;
-			$error_count   = 0;
-
-			// Regenerate thumbnails for each image
-			foreach ( $images as $image ) {
-				try {
-					$result = $storage_manager->generate_thumbnail( $image );
-					if ( $result ) {
-						++$success_count;
-					} else {
-						++$error_count;
-					}
-				} catch ( \Exception $e ) {
-					++$error_count;
-					continue;
-				}
-			}
-
-			$total_count = count( $images );
 
 			if ( $error_count > 0 ) {
 				return new WP_REST_Response(

@@ -43,17 +43,20 @@ jQuery(document).ready(function ($) {
             },
             beforeSend: function () {
                 $('#advgb-loading-screen')
-                    .append('<div id="advgb-config-saved-text">Saving... Do not close this window!</div>')
+                    .append($('<div id="advgb-config-saved-text"></div>').text(advgbConfigStatusText('saving', 'Saving... Do not close this window!')))
                     .show();
+                $('#advgb-config-status').text(advgbConfigStatusText('saving', 'Saving... Do not close this window!'));
             },
             success: function () {
-                $('#advgb-config-saved-text').text('Saved successfully!');
+                $('#advgb-config-saved-text').text(advgbConfigStatusText('saved', 'Saved successfully!'));
+                $('#advgb-config-status').text(advgbConfigStatusText('saved', 'Saved successfully!'));
                 setTimeout(function () {
                     $('#advgb-loading-screen').hide();
                     $('#advgb-config-saved-text').remove();
                 }, 2000);
             },
             error: function ( jqxhr, textStatus, error ) {
+                $('#advgb-config-status').text(advgbConfigStatusText('error', 'Error: changes could not be saved.'));
                 alert(textStatus + " : " + error + ' - ' + jqxhr.responseJSON);
                 $('#advgb-loading-screen').hide();
                 $('#advgb-config-saved-text').remove();
@@ -61,3 +64,16 @@ jQuery(document).ready(function ($) {
         });
     });
 });
+
+/**
+ * Translated status text printed as data attributes on #advgb-config-status (role="status").
+ *
+ * @param {string} key      data attribute key: saving, saved or error
+ * @param {string} fallback English fallback
+ *
+ * @return {string}
+ */
+function advgbConfigStatusText(key, fallback) {
+    var text = jQuery('#advgb-config-status').attr('data-' + key);
+    return text ? text : fallback;
+}

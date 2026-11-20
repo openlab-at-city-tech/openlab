@@ -969,7 +969,7 @@ function cuny_member_profile_header() {
 						// We store the department privacy setting in index -78.
 
 						$hidden_fields_for_user = bp_xprofile_get_hidden_fields_for_user( bp_displayed_user_id() );
-						$show_department_field  = ! in_array( -78, $hidden_fields_for_user, true );
+						$show_department_field  = ! in_array( openlab_get_department_visibility( bp_displayed_user_id() ), bp_xprofile_get_hidden_field_types_for_user( bp_displayed_user_id(), bp_loggedin_user_id() ), true );
 
 						// Nuke the department value to ensure it doesn't show.
 						if ( ! $show_department_field ) {
@@ -2460,6 +2460,11 @@ function openlab_privacy_settings_save_cb() {
 			continue;
 		}
 
+		if ( -78 === $profile_privacy_field_id ) {
+			openlab_set_department_visibility( bp_displayed_user_id(), $visibility );
+			continue;
+		}
+
 		xprofile_set_field_visibility_level( $profile_privacy_field_id, bp_displayed_user_id(), $visibility );
 	}
 
@@ -2473,6 +2478,68 @@ function openlab_privacy_settings_save_cb() {
 	exit;
 }
 add_action( 'bp_actions', 'openlab_privacy_settings_save_cb' );
+
+/**
+ * Gets a member's Department (Major Program of Study) visibility level.
+ *
+ * The level is stored under key -78 in the bp_xprofile_visibility_levels user meta. BuddyPress
+ * 14.5 casts field IDs with absint() in its visibility functions, so do not read it through them.
+ *
+ * @param int $user_id User ID.
+ * @return string Visibility level. 'public' when the member has not chosen one.
+ */
+function openlab_get_department_visibility( $user_id ) {
+	$levels = bp_get_user_meta( $user_id, 'bp_xprofile_visibility_levels', true );
+
+	return is_array( $levels ) && ! empty( $levels[-78] ) ? $levels[-78] : 'public';
+}
+
+/**
+ * Sets a member's Department (Major Program of Study) visibility level.
+ *
+ * @param int    $user_id User ID.
+ * @param string $level   A level from bp_xprofile_get_visibility_levels().
+ * @return bool
+ */
+function openlab_set_department_visibility( $user_id, $level ) {
+	if ( ! array_key_exists( $level, bp_xprofile_get_visibility_levels() ) ) {
+		return false;
+	}
+
+	$levels = bp_get_user_meta( $user_id, 'bp_xprofile_visibility_levels', true );
+	if ( ! is_array( $levels ) ) {
+		$levels = [];
+	}
+
+	$levels[-78] = $level;
+
+	return (bool) bp_update_user_meta( $user_id, 'bp_xprofile_visibility_levels', $levels );
+}
+
+/**
+ * Keeps profile field 78 visible when only the Department setting hides it.
+ *
+ * BuddyPress 14.5 casts the Department key -78 to 78 when it lists a member's hidden fields, and
+ * 78 is a real profile field. Field 78 stays hidden only when its own visibility hides it.
+ *
+ * @param int[] $hidden_fields     Hidden field IDs.
+ * @param int   $displayed_user_id Displayed user ID.
+ * @param int   $current_user_id   Viewing user ID.
+ * @return int[]
+ */
+function openlab_unhide_field_78_hidden_by_department( $hidden_fields, $displayed_user_id, $current_user_id ) {
+	if ( ! in_array( 78, array_map( 'intval', (array) $hidden_fields ), true ) ) {
+		return $hidden_fields;
+	}
+
+	$hidden_levels = bp_xprofile_get_hidden_field_types_for_user( $displayed_user_id, $current_user_id );
+	if ( in_array( xprofile_get_field_visibility_level( 78, $displayed_user_id ), $hidden_levels, true ) ) {
+		return $hidden_fields;
+	}
+
+	return array_values( array_diff( array_map( 'intval', (array) $hidden_fields ), [ 78 ] ) );
+}
+add_filter( 'bp_xprofile_get_hidden_fields_for_user', 'openlab_unhide_field_78_hidden_by_department', 10, 3 );
 
 /**
  * Gets the submenu items for 'My Settings'.

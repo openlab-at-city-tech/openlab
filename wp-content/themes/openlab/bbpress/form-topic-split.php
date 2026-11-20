@@ -9,7 +9,7 @@
 
 	<?php bbp_breadcrumb(); ?>
 
-	<?php if ( is_user_logged_in() && current_user_can( 'edit_topic', bbp_get_topic_id() ) ) : ?>
+	<?php if ( bbp_current_user_can_access_topic_moderation() ) : ?>
 
 		<div id="split-topic-<?php bbp_topic_id(); ?>" class="bbp-topic-split">
 
@@ -35,7 +35,7 @@
 							<div>
 								<input name="bbp_topic_split_option" id="bbp_topic_split_option_reply" type="radio" checked="checked" value="reply" tabindex="<?php bbp_tab_index(); ?>" />
 								<label for="bbp_topic_split_option_reply"><?php printf( __( 'New topic in <strong>%s</strong> titled:', 'bbpress' ), bbp_get_forum_title( bbp_get_topic_forum_id( bbp_get_topic_id() ) ) ); ?></label>
-								<input type="text" id="bbp_topic_split_destination_title" value="<?php printf( __( 'Split: %s', 'bbpress' ), bbp_get_topic_title() ); ?>" tabindex="<?php bbp_tab_index(); ?>" size="35" name="bbp_topic_split_destination_title" />
+								<input type="text" id="bbp_topic_split_destination_title" value="<?php printf( esc_attr__( 'Split: %s', 'bbpress' ), esc_attr( bbp_get_topic_title() ) ); ?>" tabindex="<?php bbp_tab_index(); ?>" size="35" name="bbp_topic_split_destination_title" />
 							</div>
 
 							<?php

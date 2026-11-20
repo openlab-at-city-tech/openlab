@@ -90,6 +90,9 @@ function su_image_resize( $url, $width = null, $height = null, $crop = true, $re
 			$editor->crop( $src_x, $src_y, $src_w, $src_h, $dest_width, $dest_height );
 			// Now let's save the image
 			$saved = $editor->save( $dest_file_name );
+			if ( is_wp_error( $saved ) ) {
+				return $saved;
+			}
 			// Get resized image information
 			$resized_url    = str_replace( basename( $url ), basename( $saved['path'] ), $url );
 			$resized_width  = $saved['width'];

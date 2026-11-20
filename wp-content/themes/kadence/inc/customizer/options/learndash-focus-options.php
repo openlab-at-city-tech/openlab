@@ -10,56 +10,56 @@ namespace Kadence;
 use Kadence\Theme_Customizer;
 use function Kadence\kadence;
 
-$settings = array(
-	'sfwd-focus_layout_tabs' => array(
+$settings = [
+	'sfwd-focus_layout_tabs'        => [
 		'control_type' => 'kadence_tab_control',
 		'section'      => 'sfwd_topic_layout',
 		'settings'     => false,
 		'priority'     => 1,
-		'input_attrs'  => array(
-			'general' => array(
+		'input_attrs'  => [
+			'general' => [
 				'label'  => __( 'General', 'kadence' ),
 				'target' => 'sfwd_topic_layout',
-			),
-			'design' => array(
+			],
+			'design'  => [
 				'label'  => __( 'Design', 'kadence' ),
 				'target' => 'sfwd_topic_layout_design',
-			),
-			'active' => 'general',
-		),
-	),
-	'sfwd-focus_layout_tabs_design' => array(
+			],
+			'active'  => 'general',
+		],
+	],
+	'sfwd-focus_layout_tabs_design' => [
 		'control_type' => 'kadence_tab_control',
 		'section'      => 'sfwd_topic_layout_design',
 		'settings'     => false,
 		'priority'     => 1,
-		'input_attrs'  => array(
-			'general' => array(
+		'input_attrs'  => [
+			'general' => [
 				'label'  => __( 'General', 'kadence' ),
 				'target' => 'sfwd_topic_layout',
-			),
-			'design' => array(
+			],
+			'design'  => [
 				'label'  => __( 'Design', 'kadence' ),
 				'target' => 'sfwd_topic_layout_design',
-			),
-			'active' => 'design',
-		),
-	),
-	'info_sfwd-focus_title' => array(
+			],
+			'active'  => 'design',
+		],
+	],
+	'info_sfwd-focus_title'         => [
 		'control_type' => 'kadence_title_control',
 		'section'      => 'sfwd_topic_layout',
 		'priority'     => 2,
 		'label'        => esc_html__( 'Focus Title', 'kadence' ),
 		'settings'     => false,
-	),
-	'info_sfwd-focus_title_design' => array(
+	],
+	'info_sfwd-focus_title_design'  => [
 		'control_type' => 'kadence_title_control',
 		'section'      => 'sfwd_topic_layout_design',
 		'priority'     => 2,
 		'label'        => esc_html__( 'Focus Title', 'kadence' ),
 		'settings'     => false,
-	),
-	'sfwd-focus_title' => array(
+	],
+	'sfwd-focus_title'              => [
 		'control_type' => 'kadence_switch_control',
 		'sanitize'     => 'kadence_sanitize_toggle',
 		'section'      => 'sfwd_topic_layout',
@@ -67,33 +67,32 @@ $settings = array(
 		'default'      => kadence()->default( 'sfwd-focus_title' ),
 		'label'        => esc_html__( 'Show Title in Focus Mode?', 'kadence' ),
 		'transport'    => 'refresh',
-	),
-	'sfwd-focus_title_font' => array(
+	],
+	'sfwd-focus_title_font'         => [
 		'control_type' => 'kadence_typography_control',
 		'section'      => 'sfwd_topic_layout_design',
 		'label'        => esc_html__( 'Topic Title Font', 'kadence' ),
 		'default'      => kadence()->default( 'sfwd-focus_title_font' ),
-		'live_method'     => array(
-			array(
+		'live_method'  => [
+			[
 				'type'     => 'css_typography',
 				'selector' => '.sfwd-focus-title h1',
 				'property' => 'font',
 				'key'      => 'typography',
-			),
-		),
-		'context'      => array(
-			array(
-				'setting'    => 'sfwd-focus_title',
-				'operator'   => '=',
-				'value'      => true,
-			),
-		),
-		'input_attrs'  => array(
+			],
+		],
+		'context'      => [
+			[
+				'setting'  => 'sfwd-focus_title',
+				'operator' => '=',
+				'value'    => true,
+			],
+		],
+		'input_attrs'  => [
 			'id'             => 'sfwd-focus_title_font',
 			'headingInherit' => true,
-		),
-	),
-);
+		],
+	],
+];
 
 Theme_Customizer::add_settings( $settings );
-

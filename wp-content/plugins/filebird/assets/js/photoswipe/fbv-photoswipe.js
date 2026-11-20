@@ -1,6 +1,14 @@
 "use strict";
 
 var filebirdGallery = {
+  escapeHtml: function (str) {
+    return String(str == null ? "" : str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  },
   template: `
     <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="pswp__bg"></div>
@@ -65,7 +73,7 @@ var filebirdGallery = {
         src: imgEl.getAttribute("src"),
         w: parseInt(imgEl.getAttribute("width"), 10),
         h: parseInt(imgEl.getAttribute("height"), 10),
-        title: imgEl.getAttribute("alt") + ' <div class="fbv-gallery-caption">' + figcaptionEl.innerHTML + '</div>',
+        title: filebirdGallery.escapeHtml(imgEl.getAttribute("alt")) + ' <div class="fbv-gallery-caption">' + figcaptionEl.innerHTML + '</div>',
         msrc: imgEl.getAttribute("src"),
         el: figureEl,
       };

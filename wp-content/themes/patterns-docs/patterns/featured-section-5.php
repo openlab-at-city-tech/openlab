@@ -2,7 +2,7 @@
 /**
  * Title: Featured Section 5
  * Slug: patterns-docs/featured-section-5
- * Categories: featured, call-to-actions
+ * Categories: featured, call-to-action
  * Description: A layout with an image in the left column and a title, content, and Card 2 pattern in the right column.
  *
  * @package    Patterns_Docs

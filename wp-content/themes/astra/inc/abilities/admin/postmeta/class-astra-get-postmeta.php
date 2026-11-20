@@ -141,6 +141,7 @@ class Astra_Get_Postmeta extends Astra_Abstract_Ability {
 
 		// Get post ID - either from post_id or by looking up post_title.
 		$post_id = null;
+		$post    = null;
 
 		if ( isset( $args['post_id'] ) ) {
 			$post_id = absint( $args['post_id'] );
@@ -171,7 +172,7 @@ class Astra_Get_Postmeta extends Astra_Abstract_Ability {
 				$post = $query->have_posts() ? $query->posts[0] : null;
 			}
 
-			if ( ! $post instanceof \WP_Post ) {
+			if ( ! $post instanceof \WP_Post || ! current_user_can( 'read_post', $post->ID ) ) {
 				return Astra_Abilities_Response::error(
 					__( 'Post not found.', 'astra' ),
 					/* translators: %s: post title */
@@ -189,14 +190,17 @@ class Astra_Get_Postmeta extends Astra_Abstract_Ability {
 			);
 		}
 
-		// Verify post exists.
-		$post = get_post( $post_id );
-		if ( ! $post ) {
-			return Astra_Abilities_Response::error(
-				__( 'Post not found.', 'astra' ),
-				/* translators: %d: post ID */
-				sprintf( __( 'Post with ID %d does not exist.', 'astra' ), $post_id )
-			);
+		// Verify post exists and the current user can read it.
+		if ( ! $post instanceof \WP_Post ) {
+			$post = get_post( $post_id );
+
+			if ( ! $post || 'revision' === $post->post_type || ! current_user_can( 'read_post', $post_id ) ) {
+				return Astra_Abilities_Response::error(
+					__( 'Post not found.', 'astra' ),
+					/* translators: %d: post ID */
+					sprintf( __( 'Post with ID %d does not exist.', 'astra' ), $post_id )
+				);
+			}
 		}
 
 		// Get meta box instance.

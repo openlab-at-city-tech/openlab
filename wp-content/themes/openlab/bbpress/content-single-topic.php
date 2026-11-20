@@ -11,7 +11,7 @@
 
 	<?php do_action( 'bbp_template_before_single_topic' ); ?>
 
-	<?php if ( post_password_required() ) : ?>
+	<?php if ( post_password_required( bbp_get_topic_id() ) ) : ?>
 
 		<?php bbp_get_template_part( 'form', 'protected' ); ?>
 

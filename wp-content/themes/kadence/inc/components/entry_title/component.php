@@ -9,7 +9,6 @@ namespace Kadence\Entry_Title;
 
 use Kadence\Component_Interface;
 use Kadence\Templating_Component_Interface;
-use function add_action;
 use function apply_filters;
 use function Kadence\kadence;
 use function get_template_part;
@@ -27,7 +26,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'entry_title';
 	}
 
@@ -35,7 +34,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		//add_filter( 'kadence_title_elements_default', array( $this, 'maybe_add_defaults' ), 10, 2 );
+		// add_filter( 'kadence_title_elements_default', array( $this, 'maybe_add_defaults' ), 10, 2 );
 	}
 	/**
 	 * Gets template tags to expose as methods on the Template_Tags class instance, accessible through `kadence()`.
@@ -44,10 +43,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *               a callable or an array with key 'callable'. This approach is used to reserve the possibility of
 	 *               adding support for further arguments in the future.
 	 */
-	public function template_tags() : array {
-		return array(
-			'render_title' => array( $this, 'render_title' ),
-		);
+	public function template_tags(): array {
+		return [
+			'render_title' => [ $this, 'render_title' ],
+		];
 	}
 
 	/**

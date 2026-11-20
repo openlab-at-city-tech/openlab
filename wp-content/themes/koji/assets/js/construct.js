@@ -118,12 +118,14 @@ koji.toggles = {
 				kojiToggleAttribute( $( this ), 'aria-pressed' );
 			} );
 
-			// Check whether to set focus
-			if ( $toggle.is( '.active' ) && $toggle.data( 'set-focus' ) ) {
-				var $focusElement = $( $toggle.data( 'set-focus' ) );
+			// Check whether to set focus. When opening, focus the element set on the toggle. When closing, only 
+			// move focus if the element is outside of the target (like the search toggle, when the search is closed).
+			if ( $toggle.data( 'set-focus' ) ) {
+				var $focusElement = $( $toggle.data( 'set-focus' ) ),
+					isClosing     = ! $target.hasClass( classToToggle );
 
-				if ( $focusElement.length ) {
-					$focusElement.focus();
+				if ( $focusElement.length && ( $toggle.is( '.active' ) || ( isClosing && ! $.contains( $target[0], $focusElement[0] ) ) ) ) {
+					$focusElement.trigger( 'focus' );
 				}
 			}
 
@@ -198,7 +200,7 @@ koji.searchModal = {
 
 	closeOnEscape: function() {
 
-		$( document ).keyup( function( e ) {
+		$( document ).on( 'keyup', function( e ) {
 			if ( e.keyCode == 27 && $( '.search-overlay' ).hasClass( 'active' ) ) {
 				$( '.search-untoggle' ).trigger( 'click' );
 			}
@@ -342,9 +344,13 @@ koji.mobileMenu = {
 
 	focusLoop: function() {
 		$( '*' ).on( 'focus', function() {
-			if ( $( '.mobile-menu-wrapper' ).hasClass( 'active' ) ) {
+			if ( $( '.cover-modal' ).hasClass( 'active' ) ) {
 				if ( $( this ).parents( '#site-content' ).length ) {
-					$( '.nav-toggle' ).focus();
+					if ( $( '.search-overlay' ).hasClass( 'active' ) ) {
+						$( '.search-untoggle' ).trigger( 'focus' );
+					} else if ( $( '.mobile-menu-wrapper' ).hasClass( 'active' ) ) {
+						$( '.nav-toggle' ).trigger( 'focus' );
+					}
 				}
 			}
 		} );
@@ -380,7 +386,7 @@ koji.intrinsicRatioEmbeds = {
 
 		resizeVideo( vidSelector );
 
-		$( window ).resize( function() {
+		$( window ).on( 'resize', function() {
 			resizeVideo( vidSelector );
 		} );
 
@@ -433,7 +439,7 @@ koji.smoothScroll = {
 		.not( '[href="#"]' )
 		.not( '[href="#0"]' )
 		.not( '.skip-link' )
-		.click( function( event ) {
+		.on( 'click', function( event ) {
 			// On-page links
 			if ( location.pathname.replace( /^\//, '' ) == this.pathname.replace( /^\//, '' ) && location.hostname == this.hostname ) {
 				// Figure out element to scroll to
@@ -685,7 +691,8 @@ koji.loadMore = {
 			type: 'post',
 			data: {
 				action: 'koji_ajax_load_more',
-				json_data: json_query_args
+				json_data: json_query_args,
+				nonce: koji_ajax_load_more.nonce
 			},
 			success: function( result ) {
 
@@ -735,7 +742,7 @@ koji.loadMore = {
 						}
 
 						// Set the focus to the first item of the loaded posts
-						$( '.post-from-page-' + query_args.paged + ':first .preview-title a' ).focus();
+						$( '.post-from-page-' + query_args.paged + ':first .preview-title a' ).trigger( 'focus' );
 
 					} );
 

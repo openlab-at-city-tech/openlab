@@ -1,7 +1,7 @@
 === FSE Freelancer Portfolio ===
 Contributors: cretathemes
 Requires at least: 5.9
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -281,6 +281,30 @@ FSE Freelancer Portfolio is a visually appealing and feature-rich WordPress them
 = 3.1.8 (Released: April, 2026) =
 * Resolved minor issues.
 
+= 3.1.9 (Released: May, 2026) =
+* Resolved minor bugs.
+
+
+= 3.2.0 =
+* Improved Theme Structure.
+
+= 3.2.1 =
+* Updated Theme Functions.
+
+= 3.2.2 =
+* Refined Layout Sections.
+
+= 3.2.3 =
+* Responsive Design Improvements.
+
+= 3.2.4 =
+* Performance and Stability.
+
+= 3.2.5 =
+* Refined Layout Sections.
+
+= 3.2.6 =
+* Framework Optimization.
 == Copyright ==
 
 FSE Freelancer Portfolio WordPress Theme, 2012-2023
@@ -360,5 +384,6 @@ License URL: https://pxhere.com/en/license
 Source: https://pxhere.com/en/photo/753019
 
 License: CC0 1.0 Universal (CC0 1.0)
+Stable tag: 3.2.6
 License URL: https://pxhere.com/en/license
 Source: https://pxhere.com/en/photo/759001

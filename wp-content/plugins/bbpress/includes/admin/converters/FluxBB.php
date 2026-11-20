@@ -10,11 +10,17 @@
 /**
  * Implementation of FluxBB Forum converter.
  *
- * @since 2.5.0 bbPress (r5138)
+ * @since 2.5.0 bbPress (r5139)
  *
  * @link Codex Docs https://codex.bbpress.org/import-forums/fluxbb
  */
 class FluxBB extends BBP_Converter_Base {
+
+	/**
+	 * @var bool Whether source-dependent fields have been set up.
+	 * @since 2.6.18 bbPress (r7588)
+	 */
+	private $source_fields_setup = false;
 
 	/**
 	 * Main Constructor
@@ -49,10 +55,11 @@ class FluxBB extends BBP_Converter_Base {
 
 		// Forum reply count (Stored in postmeta)
 		$this->field_map[] = array(
-			'from_tablename' => 'forums',
-			'from_fieldname' => 'num_posts',
-			'to_type'        => 'forum',
-			'to_fieldname'   => '_bbp_reply_count'
+			'from_tablename'  => 'forums',
+			'from_fieldname'  => 'num_posts',
+			'to_type'         => 'forum',
+			'to_fieldname'    => '_bbp_reply_count',
+			'callback_method' => 'callback_forum_reply_count'
 		);
 
 		// Forum total topic count (Stored in postmeta)
@@ -65,10 +72,11 @@ class FluxBB extends BBP_Converter_Base {
 
 		// Forum total reply count (Stored in postmeta)
 		$this->field_map[] = array(
-			'from_tablename' => 'forums',
-			'from_fieldname' => 'num_posts',
-			'to_type'        => 'forum',
-			'to_fieldname'   => '_bbp_total_reply_count'
+			'from_tablename'  => 'forums',
+			'from_fieldname'  => 'num_posts',
+			'to_type'         => 'forum',
+			'to_fieldname'    => '_bbp_total_reply_count',
+			'callback_method' => 'callback_forum_reply_count'
 		);
 
 		// Forum title.
@@ -123,22 +131,22 @@ class FluxBB extends BBP_Converter_Base {
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date_gmt',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified_gmt',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 
 		/** Forum Subscriptions Section ***************************************/
@@ -352,12 +360,16 @@ class FluxBB extends BBP_Converter_Base {
 		);
 
 		// Reply parent forum id (If no parent, then 0, Stored in postmeta)
+		// Note: This join also excludes each topic's first post from the replies.
 		$this->field_map[] = array(
-			'from_tablename'  => 'posts',
-			'from_fieldname'  => 'topic_id',
+			'from_tablename'  => 'topics',
+			'from_fieldname'  => 'forum_id',
+			'join_tablename'  => 'posts',
+			'join_type'       => 'INNER',
+			'join_expression' => 'ON topics.id = posts.topic_id WHERE topics.first_post_id != posts.id',
 			'to_type'         => 'reply',
 			'to_fieldname'    => '_bbp_forum_id',
-			'callback_method' => 'callback_topicid_to_forumid'
+			'callback_method' => 'callback_forumid'
 		);
 
 		// Reply parent topic id (If no parent, then 0, Stored in postmeta)
@@ -453,17 +465,9 @@ class FluxBB extends BBP_Converter_Base {
 			'callback_method' => 'callback_savepass'
 		);
 
-		// Store old user salt (This is only used for the SELECT row info for the above password save)
-//		$this->field_map[] = array(
-//			'from_tablename' => 'users',
-//			'from_fieldname' => 'salt',
-//			'to_type'        => 'user',
-//			'to_fieldname'   => ''
-//		);
-
 		// User password verify class (Stored in usermeta for verifying password)
 		$this->field_map[] = array(
-			'to_type'      => 'users',
+			'to_type'      => 'user',
 			'to_fieldname' => '_bbp_class',
 			'default'      => 'FluxBB'
 		);
@@ -581,7 +585,6 @@ class FluxBB extends BBP_Converter_Base {
 			'to_type'        => 'user',
 			'to_fieldname'   => '_bbp_fluxbb_user_admin_note'
 		);
-
 	}
 
 	/**
@@ -593,12 +596,52 @@ class FluxBB extends BBP_Converter_Base {
 	}
 
 	/**
-	 * This method is to save the salt and password together.  That
-	 * way when we authenticate it we can get it out of the database
-	 * as one value. Array values are auto sanitized by WordPress.
+	 * Setup the optional legacy salt field after connecting to the source.
+	 *
+	 * @since 2.6.18 bbPress (r7588)
+	 */
+	protected function setup_source_fields() {
+		if ( $this->source_fields_setup ) {
+			return;
+		}
+
+		$this->source_fields_setup = true;
+
+		if ( $this->source_has_salt() ) {
+			$this->field_map[] = array(
+				'from_tablename' => 'users',
+				'from_fieldname' => 'salt',
+				'to_type'        => 'user',
+				'to_fieldname'   => ''
+			);
+		}
+	}
+
+	/**
+	 * Check whether the source users table retains the legacy FluxBB salt field.
+	 *
+	 * @since 2.6.18 bbPress (r7538)
+	 *
+	 * @return bool True when the salt field exists, false otherwise.
+	 */
+	private function source_has_salt() {
+		if ( empty( $this->opdb ) ) {
+			return false;
+		}
+
+		return (bool) $this->opdb->get_var( "SHOW COLUMNS FROM {$this->opdb->prefix}users LIKE 'salt'" );
+	}
+
+	/**
+	 * Save the salt and password together. Pre-slash the salt because WordPress
+	 * removes one layer of slashes when storing user metadata.
 	 */
 	public function callback_savepass( $field, $row ) {
-		$pass_array = array( 'hash' => $field, 'salt' => $row['salt'] );
+		$pass_array = array(
+			'hash' => $field,
+			'salt' => isset( $row['salt'] ) ? wp_slash( (string) $row['salt'] ) : ''
+		);
+
 		return $pass_array;
 	}
 
@@ -607,8 +650,38 @@ class FluxBB extends BBP_Converter_Base {
 	 * to a pass the user has typed in.
 	 */
 	public function authenticate_pass( $password, $serialized_pass ) {
-		$pass_array = unserialize( $serialized_pass );
-		return ( $pass_array['hash'] == md5( md5( $password ). $pass_array['salt'] ) );
+
+		// Unserialize the password, with safeguards
+		$pass_array = $this->unserialize_pass( $serialized_pass );
+
+		// Bail if missing or invalid values
+		if ( ! is_array( $pass_array ) || ! isset( $pass_array['hash'] ) || ! array_key_exists( 'salt', $pass_array ) || ! is_string( $pass_array['hash'] ) || ( ! is_string( $pass_array['salt'] ) && ! is_null( $pass_array['salt'] ) ) ) {
+			return false;
+		}
+
+		$salt = (string) $pass_array['salt'];
+
+		// Salted SHA-1 from FluxBB 1.3
+		if ( ! empty( $salt ) ) {
+			return hash_equals(
+				$pass_array['hash'],
+				sha1( $salt . sha1( $password ) )
+			);
+		}
+
+		// Unsalted MD5 from FluxBB 1.2
+		if ( 40 !== strlen( $pass_array['hash'] ) ) {
+			return hash_equals(
+				$pass_array['hash'],
+				md5( $password )
+			);
+		}
+
+		// SHA-1 from FluxBB 1.4 and newer
+		return hash_equals(
+			$pass_array['hash'],
+			sha1( $password )
+		);
 	}
 
 	/**
@@ -652,13 +725,31 @@ class FluxBB extends BBP_Converter_Base {
 	}
 
 	/**
-	 * Verify the topic/reply count.
+	 * Convert a FluxBB forum post count into a reply count.
+	 *
+	 * FluxBB includes each topic's first post in the forum post count.
+	 *
+	 * @since 2.6.20 bbPress (r7937)
+	 *
+	 * @param int   $count Forum post count.
+	 * @param array $row   Source forum row.
+	 * @return int Forum reply count.
+	 */
+	public function callback_forum_reply_count( $count = 0, $row = array() ) {
+		$num_topics = isset( $row['num_topics'] )
+			? (int) $row['num_topics']
+			: 0;
+
+		return max( 0, (int) $count - $num_topics );
+	}
+
+	/**
+	 * Verify the topic reply count.
 	 *
 	 * @param int $count FluxBB v1.5.3 topic/reply counts
 	 * @return string WordPress safe
 	 */
 	public function callback_topic_reply_count( $count = 1 ) {
-		$count = absint( (int) $count - 1 );
-		return $count;
+		return max( 0, (int) $count );
 	}
 }

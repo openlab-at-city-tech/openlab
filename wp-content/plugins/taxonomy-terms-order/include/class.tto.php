@@ -12,8 +12,8 @@
             */
             function __construct() 
                 {
-                    add_action('admin_print_scripts',               array ( $this,  'admin_print_scripts' ) );
-                    add_action('admin_print_styles',                array ( $this,  'admin_print_styles' ) );
+                    add_action('admin_enqueue_scripts',             array ( $this,  'admin_enqueue_scripts' ) );
+                    
                     add_action('admin_menu',                        array ( $this,  'admin_menu' ), 99);
                     add_filter('terms_clauses',                     array ( $this,  'apply_order_filter' ), 10, 3);
                     add_filter('get_terms_orderby',                 array ( $this,  'get_terms_orderby' ), 1, 2);
@@ -26,29 +26,26 @@
                     if ( is_admin() )
                         TTO_functions::check_table_column();                    
                 }
-                
+            
             
             /**
-            * Admin Scripts
-            *     
+            * Enqueue the styles nd scripts assets
+            * 
+            * @param mixed $hook
+            * @return mixed
             */
-            function admin_print_scripts()
+            function admin_enqueue_scripts( $hook )
                 {
+                    if ( strpos ( $hook, 'to-interface' )   === FALSE   &&  strpos ( $hook, 'settings_page_to-options' )   === FALSE )
+                        return;
+                        
+                    wp_register_style('to.css', TOURL . '/css/to.css', array(), TTO_VERSION );
+                    wp_enqueue_style( 'to.css');
+                    
                     wp_enqueue_script('jquery');                    
                     wp_enqueue_script('jquery-ui-sortable');
                     wp_register_script('to-javascript', TOURL . '/js/to-javascript.js', array(), TTO_VERSION, FALSE );
                     wp_enqueue_script( 'to-javascript');
-                }
-                
-            
-            /**
-            * Admin styles
-            * 
-            */
-            function admin_print_styles()
-                {
-                    wp_register_style('to.css', TOURL . '/css/to.css', array(), TTO_VERSION );
-                    wp_enqueue_style( 'to.css');
                 }
                 
                 
@@ -66,18 +63,8 @@
                     add_options_page('Taxonomy Terms Order', '<img class="menu_tto" src="'. TOURL .'/images/menu-icon.png" alt="" />' . __('Taxonomy Terms Order', 'taxonomy-terms-order'), 'manage_options', 'to-options', array ( $TTO_plugin_options, 'plugin_options' ) );
                             
                     $options = TTO_functions::get_settings();
-                    
-                    if(isset($options['capability']) && !empty($options['capability']))
-                        $capability = $options['capability'];
-                    else if (is_numeric($options['level']))
-                        {
-                            //maintain the old user level compatibility
-                            $capability = TTO_functions::userdata_get_user_level();
-                        }
-                        else
-                            {
-                                $capability = 'manage_options';  
-                            } 
+                                      
+                    $capability = $this->get_interface_capability() ;
                             
                      //put a menu within all custom types if apply
                     $post_types = get_post_types();
@@ -102,13 +89,46 @@
                             
                             $TTO_Interface =    new TTO_Interface();
                             
-                            if ($post_type == 'post')
-                                add_submenu_page('edit.php', __('Taxonomy Order', 'taxonomy-terms-order'), __('Taxonomy Order', 'taxonomy-terms-order'), $capability, 'to-interface-'.$post_type, array ( $TTO_Interface, 'Interface' ) );
-                                elseif ($post_type == 'attachment')
-                                add_submenu_page('upload.php', __('Taxonomy Order', 'taxonomy-terms-order'), __('Taxonomy Order', 'taxonomy-terms-order'), $capability, 'to-interface-'.$post_type, array ( $TTO_Interface, 'Interface' ) );   
-                                else
-                                add_submenu_page('edit.php?post_type='.$post_type, __('Taxonomy Order', 'taxonomy-terms-order'), __('Taxonomy Order', 'taxonomy-terms-order'), $capability, 'to-interface-'.$post_type, array ( $TTO_Interface, 'Interface' ) );
+                            $post_type_object = get_post_type_object( $post_type );
+
+                            if ( $post_type === 'post' ) {
+                                $parent_slug = 'edit.php';
+                            } elseif ( $post_type === 'attachment' ) {
+                                $parent_slug = 'upload.php';
+                            } elseif ( $post_type_object && is_string( $post_type_object->show_in_menu ) ) {
+                                // CPT is registered as a submenu of another top-level menu.
+                                $parent_slug = $post_type_object->show_in_menu;
+                            } else {
+                                // Standard standalone CPT menu.
+                                $parent_slug = 'edit.php?post_type=' . $post_type;
+                            }
+
+                            add_submenu_page(
+                                                $parent_slug,
+                                                __( 'Taxonomy Order', 'taxonomy-terms-order' ),
+                                                __( 'Taxonomy Order', 'taxonomy-terms-order' ),
+                                                $capability,
+                                                'to-interface-' . $post_type,
+                                                array( $TTO_Interface, 'Interface' )
+                            );
+
                         }
+                }
+                
+                
+            function get_interface_capability() 
+                {
+                    $options = TTO_functions::get_settings();
+
+                    if ( ! empty( $options['capability'] ) ) {
+                        return $options['capability'];
+                    }
+
+                    if ( isset( $options['level'] ) && is_numeric( $options['level'] ) ) {
+                        return TTO_functions::userdata_get_user_level();
+                    }
+
+                    return 'manage_options';
                 }
                 
             
@@ -126,6 +146,8 @@
                     
                     $options = TTO_functions::get_settings();
                     
+                    $ignore_term_order = $args['ignore_term_order'] ?? false;
+                    
                     //if admin make sure use the admin setting
                     if (is_admin())
                         {
@@ -135,7 +157,7 @@
                             if (isset($_GET['orderby']) && sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) !==  'term_order')
                                 return $clauses;
                             
-                            if ( $options['adminsort'] == "1" &&  (!isset($args['ignore_term_order']) ||  (isset($args['ignore_term_order'])  &&  $args['ignore_term_order']  !== TRUE) ) )
+                            if ($options['adminsort'] === "1" && $ignore_term_order !== true)
                                 {
                                     if ( $clauses['orderby']    ==  'ORDER BY t.name' )
                                         $clauses['orderby'] =   'ORDER BY t.term_order '. $clauses['order'] .', t.name';
@@ -148,14 +170,26 @@
                         }
                     
                     //if autosort, then force the menu_order
-                    if ($options['autosort'] == "1"   &&  (!isset($args['ignore_term_order']) ||  (isset($args['ignore_term_order'])  &&  $args['ignore_term_order']  !== TRUE) ) )
+                    if ($options['autosort'] === "1" && $ignore_term_order !== true ) 
                         {
                             $clauses['orderby'] =   'ORDER BY t.term_order';
+                            
+                            return $clauses;
                         }
+                    
+                    $rest_route = $GLOBALS['wp']->query_vars['rest_route'] ?? '';
+
+                    // Admin/dashboard REST calls typically use these namespaces
+                    $is_admin_rest = (
+                                        strpos( $rest_route, '/wp/v2/' ) === 0 ||   // core WP admin REST
+                                        strpos( $rest_route, '/wp-block' ) === 0      // block editor
+                                    );
                         
-                    if ( $options['adminsort'] == "1"   &&  defined( 'REST_REQUEST' ) && REST_REQUEST )
+                    if ( $is_admin_rest &&  $options['adminsort'] === "1"   &&  defined( 'REST_REQUEST' ) && REST_REQUEST )
                         {
-                            $clauses['orderby'] =   'ORDER BY t.term_order'; 
+                            $clauses['orderby'] =   'ORDER BY t.term_order';
+                            
+                            return $clauses; 
                         } 
                         
                     return $clauses; 
@@ -187,15 +221,20 @@
             */
             function saveAjaxOrder()
                 {
-                    global $wpdb;
+                    global $wpdb; 
                     
                     if  ( ! isset ( $_POST['nonce'] ) ||  ! wp_verify_nonce( sanitize_text_field ( wp_unslash ( $_POST['nonce'] ) ), 'update-taxonomy-order' ) )
-                        die();
+                        wp_send_json_error( array( 'message' => __( 'You are not allowed to access this area.', 'taxonomy-terms-order' ) ), 403 );
+                        
+                    if ( ! current_user_can( $this->get_interface_capability() ) )
+                        wp_send_json_error( array( 'message' => __( 'You are not allowed to reorder these terms.', 'taxonomy-terms-order' ) ), 403 );
                      
                     $data               = isset ( $_POST['order'] )  ?   stripslashes( sanitize_text_field ( wp_unslash ( $_POST['order'] ) ) )   :   "";
                     $unserialised_data  = json_decode($data, TRUE);
+                    
+                    if ( ! is_array( $unserialised_data ) )
+                        wp_send_json_error( array( 'message' => __( 'Invalid order data.', 'taxonomy-terms-order' ) ), 400 );
                             
-                    if (is_array($unserialised_data))
                     foreach($unserialised_data as $key => $values ) 
                         {
                             //$key_parent = str_replace("item_", "", $key);
@@ -221,7 +260,7 @@
                     
                     wp_cache_flush();
                         
-                    die();
+                    wp_send_json_success( array( 'message' => __( 'Items Order Updated', 'taxonomy-terms-order' ) ) );
                 }
                 
                 

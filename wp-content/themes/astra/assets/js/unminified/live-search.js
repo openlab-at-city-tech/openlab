@@ -12,26 +12,43 @@
 	}
 
 	function getSearchResultPostMarkup(resultsData) {
-		let processedHtml = "";
+		const fragment = document.createDocumentFragment();
 
 		Object.entries(resultsData).forEach(([postType, postsData]) => {
 			let postTypeLabel = astra_search.search_post_types_labels[postType]
 				? astra_search.search_post_types_labels[postType]
 				: postType + "s";
-			processedHtml += `<label class="ast-search--posttype-heading"> ${postTypeLabel} </label>`;
+
+			// postTypeLabel is esc_html()'d server-side; decode it back for the textContent sink so entities display correctly.
+			const heading = document.createElement("label");
+			heading.className = "ast-search--posttype-heading";
+			heading.textContent = decodeHTMLEntities(postTypeLabel);
+			fragment.appendChild(heading);
+
 			postsData.forEach((post) => {
-				const searchPostTitle = decodeHTMLEntities(post.title.rendered);
-				const headerCoverSearch = document.getElementById("ast-search-form");
+				const headerCoverSearch = document.querySelector(".ast-search-box.header-cover");
 				const fullScreenSearch = document.getElementById("ast-seach-full-screen-form");
+
+				const item = document.createElement("a");
+				item.className = "ast-search-item";
+				item.setAttribute("role", "option");
+				item.setAttribute("target", "_self");
+				// setAttribute stores post.link as a literal value, so it can never break out of the markup.
+				item.setAttribute("href", post.link);
 				if (fullScreenSearch || headerCoverSearch) {
-					processedHtml += `<a class="ast-search-item" role="option" target="_self" href="${post.link}" tabindex="1"> <span> ${searchPostTitle} </span> </a>`;
-				} else {
-					processedHtml += `<a class="ast-search-item" role="option" target="_self" href="${post.link}"> <span> ${searchPostTitle} </span> </a>`;
+					item.setAttribute("tabindex", "1");
 				}
+
+				const titleWrap = document.createElement("span");
+				// textContent never parses its input as HTML, so a crafted post title stays inert text.
+				titleWrap.textContent = decodeHTMLEntities(post.title.rendered);
+
+				item.appendChild(titleWrap);
+				fragment.appendChild(item);
 			});
 		});
 
-		return processedHtml;
+		return fragment;
 	}
 
 	window.addEventListener("load", function (e) {
@@ -71,7 +88,12 @@
 					xhr.onreadystatechange = function () {
 						if (xhr.readyState === 4 && xhr.status === 200) {
 							const postsData = JSON.parse(xhr.responseText);
-							let resultsContainer = "";
+
+							const resultsContainer = document.createElement("div");
+							resultsContainer.className = "ast-live-search-results";
+							resultsContainer.setAttribute("role", "listbox");
+							resultsContainer.setAttribute("aria-label", astra_search.search_results_label);
+							resultsContainer.style.top = parseInt(searchForm.offsetHeight) + 10 + "px";
 
 							if (postsData.length > 0) {
 								let formattedPostsData = {};
@@ -84,33 +106,17 @@
 										formattedPostsData[post.type] = [post];
 									}
 								});
-								let searchResultMarkup =
+								resultsContainer.appendChild(
 									getSearchResultPostMarkup(
 										formattedPostsData
-									);
-								resultsContainer = `
-									<div
-										class="ast-live-search-results"
-										role="listbox"
-										aria-label="Search results"
-										style="top: ${parseInt(searchForm.offsetHeight) + 10}px;"
-									>
-										${searchResultMarkup}
-									</div>
-								`;
+									)
+								);
 							} else {
-								resultsContainer = `
-									<div
-										class="ast-live-search-results"
-										role="listbox"
-										aria-label="Search results"
-										style="top: ${parseInt(searchForm.offsetHeight) + 10}px;"
-									>
-										<label class="ast-search--no-results-heading"> ${
-											astra_search.no_live_results_found
-										} </label>
-									</div>
-								`;
+								const noResults = document.createElement("label");
+								noResults.className = "ast-search--no-results-heading";
+								// no_live_results_found is a server-provided translated string.
+								noResults.textContent = astra_search.no_live_results_found;
+								resultsContainer.appendChild(noResults);
 							}
 
 							const searchResultsWrappers =
@@ -122,10 +128,7 @@
 									wrap.parentNode.removeChild(wrap);
 								});
 							}
-							searchForm.insertAdjacentHTML(
-								"beforeend",
-								resultsContainer
-							);
+							searchForm.appendChild(resultsContainer);
 						}
 					};
 

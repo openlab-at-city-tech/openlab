@@ -14,7 +14,7 @@ if ( ! class_exists( 'BBP_Forums_Members' ) ) :
 /**
  * Member profile modifications
  *
- * @since 2.2.0 bbPress (r4395)
+ * @since 2.2.0 bbPress (r4397)
  * @since 2.6.0 bbPress (r6320) Add engagements support
  *
  * @package bbPress
@@ -25,7 +25,7 @@ class BBP_BuddyPress_Members {
 	/**
 	 * Main constructor for modifying bbPress profile links
 	 *
-	 * @since 2.2.0 bbPress (r4395)
+	 * @since 2.2.0 bbPress (r4397)
 	 */
 	public function __construct() {
 		$this->setup_actions();
@@ -36,7 +36,7 @@ class BBP_BuddyPress_Members {
 	/**
 	 * Setup the actions
 	 *
-	 * @since 2.2.0 bbPress (r4395)
+	 * @since 2.2.0 bbPress (r4397)
 	 *
 	 * @access private
 	 */
@@ -45,23 +45,48 @@ class BBP_BuddyPress_Members {
 		// Allow unsubscribe/unfavorite links to work
 		add_action( 'bp_template_redirect', array( $this, 'set_member_forum_query_vars' ) );
 
-		/** Favorites *********************************************************/
+		/** Engagements *******************************************************/
 
-		// Move handler to 'bp_actions' - BuddyPress bypasses template_loader
+		// Move handlers to 'bp_actions' - BuddyPress bypasses template_loader
 		remove_action( 'bbp_get_request', 'bbp_favorites_handler', 1 );
-		add_action(    'bp_actions',      'bbp_favorites_handler', 1 );
-
-		/** Subscriptions *****************************************************/
-
-		// Move handler to 'bp_actions' - BuddyPress bypasses template_loader
 		remove_action( 'bbp_get_request', 'bbp_subscriptions_handler', 1 );
-		add_action(    'bp_actions',      'bbp_subscriptions_handler', 1 );
+		add_action(    'bp_actions',      array( $this, 'engagements_handler' ), 1 );
+	}
+
+	/** Actions ***************************************************************/
+
+	/**
+	 * Handle favorites and subscriptions from BuddyPress member pages.
+	 *
+	 * BuddyPress does not pass the requested action to its `bp_actions` hook,
+	 * so get it directly from the request before passing it to the bbPress
+	 * handlers.
+	 *
+	 * @since 2.6.20 bbPress (r7933)
+	 * @since 2.6.20 bbPress (r8025) Set member query variables before handling engagements.
+	 */
+	public function engagements_handler() {
+
+		// Bail if no action, or if not a string (arrays not supported)
+		if ( empty( $_GET['action'] ) || ! is_string( $_GET['action'] ) ) {
+			return;
+		}
+
+		// Sanitize the GET action
+		$action = sanitize_key( $_GET['action'] );
+
+		// Set the displayed member context before handlers select a user
+		$this->set_member_forum_query_vars();
+
+		// Pass the action to both handlers, which validate supported actions
+		bbp_favorites_handler( $action );
+		bbp_subscriptions_handler( $action );
 	}
 
 	/**
 	 * Setup the filters
 	 *
-	 * @since 2.2.0 bbPress (r4395)
+	 * @since 2.2.0 bbPress (r4397)
 	 * @since 2.6.0 bbPress (r6320) Add engagements support
 	 *
 	 * @access private
@@ -90,7 +115,7 @@ class BBP_BuddyPress_Members {
 	/**
 	 * Override bbPress profile URL with BuddyPress profile URL
 	 *
-	 * @since 2.0.0 bbPress (r3401)
+	 * @since 2.6.0 bbPress (r6804)
 	 * @since 2.6.0 bbPress (r6320) Add engagements support
 	 *
 	 * @param int $user_id
@@ -103,8 +128,8 @@ class BBP_BuddyPress_Members {
 	/**
 	 * Override bbPress topics created URL with BuddyPress profile URL
 	 *
-	 * @since 2.6.0 bbPress (r3721)
-	 * @since 2.6.0 bbPress (r6803) Use private method
+	 * @since 2.6.0 bbPress (r6804)
+	 * @since 2.6.0 bbPress (r6804) Use private method
 	 *
 	 * @param int $user_id
 	 * @return string
@@ -116,8 +141,8 @@ class BBP_BuddyPress_Members {
 	/**
 	 * Override bbPress replies created URL with BuddyPress profile URL
 	 *
-	 * @since 2.6.0 bbPress (r3721)
-	 * @since 2.6.0 bbPress (r6803) Use private method
+	 * @since 2.6.0 bbPress (r6804)
+	 * @since 2.6.0 bbPress (r6804) Use private method
 	 *
 	 * @param int $user_id
 	 * @return string
@@ -129,8 +154,8 @@ class BBP_BuddyPress_Members {
 	/**
 	 * Override bbPress favorites URL with BuddyPress profile URL
 	 *
-	 * @since 2.1.0 bbPress (r3721)
-	 * @since 2.6.0 bbPress (r6803) Use private method
+	 * @since 2.2.0 bbPress (r4397)
+	 * @since 2.6.0 bbPress (r6804) Use private method
 	 *
 	 * @param int $user_id
 	 * @return string
@@ -142,8 +167,8 @@ class BBP_BuddyPress_Members {
 	/**
 	 * Override bbPress subscriptions URL with BuddyPress profile URL
 	 *
-	 * @since 2.1.0 bbPress (r3721)
-	 * @since 2.6.0 bbPress (r6803) Use private method
+	 * @since 2.2.0 bbPress (r4397)
+	 * @since 2.6.0 bbPress (r6804) Use private method
 	 *
 	 * @param int $user_id
 	 * @return string
@@ -155,7 +180,7 @@ class BBP_BuddyPress_Members {
 	/**
 	 * Override bbPress engagements URL with BuddyPress profile URL
 	 *
-	 * @since 2.6.0 bbPress (r6320)
+	 * @since 2.6.0 bbPress (r6321)
 	 *
 	 * @param int $user_id
 	 * @return string
@@ -168,16 +193,17 @@ class BBP_BuddyPress_Members {
 	 * Set favorites and subscriptions query variables if viewing member profile
 	 * pages.
 	 *
-	 * @since 2.3.0 bbPress (r4615)
+	 * @since 2.3.0 bbPress (r4616)
 	 * @since 2.6.0 bbPress (r6320) Support all profile sections
+	 * @since 2.6.20 bbPress (r7925) Support all displayed profiles
 	 *
 	 * @global WP_Query $wp_query
-	 * @return If not viewing your own profile
+	 * @return void
 	 */
 	public function set_member_forum_query_vars() {
 
 		// Special handling for forum component
-		if ( ! bp_is_my_profile() ) {
+		if ( ! bp_is_user() ) {
 			return;
 		}
 
@@ -211,7 +237,7 @@ class BBP_BuddyPress_Members {
 	/**
 	 * Private method used to concatenate user IDs and slugs into URLs
 	 *
-	 * @since 2.6.0 bbPress (r6803)
+	 * @since 2.6.0 bbPress (r6804)
 	 *
 	 * @param int    $user_id
 	 * @param string $slug
@@ -228,13 +254,13 @@ class BBP_BuddyPress_Members {
 		// Default URL value
 		$url = array();
 
-		// BuddyPress < 12.0 (deprecated code is intentionally included)
-		if ( function_exists( 'bp_core_get_user_domain' ) ) {
-			$url = array( bp_core_get_user_domain( $user_id ) );
-
-		// BuddyPress > 12.0 (rewrite rules)
-		} elseif ( function_exists( 'bp_members_get_user_url' ) ) {
+		// BuddyPress 12.0 and newer (rewrite rules)
+		if ( function_exists( 'bp_members_get_user_url' ) ) {
 			$url = array( bp_members_get_user_url( $user_id ) );
+
+		// BuddyPress before 12.0 (deprecated code is intentionally included)
+		} elseif ( function_exists( 'bp_core_get_user_domain' ) ) {
+			$url = array( bp_core_get_user_domain( $user_id ) );
 		}
 
 		// Maybe push slug to end of URL array

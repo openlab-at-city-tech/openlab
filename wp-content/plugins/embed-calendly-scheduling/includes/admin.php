@@ -52,11 +52,31 @@ class EMCS_Admin
         }
 
         include_once(EMCS_EVENT_TYPES . 'event-types.php');
-        EMCS_Event_Types::sync_event_types();
+        $result = EMCS_Event_Types::sync_event_types();
 
         $redirect = isset($_POST['_wp_http_referer'])
             ? sanitize_text_field(wp_unslash($_POST['_wp_http_referer']))
             : admin_url('admin.php?page=emcs-event-types');
+
+        // If sync returned a WP_Error, pass the error message via redirect
+        if (is_wp_error($result)) {
+
+            $error_message = $result->get_error_message();
+            $error_data = $result->get_error_data();
+            $http_code = is_array($error_data) && isset($error_data['http_code']) ? $error_data['http_code'] : '';
+
+            $redirect = add_query_arg(
+                array(
+                    'emcs_sync_error' => '1',
+                    'emcs_error_msg'  => rawurlencode($error_message),
+                ),
+                $redirect
+            );
+
+            if ($http_code) {
+                $redirect = add_query_arg('emcs_error_code', $http_code, $redirect);
+            }
+        }
 
         wp_safe_redirect($redirect);
         exit;

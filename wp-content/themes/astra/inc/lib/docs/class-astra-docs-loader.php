@@ -237,13 +237,17 @@ class Astra_Docs_Loader {
 		$file_path  = $this->get_local_docs_file_path();
 		$filesystem = $this->get_filesystem();
 
+		if ( ! $filesystem ) {
+			return false;
+		}
+
 		if ( ! defined( 'FS_CHMOD_DIR' ) ) {
 			define( 'FS_CHMOD_DIR', ( 0755 & ~ umask() ) );
 		}
 
 		// If the folder doesn't exist, create it.
 		if ( ! file_exists( $this->get_docs_folder() ) ) {
-			$this->get_filesystem()->mkdir( $this->get_docs_folder(), FS_CHMOD_DIR );
+			$filesystem->mkdir( $this->get_docs_folder(), FS_CHMOD_DIR );
 		}
 
 		// If the file doesn't exist, create it. Return false if it can not be created.
@@ -309,7 +313,9 @@ class Astra_Docs_Loader {
 	 */
 	public function get_base_path() {
 		if ( ! $this->base_path ) {
-			$this->base_path = apply_filters( 'astra_local_docs_base_path', $this->get_filesystem()->wp_content_dir() . 'uploads' );
+			$filesystem      = $this->get_filesystem();
+			$wp_content_dir  = $filesystem ? $filesystem->wp_content_dir() : WP_CONTENT_DIR . '/';
+			$this->base_path = apply_filters( 'astra_local_docs_base_path', $wp_content_dir . 'uploads' );
 		}
 		return $this->base_path;
 	}
@@ -367,17 +373,21 @@ class Astra_Docs_Loader {
 	 */
 	public function astra_delete_docs_folder() {
 		// Delete previously created supportive options.
-		return $this->get_filesystem()->delete( $this->get_docs_folder(), true );
+		$filesystem = $this->get_filesystem();
+		if ( ! $filesystem ) {
+			return false;
+		}
+		return $filesystem->delete( $this->get_docs_folder(), true );
 	}
 
 	/**
 	 * Get the filesystem.
 	 *
 	 * @since 4.6.0
-	 * @return \WP_Filesystem_Base
+	 * @return \WP_Filesystem_Base|null Filesystem instance, or null on failure.
 	 */
 	protected function get_filesystem() {
-		
+
 		// We are using WP_Filesystem for managing local doc files which is necessary for the proper functionality of the theme -- This is an extension version of TRT webfont library.
 		global $wp_filesystem;
 
@@ -386,8 +396,19 @@ class Astra_Docs_Loader {
 			if ( ! function_exists( 'WP_Filesystem' ) ) {
 				require_once wp_normalize_path( ABSPATH . '/wp-admin/includes/file.php' );  // PHPCS:ignore WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
 			}
-			WP_Filesystem();
+			// WP_Filesystem() returns true only when fully connected; false covers
+			// missing credentials, wrong password, and connect() failures alike.
+			if ( true !== WP_Filesystem() ) {
+				return null;
+			}
 		}
+
+		// Secondary guard: reject a pre-set broken FTP object left behind by a
+		// previously-failed WP_Filesystem() call from another caller in the request.
+		if ( ! $wp_filesystem || $wp_filesystem->errors->has_errors() ) {
+			return null;
+		}
+
 		return $wp_filesystem;
 	}
 }

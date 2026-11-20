@@ -97,11 +97,13 @@ if ( ! function_exists( 'jetpack_has_gravatar' ) ) {
 	 */
 	function jetpack_has_gravatar( $email ) {
 
-		$url     = get_avatar_url( $email, array( 'default' => '404' ) );
-		$headers = get_headers( $url );
+		$url = get_avatar_url( $email, array( 'default' => '404' ) );
+		if ( ! is_string( $url ) ) {
+			return false;
+		}
 
-		// If 200 is found, the user has a Gravatar; otherwise, they don't.
-		return preg_match( '|200|', $headers[0] ) ? true : false;
+		// If 200 is returned, the user has a Gravatar; otherwise, they don't.
+		return wp_remote_retrieve_response_code( wp_remote_head( $url ) ) === 200;
 	}
 
 }

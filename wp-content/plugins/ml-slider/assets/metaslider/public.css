@@ -82,11 +82,13 @@ body .metaslider .flexslider .flex-direction-nav li {
     margin: 0 !important;
 }
 
-.metaslider .caption-wrap .caption img {
-    width: auto;
+.metaslider .flexslider .slides li .caption-wrap .caption img {
+    max-width: 100%;
+    height: auto;
+    display: inline;
 }
 
-.metaslider .slides img {
+.metaslider .slides img:not(.caption img) {
 	width: 100%;
 	display: block;
 }
@@ -395,16 +397,13 @@ div.metaslider .slider-wrapper .nivo-controlNav a {
 
 /* Admin Bar */
 #wpadminbar #wp-admin-bar-ms-main-menu .ab-item #metaslider-main-menu-icon {
-	background-size: 18px;
+	background-size: 30px auto;
 	background-repeat: no-repeat;
 	background-position: left center;
-	width: 18px;
+	width: 30px;
 	height: 32px;
 	float: left;
 	margin-right: 5px;
-}
-#wpadminbar #wp-admin-bar-ms-main-menu:hover #metaslider-main-menu-icon{
-    background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyBmaWxsPSIjNzJhZWU2IiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMjU1LjggMjU1LjgiIHN0eWxlPSJmaWxsOiM3MmFlZTYiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxnPjxwYXRoIGQ9Ik0xMjcuOSwwQzU3LjMsMCwwLDU3LjMsMCwxMjcuOWMwLDcwLjYsNTcuMywxMjcuOSwxMjcuOSwxMjcuOWM3MC42LDAsMTI3LjktNTcuMywxMjcuOS0xMjcuOUMyNTUuOCw1Ny4zLDE5OC41LDAsMTI3LjksMHogTTE2LjQsMTc3LjFsOTIuNS0xMTcuNUwxMjQuMiw3OWwtNzcuMyw5OC4xSDE2LjR6IE0xNzAuNSwxNzcuMWwtMzguOS00OS40bDE1LjUtMTkuNmw1NC40LDY5SDE3MC41eiBNMjA4LjUsMTc3LjFMMTQ2LjksOTkgbC02MS42LDc4LjJoLTMxbDkyLjUtMTE3LjVsOTIuNSwxMTcuNUgyMDguNXoiLz48L2c+PC9zdmc+Cg==") !important;
 }
 .ms-edit-frontend {
 	text-decoration: none !important;
@@ -464,6 +463,14 @@ div.metaslider .slider-wrapper .nivo-controlNav a {
     height: 100%;
     width: auto;
 }
+/* The row already has a set height, so drop the aspect ratio padding */
+.ms-carousel-force-height .slides > li.ms-livid .ms-img-inner,
+.ms-carousel-force-height .slides > li.ms-livid div.livid {
+    height: 100% !important;
+}
+.ms-carousel-force-height .slides > li.ms-livid div.livid {
+    padding-bottom: 0 !important;
+}
 
 /* Custom button */
 .ms-custom-button {
@@ -497,7 +504,14 @@ div.metaslider .slider-wrapper .nivo-controlNav a {
     z-index: 11;
 }
 
-/* Remove bottom spacing when using container to have full control of spacing 
+/* Elementor's shortcode wrapper can collapse to zero width on mobile and Safari,
+ * leaving the slideshow blank. Needs :has() - Safari 15.4+, Firefox 121+. */
+.elementor-widget-shortcode:has(.metaslider) {
+    width: 100%;
+    flex-basis: 100%;
+}
+
+/* Remove bottom spacing when using container to have full control of spacing
  * through Container's margin and padding settings */
 .metaslider-container-box .metaslider.metaslider-flex.ml-slider .flexslider {
     margin-bottom: 0;
@@ -513,6 +527,29 @@ div.metaslider .slider-wrapper .nivo-controlNav a {
     margin-top: 0;
     margin-bottom: 0;
 }*/
+
+/* Local video */
+.metaslider .local-video video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.metaslider .local-video {
+    width: 100%;
+}
+.metaslider .local-video.ms-fit-video video {
+    object-fit: cover;
+}
+.ms-carousel-force-height .slides > li.ms-local-video div.local-video img.msDefaultImage {
+    height: 100%;
+    width: auto;
+}
+.ms-carousel-force-height .slides > li.ms-local-video div.local-video {
+    height: 100% !important;
+    padding-bottom: 0 !important;
+}
 
 @media only screen and (max-width : 767px) {
     .metaslider.ms-theme-precognition .flex-control-nav li a {

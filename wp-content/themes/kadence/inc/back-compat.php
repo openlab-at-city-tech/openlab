@@ -68,9 +68,9 @@ function kadence_customize() {
 	wp_die(
 		esc_html( kadence_get_insufficient_requirements_message() ),
 		'',
-		array(
+		[
 			'back_link' => true,
-		)
+		]
 	);
 }
 add_action( 'load-customize.php', 'kadence_customize' );

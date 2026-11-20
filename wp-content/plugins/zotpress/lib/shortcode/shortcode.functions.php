@@ -309,7 +309,7 @@ function zotpress_date_format ($date) {
  * 
  * @return string Array with the processed variables.
  */
-function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
+function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false, $is_intext=false) {
 
 	$zpr = array();
 
@@ -341,11 +341,20 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 	// 	unset($zp_account_temp);
 	// }
 
-	$zpr['nickname'] = false;
+	$zpr["nickname"] = false;
 	if ( isset($atts['nickname']) && $atts['nickname'] !== false )
 		$zpr["nickname"] = zotpress_clean_param(zotpress_clean_param( $atts['nickname'] ));
     else if ( isset($atts['nick']) && $atts['nick'] !== false )
 		$zpr["nickname"] = zotpress_clean_param(zotpress_clean_param( $atts['nick'] ));
+
+	// 7.4.5: Maybe we need a default account at this stage, due to other changes ...
+	if ( $zpr["nickname"] === false
+			&& $zpr["api_user_id"] === false )
+	{
+		$zp_account_temp = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress LIMIT 1", OBJECT);
+		$zpr["api_user_id"] = $zp_account_temp->api_user_id;
+		unset($zp_account_temp);
+	}
 
 	$zpr["limit"] = 50; // max 100, 22 seconds
 	$zpr["overwrite_request"] = false;
@@ -360,7 +369,7 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 		$zpr["type"] = "basic";
 		if ( isset($atts['type']) 
 				&& $atts['type'] != "" )
-			$zpr["type"] = sanitize_text_field($atts['type']);
+			$zpr["type"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['type'])));
 		else
 			$zpr["type"] = "basic";	
 	
@@ -370,13 +379,13 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 		$zpr["type"] = "dropdown";
 		if ( isset($atts['type']) 
 				&& $atts['type'] != "" )
-			$zpr["type"] = sanitize_text_field($atts['type']);
+			$zpr["type"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['type'])));
 	}
 
 	$zpr["item_type"] = "items";
 	if ( isset($atts['item_type']) 
 			&& $atts['item_type'] != "" )
-		$zpr["item_type"] = sanitize_text_field(wp_strip_all_tags($atts['item_type']));
+		$zpr["item_type"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['item_type'])));
 	
 	$zpr["get_top"] = false;
 	if ( isset($atts['get_top']) ) $zpr["get_top"] = true;
@@ -406,7 +415,7 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 	// instance id, item key, collection id, tag id
 	$zpr["instance_id"] = false;
 	if ( isset($atts['instance_id']) )
-		$zpr["instance_id"] = sanitize_text_field(wp_strip_all_tags($atts['instance_id']));
+		$zpr["instance_id"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['instance_id'])));
 
 	$zpr["item_key"] = false;
 	if ( isset($atts['item_key'])
@@ -425,7 +434,7 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 		$zpr["item_key"] = str_replace(', ', ',', $zpr["item_key"]); // remove spces after commas
 	// $item_key = str_replace(" ", "", $item_key ); // remove any spaces ... not needed?
 
-			
+	
 	// REVIEW: Make sure item_key is formatting in the new style
 	//
 	// BIB FORMATS:
@@ -437,18 +446,34 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 		$zpr["item_key"] = str_replace('{:', '', $zpr["item_key"]);
 		$zpr["item_key"] = str_replace('}', '', $zpr["item_key"]);
 	}
-	
+	// var_dump("sf test", $zpr["item_key"], $atts);
+
 	if ( $zpr["item_key"] !== false
 			&& strpos( $zpr["item_key"], ":" ) == false ) {
 				
 		$temp_reformatted = "";
-		$temp_items = explode( ",", $zpr["item_key"] );
+
+		// 7.4.5: Can't assume , because of page numbers
+		if ( $is_intext )
+			$temp_items = explode( "},{", $zpr["item_key"] );
+		else
+			$temp_items = explode( ",", $zpr["item_key"] );
+		// var_dump("temp_items", $temp_items);
 
 		foreach ( $temp_items as $item )
-			$temp_reformatted .= "{".$zpr["api_user_id"].":".$item."},";
+		{
+			// Get rid of curlies for now
+			$item = str_replace("{", "", str_replace("}", "", $item));
+			// $temp_reformatted .= "{".$zpr["api_user_id"].":".$item."},";
+			// $item = str_replace("{", "{".$zpr["api_user_id"].":", $item);
+			$item = "{".$zpr["api_user_id"].":".$item."}";
+			// var_dump("item", $item, $zpr["api_user_id"]);
+			$temp_reformatted .= $item.",";
+		}
 
 		$zpr["item_key"] = rtrim( $temp_reformatted, ',' );
 	}
+	// var_dump("sf test after", $zpr["item_key"]);
 
 	$zpr["itemtype"] = false;
 	if ( isset($atts['itemtype'])
@@ -519,20 +544,20 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 	$zpr["collection_id"] = false;
 	if ( isset($atts['collection_id'])
 			&& ( $atts['collection_id'] != "false" && $atts['collection_id'] !== false && $atts['collection_id'] !== '' ) )
-		$zpr["collection_id"] = sanitize_text_field(wp_strip_all_tags($atts['collection_id']));
+		$zpr["collection_id"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['collection_id'])));
 	elseif ( isset($atts['collection'])
 			&& ( $atts['collection'] != "false" && $atts['collection'] !== false && $atts['collection'] !== '' ) )
-		$zpr["collection_id"] = sanitize_text_field(wp_strip_all_tags($atts['collection']));
+		$zpr["collection_id"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['collection'])));
 	elseif ( isset($atts['collections'])
 			&& ( $atts['collections'] != "false" && $atts['collections'] !== false && $atts['collections'] !== '' ) )
-		$zpr["collection_id"] = sanitize_text_field(wp_strip_all_tags($atts['collections']));
+		$zpr["collection_id"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['collections'])));
 	elseif ( isset($atts['zpcollection'])
 			&& ( $atts['zpcollection'] != "false" && $atts['zpcollection'] !== false && $atts['zpcollection'] !== '' ) )
-		$zpr["collection_id"] = sanitize_text_field(wp_strip_all_tags($atts['zpcollection']));
+		$zpr["collection_id"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['zpcollection'])));
 	elseif ( isset($_GET['subcollection_id'])
 			&& ( $_GET['subcollection_id'] != "false" && $_GET['subcollection_id'] !== false && $_GET['subcollection_id'] !== '' ) )
 	// && preg_match("/^[a-zA-Z0-9]+$/", $_GET['subcollection_id']) )
-		$zpr["collection_id"] = zotpress_clean_param( sanitize_text_field(wp_unslash($_GET['subcollection_id'])) );
+		$zpr["collection_id"] = esc_attr(zotpress_clean_param( sanitize_text_field(wp_unslash($_GET['subcollection_id']))) );
 
 	// $collection_id = str_replace(" ", "", $collection_id );
 
@@ -551,22 +576,22 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 	$zpr["tag_id"] = false;
 	if ( isset($atts['tag_id'])
 			&& ( $atts['tag_id'] != "false" && $atts['tag_id'] !== false && $atts['tag_id'] !== '' ) )
-		$zpr["tag_id"] = sanitize_text_field(wp_strip_all_tags($atts['tag_id']));
+		$zpr["tag_id"] = (sanitize_text_field(wp_strip_all_tags($atts['tag_id'])));
 	elseif ( isset($atts['tag_name'])
 			&& ( $atts['tag_name'] != "false" && $atts['tag_name'] !== false && $atts['tag_name'] !== '' ) )
-		$zpr["tag_id"] = sanitize_text_field(wp_strip_all_tags($atts['tag_name']));
+		$zpr["tag_id"] = (sanitize_text_field(wp_strip_all_tags($atts['tag_name'])));
 	elseif ( isset($atts['tags'])
 			&& ( $atts['tags'] != "false" && $atts['tags'] !== false && $atts['tags'] !== '' ) )
-		$zpr["tag_id"] = sanitize_text_field(wp_strip_all_tags($atts['tags']));
+		$zpr["tag_id"] = (sanitize_text_field(wp_strip_all_tags($atts['tags'])));
 	elseif ( isset($atts['tag'])
 			&& ( $atts['tag'] != "false" && $atts['tag'] !== false && $atts['tag'] !== '' ) )
-		$zpr["tag_id"] = sanitize_text_field(wp_strip_all_tags($atts['tag']));
+		$zpr["tag_id"] = (sanitize_text_field(wp_strip_all_tags($atts['tag'])));
 	elseif ( isset($atts['zptag'])
 			&& ( $atts['zptag'] != "false" && $atts['zptag'] !== false && $atts['zptag'] !== '' ) )
-		$zpr["tag_id"] = sanitize_text_field(wp_strip_all_tags($atts['zptag']));
+		$zpr["tag_id"] = (sanitize_text_field(wp_strip_all_tags($atts['zptag'])));
 	elseif ( isset($_GET['lib_tag'])
 			&& ( $_GET['lib_tag'] != "false" && $_GET['lib_tag'] !== false && $_GET['lib_tag'] !== '' ) )
-		$zpr["tag_id"] = sanitize_text_field(wp_strip_all_tags(wp_unslash($_GET['lib_tag'])));
+		$zpr["tag_id"] = (sanitize_text_field(wp_strip_all_tags(wp_unslash($_GET['lib_tag']))));
 
 	// Deal with plus sign as space
 	if ( $zpr["tag_id"] !== false )
@@ -650,7 +675,7 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 
 	$zpr["filter"] = false;
 	if ( isset($atts['filter']) )
-		$zpr["filter"] = sanitize_text_field(wp_strip_all_tags($atts['filter']));
+		$zpr["filter"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['filter'])));
 
 	// Sorty by, order
 	$zpr["sortby"] = false;
@@ -673,28 +698,29 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 				&& $atts['sortby'] == "default" ) {
 			$zpr["sortby"] = "default";
 		} else {
-			$zpr["sortby"] = strtolower(sanitize_text_field(wp_strip_all_tags($atts['sortby'])));
+			$zpr["sortby"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['sortby'])));
 		}
 	}
 	
 	if ( isset($atts['order'])
 			&& ( strtolower($atts['order']) == "asc" || strtolower($atts['order']) == "desc" ) )
-		$zpr["order"] = strtolower(sanitize_text_field(wp_strip_all_tags($atts['order'])));
+		$zpr["order"] = strtolower(esc_attr(sanitize_text_field(wp_strip_all_tags($atts['order']))));
 	elseif ( isset($atts['sort'])
 			&& ( strtolower($atts['sort']) == "asc" || strtolower($atts['sort']) == "desc" ) )
-		$zpr["order"] = strtolower(sanitize_text_field(wp_strip_all_tags($atts['sort'])));
+		$zpr["order"] = strtolower(esc_attr(sanitize_text_field(wp_strip_all_tags($atts['sort']))));
 
 	// Show images, show tags, downloadable, inclusive, notes, abstracts, citeable
+	// 7.4.3: Added condition via André Lambelet: || $atts['showimage'] == "openlib"
 	$zpr["showimage"] = false;
 	if ( isset($atts['showimage']) 
-			&& ( $atts['showimage'] == "yes" || $atts['showimage'] == "true" || $atts['showimage'] === true || $atts['showimage'] == 1 ) )
-		$zpr["showimage"] = sanitize_text_field(wp_strip_all_tags($atts['showimage']));
+			&& ( $atts['showimage'] == "yes" || $atts['showimage'] == "true" || $atts['showimage'] === true || $atts['showimage'] == 1 || $atts['showimage'] == "openlib" ) )
+		$zpr["showimage"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['showimage'])));
 	elseif ( isset($atts['image']) 
-			&& ( $atts['image'] == "yes" || $atts['image'] == "true" || $atts['image'] === true || $atts['image'] == 1 ) )
-		$zpr["showimage"] = sanitize_text_field(wp_strip_all_tags($atts['image']));
+			&& ( $atts['image'] == "yes" || $atts['image'] == "true" || $atts['image'] === true || $atts['image'] == 1 || $atts['image'] == "openlib" ) )
+		$zpr["showimage"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['image'])));
 	elseif ( isset($atts['images']) 
-			&& ( $atts['images'] == "yes" || $atts['images'] == "true" || $atts['images'] === true || $atts['images'] == 1 ) )
-		$zpr["showimage"] = sanitize_text_field(wp_strip_all_tags($atts['images']));
+			&& ( $atts['images'] == "yes" || $atts['images'] == "true" || $atts['images'] === true || $atts['images'] == 1 || $atts['images'] == "openlib" ) )
+		$zpr["showimage"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['images'])));
 
 	// Set value
 	// if ( isset($_GET['showimage']) )
@@ -766,7 +792,7 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 	$zpr["urlwrap"] = false;
 	if ( isset($atts['urlwrap']) 
 			&& ( $atts['urlwrap'] == "title" || $atts['urlwrap'] == "image" ) )
-		$zpr["urlwrap"] = sanitize_text_field(wp_strip_all_tags($atts['urlwrap']));
+		$zpr["urlwrap"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['urlwrap'])));
 
 	// CHECK: Is htmlentities() and trim() needed anymore?
 	$zpr["highlight"] = false;
@@ -775,7 +801,7 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 			&& $atts['highlight'] !== false
 			&& $atts['highlight'] !== 0
 		 	&& $atts['highlight'] !== "false" )
-		$zpr["highlight"] = trim( htmlentities( zotpress_clean_param( sanitize_text_field(wp_strip_all_tags( $atts['highlight'] ))) ));
+		$zpr["highlight"] = trim(htmlentities( zotpress_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['highlight'] ))) ));
 
 	$zpr["forcenumber"] = false;
 	if ( isset($atts['forcenumber'])
@@ -791,7 +817,7 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 	if ( isset($atts['toplevel'])
 			&& $zpr["tag_id"] === false ) {
 
-		$zpr["toplevel"] = sanitize_text_field(wp_strip_all_tags($atts['toplevel']));
+		$zpr["toplevel"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['toplevel'])));
 		// $zpr["collection_id"] = false;
 	}
 	if ( $zpr["collection_id"] == "toplevel" )
@@ -823,12 +849,55 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 			// && ( $atts['browsebar'] == "no" || $atts['browsebar'] == "false" || $atts['browsebar'] === false || $atts['browsebar'] == 0 ) )
 			&& ( $atts['browsebar'] != "yes" || $atts['browsebar'] != "true" || $atts['browsebar'] !== true ) )
 		$zpr["browsebar"] = false;
-	// else
-	// 	$zpr["browsebar"] = true;
-	
-	// Special attributes for ZotpressLib //
 
 
+	// 7.4.3: Special attributes for ZotpressInText
+
+	// Pages
+	$zpr["pages"] = false;
+	if ( isset($atts['pages']) )
+		$zpr["pages"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['pages'])));
+	else if ( isset($atts['page']) )
+		$zpr["pages"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['page'])));
+
+	// Format
+	$zpr["format"] = false;
+	if ( isset($atts['format']) )
+		$zpr["format"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['format'])));
+
+	// Brackets
+	$zpr["brackets"] = false;
+	if ( isset($atts['brackets']) )
+		$zpr["brackets"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['brackets'])));
+	else if ( isset($atts['bracket']) )
+		$zpr["pages"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['bracket'])));
+
+	// Separator
+	$zpr["separator"] = false;
+	if ( isset($atts['separator']) )
+		if ( $zpr["separator"] == "default" )
+			$zpr["separator"] = false;
+		else
+			$zpr["separator"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['separator'])));
+
+	// Et al.
+	$zpr["etal"] = false;
+	if ( isset($atts['etal']) )
+		if ( $zpr["etal"] == "default" )
+			$zpr["etal"] = false;
+		else
+			$zpr["etal"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['etal'])));
+
+	// And
+	$zpr["and"] = false;
+	if ( isset($atts['and']) )
+		if ( $zpr["and"] == "default" )
+			$zpr["and"] = false;
+		else
+			$zpr["and"] = esc_attr(sanitize_text_field(wp_strip_all_tags($atts['and'])));
+
+
+	// Request variables:
 
 	$zpr["request_start"] = 0;
 	if ( isset($atts['request_start']) )

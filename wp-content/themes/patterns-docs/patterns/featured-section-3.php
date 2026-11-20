@@ -2,7 +2,7 @@
 /**
  * Title: Featured Section 3
  * Slug: patterns-docs/featured-section-3
- * Categories: featured
+ * Categories: posts, featured
  * Description: A layout with an image in the left column and a title, content, and Card 2 pattern in the right column.
  *
  * @package    Patterns_Docs
@@ -13,8 +13,8 @@
 ?>
 <!-- wp:group {"metadata":{"name":"Featured Section 3"},"align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"},"blockGap":"0px"}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull"
-	style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">    
-	
+	style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+
 <!-- wp:pattern {"slug":"patterns-docs/section-title-2"} /-->
 
 <!-- wp:spacer {"height":"var:preset|spacing|60"} -->

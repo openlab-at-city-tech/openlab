@@ -25,27 +25,27 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'microdata';
 	}
 	/**
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-        add_action( 'init', array( $this, 'disable_sitemap_filter' ) );
+		add_action( 'init', [ $this, 'disable_sitemap_filter' ] );
 	}
 
-    /**
-     * Check if the user has chosen to disable sitemaps.
-     *
-     * @return void
-     */
-    public function disable_sitemap_filter() {
-        $disable_sitemap = kadence()->option( 'disable_sitemap' ) ? true : false;
-		if( $disable_sitemap ) {
-        	add_filter( 'wp_sitemaps_enabled', '__return_false' );
+	/**
+	 * Check if the user has chosen to disable sitemaps.
+	 *
+	 * @return void
+	 */
+	public function disable_sitemap_filter() {
+		$disable_sitemap = kadence()->option( 'disable_sitemap' ) ? true : false;
+		if ( $disable_sitemap ) {
+			add_filter( 'wp_sitemaps_enabled', '__return_false' );
 		}
-    }
+	}
 
 	/**
 	 * Gets template tags to expose as methods on the Template_Tags class instance, accessible through `kadence()`.
@@ -54,10 +54,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *               a callable or an array with key 'callable'. This approach is used to reserve the possibility of
 	 *               adding support for further arguments in the future.
 	 */
-	public function template_tags() : array {
-		return array(
-			'print_microdata' => array( $this, 'print_microdata' ),
-		);
+	public function template_tags(): array {
+		return [
+			'print_microdata' => [ $this, 'print_microdata' ],
+		];
 	}
 
 	/**

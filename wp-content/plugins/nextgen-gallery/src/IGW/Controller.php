@@ -16,6 +16,7 @@ use Imagely\NGG\Display\StaticPopeAssets;
 use Imagely\NGG\Display\View;
 use Imagely\NGG\DisplayedGallery\Renderer;
 use Imagely\NGG\DisplayedGallery\SourceManager;
+use Imagely\NGG\PrivateGalleries\ClientPage;
 use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Util\Router;
 use Imagely\NGG\Util\Security;
@@ -433,7 +434,7 @@ class Controller {
 				'displayed_gallery'             => $this->displayed_gallery->get_entity(),
 				'sources'                       => $sources->get_all(),
 				'gallery_primary_key'           => $gallery_mapper->get_primary_key_column(),
-				'galleries'                     => $gallery_mapper->find_all(),
+				'galleries'                     => array_map( [ ClientPage::class, 'without_secrets' ], $gallery_mapper->find_all() ),
 				'albums'                        => $album_mapper->find_all(),
 				'tags'                          => $tags,
 				'display_types'                 => $display_types,

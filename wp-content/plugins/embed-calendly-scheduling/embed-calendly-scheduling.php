@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Plugin Name: EMC - Easily Embed Calendly Scheduling
+ * Plugin Name: EMC - Embed Calendly Scheduling With Ease
  * Description: Embed Calendly scheduling pages in WordPress and optimize your booking flow with analytics, availability indicator, and conversion tools.
  * Author: Simpma Solutions
  * Author URI: https://simpma.com/emc/
- * Version: 5.5
+ * Version: 6.0
  * License: GPLv2 or later
  * Text Domain: embed-calendly-scheduling
  */
@@ -15,7 +15,6 @@ defined('EMCS_DIR')                             || define('EMCS_DIR', plugin_dir
 defined('EMCS_URL')                             || define('EMCS_URL', plugin_dir_url(__FILE__));
 defined('EMCS_INCLUDES')                        || define('EMCS_INCLUDES', EMCS_DIR . 'includes/');
 defined('EMCS_EVENT_TYPES')                     || define('EMCS_EVENT_TYPES', EMCS_INCLUDES . 'event-types/');
-defined('EMCS_CUSTOMIZER_TEMPLATES')            || define('EMCS_CUSTOMIZER_TEMPLATES', EMCS_INCLUDES . 'widget-customizer/template-parts/');
 defined('EMCS_CIPHER')                          || define('EMCS_CIPHER', 'aes-256-cbc');
 
 include_once(EMCS_INCLUDES . 'admin.php');
@@ -23,6 +22,7 @@ include_once(EMCS_INCLUDES . 'shortcode.php');
 include_once(EMCS_EVENT_TYPES . 'event-types-dashboard.php');
 include_once(EMCS_INCLUDES . 'widget-customizer/customizer.php');
 include_once(EMCS_INCLUDES . 'promotions.php');
+include_once(EMCS_INCLUDES . 'availability/shortcode.php');
 
 register_activation_hook(__FILE__, 'EMCS_Admin::on_activation');
 
@@ -38,7 +38,8 @@ function emcs_admin_scripts()
         $allowed_pages = [
             'emcs-customizer',
             'emcs-settings',
-            'emcs-event-types'
+            'emcs-event-types',
+            'emcs-licenses'
         ];
 
         if (in_array($page, $allowed_pages, true)) {
@@ -53,13 +54,6 @@ function emcs_admin_scripts()
                 EMCS_URL . 'assets/css/util.css',
                 [],
                 filemtime(EMCS_DIR . 'assets/css/util.css')
-            );
-            wp_enqueue_script(
-                'emcs_customizer_js',
-                EMCS_URL . 'assets/js/widget-customizer.js',
-                [],
-                filemtime(EMCS_DIR . 'assets/js/widget-customizer.js'),
-                true
             );
         }
     }
@@ -88,5 +82,6 @@ add_action('admin_menu', 'EMCS_Customizer::init');
 include_once(EMCS_INCLUDES . 'settings.php');
 add_action('in_admin_header', 'EMCS_Admin::clear_unwanted_notices', 1000);
 add_action('admin_post_emcs_sync_event_types', 'EMCS_Admin::sync_event_types_button_listener');
+add_action('init', 'EMCS_Availability::init');
 add_action('admin_init', 'EMCS_Promotions::init');
 add_action('admin_menu', 'EMCS_Promotions::init_menu');

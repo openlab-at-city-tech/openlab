@@ -5,6 +5,11 @@
  * @package WP_Document_Revisions
  */
 
+// direct file access protection.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Admin list functionality for WP_Document_Revisions_Admin.
  */
@@ -52,18 +57,405 @@ trait WP_Document_Revisions_Admin_List {
 				'order'               => 'ASC',
 				'wpdr_added'          => 'list',
 				'has_published_posts' => array( 'document' ),
+				'echo'                => false,
 			);
-			wp_dropdown_users( $args );
+			// @phpstan-ignore argument.type ($args carry the custom 'wpdr_added' marker consumed by our pre_user_query filter; wp_dropdown_users() ignores keys it does not recognise)
+			$owner_dropdown = wp_dropdown_users( $args );
 			remove_action( 'pre_user_query', array( $this, 'pre_user_query' ) );
+			// wp_dropdown_users() returns nothing when no owner has a published document, so only label a select that exists.
+			if ( ! empty( $owner_dropdown ) ) {
+				echo '<label class="screen-reader-text" for="author">' . esc_html__( 'Filter by owner', 'wp-document-revisions' ) . '</label>';
+				echo $owner_dropdown; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup built and escaped by wp_dropdown_users().
+			}
+
+			// file filtering.
+			$file_filter = filter_input( INPUT_GET, 'wpdr_file', FILTER_SANITIZE_SPECIAL_CHARS );
+			echo '<label class="screen-reader-text" for="wpdr_file">' . esc_html__( 'Filter by file', 'wp-document-revisions' ) . '</label>';
+			echo '<select name="wpdr_file" id="wpdr_file">';
+			echo '<option value="">' . esc_html__( 'All files', 'wp-document-revisions' ) . '</option>';
+			echo '<option value="missing"' . selected( $file_filter, 'missing', false ) . '>' . esc_html__( 'Missing file', 'wp-document-revisions' ) . '</option>';
+			echo '</select>';
 		}
+	}
+
+	/**
+	 * Adds the Revisions and File columns to the documents list.
+	 *
+	 * @since 5.6.0
+	 * @param array<string, string> $columns the columns.
+	 * @return array<string, string>
+	 */
+	public function add_file_columns( array $columns ): array {
+		$added = array(
+			'wpdr_file'      => __( 'File', 'wp-document-revisions' ),
+			'wpdr_revisions' => __( 'Revisions', 'wp-document-revisions' ),
+		);
+
+		// Before the date column, if there is one.
+		$position = array_search( 'date', array_keys( $columns ), true );
+		if ( false === $position ) {
+			return array_merge( $columns, $added );
+		}
+
+		return array_merge( array_slice( $columns, 0, $position, true ), $added, array_slice( $columns, $position, null, true ) );
+	}
+
+	/**
+	 * Outputs the Revisions and File columns.
+	 *
+	 * @since 5.6.0
+	 * @param string $column_name the column.
+	 * @param int    $post_id     the document ID.
+	 */
+	public function file_columns_cb( string $column_name, int $post_id ): void {
+		if ( 'wpdr_revisions' === $column_name ) {
+			// get_revisions() includes the document itself.
+			echo esc_html( number_format_i18n( max( 0, count( self::$parent->get_revisions( $post_id ) ) - 1 ) ) );
+			return;
+		}
+
+		if ( 'wpdr_file' !== $column_name ) {
+			return;
+		}
+
+		$attach = self::$parent->get_document( $post_id );
+		$file   = $attach instanceof WP_Post ? get_attached_file( $attach->ID ) : false;
+		if ( ! is_string( $file ) || ! is_file( $file ) ) {
+			echo '<strong class="wpdr-missing-file">' . esc_html__( 'Missing', 'wp-document-revisions' ) . '</strong>';
+			return;
+		}
+
+		$extension = strtoupper( ltrim( self::$parent->get_extension( $file ), '.' ) );
+		echo esc_html( $extension . ( '' !== $extension ? ', ' : '' ) . size_format( (int) filesize( $file ) ) );
+	}
+
+	/**
+	 * Makes the Revisions and File columns sortable.
+	 *
+	 * @since 5.6.0
+	 * @param array<string, string> $columns sortable columns.
+	 * @return array<string, string>
+	 */
+	public function file_sortable_columns( array $columns ): array {
+		$columns['wpdr_revisions'] = 'wpdr_revisions';
+		$columns['wpdr_file']      = 'wpdr_file';
+		return $columns;
+	}
+
+	/**
+	 * Passes the "Missing file" list filter from the request to the documents query.
+	 *
+	 * @since 5.6.0
+	 * @param WP_Query $query the query.
+	 */
+	public function file_filter_query_var( WP_Query $query ): void {
+		if ( ! is_admin() || ! $query->is_main_query() || 'document' !== $query->get( 'post_type' ) ) {
+			return;
+		}
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only list filter.
+		if ( isset( $_GET['wpdr_file'] ) && 'missing' === sanitize_key( wp_unslash( $_GET['wpdr_file'] ) ) ) {
+			$query->set( 'wpdr_file', 'missing' );
+		}
+	}
+
+	/**
+	 * Sorts by the Revisions and File columns, and applies the "Missing file" filter.
+	 *
+	 * "Missing" here means the document isn't linked to an existing attachment; the File
+	 * column also reports files that are linked but gone from disk.
+	 *
+	 * @since 5.6.0
+	 * @param array<string, string> $clauses query clauses.
+	 * @param WP_Query              $query   the query.
+	 * @return array<string, string>
+	 */
+	public function file_columns_clauses( array $clauses, WP_Query $query ): array {
+		if ( ! is_admin() || 'document' !== $query->get( 'post_type' ) ) {
+			return $clauses;
+		}
+
+		global $wpdb;
+		$attachment_id = "SELECT CAST( m.meta_value AS UNSIGNED ) FROM {$wpdb->postmeta} m WHERE m.post_id = {$wpdb->posts}.ID AND m.meta_key = '_document_attachment_id' LIMIT 1";
+
+		if ( 'missing' === $query->get( 'wpdr_file' ) ) {
+			$clauses['where'] .= " AND NOT EXISTS ( SELECT 1 FROM {$wpdb->posts} a WHERE a.ID = ( {$attachment_id} ) AND a.post_type = 'attachment' )";
+		}
+
+		$order = 'ASC' === strtoupper( (string) $query->get( 'order' ) ) ? 'ASC' : 'DESC';
+		switch ( $query->get( 'orderby' ) ) {
+			case 'wpdr_revisions':
+				$clauses['orderby'] = "( SELECT COUNT(*) FROM {$wpdb->posts} r WHERE r.post_parent = {$wpdb->posts}.ID AND r.post_type = 'revision' AND r.post_name NOT LIKE '%-autosave-%' ) {$order}, {$wpdb->posts}.ID {$order}";
+				break;
+			case 'wpdr_file':
+				$clauses['orderby'] = "( SELECT a.post_mime_type FROM {$wpdb->posts} a WHERE a.ID = ( {$attachment_id} ) ) {$order}, {$wpdb->posts}.ID {$order}";
+				break;
+		}
+
+		return $clauses;
+	}
+
+	/**
+	 * Displays a first-run call to action on the documents list when no documents exist yet.
+	 *
+	 * Keeps the empty state actionable instead of showing a blank table, reducing the friction
+	 * new users (and WordPress Playground "Live Preview" visitors) hit before their first upload.
+	 *
+	 * @since 5.3
+	 */
+	public function empty_state_notice(): void {
+		$screen = get_current_screen();
+		if ( is_null( $screen ) || 'edit-document' !== $screen->id ) {
+			return;
+		}
+
+		/**
+		 * Filters whether to show the first-run "add your first document" notice.
+		 *
+		 * @since 5.6.0
+		 *
+		 * @param bool $show Whether to show the notice. Default true.
+		 */
+		if ( ! apply_filters( 'document_show_empty_state', true ) ) {
+			return;
+		}
+
+		// Only a genuine first-run state: skip when searching or filtering, where an empty list means "no matches" rather than "no documents".
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_GET['s'] ) || isset( $_GET['post_status'] ) || isset( $_GET['workflow_state'] ) || isset( $_GET['author'] ) ) {
+			return;
+		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+		// No point prompting a user who cannot create documents.
+		if ( ! current_user_can( 'edit_documents' ) ) {
+			return;
+		}
+
+		// Bail if any documents already exist (in any status).
+		$counts = array_map( 'intval', (array) wp_count_posts( 'document' ) );
+		if ( array_sum( $counts ) > 0 ) {
+			return;
+		}
+
+		$add_link  = sprintf(
+			'<a href="%s">%s</a>',
+			esc_url( admin_url( 'post-new.php?post_type=document' ) ),
+			esc_html__( 'Add your first document', 'wp-document-revisions' )
+		);
+		$docs_url  = WP_Document_Revisions::feedback_urls()['docs'];
+		$docs_link = '' === $docs_url ? '' : sprintf(
+			'<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
+			esc_url( $docs_url ),
+			esc_html__( 'read the documentation', 'wp-document-revisions' )
+		);
+		?>
+		<div class="notice notice-info">
+			<p>
+				<strong><?php esc_html_e( 'Welcome to WP Document Revisions!', 'wp-document-revisions' ); ?></strong>
+				<?php
+				if ( '' === $docs_link ) {
+					printf(
+						/* translators: %s: link to add a new document */
+						esc_html__( 'You have not added any documents yet. %s to start tracking revisions and workflow.', 'wp-document-revisions' ),
+						$add_link // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- anchor assembled from esc_url() and esc_html__() above.
+					);
+				} else {
+					printf(
+						/* translators: 1: link to add a new document, 2: link to the documentation */
+						esc_html__( 'You have not added any documents yet. %1$s to start tracking revisions and workflow, or %2$s.', 'wp-document-revisions' ),
+						$add_link, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- anchor assembled from esc_url() and esc_html__() above.
+						$docs_link // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- anchor assembled from esc_url() and esc_html__() above.
+					);
+				}
+				?>
+			</p>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Invites engaged, successful users to leave a WordPress.org review.
+	 *
+	 * Shown only on the documents list screen (so it never coincides with the upload/lock
+	 * error notices that appear on the document edit screen) and only once the user has a
+	 * real, working library. Every document save creates a revision in this plugin, so a
+	 * healthy document count implies a meaningful revision history. Dismissal is remembered
+	 * per user, and the prompt never nags again.
+	 *
+	 * @since 5.3
+	 */
+	public function review_prompt(): void {
+		$screen = get_current_screen();
+		if ( is_null( $screen ) || 'edit-document' !== $screen->id ) {
+			return;
+		}
+
+		/**
+		 * Filters whether to show the WordPress.org review prompt.
+		 *
+		 * Return false to turn it off for everyone, e.g. on managed sites, rather than
+		 * faking each user's dismissal.
+		 *
+		 * @since 5.6.0
+		 *
+		 * @param bool $show    Whether to show the prompt. Default true.
+		 * @param int  $user_id Current user ID.
+		 */
+		if ( ! apply_filters( 'document_show_review_prompt', true, get_current_user_id() ) ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'edit_documents' ) ) {
+			return;
+		}
+
+		// Never ask again once the user has responded.
+		if ( get_user_meta( get_current_user_id(), self::REVIEW_DISMISSED_META, true ) ) {
+			return;
+		}
+
+		$urls = WP_Document_Revisions::feedback_urls();
+		if ( '' === $urls['review'] ) {
+			return;
+		}
+
+		// Engagement gate: only ask users with a real, successful library.
+		$counts = array_map( 'intval', (array) wp_count_posts( 'document' ) );
+		if ( array_sum( $counts ) < self::REVIEW_MIN_DOCS ) {
+			return;
+		}
+
+		$review_url  = wp_nonce_url(
+			add_query_arg(
+				array(
+					'wpdr_review_dismiss' => 1,
+					'wpdr_review_go'      => 1,
+				)
+			),
+			'wpdr_review_dismiss',
+			'wpdr_review_nonce'
+		);
+		$dismiss_url = wp_nonce_url( add_query_arg( 'wpdr_review_dismiss', 1 ), 'wpdr_review_dismiss', 'wpdr_review_nonce' );
+		?>
+		<div class="notice notice-info">
+			<p><?php esc_html_e( 'You have been managing your documents with WP Document Revisions — thank you! If it has been useful, would you consider leaving a quick review? It genuinely helps other teams discover the plugin.', 'wp-document-revisions' ); ?></p>
+			<p>
+				<a href="<?php echo esc_url( $review_url ); ?>" class="button button-primary" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Leave a review', 'wp-document-revisions' ); ?></a>
+				<a href="<?php echo esc_url( $dismiss_url ); ?>" class="button-link"><?php esc_html_e( 'No thanks', 'wp-document-revisions' ); ?></a>
+			</p>
+			<?php
+			// Offered alongside the review, not instead of it, so the prompt never filters reviews by sentiment.
+			$other = self::feedback_links( array( 'ideas', 'support' ) );
+			if ( $other ) :
+				?>
+				<p><?php echo esc_html__( 'Something missing or not working?', 'wp-document-revisions' ) . ' ' . implode( ' | ', $other ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- anchors built by feedback_links() from esc_url() and esc_html(). ?></p>
+			<?php endif; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Builds the documentation, support, ideas and review links, skipping any filtered to empty.
+	 *
+	 * @since 5.8.0
+	 *
+	 * @param string[] $keys which links, in display order.
+	 * @return array<string, string> anchor HTML keyed by purpose.
+	 */
+	public static function feedback_links( array $keys = array( 'docs', 'support', 'ideas', 'review' ) ): array {
+		$labels = array(
+			'docs'    => __( 'Documentation', 'wp-document-revisions' ),
+			'support' => __( 'Get support', 'wp-document-revisions' ),
+			'ideas'   => __( 'Suggest an idea', 'wp-document-revisions' ),
+			'review'  => __( 'Leave a review', 'wp-document-revisions' ),
+		);
+		$urls   = WP_Document_Revisions::feedback_urls();
+		$links  = array();
+		foreach ( $keys as $key ) {
+			if ( empty( $urls[ $key ] ) || ! isset( $labels[ $key ] ) ) {
+				continue;
+			}
+			$links[ $key ] = sprintf(
+				'<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
+				esc_url( $urls[ $key ] ),
+				esc_html( $labels[ $key ] )
+			);
+		}
+		return $links;
+	}
+
+	/**
+	 * Adds documentation, support, ideas and review links under the plugin on the Plugins screen.
+	 *
+	 * @since 5.8.0
+	 *
+	 * @param string[] $links the plugin's row meta links.
+	 * @param string   $file  plugin file, relative to the plugins directory.
+	 * @return string[]
+	 */
+	public function plugin_row_meta( $links, $file ) {
+		if ( plugin_basename( dirname( __DIR__ ) . '/wp-document-revisions.php' ) !== $file ) {
+			return $links;
+		}
+		return array_merge( (array) $links, array_values( self::feedback_links() ) );
+	}
+
+	/**
+	 * Help sidebar listing where to get help or send feedback.
+	 *
+	 * @since 5.8.0
+	 *
+	 * @return string sidebar HTML, or '' when every link is filtered out.
+	 */
+	public static function help_sidebar(): string {
+		$links = self::feedback_links();
+		if ( ! $links ) {
+			return '';
+		}
+		return '<p><strong>' . esc_html__( 'For more information:', 'wp-document-revisions' ) . '</strong></p><p>' . implode( '</p><p>', $links ) . '</p>';
+	}
+
+	/**
+	 * Records dismissal of the review prompt and, when the user chose to leave a review,
+	 * forwards them to the WordPress.org review page.
+	 *
+	 * @since 5.3
+	 */
+	public function handle_review_dismissal(): void {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		if ( ! isset( $_GET['wpdr_review_dismiss'] ) ) {
+			return;
+		}
+		$nonce = isset( $_GET['wpdr_review_nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['wpdr_review_nonce'] ) ) : '';
+		$go    = isset( $_GET['wpdr_review_go'] );
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+		if ( ! wp_verify_nonce( $nonce, 'wpdr_review_dismiss' ) ) {
+			return;
+		}
+
+		update_user_meta( get_current_user_id(), self::REVIEW_DISMISSED_META, 1 );
+
+		if ( $go ) {
+			$review = WP_Document_Revisions::feedback_urls()['review'];
+			if ( '' !== $review ) {
+				// External redirect to the review page is intentional.
+				wp_redirect( $review ); // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
+				exit;
+			}
+		}
+
+		wp_safe_redirect( remove_query_arg( array( 'wpdr_review_dismiss', 'wpdr_review_nonce', 'wpdr_review_go' ) ) );
+		exit;
 	}
 
 	/**
 	 * Filter the user dropdown args to add additional arguments that are normally filtered out. .
 	 *
 	 * @since 3.6
-	 * @param array $query_args  The query arguments for get_users().
-	 * @param array $parsed_args The arguments passed to wp_dropdown_users() combined with the defaults.
+	 * @param array<string, mixed> $query_args  The query arguments for get_users().
+	 * @param array<string, mixed> $parsed_args The arguments passed to wp_dropdown_users() combined with the defaults.
+	 * @return array<string, mixed> the (possibly modified) query arguments.
 	 */
 	public function filter_user_dropdown( array $query_args, array $parsed_args ) {
 		if ( array_key_exists( 'wpdr_added', $parsed_args ) ) {
@@ -78,9 +470,9 @@ trait WP_Document_Revisions_Admin_List {
 	 * If the user can read Private documents, then include private in the selection.
 	 *
 	 * @since 3.6
-	 * @param Object $query the WP_Query object.
+	 * @param WP_User_Query $query the WP_Query object.
 	 */
-	public function pre_user_query( object $query ): void {
+	public function pre_user_query( WP_User_Query $query ): void {
 		if ( current_user_can( 'read_private_documents' ) ) {
 			$query->query_where = str_replace( "= 'publish'", "IN ('publish', 'private')", $query->query_where );
 		}
@@ -91,9 +483,9 @@ trait WP_Document_Revisions_Admin_List {
 	 *
 	 * Only invoked if taxonomy slug needs to be changed.
 	 *
-	 * @param Object $query the WP_Query object.
+	 * @param WP_Query $query the WP_Query object.
 	 */
-	public function convert_workflow_state_to_post_status( object $query ): void {
+	public function convert_workflow_state_to_post_status( WP_Query $query ): void {
 		global $pagenow, $typenow;
 		if ( 'edit.php' === $pagenow && 'document' === $typenow ) {
 			if ( 'workflow_state' !== self::$parent->taxonomy_key() && array_key_exists( 'workflow_state', $query->query_vars ) ) {
@@ -107,8 +499,8 @@ trait WP_Document_Revisions_Admin_List {
 	 * Renames author column on document list to "owner".
 	 *
 	 * @since 1.0.4
-	 * @param array $defaults the default column labels.
-	 * @return array the modified column labels
+	 * @param array<string, string> $defaults the default column labels.
+	 * @return array<string, string> the modified column labels
 	 */
 	public function rename_author_column( array $defaults ): array {
 		if ( isset( $defaults['author'] ) ) {
@@ -122,8 +514,8 @@ trait WP_Document_Revisions_Admin_List {
 	 * Splices in Currently Editing column to document list.
 	 *
 	 * @since 1.1
-	 * @param array $defaults the original columns.
-	 * @return array our spliced columns
+	 * @param array<string, string> $defaults the original columns.
+	 * @return array<string, string> our spliced columns
 	 */
 	public function add_currently_editing_column( array $defaults ): array {
 		// get checkbox and title.

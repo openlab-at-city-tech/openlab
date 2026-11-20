@@ -7,6 +7,7 @@ use Imagely\NGG\DataMappers\DisplayedGallery as DisplayedGalleryMapper;
 use Imagely\NGG\DataTypes\DisplayedGallery;
 use Imagely\NGG\DisplayType\ControllerFactory;
 use Imagely\NGG\Display\DisplayManager;
+use Imagely\NGG\Display\PreviewAssets;
 use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Util\Router;
 use Imagely\NGG\Util\Transient;
@@ -320,7 +321,30 @@ class Renderer {
 			);
 		}
 
+		// A private gallery outside its client page: nothing for visitors, a notice for managers.
+		$private_notice = \Imagely\NGG\PrivateGalleries\Visibility::get_render_notice( $displayed_gallery );
+		if ( $private_notice && $private_notice['fully_hidden'] ) {
+			if ( ! $return_output ) {
+				echo $private_notice['html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped in Visibility::notice_html().
+			}
+			return $private_notice['html'];
+		}
+
 		$retval = '';
+
+		if ( $private_notice ) {
+			$retval = $private_notice['html'];
+
+			// Templates name the first requested gallery, so a hidden one must not stay in the list.
+			$displayed_gallery->container_ids = array_values(
+				array_filter(
+					(array) $displayed_gallery->container_ids,
+					static function ( $id ) use ( $private_notice ) {
+						return ! in_array( (int) $id, $private_notice['hidden'], true );
+					}
+				)
+			);
+		}
 
 		if ( is_null( $displayed_gallery->id() ) ) {
 			$displayed_gallery->id( md5( wp_json_encode( $displayed_gallery->get_entity() ) ) );
@@ -362,11 +386,17 @@ class Renderer {
 			$lookup = false;
 		} elseif ( $app->get_parameter( 'show' ) ) {
 			$lookup = false;
+		} elseif ( $app->get_parameter( 'ajax_pagination_referrer' ) ) {
+			// The cache key does not include the request body, so output built from this parameter must not be cached.
+			$lookup = false;
 		} elseif ( $controller->is_cachable() === false ) {
 			$lookup = false;
 		} elseif ( ! NGG_RENDERING_CACHE_ENABLED ) {
 			$lookup = false;
 		}
+
+		// A page builder that injects this markup into a page that is already loaded needs the assets to come with it.
+		$preview_assets = PreviewAssets::is_needed() ? PreviewAssets::snapshot() : null;
 
 		// Just in case M_Gallery_Display could not find this displayed gallery during wp_enqueue_scripts (most likely
 		// because this displayed gallery was created through do_shortcode) we'll enqueue it now. This may potentially
@@ -391,7 +421,7 @@ class Renderer {
 		if ( $lookup ) {
 			// The display type may need to output some things even when serving from the cache.
 			if ( method_exists( $controller, 'cache_action' ) ) {
-				$retval = $controller->cache_action( $displayed_gallery );
+				$retval .= $controller->cache_action( $displayed_gallery );
 			}
 
 			if ( method_exists( $controller, 'index_action' ) ) {
@@ -462,6 +492,10 @@ class Renderer {
 		}
 
 		$retval .= $html;
+
+		if ( null !== $preview_assets ) {
+			$retval .= PreviewAssets::render( $preview_assets );
+		}
 
 		if ( ! $return_output ) {
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $retval contains safe HTML from gallery rendering

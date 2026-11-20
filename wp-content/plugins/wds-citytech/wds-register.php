@@ -591,6 +591,60 @@ function openlab_save_meta_data_at_registration( $usermeta ) {
 add_filter( 'bp_signup_usermeta', 'openlab_save_meta_data_at_registration' );
 
 /**
+ * Adds the account type's profile fields to the signup.
+ *
+ * BuddyPress 14.5.3+ saves only its signup fields when a form posts any other field, and the
+ * registration form posts the account type's fields. The field list comes from the account type's
+ * profile groups, not from the posted list: the form posts the field IDs of its last group only,
+ * so alumni would lose their Student group answers.
+ *
+ * @param array $usermeta Signup meta.
+ * @return array
+ */
+function openlab_add_account_type_fields_to_signup( $usermeta ) {
+	if ( empty( $usermeta['account_type'] ) ) {
+		return $usermeta;
+	}
+
+	$groups = bp_xprofile_get_groups(
+		[
+			'exclude_groups' => openlab_get_exclude_groups_for_account_type( $usermeta['account_type'] ),
+			'fetch_fields'   => true,
+		]
+	);
+
+	$field_ids = [];
+	foreach ( $groups as $group ) {
+		foreach ( wp_parse_id_list( wp_list_pluck( (array) $group->fields, 'id' ) ) as $field_id ) {
+			$value_key      = 'field_' . $field_id;
+			$visibility_key = $value_key . '_visibility';
+
+			if ( empty( $_POST[ $value_key ] ) && empty( $_POST[ $visibility_key ] ) ) {
+				continue;
+			}
+
+			// Copied as BuddyPress copies its own signup fields in bp_core_screen_signup().
+			if ( ! empty( $_POST[ $value_key ] ) ) {
+				$usermeta[ $value_key ] = $_POST[ $value_key ];
+			}
+
+			if ( ! empty( $_POST[ $visibility_key ] ) ) {
+				$usermeta[ $visibility_key ] = $_POST[ $visibility_key ];
+			}
+
+			$field_ids[] = $field_id;
+		}
+	}
+
+	$saved_ids = isset( $usermeta['profile_field_ids'] ) ? wp_parse_id_list( $usermeta['profile_field_ids'] ) : [];
+
+	$usermeta['profile_field_ids'] = implode( ',', array_unique( array_merge( $saved_ids, $field_ids ) ) );
+
+	return $usermeta;
+}
+add_filter( 'bp_signup_usermeta', 'openlab_add_account_type_fields_to_signup', 20 );
+
+/**
  * Processes academic unit data on account activation.
  */
 function openlab_process_academic_unit_data_at_activation( $user_id, $key, $data ) {

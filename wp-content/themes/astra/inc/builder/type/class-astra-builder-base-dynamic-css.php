@@ -378,7 +378,7 @@ if ( ! class_exists( 'Astra_Builder_Base_Dynamic_CSS' ) ) {
 
 			/* Parse CSS from array() */
 			$css_output  = astra_parse_css( $css_output_desktop );
-			$css_output .= astra_parse_css( $css_output_tablet, '', astra_get_tablet_breakpoint() );
+			$css_output .= astra_parse_css( $css_output_tablet, '', number_format( absint( astra_get_tablet_breakpoint() ) + 0.98, 2, '.', '' ) );
 			$css_output .= astra_parse_css( $css_output_mobile, '', astra_get_mobile_breakpoint() );
 
 			return $css_output;

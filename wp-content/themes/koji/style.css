@@ -2,16 +2,17 @@
 
 	Theme Name: Koji
     Text Domain: koji
-	Version: 2.1
-	Description: Koji is a clean and lightweight theme for bloggers. It features a masonry grid on the archive pages, a beautiful and minimal design, Block Editor/Gutenberg support, widget areas in the sidebar and the footer, infinite scroll loading that can be set to load more posts on button click or when the visitor reaches the bottom of the page, settings for what post meta to display on archive pages and on single posts, icon links to social media pages, custom logo support, a search overlay that can be accessed from any page, and much more. Demo: https://andersnoren.se/themes/koji/
-	Tags: two-columns, left-sidebar, grid-layout, custom-background, custom-logo, editor-style, featured-images, sticky-post, theme-options, threaded-comments, translation-ready, blog, photography, portfolio, footer-widgets, accessibility-ready, block-styles, wide-blocks
+	Version: 2.2.3
+	Description: Koji is a clean and lightweight theme for bloggers. It features a masonry grid on the archive pages, a beautiful and minimal design, Block Editor/Gutenberg support, widget areas in the sidebar and the footer, infinite scroll loading that can be set to load more posts on button click or when the visitor reaches the bottom of the page, settings for what post meta to display on archive pages and on single posts, icon links to social media pages, custom logo support, a search overlay that can be accessed from any page, and much more. Demo: https://koji.andersnoren.se
+	Tags: two-columns, left-sidebar, grid-layout, custom-background, custom-logo, editor-style, featured-images, sticky-post, theme-options, threaded-comments, translation-ready, blog, photography, portfolio, footer-widgets, block-styles, wide-blocks
 	Author: Anders Norén
 	Author URI: https://andersnoren.se
 	License: GNU General Public License version 2.0
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
 	Theme URI: https://andersnoren.se/teman/koji-wordpress-theme/
-	Requires PHP: 5.4
-	Tested up to: 6.4
+	Requires at least: 4.5
+	Requires PHP: 7.4
+	Tested up to: 7.1
 	
 	All files, unless otherwise stated, are released under the GNU General Public License
 	version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html)
@@ -173,8 +174,10 @@ body a {
 	text-decoration: underline;
 }
 
-a:focus {
-	text-decoration: underline;
+:focus-visible {
+	box-shadow: 0 0 0 6px #f1f1f1;
+	outline: 2px solid #232D37;
+	outline-offset: 2px;
 }
 
 .group:after,
@@ -606,17 +609,6 @@ textarea {
 	width: 100%;
 }
 
-textarea:focus,
-input[type="email"]:focus,
-input[type="password"]:focus,
-input[type="search"]:focus,
-input[type="tel"]:focus,
-input[type="text"]:focus,
-input[type="url"]:focus {
-	border-color: #68717b;
-	outline: none;
-}
-
 select {
 	background: #fff url( ./assets/images/icons/chevron-down.svg ) no-repeat;
 	background-position: calc( 100% - 1.4rem ) center;
@@ -672,14 +664,6 @@ input[type="reset"]:hover,
 input[type="submit"]:hover {
 	cursor: pointer;
 	opacity: .9;
-}
-
-button:focus,
-.faux-button:focus,
-input[type="button"]:focus,
-input[type="reset"]:focus,
-input[type="submit"]:focus {
-	text-decoration: underline;
 }
 
 button:disabled,
@@ -861,9 +845,7 @@ ul.social-icons li {
 }
 
 .social-icons button:hover,
-.social-icons a:hover,
-.social-icons button:focus,
-.social-icons a:focus {
+.social-icons a:hover {
 	transform: scale( 1.15 );
 	text-decoration: none;
 }
@@ -923,7 +905,7 @@ ul.social-icons li {
 .s-icons a[href*="tumblr.com"]::before { content: '\f173'; font-family: 'Font Awesome 6 Brands'; }
 .s-icons a[href*="twitch"]::before { content: '\f1e8'; font-family: 'Font Awesome 6 Brands'; }
 .s-icons a[href*="twitter.com"]::before { content: '\f099'; font-family: 'Font Awesome 6 Brands'; }
-.s-icons a[href*="unsplash.com"]::before { content: '\e07c'; font-family: 'Font Awesome 6 Brands'; }
+.s-icons a[href*="unsplash."]::before { content: '\e07c'; font-family: 'Font Awesome 6 Brands'; }
 .s-icons a[href*="vimeo.com"]::before { content: '\f27d'; font-family: 'Font Awesome 6 Brands'; }
 .s-icons a[href*="wordpress.org"]::before,
 .s-icons a[href*="wordpress.com"]::before { content: '\f411'; font-family: 'Font Awesome 6 Brands'; }
@@ -1152,8 +1134,7 @@ ul.social-icons li {
 	margin: 0;
 }
 
-.site-title a:hover,
-.site-title a:focus {
+.site-title a:hover {
 	color: #4B555F;
 }
 
@@ -1254,7 +1235,12 @@ ul.social-icons li {
 .nav-toggle .bar:nth-child(1) { margin-top: -.6rem; }
 .nav-toggle .bar:nth-child(3) { margin-top: .6rem; }
 
-.nav-toggle:focus label {
+.nav-toggle:focus-visible {
+	box-shadow: none;
+	outline: none;
+}
+
+.nav-toggle:focus-visible label {
 	text-decoration: underline;
 }
 
@@ -1382,8 +1368,13 @@ ul.site-nav ul {
 }
 
 .search-untoggle:hover .search-untoggle-inner,
-.search-untoggle:focus .search-untoggle-inner {
+.search-untoggle:focus-visible .search-untoggle-inner {
 	background: #E6E9EC;
+}
+
+.search-untoggle:focus-visible {
+	box-shadow: none;
+	outline-offset: -10px;
 }
 
 .search-overlay label {
@@ -1433,8 +1424,7 @@ ul.site-nav ul {
 /* Archive Header ----------------------------- */
 
 .preview.archive-header a { text-decoration: underline; }
-.preview.archive-header a:hover,
-.preview.archive-header a:focus { text-decoration: none; }
+.preview.archive-header a:hover { text-decoration: none; }
 
 .archive-header-mobile {
 	padding: 4rem 0;
@@ -1508,10 +1498,6 @@ ul.site-nav ul {
 	transition: opacity .15s linear;
 }
 
-.preview-image:focus {
-	opacity: .75;
-}
-
 .preview-image img {
 	width: 100%;
 }
@@ -1530,8 +1516,7 @@ ul.site-nav ul {
 	margin-bottom: 0;
 }
 
-.preview-title a:hover,
-.preview-title a:focus {
+.preview-title a:hover {
 	color: #232D37;
 }
 
@@ -1618,8 +1603,7 @@ ul.site-nav ul {
 	transition: fill .15s linear;
 }
 
-.pagination-single a:hover,
-.pagination-single a:focus {
+.pagination-single a:hover {
 	text-decoration: underline;
 }
 
@@ -1675,8 +1659,7 @@ ul.site-nav ul {
 }
 
 .leave-comment-link:hover,
-.comment-reply-title small a:hover,
-.comment-reply-title small a:focus {
+.comment-reply-title small a:hover {
 	color: #4B555F;
 	text-decoration: underline;
 }
@@ -1731,8 +1714,7 @@ ul.site-nav ul {
 	transition: border-color .15s linear;
 }
 
-.comment-meta a:hover,
-.comment-meta a:focus {
+.comment-meta a:hover {
 	border-bottom-color: #68717b;
 	text-decoration: none;
 }
@@ -1745,8 +1727,7 @@ ul.site-nav ul {
 	border-bottom: .1rem solid #DCDFE2;
 }
 
-.comment-author b a:hover,
-.comment-author b a:focus {
+.comment-author b a:hover {
 	border-bottom-color: #232D37;
 	text-decoration: none;
 }
@@ -1791,8 +1772,7 @@ ul.site-nav ul {
 	transition: all .15s linear;
 }
 
-.comment-reply-link:hover,
-.comment-reply-link:focus {
+.comment-reply-link:hover {
 	background: #68717b;
 	border-color: #68717b;
 	color: #fff;
@@ -1852,8 +1832,7 @@ ul.site-nav ul {
 	text-decoration: none;
 }
 
-.comments-pagination a.page-numbers:hover,
-.comments-pagination a.page-numbers:focus {
+.comments-pagination a.page-numbers:hover {
 	color: #232D37;
 }
 
@@ -1899,8 +1878,7 @@ ul.site-nav ul {
 	text-decoration: underline;
 }
 
-.comment-respond .logged-in-as a:hover,
-.comment-respond .logged-in-as a:focus {
+.comment-respond .logged-in-as a:hover {
 	color: #232D37;
 }
 
@@ -2284,6 +2262,9 @@ blockquote.has-text-align-right {
 /*	X.	Site Pagination
 /* -------------------------------------------------------------------------------- */
 
+.pagination-wrapper {
+	position: relative;
+}
 
 #pagination {
 	padding: 4rem 0;
@@ -2320,7 +2301,7 @@ body:not(.pagination-type-button) #load-more {
 	white-space: nowrap;
 }
 
-html.js body:not(.pagination-type-links) .link-pagination {
+html.js body:not(.pagination-type-links) .link-pagination:not(.fallback-pagination) {
 	display: none;
 }
 
@@ -2356,8 +2337,7 @@ html.js body:not(.pagination-type-links) .link-pagination {
 	text-decoration: none;
 }
 
-.link-pagination a:hover,
-.link-pagination a:focus {
+.link-pagination a:hover {
 	color: #232D37;
 }
 
@@ -2427,8 +2407,7 @@ html.js body:not(.pagination-type-links) .link-pagination {
 	text-decoration: none;
 }
 
-.credits a:hover,
-.credits a:focus {
+.credits a:hover {
 	text-decoration: underline;
 }
 
@@ -2598,8 +2577,7 @@ html.js body:not(.pagination-type-links) .link-pagination {
 	text-decoration: none;
 }
 
-.widget_tag_cloud a:hover,
-.widget_tag_cloud a:focus {
+.widget_tag_cloud a:hover {
 	background: #232D37;
 	color: #fff;
 }

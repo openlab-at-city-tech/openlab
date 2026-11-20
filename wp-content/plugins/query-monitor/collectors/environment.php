@@ -186,13 +186,17 @@ class QM_Collector_Environment extends QM_DataCollector {
 			'WP_DEVELOPMENT_MODE' => self::format_bool_constant( 'WP_DEVELOPMENT_MODE' ),
 		);
 
-		$this->data->wp['environment_type'] = wp_get_environment_type();
-
-		// WP 6.3
-		if ( function_exists( 'wp_get_development_mode' ) ) {
-			$this->data->wp['development_mode'] = wp_get_development_mode();
+		// Admin asset prefetching replaced script concatenation in WordPress 7.2, which stopped reading these constants.
+		if ( function_exists( 'wp_prefetch_admin_assets' ) ) {
+			unset(
+				$constants['CONCATENATE_SCRIPTS'],
+				$constants['COMPRESS_SCRIPTS'],
+				$constants['COMPRESS_CSS']
+			);
 		}
 
+		$this->data->wp['environment_type'] = wp_get_environment_type();
+		$this->data->wp['development_mode'] = wp_get_development_mode();
 		$this->data->wp['constants'] = apply_filters( 'qm/environment-constants', $constants );
 
 		if ( is_multisite() ) {

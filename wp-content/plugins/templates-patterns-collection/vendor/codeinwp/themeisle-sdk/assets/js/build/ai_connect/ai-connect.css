@@ -1,0 +1,101 @@
+/* Plugin-row link */
+.ti-ai-connect-open { font-weight: 600 !important; }
+.ti-ai-sparkle { vertical-align: text-bottom !important; margin-right: 3px !important; }
+
+/* Admin notice — one line, button inline on the right */
+/* Product dashboards hide the admin notices by class, some with !important and
+   printed after this sheet (Optimole: `.notice:not(.optml-notice-optin) { display: none !important }`).
+   Ours is the one they asked for: outrank that by specificity. */
+body.wp-admin .ti-ai-notice.notice, .ti-ai-notice.notice.ti-ai-notice { display: block !important; }
+/* Enable hides it (a product's React tree may own the node, so it is not removed). */
+body.wp-admin .ti-ai-notice.notice[hidden], .ti-ai-notice.notice.ti-ai-notice[hidden] { display: none !important; }
+.ti-ai-notice { position: relative !important; background: #fff !important; border: 0 !important; border-left: 4px solid #2271b1 !important; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04) !important; padding: 8px 38px 8px 12px !important; }
+.ti-ai-notice .notice-dismiss { position: absolute !important; top: 0 !important; right: 1px !important; margin: 0 !important; padding: 9px !important; border: none !important; background: none !important; color: #787c82 !important; cursor: pointer !important; }
+.ti-ai-notice-inner { display: flex !important; align-items: center !important; justify-content: space-between !important; gap: 16px !important; flex-wrap: wrap !important; }
+.ti-ai-notice-inner p { margin: .5em 0 !important; padding: 0 !important; flex: 1 1 420px !important; }
+.ti-ai-notice .button { flex: none !important; margin: 4px 0 !important; }
+.ti-ai-notice .button .ti-ai-sparkle { margin-right: 5px !important; color: #d63638 !important; }
+
+/* Self-contained: products that ship a CSS reset with their dashboard (Tailwind
+   preflight strips margins, borders, button and input styling from the whole
+   admin page) must not change how the notice and the modal look. Everything
+   the two use is set here, sized and coloured like wp-admin. */
+.ti-ai-dialog, .ti-ai-notice { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif !important; font-size: 13px !important; line-height: 1.5 !important; color: #1d2327 !important; }
+.ti-ai-dialog *, .ti-ai-dialog *::before, .ti-ai-dialog *::after, .ti-ai-notice *, .ti-ai-notice *::before, .ti-ai-notice *::after { box-sizing: border-box !important; }
+.ti-ai-dialog p { margin: 0 0 1em !important; }
+.ti-ai-dialog h2 { font-weight: 600 !important; }
+.ti-ai-dialog h3 { font-weight: 600 !important; }
+.ti-ai-dialog a { color: #2271b1 !important; }
+.ti-ai-dialog .button, .ti-ai-notice .button { display: inline-flex !important; align-items: center !important; justify-content: center !important; margin: 0 !important; padding: 0 10px !important; min-height: 30px !important; line-height: 2.15384615 !important; font-family: inherit !important; font-size: 13px !important; font-weight: 400 !important; text-decoration: none !important; white-space: nowrap !important; color: #2271b1 !important; background: #f6f7f7 !important; border: 1px solid #2271b1 !important; border-radius: 3px !important; cursor: pointer !important; box-shadow: none !important; -webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important; }
+.ti-ai-dialog .button:hover, .ti-ai-notice .button:hover { background: #f0f0f1 !important; border-color: #0a4b78 !important; color: #0a4b78 !important; }
+.ti-ai-dialog .button:focus, .ti-ai-notice .button:focus { outline: none !important; box-shadow: 0 0 0 1px #fff, 0 0 0 3px #2271b1 !important; }
+.ti-ai-dialog .button:focus:not(:focus-visible), .ti-ai-notice .button:focus:not(:focus-visible) { box-shadow: none !important; }
+.ti-ai-dialog .button-primary { color: #fff !important; background: #2271b1 !important; border-color: #2271b1 !important; }
+.ti-ai-dialog .button-primary:hover { color: #fff !important; background: #135e96 !important; border-color: #135e96 !important; }
+.ti-ai-dialog .button-primary:disabled { color: #fff !important; background: #2271b1 !important; border-color: #2271b1 !important; opacity: .7 !important; cursor: default !important; }
+.ti-ai-dialog .button-hero { min-height: 46px !important; line-height: 3.14285714 !important; padding: 0 36px !important; font-size: 14px !important; }
+.ti-ai-dialog .button-small { min-height: 26px !important; line-height: 2.18181818 !important; padding: 0 8px !important; font-size: 11px !important; }
+.ti-ai-dialog input[type="text"] { margin: 0 !important; padding: 0 8px !important; min-height: 30px !important; width: 100% !important; font-family: Consolas, Monaco, monospace !important; font-size: 13px !important; line-height: 2 !important; color: #2c3338 !important; background: #fff !important; border: 1px solid #8c8f94 !important; border-radius: 4px !important; box-shadow: 0 0 0 transparent !important; }
+.ti-ai-dialog .dashicons { font-family: dashicons !important; font-size: 20px !important; width: 20px !important; height: 20px !important; line-height: 1 !important; }
+.ti-ai-dialog:focus { outline: none !important; }
+
+/* Modal shell — sized and coloured like core's plugin-details modal */
+.ti-ai-modal[hidden] { display: none; }
+.ti-ai-modal { position: fixed; inset: 0; z-index: 100100; display: flex; align-items: flex-start; justify-content: center; padding: 48px 16px; overflow-y: auto; }
+.ti-ai-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, .7); }
+.ti-ai-dialog { position: relative !important; background: #fff !important; width: 100% !important; max-width: 600px !important; box-shadow: 0 3px 6px rgba(0, 0, 0, .3) !important; padding: 28px 32px 20px !important; color: #1d2327 !important; }
+.ti-ai-close { position: absolute !important; top: 8px !important; right: 8px !important; border: 0 !important; background: none !important; color: #646970 !important; cursor: pointer !important; padding: 6px !important; }
+.ti-ai-close:hover, .ti-ai-close:focus { color: #135e96 !important; }
+.ti-ai-dialog h2 { font-size: 22px !important; line-height: 1.3 !important; margin: 0 0 8px !important; }
+.ti-ai-dialog h3 { font-size: 12px !important; text-transform: uppercase !important; letter-spacing: .04em !important; color: #646970 !important; margin: 20px 0 8px !important; }
+.ti-ai-lead { font-size: 14px !important; line-height: 1.6 !important; margin: 0 !important; }
+.ti-ai-dialog p.ti-ai-hint, .ti-ai-dialog p.ti-ai-error, .ti-ai-dialog p.ti-ai-eyebrow { margin-bottom: 0 !important; }
+.ti-ai-eyebrow { display: inline-flex !important; align-items: center !important; gap: 4px !important; margin: 0 0 8px !important; font-size: 12px !important; color: #646970 !important; }
+.ti-ai-eyebrow .ti-ai-sparkle { color: #d63638 !important; }
+
+/* Enable */
+.ti-ai-enable { margin: 18px 0 4px !important; }
+.ti-ai-error { margin: 8px 0 0 !important; color: #d63638 !important; }
+.ti-ai-error[hidden] { display: none !important; }
+.ti-ai-enabled-badge { display: none !important; align-items: center !important; gap: 6px !important; color: #00a32a !important; font-weight: 600 !important; }
+.ti-ai-enabled-badge .dashicons { color: #00a32a !important; }
+/* !important: the self-contained `.ti-ai-dialog .button` rule above would otherwise keep it shown. */
+.ti-ai-dialog[data-enabled="1"] [data-enable] { display: none !important; }
+[data-enabled="1"] .ti-ai-enabled-badge { display: inline-flex !important; }
+
+/* State-dependent bits */
+.ti-ai-dialog .ti-ai-when-on, .ti-ai-dialog .button.ti-ai-when-on { display: none !important; }
+.ti-ai-dialog[data-enabled="1"] .ti-ai-when-on { display: revert !important; }
+.ti-ai-dialog[data-enabled="1"] .button.ti-ai-when-on { display: inline-flex !important; }
+[data-enabled="1"] .ti-ai-when-off { display: none !important; }
+[data-enabled="0"] .ti-ai-client { pointer-events: none !important; opacity: .5 !important; }
+[data-enabled="0"] .ti-ai-copyrow input { color: #a7aaad !important; background: #f6f7f7 !important; border-color: #dcdcde !important; -webkit-user-select: none !important; -moz-user-select: none !important; user-select: none !important; }
+.ti-ai-dialog[data-enabled="0"] .ti-ai-copyrow .button { pointer-events: none !important; opacity: .5 !important; }
+[data-enabled="0"] .ti-ai-prompts li { color: #50575e !important; }
+
+.ti-ai-label { display: block !important; margin-top: 14px !important; font-weight: 600 !important; }
+.ti-ai-copyrow { display: flex !important; gap: 6px !important; margin-top: 4px !important; }
+.ti-ai-copyrow input { flex: 1 !important; }
+
+.ti-ai-clients { display: flex !important; flex-wrap: wrap !important; gap: 8px !important; }
+.ti-ai-client.button { display: inline-flex !important; align-items: center !important; gap: 8px !important; height: auto !important; padding: 6px 14px !important; }
+.ti-ai-hint { margin: 6px 0 0 !important; color: #646970 !important; font-size: 12px !important; }
+
+.ti-ai-prompts { margin: 0 !important; padding: 0 !important; list-style: none !important; }
+.ti-ai-prompts li { display: flex !important; align-items: center !important; justify-content: space-between !important; gap: 12px !important; padding: 8px 12px !important; margin-bottom: 6px !important; background: #f6f7f7 !important; border-left: 3px solid #2271b1 !important; font-style: italic !important; }
+.ti-ai-prompts .button { font-style: normal !important; flex: none !important; }
+
+.button.is-copied { color: #00a32a; border-color: #00a32a; }
+
+/* Customizer: the controls pane sits at z-index 500000. */
+.ti-ai-modal.ti-ai-in-customizer, .ti-ai-modal.ti-ai-in-editor { z-index: 500100; }
+.ti-ai-customize-notice .notification-message { line-height: 1.5 !important; }
+.ti-ai-customize-notice .ti-ai-connect-open { display: inline-flex !important; align-items: center !important; margin-top: 6px !important; font-weight: 600 !important; text-decoration: none !important; }
+.ti-ai-customize-notice .ti-ai-connect-open .ti-ai-sparkle { margin-right: 4px !important; color: #d63638 !important; }
+
+.ti-ai-enable .ti-ai-hint { margin-top: 8px !important; max-width: 520px !important; }
+
+/* The "other agents" link rides along the hint line. */
+.ti-ai-hint .ti-ai-more { color: inherit !important; text-decoration: underline !important; text-underline-offset: 2px !important; }
+.ti-ai-hint .ti-ai-more:hover, .ti-ai-hint .ti-ai-more:focus { color: #2271b1 !important; }
+

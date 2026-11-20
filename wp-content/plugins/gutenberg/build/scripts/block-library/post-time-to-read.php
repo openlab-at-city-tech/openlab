@@ -92,9 +92,9 @@ function gutenberg_block_core_post_time_to_read_word_count( $text, $type ) {
  *
  * @since 6.9.0
  *
- * @param  array    $attributes Block attributes.
- * @param  string   $content    Block default content.
- * @param  WP_Block $block      Block instance.
+ * @param array    $attributes Block attributes.
+ * @param string   $content    Block default content.
+ * @param WP_Block $block      Block instance.
  * @return string Returns the rendered post author name block.
  */
 function gutenberg_render_block_core_post_time_to_read( $attributes, $content, $block ) {

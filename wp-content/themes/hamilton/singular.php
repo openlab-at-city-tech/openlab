@@ -25,7 +25,7 @@ if ( have_posts() )  :
 						<div class="meta">
 
 							<?php 
-							echo __( 'In', 'hamilton' ) . ' '; the_category( ', ' ); 
+							esc_html_e( 'In', 'hamilton' ); echo ' '; the_category( ', ' ); 
 
 							if ( comments_open() ) : ?>
 								<span>&bull;</span>

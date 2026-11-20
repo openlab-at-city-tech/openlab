@@ -5,6 +5,11 @@
  * @package WP_Document_Revisions
  */
 
+// direct file access protection.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Document retrieval, taxonomy, and display functionality for WP_Document_Revisions.
  */
@@ -13,7 +18,10 @@ trait WP_Document_Revisions_Query {
 	/**
 	 * Returns the.document attachment associated with a post.
 	 *
-	 * @param id $post_id ID of a post object (document or revision).
+	 * The attachment id comes from (forgeable) post_content, so the attachment is only
+	 * returned if it is parented to the document that owns the post.
+	 *
+	 * @param int $post_id ID of a post object (document or revision).
 	 * @return WP_Post|false
 	 */
 	public function get_document( $post_id ) {
@@ -22,7 +30,12 @@ trait WP_Document_Revisions_Query {
 		if ( $attach_id ) {
 			$attach = get_post( $attach_id );
 			if ( (bool) $attach && 'attachment' === $attach->post_type ) {
-				return $attach;
+				// For a revision (or autosave) the owning document is its parent.
+				$post   = get_post( $post_id );
+				$doc_id = ( $post && 'revision' === $post->post_type ) ? $post->post_parent : ( $post ? $post->ID : 0 );
+				if ( $doc_id && (int) $attach->post_parent === (int) $doc_id ) {
+					return $attach;
+				}
 			}
 		}
 		// not a valid attachment.
@@ -35,9 +48,9 @@ trait WP_Document_Revisions_Query {
 	 *
 	 * See https://developer.wordpress.org/reference/classes/wp_query/ for more information on potential parameters
 	 *
-	 * @param ?array  $args (optional) an array of WP_Query arguments.
-	 * @param boolean $return_attachments (optional).
-	 * @return array an array of post objects
+	 * @param ?array<string, mixed> $args (optional) an array of WP_Query arguments.
+	 * @param boolean               $return_attachments (optional).
+	 * @return WP_Post[] an array of post objects
 	 */
 	public function get_documents( ?array $args = array(), bool $return_attachments = false ): array {
 		$args              = (array) $args;
@@ -50,6 +63,9 @@ trait WP_Document_Revisions_Query {
 
 		$query  = new WP_Query( $args );
 		$output = array();
+
+		// perm=readable only restricts private statuses, so check each document.
+		$query->posts = array_values( array_filter( $query->posts, array( $this, 'can_list_document' ) ) );
 
 		if ( $return_attachments ) {
 
@@ -70,12 +86,41 @@ trait WP_Document_Revisions_Query {
 			}
 		}
 
-		// remove empty rows, e.g., created by autodraft, etc.
+		// remove empty rows, e.g., created by autodraft, etc. This can reduce the number of rows returned.
 		$output = array_filter( $output );
 
 		return $output;
 	}
 
+
+	/**
+	 * Whether the current user may see a document in a list.
+	 *
+	 * Published documents are listed like other published posts (unless document_read_uses_read
+	 * is turned off), other statuses need read_document, and trashed documents need edit_document.
+	 *
+	 * @since 5.5.1
+	 *
+	 * @param WP_Post|int $document document post or ID.
+	 * @return bool
+	 */
+	public function can_list_document( $document ): bool {
+		$document = get_post( $document );
+		if ( ! $document instanceof WP_Post ) {
+			return false;
+		}
+
+		if ( 'trash' === $document->post_status ) {
+			return current_user_can( 'edit_document', $document->ID );
+		}
+
+		// Don't hide published documents from logged-in users without a role here (e.g. on multisite).
+		if ( 'publish' === $document->post_status && apply_filters( 'document_read_uses_read', true ) ) {
+			return true;
+		}
+
+		return current_user_can( 'read_document', $document->ID );
+	}
 
 	/**
 	 * Try to retrieve only correct documents.
@@ -89,21 +134,53 @@ trait WP_Document_Revisions_Query {
 	 */
 	public function retrieve_documents( WP_Query $query ): void {
 		$query_fields = (array) $query->query;
-		if ( isset( $query_fields['post_type'] ) && 'document' === $query_fields['post_type'] ) {
-			// not for administrator.
-			$user = wp_get_current_user();
-			if ( in_array( 'administrator', $user->roles, true ) ) {
-				return;
-			}
 
-			// dropped through initial tests.
-			if ( isset( $query_fields['post_status'] ) && ! empty( $query_fields['post_status'] ) ) {
-				if ( ! isset( $query_fields['perm'] ) ) {
-					// create/modify taxonomy query.
-					$query->set( 'perm', 'readable' );
-				}
-			}
+		// Only queries that ask for specific statuses skip WordPress's own visibility rules.
+		if ( empty( $query_fields['post_status'] ) || isset( $query_fields['perm'] ) ) {
+			return;
 		}
+
+		// Does the query include documents? post_type can be a string, an array, or 'any'.
+		$post_types = isset( $query_fields['post_type'] ) ? (array) $query_fields['post_type'] : array();
+		if ( ! in_array( 'document', $post_types, true ) && ! in_array( 'any', $post_types, true ) ) {
+			return;
+		}
+
+		// Users who can read every private document see them all anyway.
+		$doc_type = get_post_type_object( 'document' );
+		if ( ! $doc_type || current_user_can( $doc_type->cap->read_private_posts ) ) {
+			return;
+		}
+
+		if ( array( 'document' ) === $post_types ) {
+			$query->set( 'perm', 'readable' );
+			return;
+		}
+
+		// For several post types, core would check one combined capability that nobody
+		// has, hiding other users' private posts of every type. Only restrict documents.
+		$query->set( 'wpdr_restrict_private_documents', true );
+	}
+
+	/**
+	 * Hides other users' private documents from a multi-post-type query flagged by
+	 * retrieve_documents().
+	 *
+	 * @since 5.6.0
+	 * @param string   $where the WHERE clause.
+	 * @param WP_Query $query the query.
+	 * @return string
+	 */
+	public function restrict_private_documents( $where, $query ) {
+		if ( ! $query instanceof WP_Query || ! $query->get( 'wpdr_restrict_private_documents' ) ) {
+			return $where;
+		}
+
+		global $wpdb;
+		return $where . $wpdb->prepare(
+			" AND NOT ( {$wpdb->posts}.post_type = 'document' AND {$wpdb->posts}.post_status = 'private' AND {$wpdb->posts}.post_author <> %d )",
+			get_current_user_id()
+		);
 	}
 
 
@@ -117,7 +194,7 @@ trait WP_Document_Revisions_Query {
 		if ( empty( $post_content ) ) {
 			return false;
 		} elseif ( is_numeric( $post_content ) ) {
-			return (int) $post_content;
+			return absint( $post_content );
 		} else {
 			// Early return if content doesn't contain WPDR marker to avoid regex cost.
 			if ( false === stripos( $post_content, 'WPDR' ) ) {
@@ -127,7 +204,7 @@ trait WP_Document_Revisions_Query {
 			preg_match( '/<!-- WPDR \s*(\d+) -->/i', $post_content, $id );
 			if ( isset( $id[1] ) ) {
 				// if a match return the id (Zero will be no document attached - WPML scenario).
-				return (int) $id[1];
+				return absint( $id[1] );
 			}
 		}
 		// no document found.
@@ -143,7 +220,7 @@ trait WP_Document_Revisions_Query {
 	 *
 	 * Note: We can't use the screen API because A) used on front end, and B) admin_init is too early (enqueue scripts).
 	 *
-	 * @param object|int|bool $documentish a post object, postID, or false.
+	 * @param WP_Post|int|bool $documentish a post object, postID, or false.
 	 * @since 0.5
 	 * @return bool true if document, false if not
 	 */
@@ -183,7 +260,12 @@ trait WP_Document_Revisions_Query {
 			return false;
 		}
 
-		$post = get_post( $documentish );
+		// if not a WP_Post, then get it.
+		if ( $documentish instanceof WP_Post ) {
+			$post = $documentish;
+		} else {
+			$post = get_post( $documentish );
+		}
 
 		if ( ! $post ) {
 			return false;
@@ -204,10 +286,10 @@ trait WP_Document_Revisions_Query {
 	 * Prevents Attachment ID from being displayed on front end.
 	 *
 	 * @since 1.0.3
-	 * @param string $content the post content.
-	 * @return string either the original content or none
+	 * @param mixed $content the post content (a string, unless another filter misbehaves).
+	 * @return mixed either the original content or none
 	 */
-	public function content_filter( string $content ): string {
+	public function content_filter( $content ) {
 		if ( ! $this->verify_post_type( get_post() ) ) {
 			return $content;
 		}
@@ -222,20 +304,60 @@ trait WP_Document_Revisions_Query {
 
 
 	/**
+	 * Whether a post is a document's attachment that the current user can't edit the document of.
+	 *
+	 * @since 5.8.2
+	 * @param mixed $post the post.
+	 * @return bool
+	 */
+	private function is_hidden_document_attachment( $post ): bool {
+		return $post instanceof WP_Post
+			&& 'attachment' === $post->post_type
+			&& 'document' === get_post_type( $post->post_parent )
+			&& ! current_user_can( 'edit_document', $post->post_parent );
+	}
+
+	/**
+	 * Keeps oEmbed from describing a document's attachments.
+	 *
+	 * Core treats the attachments of a published document as public, including one that's
+	 * password protected or an earlier revision's file, and returns their title, the stored
+	 * file name, in the oEmbed response.
+	 *
+	 * @since 5.8.2
+	 * @param mixed $post_id ID of the post the oEmbed URL resolved to.
+	 * @return mixed the post ID, or 0 for a document's attachment.
+	 */
+	public function oembed_request_post_id( $post_id ) {
+		if ( is_numeric( $post_id ) && 'attachment' === get_post_type( (int) $post_id ) && 'document' === get_post_type( wp_get_post_parent_id( (int) $post_id ) ) ) {
+			return 0;
+		}
+		return $post_id;
+	}
+
+	/**
 	 * Adds revision number to document titles.
 	 *
 	 * @since 1.0
-	 * @param string $title   the title.
-	 * @param int    $post_id The ID of the post for which the title is being generated.
-	 * @return string the title possibly with the revision number
+	 * @param mixed $title   the title (a string, unless another filter misbehaves).
+	 * @param mixed $post_id The ID of the post for which the title is being generated.
+	 * @return mixed the title possibly with the revision number
 	 */
-	public function add_revision_num_to_title( string $title, ?int $post_id = null ): string {
+	public function add_revision_num_to_title( $title, $post_id = null ) {
 		// If a post ID is not provided, do not attempt to filter the title.
-		if ( is_null( $post_id ) ) {
+		if ( ! is_string( $title ) || ! is_numeric( $post_id ) ) {
 			return $title;
 		}
 
 		$post = get_post( $post_id );
+
+		// A document's attachment is titled with its stored file name, which is enough to fetch
+		// the file straight from the uploads folder, so show the document's title instead to
+		// anyone who can't edit the document.
+		if ( $this->is_hidden_document_attachment( $post ) ) {
+			$title = get_post_field( 'post_title', $post->post_parent );
+			$post  = get_post( $post->post_parent );
+		}
 
 		// verify post type.
 		if ( ! $this->verify_post_type( $post ) ) {
@@ -273,62 +395,19 @@ trait WP_Document_Revisions_Query {
 
 
 	/**
-	 * Extends the modified term_count_cb to all custom taxonomies associated with documents
-	 * Unless taxonomy already has a custom callback.
-	 *
-	 * @since 1.2.1
-	 */
-	public function register_term_count_cb(): void {
-		// This will return only taxonomies for documents only, e.g. ignore those for documents AND another.
-		$taxs = get_taxonomies(
-			array(
-				'object_type'           => array( 'document' ),
-				'update_count_callback' => '',
-			),
-			'names'
-		);
-
-		/**
-		 * Filter to select which taxonomies with default term count to be modified to count all non-trashed posts.
-		 *
-		 * @param array $taxs document taxonomies .
-		 */
-		$taxs = apply_filters( 'document_taxonomy_term_count', $taxs );
-
-		if ( ! empty( $taxs ) ) {
-			global $wp_taxonomies;
-
-			foreach ( $taxs as $tax ) {
-					$wp_taxonomies[ $tax ]->update_count_callback = array( $this, 'term_count_cb' );
-			}
-		}
-	}
-
-
-	/**
 	 * Filters the term_count post_statuses for all custom taxonomies associated with documents
 	 * Unless taxonomy already has a custom callback.
 	 *
 	 * @since 3.3.0
 	 * @param string[]    $statuses  List of post statuses to include in the count. Default is 'publish'.
 	 * @param WP_Taxonomy $taxonomy  Current taxonomy object.
+	 * @return string[] the (possibly modified) list of post statuses.
 	 */
 	public function review_count_statuses( array $statuses, WP_Taxonomy $taxonomy ): array {
 		$tax_name   = $taxonomy->name;
 		$tax_status = wp_cache_get( 'wpdr_statuses_' . $tax_name );
 		if ( false === $tax_status ) {
-			// if filtered out, don't need to look at taxonomy. N.B. Odd format for compatibility.
-			/**
-			 * Filter to select which taxonomies with default term count to be modified to count all non-trashed posts.
-			 *
-			 * In prior versions input parameter was an array of all affected post types.
-			 *
-			 * @param array $taxs document taxonomies .
-			 */
-			if ( ! in_array( $tax_name, apply_filters( 'document_taxonomy_term_count', array( $tax_name ) ), true ) ) {
-				$tax_status = $statuses;
-			} elseif ( '' !== $taxonomy->update_count_callback || ! in_array( 'document', $taxonomy->object_type, true ) ) {
-				// check if taxonomy has a callback defined or is not for documents.
+			if ( ! $this->counts_all_statuses( $taxonomy ) ) {
 				$tax_status = $statuses;
 			} else {
 				// get the list of statuses.
@@ -344,6 +423,170 @@ trait WP_Document_Revisions_Query {
 		return $tax_status;
 	}
 
+
+	/**
+	 * Whether review_count_statuses() widens a taxonomy's term counts to every non-trashed status.
+	 *
+	 * @since 5.8.2
+	 * @param WP_Taxonomy $taxonomy the taxonomy.
+	 * @return bool
+	 */
+	public function counts_all_statuses( WP_Taxonomy $taxonomy ): bool {
+		// if filtered out, don't need to look at taxonomy. N.B. Odd format for compatibility.
+		/**
+		 * Filter to select which taxonomies with default term count to be modified to count all non-trashed posts.
+		 *
+		 * In prior versions input parameter was an array of all affected post types.
+		 *
+		 * @param array $taxs document taxonomies .
+		 */
+		if ( ! in_array( $taxonomy->name, apply_filters( 'document_taxonomy_term_count', array( $taxonomy->name ) ), true ) ) {
+			return false;
+		}
+
+		// check if taxonomy has a callback defined or is not for documents.
+		return '' === $taxonomy->update_count_callback && in_array( 'document', $taxonomy->object_type, true );
+	}
+
+	/**
+	 * Hooks the REST term responses of taxonomies whose counts include non-public documents.
+	 *
+	 * @since 5.8.2
+	 * @return void
+	 */
+	public function filter_rest_term_counts(): void {
+		foreach ( get_object_taxonomies( 'document', 'objects' ) as $taxonomy ) {
+			if ( $taxonomy->show_in_rest && $this->counts_all_statuses( $taxonomy ) ) {
+				add_filter( 'rest_' . $taxonomy->name . '_query', array( $this, 'rest_term_public_query' ), 10, 2 );
+				add_filter( 'rest_prepare_' . $taxonomy->name, array( $this, 'rest_term_public_count' ), 10, 2 );
+			}
+		}
+	}
+
+	/**
+	 * Whether the current user may see term counts that include every user's non-public documents.
+	 *
+	 * @since 5.8.2
+	 * @return bool
+	 */
+	private function can_see_all_status_counts(): bool {
+		return current_user_can( 'edit_others_documents' ) && current_user_can( 'read_private_documents' );
+	}
+
+	/**
+	 * Makes hide_empty and orderby=count in REST term queries use published-only counts.
+	 *
+	 * Both otherwise use the stored all-status count, which would reveal terms that only
+	 * non-public documents carry, and their relative sizes.
+	 *
+	 * @since 5.8.2
+	 * @param array<string, mixed> $args    get_terms() arguments.
+	 * @param WP_REST_Request      $request the request.
+	 * @return array<string, mixed>
+	 */
+	public function rest_term_public_query( $args, $request ) {
+		unset( $request );
+		if ( $this->can_see_all_status_counts() || ! is_array( $args ) || empty( $args['taxonomy'] ) ) {
+			return $args;
+		}
+
+		if ( isset( $args['orderby'] ) && 'count' === $args['orderby'] ) {
+			$args['orderby'] = 'name';
+		}
+
+		if ( ! empty( $args['hide_empty'] ) ) {
+			$tt_ids  = array_keys( $this->published_term_counts( (string) $args['taxonomy'] ) );
+			$visible = get_terms(
+				array(
+					'taxonomy'         => $args['taxonomy'],
+					'term_taxonomy_id' => $tt_ids ? $tt_ids : array( 0 ),
+					'hide_empty'       => false,
+					'fields'           => 'ids',
+				)
+			);
+			$visible = is_array( $visible ) ? array_map( 'intval', $visible ) : array();
+			if ( ! empty( $args['include'] ) ) {
+				$visible = array_intersect( $visible, wp_parse_id_list( $args['include'] ) );
+			}
+			$args['include']    = $visible ? array_values( $visible ) : array( 0 );
+			$args['hide_empty'] = false;
+		}
+
+		return $args;
+	}
+
+	/**
+	 * Replaces a REST term's count with its published-only count for users who can't see every non-public document.
+	 *
+	 * The stored count includes drafts, pending and private documents (see review_count_statuses()),
+	 * which the Documents screens show on purpose but anonymous REST requests mustn't see.
+	 *
+	 * @since 5.8.2
+	 * @param WP_REST_Response $response the term response.
+	 * @param WP_Term          $term     the term.
+	 * @return WP_REST_Response
+	 */
+	public function rest_term_public_count( $response, $term ) {
+		if ( $this->can_see_all_status_counts() || ! $response instanceof WP_REST_Response || ! $term instanceof WP_Term ) {
+			return $response;
+		}
+
+		$data = $response->get_data();
+		if ( isset( $data['count'] ) ) {
+			$counts        = $this->published_term_counts( $term->taxonomy );
+			$data['count'] = $counts[ (int) $term->term_taxonomy_id ] ?? 0;
+			$response->set_data( $data );
+		}
+
+		return $response;
+	}
+
+	/**
+	 * Published-only term counts for a taxonomy, keyed by term_taxonomy_id, computed once per request.
+	 *
+	 * Counts what core would count without review_count_statuses(): published objects of the taxonomy's post types.
+	 *
+	 * @since 5.8.2
+	 * @param string $taxonomy taxonomy name.
+	 * @return array<int, int>
+	 */
+	private function published_term_counts( string $taxonomy ): array {
+		wp_cache_add_non_persistent_groups( 'wpdr_term_counts' );
+		$counts = wp_cache_get( $taxonomy, 'wpdr_term_counts' );
+		if ( is_array( $counts ) ) {
+			return $counts;
+		}
+
+		global $wpdb;
+		$tax_obj    = get_taxonomy( $taxonomy );
+		$post_types = $tax_obj ? array_values( array_filter( $tax_obj->object_type, 'post_type_exists' ) ) : array();
+
+		$counts = array();
+		if ( empty( $post_types ) ) {
+			return $counts;
+		}
+
+		$placeholders = implode( ', ', array_fill( 0, count( $post_types ), '%s' ) );
+		// phpcs:disable WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT tr.term_taxonomy_id, COUNT(*) AS cnt FROM {$wpdb->term_relationships} tr
+				INNER JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id
+				INNER JOIN {$wpdb->posts} p ON p.ID = tr.object_id
+				WHERE tt.taxonomy = %s AND p.post_status = 'publish' AND p.post_type IN ( {$placeholders} )
+				GROUP BY tr.term_taxonomy_id",
+				array_merge( array( $taxonomy ), $post_types )
+			)
+		);
+		// phpcs:enable
+
+		foreach ( (array) $rows as $row ) {
+			$counts[ (int) $row->term_taxonomy_id ] = (int) $row->cnt;
+		}
+		wp_cache_set( $taxonomy, $counts, 'wpdr_term_counts' );
+
+		return $counts;
+	}
 
 	/**
 	 * Ensures that any system limit on revisions does not apply to documents.
@@ -384,7 +627,7 @@ trait WP_Document_Revisions_Query {
 	 * @return string
 	 */
 	public function format_doc_id( int $post_id ): string {
-		return '<!-- WPDR ' . (string) $post_id . ' -->';
+		return '<!-- WPDR ' . trim( (string) $post_id ) . ' -->';
 	}
 
 
@@ -392,7 +635,7 @@ trait WP_Document_Revisions_Query {
 	 * Gets a file extension from a post.
 	 *
 	 * @since 0.5
-	 * @param object|int $document_or_attachment document or attachment.
+	 * @param object|int|string $document_or_attachment document or attachment.
 	 * @return string the extension to the latest revision
 	 */
 	public function get_file_type( $document_or_attachment = '' ): string {
@@ -418,13 +661,15 @@ trait WP_Document_Revisions_Query {
 				return '';
 			}
 
-			$attachment = $this->get_document( $latest_revision );
+			$attachment = $this->get_document( $latest_revision->ID );
 
-			// sanity check in case post_content somehow doesn't represent an attachment,
+			// quick check in case post_content somehow doesn't represent an attachment,
 			// or in case some sort of non-document, non-attachment object/ID was passed.
 			if ( ! $attachment ) {
 				return '';
 			}
+		} else {
+			return '';
 		}
 
 		// no need to get the correct directory as we just want the extension.
@@ -439,6 +684,7 @@ trait WP_Document_Revisions_Query {
 	 * @param string|int[] $size    Requested image size. Can be any registered image size name, or
 	 *                              an array of width and height values in pixels (in that order).
 	 * @param int          $post_id The post ID.
+	 * @return string|array<int, mixed> the (possibly overridden) image size.
 	 */
 	public function document_featured_image_size( $size, int $post_id ) {
 		if ( 'post-thumbnail' !== $size || ! $this->verify_post_type( $post_id ) ) {
@@ -461,43 +707,18 @@ trait WP_Document_Revisions_Query {
 	}
 
 	/**
-	 * Term Count Callback that applies custom filter
-	 * Allows Workflow State counts to include non-published posts.
-	 *
-	 * @since 1.2.1
-	 * @param Array  $terms the terms to filter.
-	 * @param Object $taxonomy the taxonomy object.
-	 */
-	public function term_count_cb( array $terms, object $taxonomy ): void {
-		add_filter( 'query', array( $this, 'term_count_query_filter' ) );
-		_update_post_term_count( $terms, $taxonomy );
-		remove_filter( 'query', array( $this, 'term_count_query_filter' ) );
-	}
-
-	/**
-	 * Alters term count query to include all non-trashed posts.
-	 * See generally, #17548
-	 *
-	 * @since 1.2.1
-	 * @param string $query the query string.
-	 * @return string the modified query
-	 */
-	public function term_count_query_filter( string $query ): string {
-		return str_replace( "= 'publish'", "!= 'trash'", $query );
-	}
-
-	/**
 	 * Return an empty excerpt for documents on front end views to avoid leaking
 	 * revision notes (except if the user could see them by editting the post).
 	 *
 	 * @since 3.3.0
-	 * @param string  $excerpt The original excerpt text associated with a post.
-	 * @param WP_Post $post    The post object.
+	 * @param mixed $excerpt The original excerpt text associated with a post.
+	 * @param mixed $post    The post object. Defaults to the current post.
 	 *
-	 * @return string
+	 * @return mixed
 	 */
-	public function empty_excerpt_return( string $excerpt, WP_Post $post ): string {
-		if ( '' === $excerpt || ! $this->verify_post_type( $post ) ) {
+	public function empty_excerpt_return( $excerpt, $post = null ) {
+		$post = get_post( $post );
+		if ( ! is_string( $excerpt ) || '' === $excerpt || ! $post || ! $this->verify_post_type( $post ) ) {
 			return $excerpt;
 		}
 
@@ -517,16 +738,21 @@ trait WP_Document_Revisions_Query {
 	 *
 	 * @since 3.3.0
 	 *
-	 * @param string  $where          The `WHERE` clause in the SQL.
-	 * @param bool    $in_same_term   Whether post should be in a same taxonomy term.
-	 * @param array   $excluded_terms Array of excluded term IDs.
-	 * @param string  $taxonomy       Taxonomy. Used to identify the term used when `$in_same_term` is true.
-	 * @param WP_Post $post           WP_Post object.
+	 * Core always passes all five arguments, but themes and plugins sometimes apply
+	 * this filter themselves with fewer or non-canonical ones (#732), so accept
+	 * anything and fall back to the current post.
 	 *
-	 * @return string
+	 * @param mixed $where          The `WHERE` clause in the SQL.
+	 * @param mixed $in_same_term   Whether post should be in a same taxonomy term.
+	 * @param mixed $excluded_terms Array of excluded term IDs, or comma-separated string.
+	 * @param mixed $taxonomy       Taxonomy. Used to identify the term used when `$in_same_term` is true.
+	 * @param mixed $post           WP_Post object. Defaults to the current post.
+	 *
+	 * @return mixed
 	 */
-	public function suppress_adjacent_doc( string $where, bool $in_same_term, array $excluded_terms, string $taxonomy, WP_Post $post ): string {
-		if ( ! $this->verify_post_type( $post ) ) {
+	public function suppress_adjacent_doc( $where, $in_same_term = false, $excluded_terms = '', $taxonomy = 'category', $post = null ) {
+		$post = $post instanceof WP_Post ? $post : get_post();
+		if ( ! is_string( $where ) || ! $post || ! $this->verify_post_type( $post ) ) {
 			return $where;
 		}
 
@@ -549,14 +775,12 @@ trait WP_Document_Revisions_Query {
 	 */
 	public function posts_results( array $results, WP_Query $query_object ): array {
 		$match = false;
-		if ( is_array( $results ) ) {
-			foreach ( $results as $key => $result ) {
-				// confirm a document.
-				if ( $this->verify_post_type( $result ) ) {
-					// user has no access, remove from result.
-					unset( $results[ $key ] );
-					$match = true;
-				}
+		foreach ( $results as $key => $result ) {
+			// confirm a document.
+			if ( $this->verify_post_type( $result ) ) {
+				// user has no access, remove from result.
+				unset( $results[ $key ] );
+				$match = true;
 			}
 		}
 		// re-evaluate count.
@@ -564,17 +788,9 @@ trait WP_Document_Revisions_Query {
 			// reindex array.
 			$results = array_values( $results );
 
-			if ( is_array( $results ) ) {
-				$query_object->post_count  = count( $results );
-				$query_object->found_posts = $query_object->post_count;
-				$query_object->is_404      = (bool) ( 0 === $query_object->post_count );
-			} elseif ( null === $results ) {
-				$query_object->post_count  = 0;
-				$query_object->found_posts = 0;
-				$query_object->is_404      = true;
-			} else {
-				$query_object->found_posts = 1;
-			}
+			$query_object->post_count  = count( $results );
+			$query_object->found_posts = $query_object->post_count;
+			$query_object->is_404      = (bool) ( 0 === $query_object->post_count );
 		}
 
 		return $results;
@@ -601,8 +817,8 @@ trait WP_Document_Revisions_Query {
 	 * Adds EditFlow / PublishPress Status support for post status to the admin table.
 	 *
 	 * @since 3.3.0
-	 * @param array $defaults the column chosen of the all documents list.
-	 * @return array the updated column list.
+	 * @param array<string, string> $defaults the column chosen of the all documents list.
+	 * @return array<string, string> the updated column list.
 	 */
 	public function add_post_status_column( array $defaults ): array {
 		// find place to slice (after author).
@@ -631,7 +847,7 @@ trait WP_Document_Revisions_Query {
 	 *
 	 * @since 3.3.0
 	 * @param string $column_name the column name of the all documents list to be populated.
-	 * @param string $post_id     the post id of the all documents list to be populated.
+	 * @param int    $post_id     the post id of the all documents list to be populated.
 	 */
 	public function post_status_column_cb( string $column_name, $post_id ): void {
 

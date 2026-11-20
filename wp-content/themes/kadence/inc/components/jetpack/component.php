@@ -26,7 +26,7 @@ class Component implements Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'jetpack';
 	}
 
@@ -34,7 +34,7 @@ class Component implements Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_action( 'after_setup_theme', array( $this, 'action_add_jetpack_support' ) );
+		add_action( 'after_setup_theme', [ $this, 'action_add_jetpack_support' ] );
 	}
 
 	/**
@@ -49,11 +49,11 @@ class Component implements Component_Interface {
 		// Add theme support for Infinite Scroll.
 		add_theme_support(
 			'infinite-scroll',
-			array(
+			[
 				'container' => 'archive-container',
 				'footer'    => false,
 				'wrapper'   => false,
-				'render'    => function() {
+				'render'    => function () {
 					while ( have_posts() ) {
 						the_post();
 						if ( is_search() ) {
@@ -63,7 +63,7 @@ class Component implements Component_Interface {
 						}
 					}
 				},
-			)
+			]
 		);
 
 		// Add theme support for Responsive Videos.
@@ -72,16 +72,16 @@ class Component implements Component_Interface {
 		// Add theme support for Content Options.
 		add_theme_support(
 			'jetpack-content-options',
-			array(
-				'post-details' => array(
+			[
+				'post-details' => [
 					'stylesheet' => 'kadence-content',
 					'date'       => '.posted-on',
 					'categories' => '.category-links',
 					'tags'       => '.tag-links',
 					'author'     => '.posted-by',
 					'comment'    => '.comments-link',
-				),
-			)
+				],
+			]
 		);
 	}
 }

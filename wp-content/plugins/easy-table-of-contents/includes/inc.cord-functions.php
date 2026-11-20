@@ -245,17 +245,46 @@ function mb_substr_replace( $string, $replacement, $start, $length = null ) {
 		return array_map( __FUNCTION__, $string, $replacement, $start, $length );
 	}
 
-	preg_match_all( '/./us', (string) $string, $smatches );
-	preg_match_all( '/./us', (string) $replacement, $rmatches );
+	/*
+	 * Character-splitting the whole post with preg_match_all( '/./us' ) once per heading
+	 * exhausts the PHP time limit on long articles. mb_substr() keeps the same
+	 * character offsets mb_strpos() returns.
+	 */
+	$string      = (string) $string;
+	$replacement = (string) $replacement;
+	$strlen      = mb_strlen( $string );
 
-	if ( $length === null ) {
-
-		$length = mb_strlen( $string );
+	if ( ! is_int( $start ) ) {
+		$start = (int) $start;
 	}
 
-	array_splice( $smatches[0], $start, $length, $rmatches[0] );
+	if ( $start < 0 ) {
+		$start = max( 0, $strlen + $start );
+	} elseif ( $start > $strlen ) {
+		$start = $strlen;
+	}
 
-	return join( $smatches[0] );
+	if ( null === $length ) {
+		$length = $strlen - $start;
+	} else {
+		$length = (int) $length;
+		if ( $length < 0 ) {
+			$length = max( 0, $strlen - $start + $length );
+		}
+	}
+
+	$before = mb_substr( $string, 0, $start );
+	$after  = mb_substr( $string, $start + $length );
+
+	if ( false === $before ) {
+		$before = '';
+	}
+
+	if ( false === $after ) {
+		$after = '';
+	}
+
+	return $before . $replacement . $after;
 }
 endif;
 /**
@@ -364,6 +393,70 @@ function insertElementByPTag($content, $toc)
 }
 endif;
 
+if( ! function_exists( __NAMESPACE__ . '\eztoc_get_figure_insert_position' ) ):
+/**
+ * Find byte position after the Nth figure, deferring to the outermost parent when nested (e.g. galleries).
+ *
+ * @since 2.0.80
+ *
+ * @param string $content
+ * @param int    $figure_index
+ *
+ * @return int|false
+ */
+function eztoc_get_figure_insert_position( $content, $figure_index ) {
+	$figure_index = max( 1, (int) $figure_index );
+	$use_mb       = function_exists( 'mb_strpos' );
+	$strpos_fn    = $use_mb ? 'mb_strpos' : 'strpos';
+	$strlen_fn    = $use_mb ? 'mb_strlen' : 'strlen';
+
+	$open_tag  = '<figure';
+	$close_tag = '</figure>';
+	$close_len = $strlen_fn( $close_tag );
+
+	$count               = 0;
+	$pos                 = 0;
+	$depth               = 0;
+	$wait_for_depth_zero = false;
+	$content_len         = $strlen_fn( $content );
+
+	while ( $pos < $content_len ) {
+		$next_open  = $strpos_fn( $content, $open_tag, $pos );
+		$next_close = $strpos_fn( $content, $close_tag, $pos );
+
+		if ( false === $next_close && false === $next_open ) {
+			break;
+		}
+
+		if ( false !== $next_open && ( false === $next_close || $next_open < $next_close ) ) {
+			$depth++;
+			$pos = $next_open + $strlen_fn( $open_tag );
+			continue;
+		}
+
+		$close_end = $next_close + $close_len;
+		$count++;
+
+		if ( $count === $figure_index && ! $wait_for_depth_zero ) {
+			if ( $depth > 1 ) {
+				$wait_for_depth_zero = true;
+			} else {
+				return $close_end;
+			}
+		}
+
+		$depth--;
+		$pos = $close_end;
+
+		if ( $wait_for_depth_zero && 0 === $depth ) {
+			return $close_end;
+		}
+	}
+
+	return false;
+}
+endif;
+
 if( ! function_exists( __NAMESPACE__ . '\insertElementByImgTag' ) ):
 /**
  * insertElementByImgTag Method
@@ -371,11 +464,22 @@ if( ! function_exists( __NAMESPACE__ . '\insertElementByImgTag' ) ):
  * @since 2.0.60
  * @param $content
  * @param $toc
+ * @param int $figure_index
  * @return false|string
  * @throws \DOMException
 */
-function insertElementByImgTag($content, $toc)
+function insertElementByImgTag($content, $toc, $figure_index = 1)
 {
+	$position = eztoc_get_figure_insert_position( $content, $figure_index );
+
+	if ( false !== $position ) {
+		if ( function_exists( 'mb_substr' ) ) {
+			return mb_substr( $content, 0, $position ) . $toc . mb_substr( $content, $position );
+		}
+
+		return substr( $content, 0, $position ) . $toc . substr( $content, $position );
+	}
+
 	$find = array('</figure>');
 	$replace = array('</figure>' . $toc);
 	return mb_find_replace( $find, $replace, $content );

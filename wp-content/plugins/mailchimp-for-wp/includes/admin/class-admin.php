@@ -1,5 +1,8 @@
 <?php
 
+defined('ABSPATH') || exit;
+
+
 /**
  * Class MC4WP_Admin
  *
@@ -68,6 +71,7 @@ class MC4WP_Admin
         add_action('wp_dashboard_setup', [$this, 'register_dashboard_widgets']);
         add_action('mc4wp_admin_empty_lists_cache', [$this, 'renew_lists_cache']);
         add_action('mc4wp_admin_empty_debug_log', [$this, 'empty_debug_log']);
+        add_action('mc4wp_admin_connect_tracking_pixel', [$this, 'connect_tracking_pixel']);
 
         add_action('admin_notices', [$this, 'show_api_key_notice']);
         add_action('mc4wp_admin_dismiss_api_key_notice', [$this, 'dismiss_api_key_notice']);
@@ -114,11 +118,11 @@ class MC4WP_Admin
         }
 
         // verify nonce
-        if (! isset($_REQUEST['_wpnonce']) || false === wp_verify_nonce($_REQUEST['_wpnonce'], '_mc4wp_action')) {
+        if (! isset($_REQUEST['_wpnonce']) || false === wp_verify_nonce(wp_unslash($_REQUEST['_wpnonce']), '_mc4wp_action')) {
             wp_nonce_ays('_mc4wp_action');
         }
 
-        $action = (string) $_REQUEST['_mc4wp_action'];
+        $action = (string) wp_unslash($_REQUEST['_mc4wp_action']);
 
         /**
          * Allows you to hook into requests containing `_mc4wp_action` => action name.
@@ -134,9 +138,9 @@ class MC4WP_Admin
 
         // redirect back to where we came from (to prevent double submit)
         if (! empty($_POST['_redirect_to'])) {
-            $redirect_url = $_POST['_redirect_to'];
+            $redirect_url = wp_unslash($_POST['_redirect_to']);
         } elseif (! empty($_GET['_redirect_to'])) {
-            $redirect_url = $_GET['_redirect_to'];
+            $redirect_url = wp_unslash($_GET['_redirect_to']);
         } else {
             $redirect_url = remove_query_arg('_mc4wp_action');
         }
@@ -218,7 +222,7 @@ class MC4WP_Admin
         $lists     = $mailchimp->refresh_lists();
 
         if (! empty($lists)) {
-            $this->messages->flash(esc_html__('Success! The cached configuration for your Mailchimp lists has been renewed.', 'mailchimp-for-wp'));
+            $this->messages->flash(__('Success! The cached configuration for your Mailchimp lists has been renewed.', 'mailchimp-for-wp'));
         }
     }
 
@@ -233,6 +237,7 @@ class MC4WP_Admin
 
     /**
      * Validates the General settings
+     *
      * @param array $settings
      * @return array
      */
@@ -251,9 +256,30 @@ class MC4WP_Admin
         // Sanitize API key
         $settings['api_key'] = sanitize_text_field($settings['api_key']);
 
-        // Sanitize tracking pixel ID (alphanumeric and hyphens only)
-        if (isset($settings['tracking_pixel_id'])) {
-            $settings['tracking_pixel_id'] = preg_replace('/[^a-zA-Z0-9\-]/', '', $settings['tracking_pixel_id']);
+        // Sanitize tracking pixel enabled toggle
+        $settings['tracking_pixel_enabled'] = ! empty($settings['tracking_pixel_enabled']);
+
+        // If the toggle was just switched on, trigger auto-connect to fetch/create the connected site.
+        // Also runs when only the script URL is missing, which is the case for sites that got their
+        // site ID from the e-commerce store settings without a script URL alongside it.
+        if ($settings['tracking_pixel_enabled'] && (empty($settings['tracking_pixel_site_id']) || empty($settings['tracking_pixel_script_url']))) {
+            // Pass the submitted key, because this runs before the new settings are stored and the API
+            // service still holds the key that is currently in the database. The constant wins as usual.
+            $api_key = defined('MC4WP_API_KEY') && constant('MC4WP_API_KEY') !== '' ? (string) MC4WP_API_KEY : $settings['api_key'];
+            $result  = MC4WP_Tracking_Pixel::fetch_or_create_connected_site($api_key);
+            if ($result !== false) {
+                $settings['tracking_pixel_site_id']    = $result['site_id'];
+                $settings['tracking_pixel_script_url'] = $result['script_url'];
+            } else {
+                $this->messages->flash(esc_html__('Could not automatically connect your site to Mailchimp. Please check your API key and try again.', 'mailchimp-for-wp'), 'error');
+                $settings['tracking_pixel_enabled'] = false;
+            }
+        }
+
+        // If the toggle is turned off, clear stored site info
+        if (! $settings['tracking_pixel_enabled']) {
+            $settings['tracking_pixel_site_id']    = '';
+            $settings['tracking_pixel_script_url'] = '';
         }
 
         // if API key changed, empty Mailchimp cache
@@ -422,18 +448,19 @@ class MC4WP_Admin
                 $mailchimp = new MC4WP_MailChimp();
                 $lists     = $mailchimp->get_lists();
             } catch (MC4WP_API_Connection_Exception $e) {
-                $message = sprintf('<strong>%s</strong> %s %s ', esc_html__('Error connecting to Mailchimp:', 'mailchimp-for-wp'), $e->getCode(), $e->getMessage());
+                $message = sprintf('<strong>%s</strong> %s %s ', __('Error connecting to Mailchimp:', 'mailchimp-for-wp'), $e->getCode(), $e->getMessage());
 
                 if (is_object($e->response_data) && ! empty($e->response_data->ref_no)) {
-                    $message .= '<br />' . sprintf(esc_html__('Looks like your server is blocked by Mailchimp\'s firewall. Please contact Mailchimp support and include the following reference number: %s', 'mailchimp-for-wp'), $e->response_data->ref_no);
+                    // translators: %s is the Mailchimp firewall reference number.
+                    $message .= '<br />' . sprintf(__('Looks like your server is blocked by Mailchimp\'s firewall. Please contact Mailchimp support and include the following reference number: %s', 'mailchimp-for-wp'), $e->response_data->ref_no);
                 }
 
-                $message .= '<br /><br />' . sprintf('<a href="%s">' . esc_html__('Here\'s some info on solving common connectivity issues.', 'mailchimp-for-wp') . '</a>', 'https://www.mc4wp.com/kb/solving-connectivity-issues/#utm_source=wp-plugin&utm_medium=mailchimp-for-wp&utm_campaign=settings-notice');
+                $message .= '<br /><br />' . sprintf('<a href="%s">' . __('Here\'s some info on solving common connectivity issues.', 'mailchimp-for-wp') . '</a>', 'https://www.mc4wp.com/kb/solving-connectivity-issues/#utm_source=wp-plugin&utm_medium=mailchimp-for-wp&utm_campaign=settings-notice');
 
                 $this->messages->flash($message, 'error');
                 $connected = false;
             } catch (MC4WP_API_Exception $e) {
-                $message = sprintf('<strong>%s</strong><br /> %s', esc_html__('Mailchimp returned the following error:', 'mailchimp-for-wp'), nl2br((string) $e));
+                $message = sprintf('<strong>%s</strong><br /> %s', __('Mailchimp returned the following error:', 'mailchimp-for-wp'), nl2br((string) $e));
                 $this->messages->flash($message, 'error');
                 $connected = false;
             }
@@ -470,6 +497,25 @@ class MC4WP_Admin
     }
 
     /**
+     * Re-runs the connected site auto-connect flow (useful if the site was
+     * registered under a different domain or the stored site_id is stale).
+     */
+    public function connect_tracking_pixel()
+    {
+        $result = MC4WP_Tracking_Pixel::fetch_or_create_connected_site();
+        if ($result !== false) {
+            $opts                              = mc4wp_get_options();
+            $opts['tracking_pixel_enabled']    = true;
+            $opts['tracking_pixel_site_id']    = $result['site_id'];
+            $opts['tracking_pixel_script_url'] = $result['script_url'];
+            update_option('mc4wp', $opts);
+            $this->messages->flash(esc_html__('Site tracking pixel successfully connected.', 'mailchimp-for-wp'));
+        } else {
+            $this->messages->flash(esc_html__('Could not connect site tracking pixel. Please check your API key and try again.', 'mailchimp-for-wp'), 'error');
+        }
+    }
+
+    /**
      * Empties the log file
      */
     public function empty_debug_log()
@@ -477,7 +523,7 @@ class MC4WP_Admin
         $log = $this->get_log();
         file_put_contents($log->file, '');
 
-        $this->messages->flash(esc_html__('Log successfully emptied.', 'mailchimp-for-wp'));
+        $this->messages->flash(__('Log successfully emptied.', 'mailchimp-for-wp'));
     }
 
     /**
@@ -508,7 +554,8 @@ class MC4WP_Admin
         }
 
         echo '<div class="notice notice-warning mc4wp-is-dismissible">';
-        echo '<p>', sprintf(wp_kses(__('To get started with Mailchimp for WordPress, please <a href="%s">enter your Mailchimp API key on the settings page of the plugin</a>.', 'mailchimp-for-wp'), ['a' => ['href' => []]]), admin_url('admin.php?page=mailchimp-for-wp')), '</p>';
+        // translators: %s is the URL to the plugin settings page.
+        echo '<p>', sprintf(wp_kses(__('To get started with Mailchimp for WordPress, please <a href="%s">enter your Mailchimp API key on the settings page of the plugin</a>.', 'mailchimp-for-wp'), ['a' => ['href' => []]]), esc_url(admin_url('admin.php?page=mailchimp-for-wp'))), '</p>';
         echo '<form method="post">';
         wp_nonce_field('_mc4wp_action', '_wpnonce');
         echo '<input type="hidden" name="_mc4wp_action" value="dismiss_api_key_notice" />';
@@ -530,7 +577,7 @@ class MC4WP_Admin
      */
     protected function get_log()
     {
-        return mc4wp('log');
+        return mc4wp_get_service('log');
     }
 
     /**
@@ -538,6 +585,6 @@ class MC4WP_Admin
      */
     protected function get_api()
     {
-        return mc4wp('api');
+        return mc4wp_get_service('api');
     }
 }

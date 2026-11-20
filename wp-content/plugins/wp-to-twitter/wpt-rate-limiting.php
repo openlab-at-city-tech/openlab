@@ -5,7 +5,7 @@
  * @category Core
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.joedolson.com/wp-to-twitter/
  */
 
@@ -107,10 +107,10 @@ function wpt_default_rate_limit( $term = false ) {
 	 *
 	 * @hook wpt_default_rate_limit
 	 *
-	 * @param {int} $limit Integer number of posts allowed.
-	 * @param {int|bool} $term  Term ID or false for default value.
+	 * @param int $limit Integer number of posts allowed.
+	 * @param int|bool $term  Term ID or false for default value.
 	 *
-	 * @return {int}
+	 * @return int
 	 */
 	return apply_filters( 'wpt_default_rate_limit', $limit, $term );
 }
@@ -222,9 +222,9 @@ function wpt_view_rate_limits() {
 			?>
 			<li><h4><a href='https://x.com/$author'>@<?php echo esc_html( $author ); ?></a>:</h4><ul>
 				<?php
-				foreach ( $term as $id => $value ) {
+				foreach ( $term as $key => $value ) {
 					$count         = count( $value );
-					$term_array    = explode( '+', $id );
+					$term_array    = explode( '+', $key );
 					$t             = $term_array[0];
 					$x             = $term_array[1];
 					$limit         = wpt_get_rate_limit( $t );

@@ -17,7 +17,7 @@ if ( post_password_required() ) {
 
 		<div class="comments">
 		
-			<h3 class="comment-reply-title"><?php _e( 'Comments', 'hamilton' ) ?></h3>
+			<h3 class="comment-reply-title"><?php esc_html_e( 'Comments', 'hamilton' ) ?></h3>
 			
 			<?php 
 			

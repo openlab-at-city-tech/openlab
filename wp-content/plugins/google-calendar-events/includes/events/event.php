@@ -225,6 +225,14 @@ class Event
 	public $meta = [];
 
 	/**
+	 * Calendar priority within a grouped calendar (0 = first selected, PHP_INT_MAX = unset).
+	 *
+	 * @access public
+	 * @var int
+	 */
+	public $calendar_priority = PHP_INT_MAX;
+
+	/**
 	 * Event default template.
 	 *
 	 * @access public
@@ -393,8 +401,8 @@ class Event
 			$var = (array) $var;
 		}
 
-		$location['name'] = isset($var['name']) ? esc_attr(strip_tags($var['name'])) : '';
-		$location['address'] = isset($var['address']) ? esc_attr(strip_tags($var['address'])) : '';
+		$location['name'] = isset($var['name']) ? esc_attr(wp_strip_all_tags($var['name'])) : '';
+		$location['address'] = isset($var['address']) ? esc_attr(wp_strip_all_tags($var['address'])) : '';
 		$location['lat'] = isset($var['lat']) ? $this->esc_coordinate($var['lat']) : 0;
 		$location['lng'] = isset($var['lng']) ? $this->esc_coordinate($var['lng']) : 0;
 

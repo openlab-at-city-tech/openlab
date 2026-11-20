@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Admin reset page
  *
- * @since 2.0.0 bbPress (r2613)
+ * @since 2.6.0 bbPress (r6277)
  *
  */
 function bbp_admin_reset_page() {
@@ -29,7 +29,7 @@ function bbp_admin_reset_page() {
 			<table class="form-table">
 				<tbody>
 					<tr valign="top">
-						<th scope="row"><?php esc_html_e( 'The following data will be removed:', 'bbpress' ) ?></th>
+						<th scope="row"><?php esc_html_e( 'The following data will be removed:', 'bbpress' ); ?></th>
 						<td>
 							<?php esc_html_e( 'All Forums',           'bbpress' ); ?><br />
 							<?php esc_html_e( 'All Topics',           'bbpress' ); ?><br />
@@ -43,6 +43,7 @@ function bbp_admin_reset_page() {
 							<?php esc_html_e( 'Importer Helper Data', 'bbpress' ); ?><br />
 						</td>
 					</tr>
+					<?php if ( ! is_multisite() ) : ?>
 					<tr valign="top">
 						<th scope="row"><?php esc_html_e( 'Delete imported users?', 'bbpress' ); ?></th>
 						<td>
@@ -53,6 +54,7 @@ function bbp_admin_reset_page() {
 							</fieldset>
 						</td>
 					</tr>
+					<?php endif; ?>
 					<tr valign="top">
 						<th scope="row"><?php esc_html_e( 'Do you really want to do this?', 'bbpress' ); ?></th>
 						<td>
@@ -79,7 +81,7 @@ function bbp_admin_reset_page() {
 /**
  * Handle a bbPress admin area reset request.
  *
- * @since 2.0.0 bbPress (r2613)
+ * @since 2.1.0 bbPress (r3884)
  */
 function bbp_admin_reset_handler() {
 
@@ -103,7 +105,7 @@ function bbp_admin_reset_handler() {
 /**
  * Wrapper for determining admin reset query feedback presented to a user.
  *
- * @since 2.6.0 bbPress (r6758)
+ * @since 2.6.0 bbPress (r6759)
  *
  * @param array $args Array of query, message, and possible responses
  *
@@ -131,7 +133,7 @@ function bbp_admin_reset_query_feedback( $args = array() ) {
 	// Success/Failure based on query error
 	if ( ! empty( $r['query'] ) ) {
 		$query  = bbp_db()->query( $r['query'] );
-		$result = ! is_wp_error( $query )
+		$result = ( false !== $query ) && ! is_wp_error( $query )
 			? $r['responses']['success']
 			: $r['responses']['failure'];
 
@@ -147,7 +149,7 @@ function bbp_admin_reset_query_feedback( $args = array() ) {
 /**
  * Perform a bbPress database reset.
  *
- * @since 2.6.0 bbPress
+ * @since 2.6.0 bbPress (r6750)
  */
 function bbp_admin_reset_database() {
 
@@ -177,78 +179,99 @@ function bbp_admin_reset_database() {
 		$sql_meta = implode( "', '", $sql_meta );
 
 		// Delete posts
-		$messages[] = bbp_admin_reset_query_feedback( array(
-			'query'   => "DELETE FROM `{$bbp_db->posts}` WHERE `post_type` IN ('{$fpt}', '{$tpt}', '{$rpt}')",
-			'message' => esc_html__( 'Removing Forums, Topics, and Replies&hellip; %s', 'bbpress' )
-		) );
+		$messages[] = bbp_admin_reset_query_feedback(
+			array(
+				'query'   => "DELETE FROM `{$bbp_db->posts}` WHERE `post_type` IN ('{$fpt}', '{$tpt}', '{$rpt}')",
+				/* translators: %s: Status of the deletion process */
+				'message' => esc_html__( 'Removing Forums, Topics, and Replies&hellip; %s', 'bbpress' )
+			)
+		);
 
 		/** Post Meta *********************************************************/
 
 		if ( ! empty( $sql_posts ) ) {
-			$messages[] = bbp_admin_reset_query_feedback( array(
-				'query'   => "DELETE FROM `{$bbp_db->postmeta}` WHERE `post_id` IN ('{$sql_meta}')",
-				'message' => esc_html__( 'Removing Forum, Topic, and Reply Meta Data&hellip; %s', 'bbpress' )
-			) );
+			$messages[] = bbp_admin_reset_query_feedback(
+				array(
+					'query'   => "DELETE FROM `{$bbp_db->postmeta}` WHERE `post_id` IN ('{$sql_meta}')",
+					/* translators: %s: Status of the meta deletion process */
+					'message' => esc_html__( 'Removing Forum, Topic, and Reply Meta Data&hellip; %s', 'bbpress' )
+				)
+			);
 		}
 
 		/** Post Revisions ****************************************************/
 
 		if ( ! empty( $sql_posts ) ) {
-			$messages[] = bbp_admin_reset_query_feedback( array(
-				'query'   => "DELETE FROM `{$bbp_db->posts}` WHERE `post_parent` IN ('{$sql_meta}') AND `post_type` = 'revision'",
-				'message' => esc_html__( 'Removing Revision Data&hellip; %s', 'bbpress' )
-			) );
+			$messages[] = bbp_admin_reset_query_feedback(
+				array(
+					'query'   => "DELETE FROM `{$bbp_db->posts}` WHERE `post_parent` IN ('{$sql_meta}') AND `post_type` = 'revision'",
+					/* translators: %s: Status of the revision deletion process */
+					'message' => esc_html__( 'Removing Revision Data&hellip; %s', 'bbpress' )
+				)
+			);
 		}
 	}
 
 	/** Topic Tags ************************************************************/
 
-	$messages[] = bbp_admin_reset_query_feedback( array(
-		'query'   => "DELETE a,b,c FROM `{$bbp_db->terms}` AS a LEFT JOIN `{$bbp_db->term_taxonomy}` AS c ON a.term_id = c.term_id LEFT JOIN `{$bbp_db->term_relationships}` AS b ON b.term_taxonomy_id = c.term_taxonomy_id WHERE c.taxonomy = 'topic-tag'",
-		'message' => esc_html__( 'Deleting Topic Tags&hellip; %s', 'bbpress' )
-	) );
+	$messages[] = bbp_admin_reset_query_feedback(
+		array(
+			'query'   => "DELETE a,b,c FROM `{$bbp_db->terms}` AS a LEFT JOIN `{$bbp_db->term_taxonomy}` AS c ON a.term_id = c.term_id LEFT JOIN `{$bbp_db->term_relationships}` AS b ON b.term_taxonomy_id = c.term_taxonomy_id WHERE c.taxonomy = 'topic-tag'",
+			/* translators: %s: Status of the tag deletion process */
+			'message' => esc_html__( 'Deleting Topic Tags&hellip; %s', 'bbpress' )
+		)
+	);
 
 	/** User ******************************************************************/
 
 	// First, if we're deleting previously imported users, delete them now
-	if ( ! empty( $_POST['bbpress-delete-imported-users'] ) ) {
-		$sql_users = $bbp_db->get_results( "SELECT `user_id` FROM `{$bbp_db->usermeta}` WHERE `meta_key` = '_bbp_old_user_id'", OBJECT_K );
+	if ( ! is_multisite() && ! empty( $_POST['bbpress-delete-imported-users'] ) ) {
+		$sql_users = array_unique( array_map( 'intval', $bbp_db->get_col( "SELECT `user_id` FROM `{$bbp_db->usermeta}` WHERE `meta_key` = '_bbp_old_user_id'" ) ) );
 
 		if ( ! empty( $sql_users ) ) {
-			$sql_meta = array();
-			foreach ( $sql_users as $key => $value ) {
-				$sql_meta[] = $key;
+			require_once ABSPATH . 'wp-admin/includes/user.php';
+			$deleted = true;
+			foreach ( $sql_users as $user_id ) {
+				if ( ! wp_delete_user( (int) $user_id ) ) {
+					$deleted = false;
+				}
 			}
 
-			// Users
-			$sql_meta   = implode( "', '", $sql_meta );
-			$messages[] = bbp_admin_reset_query_feedback( array(
-				'query'   => "DELETE FROM `{$bbp_db->users}` WHERE `ID` IN ('{$sql_meta}')",
-				'message' => esc_html__( 'Deleting Imported Users&hellip; %s', 'bbpress' )
-			) );
-
-			// User meta
-			$messages[] = bbp_admin_reset_query_feedback( array(
-				'query'   => "DELETE FROM `{$bbp_db->usermeta}` WHERE `user_id` IN ('{$sql_meta}')",
-				'message' => esc_html__( 'Deleting Imported User Meta&hellip; %s', 'bbpress' )
-			) );
+			$messages[] = sprintf(
+				/* translators: %s: Status of the user deletion process */
+				esc_html__( 'Deleting Imported Users&hellip; %s', 'bbpress' ),
+				$deleted ? esc_html__( 'Success!', 'bbpress' ) : esc_html__( 'Failed!', 'bbpress' )
+			);
 		}
 	}
 
-	// Next, if we still have users that were not imported delete that meta data
-	$messages[] = bbp_admin_reset_query_feedback( array(
-		'query'   => "DELETE FROM `{$bbp_db->usermeta}` WHERE `meta_key` LIKE '%%_bbp_%%'",
-		'message' => esc_html__( 'Deleting bbPress Specific User Meta&hellip; %s', 'bbpress' )
-	) );
+	// Remove only this site's user options on multisite. Converter metadata is global.
+	$meta_key = is_multisite()
+		? $bbp_db->get_blog_prefix() . '_bbp_'
+		: '_bbp_';
+	$like = is_multisite()
+		? $bbp_db->esc_like( $meta_key ) . '%'
+		: '%' . $bbp_db->esc_like( $meta_key ) . '%';
+
+	$messages[] = bbp_admin_reset_query_feedback(
+		array(
+			'query'   => $bbp_db->prepare( "DELETE FROM `{$bbp_db->usermeta}` WHERE `meta_key` LIKE %s", $like ),
+			/* translators: %s: Status of the user meta deletion process */
+			'message' => esc_html__( 'Deleting bbPress Specific User Meta&hellip; %s', 'bbpress' )
+		)
+	);
 
 	/** Converter *************************************************************/
 
 	$table_name = $bbp_db->prefix . 'bbp_converter_translator';
 	if ( $bbp_db->get_var( "SHOW TABLES LIKE '{$table_name}'" ) === $table_name ) {
-		$messages[] = bbp_admin_reset_query_feedback( array(
-			'query'   => "DROP TABLE {$table_name}",
-			'message' => esc_html__( 'Dropping Conversion Table&hellip; %s', 'bbpress' )
-		) );
+		$messages[] = bbp_admin_reset_query_feedback(
+			array(
+				'query'   => "DROP TABLE {$table_name}",
+				/* translators: %s: Status of the table deletion process */
+				'message' => esc_html__( 'Dropping Conversion Table&hellip; %s', 'bbpress' )
+			)
+		);
 	}
 
 	/** Options ***************************************************************/

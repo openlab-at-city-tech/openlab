@@ -225,8 +225,10 @@ class Event_Builder
 				// Does the event has NOT a start location?
 				'if-not-end-location',
 				// Does the event has NOT an end location?
+				'if-event',
+				// Conditional: show content if event ID matches id--in list or does not match id--not-in list.
 			],
-			(array) $this->add_custom_event_tags()
+			(array) $this->add_custom_event_tags(),
 		);
 	}
 
@@ -352,8 +354,10 @@ class Event_Builder
 				case 'link':
 				case 'url':
 					$content = 'link' == $tag ? $calendar->get_event_html($event, $partial) : '';
+					$parsed_attr = (array) shortcode_parse_atts($attr);
+					$link_url = !empty($parsed_attr['url']) ? $parsed_attr['url'] : $event->link;
 
-					return $this->make_link($tag, $event->link, $content, $attr);
+					return $this->make_link($tag, $link_url, $content, $attr);
 
 				case 'add-to-gcal-link':
 					$content = 'add-to-gcal-link' == $tag ? $calendar->get_event_html($event, $partial) : '';
@@ -577,6 +581,25 @@ class Event_Builder
 
 					return '';
 
+				case 'if-event':
+					$parsed = array_merge(['id--in' => '', 'id--not-in' => ''], (array) shortcode_parse_atts($attr));
+					$event_id = $event->uid;
+					$in_ids = array_filter(array_map('trim', explode(',', $parsed['id--in'])));
+					$not_in = array_filter(array_map('trim', explode(',', $parsed['id--not-in'])));
+
+					$in_match =
+						!empty($in_ids) && (bool) array_filter($in_ids, fn($id) => $this->matches_event_id($id, $event_id));
+					$not_in_match =
+						!empty($not_in) && (bool) array_filter($not_in, fn($id) => $this->matches_event_id($id, $event_id));
+
+					$passes_in = empty($in_ids) || $in_match;
+					$passes_not_in = empty($not_in) || !$not_in_match;
+
+					if ($passes_in && $passes_not_in) {
+						return $calendar->get_event_html($event, $partial);
+					}
+					return '';
+
 				/* ======= *
 				 * Custom Event Tags or Default *
 				 * ======= */
@@ -642,7 +665,7 @@ class Event_Builder
 				'limit' => 0,
 				// Trim length to amount of words
 			],
-			(array) shortcode_parse_atts($attr)
+			(array) shortcode_parse_atts($attr),
 		);
 
 		if (!empty($attr['html'])) {
@@ -684,7 +707,7 @@ class Event_Builder
 				'autolink' => 'no',
 				// Automatically convert plaintext URIs to anchors
 			],
-			(array) shortcode_parse_atts($attr)
+			(array) shortcode_parse_atts($attr),
 		);
 
 		$allow_html = 'no' != $attr['html'] ? true : false;
@@ -827,6 +850,11 @@ class Event_Builder
 				'</span>' .
 				$time_start .
 				$time_end;
+
+			// Single-day all-day events still need endDate for Event schema.
+			if ($event->whole_day && $end instanceof Carbon && empty($time_end)) {
+				$output .= '<meta itemprop="endDate" content="' . esc_attr($end_iso) . '" />';
+			}
 		}
 
 		return trim($output);
@@ -854,7 +882,7 @@ class Event_Builder
 
 		$dt = $bound . '_dt';
 
-		if (!$event->$dt instanceof Carbon) {
+		if (!($event->$dt instanceof Carbon)) {
 			simcal_log_error('NOT CARBON');
 
 			return '';
@@ -866,7 +894,7 @@ class Event_Builder
 			[
 				'format' => '',
 			],
-			(array) shortcode_parse_atts($attr)
+			(array) shortcode_parse_atts($attr),
 		);
 
 		$format = ltrim(strstr($tag, '-'), '-');
@@ -947,7 +975,7 @@ class Event_Builder
 				'newwindow' => false,
 				// If autolink attribute is true, open link in new window
 			],
-			(array) shortcode_parse_atts($attr)
+			(array) shortcode_parse_atts($attr),
 		);
 
 		$anchor = $tag != 'url' ? 'yes' : $attr['autolink'];
@@ -965,9 +993,12 @@ class Event_Builder
 		 */
 		$additional_link_atts = apply_filters('simcal_additional_event_link_attributes', '', $attr);
 
+		// esc_url() strips percent-encoded non-ASCII octets; use esc_attr() for gcal links.
+		$href = 'add-to-gcal-link' === $tag ? esc_attr($url) : esc_url($url);
+
 		return false !== $anchor
 			? ' <a href="' .
-					esc_url($url) .
+					$href .
 					'" ' .
 					wp_kses_post($target) .
 					' ' .
@@ -1031,7 +1062,7 @@ class Event_Builder
 				'response' => '',
 				// filter attendees by rsvp response (yes/no/maybe)
 			],
-			(array) shortcode_parse_atts($attr)
+			(array) shortcode_parse_atts($attr),
 		);
 
 		$html = '<ul class="simcal-attendees" itemprop="attendees">' . "\n\t";
@@ -1074,13 +1105,16 @@ class Event_Builder
 
 		if ($unknown > 0) {
 			if ($known > 0) {
-				/* translators: One more person attending the event. */
-				$others = sprintf(_n('1 more attendee', '%s more attendees', $unknown, 'google-calendar-events'), $unknown);
-			} else {
-				/* translators: One or more persons attending the event whose name is unknown. */
 				$others = sprintf(
-					_n('1 anonymous attendee', '%s anonymous attendees', $unknown, 'google-calendar-events'),
-					$unknown
+					/* translators: %s: number of additional attendees */
+					_n('%s more attendee', '%s more attendees', $unknown, 'google-calendar-events'),
+					number_format_i18n($unknown),
+				);
+			} else {
+				$others = sprintf(
+					/* translators: %s: number of anonymous attendees */
+					_n('%s anonymous attendee', '%s anonymous attendees', $unknown, 'google-calendar-events'),
+					number_format_i18n($unknown),
 				);
 			}
 			$photo = $attr['photo'] !== 'hide' ? get_avatar('', 128) : '';
@@ -1147,7 +1181,7 @@ class Event_Builder
 				'email' => 'hide',
 				// show/hide attendee email address
 			],
-			(array) shortcode_parse_atts($attr)
+			(array) shortcode_parse_atts($attr),
 		);
 
 		$photo =
@@ -1159,7 +1193,7 @@ class Event_Builder
 		if (!empty($organizer['email']) && 'show' == $attr['email']) {
 			$organizer_html = sprintf(
 				'<a href="mailto:' . $organizer['email'] . '" itemprop="email">%s</a>',
-				$organizer_html
+				$organizer_html,
 			);
 		}
 
@@ -1222,6 +1256,35 @@ class Event_Builder
 			')' .
 			'(\\]?)' . // 6: Optional second closing bracket for escaping tags: [[tag]]
 			'/s';
+	}
+
+	private function matches_event_id($provided_id, $event_uid)
+	{
+		// Direct match
+		if ($provided_id === $event_uid) {
+			return true;
+		}
+
+		// Remove domain part for comparison if present (e.g., "08ic144bfaq0ss1rfukknevdc0@google.com" becomes "08ic144bfaq0ss1rfukknevdc0")
+		$removed_domain_provided_id = explode('@', $provided_id)[0];
+		$removed_domain_event_uid = explode('@', $event_uid)[0];
+
+		if ($removed_domain_provided_id === $removed_domain_event_uid) {
+			return true;
+		}
+
+		// Google Calendar URL IDs are base64("eventId calendarId") — decode and extract the event ID part
+		$decoded = base64_decode($provided_id, true);
+		if ($decoded !== false && ctype_print($decoded)) {
+			$space_pos = strpos($decoded, ' ');
+			$decoded_event_id = $space_pos !== false ? substr($decoded, 0, $space_pos) : trim($decoded);
+
+			if ($decoded_event_id === $event_uid || strpos($event_uid, $decoded_event_id . '@') === 0) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	//allow other plugins to register own event tags

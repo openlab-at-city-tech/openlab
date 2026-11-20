@@ -10,7 +10,7 @@
 /**
  *  Implementation of XenForo converter.
  *
- * @since 2.5.0 bbPress (r5145)
+ * @since 2.5.0 bbPress (r5146)
  *
  * @link Codex Docs https://codex.bbpress.org/import-forums/xenforo
  */
@@ -162,22 +162,22 @@ class XenForo extends BBP_Converter_Base {
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date_gmt',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified_gmt',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 
 		/** Forum Subscriptions Section ***************************************/
@@ -521,8 +521,7 @@ class XenForo extends BBP_Converter_Base {
 			'to_fieldname'   => '_bbp_old_user_id'
 		);
 
-/*		// User password.
-		// Note: We join the 'user_authenticate' table because 'user' does not include password.
+		// Store authentication data (Stored in serialized usermeta)
 		$this->field_map[] = array(
 			'from_tablename'  => 'user_authenticate',
 			'from_fieldname'  => 'data',
@@ -530,26 +529,18 @@ class XenForo extends BBP_Converter_Base {
 			'join_type'       => 'LEFT',
 			'join_expression' => 'USING (user_id)',
 			'to_type'         => 'user',
-			'to_fieldname'    => '_bbp_converter_password'
-		);
-
-		// Store old User password (Stored in usermeta serialized with salt)
-		$this->field_map[] = array(
-			'from_tablename'  => 'user',
-			'from_fieldname'  => 'password',
-			'to_type'         => 'user',
 			'to_fieldname'    => '_bbp_password',
 			'callback_method' => 'callback_savepass'
 		);
 
-		// Store old User Salt (This is only used for the SELECT row info for the above password save)
+		// Authentication scheme (Used by the password callback above)
 		$this->field_map[] = array(
-			'from_tablename' => 'user',
-			'from_fieldname' => 'salt',
+			'from_tablename' => 'user_authenticate',
+			'from_fieldname' => 'scheme_class',
 			'to_type'        => 'user',
-			'to_fieldname'   =>   ''
+			'to_fieldname'   => ''
 		);
-*/
+
 		// User password verify class (Stored in usermeta for verifying password)
 		$this->field_map[] = array(
 			'to_type'        => 'user',
@@ -682,27 +673,65 @@ class XenForo extends BBP_Converter_Base {
 	}
 
 	/**
-	 * This method is to save the salt and password together.  That
-	 * way when we authenticate it we can get it out of the database
-	 * as one value. Array values are auto sanitized by WordPress.
+	 * Store XenForo's serialized authentication data with its scheme.
+	 *
+	 * @param string $field Serialized authentication data.
+	 * @param array  $row   Source database row.
+	 * @return array|bool Authentication metadata, or false if invalid.
 	 */
-	public function translate_savepass( $field, $row ) {
-		$pass_array = array( 'hash' => $field, 'salt' => $row['salt'] );
-		return $pass_array;
+	public function callback_savepass( $field, $row ) {
+		$pass_array = $this->unserialize_pass( $field );
+
+		if ( ! is_array( $pass_array ) || ! isset( $pass_array['hash'], $row['scheme_class'] ) || ! is_string( $pass_array['hash'] ) || ! is_string( $row['scheme_class'] ) ) {
+			return false;
+		}
+
+		$pass_array['scheme'] = $row['scheme_class'];
+
+		return wp_slash( $pass_array );
 	}
 
 	/**
-	 * This method is to take the pass out of the database and compare
-	 * to a pass the user has typed in.
+	 * Check a password against XenForo authentication metadata.
+	 *
+	 * @param string $password        Password in plain text.
+	 * @param string $serialized_pass Serialized authentication metadata.
+	 * @return bool Whether the password is correct.
 	 */
 	public function authenticate_pass( $password, $serialized_pass ) {
-		$pass_array = unserialize( $serialized_pass );
-		switch( $pass_array['hashFunc'] ) {
-			case 'sha256':
-				return ( $pass_array['hash'] == hash( 'sha256', hash( 'sha256', $password ) . $pass_array['salt'] ) );
-			case 'sha1':
-				return ( $pass_array['hash'] == sha1( sha1( $password ) . $pass_array['salt'] ) );
+
+		// Unserialize the password, with safeguards
+		$pass_array = $this->unserialize_pass( $serialized_pass );
+
+		// Bail if missing or invalid values
+		if ( ! is_string( $password ) || ! is_array( $pass_array ) || ! isset( $pass_array['scheme'], $pass_array['hash'] ) || ! is_string( $pass_array['scheme'] ) || ! is_string( $pass_array['hash'] ) ) {
+			return false;
 		}
+
+		// XenForo 1.2 and newer native bcrypt passwords
+		if ( in_array( $pass_array['scheme'], array( 'XenForo_Authentication_Core12', 'XF:Core12' ), true ) ) {
+			return password_verify( $password, $pass_array['hash'] );
+		}
+
+		// Older XenForo native passwords
+		if ( ! in_array( $pass_array['scheme'], array( 'XenForo_Authentication_Core', 'XF:Core' ), true ) || ! isset( $pass_array['hashFunc'], $pass_array['salt'] ) || ! is_string( $pass_array['hashFunc'] ) || ! is_string( $pass_array['salt'] ) ) {
+			return false;
+		}
+
+		switch ( $pass_array['hashFunc'] ) {
+			case 'sha256':
+				return hash_equals(
+					$pass_array['hash'],
+					hash( 'sha256', hash( 'sha256', $password ) . $pass_array['salt'] )
+				);
+			case 'sha1':
+				return hash_equals(
+					$pass_array['hash'],
+					sha1( sha1( $password ) . $pass_array['salt'] )
+				);
+		}
+
+		return false;
 	}
 
 	/**

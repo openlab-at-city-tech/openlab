@@ -17,7 +17,7 @@
 	if ( wpa.dir ) {
 		let dir  = html.getAttribute( 'dir' );
 		if ( ! dir && wpa.dir !== 'ltr' ) {
-			html.setAttributeattr( 'dir', wpa.dir );
+			html.setAttribute( 'dir', wpa.dir );
 			if ( wpa.errors || wpa.tracking ) {
 				errors.push( 'html-lang-direction' );
 				console.log( 'HTML language direction set by WP Accessibility' );
@@ -50,11 +50,25 @@
 		}
 	}
 
+	const wpaClearMaximumScale = (str) => {
+		return str
+			// Remove maximum-scale and its value, along with any surrounding whitespace/commas
+			.replace( /(?:,\s*)?maximum-scale=[^,]+(?:,\s*)?/, ( match, offset, fullString ) => {
+				// If the match is at the very beginning or very end, clean up trailing/leading commas
+				if ( offset === 0 || offset + match.length === fullString.length ) {
+					return '';
+				}
+				// If it's in the middle, replace the whole match with a single comma and space
+				return ', ';
+			})
+			.trim();
+	};
+
 	const viewport = document.querySelector( 'meta[name="viewport"]' );
 	if ( viewport && wpa.viewport ) {
-		let conditionsBefore = viewport.getAttribute( 'content' );
-		let conditionsAfter  = viewport.getAttribute( 'content' );
+		let conditionsBefore = viewport.getAttribute( 'content' ), conditionsAfter;
 		if ( conditionsBefore.search(/user-scalable=no/g) ) {
+			// Replace 'user-scalable=no' with 'user-scalable=yes'.
 			conditionsAfter = conditionsBefore.replace( 'user-scalable=no', 'user-scalable=yes' );
 			viewport.setAttribute( 'content', conditionsAfter );
 			if ( ( wpa.errors || wpa.tracking ) && conditionsAfter != conditionsBefore ) {
@@ -62,14 +76,13 @@
 				console.log( 'Viewport made scalable by WP Accessibility' );
 			}
 		}
-		if ( conditionsBefore.search(/maximum-scale=1/g) ) {
-			conditionsAfter = conditionsBefore.replace( 'maximum-scale=1', 'maximum-scale=5' );
-			conditionsAfter = conditionsAfter.replace( 'maximum-scale=0', 'maximum-scale=5' );
-			viewport.setAttribute( 'content', conditionsAfter );
-			if ( ( wpa.errors || wpa.tracking ) && conditionsAfter != conditionsBefore  ) {
-				errors.push( 'viewport-maxscale' );
-				console.log( 'Viewport maximum scale set by WP Accessibility' );
-			}
+		conditionsBefore = viewport.getAttribute( 'content' );
+		conditionsAfter  = wpaClearMaximumScale( conditionsBefore );
+		console.log( conditionsAfter );
+		viewport.setAttribute( 'content', conditionsAfter );
+		if ( ( wpa.errors || wpa.tracking ) && conditionsAfter != conditionsBefore  ) {
+			errors.push( 'viewport-maxscale' );
+			console.log( 'Viewport maximum scale set by WP Accessibility' );
 		}
 	}
 
@@ -279,12 +292,21 @@
 
 	if ( wpa.tabindex ) {
 		// Remove tabindex from elements that should be natively focusable.
-		let focusable  = document.querySelectorAll('input,a[href],select,textarea,button');
+		let focusable  = document.querySelectorAll('input:not(.wpa-ignore-tabindex),a[href]:not(.wpa-ignore-tabindex),select:not(.wpa-ignore-tabindex),textarea:not(.wpa-ignore-tabindex),button:not(.wpa-ignore-tabindex)');
 		let tabRemoved = 0;
 		if ( focusable.length !== 0 ) {
 			focusable.forEach( (el) => {
 				let tabindex = el.getAttribute('tabindex');
-				if ( tabindex ) {
+				let skip = false;
+				// Check for intentionally hidden elements with tabindex of -1.
+				if ( el.hasAttribute('tabindex') && tabindex === '-1' ) {
+					let hasAriaHidden = el.getAttribute('aria-hidden');
+					let hasHidden = el.hasAttribute('hidden');
+					if ( hasAriaHidden === 'true' || hasHidden ) {
+						skip = true;
+					}
+				}
+				if ( tabindex && !skip ) {
 					el.removeAttribute('tabindex');
 					tabRemoved++;
 				}
@@ -311,7 +333,7 @@
 				console.log( fakeButtons.length + ' tabindex attributes added to divs with the button role by WP Accessibility' );
 			}
 		}
-		if ( buttonLinks !== 0 ) {
+		if ( buttonLinks.length !== 0 ) {
 			buttonLinks.forEach( (el) => {
 				el.setAttribute( 'tabindex', '0' );
 				el.classList.add('wpa-focusable');
@@ -321,7 +343,7 @@
 				console.log( buttonLinks.length + ' tabindex attributes added to anchor elements with the button role and no href value by WP Accessibility' );
 			}
 		}
-		if ( fakeLinks !== 0 ) {
+		if ( fakeLinks.length !== 0 ) {
 			fakeLinks.forEach( (el) => {
 				el.setAttribute( 'tabindex', '0' );
 				el.classList.add('wpa-focusable');
@@ -331,7 +353,7 @@
 				console.log( fakeLinks.length + ' tabindex attributes added to elements with the link role not using the a element by WP Accessibility' );
 			}
 		}
-		if ( linkLinks !== 0 ) {
+		if ( linkLinks.length !== 0 ) {
 			linkLinks.forEach( (el) => {
 				el.setAttribute( 'tabindex', '0' );
 				el.classList.add('wpa-focusable');
@@ -650,6 +672,10 @@
 					// Small images won't get displayed alt text containers.
 					return;
 				}
+				if ( el.classList.contains( 'wpa-skip' ) || el.closest( '.wpa-skip' ) ) {
+					// Skip images that have been marked to skip.
+					return;
+				}
 			}
 			let alt = img.getAttribute('alt');
 
@@ -760,20 +786,26 @@
 				id = classes.replace( 'wp-image-', '' );
 			}
 			let api = wpa.restUrl + '/' + id;
-			fetch( api )
-				.then( response => response.json())
-				.then(data => {
+			fetch( api, {
+					method: 'GET',
+					headers: {
+						'X-WP-Nonce': wpa.restNonce
+					}
+				} )
+				.then( response => {
+					return response.json();
+				})
+				.then( data => {
 					let rawdesc = data.description.rendered;
 					rawdesc = rawdesc.replace(/(<([^>]+)>)/gi, '').trim();
 					if ( '' !== rawdesc ) {
 						let url = new URL( wpa.ldHome );
 						url.searchParams.set( 'longdesc', id );
-						url.searchParams.set( 'p', id );
 						url.toString();
 						wpa_draw_longdesc( img, id, url, rawdesc );
 					}
 				})
-				.catch( error => {
+				.catch( (error) => {
 					console.log( error );
 				});
 		}
@@ -796,6 +828,19 @@
 					post_id = value.replace( 'page-id-', '', value );
 				}
 			});
+			if ( '' === post_id ) {
+				let articleClasses = img.closest( 'article' ).className.split(/\s+/);
+				if ( articleClasses.length > 0 ) {
+					articleClasses.forEach( (value) => {
+						if ( value.match( /post-/gi ) ) {
+							let stringRemaining = value.replace( 'post-', '', value );
+							if ( stringRemaining.match( /^[0-9]+$/ ) ) {
+								post_id = stringRemaining;
+							}
+						}
+					});
+				}
+			}
 			let url = new URL(longdesc);
 			url.searchParams.set( 'referrer', post_id );
 			url.toString();
@@ -848,6 +893,95 @@
 				});
 			}
 		}
+	}
+
+	// Listen for the font size change event.
+	document.addEventListener( 'wpa_fontsize_changed', function(e) {
+		fontSizeModify( e.detail.change, e.detail.factor );
+	} );
+	/**
+	 * Modifies the font size of text nodes within the document body.
+	 *
+	 * @param {string} change increase or reset.
+	 * @param {float} factor The factor by which to increase the font size.
+	 */
+	function fontSizeModify( change = 'increase', factor = 1.6 ) {
+		const adminBar = document.getElementById( 'wpadminbar' );
+		const toolBar = document.querySelector( '.a11y-toolbar' );
+
+		const ancestorResized = (el) => {
+			while (el) {
+				// Don't resize text inside other already resized elements or in the adminbar.
+				if ( el.hasAttribute( 'data-wpa-resized' ) ) {
+					return true;
+				}
+				el = el.parentElement; // Moves up to the next parent
+			}
+			return false;
+		};
+
+		const resizeElement = (el) => {
+			// Extract the computed, rendered font-size.
+			const computedStyle = window.getComputedStyle( el );
+			const fontSize = computedStyle.getPropertyValue( 'font-size' ).replace( 'px', '' );
+			const cssString = 'font-size: ' + ( parseFloat(fontSize) * factor ) + 'px !important';
+			if ( ! ancestorResized( el ) && 'increase' === change ) {
+				let inlineFontSize = el.style.fontSize;
+				// if element has a font-size set inline, store it in the data-wpa-resized attribute.
+				if ( inlineFontSize ) {
+					el.setAttribute( 'data-wpa-resized', inlineFontSize );
+				} else {
+					el.setAttribute( 'data-wpa-resized', 'true' );
+				}
+				el.style.cssText += cssString;
+			}
+			if ( change === 'reset' ) {
+				el.style.removeProperty( 'font-size' );
+				// Restore the inline font-size if it was stored by the script.
+				if ( el.hasAttribute( 'data-wpa-resized' ) && el.getAttribute( 'data-wpa-resized' ) !== 'true' ) {
+					el.style.fontSize = el.getAttribute( 'data-wpa-resized' );
+				}
+				el.removeAttribute( 'data-wpa-resized' );
+			}
+		};
+
+		const walker = document.createTreeWalker(
+			document.body,
+			NodeFilter.SHOW_TEXT,
+			{
+				acceptNode: function(node) {
+					// Ignore scripts, styles, nodes with only whitespace, and the adminbar.
+					const parentTag = node.parentElement ? node.parentElement.tagName : '';
+					if (['SCRIPT', 'STYLE', 'NOSCRIPT', 'SVG'].includes( parentTag ) || ( adminBar && adminBar.contains(node) ) || ( toolBar && toolBar.contains(node) ) ) {
+						return NodeFilter.FILTER_REJECT;
+					}
+					return node.textContent.trim().length > 0 || node.nodeType === Node.ELEMENT_NODE ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+				}
+			}
+		);
+
+		const seenElements = new Set();
+		// 2. Iterate through the text nodes
+		while ( walker.nextNode() ) {
+			const textNode = walker.currentNode;
+			const parentElement = textNode.parentElement;
+
+			// Prevent checking the same element multiple times
+			if ( parentElement && ! seenElements.has( parentElement ) ) {
+				seenElements.add( parentElement );
+				resizeElement( parentElement );
+			}
+		}
+
+		// Form controls (e.g. input) may have no text node children, so they need to be handled separately.
+		const formElements = document.body.querySelectorAll( 'input, select, textarea' );
+		formElements.forEach( (el) => {
+			if ( ( adminBar && adminBar.contains( el ) ) || ( toolBar && toolBar.contains( el ) ) || seenElements.has( el ) ) {
+				return;
+			}
+			seenElements.add( el );
+			resizeElement( el );
+		});
 	}
 })();
 

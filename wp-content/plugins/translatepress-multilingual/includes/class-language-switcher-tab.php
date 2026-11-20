@@ -243,7 +243,7 @@ class TRP_Language_Switcher_Tab {
      * @param array  $data   Incoming config
      * @return array
      */
-    private function sanitize_scope_config( string $scope, array $data ): array {
+    public function sanitize_scope_config( string $scope, array $data ): array {
         /* Rule map  */
         $rules = [
             'floater' => [

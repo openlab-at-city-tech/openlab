@@ -1,5 +1,8 @@
 <?php
 
+defined('ABSPATH') || exit;
+
+
 /**
  * Handles the Mailchimp campaign archive shortcode and Gutenberg block.
  *
@@ -135,8 +138,8 @@ class MC4WP_Campaign_Archive
                 $timestamp = strtotime($campaign->send_time);
                 if ($timestamp) {
                     $html .= ' <span class="mc4wp-campaign-archive__date">';
-                    /* translators: %s: Campaign send date. */
                     $html .= sprintf(
+                        // translators: %s is the campaign send date.
                         esc_html__('(%s)', 'mailchimp-for-wp'),
                         esc_html(date_i18n(get_option('date_format'), $timestamp))
                     );
@@ -188,7 +191,7 @@ class MC4WP_Campaign_Archive
             }
         } catch (MC4WP_API_Exception $e) {
             // Log API errors gracefully, do not break the page.
-            mc4wp('log')->error('Campaign Archive: ' . $e->getMessage());
+            mc4wp_get_service('log')->error('Campaign Archive: ' . $e->getMessage());
             return current_user_can('manage_options') ? '<!-- MC4WP Campaign Archive Error: ' . esc_html($e->getMessage()) . ' -->' : '';
         }
 

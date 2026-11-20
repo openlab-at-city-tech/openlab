@@ -5,7 +5,7 @@
  * @category Settings
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.joedolson.com/wp-to-twitter/
  */
 
@@ -265,7 +265,15 @@ function wpt_updated_settings() {
 		update_option( 'jd_twit_blogroll', ( isset( $_POST['jd_twit_blogroll'] ) ) ? 1 : '' );
 		$message  = wpt_select_shortener( map_deep( wp_unslash( $_POST ), 'sanitize_text_field' ) );
 		$message .= __( 'XPoster Options Updated', 'wp-to-twitter' );
-		$message  = apply_filters( 'wpt_settings', $message, $_POST );
+		/**
+		 * Filter the printed message after updating XPoster settings.
+		 *
+		 * @hook wpt_settings
+		 *
+		 * @param string $message Response after saving settings.
+		 * @param array  $post POST data, unsanitized.
+		 */
+		$message = apply_filters( 'wpt_settings', $message, $_POST );
 	}
 
 	if ( isset( $_POST['wpt_shortener_update'] ) && 'true' === $_POST['wpt_shortener_update'] ) {
@@ -274,9 +282,7 @@ function wpt_updated_settings() {
 
 	// Check whether the server has supported for needed functions.
 	if ( isset( $_POST['submit-type'] ) && 'check-support' === $_POST['submit-type'] ) {
-		$service = ( isset( $_POST['bluesky'] ) ) ? 'bluesky' : 'xcom';
-		$service = ( isset( $_POST['mastodon'] ) ) ? 'mastodon' : $service;
-		$message = wpt_check_functions( $service );
+		$message = wpt_check_functions();
 	}
 
 	if ( $message ) {
@@ -303,9 +309,9 @@ function wpt_possible_post_types() {
 	 *
 	 * @hook wpt_exclude_post_types
 	 *
-	 * @param {array} $exclusions Array of post type name slugs to exclude.
+	 * @param array $exclusions Array of post type name slugs to exclude.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	$excluded = apply_filters( 'wpt_exclude_post_types', $exclusions );
 	$return   = array();
@@ -328,7 +334,7 @@ function wpt_update_settings() {
 	<div class="wrap" id="wp-to-twitter">
 	<?php
 	if ( defined( 'WPT_STAGING_MODE' ) && true === WPT_STAGING_MODE ) {
-		echo "<div class='updated notice'><p>" . esc_html__( 'XPoster is in staging mode. Status updates will be reported as if successfully sent, but will not be posted.', 'wp-to-twitter' ) . '</p></div>';
+		echo "<div class='notice notice-info'><p>" . esc_html__( 'XPoster is in staging mode. Status updates will be reported as if successfully sent, but will not be posted.', 'wp-to-twitter' ) . '</p></div>';
 	}
 	wpt_updated_settings();
 	wpt_show_last_update();
@@ -506,7 +512,7 @@ function wpt_update_settings() {
 									<input type="checkbox" name="jd_twit_blogroll" id="jd_twit_blogroll" value="1" <?php checked( 'checked', wpt_checkbox( 'jd_twit_blogroll' ) ); ?> />
 									<label for="jd_twit_blogroll"><strong><?php esc_html_e( 'Send status update when you post a link', 'wp-to-twitter' ); ?></strong></label><br/>
 									<label for="newlink-published-text"><?php esc_html_e( 'Text for new link updates:', 'wp-to-twitter' ); ?></label>
-									<input aria-describedby="newlink-published-text-label" type="text" class="wpt-template" name="newlink-published-text" id="newlink-published-text" class="widefat" maxlength="120" value="<?php echo esc_attr( stripslashes( get_option( 'newlink-published-text' ) ) ); ?>"/><br/><span id="newlink-published-text-label"><?php echo wp_kses_post( 'Available shortcodes: <code>#url#</code>, <code>#title#</code>, and <code>#description#</code>.', 'wp-to-twitter' ); ?></span>
+									<input aria-describedby="newlink-published-text-label" type="text" class="wpt-template" name="newlink-published-text" id="newlink-published-text" class="widefat" maxlength="120" value="<?php echo esc_attr( stripslashes( get_option( 'newlink-published-text' ) ) ); ?>"/><br/><span id="newlink-published-text-label"><?php echo wp_kses_post( __( 'Available shortcodes: <code>#url#</code>, <code>#title#</code>, and <code>#description#</code>.', 'wp-to-twitter' ) ); ?></span>
 								</p>
 							</fieldset>
 						</div>
@@ -1094,7 +1100,6 @@ function wpt_service_length( $service ) {
 	$language = get_locale();
 	switch ( $language ) {
 		case 'zh_CN':
-		case 'zh_HK':
 		case 'zh_HK':
 		case 'ja':
 		case 'ko_KR':

@@ -4,6 +4,9 @@ namespace WpToTwitter_Vendor\Noweh\TwitterApi;
 
 use Exception;
 use WpToTwitter_Vendor\GuzzleHttp\Client;
+use WpToTwitter_Vendor\GuzzleHttp\Exception\GuzzleException;
+use WpToTwitter_Vendor\GuzzleHttp\Exception\RequestException;
+use WpToTwitter_Vendor\GuzzleHttp\Exception\ServerException;
 use WpToTwitter_Vendor\GuzzleHttp\HandlerStack;
 use WpToTwitter_Vendor\GuzzleHttp\Subscriber\Oauth\Oauth1;
 use JsonException;
@@ -31,7 +34,7 @@ class Media extends AbstractController
     }
     /**
      * Prepare request to upload images to Twitter
-     * @param array $settings
+     * @param array<string, mixed> $settings
      * @return void
      */
     private function prepareRequest(array $settings = []) : void
@@ -45,9 +48,8 @@ class Media extends AbstractController
     /**
      * Upload media to Twitter
      * @param string $filedata Base64 encoded binary file
-     * @return void
-     * @throws JsonException
-     * @throws Exception
+     * @return array<string, mixed>|null
+     * @throws GuzzleException|\RuntimeException|\JsonException
      */
     public function upload(string $filedata = "") : ?array
     {
@@ -55,10 +57,16 @@ class Media extends AbstractController
             $headers = ['Accept' => 'application/json'];
             $response = $this->client->request("POST", "media/upload.json?media_category=TWEET_IMAGE", ['verify' => !(\DIRECTORY_SEPARATOR === '\\'), 'headers' => $headers, 'multipart' => [["name" => "media_data", "contents" => $filedata]]]);
             if ($response->getStatusCode() === 200) {
-                return \json_decode($response->getBody()->getContents(), \true, 512, \JSON_THROW_ON_ERROR);
+                /** @var array<string, mixed>|null $payload */
+                $payload = \json_decode($response->getBody()->getContents(), \true, 512, \JSON_THROW_ON_ERROR);
+                return $payload;
             }
-        } catch (Exception $e) {
-            throw new \RuntimeException($e->getResponse()->getBody()->getContents(), $e->getCode());
+        } catch (ServerException $e) {
+            /** @var \stdClass|null $payload */
+            $payload = \json_decode($e->getResponse()->getBody()->getContents(), \true, 512, \JSON_THROW_ON_ERROR);
+            throw new \RuntimeException($payload->detail ?? $e->getMessage(), $payload->status ?? $e->getCode());
+        } catch (RequestException $e) {
+            throw new \RuntimeException($e->getMessage(), $e->getCode());
         }
         return null;
     }

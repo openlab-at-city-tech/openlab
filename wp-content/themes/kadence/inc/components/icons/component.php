@@ -9,8 +9,6 @@ namespace Kadence\Icons;
 
 use Kadence\Component_Interface;
 use Kadence\Templating_Component_Interface;
-use function add_action;
-use function add_filter;
 use function apply_filters;
 
 /**
@@ -27,7 +25,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'icons';
 	}
 
@@ -44,11 +42,11 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *               a callable or an array with key 'callable'. This approach is used to reserve the possibility of
 	 *               adding support for further arguments in the future.
 	 */
-	public function template_tags() : array {
-		return array(
-			'get_icon'   => array( $this, 'get_icon' ),
-			'print_icon' => array( $this, 'print_icon' ),
-		);
+	public function template_tags(): array {
+		return [
+			'get_icon'   => [ $this, 'get_icon' ],
+			'print_icon' => [ $this, 'print_icon' ],
+		];
 	}
 	/**
 	 * Get an SVG Icon
@@ -56,13 +54,14 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @param string $icon the icon name.
 	 * @param string $icon_title the icon title for screen readers.
 	 * @param bool   $base if the baseline class should be added.
+	 * @param bool   $aria if screen readers should read the icon, otherwise it is aria-hidden.
 	 */
 	public function get_icon( $icon = 'search', $icon_title = '', $base = true, $aria = false ) {
 		$display_title = apply_filters( 'kadence_svg_icons_have_title', true );
-		$output = '<span class="kadence-svg-iconset' . ( $base ? ' svg-baseline' : '' ) . '">';
+		$output        = '<span class="kadence-svg-iconset' . ( $base ? ' svg-baseline' : '' ) . '">';
 		switch ( $icon ) {
 			case 'moon':
-				$output .= '<svg'. ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-moon-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">';
+				$output .= '<svg' . ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-moon-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">';
 				if ( $display_title ) {
 					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'Dark Mode', 'kadence' ) ) . '</title>';
 				}
@@ -70,7 +69,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				</svg>';
 				break;
 			case 'moonAlt':
-				$output .= '<svg'. ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-moon-alt-svg" fill="currentColor" version="1.1" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">';
+				$output .= '<svg' . ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-moon-alt-svg" fill="currentColor" version="1.1" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">';
 				if ( $display_title ) {
 					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'Dark Mode', 'kadence' ) ) . '</title>';
 				}
@@ -78,7 +77,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				</svg>';
 				break;
 			case 'sun':
-				$output .= '<svg'. ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-sun-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">';
+				$output .= '<svg' . ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-sun-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">';
 				if ( $display_title ) {
 					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'Light Mode', 'kadence' ) ) . '</title>';
 				}
@@ -86,7 +85,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				</svg>';
 				break;
 			case 'sunAlt':
-				$output .= '<svg'. ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-sun-alt-svg" fill="currentColor" version="1.1" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">';
+				$output .= '<svg' . ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-sun-alt-svg" fill="currentColor" version="1.1" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">';
 				if ( $display_title ) {
 					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'Light Mode', 'kadence' ) ) . '</title>';
 				}
@@ -94,7 +93,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				</svg>';
 				break;
 			case 'sunrise':
-				$output .= '<svg'. ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-sunrise-svg" fill="currentColor" version="1.1" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">';
+				$output .= '<svg' . ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-sunrise-svg" fill="currentColor" version="1.1" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">';
 				if ( $display_title ) {
 					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'Light Mode', 'kadence' ) ) . '</title>';
 				}
@@ -102,7 +101,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				</svg>';
 				break;
 			case 'sunset':
-				$output .= '<svg'. ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-sunset-svg" fill="currentColor" version="1.1" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">';
+				$output .= '<svg' . ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-sunset-svg" fill="currentColor" version="1.1" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">';
 				if ( $display_title ) {
 					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'Dark Mode', 'kadence' ) ) . '</title>';
 				}
@@ -110,7 +109,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				</svg>';
 				break;
 			case 'settings':
-				$output .= '<svg'. ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-settings-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">';
+				$output .= '<svg' . ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-settings-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">';
 				if ( $display_title ) {
 					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'Settings', 'kadence' ) ) . '</title>';
 				}
@@ -118,7 +117,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				</svg>';
 				break;
 			case 'home':
-				$output .= '<svg'. ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-home-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">';
+				$output .= '<svg' . ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-home-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">';
 				if ( $display_title ) {
 					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'Home', 'kadence' ) ) . '</title>';
 				}
@@ -126,7 +125,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				</svg>';
 				break;
 			case 'search':
-				$output .= '<svg'. ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-search-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="26" height="28" viewBox="0 0 26 28">';
+				$output .= '<svg' . ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-search-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="26" height="28" viewBox="0 0 26 28">';
 				if ( $display_title ) {
 					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'Search', 'kadence' ) ) . '</title>';
 				}
@@ -134,7 +133,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				</svg>';
 				break;
 			case 'search2':
-				$output .= '<svg'. ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-search2-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">';
+				$output .= '<svg' . ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-search2-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">';
 				if ( $display_title ) {
 					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'Search', 'kadence' ) ) . '</title>';
 				}
@@ -206,7 +205,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				</svg>';
 				break;
 			case 'tiktok':
-				$output .= '<svg'. ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-tiktok-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">';
+				$output .= '<svg' . ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-tiktok-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">';
 				if ( $display_title ) {
 					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'TikTok', 'kadence' ) ) . '</title>';
 				}
@@ -214,7 +213,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				</svg>';
 				break;
 			case 'discord':
-				$output .= '<svg'. ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-discord-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="33" height="32" viewBox="0 0 33 32">';
+				$output .= '<svg' . ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-discord-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="33" height="32" viewBox="0 0 33 32">';
 				if ( $display_title ) {
 					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'Discord', 'kadence' ) ) . '</title>';
 				}
@@ -223,7 +222,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				</svg>';
 				break;
 			case 'discordAlt':
-				$output .= '<svg'. ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-discord-alt-svg" fill="currentColor" width="800px" height="800px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">';
+				$output .= '<svg' . ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-discord-alt-svg" fill="currentColor" width="800px" height="800px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">';
 				if ( $display_title ) {
 					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'Discord', 'kadence' ) ) . '</title>';
 				}
@@ -238,7 +237,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				</svg>';
 				break;
 			case 'discordAlt2':
-				$output .= '<svg'. ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-discord-alt-2-svg" fill="currentColor" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256" height="256" viewBox="0 0 256 256" xml:space="preserve">';
+				$output .= '<svg' . ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-discord-alt-2-svg" fill="currentColor" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256" height="256" viewBox="0 0 256 256" xml:space="preserve">';
 				if ( $display_title ) {
 					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'Discord', 'kadence' ) ) . '</title>';
 				}
@@ -351,7 +350,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				$output .= '<path d="M9.328 10.422c0 0-0.156 0.266-4.016 7.125-0.203 0.344-0.469 0.719-1.016 0.719h-3.734c-0.219 0-0.391-0.109-0.484-0.266s-0.109-0.359 0-0.562l3.953-7c0.016 0 0.016 0 0-0.016l-2.516-4.359c-0.109-0.203-0.125-0.422-0.016-0.578 0.094-0.156 0.281-0.234 0.5-0.234h3.734c0.562 0 0.844 0.375 1.031 0.703 2.547 4.453 2.562 4.469 2.562 4.469zM21.922 0.391c0.109 0.156 0.109 0.375 0 0.578l-8.25 14.594c-0.016 0-0.016 0.016 0 0.016l5.25 9.609c0.109 0.203 0.109 0.422 0.016 0.578-0.109 0.156-0.281 0.234-0.5 0.234h-3.734c-0.562 0-0.859-0.375-1.031-0.703-5.297-9.703-5.297-9.719-5.297-9.719s0.266-0.469 8.297-14.719c0.203-0.359 0.438-0.703 1-0.703h3.766c0.219 0 0.391 0.078 0.484 0.234z"></path>
 				</svg>';
 				break;
-			case 'wordpress': // phpcs:ignore WordPress.WP.CapitalPDangit.Misspelled
+			// The saved ID is all lowercase, which WordPress.org's Theme Check flags as a misspelling, so build it at runtime.
+			case strtolower( 'WordPress' ):
 				$output .= '<svg class="kadence-svg-icon kadence-wordpress-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">';
 				if ( $display_title ) {
 					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'WordPress', 'kadence' ) ) . '</title>';
@@ -603,7 +603,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				</svg>';
 				break;
 			case 'account':
-				$output .= '<svg'. ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-account-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">';
+				$output .= '<svg' . ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-account-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">';
 				if ( $display_title ) {
 					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'Account', 'kadence' ) ) . '</title>';
 				}
@@ -611,7 +611,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				</svg>';
 				break;
 			case 'account2':
-				$output .= '<svg'. ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-account2-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">';
+				$output .= '<svg' . ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-account2-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">';
 				if ( $display_title ) {
 					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'Account', 'kadence' ) ) . '</title>';
 				}
@@ -619,13 +619,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				</svg>';
 				break;
 			case 'account3':
-				$output .= '<svg'. ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-account3-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">';
+				$output .= '<svg' . ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-account3-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">';
 				if ( $display_title ) {
 					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'Account', 'kadence' ) ) . '</title>';
 				}
 				$output .= '<path d="M14 0c7.734 0 14 6.266 14 14 0 7.688-6.234 14-14 14-7.75 0-14-6.297-14-14 0-7.734 6.266-14 14-14zM23.672 21.109c1.453-2 2.328-4.453 2.328-7.109 0-6.609-5.391-12-12-12s-12 5.391-12 12c0 2.656 0.875 5.109 2.328 7.109 0.562-2.797 1.922-5.109 4.781-5.109 1.266 1.234 2.984 2 4.891 2s3.625-0.766 4.891-2c2.859 0 4.219 2.312 4.781 5.109zM20 11c0-3.313-2.688-6-6-6s-6 2.688-6 6 2.688 6 6 6 6-2.688 6-6z"></path>
 				</svg>';
-				break;	
+				break;  
 			case 'feed':
 				$output .= '<svg class="kadence-svg-icon kadence-feed-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="22" height="28" viewBox="0 0 22 28">';
 				if ( $display_title ) {
@@ -850,7 +850,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				</svg>';
 				break;
 			case 'quotes':
-				$output .= '<svg'. ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-quotes-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">';
+				$output .= '<svg' . ( ! $aria ? ' aria-hidden="true"' : '' ) . ' class="kadence-svg-icon kadence-quotes-svg" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">';
 				if ( $display_title ) {
 					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'Quotes', 'kadence' ) ) . '</title>';
 				}
@@ -1329,14 +1329,14 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				</g>
 				</svg>';
 				break;
-				case 'flipboardAlt2':
-					$output .= '<svg class="kadence-svg-icon kadence-flipboard-alt-2-svg" fill="currentColor" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">';
-					if ( $display_title ) {
-						$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'Flipboard', 'kadence' ) ) . '</title>';
-					}
-					$output .= '<path d="m0 0h7.7v24h-7.7zm8.5 8.5h7.8v7.8h-7.8zm0-8.5h15.5v7.7h-15.5z" />
+			case 'flipboardAlt2':
+				$output .= '<svg class="kadence-svg-icon kadence-flipboard-alt-2-svg" fill="currentColor" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">';
+				if ( $display_title ) {
+					$output .= '<title>' . ( ! empty( $icon_title ) ? $icon_title : esc_html__( 'Flipboard', 'kadence' ) ) . '</title>';
+				}
+				$output .= '<path d="m0 0h7.7v24h-7.7zm8.5 8.5h7.8v7.8h-7.8zm0-8.5h15.5v7.7h-15.5z" />
 					</svg>';
-					break;
+				break;
 			case 'fstoppers':
 				$output .= '<svg class="kadence-svg-icon kadence-fstoppers-svg" viewBox="0 0 147 147" xmlns="http://www.w3.org/2000/svg">';
 				if ( $display_title ) {

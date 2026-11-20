@@ -11,6 +11,7 @@
 
 namespace ThemeisleSDK\Common;
 
+use ThemeisleSDK\Loader;
 use ThemeisleSDK\Product;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -33,6 +34,7 @@ abstract class Abstract_Module {
 		'optimole-wp'                         => 'optimole-wp/optimole-wp.php',
 		'tweet-old-post'                      => 'tweet-old-post/tweet-old-post.php',
 		'feedzy-rss-feeds'                    => 'feedzy-rss-feeds/feedzy-rss-feed.php',
+		'insert-php'                          => 'insert-php/insert_php.php',
 		'woocommerce-product-addon'           => 'woocommerce-product-addon/woocommerce-product-addon.php',
 		'visualizer'                          => 'visualizer/index.php',
 		'wp-landing-kit'                      => 'wp-landing-kit/wp-landing-kit.php',
@@ -40,9 +42,19 @@ abstract class Abstract_Module {
 		'sparks-for-woocommerce'              => 'sparks-for-woocommerce/sparks-for-woocommerce.php',
 		'templates-patterns-collection'       => 'templates-patterns-collection/templates-patterns-collection.php',
 		'wpcf7-redirect'                      => 'wpcf7-redirect/wpcf7-redirect.php',
+		'anti-spam'                           => 'anti-spam/anti-spam.php',
 		'wp-full-stripe-free'                 => 'wp-full-stripe-free/wp-full-stripe.php',
 		'learning-management-system'          => 'learning-management-system/lms.php',
+		'wp-cloudflare-page-cache'            => 'wp-cloudflare-page-cache/wp-cloudflare-super-page-cache.php',
+		'easy-mcp-ai'                         => 'easy-mcp-ai/easy-mcp-ai.php',
 	];
+
+	/**
+	 * Runtime-resolved plugin paths.
+	 *
+	 * @var string[] $resolved_plugin_paths Plugin main file path by slug.
+	 */
+	private $resolved_plugin_paths = [];
 
 	/**
 	 * Product which use the module.
@@ -122,6 +134,28 @@ abstract class Abstract_Module {
 	}
 
 	/**
+	 * Read a compiled script's `.asset.php` file.
+	 *
+	 * The build folder is not tracked in git, so the file can be missing
+	 * (tests, a checkout without `npm run build`). Fall back to no
+	 * dependencies and the SDK version instead of a fatal.
+	 *
+	 * @param string $relative_path Path relative to the SDK root, e.g. 'assets/js/build/about/about.asset.php'.
+	 *
+	 * @return array{dependencies: string[], version: string}
+	 */
+	public function get_asset_file( $relative_path ) {
+		global $themeisle_sdk_max_path;
+
+		$asset_path = $themeisle_sdk_max_path . '/' . ltrim( $relative_path, '/' );
+
+		return is_readable( $asset_path ) ? require $asset_path : array(
+			'dependencies' => array(),
+			'version'      => Loader::get_version(),
+		);
+	}
+
+	/**
 	 * Call plugin api
 	 *
 	 * @param string $slug plugin slug.
@@ -140,7 +174,8 @@ abstract class Abstract_Module {
 					'slug'   => $slug,
 					'fields' => array(
 						'downloaded'        => false,
-						'rating'            => false,
+						'rating'            => true,
+						'ratings'           => true,
 						'description'       => false,
 						'short_description' => true,
 						'donate_link'       => false,
@@ -172,11 +207,9 @@ abstract class Abstract_Module {
 	 * @return bool
 	 */
 	public function is_plugin_installed( $plugin ) {
-		if ( ! isset( $this->plugin_paths[ $plugin ] ) ) {
-			return false;
-		}
+		$plugin_file = $this->resolve_plugin_main_file( $plugin );
 
-		if ( file_exists( WP_CONTENT_DIR . '/plugins/' . $this->plugin_paths[ $plugin ] ) ) {
+		if ( file_exists( WP_CONTENT_DIR . '/plugins/' . $plugin_file ) ) {
 			return true;
 		}
 
@@ -192,7 +225,7 @@ abstract class Abstract_Module {
 	 */
 	public function get_plugin_activation_link( $slug ) {
 		$reference_key = $slug === 'otter-blocks' ? 'reference_key' : 'optimole_reference_key';
-		$plugin        = isset( $this->plugin_paths[ $slug ] ) ? $this->plugin_paths[ $slug ] : $slug . '/' . $slug . '.php';
+		$plugin        = $this->resolve_plugin_main_file( $slug );
 
 		return add_query_arg(
 			array(
@@ -217,9 +250,59 @@ abstract class Abstract_Module {
 	public function is_plugin_active( $plugin ) {
 		include_once ABSPATH . 'wp-admin/includes/plugin.php';
 
-		$plugin = isset( $this->plugin_paths[ $plugin ] ) ? $this->plugin_paths[ $plugin ] : $plugin . '/' . $plugin . '.php';
+		$plugin = $this->resolve_plugin_main_file( $plugin );
 
 		return is_plugin_active( $plugin );
+	}
+
+	/**
+	 * Resolve a plugin's main file path by slug.
+	 *
+	 * @param string $slug Plugin slug.
+	 *
+	 * @return string
+	 */
+	private function resolve_plugin_main_file( $slug ) {
+		if ( isset( $this->resolved_plugin_paths[ $slug ] ) ) {
+			return $this->resolved_plugin_paths[ $slug ];
+		}
+
+		if ( isset( $this->plugin_paths[ $slug ] ) ) {
+			$this->resolved_plugin_paths[ $slug ] = $this->plugin_paths[ $slug ];
+			return $this->resolved_plugin_paths[ $slug ];
+		}
+
+		$default_plugin_file = $slug . '/' . $slug . '.php';
+
+		if ( file_exists( WP_CONTENT_DIR . '/plugins/' . $default_plugin_file ) ) {
+			$this->resolved_plugin_paths[ $slug ] = $default_plugin_file;
+			return $this->resolved_plugin_paths[ $slug ];
+		}
+
+		// get_plugins() opens the folder with @opendir(), which still reaches custom error handlers when it is missing.
+		if ( ! is_dir( WP_PLUGIN_DIR . '/' . $slug ) ) {
+			$this->resolved_plugin_paths[ $slug ] = $default_plugin_file;
+			return $this->resolved_plugin_paths[ $slug ];
+		}
+
+		include_once ABSPATH . 'wp-admin/includes/plugin.php';
+
+		if ( function_exists( 'get_plugins' ) ) {
+			$plugins = get_plugins( '/' . $slug );
+
+			if ( ! empty( $plugins ) ) {
+				$plugin_files = array_keys( $plugins );
+				$plugin_file  = $slug . '/' . reset( $plugin_files );
+
+				$this->resolved_plugin_paths[ $slug ] = $plugin_file;
+
+				return $this->resolved_plugin_paths[ $slug ];
+			}
+		}
+
+		$this->resolved_plugin_paths[ $slug ] = $default_plugin_file;
+
+		return $this->resolved_plugin_paths[ $slug ];
 	}
 
 	/**

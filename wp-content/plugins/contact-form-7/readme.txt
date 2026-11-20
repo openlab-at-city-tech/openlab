@@ -2,10 +2,10 @@
 Contributors: rocklobsterinc, takayukister
 Donate link: https://contactform7.com/donate/
 Tags: contact form, schema-woven validation
-Tested up to: 6.9
-Requires at least: 6.7
-Requires PHP: 7.4
-Stable tag: 6.1.5
+Tested up to: 7.1
+Requires at least: 7.1
+Requires PHP: 8.3
+Stable tag: 6.2.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,21 +25,7 @@ It is hard to continue to maintain this plugin without support from users like y
 
 = Privacy notices =
 
-With the default configuration, this plugin, in itself, does not:
-
-* track users by stealth;
-* write any user personal data to the database;
-* send any data to external servers;
-* use cookies.
-
-If you activate certain features in this plugin, the contact form submitter's personal data, including their IP address, may be sent to the service provider. Thus, confirming the provider's privacy policy is recommended. These features include:
-
-* reCAPTCHA ([Google](https://policies.google.com/?hl=en))
-* Akismet ([Automattic](https://automattic.com/privacy/))
-* [Constant Contact](https://www.constantcontact.com/legal/privacy-center)
-* [Brevo](https://www.brevo.com/legal/privacypolicy/)
-* [Stripe](https://stripe.com/privacy)
-* Turnstile ([Cloudflare](https://www.cloudflare.com/turnstile-privacy-policy/))
+See [Plugin privacy notices](https://contactform7.com/plugin-privacy-notices/).
 
 == Installation ==
 
@@ -66,56 +52,34 @@ Do you have questions or issues with Contact Form 7? Use these support channels 
 
 == Changelog ==
 
+= 6.2.5 =
+
+* [Release announcement](https://contactform7.com/2026/11/10/contact-form-7-625/)
+
+= 6.2.4.1 =
+
+* FormDataTree-PHP: Upgraded to 2.0.10.
+
+= 6.2.4 =
+
+* [Release announcement](https://contactform7.com/2026/10/29/contact-form-7-624/)
+
+= 6.2.3 =
+
+* [Release announcement](https://contactform7.com/2026/10/21/contact-form-7-623/)
+
+= 6.2.2 =
+
+* [Release announcement](https://contactform7.com/2026/10/11/contact-form-7-622/)
+
+= 6.2.1 =
+
+* [Release announcement](https://contactform7.com/2026/10/08/contact-form-7-621/)
+
+= 6.2 =
+
+* [Release announcement](https://contactform7.com/2026/10/06/contact-form-7-620/)
+
 For more information, see [Releases](https://contactform7.com/category/releases/).
-
-= 6.1.5 =
-
-[https://contactform7.com/contact-form-7-615/](https://contactform7.com/contact-form-7-615/)
-
-= 6.1.4 =
-
-[https://contactform7.com/contact-form-7-614/](https://contactform7.com/contact-form-7-614/)
-
-= 6.1.3 =
-
-[https://contactform7.com/contact-form-7-613/](https://contactform7.com/contact-form-7-613/)
-
-= 6.1.2 =
-
-[https://contactform7.com/contact-form-7-612/](https://contactform7.com/contact-form-7-612/)
-
-= 6.1.1 =
-
-[https://contactform7.com/contact-form-7-611/](https://contactform7.com/contact-form-7-611/)
-
-= 6.1 =
-
-[https://contactform7.com/contact-form-7-61/](https://contactform7.com/contact-form-7-61/)
-
-= 6.0.5 =
-
-[https://contactform7.com/contact-form-7-605/](https://contactform7.com/contact-form-7-605/)
-
-= 6.0.4 =
-
-[https://contactform7.com/contact-form-7-604/](https://contactform7.com/contact-form-7-604/)
-
-= 6.0.3 =
-
-* Updates the copyright year to 2025.
-* Updates the "Contact Form 7 needs your support" message content.
-* Updates the Constant Contact deprecation warning.
-
-= 6.0.2 =
-
-* Removes unnecessary type declaration from nullable arguments to avoid deprecation warnings in PHP 8.4.
-
-= 6.0.1 =
-
-[https://contactform7.com/contact-form-7-601/](https://contactform7.com/contact-form-7-601/)
-
-= 6.0 =
-
-[https://contactform7.com/contact-form-7-60/](https://contactform7.com/contact-form-7-60/)
 
 == Upgrade Notice ==

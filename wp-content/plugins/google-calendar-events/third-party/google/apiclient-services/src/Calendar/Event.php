@@ -32,6 +32,8 @@ class Event extends \SimpleCalendar\plugin_deps\Google\Collection
      * @var bool
      */
     public $attendeesOmitted;
+    protected $birthdayPropertiesType = EventBirthdayProperties::class;
+    protected $birthdayPropertiesDataType = '';
     /**
      * @var string
      */
@@ -64,6 +66,8 @@ class Event extends \SimpleCalendar\plugin_deps\Google\Collection
     public $eventType;
     protected $extendedPropertiesType = EventExtendedProperties::class;
     protected $extendedPropertiesDataType = '';
+    protected $focusTimePropertiesType = EventFocusTimeProperties::class;
+    protected $focusTimePropertiesDataType = '';
     protected $gadgetType = EventGadget::class;
     protected $gadgetDataType = '';
     /**
@@ -110,6 +114,8 @@ class Event extends \SimpleCalendar\plugin_deps\Google\Collection
     protected $organizerDataType = '';
     protected $originalStartTimeType = EventDateTime::class;
     protected $originalStartTimeDataType = '';
+    protected $outOfOfficePropertiesType = EventOutOfOfficeProperties::class;
+    protected $outOfOfficePropertiesDataType = '';
     /**
      * @var bool
      */
@@ -209,6 +215,20 @@ class Event extends \SimpleCalendar\plugin_deps\Google\Collection
     public function getAttendeesOmitted()
     {
         return $this->attendeesOmitted;
+    }
+    /**
+     * @param EventBirthdayProperties
+     */
+    public function setBirthdayProperties(EventBirthdayProperties $birthdayProperties)
+    {
+        $this->birthdayProperties = $birthdayProperties;
+    }
+    /**
+     * @return EventBirthdayProperties
+     */
+    public function getBirthdayProperties()
+    {
+        return $this->birthdayProperties;
     }
     /**
      * @param string
@@ -349,6 +369,20 @@ class Event extends \SimpleCalendar\plugin_deps\Google\Collection
     public function getExtendedProperties()
     {
         return $this->extendedProperties;
+    }
+    /**
+     * @param EventFocusTimeProperties
+     */
+    public function setFocusTimeProperties(EventFocusTimeProperties $focusTimeProperties)
+    {
+        $this->focusTimeProperties = $focusTimeProperties;
+    }
+    /**
+     * @return EventFocusTimeProperties
+     */
+    public function getFocusTimeProperties()
+    {
+        return $this->focusTimeProperties;
     }
     /**
      * @param EventGadget
@@ -531,6 +565,20 @@ class Event extends \SimpleCalendar\plugin_deps\Google\Collection
     public function getOriginalStartTime()
     {
         return $this->originalStartTime;
+    }
+    /**
+     * @param EventOutOfOfficeProperties
+     */
+    public function setOutOfOfficeProperties(EventOutOfOfficeProperties $outOfOfficeProperties)
+    {
+        $this->outOfOfficeProperties = $outOfOfficeProperties;
+    }
+    /**
+     * @return EventOutOfOfficeProperties
+     */
+    public function getOutOfOfficeProperties()
+    {
+        return $this->outOfOfficeProperties;
     }
     /**
      * @param bool

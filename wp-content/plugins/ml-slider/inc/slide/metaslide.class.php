@@ -135,6 +135,8 @@ class MetaSlide
     /**
      * Ajax wrapper to update the slide image.
      *
+     * @since 3.114.0 Only changes a slide and slideshow the user can edit
+     *
      * @return String The status message and if success, the thumbnail link (JSON)
      */
     public function ajax_update_slide_image()
@@ -164,10 +166,15 @@ class MetaSlide
             );
         }
 
+        $slide_id  = absint($_POST['slide_id']);
+        $slider_id = absint($_POST['slider_id']);
+        metaslider_verify_slide_for_ajax($slide_id);
+        metaslider_verify_slideshow_for_ajax($slider_id);
+
         $result = $this->update_slide_image(
-            absint($_POST['slide_id']),
+            $slide_id,
             absint($_POST['image_id']),
-            absint($_POST['slider_id'])
+            $slider_id
         );
 
         if (is_wp_error($result)) {
@@ -240,8 +247,13 @@ class MetaSlide
     public function build_image_tag($attributes)
     {
         $attachment_id = $this->get_attachment_id();
+        // Always output an alt attribute, empty when the caller has none
+        if (! isset($attributes['alt'])) {
+            $attributes['alt'] = '';
+        }
 
-        if (('disabled' == $this->settings['smartCrop'] || 'disabled_pad' == $this->settings['smartCrop']) && ('image' == $this->identifier || 'html_overlay' == $this->identifier)) {
+        $smart_crop = isset($this->settings['smartCrop']) ? $this->settings['smartCrop'] : 'false';
+        if (('disabled' == $smart_crop || 'disabled_pad' == $smart_crop) && ('image' == $this->identifier || 'html_overlay' == $this->identifier)) {
             // This will use WP built in image building so we can remove some of these attributes
             unset($attributes['src']);
             unset($attributes['height']);
@@ -270,6 +282,10 @@ class MetaSlide
      */
     public function build_anchor_tag($attributes, $content)
     {
+        // Preview is a srcdoc iframe - force new tab so links don't navigate it away.
+        if (isset($attributes['target']) && isset($_REQUEST['action']) && 'ms_get_preview' == $_REQUEST['action']) {
+            $attributes['target'] = '_blank';
+        }
 
         $html = "<a";
 
@@ -381,7 +397,14 @@ class MetaSlide
 
             $selected = $pos == 0 ? "class='selected " . esc_attr($add_class) . "' style='" . esc_attr($hide) . "'" : "class='" . esc_attr($add_class) . "' style='" . esc_attr($hide) . "'";
 
-            $return .= "<li {$selected} ><a tabindex='0' href='#' data-tab_id='tab-" . esc_attr($pos) . "'>" . esc_html($tab['title']) . "</a></li>";
+            $pro_btn = '';
+            $tab_link_class = '';
+            if (!empty($tab['pro'])) {
+                $pro_btn = ' <span class="dashicons dashicons-lock is-pro-setting tipsy-tooltip-top" original-title="' . esc_attr($tab['pro']) . '" data-href="' . esc_url('https://www.metaslider.com/upgrade?utm_source=lite&utm_medium=banner&utm_campaign=pro') . '"></span>';
+                $tab_link_class = " class='has-pro-ad'";
+            }
+
+            $return .= "<li {$selected} ><a tabindex='0' href='#' data-tab_id='tab-" . esc_attr($pos) . "'{$tab_link_class}>" . esc_html($tab['title']) . "{$pro_btn}</a></li>";
         }
 
         $return .= "</ul>";
@@ -504,7 +527,7 @@ class MetaSlide
             $menu_order = $query->post->menu_order;
         }
 
-        wp_reset_query();
+        wp_reset_query(); // phpcs:ignore WordPress.WP.DiscouragedFunctions.wp_reset_query_wp_reset_query
 
         // increment
         $menu_order = $menu_order + 1;
@@ -633,6 +656,7 @@ class MetaSlide
      * Slide thumb image HTML in admin
      * 
      * @since 3.60
+     * @since 3.114.0 Thumbnails are lazy loaded
      * 
      * @return html
      */
@@ -656,7 +680,7 @@ class MetaSlide
                     esc_url( $thumb_small ) . '" srcset="' . 
                     esc_url( $thumb_large ) . ' 1024w, ' . 
                     esc_url( $thumb_medium ) . ' 768w, ' . 
-                    esc_url( $thumb_small ) . ' 240w" sizes="(min-width: 990px) and (max-width: 1024px) 1024px, (max-width: 768px) 768px, 240px" />
+                    esc_url( $thumb_small ) . ' 240w" sizes="(min-width: 990px) and (max-width: 1024px) 1024px, (max-width: 768px) 768px, 240px" alt="" loading="lazy" decoding="async" />
                 </div>
             </button>
         </div>';
@@ -784,7 +808,7 @@ class MetaSlide
 
         if (filter_var($this->get_setting('printCss'), FILTER_VALIDATE_BOOLEAN)) {
             wp_enqueue_style('metaslider-' . $this->get_setting('type') . '-slider', METASLIDER_ASSETS_URL . $this->css_path, false, METASLIDER_ASSETS_VERSION);
-            wp_enqueue_style('metaslider-public', METASLIDER_ASSETS_URL . 'metaslider/public.css', false, METASLIDER_ASSETS_VERSION);
+            wp_enqueue_style('metaslider-public', METASLIDER_ASSETS_URL . 'metaslider/public' . metaslider_asset_suffix() . '.css', false, METASLIDER_ASSETS_VERSION);
 
             $extra_css = apply_filters("metaslider_css", "", $this->settings, $this->id);
             wp_add_inline_style('metaslider-public', $extra_css);
@@ -846,9 +870,10 @@ class MetaSlide
         ?>
 
         <button type="button" title="<?php
-        _e('Hide slide', 'ml-slider'); ?>" class="hide-slide toolbar-button alignright tipsy-tooltip-top">
+        esc_attr_e('Hide slide', 'ml-slider'); ?>" class="hide-slide toolbar-button alignright tipsy-tooltip-top">
             <input class="hide-slide" type="checkbox" name="attachment[<?php
             echo esc_attr($this->slide->ID); ?>][hide_slide]" <?php
+            echo 'aria-label="' . esc_attr__('Hide slide', 'ml-slider') . '" ';
             echo($hide_slide ? 'checked="checked"' : ''); ?>>
             <svg class="feather feather-eye" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -879,5 +904,48 @@ class MetaSlide
     public function image_cropped_size( $side )
     {
         return metaslider_image_cropped_size(  $side, $this->settings );
+    }
+
+    /**
+     * Append the Schedule and Advanced tabs, which every slide type offers as an
+     * upgrade prompt while Pro is inactive. Pro replaces both through the
+     * metaslider_slide_tabs filter, so these are only ever the free view.
+     *
+     * @since 3.113.0
+     *
+     * @param array $tabs                Tabs built so far
+     * @param array $unsupported_advanced Advanced rows Pro cannot apply to this
+     *                                    slide type ('delay', 'repeat', 'first_loop',
+     *                                    'thumbnail', 'classes'), left out rather than
+     *                                    advertised
+     *
+     * @return array
+     */
+    protected function add_pro_upsell_tabs($tabs, $unsupported_advanced = array())
+    {
+        ob_start();
+        include METASLIDER_PATH . 'admin/views/slides/tabs/schedule.php';
+        $schedule_tab = ob_get_clean();
+
+        $tabs['schedule'] = array(
+            'title' => __('Schedule', 'ml-slider'),
+            'content' => $schedule_tab,
+            'pro' => __('Schedule is available in MetaSlider Slideshow Pro', 'ml-slider')
+        );
+
+        // Read by advanced.php to skip the rows this slide type can't use
+        $unsupported_advanced_rows = $unsupported_advanced;
+
+        ob_start();
+        include METASLIDER_PATH . 'admin/views/slides/tabs/advanced.php';
+        $advanced_tab = ob_get_clean();
+
+        $tabs['advanced'] = array(
+            'title' => __('Advanced', 'ml-slider'),
+            'content' => $advanced_tab,
+            'pro' => __('Advanced settings are available in MetaSlider Slideshow Pro', 'ml-slider')
+        );
+
+        return $tabs;
     }
 }

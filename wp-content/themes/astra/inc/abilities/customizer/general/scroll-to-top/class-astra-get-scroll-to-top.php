@@ -35,27 +35,27 @@ class Astra_Get_Scroll_To_Top extends Astra_Abstract_Ability {
 	public function get_output_schema() {
 		return $this->build_output_schema(
 			array(
-				'enabled'          => array(
+				'enabled'             => array(
 					'type'        => 'boolean',
 					'description' => 'Whether the scroll-to-top button is enabled.',
 				),
-				'position'         => array(
+				'position'            => array(
 					'type'        => 'string',
 					'description' => 'Button position (left or right).',
 				),
-				'on_devices'       => array(
+				'on_devices'          => array(
 					'type'        => 'string',
 					'description' => 'Device visibility (both, desktop, or mobile).',
 				),
-				'icon_size'        => array(
+				'icon_size'           => array(
 					'type'        => 'integer',
 					'description' => 'Icon size in pixels.',
 				),
-				'colors'           => array(
+				'colors'              => array(
 					'type'        => 'object',
 					'description' => 'Color settings (icon, background, hover variants).',
 				),
-				'border_radius'    => array(
+				'border_radius'       => array(
 					'type'        => 'object',
 					'description' => 'Border radius settings.',
 				),
@@ -102,10 +102,10 @@ class Astra_Get_Scroll_To_Top extends Astra_Abstract_Ability {
 		}
 
 		$colors = array(
-			'icon_color'       => astra_get_option( 'scroll-to-top-icon-color', '' ),
-			'icon_bg_color'    => astra_get_option( 'scroll-to-top-icon-bg-color', '' ),
-			'icon_h_color'     => astra_get_option( 'scroll-to-top-icon-h-color', '' ),
-			'icon_h_bg_color'  => astra_get_option( 'scroll-to-top-icon-h-bg-color', '' ),
+			'icon_color'      => astra_get_option( 'scroll-to-top-icon-color', '' ),
+			'icon_bg_color'   => astra_get_option( 'scroll-to-top-icon-bg-color', '' ),
+			'icon_h_color'    => astra_get_option( 'scroll-to-top-icon-h-color', '' ),
+			'icon_h_bg_color' => astra_get_option( 'scroll-to-top-icon-h-bg-color', '' ),
 		);
 
 		$position_labels = array(

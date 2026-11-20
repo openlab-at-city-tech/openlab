@@ -53,6 +53,7 @@ if ( ! function_exists( 'hamilton_setup' ) ) :
 			'footer'		 => false,
 			'footer_widgets' => false,
 			'container'      => 'posts',
+			'render'         => 'hamilton_infinite_scroll_render',
 		) );
 		
 		// Make the theme translation ready
@@ -73,6 +74,42 @@ require get_template_directory() . '/inc/classes/class-hamilton-customize.php';
 
 
 /*	-----------------------------------------------------------------------------------------------
+	JETPACK INFINITE SCROLL
+--------------------------------------------------------------------------------------------------- */
+
+if ( ! function_exists( 'hamilton_infinite_scroll_render' ) ) :
+	function hamilton_infinite_scroll_render() {
+
+		while ( have_posts() ) {
+			the_post();
+			get_template_part( 'content' );
+		}
+
+		// Jetpack calls wp_head() right after the render callback, inside the same output buffer, which adds
+		// the contents of <head> to the loaded posts. Buffer and discard that output. The wp_head actions still
+		// run, so Jetpack can still pick up any scripts and styles enqueued by the new posts.
+		add_action( 'wp_head', 'hamilton_infinite_scroll_head_buffer_start', -99999 );
+		add_action( 'wp_head', 'hamilton_infinite_scroll_head_buffer_end', PHP_INT_MAX );
+
+	}
+endif;
+
+if ( ! function_exists( 'hamilton_infinite_scroll_head_buffer_start' ) ) :
+	function hamilton_infinite_scroll_head_buffer_start() {
+		ob_start();
+	}
+endif;
+
+if ( ! function_exists( 'hamilton_infinite_scroll_head_buffer_end' ) ) :
+	function hamilton_infinite_scroll_head_buffer_end() {
+		ob_end_clean();
+		remove_action( 'wp_head', 'hamilton_infinite_scroll_head_buffer_start', -99999 );
+		remove_action( 'wp_head', 'hamilton_infinite_scroll_head_buffer_end', PHP_INT_MAX );
+	}
+endif;
+
+
+/*	-----------------------------------------------------------------------------------------------
 	ENQUEUE STYLES
 --------------------------------------------------------------------------------------------------- */
 
@@ -81,7 +118,7 @@ if ( ! function_exists( 'hamilton_load_style' ) ) :
 
 		$theme_version = wp_get_theme( 'hamilton' )->get( 'Version' );
 
-		wp_register_style( 'hamilton-fonts', get_theme_file_uri( '/assets/css/fonts.css' ) );
+		wp_register_style( 'hamilton-fonts', get_theme_file_uri( '/assets/css/fonts.css' ), array(), $theme_version );
 		wp_enqueue_style( 'hamilton-style', get_stylesheet_uri(), array( 'hamilton-fonts' ), $theme_version );
 		
 	}
@@ -118,7 +155,9 @@ add_filter( 'use_default_gallery_style', '__return_false' );
 if ( ! function_exists( 'hamilton_enqueue_scripts' ) ) :
 	function hamilton_enqueue_scripts() {
 
-		wp_enqueue_script( 'hamilton_global', get_template_directory_uri() . '/assets/js/global.js', array( 'jquery', 'imagesloaded', 'masonry' ), '', true );
+		$theme_version = wp_get_theme( 'hamilton' )->get( 'Version' );
+
+		wp_enqueue_script( 'hamilton_global', get_template_directory_uri() . '/assets/js/global.js', array( 'jquery', 'imagesloaded', 'masonry' ), $theme_version, true );
 
 		if ( ( ! is_admin() ) && is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 			wp_enqueue_script( 'comment-reply' );
@@ -370,11 +409,16 @@ endif;
 if ( ! function_exists( 'hamilton_block_editor_styles' ) ) :
 	function hamilton_block_editor_styles() {
 
+		// Only load in the editor. Hooked to enqueue_block_assets so the styles reach the iframed editor canvas.
+		if ( ! is_admin() ) {
+			return;
+		}
+
 		$theme_version = wp_get_theme( 'hamilton' )->get( 'Version' );
 
-		wp_register_style( 'hamilton-block-editor-styles-font', get_theme_file_uri( '/assets/css/fonts.css' ) );
+		wp_register_style( 'hamilton-block-editor-styles-font', get_theme_file_uri( '/assets/css/fonts.css' ), array(), $theme_version );
 		wp_enqueue_style( 'hamilton-block-editor-styles', get_theme_file_uri( '/assets/css/hamilton-block-editor-styles.css' ), array( 'hamilton-block-editor-styles-font' ), $theme_version, 'all' );
 
 	}
-	add_action( 'enqueue_block_editor_assets', 'hamilton_block_editor_styles', 1 );
+	add_action( 'enqueue_block_assets', 'hamilton_block_editor_styles', 1 );
 endif;

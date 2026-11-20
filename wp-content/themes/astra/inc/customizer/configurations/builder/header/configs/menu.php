@@ -646,6 +646,32 @@ function astra_header_menu_configuration() {
 			),
 		);
 
+		// Mega menu / custom dropdown upsell nudge (free only).
+		if ( astra_showcase_upgrade_notices() ) {
+			$_configs[] = array(
+				'name'        => ASTRA_THEME_SETTINGS . '[header-' . $_prefix . '-mega-menu-upsell]',
+				'type'        => 'control',
+				'control'     => 'ast-upgrade',
+				'campaign'    => 'menus',
+				'section'     => $_section,
+				'default'     => '',
+				'priority'    => 999,
+				'title'       => __( 'Turn Menus Into Rich Dropdowns', 'astra' ),
+				'description' => sprintf(
+					/* translators: %s: Learn more documentation link. */
+					__( 'Turn any menu item into a large, multi-column dropdown (a mega menu) — fully designed, any width. %s', 'astra' ),
+					'<a href="' . esc_url( astra_get_pro_url( '/mega-menu/', 'free-theme', 'customizer-menu', 'mega-menu-learn' ) ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Learn more', 'astra' ) . '</a>'
+				),
+				'choices'     => array(
+					'one'   => array( 'title' => __( 'Full-width or custom-width dropdowns', 'astra' ) ),
+					'two'   => array( 'title' => __( 'Add templates, widgets, or custom content', 'astra' ) ),
+					'three' => array( 'title' => __( 'Multi-column layouts with per-item styling', 'astra' ) ),
+				),
+				'context'     => Astra_Builder_Helper::$general_tab,
+				'divider'     => array( 'ast_class' => 'ast-top-section-divider' ),
+			);
+		}
+
 		$menu_configs[] = Astra_Builder_Base_Configuration::prepare_visibility_tab( $_section );
 		$menu_configs[] = $_configs;
 	}

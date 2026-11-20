@@ -1103,9 +1103,12 @@ td.ast-advanced-hook-row-heading {
 	padding: 0 8px;
 }
 /* Reset Button CSS */
+.ast-reset-btn.components-button {
+	border-width: 0;
+}
 .ast-color-btn-reset-wrap {
 	position: absolute;
-    right: 36px;
+    right: 30px;
     top: 6px;
 }
 .ast-color-btn-reset-wrap .ast-reset-btn.components-button, .ast-resp-slider-reset-wrap .ast-reset-btn.components-button {
@@ -2051,9 +2054,6 @@ td.ast-advanced-hook-row-heading {
     width: 12px;
     height: 12px;
     font-size: 12px;
-    position: relative;
-    top: 0.1em;
-    left: 0.5em;
 }
 
 .ast-bg-control-left {

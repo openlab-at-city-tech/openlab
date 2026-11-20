@@ -236,11 +236,25 @@ class nggAdmin {
 	}
 
 	/**
+	 * The message set_watermark() returns when the watermark was applied but older cached copies
+	 * of the image could not be deleted (#1236).
+	 *
+	 * Exposed so callers can tell this partial success from a failed watermark: the REST route
+	 * still clears the cache and reports it with its own error code.
+	 *
+	 * @return string
+	 */
+	public static function cached_copies_not_deleted_message() {
+		return __( 'The watermark was applied, but older cached copies of this image could not be deleted and may still show it without the watermark. Check that the web server can write to the gallery\'s cache folder.', 'nggallery' );
+	}
+
+	/**
 	 * Sets the watermark for the image
 	 *
 	 * @class nggAdmin
 	 * @param object|int $image Contain all information about the image or the id
-	 * @return string result code
+	 * @return string '1' on success, otherwise a message; cached_copies_not_deleted_message()
+	 *                when the watermark was applied but stale cached copies remain.
 	 */
 	public static function set_watermark( $image ) {
 
@@ -255,16 +269,35 @@ class nggAdmin {
 		$storage = \Imagely\NGG\DataStorage\Manager::get_instance();
 
 		// XXX NextGEN Legacy was only handling watermarks at this stage, so we're forcefully disabling all else.
+		// watermark_required: a watermark that cannot be loaded (refused path, unreachable
+		// URL, missing font) fails the operation instead of re-saving the image without one
+		// and reporting success (#1104).
 		$params = [
-			'watermark'  => true,
-			'reflection' => false,
-			'crop'       => false,
+			'watermark'          => true,
+			'watermark_required' => true,
+			'reflection'         => false,
+			'crop'               => false,
 		];
 		$result = $storage->generate_image_size( $image, 'full', $params );
 
 		if ( ! $result ) {
-			// XXX there isn't any error handling unfortunately at the moment in the generate_thumbnail functions, need a way to return proper error status.
-			return __( 'Error while applying watermark to image.', 'nggallery' );
+			$settings = \Imagely\NGG\Settings\Settings::get_instance();
+			$wm_path  = $settings->get( 'wmPath' );
+			// Name the watermark only when it is what failed; a missing or unwritable
+			// source image takes the generic message.
+			if ( 'image' === $settings->get( 'wmType' ) && is_string( $wm_path ) && '' !== $wm_path && ! \Imagely\NGG\Util\Security::load_watermark_image( $wm_path ) ) {
+				return sprintf(
+					/* translators: %s: the "Watermark Image Path" setting (a file path or URL). */
+					__( 'Could not load the watermark image from "%s". Check the Watermark Image Path in the watermark settings: use a file on this server, or an image URL this site can download.', 'nggallery' ),
+					$wm_path
+				);
+			}
+			return __( 'Error while applying watermark to image. Check that the watermark image or font in the watermark settings can be loaded.', 'nggallery' );
+		}
+
+		// Dynamic sizes cloned from the unwatermarked file would otherwise keep being served (#1236).
+		if ( ! $storage->delete_dynamic_image_sizes( $image ) ) {
+			return self::cached_copies_not_deleted_message();
 		}
 
 		// success.

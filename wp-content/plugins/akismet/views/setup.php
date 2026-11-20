@@ -68,8 +68,8 @@ $tick_icon = '<svg class="akismet-setup-instructions__icon" width="48" height="4
 		Akismet::view(
 			'get',
 			array(
-				'text'    => __( 'Get started', 'akismet' ),
-				'classes' => array( 'akismet-button', 'akismet-is-primary', 'akismet-setup-instructions__button' ),
+				'text'        => __( 'Get started', 'akismet' ),
+				'classes'     => array( 'akismet-button', 'akismet-is-primary', 'akismet-setup-instructions__button' ),
 				'utm_content' => 'setup_instructions',
 			)
 		);

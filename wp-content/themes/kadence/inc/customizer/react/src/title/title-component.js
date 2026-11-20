@@ -22,6 +22,7 @@ class TitleComponent extends Component {
 							{ this.props.control.params.description }
 						</span>
 					) }
+					{ this.props.control.renderNotice() }
 				</div>
 		);
 	}

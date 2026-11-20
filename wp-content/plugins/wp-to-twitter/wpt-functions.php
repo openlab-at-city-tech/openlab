@@ -5,7 +5,7 @@
  * @category Core
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.joedolson.com/wp-to-twitter/
  */
 
@@ -22,7 +22,7 @@ require __DIR__ . '/classes/class-wpt-normalizer.php';
  * @param string $sub1 Array key if applicable.
  * @param string $sub2 Array key if applicable.
  *
- * @return Checked or unchecked.
+ * @return string Checked or unchecked.
  */
 function wpt_checkbox( $field, $sub1 = false, $sub2 = '' ) {
 	if ( $sub1 ) {
@@ -52,7 +52,7 @@ function wpt_checkbox( $field, $sub1 = false, $sub2 = '' ) {
  * @param string $value Value to verify against.
  * @param string $type Select or checkbox.
  *
- * @return Selected or unselected/ checked or unchecked.
+ * @return string Selected or unselected/ checked or unchecked.
  */
 function wpt_selected( $field, $value, $type = 'select' ) {
 	if ( get_option( $field ) === $value ) {
@@ -64,13 +64,13 @@ function wpt_selected( $field, $value, $type = 'select' ) {
 /**
  * Insert a status update record into logs.
  *
- * @param string $data Option key.
- * @param int    $id Post ID.
- * @param string $message Log message.
- * @param string $http HTTP code for this message.
+ * @param string     $data Option key.
+ * @param int|string $post_ID Post ID or the string 'test'.
+ * @param string     $message Log message.
+ * @param string     $http HTTP code for this message.
  */
-function wpt_set_log( $data, $id, $message, $http = '200' ) {
-	if ( 'test' === $id ) {
+function wpt_set_log( $data, $post_ID, $message, $http = '200' ) {
+	if ( 'test' === $post_ID ) {
 		delete_transient( $data );
 		set_transient( $data, $message, 300 );
 	} else {
@@ -78,28 +78,28 @@ function wpt_set_log( $data, $id, $message, $http = '200' ) {
 			'message' => $message,
 			'http'    => (string) $http,
 		);
-		delete_transient( $id . '_' . $data );
-		set_transient( $id . '_' . $data, $message, 300 );
+		delete_transient( $post_ID . '_' . $data );
+		set_transient( $post_ID . '_' . $data, $message, 300 );
 	}
 	delete_transient( $data . '_last' );
-	set_transient( $data . '_last', array( $id, $message ), 300 );
+	set_transient( $data . '_last', array( $post_ID, $message ), 300 );
 }
 
 /**
  * Get information from status update logs.
  *
- * @param string $data Option key.
- * @param int    $id Post ID.
+ * @param string     $data Option key.
+ * @param int|string $post_ID Post ID or string representing type of global log.
  *
  * @return string|array message.
  */
-function wpt_get_log( $data, $id ) {
-	if ( 'test' === $id ) {
+function wpt_get_log( $data, $post_ID ) {
+	if ( 'test' === $post_ID ) {
 		$log = get_transient( $data );
-	} elseif ( 'last' === $id ) {
+	} elseif ( 'last' === $post_ID ) {
 		$log = get_transient( $data . '_last' );
 	} else {
-		$log = get_transient( $id . '_' . $data );
+		$log = get_transient( $post_ID . '_' . $data );
 	}
 
 	return $log;
@@ -108,9 +108,9 @@ function wpt_get_log( $data, $id ) {
 /**
  * Clean up status update logs. Run once on admin load.
  *
- * @param int $id Post ID.
+ * @param int $post_ID Post ID.
  */
-function wpt_clean_logs( $id ) {
+function wpt_clean_logs( $post_ID ) {
 	$cleaned = get_option( 'wpt_logs_cleaned', 'false' );
 	if ( 'false' === $cleaned ) {
 		// one-time bulk remove logs that missed transient expiration.
@@ -139,12 +139,12 @@ function wpt_check_functions() {
 	 *
 	 * @hook wptt_shorten_link
 	 *
-	 * @param {string}   $testurl Unshortened test URL.
-	 * @param {string}   $title Title text to use for URL shortener.
-	 * @param {int|bool} $post_ID Post ID. Default false.
-	 * @param {bool}     $testing In testing mode. Default true.
+	 * @param string   $testurl Unshortened test URL.
+	 * @param string   $title Title text to use for URL shortener.
+	 * @param int|bool $post_ID Post ID. Default false.
+	 * @param bool     $testing In testing mode. Default true.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$shrink = apply_filters( 'wptt_shorten_link', $testurl, $title, false, true );
 	if ( false === $shrink ) {
@@ -160,19 +160,35 @@ function wpt_check_functions() {
 		$message .= " <a href='$shrink'>$shrink</a></li>";
 	}
 	// check social network credentials.
+	$failed = false;
 	if ( wpt_check_connections( false, true ) ) {
 		$rand     = wp_rand( 1000000, 9999999 );
 		$testpost = wpt_post_to_service( "This is a test of XPoster. $shrink ($rand)" );
 		if ( $testpost && ! empty( $testpost ) ) {
 			foreach ( $testpost as $key => $test ) {
 				if ( 'xcom' === $key ) {
-					$message .= '<li>' . __( 'XPoster successfully submitted a status update to X.com.', 'wp-to-twitter' ) . '</li>';
+					if ( 200 === $test['http'] ) {
+						$message .= '<li class="success">' . __( 'XPoster successfully submitted a status update to X.com.', 'wp-to-twitter' ) . '</li>';
+					} else {
+						$message .= '<li class="error">' . __( 'XPoster failed to submit a status update to X.com.', 'wp-to-twitter' ) . '</li>';
+						$failed   = true;
+					}
 				}
 				if ( 'mastodon' === $key ) {
-					$message .= '<li>' . __( 'XPoster successfully submitted a status update to your Mastodon instance.', 'wp-to-twitter' ) . '</li>';
+					if ( 200 === $test['http'] ) {
+						$message .= '<li class="success">' . __( 'XPoster successfully submitted a status update to your Mastodon instance.', 'wp-to-twitter' ) . '</li>';
+					} else {
+						$message .= '<li class="error">' . __( 'XPoster failed to submit a status update to Mastodon.', 'wp-to-twitter' ) . '</li>';
+						$failed   = true;
+					}
 				}
 				if ( 'bluesky' === $key ) {
-					$message .= '<li>' . __( 'XPoster successfully submitted a status update to your Bluesky account.', 'wp-to-twitter' ) . '</li>';
+					if ( 200 === $test['http'] ) {
+						$message .= '<li class="success">' . __( 'XPoster successfully submitted a status update to your Bluesky account.', 'wp-to-twitter' ) . '</li>';
+					} else {
+						$message .= '<li class="error">' . __( 'XPoster failed to submit a status update to Bluesky.', 'wp-to-twitter' ) . '</li>';
+						$failed   = true;
+					}
 				}
 			}
 		} else {
@@ -183,11 +199,15 @@ function wpt_check_functions() {
 	} else {
 		$message .= __( 'You have not connected WordPress to a supported service.', 'wp-to-twitter' ) . ' ';
 	}
-	if ( false === $testpost && false === $shrink ) {
+	if ( ( false === $testpost || $failed ) && false === $shrink ) {
 		$message .= '<li class="error">' . __( "<strong>Your server does not appear to support the required methods for XPoster to function.</strong> You can try it anyway - these tests aren't perfect.", 'wp-to-twitter' ) . '</li>';
 	}
 	if ( $testpost && $shrink ) {
-		$message .= '<li>' . __( 'Your server should run XPoster successfully.', 'wp-to-twitter' ) . '</li>';
+		if ( $failed ) {
+			$message .= '<li class="error">' . __( 'Your server ran some parts of XPoster, but there were failures.', 'wp-to-twitter' ) . '</li>';
+		} else {
+			$message .= '<li>' . __( 'Your server should run XPoster successfully.', 'wp-to-twitter' ) . '</li>';
+		}
 	}
 	$message .= '</ul>
 	</div>';
@@ -239,10 +259,10 @@ function wpt_settings_tabs() {
 	 *
 	 * @hook wpt_settings_tabs_pages
 	 *
-	 * @param {array}  $pages Array of pages with `[ 'key' => 'title' ]`.
-	 * @param {string} $current Array key of current page.
+	 * @param array  $pages Array of pages with `[ 'key' => 'title' ]`.
+	 * @param string $current Array key of current page.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	$pages     = apply_filters( 'wpt_settings_tabs_pages', $pages, $current );
 	$admin_url = admin_url( 'admin.php?page=wp-tweets-pro' );
@@ -284,9 +304,9 @@ function wpt_show_last_update() {
 	 *
 	 * @hook wpt_show_last_update
 	 *
-	 * @param {bool} $show true to show; false to hide.
+	 * @param bool $show true to show; false to hide.
 	 *
-	 * @return {bool}
+	 * @return bool
 	 */
 	if ( apply_filters( 'wpt_show_last_update', true ) ) {
 		$log = wpt_get_log( 'wpt_status_message', 'last' );
@@ -369,12 +389,12 @@ function wpt_check_caps( $role, $cap ) {
  * @param string $name Display name for capability.
  */
 function wpt_cap_checkbox( $role, $cap, $name ) {
-	$id       = 'wpt_caps_' . $role . '_' . $cap;
+	$input_id = 'wpt_caps_' . $role . '_' . $cap;
 	$has_caps = wpt_check_caps( $role, $cap );
 	?>
 	<li>
-		<input type='checkbox' id='<?php echo esc_attr( $id ); ?>' name='wpt_caps[<?php echo esc_attr( $role ); ?>][<?php echo esc_attr( $cap ); ?>]' value='on'<?php checked( 'checked', $has_caps ); ?> />
-		<label for='<?php echo esc_attr( $id ); ?>'><?php echo esc_html( $name ); ?></label>
+		<input type='checkbox' id='<?php echo esc_attr( $input_id ); ?>' name='wpt_caps[<?php echo esc_attr( $role ); ?>][<?php echo esc_attr( $cap ); ?>]' value='on'<?php checked( 'checked', $has_caps ); ?> />
+		<label for='<?php echo esc_attr( $input_id ); ?>'><?php echo esc_html( $name ); ?></label>
 	</li>
 	<?php
 }
@@ -389,7 +409,7 @@ function wpt_cap_checkbox( $role, $cap, $name ) {
  */
 function wpt_mail( $subject, $body, $post_ID = false, $override = false ) {
 	$body .= ' Active Filter:' . current_filter();
-	if ( ( WPT_DEBUG ) ) {
+	if ( ( WPT_DEBUG || $override ) ) {
 		if ( WPT_DEBUG_BY_EMAIL ) {
 			wp_mail( WPT_DEBUG_ADDRESS, $subject, $body, WPT_FROM );
 		} else {
@@ -421,7 +441,6 @@ function wpt_debug_log( $subject, $body, $post_ID ) {
 function wpt_show_debug() {
 	global $post_ID;
 	if ( WPT_DEBUG ) {
-		$records   = '';
 		$debug_log = get_post_meta( $post_ID, '_wpt_debug_log' );
 
 		if ( ! empty( $debug_log ) ) {
@@ -476,7 +495,7 @@ function wpt_show_debug() {
  * @param string    $method Query method.
  * @throws Exception JSON error string.
  *
- * @return JSON object.
+ * @return mixed JSON object.
  */
 function wpt_remote_json( $url, $args = true, $method = 'GET' ) {
 	$input = wpt_fetch_url( $url, $method );
@@ -519,7 +538,7 @@ function wpt_remote_json( $url, $args = true, $method = 'GET' ) {
  *
  * @param string $url URL.
  *
- * @return URL if passes, false otherwise.
+ * @return string|bool URL if passes, false otherwise.
  */
 function wpt_is_valid_url( $url ) {
 	if ( is_string( $url ) ) {
@@ -577,7 +596,7 @@ if ( ! function_exists( 'mb_substr_split_unicode' ) ) {
 	 * @param string $str String.
 	 * @param int    $split_pos Position to split on.
 	 *
-	 * @return split output.
+	 * @return int split output.
 	 */
 	function mb_substr_split_unicode( $str, $split_pos ) {
 		if ( 0 === $split_pos ) {
@@ -655,7 +674,7 @@ if ( ! function_exists( 'mb_strrpos' ) ) {
  * @param string $value Value to check.
  * @param string $type Type of field.
  *
- * @return checked string.
+ * @return string checked string.
  */
 function wtt_option_selected( $field, $value, $type = 'checkbox' ) {
 	switch ( $type ) {
@@ -694,9 +713,9 @@ function wpt_post_is_new( $modified, $postdate ) {
 	 *
 	 * @hook wpt_edit_sensitivity
 	 *
-	 * @param {int} $sensitivity Integer representing seconds. Default 10.
+	 * @param int $sensitivity Integer representing seconds. Default 10.
 	 *
-	 * @return {int}
+	 * @return int
 	 */
 	$modifier  = apply_filters( 'wpt_edit_sensitivity', 10 ); // alter time in seconds to modified date.
 	$mod_date  = strtotime( $modified );
@@ -722,10 +741,10 @@ function wpt_post_attachment( $post_ID ) {
 	 *
 	 * @hook wpt_use_featured_image
 	 *
-	 * @param {bool} $use True to use the featured image.
-	 * @param {int}  $post_ID Post ID.
+	 * @param bool $use True to use the featured image.
+	 * @param int  $post_ID Post ID.
 	 *
-	 * @return {bool}
+	 * @return bool
 	 */
 	$use_featured_image = apply_filters( 'wpt_use_featured_image', true, $post_ID );
 	if ( has_post_thumbnail( $post_ID ) && $use_featured_image ) {
@@ -757,10 +776,10 @@ function wpt_post_attachment( $post_ID ) {
 	 *
 	 * @hook wpt_post_attachment
 	 *
-	 * @param {int} $attachment_id Attachment ID.
-	 * @param {int} $post_ID Post ID.
+	 * @param int $attachment_id Attachment ID.
+	 * @param int $post_ID Post ID.
 	 *
-	 * @return {int|bool}
+	 * @return int|bool
 	 */
 	$attachment_id = apply_filters( 'wpt_post_attachment', $attachment_id, $post_ID );
 	$meta          = wp_get_attachment_metadata( $attachment_id );
@@ -1026,9 +1045,9 @@ function wpt_delete_copied_meta( $new_id, $post ) {
 	 *
 	 * @hook wpt_allow_copy_meta
 	 *
-	 * @param {bool} $disable True to allow meta to be copied. Default false.
+	 * @param bool $disable True to allow meta to be copied. Default false.
 	 *
-	 * @return {bool}
+	 * @return bool
 	 */
 	$disable = apply_filters( 'wpt_allow_copy_meta', false );
 	if ( $disable ) {

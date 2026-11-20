@@ -1,1806 +1,2843 @@
+import { __experimentalApplicationPasswordConnectorSettings, __experimentalConnectorItem, __experimentalDefaultConnectorSettings, __experimentalRegisterConnector, privateApis } from "@wordpress/connectors";
+
+// \0rolldown/runtime.js
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __commonJS = (cb, mod) => function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
+var __commonJSMin = (cb, mod) => () => (mod || (cb((mod = { exports: {} }).exports, mod, mod.exports), cb = null), mod.exports);
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
+	if (from && typeof from === "object" || typeof from === "function") {
+		for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
+			key = keys[i];
+			if (!__hasOwnProp.call(to, key) && key !== except) {
+				__defProp(to, key, {
+					get: ((k) => from[k]).bind(null, key),
+					enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+				});
+			}
+		}
+	}
+	return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule || !__hasOwnProp.call(mod, "default") ? __defProp(target, "default", {
+	value: mod,
+	enumerable: true
+}) : target, mod));
 
-// package-external:@wordpress/i18n
-var require_i18n = __commonJS({
-  "package-external:@wordpress/i18n"(exports, module) {
-    module.exports = window.wp.i18n;
-  }
-});
+// \0wp-global:@wordpress/i18n
+var require_i18n = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = window.wp.i18n;
+}));
 
-// package-external:@wordpress/components
-var require_components = __commonJS({
-  "package-external:@wordpress/components"(exports, module) {
-    module.exports = window.wp.components;
-  }
-});
+// \0wp-global:react
+var require__wp_global_react = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = window.React;
+}));
 
-// vendor-external:react/jsx-runtime
-var require_jsx_runtime = __commonJS({
-  "vendor-external:react/jsx-runtime"(exports, module) {
-    module.exports = window.ReactJSXRuntime;
-  }
-});
-
-// package-external:@wordpress/element
-var require_element = __commonJS({
-  "package-external:@wordpress/element"(exports, module) {
-    module.exports = window.wp.element;
-  }
-});
-
-// vendor-external:react
-var require_react = __commonJS({
-  "vendor-external:react"(exports, module) {
-    module.exports = window.React;
-  }
-});
-
-// package-external:@wordpress/private-apis
-var require_private_apis = __commonJS({
-  "package-external:@wordpress/private-apis"(exports, module) {
-    module.exports = window.wp.privateApis;
-  }
-});
-
-// package-external:@wordpress/data
-var require_data = __commonJS({
-  "package-external:@wordpress/data"(exports, module) {
-    module.exports = window.wp.data;
-  }
-});
-
-// package-external:@wordpress/core-data
-var require_core_data = __commonJS({
-  "package-external:@wordpress/core-data"(exports, module) {
-    module.exports = window.wp.coreData;
-  }
-});
-
-// package-external:@wordpress/notices
-var require_notices = __commonJS({
-  "package-external:@wordpress/notices"(exports, module) {
-    module.exports = window.wp.notices;
-  }
-});
-
-// package-external:@wordpress/url
-var require_url = __commonJS({
-  "package-external:@wordpress/url"(exports, module) {
-    module.exports = window.wp.url;
-  }
-});
-
-// node_modules/clsx/dist/clsx.mjs
-function r(e) {
-  var t, f, n = "";
-  if ("string" == typeof e || "number" == typeof e) n += e;
-  else if ("object" == typeof e) if (Array.isArray(e)) {
-    var o = e.length;
-    for (t = 0; t < o; t++) e[t] && (f = r(e[t])) && (n && (n += " "), n += f);
-  } else for (f in e) e[f] && (n && (n += " "), n += f);
-  return n;
-}
-function clsx() {
-  for (var e, t, f = 0, n = "", o = arguments.length; f < o; f++) (e = arguments[f]) && (t = r(e)) && (n && (n += " "), n += t);
-  return n;
-}
-var clsx_default = clsx;
-
-// packages/admin-ui/build-module/navigable-region/index.mjs
-var import_element = __toESM(require_element(), 1);
-var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
-var NavigableRegion = (0, import_element.forwardRef)(
-  ({ children, className, ariaLabel, as: Tag = "div", ...props }, ref) => {
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-      Tag,
-      {
-        ref,
-        className: clsx_default("admin-ui-navigable-region", className),
-        "aria-label": ariaLabel,
-        role: "region",
-        tabIndex: "-1",
-        ...props,
-        children
-      }
-    );
-  }
-);
-NavigableRegion.displayName = "NavigableRegion";
-var navigable_region_default = NavigableRegion;
-
-// packages/ui/build-module/badge/badge.mjs
-var import_element3 = __toESM(require_element(), 1);
-
-// node_modules/@base-ui/utils/esm/useRefWithInit.js
-var React2 = __toESM(require_react(), 1);
-var UNINITIALIZED = {};
+// node_modules/.store/@base-ui/utils@0.5.0--7My7Lubseca8je9LSEweA/node_modules/@base-ui/utils/useRefWithInit.mjs
+var import__wp_global_react = /* @__PURE__ */ __toESM(require__wp_global_react(), 1);
+const UNINITIALIZED = {};
+/**
+* A React.useRef() that is initialized with a function. Note that it accepts an optional
+* initialization argument, so the initialization function doesn't need to be an inline closure.
+*
+* @usage
+*   const ref = useRefWithInit(sortColumns, columns)
+*/
 function useRefWithInit(init, initArg) {
-  const ref = React2.useRef(UNINITIALIZED);
-  if (ref.current === UNINITIALIZED) {
-    ref.current = init(initArg);
-  }
-  return ref;
+	const ref = import__wp_global_react.useRef(UNINITIALIZED);
+	if (ref.current === UNINITIALIZED) ref.current = init(initArg);
+	return ref;
 }
 
-// node_modules/@base-ui/utils/esm/warn.js
-var set;
-if (true) {
-  set = /* @__PURE__ */ new Set();
-}
-function warn(...messages) {
-  if (true) {
-    const messageKey = messages.join(" ");
-    if (!set.has(messageKey)) {
-      set.add(messageKey);
-      console.warn(`Base UI: ${messageKey}`);
-    }
-  }
-}
-
-// node_modules/@base-ui/react/esm/utils/useRenderElement.js
-var React5 = __toESM(require_react(), 1);
-
-// node_modules/@base-ui/utils/esm/useMergedRefs.js
+// node_modules/.store/@base-ui/utils@0.5.0--7My7Lubseca8je9LSEweA/node_modules/@base-ui/utils/useMergedRefs.mjs
+/**
+* Merges refs into a single memoized callback ref or `null`.
+* This makes sure multiple refs are updated together and have the same value.
+*
+* This function accepts up to four refs. If you need to merge more, or have an unspecified number of refs to merge,
+* use `useMergedRefsN` instead.
+*/
 function useMergedRefs(a, b, c, d) {
-  const forkRef = useRefWithInit(createForkRef).current;
-  if (didChange(forkRef, a, b, c, d)) {
-    update(forkRef, [a, b, c, d]);
-  }
-  return forkRef.callback;
+	const forkRef = useRefWithInit(createForkRef).current;
+	if (didChange(forkRef, a, b, c, d)) update(forkRef, [
+		a,
+		b,
+		c,
+		d
+	]);
+	return forkRef.callback;
 }
+/**
+* Merges an array of refs into a single memoized callback ref or `null`.
+*
+* If you need to merge a fixed number (up to four) of refs, use `useMergedRefs` instead for better performance.
+*/
 function useMergedRefsN(refs) {
-  const forkRef = useRefWithInit(createForkRef).current;
-  if (didChangeN(forkRef, refs)) {
-    update(forkRef, refs);
-  }
-  return forkRef.callback;
+	const forkRef = useRefWithInit(createForkRef).current;
+	if (didChangeN(forkRef, refs)) update(forkRef, refs);
+	return forkRef.callback;
 }
 function createForkRef() {
-  return {
-    callback: null,
-    cleanup: null,
-    refs: []
-  };
+	return {
+		callback: null,
+		cleanup: null,
+		refs: []
+	};
 }
 function didChange(forkRef, a, b, c, d) {
-  return forkRef.refs[0] !== a || forkRef.refs[1] !== b || forkRef.refs[2] !== c || forkRef.refs[3] !== d;
+	return forkRef.refs[0] !== a || forkRef.refs[1] !== b || forkRef.refs[2] !== c || forkRef.refs[3] !== d;
 }
 function didChangeN(forkRef, newRefs) {
-  return forkRef.refs.length !== newRefs.length || forkRef.refs.some((ref, index) => ref !== newRefs[index]);
+	return forkRef.refs.length !== newRefs.length || forkRef.refs.some((ref, index) => ref !== newRefs[index]);
 }
 function update(forkRef, refs) {
-  forkRef.refs = refs;
-  if (refs.every((ref) => ref == null)) {
-    forkRef.callback = null;
-    return;
-  }
-  forkRef.callback = (instance) => {
-    if (forkRef.cleanup) {
-      forkRef.cleanup();
-      forkRef.cleanup = null;
-    }
-    if (instance != null) {
-      const cleanupCallbacks = Array(refs.length).fill(null);
-      for (let i = 0; i < refs.length; i += 1) {
-        const ref = refs[i];
-        if (ref == null) {
-          continue;
-        }
-        switch (typeof ref) {
-          case "function": {
-            const refCleanup = ref(instance);
-            if (typeof refCleanup === "function") {
-              cleanupCallbacks[i] = refCleanup;
-            }
-            break;
-          }
-          case "object": {
-            ref.current = instance;
-            break;
-          }
-          default:
-        }
-      }
-      forkRef.cleanup = () => {
-        for (let i = 0; i < refs.length; i += 1) {
-          const ref = refs[i];
-          if (ref == null) {
-            continue;
-          }
-          switch (typeof ref) {
-            case "function": {
-              const cleanupCallback = cleanupCallbacks[i];
-              if (typeof cleanupCallback === "function") {
-                cleanupCallback();
-              } else {
-                ref(null);
-              }
-              break;
-            }
-            case "object": {
-              ref.current = null;
-              break;
-            }
-            default:
-          }
-        }
-      };
-    }
-  };
+	forkRef.refs = refs;
+	if (refs.every((ref) => ref == null)) {
+		forkRef.callback = null;
+		return;
+	}
+	forkRef.callback = (instance) => {
+		if (forkRef.cleanup) {
+			forkRef.cleanup();
+			forkRef.cleanup = null;
+		}
+		if (instance != null) {
+			const cleanupCallbacks = Array(refs.length).fill(null);
+			for (let i = 0; i < refs.length; i += 1) {
+				const ref = refs[i];
+				if (ref == null) continue;
+				switch (typeof ref) {
+					case "function": {
+						const refCleanup = ref(instance);
+						if (typeof refCleanup === "function") cleanupCallbacks[i] = refCleanup;
+						break;
+					}
+					case "object": ref.current = instance;
+				}
+			}
+			forkRef.cleanup = () => {
+				for (let i = 0; i < refs.length; i += 1) {
+					const ref = refs[i];
+					if (ref == null) continue;
+					switch (typeof ref) {
+						case "function": {
+							const cleanupCallback = cleanupCallbacks[i];
+							if (typeof cleanupCallback === "function") cleanupCallback();
+							else ref(null);
+							break;
+						}
+						case "object": ref.current = null;
+					}
+				}
+			};
+		}
+	};
 }
 
-// node_modules/@base-ui/utils/esm/getReactElementRef.js
-var React4 = __toESM(require_react(), 1);
-
-// node_modules/@base-ui/utils/esm/reactVersion.js
-var React3 = __toESM(require_react(), 1);
-var majorVersion = parseInt(React3.version, 10);
+// node_modules/.store/@base-ui/utils@0.5.0--7My7Lubseca8je9LSEweA/node_modules/@base-ui/utils/reactVersion.mjs
+const majorVersion = parseInt(import__wp_global_react.version, 10);
 function isReactVersionAtLeast(reactVersionToCheck) {
-  return majorVersion >= reactVersionToCheck;
+	return majorVersion >= reactVersionToCheck;
 }
 
-// node_modules/@base-ui/utils/esm/getReactElementRef.js
+// node_modules/.store/@base-ui/utils@0.5.0--7My7Lubseca8je9LSEweA/node_modules/@base-ui/utils/getReactElementRef.mjs
+/**
+* Extracts the `ref` from a React element, handling different React versions.
+*/
 function getReactElementRef(element) {
-  if (!/* @__PURE__ */ React4.isValidElement(element)) {
-    return null;
-  }
-  const reactElement = element;
-  const propsWithRef = reactElement.props;
-  return (isReactVersionAtLeast(19) ? propsWithRef?.ref : reactElement.ref) ?? null;
+	if (!/*#__PURE__*/ import__wp_global_react.isValidElement(element)) return null;
+	const reactElement = element;
+	const propsWithRef = reactElement.props;
+	return (isReactVersionAtLeast(19) ? propsWithRef?.ref : reactElement.ref) ?? null;
 }
 
-// node_modules/@base-ui/utils/esm/mergeObjects.js
+// node_modules/.store/@base-ui/utils@0.5.0--7My7Lubseca8je9LSEweA/node_modules/@base-ui/utils/mergeObjects.mjs
 function mergeObjects(a, b) {
-  if (a && !b) {
-    return a;
-  }
-  if (!a && b) {
-    return b;
-  }
-  if (a || b) {
-    return {
-      ...a,
-      ...b
-    };
-  }
-  return void 0;
+	if (a && !b) return a;
+	if (!a && b) return b;
+	if (a || b) return {
+		...a,
+		...b
+	};
 }
 
-// node_modules/@base-ui/react/esm/utils/getStateAttributesProps.js
+// node_modules/.store/@base-ui/utils@0.5.0--7My7Lubseca8je9LSEweA/node_modules/@base-ui/utils/createLogOnce.mjs
+let loggedMessages;
+loggedMessages = /* @__PURE__ */ new Set();
+/** Creates a dev-only logger that writes each unique message to `console[severity]` once. */
+function createLogOnce(severity, prefix) {
+	return function logOnce(...messages) {
+		{
+			const message = messages.join(" ");
+			const output = prefix ? `${prefix}: ${message}` : message;
+			const key = `${severity}:${output}`;
+			if (!loggedMessages.has(key)) {
+				loggedMessages.add(key);
+				if (severity === "warn") console.warn(output);
+				else console.error(output);
+			}
+		}
+	};
+}
+
+// node_modules/.store/@base-ui/utils@0.5.0--7My7Lubseca8je9LSEweA/node_modules/@base-ui/utils/warn.mjs
+const warn = createLogOnce("warn", "Base UI");
+
+// node_modules/.store/@base-ui/utils@0.5.0--7My7Lubseca8je9LSEweA/node_modules/@base-ui/utils/empty.mjs
+const EMPTY_ARRAY = Object.freeze([]);
+const EMPTY_OBJECT = Object.freeze({});
+
+// node_modules/.store/@base-ui/react@1.9.0-uHNeM94OdjIeOtpyYGvL0A/node_modules/@base-ui/react/internals/getStateAttributesProps.mjs
 function getStateAttributesProps(state, customMapping) {
-  const props = {};
-  for (const key in state) {
-    const value = state[key];
-    if (customMapping?.hasOwnProperty(key)) {
-      const customProps = customMapping[key](value);
-      if (customProps != null) {
-        Object.assign(props, customProps);
-      }
-      continue;
-    }
-    if (value === true) {
-      props[`data-${key.toLowerCase()}`] = "";
-    } else if (value) {
-      props[`data-${key.toLowerCase()}`] = value.toString();
-    }
-  }
-  return props;
+	const props = {};
+	for (const key in state) {
+		const value = state[key];
+		if (customMapping?.hasOwnProperty(key)) {
+			const customProps = customMapping[key](value);
+			if (customProps != null) Object.assign(props, customProps);
+			continue;
+		}
+		if (value === true) props[`data-${key.toLowerCase()}`] = "";
+		else if (value) props[`data-${key.toLowerCase()}`] = value.toString();
+	}
+	return props;
 }
 
-// node_modules/@base-ui/react/esm/utils/resolveClassName.js
+// node_modules/.store/@base-ui/react@1.9.0-uHNeM94OdjIeOtpyYGvL0A/node_modules/@base-ui/react/utils/resolveClassName.mjs
+/**
+* If the provided className is a string, it will be returned as is.
+* Otherwise, the function will call the className function with the state as the first argument.
+*
+* @param className
+* @param state
+*/
 function resolveClassName(className, state) {
-  return typeof className === "function" ? className(state) : className;
+	return typeof className === "function" ? className(state) : className;
 }
 
-// node_modules/@base-ui/react/esm/utils/resolveStyle.js
+// node_modules/.store/@base-ui/react@1.9.0-uHNeM94OdjIeOtpyYGvL0A/node_modules/@base-ui/react/utils/resolveStyle.mjs
+/**
+* If the provided style is an object, it will be returned as is.
+* Otherwise, the function will call the style function with the state as the first argument.
+*
+* @param style
+* @param state
+*/
 function resolveStyle(style, state) {
-  return typeof style === "function" ? style(state) : style;
+	return typeof style === "function" ? style(state) : style;
 }
 
-// node_modules/@base-ui/react/esm/merge-props/mergeProps.js
-var EMPTY_PROPS = {};
+// node_modules/.store/@base-ui/react@1.9.0-uHNeM94OdjIeOtpyYGvL0A/node_modules/@base-ui/react/merge-props/mergeProps.mjs
+const EMPTY_PROPS = {};
+/**
+* Merges multiple sets of React props. It follows the Object.assign pattern where the rightmost object's fields overwrite
+* the conflicting ones from others. This doesn't apply to event handlers, `className` and `style` props.
+*
+* Event handlers are merged and called in right-to-left order (rightmost handler executes first, leftmost last).
+* For React synthetic events, the rightmost handler can prevent prior (left-positioned) handlers from executing
+* by calling `event.preventBaseUIHandler()`. For non-synthetic events (custom events with primitive/object values),
+* all handlers always execute without prevention capability.
+*
+* The `className` prop is merged by concatenating classes in right-to-left order (rightmost class appears first in the string).
+* The `style` prop is merged with rightmost styles overwriting the prior ones.
+*
+* Props can either be provided as objects or as functions that take the previous props as an argument.
+* The function will receive the merged props up to that point (going from left to right):
+* so in the case of `(obj1, obj2, fn, obj3)`, `fn` will receive the merged props of `obj1` and `obj2`.
+* The function is responsible for chaining event handlers if needed (that is, we don't run the merge logic).
+*
+* Event handlers returned by the functions are not automatically prevented when `preventBaseUIHandler` is called.
+* They must check `event.baseUIHandlerPrevented` themselves and bail out if it's true.
+*
+* @important **`ref` is not merged.**
+* @param a Props object to merge.
+* @param b Props object to merge. The function will overwrite conflicting props from `a`.
+* @param c Props object to merge. The function will overwrite conflicting props from previous parameters.
+* @param d Props object to merge. The function will overwrite conflicting props from previous parameters.
+* @param e Props object to merge. The function will overwrite conflicting props from previous parameters.
+* @returns The merged props.
+* @public
+*/
 function mergeProps(a, b, c, d, e) {
-  if (!c && !d && !e && !a) {
-    return createInitialMergedProps(b);
-  }
-  let merged = createInitialMergedProps(a);
-  if (b) {
-    merged = mergeInto(merged, b);
-  }
-  if (c) {
-    merged = mergeInto(merged, c);
-  }
-  if (d) {
-    merged = mergeInto(merged, d);
-  }
-  if (e) {
-    merged = mergeInto(merged, e);
-  }
-  return merged;
+	if (!c && !d && !e && !a) return createInitialMergedProps(b);
+	let merged = createInitialMergedProps(a);
+	if (b) merged = mergeInto(merged, b);
+	if (c) merged = mergeInto(merged, c);
+	if (d) merged = mergeInto(merged, d);
+	if (e) merged = mergeInto(merged, e);
+	return merged;
 }
+/**
+* Merges an arbitrary number of React props using the same logic as {@link mergeProps}.
+* This function accepts an array of props instead of individual arguments.
+*
+* This has slightly lower performance than {@link mergeProps} due to accepting an array
+* instead of a fixed number of arguments. Prefer {@link mergeProps} when merging 5 or
+* fewer prop sets for better performance.
+*
+* @param props Array of props to merge.
+* @returns The merged props.
+* @see mergeProps
+* @public
+*/
 function mergePropsN(props) {
-  if (props.length === 0) {
-    return EMPTY_PROPS;
-  }
-  if (props.length === 1) {
-    return createInitialMergedProps(props[0]);
-  }
-  let merged = createInitialMergedProps(props[0]);
-  for (let i = 1; i < props.length; i += 1) {
-    merged = mergeInto(merged, props[i]);
-  }
-  return merged;
+	if (props.length === 0) return EMPTY_PROPS;
+	if (props.length === 1) return createInitialMergedProps(props[0]);
+	let merged = createInitialMergedProps(props[0]);
+	for (let i = 1; i < props.length; i += 1) merged = mergeInto(merged, props[i]);
+	return merged;
 }
 function createInitialMergedProps(inputProps) {
-  if (isPropsGetter(inputProps)) {
-    return {
-      ...resolvePropsGetter(inputProps, EMPTY_PROPS)
-    };
-  }
-  return copyInitialProps(inputProps);
+	if (isPropsGetter(inputProps)) return { ...inputProps(EMPTY_PROPS) };
+	return copyInitialProps(inputProps);
 }
 function mergeInto(merged, inputProps) {
-  if (isPropsGetter(inputProps)) {
-    return resolvePropsGetter(inputProps, merged);
-  }
-  return mutablyMergeInto(merged, inputProps);
+	if (isPropsGetter(inputProps)) return inputProps(merged);
+	return mutablyMergeInto(merged, inputProps);
 }
 function copyInitialProps(inputProps) {
-  const copiedProps = {
-    ...inputProps
-  };
-  for (const propName in copiedProps) {
-    const propValue = copiedProps[propName];
-    if (isEventHandler(propName, propValue)) {
-      copiedProps[propName] = wrapEventHandler(propValue);
-    }
-  }
-  return copiedProps;
+	const copiedProps = { ...inputProps };
+	for (const propName in copiedProps) {
+		const propValue = copiedProps[propName];
+		if (isEventHandler(propName, propValue)) copiedProps[propName] = wrapEventHandler(propValue);
+	}
+	return copiedProps;
 }
+/**
+* Merges two sets of props. In case of conflicts, the external props take precedence.
+*/
 function mutablyMergeInto(mergedProps, externalProps) {
-  if (!externalProps) {
-    return mergedProps;
-  }
-  for (const propName in externalProps) {
-    const externalPropValue = externalProps[propName];
-    switch (propName) {
-      case "style": {
-        mergedProps[propName] = mergeObjects(mergedProps.style, externalPropValue);
-        break;
-      }
-      case "className": {
-        mergedProps[propName] = mergeClassNames(mergedProps.className, externalPropValue);
-        break;
-      }
-      default: {
-        if (isEventHandler(propName, externalPropValue)) {
-          mergedProps[propName] = mergeEventHandlers(mergedProps[propName], externalPropValue);
-        } else {
-          mergedProps[propName] = externalPropValue;
-        }
-      }
-    }
-  }
-  return mergedProps;
+	if (!externalProps) return mergedProps;
+	for (const propName in externalProps) {
+		const externalPropValue = externalProps[propName];
+		switch (propName) {
+			case "style":
+				mergedProps[propName] = mergeObjects(mergedProps.style, externalPropValue);
+				break;
+			case "className":
+				mergedProps[propName] = mergeClassNames(mergedProps.className, externalPropValue);
+				break;
+			default: if (isEventHandler(propName, externalPropValue)) mergedProps[propName] = mergeEventHandlers(mergedProps[propName], externalPropValue);
+			else mergedProps[propName] = externalPropValue;
+		}
+	}
+	return mergedProps;
 }
 function isEventHandler(key, value) {
-  const code0 = key.charCodeAt(0);
-  const code1 = key.charCodeAt(1);
-  const code2 = key.charCodeAt(2);
-  return code0 === 111 && code1 === 110 && code2 >= 65 && code2 <= 90 && (typeof value === "function" || typeof value === "undefined");
+	const code0 = key.charCodeAt(0);
+	const code1 = key.charCodeAt(1);
+	const code2 = key.charCodeAt(2);
+	return code0 === 111 && code1 === 110 && code2 >= 65 && code2 <= 90 && (typeof value === "function" || typeof value === "undefined");
 }
 function isPropsGetter(inputProps) {
-  return typeof inputProps === "function";
-}
-function resolvePropsGetter(inputProps, previousProps) {
-  if (isPropsGetter(inputProps)) {
-    return inputProps(previousProps);
-  }
-  return inputProps ?? EMPTY_PROPS;
+	return typeof inputProps === "function";
 }
 function mergeEventHandlers(ourHandler, theirHandler) {
-  if (!theirHandler) {
-    return ourHandler;
-  }
-  if (!ourHandler) {
-    return wrapEventHandler(theirHandler);
-  }
-  return (event) => {
-    if (isSyntheticEvent(event)) {
-      const baseUIEvent = event;
-      makeEventPreventable(baseUIEvent);
-      const result2 = theirHandler(baseUIEvent);
-      if (!baseUIEvent.baseUIHandlerPrevented) {
-        ourHandler?.(baseUIEvent);
-      }
-      return result2;
-    }
-    const result = theirHandler(event);
-    ourHandler?.(event);
-    return result;
-  };
+	if (!theirHandler) return ourHandler;
+	if (!ourHandler) return wrapEventHandler(theirHandler);
+	return (...args) => {
+		const event = args[0];
+		if (isSyntheticEvent(event)) {
+			const baseUIEvent = event;
+			makeEventPreventable(baseUIEvent);
+			const result = theirHandler(...args);
+			if (!baseUIEvent.baseUIHandlerPrevented) ourHandler?.(...args);
+			return result;
+		}
+		const result = theirHandler(...args);
+		ourHandler?.(...args);
+		return result;
+	};
 }
 function wrapEventHandler(handler) {
-  if (!handler) {
-    return handler;
-  }
-  return (event) => {
-    if (isSyntheticEvent(event)) {
-      makeEventPreventable(event);
-    }
-    return handler(event);
-  };
+	if (!handler) return handler;
+	return (...args) => {
+		const event = args[0];
+		if (isSyntheticEvent(event)) makeEventPreventable(event);
+		return handler(...args);
+	};
 }
 function makeEventPreventable(event) {
-  event.preventBaseUIHandler = () => {
-    event.baseUIHandlerPrevented = true;
-  };
-  return event;
+	event.preventBaseUIHandler = () => {
+		event.baseUIHandlerPrevented = true;
+	};
+	return event;
 }
 function mergeClassNames(ourClassName, theirClassName) {
-  if (theirClassName) {
-    if (ourClassName) {
-      return theirClassName + " " + ourClassName;
-    }
-    return theirClassName;
-  }
-  return ourClassName;
+	if (theirClassName) {
+		if (ourClassName) return theirClassName + " " + ourClassName;
+		return theirClassName;
+	}
+	return ourClassName;
 }
 function isSyntheticEvent(event) {
-  return event != null && typeof event === "object" && "nativeEvent" in event;
+	return event != null && typeof event === "object" && "nativeEvent" in event;
 }
 
-// node_modules/@base-ui/utils/esm/empty.js
-var EMPTY_ARRAY = Object.freeze([]);
-var EMPTY_OBJECT = Object.freeze({});
-
-// node_modules/@base-ui/react/esm/utils/constants.js
-var BASE_UI_SWIPE_IGNORE_ATTRIBUTE = "data-base-ui-swipe-ignore";
-var LEGACY_SWIPE_IGNORE_ATTRIBUTE = "data-swipe-ignore";
-var BASE_UI_SWIPE_IGNORE_SELECTOR = `[${BASE_UI_SWIPE_IGNORE_ATTRIBUTE}]`;
-var LEGACY_SWIPE_IGNORE_SELECTOR = `[${LEGACY_SWIPE_IGNORE_ATTRIBUTE}]`;
-
-// node_modules/@base-ui/react/esm/utils/useRenderElement.js
-var import_react = __toESM(require_react(), 1);
+// node_modules/.store/@base-ui/react@1.9.0-uHNeM94OdjIeOtpyYGvL0A/node_modules/@base-ui/react/internals/useRenderElement.mjs
+/**
+* Renders a Base UI element.
+*
+* @param element The default HTML element to render. Can be overridden by the `render` prop.
+* @param componentProps An object containing the `render` and `className` props to be used for element customization. Other props are ignored.
+* @param params Additional parameters for rendering the element.
+*/
 function useRenderElement(element, componentProps, params = {}) {
-  const renderProp = componentProps.render;
-  const outProps = useRenderElementProps(componentProps, params);
-  if (params.enabled === false) {
-    return null;
-  }
-  const state = params.state ?? EMPTY_OBJECT;
-  return evaluateRenderProp(element, renderProp, outProps, state);
+	let renderProp = componentProps.render;
+	if (params.enabled !== false) renderProp = unwrapLazyRenderProp(renderProp);
+	const outProps = useRenderElementProps(componentProps, params, renderProp);
+	if (params.enabled === false) return null;
+	const state = params.state ?? EMPTY_OBJECT;
+	return evaluateRenderProp(element, renderProp, outProps, state);
 }
-function useRenderElementProps(componentProps, params = {}) {
-  const {
-    className: classNameProp,
-    style: styleProp,
-    render: renderProp
-  } = componentProps;
-  const {
-    state = EMPTY_OBJECT,
-    ref,
-    props,
-    stateAttributesMapping,
-    enabled = true
-  } = params;
-  const className = enabled ? resolveClassName(classNameProp, state) : void 0;
-  const style = enabled ? resolveStyle(styleProp, state) : void 0;
-  const stateProps = enabled ? getStateAttributesProps(state, stateAttributesMapping) : EMPTY_OBJECT;
-  const resolvedProps = enabled && props ? resolveRenderFunctionProps(props) : void 0;
-  const outProps = enabled ? mergeObjects(stateProps, resolvedProps) ?? {} : EMPTY_OBJECT;
-  if (typeof document !== "undefined") {
-    if (!enabled) {
-      useMergedRefs(null, null);
-    } else if (Array.isArray(ref)) {
-      outProps.ref = useMergedRefsN([outProps.ref, getReactElementRef(renderProp), ...ref]);
-    } else {
-      outProps.ref = useMergedRefs(outProps.ref, getReactElementRef(renderProp), ref);
-    }
-  }
-  if (!enabled) {
-    return EMPTY_OBJECT;
-  }
-  if (className !== void 0) {
-    outProps.className = mergeClassNames(outProps.className, className);
-  }
-  if (style !== void 0) {
-    outProps.style = mergeObjects(outProps.style, style);
-  }
-  return outProps;
+/**
+* Computes render element final props.
+*/
+function useRenderElementProps(componentProps, params, renderProp) {
+	const { className: classNameProp, style: styleProp } = componentProps;
+	const { state = EMPTY_OBJECT, ref, props, stateAttributesMapping, enabled = true } = params;
+	const className = enabled ? resolveClassName(classNameProp, state) : void 0;
+	const style = enabled ? resolveStyle(styleProp, state) : void 0;
+	const stateProps = enabled ? getStateAttributesProps(state, stateAttributesMapping) : EMPTY_OBJECT;
+	const resolvedProps = enabled && props ? resolveRenderFunctionProps(props) : void 0;
+	const outProps = enabled ? mergeObjects(stateProps, resolvedProps) ?? {} : EMPTY_OBJECT;
+	if (typeof document !== "undefined") {
+		if (!enabled) useMergedRefs(null, null);
+		else if (Array.isArray(ref)) outProps.ref = useMergedRefsN([
+			outProps.ref,
+			getReactElementRef(renderProp),
+			...ref
+		]);
+		else outProps.ref = useMergedRefs(outProps.ref, getReactElementRef(renderProp), ref);
+	}
+	if (!enabled) return EMPTY_OBJECT;
+	if (className !== void 0) outProps.className = mergeClassNames(outProps.className, className);
+	if (style !== void 0) outProps.style = mergeObjects(outProps.style, style);
+	return outProps;
 }
 function resolveRenderFunctionProps(props) {
-  if (Array.isArray(props)) {
-    return mergePropsN(props);
-  }
-  return mergeProps(void 0, props);
+	if (Array.isArray(props)) return mergePropsN(props);
+	return mergeProps(void 0, props);
 }
-var REACT_LAZY_TYPE = /* @__PURE__ */ Symbol.for("react.lazy");
-var COMPONENT_IDENTIFIER_PATTERN = /^[A-Z][A-Za-z0-9$]*$/;
-var LOWERCASE_CHARACTER_PATTERN = /[a-z]/;
+const REACT_LAZY_TYPE = Symbol.for("react.lazy");
+const COMPONENT_IDENTIFIER_PATTERN = /^[A-Z][A-Za-z0-9$]*$/;
+const LOWERCASE_CHARACTER_PATTERN = /[a-z]/;
+function unwrapLazyRenderProp(render) {
+	if (render?.$$typeof !== REACT_LAZY_TYPE) return render;
+	const unwrapped = import__wp_global_react.Children.toArray(render)[0];
+	return /*#__PURE__*/ import__wp_global_react.isValidElement(unwrapped) ? unwrapped : render;
+}
 function evaluateRenderProp(element, render, props, state) {
-  if (render) {
-    if (typeof render === "function") {
-      if (true) {
-        warnIfRenderPropLooksLikeComponent(render);
-      }
-      return render(props, state);
-    }
-    const mergedProps = mergeProps(props, render.props);
-    mergedProps.ref = props.ref;
-    let newElement = render;
-    if (newElement?.$$typeof === REACT_LAZY_TYPE) {
-      const children = React5.Children.toArray(render);
-      newElement = children[0];
-    }
-    if (true) {
-      if (!/* @__PURE__ */ React5.isValidElement(newElement)) {
-        throw new Error(["Base UI: The `render` prop was provided an invalid React element as `React.isValidElement(render)` is `false`.", "A valid React element must be provided to the `render` prop because it is cloned with props to replace the default element.", "https://base-ui.com/r/invalid-render-prop"].join("\n"));
-      }
-    }
-    return /* @__PURE__ */ React5.cloneElement(newElement, mergedProps);
-  }
-  if (element) {
-    if (typeof element === "string") {
-      return renderTag(element, props);
-    }
-  }
-  throw new Error(true ? "Base UI: Render element or function are not defined." : formatErrorMessage_default(8));
+	if (render) {
+		if (typeof render === "function") {
+			warnIfRenderPropLooksLikeComponent(render);
+			return render(props, state);
+		}
+		const mergedProps = mergeProps(props, render.props);
+		mergedProps.ref = props.ref;
+		if (!/*#__PURE__*/ import__wp_global_react.isValidElement(render)) throw new Error([
+			"Base UI: The `render` prop was provided an invalid React element as `React.isValidElement(render)` is `false`.",
+			"A valid React element must be provided to the `render` prop because it is cloned with props to replace the default element.",
+			"https://base-ui.com/r/invalid-render-prop"
+		].join("\n"));
+		return /*#__PURE__*/ import__wp_global_react.cloneElement(render, mergedProps);
+	}
+	return renderTag(element, props);
 }
 function warnIfRenderPropLooksLikeComponent(renderFn) {
-  const functionName = renderFn.name;
-  if (functionName.length === 0) {
-    return;
-  }
-  if (!COMPONENT_IDENTIFIER_PATTERN.test(functionName)) {
-    return;
-  }
-  if (!LOWERCASE_CHARACTER_PATTERN.test(functionName)) {
-    return;
-  }
-  warn(`The \`render\` prop received a function named \`${functionName}\` that starts with an uppercase letter.`, "This usually means a React component was passed directly as `render={Component}`.", "Base UI calls `render` as a plain function, which can break the Rules of Hooks during reconciliation.", "If this is an intentional render callback, rename it to start with a lowercase letter.", "Use `render={<Component />}` or `render={(props) => <Component {...props} />}` instead.", "https://base-ui.com/r/invalid-render-prop");
+	const functionName = renderFn.name;
+	if (functionName.length === 0) return;
+	if (!COMPONENT_IDENTIFIER_PATTERN.test(functionName)) return;
+	if (!LOWERCASE_CHARACTER_PATTERN.test(functionName)) return;
+	warn(`The \`render\` prop received a function named \`${functionName}\` that starts with an uppercase letter.`, "This usually means a React component was passed directly as `render={Component}`.", "Base UI calls `render` as a plain function, which can break the Rules of Hooks during reconciliation.", "If this is an intentional render callback, rename it to start with a lowercase letter.", "Use `render={<Component />}` or `render={(props) => <Component {...props} />}` instead.", "https://base-ui.com/r/invalid-render-prop");
 }
 function renderTag(Tag, props) {
-  if (Tag === "button") {
-    return /* @__PURE__ */ (0, import_react.createElement)("button", {
-      type: "button",
-      ...props,
-      key: props.key
-    });
-  }
-  if (Tag === "img") {
-    return /* @__PURE__ */ (0, import_react.createElement)("img", {
-      alt: "",
-      ...props,
-      key: props.key
-    });
-  }
-  return /* @__PURE__ */ React5.createElement(Tag, props);
+	if (Tag === "button") return /*#__PURE__*/ (0, import__wp_global_react.createElement)("button", {
+		type: "button",
+		...props,
+		key: props.key
+	});
+	if (Tag === "img") return /*#__PURE__*/ (0, import__wp_global_react.createElement)("img", {
+		alt: "",
+		...props,
+		key: props.key
+	});
+	return /*#__PURE__*/ import__wp_global_react.createElement(Tag, props);
 }
 
-// node_modules/@base-ui/react/esm/use-render/useRender.js
-function useRender(params) {
-  return useRenderElement(params.defaultTagName ?? "div", params, params);
+// \0wp-global:react/jsx-runtime
+var require_jsx_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = window.ReactJSXRuntime;
+}));
+
+// node_modules/.store/clsx@2.1.1-XOLP1vUL9vEGfpiXm37fAw/node_modules/clsx/dist/clsx.mjs
+function r(e) {
+	var t, f, n = "";
+	if ("string" == typeof e || "number" == typeof e) n += e;
+	else if ("object" == typeof e) if (Array.isArray(e)) {
+		var o = e.length;
+		for (t = 0; t < o; t++) e[t] && (f = r(e[t])) && (n && (n += " "), n += f);
+	} else for (f in e) e[f] && (n && (n += " "), n += f);
+	return n;
+}
+function clsx() {
+	for (var e, t, f = 0, n = "", o = arguments.length; f < o; f++) (e = arguments[f]) && (t = r(e)) && (n && (n += " "), n += t);
+	return n;
 }
 
-// packages/ui/build-module/text/text.mjs
-var import_element2 = __toESM(require_element(), 1);
-if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='4130d64bea']")) {
-  const style = document.createElement("style");
-  style.setAttribute("data-wp-hash", "4130d64bea");
-  style.appendChild(document.createTextNode('@layer wp-ui-utilities, wp-ui-components, wp-ui-compositions, wp-ui-overrides;@layer wp-ui-components{._83ed8a8da5dd50ea__text{margin:0}._14437cfb77831647__heading-2xl{--_gcd-heading-font-size:var(--wpds-typography-font-size-2xl,32px);font-size:var(--wpds-typography-font-size-2xl,32px);line-height:var(--wpds-typography-line-height-2xl,40px)}._14437cfb77831647__heading-2xl,._3c78b7fa9b4072dd__heading-xl{font-family:var(--wpds-typography-font-family-heading,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-weight:var(--wpds-typography-font-weight-medium,499)}._3c78b7fa9b4072dd__heading-xl{--_gcd-heading-font-size:var(--wpds-typography-font-size-xl,20px);font-size:var(--wpds-typography-font-size-xl,20px);line-height:var(--wpds-typography-line-height-md,24px)}.aa58f227716bcde2__heading-lg{--_gcd-heading-font-size:var(--wpds-typography-font-size-lg,15px);font-size:var(--wpds-typography-font-size-lg,15px)}.aa58f227716bcde2__heading-lg,.fc4da56d8dfe52c4__heading-md{font-family:var(--wpds-typography-font-family-heading,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-weight:var(--wpds-typography-font-weight-medium,499);line-height:var(--wpds-typography-line-height-sm,20px)}.fc4da56d8dfe52c4__heading-md{--_gcd-heading-font-size:var(--wpds-typography-font-size-md,13px);font-size:var(--wpds-typography-font-size-md,13px)}.a9b78c7c82e8dff7__heading-sm{--_gcd-heading-font-size:var(--wpds-typography-font-size-xs,11px);font-family:var(--wpds-typography-font-family-heading,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-size:var(--wpds-typography-font-size-xs,11px);font-weight:var(--wpds-typography-font-weight-medium,499);line-height:var(--wpds-typography-line-height-xs,16px);text-transform:uppercase}._305ff559e52180d5__body-xl{--_gcd-p-font-size:var(--wpds-typography-font-size-xl,20px);--_gcd-p-line-height:var(--wpds-typography-line-height-xl,32px);font-size:var(--wpds-typography-font-size-xl,20px);line-height:var(--wpds-typography-line-height-xl,32px)}._305ff559e52180d5__body-xl,.ca1aa3fc2029e958__body-lg{font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-weight:var(--wpds-typography-font-weight-regular,400)}.ca1aa3fc2029e958__body-lg{--_gcd-p-font-size:var(--wpds-typography-font-size-lg,15px);--_gcd-p-line-height:var(--wpds-typography-line-height-md,24px);font-size:var(--wpds-typography-font-size-lg,15px);line-height:var(--wpds-typography-line-height-md,24px)}._131101940be12424__body-md{--_gcd-p-font-size:var(--wpds-typography-font-size-md,13px);--_gcd-p-line-height:var(--wpds-typography-line-height-sm,20px);font-size:var(--wpds-typography-font-size-md,13px);line-height:var(--wpds-typography-line-height-sm,20px)}._0e8d87a42c1f75fa__body-sm,._131101940be12424__body-md{font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-weight:var(--wpds-typography-font-weight-regular,400)}._0e8d87a42c1f75fa__body-sm{--_gcd-p-font-size:var(--wpds-typography-font-size-sm,12px);--_gcd-p-line-height:var(--wpds-typography-line-height-xs,16px);font-size:var(--wpds-typography-font-size-sm,12px);line-height:var(--wpds-typography-line-height-xs,16px)}}'));
-  document.head.appendChild(style);
-}
-var style_default = { "text": "_83ed8a8da5dd50ea__text", "heading-2xl": "_14437cfb77831647__heading-2xl", "heading-xl": "_3c78b7fa9b4072dd__heading-xl", "heading-lg": "aa58f227716bcde2__heading-lg", "heading-md": "fc4da56d8dfe52c4__heading-md", "heading-sm": "a9b78c7c82e8dff7__heading-sm", "body-xl": "_305ff559e52180d5__body-xl", "body-lg": "ca1aa3fc2029e958__body-lg", "body-md": "_131101940be12424__body-md", "body-sm": "_0e8d87a42c1f75fa__body-sm" };
-if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='1fb29d3a3c']")) {
-  const style = document.createElement("style");
-  style.setAttribute("data-wp-hash", "1fb29d3a3c");
-  style.appendChild(document.createTextNode("._6defc79820e382c6__button{box-sizing:var(--_gcd-button-box-sizing,border-box);font-family:var(--_gcd-button-font-family,inherit);font-size:var(--_gcd-button-font-size,inherit);font-weight:var(--_gcd-button-font-weight,inherit)}.d2cff2e5dea83bd1__input{box-sizing:var(--_gcd-input-box-sizing,border-box);font-family:var(--_gcd-input-font-family,inherit);font-size:var(--_gcd-input-font-size,inherit);font-weight:var(--_gcd-input-font-weight,inherit);margin:var(--_gcd-input-margin,0);&:is(textarea,[type=text],[type=password],[type=color],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){background-color:var(--_gcd-input-background-color,#0000);border:var(--_gcd-input-border,none);border-radius:var(--_gcd-input-border-radius,0);box-shadow:var(--_gcd-input-box-shadow,0 0 0 #0000);color:var(--_gcd-input-color,var(--wpds-color-fg-interactive-neutral,#1e1e1e));&:focus{border-color:var(--_gcd-input-border-color-focus,var(--wp-admin-theme-color));box-shadow:var(--_gcd-input-box-shadow-focus,none);outline:var(--_gcd-input-outline-focus,none)}&:disabled{background:var(--_gcd-input-background-disabled,#0000);border-color:var(--_gcd-input-border-color-disabled,#0000);box-shadow:var(--_gcd-input-box-shadow-disabled,none);color:var(--_gcd-input-color-disabled,var(--wpds-color-fg-interactive-neutral-disabled,#8d8d8d))}&::placeholder{color:var(--_gcd-input-placeholder-color,var(--wpds-color-fg-interactive-neutral-disabled,#8d8d8d))}}&:is(textarea,[type=text],[type=password],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){line-height:var(--_gcd-input-line-height,inherit);min-height:var(--_gcd-input-min-height,auto);padding:var(--_gcd-input-padding,0)}}._547d86373d02e108__textarea{box-sizing:var(--_gcd-textarea-box-sizing,border-box);overflow:var(--_gcd-textarea-overflow,auto);resize:var(--_gcd-textarea-resize,block)}._8c15fd0ed9f28ba4__div{outline:var(--_gcd-div-outline,0 solid #0000)}p._43cec3e1eec1066d__p{font-size:var(--_gcd-p-font-size,13px);line-height:var(--_gcd-p-line-height,1.5);margin:var(--_gcd-p-margin,0)}:is(h1,h2,h3,h4,h5,h6).e97669c6d9a38497__heading{color:var(--_gcd-heading-color,var(--wpds-color-fg-content-neutral,#1e1e1e));font-size:var(--_gcd-heading-font-size,inherit);font-weight:var(--_gcd-heading-font-weight,var(--wpds-typography-font-weight-medium,499));margin:var(--_gcd-heading-margin,0)}._2c0831b0499dbd6e__a,._2c0831b0499dbd6e__a:is(:hover,:focus,:active){border-radius:var(--_gcd-a-border-radius,0);box-shadow:var(--_gcd-a-box-shadow,none);color:var(--_gcd-a-color,inherit);outline:var(--_gcd-a-outline,0 solid #0000);transition:var(--_gcd-a-transition,none)}"));
-  document.head.appendChild(style);
-}
-var global_css_defense_default = { "button": "_6defc79820e382c6__button", "input": "d2cff2e5dea83bd1__input", "textarea": "_547d86373d02e108__textarea", "div": "_8c15fd0ed9f28ba4__div", "p": "_43cec3e1eec1066d__p", "heading": "e97669c6d9a38497__heading", "a": "_2c0831b0499dbd6e__a" };
-var Text = (0, import_element2.forwardRef)(function Text2({ variant = "body-md", render, className, ...props }, ref) {
-  const element = useRender({
-    render,
-    defaultTagName: "span",
-    ref,
-    props: mergeProps(props, {
-      className: clsx_default(
-        style_default.text,
-        variant.startsWith("heading-") && global_css_defense_default.heading,
-        variant.startsWith("body-") && global_css_defense_default.p,
-        style_default[variant],
-        className
-      )
-    })
-  });
-  return element;
+// \0wp-global:@wordpress/element
+var require_element = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = window.wp.element;
+}));
+
+// \0wp-global:@wordpress/primitives
+var require_primitives = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = window.wp.primitives;
+}));
+
+// packages/ui/build-module/icon/icon.mjs
+var import_element = require_element();
+var import_primitives = require_primitives();
+var import_jsx_runtime = require_jsx_runtime();
+/**
+* Renders an SVG icon with a 24px default size.
+*
+* ```jsx
+* import { wordpress } from '@wordpress/icons';
+*
+* <Icon icon={ wordpress } />
+* ```
+*/
+const Icon = (0, import_element.forwardRef)(function UnforwardedIcon({ icon, size = 24, style, ...restProps }, ref) {
+	const mergedStyle = icon.props.style || style ? {
+		...icon.props.style,
+		...style
+	} : void 0;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.SVG, {
+		ref,
+		...icon.props,
+		...restProps,
+		...mergedStyle ? { style: mergedStyle } : {},
+		width: size,
+		height: size
+	});
 });
 
-// packages/ui/build-module/badge/badge.mjs
-var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
-if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='d6a685e1aa']")) {
-  const style = document.createElement("style");
-  style.setAttribute("data-wp-hash", "d6a685e1aa");
-  style.appendChild(document.createTextNode("@layer wp-ui-utilities, wp-ui-components, wp-ui-compositions, wp-ui-overrides;@layer wp-ui-components{._96e6251aad1a6136__badge{border-radius:var(--wpds-border-radius-lg,8px);padding-block:var(--wpds-dimension-padding-xs,4px);padding-inline:var(--wpds-dimension-padding-sm,8px)}._99f7158cb520f750__is-high-intent{background-color:var(--wpds-color-bg-surface-error,#f6e6e3);color:var(--wpds-color-fg-content-error,#470000)}.c20ebef2365bc8b7__is-medium-intent{background-color:var(--wpds-color-bg-surface-warning,#fde6be);color:var(--wpds-color-fg-content-warning,#2e1900)}._365e1626c6202e52__is-low-intent{background-color:var(--wpds-color-bg-surface-caution,#fee995);color:var(--wpds-color-fg-content-caution,#281d00)}._33f8198127ddf4ef__is-stable-intent{background-color:var(--wpds-color-bg-surface-success,#c6f7cd);color:var(--wpds-color-fg-content-success,#002900)}._04c1aca8fc449412__is-informational-intent{background-color:var(--wpds-color-bg-surface-info,#deebfa);color:var(--wpds-color-fg-content-info,#001b4f)}._90726e69d495ec19__is-draft-intent{background-color:var(--wpds-color-bg-surface-neutral-weak,#f4f4f4);color:var(--wpds-color-fg-content-neutral,#1e1e1e)}._898f4a544993bd39__is-none-intent{background-color:var(--wpds-color-bg-surface-neutral-strong,#fff);border:var(--wpds-border-width-xs,1px) solid var(--wpds-color-stroke-surface-neutral,#dbdbdb);color:var(--wpds-color-fg-content-neutral,#1e1e1e);padding-block:calc(var(--wpds-dimension-padding-xs, 4px) - var(--wpds-border-width-xs, 1px));padding-inline:calc(var(--wpds-dimension-padding-sm, 8px) - var(--wpds-border-width-xs, 1px))}}"));
-  document.head.appendChild(style);
+// node_modules/.store/@base-ui/react@1.9.0-uHNeM94OdjIeOtpyYGvL0A/node_modules/@base-ui/react/use-render/useRender.mjs
+/**
+* Renders a Base UI element.
+*
+* @public
+*/
+function useRender(params) {
+	return useRenderElement(params.defaultTagName ?? "div", params, params);
 }
-var style_default2 = { "badge": "_96e6251aad1a6136__badge", "is-high-intent": "_99f7158cb520f750__is-high-intent", "is-medium-intent": "c20ebef2365bc8b7__is-medium-intent", "is-low-intent": "_365e1626c6202e52__is-low-intent", "is-stable-intent": "_33f8198127ddf4ef__is-stable-intent", "is-informational-intent": "_04c1aca8fc449412__is-informational-intent", "is-draft-intent": "_90726e69d495ec19__is-draft-intent", "is-none-intent": "_898f4a544993bd39__is-none-intent" };
-var Badge = (0, import_element3.forwardRef)(function Badge2({ intent = "none", className, ...props }, ref) {
-  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-    Text,
-    {
-      ref,
-      className: clsx_default(
-        style_default2.badge,
-        style_default2[`is-${intent}-intent`],
-        className
-      ),
-      ...props,
-      variant: "body-sm"
-    }
-  );
+
+// packages/icons/build-module/library/caution.mjs
+var caution_default = /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.SVG, {
+	xmlns: "http://www.w3.org/2000/svg",
+	viewBox: "0 0 24 24",
+	style: { fill: "none" },
+	stroke: "currentColor",
+	strokeWidth: "1.5",
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.Path, {
+		d: "M12 8L12 13M12 14.5L12 16M4.75 12C4.75 7.99593 7.99594 4.75 12 4.75C16.0041 4.75 19.25 7.99594 19.25 12C19.25 16.0041 16.0041 19.25 12 19.25C7.99594 19.25 4.75 16.0041 4.75 12Z",
+		strokeLinejoin: "round"
+	})
+});
+
+// packages/icons/build-module/library/error.mjs
+var error_default = /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.SVG, {
+	xmlns: "http://www.w3.org/2000/svg",
+	viewBox: "0 0 24 24",
+	style: { fill: "none" },
+	stroke: "currentColor",
+	strokeWidth: "1.5",
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.Path, { d: "M12 9L12 14M12 15.5V17M11.1284 5.04947L3.83827 18.0097C3.46331 18.6763 3.94502 19.5 4.70985 19.5H19.2902C20.055 19.5 20.5367 18.6763 20.1617 18.0097L12.8716 5.04947C12.4893 4.36982 11.5107 4.36982 11.1284 5.04947Z" })
+});
+
+// packages/icons/build-module/library/help.mjs
+var help_default = /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_primitives.SVG, {
+	xmlns: "http://www.w3.org/2000/svg",
+	viewBox: "0 0 24 24",
+	style: { fill: "none" },
+	stroke: "currentColor",
+	strokeWidth: "1.5",
+	children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.Path, { d: "M9.75 10.25C9.75 9.00736 10.7574 8 12 8C13.2426 8 14.25 9.00736 14.25 10.25C14.25 11.4083 13.3748 12.3621 12.2496 12.4863C12.1124 12.5015 12 12.6119 12 12.75V14M12 15V16.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.Path, {
+		d: "M19.25 12C19.25 16.0041 16.0041 19.25 12 19.25C7.99594 19.25 4.75 16.0041 4.75 12C4.75 7.99594 7.99594 4.75 12 4.75C16.0041 4.75 19.25 7.99594 19.25 12Z",
+		strokeLinejoin: "round"
+	})]
+});
+
+// packages/icons/build-module/library/info.mjs
+var info_default = /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.SVG, {
+	xmlns: "http://www.w3.org/2000/svg",
+	viewBox: "0 0 24 24",
+	style: { fill: "none" },
+	stroke: "currentColor",
+	strokeWidth: "1.5",
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.Path, {
+		d: "M12 16V11M12 9.5V8M19.25 12C19.25 16.0041 16.0041 19.25 12 19.25C7.99594 19.25 4.75 16.0041 4.75 12C4.75 7.99594 7.99594 4.75 12 4.75C16.0041 4.75 19.25 7.99594 19.25 12Z",
+		strokeLinejoin: "round"
+	})
+});
+
+// packages/icons/build-module/library/published.mjs
+var published_default = /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_primitives.SVG, {
+	xmlns: "http://www.w3.org/2000/svg",
+	viewBox: "0 0 24 24",
+	style: { fill: "none" },
+	stroke: "currentColor",
+	strokeWidth: "1.5",
+	children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.Path, {
+		d: "M12 19.25C16.0041 19.25 19.25 16.0041 19.25 12C19.25 7.99594 16.0041 4.75 12 4.75C7.99594 4.75 4.75 7.99594 4.75 12C4.75 16.0041 7.99594 19.25 12 19.25Z",
+		strokeLinejoin: "round"
+	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.Path, { d: "M9 12L11 14L15 10" })]
+});
+
+// packages/ui/build-module/text/text.mjs
+const STYLE_HASH_ATTRIBUTE$8 = "data-wp-hash";
+/**
+* Returns the shared style runtime registry.
+*
+* The registry is stored on `globalThis` so separately bundled copies of this
+* package can coordinate through the same document and style maps.
+*
+* @return The shared runtime registry.
+*/
+function getRuntime$8() {
+	const globalScope = globalThis;
+	if (globalScope.__wpStyleRuntime) return globalScope.__wpStyleRuntime;
+	globalScope.__wpStyleRuntime = {
+		documents: /* @__PURE__ */ new Map(),
+		styles: /* @__PURE__ */ new Map(),
+		injectedStyles: /* @__PURE__ */ new WeakMap()
+	};
+	if (typeof document !== "undefined") registerDocument$8(document);
+	return globalScope.__wpStyleRuntime;
+}
+/**
+* Checks whether a document already contains a style tag for a hash.
+*
+* @param targetDocument Document to inspect.
+* @param hash           Stable hash for the transformed CSS.
+*
+* @return Whether the style hash already exists in the document.
+*/
+function documentContainsStyleHash$8(targetDocument, hash) {
+	if (!targetDocument.head) return false;
+	for (const style of targetDocument.head.querySelectorAll(`style[${STYLE_HASH_ATTRIBUTE$8}]`)) if (style.getAttribute(STYLE_HASH_ATTRIBUTE$8) === hash) return true;
+	return false;
+}
+/**
+* Injects a registered style into a document, unless that document already
+* contains a style tag for the same hash.
+*
+* @param targetDocument Document to inject the style into.
+* @param hash           Stable hash for the transformed CSS.
+* @param css            CSS text to inject.
+*/
+function injectStyle$8(targetDocument, hash, css) {
+	if (!targetDocument.head) return;
+	const runtime = getRuntime$8();
+	let injectedStyles = runtime.injectedStyles.get(targetDocument);
+	if (!injectedStyles) {
+		injectedStyles = /* @__PURE__ */ new Set();
+		runtime.injectedStyles.set(targetDocument, injectedStyles);
+	}
+	if (injectedStyles.has(hash)) return;
+	if (documentContainsStyleHash$8(targetDocument, hash)) {
+		injectedStyles.add(hash);
+		return;
+	}
+	const style = targetDocument.createElement("style");
+	style.setAttribute(STYLE_HASH_ATTRIBUTE$8, hash);
+	style.appendChild(targetDocument.createTextNode(css));
+	targetDocument.head.appendChild(style);
+	injectedStyles.add(hash);
+}
+/**
+* Registers a document as a style injection target.
+*
+* Existing registered styles are replayed into the document immediately.
+* Documents are reference-counted so multiple providers can safely register the
+* same document without one cleanup removing it while another registration is
+* still active.
+*
+* @param targetDocument Document to receive registered styles.
+* @return Cleanup function that unregisters this document registration.
+*/
+function registerDocument$8(targetDocument) {
+	const runtime = getRuntime$8();
+	runtime.documents.set(targetDocument, (runtime.documents.get(targetDocument) ?? 0) + 1);
+	for (const [hash, css] of runtime.styles) injectStyle$8(targetDocument, hash, css);
+	return () => {
+		const count = runtime.documents.get(targetDocument);
+		if (count === void 0) return;
+		if (count <= 1) {
+			runtime.documents.delete(targetDocument);
+			return;
+		}
+		runtime.documents.set(targetDocument, count - 1);
+	};
+}
+/**
+* Registers a style and injects it into all registered documents.
+*
+* The hash is used as the deduplication key, so calling this repeatedly with
+* the same hash will not add duplicate style tags to a document.
+* Registered styles are retained for the lifetime of the page so they can be
+* replayed into documents that are registered later.
+*
+* @param hash Stable hash for the transformed CSS.
+* @param css  CSS text to inject.
+*/
+function registerStyle$8(hash, css) {
+	const runtime = getRuntime$8();
+	runtime.styles.set(hash, css);
+	for (const targetDocument of runtime.documents.keys()) injectStyle$8(targetDocument, hash, css);
+}
+registerStyle$8("09bae534ff", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._9745ffa515d864cf__text{text-wrap:pretty;margin:0}._8882b6a7feb4fd3d__heading-2xl{--_gcd-heading-font-size:var(--wpds-typography-font-size-2xl,32px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-emphasis,600);--_gcd-p-font-size:var(--wpds-typography-font-size-2xl,32px);--_gcd-p-line-height:var(--wpds-typography-line-height-2xl,40px);font-size:var(--wpds-typography-font-size-2xl,32px);line-height:var(--wpds-typography-line-height-2xl,40px)}._664e3e7687c45603__heading-xl,._8882b6a7feb4fd3d__heading-2xl{font-family:var(--wpds-typography-font-family-heading,-apple-system,system-ui,\"Segoe UI\",\"Roboto\",\"Oxygen-Sans\",\"Ubuntu\",\"Cantarell\",\"Helvetica Neue\",sans-serif);font-weight:var(--wpds-typography-font-weight-emphasis,600)}._664e3e7687c45603__heading-xl{--_gcd-heading-font-size:var(--wpds-typography-font-size-xl,20px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-emphasis,600);--_gcd-p-font-size:var(--wpds-typography-font-size-xl,20px);--_gcd-p-line-height:var(--wpds-typography-line-height-md,24px);font-size:var(--wpds-typography-font-size-xl,20px);line-height:var(--wpds-typography-line-height-md,24px)}.dac661a5de0ed2bd__heading-lg{--_gcd-heading-font-size:var(--wpds-typography-font-size-lg,15px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-emphasis,600);--_gcd-p-font-size:var(--wpds-typography-font-size-lg,15px);--_gcd-p-line-height:var(--wpds-typography-line-height-sm,20px);font-size:var(--wpds-typography-font-size-lg,15px)}._59c7f3f740e2f96e__heading-md,.dac661a5de0ed2bd__heading-lg{font-family:var(--wpds-typography-font-family-heading,-apple-system,system-ui,\"Segoe UI\",\"Roboto\",\"Oxygen-Sans\",\"Ubuntu\",\"Cantarell\",\"Helvetica Neue\",sans-serif);font-weight:var(--wpds-typography-font-weight-emphasis,600);line-height:var(--wpds-typography-line-height-sm,20px)}._59c7f3f740e2f96e__heading-md{--_gcd-heading-font-size:var(--wpds-typography-font-size-md,13px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-emphasis,600);--_gcd-p-font-size:var(--wpds-typography-font-size-md,13px);--_gcd-p-line-height:var(--wpds-typography-line-height-sm,20px);font-size:var(--wpds-typography-font-size-md,13px)}.cf052fbad8d93b7e__heading-sm{--_gcd-heading-font-size:var(--wpds-typography-font-size-xs,11px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-emphasis,600);--_gcd-p-font-size:var(--wpds-typography-font-size-xs,11px);--_gcd-p-line-height:var(--wpds-typography-line-height-xs,16px);font-family:var(--wpds-typography-font-family-heading,-apple-system,system-ui,\"Segoe UI\",\"Roboto\",\"Oxygen-Sans\",\"Ubuntu\",\"Cantarell\",\"Helvetica Neue\",sans-serif);font-size:var(--wpds-typography-font-size-xs,11px);font-weight:var(--wpds-typography-font-weight-emphasis,600);line-height:var(--wpds-typography-line-height-xs,16px);text-transform:uppercase}._212b9cfef57a0af4__body-xl{--_gcd-heading-font-size:var(--wpds-typography-font-size-xl,20px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-default,400);--_gcd-p-font-size:var(--wpds-typography-font-size-xl,20px);--_gcd-p-line-height:var(--wpds-typography-line-height-xl,32px);font-size:var(--wpds-typography-font-size-xl,20px);line-height:var(--wpds-typography-line-height-xl,32px)}._07f57bc0aa36b2c6__body-lg,._212b9cfef57a0af4__body-xl{font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,\"Segoe UI\",\"Roboto\",\"Oxygen-Sans\",\"Ubuntu\",\"Cantarell\",\"Helvetica Neue\",sans-serif);font-weight:var(--wpds-typography-font-weight-default,400)}._07f57bc0aa36b2c6__body-lg{--_gcd-heading-font-size:var(--wpds-typography-font-size-lg,15px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-default,400);--_gcd-p-font-size:var(--wpds-typography-font-size-lg,15px);--_gcd-p-line-height:var(--wpds-typography-line-height-md,24px);font-size:var(--wpds-typography-font-size-lg,15px);line-height:var(--wpds-typography-line-height-md,24px)}._0c6da4457aec9e62__body-md{--_gcd-heading-font-size:var(--wpds-typography-font-size-md,13px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-default,400);--_gcd-p-font-size:var(--wpds-typography-font-size-md,13px);--_gcd-p-line-height:var(--wpds-typography-line-height-sm,20px);font-size:var(--wpds-typography-font-size-md,13px);line-height:var(--wpds-typography-line-height-sm,20px)}._0c6da4457aec9e62__body-md,.b998f87ff17b7bec__body-sm{font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,\"Segoe UI\",\"Roboto\",\"Oxygen-Sans\",\"Ubuntu\",\"Cantarell\",\"Helvetica Neue\",sans-serif);font-weight:var(--wpds-typography-font-weight-default,400)}.b998f87ff17b7bec__body-sm{--_gcd-heading-font-size:var(--wpds-typography-font-size-sm,12px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-default,400);--_gcd-p-font-size:var(--wpds-typography-font-size-sm,12px);--_gcd-p-line-height:var(--wpds-typography-line-height-xs,16px);font-size:var(--wpds-typography-font-size-sm,12px);line-height:var(--wpds-typography-line-height-xs,16px)}}}");
+var style_module_default$8 = {
+	"text": "_9745ffa515d864cf__text",
+	"heading-2xl": "_8882b6a7feb4fd3d__heading-2xl",
+	"heading-xl": "_664e3e7687c45603__heading-xl",
+	"heading-lg": "dac661a5de0ed2bd__heading-lg",
+	"heading-md": "_59c7f3f740e2f96e__heading-md",
+	"heading-sm": "cf052fbad8d93b7e__heading-sm",
+	"body-xl": "_212b9cfef57a0af4__body-xl",
+	"body-lg": "_07f57bc0aa36b2c6__body-lg",
+	"body-md": "_0c6da4457aec9e62__body-md",
+	"body-sm": "b998f87ff17b7bec__body-sm"
+};
+registerStyle$8("726f348f3f", "._78c10a0773e51a91__button{box-sizing:var(--_gcd-button-box-sizing,border-box);font-family:var(--_gcd-button-font-family,inherit);font-size:var(--_gcd-button-font-size,inherit);font-weight:var(--_gcd-button-font-weight,inherit)}._5b33aa2d48624b4f__input{box-sizing:var(--_gcd-input-box-sizing,border-box);font-family:var(--_gcd-input-font-family,inherit);font-size:var(--_gcd-input-font-size,inherit);font-weight:var(--_gcd-input-font-weight,inherit);margin:var(--_gcd-input-margin,0);&::placeholder{color:var(--_gcd-input-placeholder-color,var(--wpds-color-foreground-interactive-neutral-weak,#707070))}&:is(textarea,[type=text],[type=password],[type=color],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){background-color:var(--_gcd-input-background-color,transparent);border:var(--_gcd-input-border,none);border-radius:var(--_gcd-input-border-radius,0);box-shadow:var(--_gcd-input-box-shadow,0 0 0 transparent);color:var(--_gcd-input-color,var(--wpds-color-foreground-interactive-neutral,#1e1e1e));&:focus{border-color:var(--_gcd-input-border-color-focus,var(--wp-admin-theme-color));box-shadow:var(--_gcd-input-box-shadow-focus,none);outline:var(--_gcd-input-outline-focus,none)}&:disabled{background:var(--_gcd-input-background-disabled,transparent);border-color:var(--_gcd-input-border-color-disabled,transparent);box-shadow:var(--_gcd-input-box-shadow-disabled,none);color:var(--_gcd-input-color-disabled,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}}&:is(textarea,[type=text],[type=password],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){line-height:var(--_gcd-input-line-height,inherit);min-height:var(--_gcd-input-min-height,auto);padding:var(--_gcd-input-padding,0)}}._980b3b4776ac8f81__textarea{box-sizing:var(--_gcd-textarea-box-sizing,border-box);overflow:var(--_gcd-textarea-overflow,auto);resize:var(--_gcd-textarea-resize,block)}._43e478b4279a076c__div{outline:var(--_gcd-div-outline,0 solid transparent)}p._698099e25b0fb1a6__p{font-size:var(--_gcd-p-font-size,13px);line-height:var(--_gcd-p-line-height,1.5);margin:var(--_gcd-p-margin,0)}:is(h1,h2,h3,h4,h5,h6)._326aee4184d261fd__heading{color:var(--_gcd-heading-color,var(--wpds-color-foreground-content-neutral,#1e1e1e));font-size:var(--_gcd-heading-font-size,inherit);font-weight:var(--_gcd-heading-font-weight,var(--wpds-typography-font-weight-emphasis,600));margin:var(--_gcd-heading-margin,0)}.e9576240835601ba__a,.e9576240835601ba__a:is(:hover,:focus,:active){border-radius:var(--_gcd-a-border-radius,0);box-shadow:var(--_gcd-a-box-shadow,none);color:var(--_gcd-a-color,inherit);outline:var(--_gcd-a-outline,0 solid transparent);transition:var(--_gcd-a-transition,none)}._3f05789653864a73__ol{list-style:var(--_gcd-ol-list-style,none);margin:var(--_gcd-ol-margin,0);padding-block:var(--_gcd-ol-padding-block,0);padding-inline:var(--_gcd-ol-padding-inline,0)}._3c72ff72abe57859__li{margin:var(--_gcd-li-margin,0)}[role=treeitem] span._79d16267c15d9eb2__span[aria-hidden]{display:var(--_gcd-span-display,inline);font-family:var(--_gcd-span-font-family,inherit);font-size:var(--_gcd-span-font-size,inherit);line-height:var(--_gcd-span-line-height,1);pointer-events:var(--_gcd-span-pointer-events,auto);position:var(--_gcd-span-position,static)}");
+var global_css_defense_module_default$2 = {
+	"button": "_78c10a0773e51a91__button",
+	"input": "_5b33aa2d48624b4f__input",
+	"textarea": "_980b3b4776ac8f81__textarea",
+	"div": "_43e478b4279a076c__div",
+	"p": "_698099e25b0fb1a6__p",
+	"heading": "_326aee4184d261fd__heading",
+	"a": "e9576240835601ba__a",
+	"ol": "_3f05789653864a73__ol",
+	"li": "_3c72ff72abe57859__li",
+	"span": "_79d16267c15d9eb2__span"
+};
+/**
+* A text component for rendering content with predefined typographic variants.
+* Built on design tokens for consistent typography across the UI.
+*/
+const Text = (0, import_element.forwardRef)(function UnforwardedText({ variant = "body-md", render, className, ...props }, ref) {
+	return useRender({
+		render,
+		defaultTagName: "span",
+		ref,
+		props: mergeProps(props, { className: clsx(style_module_default$8.text, global_css_defense_module_default$2.heading, global_css_defense_module_default$2.p, style_module_default$8[variant], className) })
+	});
+});
+
+// \0wp-global:@wordpress/private-apis
+var require_private_apis = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = window.wp.privateApis;
+}));
+
+// packages/ui/build-module/link/link.mjs
+var import_i18n = require_i18n();
+const STYLE_HASH_ATTRIBUTE$7 = "data-wp-hash";
+/**
+* Returns the shared style runtime registry.
+*
+* The registry is stored on `globalThis` so separately bundled copies of this
+* package can coordinate through the same document and style maps.
+*
+* @return The shared runtime registry.
+*/
+function getRuntime$7() {
+	const globalScope = globalThis;
+	if (globalScope.__wpStyleRuntime) return globalScope.__wpStyleRuntime;
+	globalScope.__wpStyleRuntime = {
+		documents: /* @__PURE__ */ new Map(),
+		styles: /* @__PURE__ */ new Map(),
+		injectedStyles: /* @__PURE__ */ new WeakMap()
+	};
+	if (typeof document !== "undefined") registerDocument$7(document);
+	return globalScope.__wpStyleRuntime;
+}
+/**
+* Checks whether a document already contains a style tag for a hash.
+*
+* @param targetDocument Document to inspect.
+* @param hash           Stable hash for the transformed CSS.
+*
+* @return Whether the style hash already exists in the document.
+*/
+function documentContainsStyleHash$7(targetDocument, hash) {
+	if (!targetDocument.head) return false;
+	for (const style of targetDocument.head.querySelectorAll(`style[${STYLE_HASH_ATTRIBUTE$7}]`)) if (style.getAttribute(STYLE_HASH_ATTRIBUTE$7) === hash) return true;
+	return false;
+}
+/**
+* Injects a registered style into a document, unless that document already
+* contains a style tag for the same hash.
+*
+* @param targetDocument Document to inject the style into.
+* @param hash           Stable hash for the transformed CSS.
+* @param css            CSS text to inject.
+*/
+function injectStyle$7(targetDocument, hash, css) {
+	if (!targetDocument.head) return;
+	const runtime = getRuntime$7();
+	let injectedStyles = runtime.injectedStyles.get(targetDocument);
+	if (!injectedStyles) {
+		injectedStyles = /* @__PURE__ */ new Set();
+		runtime.injectedStyles.set(targetDocument, injectedStyles);
+	}
+	if (injectedStyles.has(hash)) return;
+	if (documentContainsStyleHash$7(targetDocument, hash)) {
+		injectedStyles.add(hash);
+		return;
+	}
+	const style = targetDocument.createElement("style");
+	style.setAttribute(STYLE_HASH_ATTRIBUTE$7, hash);
+	style.appendChild(targetDocument.createTextNode(css));
+	targetDocument.head.appendChild(style);
+	injectedStyles.add(hash);
+}
+/**
+* Registers a document as a style injection target.
+*
+* Existing registered styles are replayed into the document immediately.
+* Documents are reference-counted so multiple providers can safely register the
+* same document without one cleanup removing it while another registration is
+* still active.
+*
+* @param targetDocument Document to receive registered styles.
+* @return Cleanup function that unregisters this document registration.
+*/
+function registerDocument$7(targetDocument) {
+	const runtime = getRuntime$7();
+	runtime.documents.set(targetDocument, (runtime.documents.get(targetDocument) ?? 0) + 1);
+	for (const [hash, css] of runtime.styles) injectStyle$7(targetDocument, hash, css);
+	return () => {
+		const count = runtime.documents.get(targetDocument);
+		if (count === void 0) return;
+		if (count <= 1) {
+			runtime.documents.delete(targetDocument);
+			return;
+		}
+		runtime.documents.set(targetDocument, count - 1);
+	};
+}
+/**
+* Registers a style and injects it into all registered documents.
+*
+* The hash is used as the deduplication key, so calling this repeatedly with
+* the same hash will not add duplicate style tags to a document.
+* Registered styles are retained for the lifetime of the page so they can be
+* replayed into documents that are registered later.
+*
+* @param hash Stable hash for the transformed CSS.
+* @param css  CSS text to inject.
+*/
+function registerStyle$7(hash, css) {
+	const runtime = getRuntime$7();
+	runtime.styles.set(hash, css);
+	for (const targetDocument of runtime.documents.keys()) injectStyle$7(targetDocument, hash, css);
+}
+registerStyle$7("37477070fb", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer utilities{.ccc29f9575c4c758__box-sizing{box-sizing:border-box;*,:after,:before{box-sizing:inherit}}}}");
+var resets_module_default$1 = { "box-sizing": "ccc29f9575c4c758__box-sizing" };
+registerStyle$7("c13e206e92", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer utilities{._0f52be5f1d4ce686__outset-ring--focus-within:focus-within,._8f922cee854f2408__outset-ring--focus-visible:focus-visible,.accedd6ae8fd878e__outset-ring--focus:focus{--_gcd-a-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--focus-color,var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9)));--_gcd-div-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--focus-color,var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9)));outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--focus-color,var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9)));outline-offset:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px))}._3ad2c88c126f2bdd__outset-ring--focus-within-except-active:focus-within,.c20f61b115485a7f__outset-ring--focus-except-active:focus{outline:none}._3ad2c88c126f2bdd__outset-ring--focus-within-except-active:focus-within:not(:has(:active)),.c20f61b115485a7f__outset-ring--focus-except-active:focus:not(:active){--_gcd-a-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--focus-color,var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9)));--_gcd-div-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--focus-color,var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9)));outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--focus-color,var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9)));outline-offset:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px))}}}");
+var focus_module_default = {
+	"outset-ring--focus": "accedd6ae8fd878e__outset-ring--focus",
+	"outset-ring--focus-visible": "_8f922cee854f2408__outset-ring--focus-visible",
+	"outset-ring--focus-within": "_0f52be5f1d4ce686__outset-ring--focus-within",
+	"outset-ring--focus-except-active": "c20f61b115485a7f__outset-ring--focus-except-active",
+	"outset-ring--focus-within-except-active": "_3ad2c88c126f2bdd__outset-ring--focus-within-except-active"
+};
+registerStyle$7("c87d91cdf7", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{.a574f9f242212d58__link{--_gcd-a-border-radius:var(--wpds-border-radius-sm,2px);border-radius:var(--wpds-border-radius-sm,2px);text-decoration-thickness:from-font;text-underline-offset:.2em}._2d2f0506e717a46c__link-with-icon{text-decoration-line:none}._92b7b6a03fbb27ac__link-contents{text-decoration:inherit;text-decoration-line:underline}._69f40d9212adc58d__is-brand,._69f40d9212adc58d__is-brand:visited{--_gcd-a-color:var(--wpds-color-foreground-interactive-brand,var(--wp-admin-theme-color,#3858e9));color:var(--wpds-color-foreground-interactive-brand,var(--wp-admin-theme-color,#3858e9))}._69f40d9212adc58d__is-brand:active,._69f40d9212adc58d__is-brand:hover{--_gcd-a-color:var(--wpds-color-foreground-interactive-brand-active,color-mix(in oklch,var(--wp-admin-theme-color,#3858e9) 52%,#000));color:var(--wpds-color-foreground-interactive-brand-active,color-mix(in oklch,var(--wp-admin-theme-color,#3858e9) 52%,#000))}._9a9c54c6e67b4c3c__is-neutral,._9a9c54c6e67b4c3c__is-neutral:visited{--_gcd-a-color:var(--wpds-color-foreground-interactive-neutral,#1e1e1e);color:var(--wpds-color-foreground-interactive-neutral,#1e1e1e);text-decoration-color:var(--wpds-color-stroke-interactive-neutral,#8d8d8d)}._9a9c54c6e67b4c3c__is-neutral:active,._9a9c54c6e67b4c3c__is-neutral:hover{--_gcd-a-color:var(--wpds-color-foreground-interactive-neutral-active,#1e1e1e);color:var(--wpds-color-foreground-interactive-neutral-active,#1e1e1e)}._93be0b747897baad__is-unstyled{--_gcd-a-border-radius:0;--_gcd-a-color:inherit;color:inherit;text-decoration:none}._9c39df40fdc09594__link-icon{font-weight:var(--wpds-typography-font-weight-default,400);line-height:1;margin-inline-start:var(--wpds-dimension-padding-xs,4px);text-decoration:none}._9c39df40fdc09594__link-icon:after{content:\"\\2060\\2197\"}._9c39df40fdc09594__link-icon:dir(rtl):after{content:\"\\2060\\2196\"}}}");
+var style_module_default$7 = {
+	"link": "a574f9f242212d58__link",
+	"link-with-icon": "_2d2f0506e717a46c__link-with-icon",
+	"link-contents": "_92b7b6a03fbb27ac__link-contents",
+	"is-brand": "_69f40d9212adc58d__is-brand",
+	"is-neutral": "_9a9c54c6e67b4c3c__is-neutral",
+	"is-unstyled": "_93be0b747897baad__is-unstyled",
+	"link-icon": "_9c39df40fdc09594__link-icon"
+};
+registerStyle$7("726f348f3f", "._78c10a0773e51a91__button{box-sizing:var(--_gcd-button-box-sizing,border-box);font-family:var(--_gcd-button-font-family,inherit);font-size:var(--_gcd-button-font-size,inherit);font-weight:var(--_gcd-button-font-weight,inherit)}._5b33aa2d48624b4f__input{box-sizing:var(--_gcd-input-box-sizing,border-box);font-family:var(--_gcd-input-font-family,inherit);font-size:var(--_gcd-input-font-size,inherit);font-weight:var(--_gcd-input-font-weight,inherit);margin:var(--_gcd-input-margin,0);&::placeholder{color:var(--_gcd-input-placeholder-color,var(--wpds-color-foreground-interactive-neutral-weak,#707070))}&:is(textarea,[type=text],[type=password],[type=color],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){background-color:var(--_gcd-input-background-color,transparent);border:var(--_gcd-input-border,none);border-radius:var(--_gcd-input-border-radius,0);box-shadow:var(--_gcd-input-box-shadow,0 0 0 transparent);color:var(--_gcd-input-color,var(--wpds-color-foreground-interactive-neutral,#1e1e1e));&:focus{border-color:var(--_gcd-input-border-color-focus,var(--wp-admin-theme-color));box-shadow:var(--_gcd-input-box-shadow-focus,none);outline:var(--_gcd-input-outline-focus,none)}&:disabled{background:var(--_gcd-input-background-disabled,transparent);border-color:var(--_gcd-input-border-color-disabled,transparent);box-shadow:var(--_gcd-input-box-shadow-disabled,none);color:var(--_gcd-input-color-disabled,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}}&:is(textarea,[type=text],[type=password],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){line-height:var(--_gcd-input-line-height,inherit);min-height:var(--_gcd-input-min-height,auto);padding:var(--_gcd-input-padding,0)}}._980b3b4776ac8f81__textarea{box-sizing:var(--_gcd-textarea-box-sizing,border-box);overflow:var(--_gcd-textarea-overflow,auto);resize:var(--_gcd-textarea-resize,block)}._43e478b4279a076c__div{outline:var(--_gcd-div-outline,0 solid transparent)}p._698099e25b0fb1a6__p{font-size:var(--_gcd-p-font-size,13px);line-height:var(--_gcd-p-line-height,1.5);margin:var(--_gcd-p-margin,0)}:is(h1,h2,h3,h4,h5,h6)._326aee4184d261fd__heading{color:var(--_gcd-heading-color,var(--wpds-color-foreground-content-neutral,#1e1e1e));font-size:var(--_gcd-heading-font-size,inherit);font-weight:var(--_gcd-heading-font-weight,var(--wpds-typography-font-weight-emphasis,600));margin:var(--_gcd-heading-margin,0)}.e9576240835601ba__a,.e9576240835601ba__a:is(:hover,:focus,:active){border-radius:var(--_gcd-a-border-radius,0);box-shadow:var(--_gcd-a-box-shadow,none);color:var(--_gcd-a-color,inherit);outline:var(--_gcd-a-outline,0 solid transparent);transition:var(--_gcd-a-transition,none)}._3f05789653864a73__ol{list-style:var(--_gcd-ol-list-style,none);margin:var(--_gcd-ol-margin,0);padding-block:var(--_gcd-ol-padding-block,0);padding-inline:var(--_gcd-ol-padding-inline,0)}._3c72ff72abe57859__li{margin:var(--_gcd-li-margin,0)}[role=treeitem] span._79d16267c15d9eb2__span[aria-hidden]{display:var(--_gcd-span-display,inline);font-family:var(--_gcd-span-font-family,inherit);font-size:var(--_gcd-span-font-size,inherit);line-height:var(--_gcd-span-line-height,1);pointer-events:var(--_gcd-span-pointer-events,auto);position:var(--_gcd-span-position,static)}");
+var global_css_defense_module_default$1 = {
+	"button": "_78c10a0773e51a91__button",
+	"input": "_5b33aa2d48624b4f__input",
+	"textarea": "_980b3b4776ac8f81__textarea",
+	"div": "_43e478b4279a076c__div",
+	"p": "_698099e25b0fb1a6__p",
+	"heading": "_326aee4184d261fd__heading",
+	"a": "e9576240835601ba__a",
+	"ol": "_3f05789653864a73__ol",
+	"li": "_3c72ff72abe57859__li",
+	"span": "_79d16267c15d9eb2__span"
+};
+/**
+* A styled anchor element with support for semantic color tones and an
+* unstyled escape hatch.
+*
+* See the [Usage Guidelines](https://wordpress.github.io/gutenberg/?path=/docs/design-system-components-button-usage-guidelines--docs)
+* for when to use `Button`, `IconButton`, `Link`, or `ButtonLink`.
+*/
+const Link = (0, import_element.forwardRef)(function UnforwardedLink({ children, variant = "default", tone = "brand", openInNewTab = false, target, render, className, ...props }, ref) {
+	const shouldShowNewTabIndicator = openInNewTab || /^_blank$/i.test(target ?? "");
+	return useRender({
+		render,
+		defaultTagName: "a",
+		ref,
+		props: mergeProps(props, {
+			className: clsx(global_css_defense_module_default$1.a, resets_module_default$1["box-sizing"], focus_module_default["outset-ring--focus-except-active"], variant !== "unstyled" && style_module_default$7.link, variant !== "unstyled" && shouldShowNewTabIndicator && style_module_default$7["link-with-icon"], variant !== "unstyled" && style_module_default$7[`is-${tone}`], variant === "unstyled" && style_module_default$7["is-unstyled"], className),
+			target: target ?? (openInNewTab ? "_blank" : void 0),
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [shouldShowNewTabIndicator && variant !== "unstyled" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: style_module_default$7["link-contents"],
+				children
+			}) : children, shouldShowNewTabIndicator && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: style_module_default$7["link-icon"],
+				role: "img",
+				"aria-label": (0, import_i18n.__)("(opens in a new tab)")
+			})] })
+		})
+	});
 });
 
 // packages/ui/build-module/stack/stack.mjs
-var import_element4 = __toESM(require_element(), 1);
-if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='b51ff41489']")) {
-  const style = document.createElement("style");
-  style.setAttribute("data-wp-hash", "b51ff41489");
-  style.appendChild(document.createTextNode("@layer wp-ui-utilities, wp-ui-components, wp-ui-compositions, wp-ui-overrides;@layer wp-ui-components{._19ce0419607e1896__stack{display:flex}}"));
-  document.head.appendChild(style);
+const STYLE_HASH_ATTRIBUTE$6 = "data-wp-hash";
+/**
+* Returns the shared style runtime registry.
+*
+* The registry is stored on `globalThis` so separately bundled copies of this
+* package can coordinate through the same document and style maps.
+*
+* @return The shared runtime registry.
+*/
+function getRuntime$6() {
+	const globalScope = globalThis;
+	if (globalScope.__wpStyleRuntime) return globalScope.__wpStyleRuntime;
+	globalScope.__wpStyleRuntime = {
+		documents: /* @__PURE__ */ new Map(),
+		styles: /* @__PURE__ */ new Map(),
+		injectedStyles: /* @__PURE__ */ new WeakMap()
+	};
+	if (typeof document !== "undefined") registerDocument$6(document);
+	return globalScope.__wpStyleRuntime;
 }
-var style_default3 = { "stack": "_19ce0419607e1896__stack" };
-var gapTokens = {
-  xs: "var(--wpds-dimension-gap-xs, 4px)",
-  sm: "var(--wpds-dimension-gap-sm, 8px)",
-  md: "var(--wpds-dimension-gap-md, 12px)",
-  lg: "var(--wpds-dimension-gap-lg, 16px)",
-  xl: "var(--wpds-dimension-gap-xl, 24px)",
-  "2xl": "var(--wpds-dimension-gap-2xl, 32px)",
-  "3xl": "var(--wpds-dimension-gap-3xl, 40px)"
+/**
+* Checks whether a document already contains a style tag for a hash.
+*
+* @param targetDocument Document to inspect.
+* @param hash           Stable hash for the transformed CSS.
+*
+* @return Whether the style hash already exists in the document.
+*/
+function documentContainsStyleHash$6(targetDocument, hash) {
+	if (!targetDocument.head) return false;
+	for (const style of targetDocument.head.querySelectorAll(`style[${STYLE_HASH_ATTRIBUTE$6}]`)) if (style.getAttribute(STYLE_HASH_ATTRIBUTE$6) === hash) return true;
+	return false;
+}
+/**
+* Injects a registered style into a document, unless that document already
+* contains a style tag for the same hash.
+*
+* @param targetDocument Document to inject the style into.
+* @param hash           Stable hash for the transformed CSS.
+* @param css            CSS text to inject.
+*/
+function injectStyle$6(targetDocument, hash, css) {
+	if (!targetDocument.head) return;
+	const runtime = getRuntime$6();
+	let injectedStyles = runtime.injectedStyles.get(targetDocument);
+	if (!injectedStyles) {
+		injectedStyles = /* @__PURE__ */ new Set();
+		runtime.injectedStyles.set(targetDocument, injectedStyles);
+	}
+	if (injectedStyles.has(hash)) return;
+	if (documentContainsStyleHash$6(targetDocument, hash)) {
+		injectedStyles.add(hash);
+		return;
+	}
+	const style = targetDocument.createElement("style");
+	style.setAttribute(STYLE_HASH_ATTRIBUTE$6, hash);
+	style.appendChild(targetDocument.createTextNode(css));
+	targetDocument.head.appendChild(style);
+	injectedStyles.add(hash);
+}
+/**
+* Registers a document as a style injection target.
+*
+* Existing registered styles are replayed into the document immediately.
+* Documents are reference-counted so multiple providers can safely register the
+* same document without one cleanup removing it while another registration is
+* still active.
+*
+* @param targetDocument Document to receive registered styles.
+* @return Cleanup function that unregisters this document registration.
+*/
+function registerDocument$6(targetDocument) {
+	const runtime = getRuntime$6();
+	runtime.documents.set(targetDocument, (runtime.documents.get(targetDocument) ?? 0) + 1);
+	for (const [hash, css] of runtime.styles) injectStyle$6(targetDocument, hash, css);
+	return () => {
+		const count = runtime.documents.get(targetDocument);
+		if (count === void 0) return;
+		if (count <= 1) {
+			runtime.documents.delete(targetDocument);
+			return;
+		}
+		runtime.documents.set(targetDocument, count - 1);
+	};
+}
+/**
+* Registers a style and injects it into all registered documents.
+*
+* The hash is used as the deduplication key, so calling this repeatedly with
+* the same hash will not add duplicate style tags to a document.
+* Registered styles are retained for the lifetime of the page so they can be
+* replayed into documents that are registered later.
+*
+* @param hash Stable hash for the transformed CSS.
+* @param css  CSS text to inject.
+*/
+function registerStyle$6(hash, css) {
+	const runtime = getRuntime$6();
+	runtime.styles.set(hash, css);
+	for (const targetDocument of runtime.documents.keys()) injectStyle$6(targetDocument, hash, css);
+}
+registerStyle$6("67591fa198", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._8e8e79c1a2eec43b__stack{display:flex}}}");
+var style_module_default$6 = { "stack": "_8e8e79c1a2eec43b__stack" };
+const gapTokens = {
+	xs: "var(--wpds-dimension-gap-xs, 4px)",
+	sm: "var(--wpds-dimension-gap-sm, 8px)",
+	md: "var(--wpds-dimension-gap-md, 12px)",
+	lg: "var(--wpds-dimension-gap-lg, 16px)",
+	xl: "var(--wpds-dimension-gap-xl, 24px)",
+	"2xl": "var(--wpds-dimension-gap-2xl, 32px)",
+	"3xl": "var(--wpds-dimension-gap-3xl, 40px)"
 };
-var Stack = (0, import_element4.forwardRef)(function Stack2({ direction, gap, align, justify, wrap, render, ...props }, ref) {
-  const style = {
-    gap: gap && gapTokens[gap],
-    alignItems: align,
-    justifyContent: justify,
-    flexDirection: direction,
-    flexWrap: wrap
-  };
-  const element = useRender({
-    render,
-    ref,
-    props: mergeProps(props, { style, className: style_default3.stack })
-  });
-  return element;
+/**
+* A flexible layout component using CSS Flexbox for consistent spacing and alignment.
+* Built on design tokens for predictable spacing values.
+*/
+const Stack = (0, import_element.forwardRef)(function UnforwardedStack({ direction, gap, align, justify, wrap, render, ...props }, ref) {
+	const style = {
+		gap: gap && gapTokens[gap],
+		alignItems: align,
+		justifyContent: justify,
+		flexDirection: direction,
+		flexWrap: wrap
+	};
+	return useRender({
+		render,
+		ref,
+		props: mergeProps(props, {
+			style,
+			className: style_module_default$6.stack
+		})
+	});
 });
 
+// packages/ui/build-module/notice/root.mjs
+const STYLE_HASH_ATTRIBUTE$5 = "data-wp-hash";
+/**
+* Returns the shared style runtime registry.
+*
+* The registry is stored on `globalThis` so separately bundled copies of this
+* package can coordinate through the same document and style maps.
+*
+* @return The shared runtime registry.
+*/
+function getRuntime$5() {
+	const globalScope = globalThis;
+	if (globalScope.__wpStyleRuntime) return globalScope.__wpStyleRuntime;
+	globalScope.__wpStyleRuntime = {
+		documents: /* @__PURE__ */ new Map(),
+		styles: /* @__PURE__ */ new Map(),
+		injectedStyles: /* @__PURE__ */ new WeakMap()
+	};
+	if (typeof document !== "undefined") registerDocument$5(document);
+	return globalScope.__wpStyleRuntime;
+}
+/**
+* Checks whether a document already contains a style tag for a hash.
+*
+* @param targetDocument Document to inspect.
+* @param hash           Stable hash for the transformed CSS.
+*
+* @return Whether the style hash already exists in the document.
+*/
+function documentContainsStyleHash$5(targetDocument, hash) {
+	if (!targetDocument.head) return false;
+	for (const style of targetDocument.head.querySelectorAll(`style[${STYLE_HASH_ATTRIBUTE$5}]`)) if (style.getAttribute(STYLE_HASH_ATTRIBUTE$5) === hash) return true;
+	return false;
+}
+/**
+* Injects a registered style into a document, unless that document already
+* contains a style tag for the same hash.
+*
+* @param targetDocument Document to inject the style into.
+* @param hash           Stable hash for the transformed CSS.
+* @param css            CSS text to inject.
+*/
+function injectStyle$5(targetDocument, hash, css) {
+	if (!targetDocument.head) return;
+	const runtime = getRuntime$5();
+	let injectedStyles = runtime.injectedStyles.get(targetDocument);
+	if (!injectedStyles) {
+		injectedStyles = /* @__PURE__ */ new Set();
+		runtime.injectedStyles.set(targetDocument, injectedStyles);
+	}
+	if (injectedStyles.has(hash)) return;
+	if (documentContainsStyleHash$5(targetDocument, hash)) {
+		injectedStyles.add(hash);
+		return;
+	}
+	const style = targetDocument.createElement("style");
+	style.setAttribute(STYLE_HASH_ATTRIBUTE$5, hash);
+	style.appendChild(targetDocument.createTextNode(css));
+	targetDocument.head.appendChild(style);
+	injectedStyles.add(hash);
+}
+/**
+* Registers a document as a style injection target.
+*
+* Existing registered styles are replayed into the document immediately.
+* Documents are reference-counted so multiple providers can safely register the
+* same document without one cleanup removing it while another registration is
+* still active.
+*
+* @param targetDocument Document to receive registered styles.
+* @return Cleanup function that unregisters this document registration.
+*/
+function registerDocument$5(targetDocument) {
+	const runtime = getRuntime$5();
+	runtime.documents.set(targetDocument, (runtime.documents.get(targetDocument) ?? 0) + 1);
+	for (const [hash, css] of runtime.styles) injectStyle$5(targetDocument, hash, css);
+	return () => {
+		const count = runtime.documents.get(targetDocument);
+		if (count === void 0) return;
+		if (count <= 1) {
+			runtime.documents.delete(targetDocument);
+			return;
+		}
+		runtime.documents.set(targetDocument, count - 1);
+	};
+}
+/**
+* Registers a style and injects it into all registered documents.
+*
+* The hash is used as the deduplication key, so calling this repeatedly with
+* the same hash will not add duplicate style tags to a document.
+* Registered styles are retained for the lifetime of the page so they can be
+* replayed into documents that are registered later.
+*
+* @param hash Stable hash for the transformed CSS.
+* @param css  CSS text to inject.
+*/
+function registerStyle$5(hash, css) {
+	const runtime = getRuntime$5();
+	runtime.styles.set(hash, css);
+	for (const targetDocument of runtime.documents.keys()) injectStyle$5(targetDocument, hash, css);
+}
+registerStyle$5("37477070fb", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer utilities{.ccc29f9575c4c758__box-sizing{box-sizing:border-box;*,:after,:before{box-sizing:inherit}}}}");
+var resets_module_default = { "box-sizing": "ccc29f9575c4c758__box-sizing" };
+registerStyle$5("e57e872b6c", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._173ad03087dbb509__notice{--icon-height:var(--wpds-dimension-size-sm,24px);--text-vertical-padding:calc((var(--icon-height) - var(--wpds-typography-line-height-sm, 20px))/2);--wp-ui-notice-background-color:var(--wpds-color-background-surface-neutral-weak,#f4f4f4);--wp-ui-notice-border-color:var(--wpds-color-stroke-surface-neutral,#dbdbdb);--wp-ui-notice-text-color:var(--wpds-color-foreground-content-neutral,#1e1e1e);--wp-ui-notice-decorative-icon-color:var(--wpds-color-foreground-content-neutral,#1e1e1e);align-items:start;background-color:var(--wp-ui-notice-background-color);border:1px solid var(--wp-ui-notice-border-color);border-radius:var(--wpds-border-radius-lg,8px);container-type:inline-size;display:grid;grid-template-columns:auto 1fr auto;isolation:isolate;padding:var(--wpds-dimension-padding-md,12px)}._86733bd626c7e048__icon{color:var(--wp-ui-notice-decorative-icon-color);grid-column:1;grid-row:1;margin-inline-end:var(--wpds-dimension-gap-xs,4px)}._6688caffadaf5a66__description{color:var(--wp-ui-notice-text-color);grid-column:2;padding-block:var(--text-vertical-padding)}._48b3142dec93ee87__actions{display:flex;flex-wrap:wrap;gap:var(--wpds-dimension-gap-md,12px);grid-column:2}._173ad03087dbb509__notice:has(._6688caffadaf5a66__description) ._48b3142dec93ee87__actions,._173ad03087dbb509__notice:has(._6d6c0651ee903d00__title) ._48b3142dec93ee87__actions{margin-block-start:var(--wpds-dimension-gap-sm,8px)}.adcfc74c7c481a8b__action-button{flex-shrink:0}.b0ce2ddf3e16f445__action-link{flex-shrink:0;&:not(:first-child){margin-inline-start:var(--wpds-dimension-gap-xs,4px)}&:not(:last-child){margin-inline-end:var(--wpds-dimension-gap-xs,4px)}}._234d6ae581e5eb29__close-icon{grid-column:3;grid-row:1;margin-inline-start:var(--wpds-dimension-gap-xs,4px)}._4e822398b0e00dd5__is-info{--wp-ui-notice-background-color:var(--wpds-color-background-surface-info-weak,#f3f9ff);--wp-ui-notice-border-color:var(--wpds-color-stroke-surface-info,#adc6e2);--wp-ui-notice-text-color:var(--wpds-color-foreground-content-info,#001b4f);--wp-ui-notice-decorative-icon-color:var(--wpds-color-foreground-content-info-weak,#006bd7)}._1ef9a1d966bd5220__is-warning{--wp-ui-notice-background-color:var(--wpds-color-background-surface-warning-weak,#fff7e1);--wp-ui-notice-border-color:var(--wpds-color-stroke-surface-warning,#e1bd7c);--wp-ui-notice-text-color:var(--wpds-color-foreground-content-warning,#2e1900);--wp-ui-notice-decorative-icon-color:var(--wpds-color-foreground-content-warning-weak,#936300)}.e98dc9c1e2c0bf3b__is-success{--wp-ui-notice-background-color:var(--wpds-color-background-surface-success-weak,#ebffed);--wp-ui-notice-border-color:var(--wpds-color-stroke-surface-success,#92d39d);--wp-ui-notice-text-color:var(--wpds-color-foreground-content-success,#002900);--wp-ui-notice-decorative-icon-color:var(--wpds-color-foreground-content-success-weak,#008030)}._673065a55bda7056__is-error{--wp-ui-notice-background-color:var(--wpds-color-background-surface-error-weak,#fff6f5);--wp-ui-notice-border-color:var(--wpds-color-stroke-surface-error,#e0afa7);--wp-ui-notice-text-color:var(--wpds-color-foreground-content-error,#470000);--wp-ui-notice-decorative-icon-color:var(--wpds-color-foreground-content-error-weak,#cc1818)}@container (max-width: 320px){._173ad03087dbb509__notice:has(._6d6c0651ee903d00__title) ._48b3142dec93ee87__actions,._173ad03087dbb509__notice:has(._6d6c0651ee903d00__title) ._6688caffadaf5a66__description{grid-column:1/3}}}@layer compositions{._6d6c0651ee903d00__title{--_gcd-heading-color:var(--wp-ui-notice-text-color);color:var(--wp-ui-notice-text-color);grid-column:2;padding-block:var(--text-vertical-padding)}.b0ce2ddf3e16f445__action-link{margin-block:auto}._234d6ae581e5eb29__close-icon,.adcfc74c7c481a8b__action-button,.b0ce2ddf3e16f445__action-link{mix-blend-mode:luminosity;@media (forced-colors:active){mix-blend-mode:normal}}}}");
+var style_module_default$5 = {
+	"notice": "_173ad03087dbb509__notice",
+	"icon": "_86733bd626c7e048__icon",
+	"description": "_6688caffadaf5a66__description",
+	"actions": "_48b3142dec93ee87__actions",
+	"title": "_6d6c0651ee903d00__title",
+	"action-button": "adcfc74c7c481a8b__action-button",
+	"action-link": "b0ce2ddf3e16f445__action-link",
+	"close-icon": "_234d6ae581e5eb29__close-icon",
+	"is-info": "_4e822398b0e00dd5__is-info",
+	"is-warning": "_1ef9a1d966bd5220__is-warning",
+	"is-success": "e98dc9c1e2c0bf3b__is-success",
+	"is-error": "_673065a55bda7056__is-error"
+};
+const icons = {
+	neutral: null,
+	info: info_default,
+	warning: caution_default,
+	success: published_default,
+	error: error_default
+};
+/**
+* A notice component that communicates system status and provides actions.
+* Render inside `Notice.List` to announce added or changed messages. Outside
+* a list, it does not announce its content to assistive technology.
+*
+* ```jsx
+* import { Notice } from '@wordpress/ui';
+*
+* function MyComponent() {
+* 	return (
+* 		<Notice.Root intent="info">
+* 			<Notice.Title>Heading</Notice.Title>
+* 			<Notice.Description>Body text</Notice.Description>
+* 			<Notice.Actions>
+* 				<Notice.ActionButton>Action</Notice.ActionButton>
+* 			</Notice.Actions>
+* 			<Notice.CloseIconButton onClick={() => {}} />
+* 		</Notice.Root>
+* 	);
+* }
+* ```
+*/
+const Root = (0, import_element.forwardRef)(function Notice({ intent = "neutral", children, icon, render, politeness = "polite", spokenMessage, ...restProps }, ref) {
+	const iconElement = icon === null ? null : icon ?? icons[intent];
+	const defaultProps = {
+		className: clsx(style_module_default$5.notice, style_module_default$5[`is-${intent}`], resets_module_default["box-sizing"]),
+		"data-wp-ui-notice-politeness": politeness,
+		"data-wp-ui-notice-spoken-message": spokenMessage,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [children, iconElement && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
+			className: style_module_default$5.icon,
+			icon: iconElement
+		})] })
+	};
+	return useRender({
+		defaultTagName: "div",
+		render,
+		ref,
+		props: mergeProps(defaultProps, restProps)
+	});
+});
+
+// packages/ui/build-module/notice/description.mjs
+const STYLE_HASH_ATTRIBUTE$4 = "data-wp-hash";
+/**
+* Returns the shared style runtime registry.
+*
+* The registry is stored on `globalThis` so separately bundled copies of this
+* package can coordinate through the same document and style maps.
+*
+* @return The shared runtime registry.
+*/
+function getRuntime$4() {
+	const globalScope = globalThis;
+	if (globalScope.__wpStyleRuntime) return globalScope.__wpStyleRuntime;
+	globalScope.__wpStyleRuntime = {
+		documents: /* @__PURE__ */ new Map(),
+		styles: /* @__PURE__ */ new Map(),
+		injectedStyles: /* @__PURE__ */ new WeakMap()
+	};
+	if (typeof document !== "undefined") registerDocument$4(document);
+	return globalScope.__wpStyleRuntime;
+}
+/**
+* Checks whether a document already contains a style tag for a hash.
+*
+* @param targetDocument Document to inspect.
+* @param hash           Stable hash for the transformed CSS.
+*
+* @return Whether the style hash already exists in the document.
+*/
+function documentContainsStyleHash$4(targetDocument, hash) {
+	if (!targetDocument.head) return false;
+	for (const style of targetDocument.head.querySelectorAll(`style[${STYLE_HASH_ATTRIBUTE$4}]`)) if (style.getAttribute(STYLE_HASH_ATTRIBUTE$4) === hash) return true;
+	return false;
+}
+/**
+* Injects a registered style into a document, unless that document already
+* contains a style tag for the same hash.
+*
+* @param targetDocument Document to inject the style into.
+* @param hash           Stable hash for the transformed CSS.
+* @param css            CSS text to inject.
+*/
+function injectStyle$4(targetDocument, hash, css) {
+	if (!targetDocument.head) return;
+	const runtime = getRuntime$4();
+	let injectedStyles = runtime.injectedStyles.get(targetDocument);
+	if (!injectedStyles) {
+		injectedStyles = /* @__PURE__ */ new Set();
+		runtime.injectedStyles.set(targetDocument, injectedStyles);
+	}
+	if (injectedStyles.has(hash)) return;
+	if (documentContainsStyleHash$4(targetDocument, hash)) {
+		injectedStyles.add(hash);
+		return;
+	}
+	const style = targetDocument.createElement("style");
+	style.setAttribute(STYLE_HASH_ATTRIBUTE$4, hash);
+	style.appendChild(targetDocument.createTextNode(css));
+	targetDocument.head.appendChild(style);
+	injectedStyles.add(hash);
+}
+/**
+* Registers a document as a style injection target.
+*
+* Existing registered styles are replayed into the document immediately.
+* Documents are reference-counted so multiple providers can safely register the
+* same document without one cleanup removing it while another registration is
+* still active.
+*
+* @param targetDocument Document to receive registered styles.
+* @return Cleanup function that unregisters this document registration.
+*/
+function registerDocument$4(targetDocument) {
+	const runtime = getRuntime$4();
+	runtime.documents.set(targetDocument, (runtime.documents.get(targetDocument) ?? 0) + 1);
+	for (const [hash, css] of runtime.styles) injectStyle$4(targetDocument, hash, css);
+	return () => {
+		const count = runtime.documents.get(targetDocument);
+		if (count === void 0) return;
+		if (count <= 1) {
+			runtime.documents.delete(targetDocument);
+			return;
+		}
+		runtime.documents.set(targetDocument, count - 1);
+	};
+}
+/**
+* Registers a style and injects it into all registered documents.
+*
+* The hash is used as the deduplication key, so calling this repeatedly with
+* the same hash will not add duplicate style tags to a document.
+* Registered styles are retained for the lifetime of the page so they can be
+* replayed into documents that are registered later.
+*
+* @param hash Stable hash for the transformed CSS.
+* @param css  CSS text to inject.
+*/
+function registerStyle$4(hash, css) {
+	const runtime = getRuntime$4();
+	runtime.styles.set(hash, css);
+	for (const targetDocument of runtime.documents.keys()) injectStyle$4(targetDocument, hash, css);
+}
+registerStyle$4("e57e872b6c", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._173ad03087dbb509__notice{--icon-height:var(--wpds-dimension-size-sm,24px);--text-vertical-padding:calc((var(--icon-height) - var(--wpds-typography-line-height-sm, 20px))/2);--wp-ui-notice-background-color:var(--wpds-color-background-surface-neutral-weak,#f4f4f4);--wp-ui-notice-border-color:var(--wpds-color-stroke-surface-neutral,#dbdbdb);--wp-ui-notice-text-color:var(--wpds-color-foreground-content-neutral,#1e1e1e);--wp-ui-notice-decorative-icon-color:var(--wpds-color-foreground-content-neutral,#1e1e1e);align-items:start;background-color:var(--wp-ui-notice-background-color);border:1px solid var(--wp-ui-notice-border-color);border-radius:var(--wpds-border-radius-lg,8px);container-type:inline-size;display:grid;grid-template-columns:auto 1fr auto;isolation:isolate;padding:var(--wpds-dimension-padding-md,12px)}._86733bd626c7e048__icon{color:var(--wp-ui-notice-decorative-icon-color);grid-column:1;grid-row:1;margin-inline-end:var(--wpds-dimension-gap-xs,4px)}._6688caffadaf5a66__description{color:var(--wp-ui-notice-text-color);grid-column:2;padding-block:var(--text-vertical-padding)}._48b3142dec93ee87__actions{display:flex;flex-wrap:wrap;gap:var(--wpds-dimension-gap-md,12px);grid-column:2}._173ad03087dbb509__notice:has(._6688caffadaf5a66__description) ._48b3142dec93ee87__actions,._173ad03087dbb509__notice:has(._6d6c0651ee903d00__title) ._48b3142dec93ee87__actions{margin-block-start:var(--wpds-dimension-gap-sm,8px)}.adcfc74c7c481a8b__action-button{flex-shrink:0}.b0ce2ddf3e16f445__action-link{flex-shrink:0;&:not(:first-child){margin-inline-start:var(--wpds-dimension-gap-xs,4px)}&:not(:last-child){margin-inline-end:var(--wpds-dimension-gap-xs,4px)}}._234d6ae581e5eb29__close-icon{grid-column:3;grid-row:1;margin-inline-start:var(--wpds-dimension-gap-xs,4px)}._4e822398b0e00dd5__is-info{--wp-ui-notice-background-color:var(--wpds-color-background-surface-info-weak,#f3f9ff);--wp-ui-notice-border-color:var(--wpds-color-stroke-surface-info,#adc6e2);--wp-ui-notice-text-color:var(--wpds-color-foreground-content-info,#001b4f);--wp-ui-notice-decorative-icon-color:var(--wpds-color-foreground-content-info-weak,#006bd7)}._1ef9a1d966bd5220__is-warning{--wp-ui-notice-background-color:var(--wpds-color-background-surface-warning-weak,#fff7e1);--wp-ui-notice-border-color:var(--wpds-color-stroke-surface-warning,#e1bd7c);--wp-ui-notice-text-color:var(--wpds-color-foreground-content-warning,#2e1900);--wp-ui-notice-decorative-icon-color:var(--wpds-color-foreground-content-warning-weak,#936300)}.e98dc9c1e2c0bf3b__is-success{--wp-ui-notice-background-color:var(--wpds-color-background-surface-success-weak,#ebffed);--wp-ui-notice-border-color:var(--wpds-color-stroke-surface-success,#92d39d);--wp-ui-notice-text-color:var(--wpds-color-foreground-content-success,#002900);--wp-ui-notice-decorative-icon-color:var(--wpds-color-foreground-content-success-weak,#008030)}._673065a55bda7056__is-error{--wp-ui-notice-background-color:var(--wpds-color-background-surface-error-weak,#fff6f5);--wp-ui-notice-border-color:var(--wpds-color-stroke-surface-error,#e0afa7);--wp-ui-notice-text-color:var(--wpds-color-foreground-content-error,#470000);--wp-ui-notice-decorative-icon-color:var(--wpds-color-foreground-content-error-weak,#cc1818)}@container (max-width: 320px){._173ad03087dbb509__notice:has(._6d6c0651ee903d00__title) ._48b3142dec93ee87__actions,._173ad03087dbb509__notice:has(._6d6c0651ee903d00__title) ._6688caffadaf5a66__description{grid-column:1/3}}}@layer compositions{._6d6c0651ee903d00__title{--_gcd-heading-color:var(--wp-ui-notice-text-color);color:var(--wp-ui-notice-text-color);grid-column:2;padding-block:var(--text-vertical-padding)}.b0ce2ddf3e16f445__action-link{margin-block:auto}._234d6ae581e5eb29__close-icon,.adcfc74c7c481a8b__action-button,.b0ce2ddf3e16f445__action-link{mix-blend-mode:luminosity;@media (forced-colors:active){mix-blend-mode:normal}}}}");
+var style_module_default$4 = {
+	"notice": "_173ad03087dbb509__notice",
+	"icon": "_86733bd626c7e048__icon",
+	"description": "_6688caffadaf5a66__description",
+	"actions": "_48b3142dec93ee87__actions",
+	"title": "_6d6c0651ee903d00__title",
+	"action-button": "adcfc74c7c481a8b__action-button",
+	"action-link": "b0ce2ddf3e16f445__action-link",
+	"close-icon": "_234d6ae581e5eb29__close-icon",
+	"is-info": "_4e822398b0e00dd5__is-info",
+	"is-warning": "_1ef9a1d966bd5220__is-warning",
+	"is-success": "e98dc9c1e2c0bf3b__is-success",
+	"is-error": "_673065a55bda7056__is-error"
+};
+/**
+* The description text for a notice.
+*/
+const Description = (0, import_element.forwardRef)(function NoticeDescription({ className, ...props }, ref) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text, {
+		ref,
+		variant: "body-md",
+		className: clsx(style_module_default$4.description, className),
+		...props
+	});
+});
+
+// packages/ui/build-module/badge/badge.mjs
+const STYLE_HASH_ATTRIBUTE$3 = "data-wp-hash";
+/**
+* Returns the shared style runtime registry.
+*
+* The registry is stored on `globalThis` so separately bundled copies of this
+* package can coordinate through the same document and style maps.
+*
+* @return The shared runtime registry.
+*/
+function getRuntime$3() {
+	const globalScope = globalThis;
+	if (globalScope.__wpStyleRuntime) return globalScope.__wpStyleRuntime;
+	globalScope.__wpStyleRuntime = {
+		documents: /* @__PURE__ */ new Map(),
+		styles: /* @__PURE__ */ new Map(),
+		injectedStyles: /* @__PURE__ */ new WeakMap()
+	};
+	if (typeof document !== "undefined") registerDocument$3(document);
+	return globalScope.__wpStyleRuntime;
+}
+/**
+* Checks whether a document already contains a style tag for a hash.
+*
+* @param targetDocument Document to inspect.
+* @param hash           Stable hash for the transformed CSS.
+*
+* @return Whether the style hash already exists in the document.
+*/
+function documentContainsStyleHash$3(targetDocument, hash) {
+	if (!targetDocument.head) return false;
+	for (const style of targetDocument.head.querySelectorAll(`style[${STYLE_HASH_ATTRIBUTE$3}]`)) if (style.getAttribute(STYLE_HASH_ATTRIBUTE$3) === hash) return true;
+	return false;
+}
+/**
+* Injects a registered style into a document, unless that document already
+* contains a style tag for the same hash.
+*
+* @param targetDocument Document to inject the style into.
+* @param hash           Stable hash for the transformed CSS.
+* @param css            CSS text to inject.
+*/
+function injectStyle$3(targetDocument, hash, css) {
+	if (!targetDocument.head) return;
+	const runtime = getRuntime$3();
+	let injectedStyles = runtime.injectedStyles.get(targetDocument);
+	if (!injectedStyles) {
+		injectedStyles = /* @__PURE__ */ new Set();
+		runtime.injectedStyles.set(targetDocument, injectedStyles);
+	}
+	if (injectedStyles.has(hash)) return;
+	if (documentContainsStyleHash$3(targetDocument, hash)) {
+		injectedStyles.add(hash);
+		return;
+	}
+	const style = targetDocument.createElement("style");
+	style.setAttribute(STYLE_HASH_ATTRIBUTE$3, hash);
+	style.appendChild(targetDocument.createTextNode(css));
+	targetDocument.head.appendChild(style);
+	injectedStyles.add(hash);
+}
+/**
+* Registers a document as a style injection target.
+*
+* Existing registered styles are replayed into the document immediately.
+* Documents are reference-counted so multiple providers can safely register the
+* same document without one cleanup removing it while another registration is
+* still active.
+*
+* @param targetDocument Document to receive registered styles.
+* @return Cleanup function that unregisters this document registration.
+*/
+function registerDocument$3(targetDocument) {
+	const runtime = getRuntime$3();
+	runtime.documents.set(targetDocument, (runtime.documents.get(targetDocument) ?? 0) + 1);
+	for (const [hash, css] of runtime.styles) injectStyle$3(targetDocument, hash, css);
+	return () => {
+		const count = runtime.documents.get(targetDocument);
+		if (count === void 0) return;
+		if (count <= 1) {
+			runtime.documents.delete(targetDocument);
+			return;
+		}
+		runtime.documents.set(targetDocument, count - 1);
+	};
+}
+/**
+* Registers a style and injects it into all registered documents.
+*
+* The hash is used as the deduplication key, so calling this repeatedly with
+* the same hash will not add duplicate style tags to a document.
+* Registered styles are retained for the lifetime of the page so they can be
+* replayed into documents that are registered later.
+*
+* @param hash Stable hash for the transformed CSS.
+* @param css  CSS text to inject.
+*/
+function registerStyle$3(hash, css) {
+	const runtime = getRuntime$3();
+	runtime.styles.set(hash, css);
+	for (const targetDocument of runtime.documents.keys()) injectStyle$3(targetDocument, hash, css);
+}
+registerStyle$3("7daf4893c9", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._9ce8c05efea8e203__badge{border-radius:var(--wpds-border-radius-lg,8px);padding-block:var(--wpds-dimension-padding-xs,4px);padding-inline:var(--wpds-dimension-padding-sm,8px)}._8b848c49ae4c70ec__infotip-trigger{--_gcd-button-font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,\"Segoe UI\",\"Roboto\",\"Oxygen-Sans\",\"Ubuntu\",\"Cantarell\",\"Helvetica Neue\",sans-serif);--_gcd-button-font-size:var(--wpds-typography-font-size-sm,12px);--_gcd-button-font-weight:var(--wpds-typography-font-weight-default,400);align-items:center;border:0;cursor:var(--wpds-cursor-control,pointer);display:inline-flex;gap:var(--wpds-dimension-gap-xs,4px);text-align:start;vertical-align:middle}._8b848c49ae4c70ec__infotip-trigger:focus{outline:none}._8b848c49ae4c70ec__infotip-trigger:focus:not(:active){--_gcd-a-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--focus-color,var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9)));--_gcd-div-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--focus-color,var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9)));outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--focus-color,var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9)));outline-offset:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px))}._0b34a322e3f931d1__infotip-icon{flex-shrink:0;margin-inline-end:-3px}.dbaa78793aa9ed55__is-high-intent{background-color:var(--wpds-color-background-surface-error,#fae5e1);color:var(--wpds-color-foreground-content-error,#470000)}.e7014da94d135da5__is-medium-intent{background-color:var(--wpds-color-background-surface-warning,#fde6be);color:var(--wpds-color-foreground-content-warning,#2e1900)}._0ea3f993ed9a8b93__is-low-intent{background-color:var(--wpds-color-background-surface-caution,#fee995);color:var(--wpds-color-foreground-content-caution,#281d00)}._2cb7bc48c640ffb1__is-stable-intent{background-color:var(--wpds-color-background-surface-success,#c2f8ca);color:var(--wpds-color-foreground-content-success,#002900)}._4ad31051a45a43b8__is-informational-intent{background-color:var(--wpds-color-background-surface-info,#deebfa);color:var(--wpds-color-foreground-content-info,#001b4f)}._0161efc7afeedbfd__is-draft-intent{background-color:var(--wpds-color-background-surface-neutral-weak,#f4f4f4);color:var(--wpds-color-foreground-content-neutral,#1e1e1e)}._8d100360e716930c__is-none-intent{background-color:var(--wpds-color-background-surface-neutral-strong,#fff);border:var(--wpds-border-width-xs,1px) solid var(--wpds-color-stroke-surface-neutral,#dbdbdb);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);padding-block:calc(var(--wpds-dimension-padding-xs, 4px) - var(--wpds-border-width-xs, 1px));padding-inline:calc(var(--wpds-dimension-padding-sm, 8px) - var(--wpds-border-width-xs, 1px))}}}");
+var style_module_default$3 = {
+	"badge": "_9ce8c05efea8e203__badge",
+	"infotip-trigger": "_8b848c49ae4c70ec__infotip-trigger",
+	"infotip-icon": "_0b34a322e3f931d1__infotip-icon",
+	"is-high-intent": "dbaa78793aa9ed55__is-high-intent",
+	"is-medium-intent": "e7014da94d135da5__is-medium-intent",
+	"is-low-intent": "_0ea3f993ed9a8b93__is-low-intent",
+	"is-stable-intent": "_2cb7bc48c640ffb1__is-stable-intent",
+	"is-informational-intent": "_4ad31051a45a43b8__is-informational-intent",
+	"is-draft-intent": "_0161efc7afeedbfd__is-draft-intent",
+	"is-none-intent": "_8d100360e716930c__is-none-intent"
+};
+registerStyle$3("726f348f3f", "._78c10a0773e51a91__button{box-sizing:var(--_gcd-button-box-sizing,border-box);font-family:var(--_gcd-button-font-family,inherit);font-size:var(--_gcd-button-font-size,inherit);font-weight:var(--_gcd-button-font-weight,inherit)}._5b33aa2d48624b4f__input{box-sizing:var(--_gcd-input-box-sizing,border-box);font-family:var(--_gcd-input-font-family,inherit);font-size:var(--_gcd-input-font-size,inherit);font-weight:var(--_gcd-input-font-weight,inherit);margin:var(--_gcd-input-margin,0);&::placeholder{color:var(--_gcd-input-placeholder-color,var(--wpds-color-foreground-interactive-neutral-weak,#707070))}&:is(textarea,[type=text],[type=password],[type=color],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){background-color:var(--_gcd-input-background-color,transparent);border:var(--_gcd-input-border,none);border-radius:var(--_gcd-input-border-radius,0);box-shadow:var(--_gcd-input-box-shadow,0 0 0 transparent);color:var(--_gcd-input-color,var(--wpds-color-foreground-interactive-neutral,#1e1e1e));&:focus{border-color:var(--_gcd-input-border-color-focus,var(--wp-admin-theme-color));box-shadow:var(--_gcd-input-box-shadow-focus,none);outline:var(--_gcd-input-outline-focus,none)}&:disabled{background:var(--_gcd-input-background-disabled,transparent);border-color:var(--_gcd-input-border-color-disabled,transparent);box-shadow:var(--_gcd-input-box-shadow-disabled,none);color:var(--_gcd-input-color-disabled,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}}&:is(textarea,[type=text],[type=password],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){line-height:var(--_gcd-input-line-height,inherit);min-height:var(--_gcd-input-min-height,auto);padding:var(--_gcd-input-padding,0)}}._980b3b4776ac8f81__textarea{box-sizing:var(--_gcd-textarea-box-sizing,border-box);overflow:var(--_gcd-textarea-overflow,auto);resize:var(--_gcd-textarea-resize,block)}._43e478b4279a076c__div{outline:var(--_gcd-div-outline,0 solid transparent)}p._698099e25b0fb1a6__p{font-size:var(--_gcd-p-font-size,13px);line-height:var(--_gcd-p-line-height,1.5);margin:var(--_gcd-p-margin,0)}:is(h1,h2,h3,h4,h5,h6)._326aee4184d261fd__heading{color:var(--_gcd-heading-color,var(--wpds-color-foreground-content-neutral,#1e1e1e));font-size:var(--_gcd-heading-font-size,inherit);font-weight:var(--_gcd-heading-font-weight,var(--wpds-typography-font-weight-emphasis,600));margin:var(--_gcd-heading-margin,0)}.e9576240835601ba__a,.e9576240835601ba__a:is(:hover,:focus,:active){border-radius:var(--_gcd-a-border-radius,0);box-shadow:var(--_gcd-a-box-shadow,none);color:var(--_gcd-a-color,inherit);outline:var(--_gcd-a-outline,0 solid transparent);transition:var(--_gcd-a-transition,none)}._3f05789653864a73__ol{list-style:var(--_gcd-ol-list-style,none);margin:var(--_gcd-ol-margin,0);padding-block:var(--_gcd-ol-padding-block,0);padding-inline:var(--_gcd-ol-padding-inline,0)}._3c72ff72abe57859__li{margin:var(--_gcd-li-margin,0)}[role=treeitem] span._79d16267c15d9eb2__span[aria-hidden]{display:var(--_gcd-span-display,inline);font-family:var(--_gcd-span-font-family,inherit);font-size:var(--_gcd-span-font-size,inherit);line-height:var(--_gcd-span-line-height,1);pointer-events:var(--_gcd-span-pointer-events,auto);position:var(--_gcd-span-position,static)}");
+var global_css_defense_module_default = {
+	"button": "_78c10a0773e51a91__button",
+	"input": "_5b33aa2d48624b4f__input",
+	"textarea": "_980b3b4776ac8f81__textarea",
+	"div": "_43e478b4279a076c__div",
+	"p": "_698099e25b0fb1a6__p",
+	"heading": "_326aee4184d261fd__heading",
+	"a": "e9576240835601ba__a",
+	"ol": "_3f05789653864a73__ol",
+	"li": "_3c72ff72abe57859__li",
+	"span": "_79d16267c15d9eb2__span"
+};
+/**
+* A badge component for displaying labels with semantic intent.
+* Add an infotip to explain a status in a popover.
+*/
+const Badge = (0, import_element.forwardRef)(function UnforwardedBadge({ intent = "none", className, children, infotip, render, ...props }, ref) {
+	const badge = /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Text, {
+		ref,
+		className: clsx(style_module_default$3.badge, style_module_default$3[`is-${intent}-intent`], className),
+		...props,
+		render: infotip ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(infotip.popover.Trigger, {
+			className: clsx(style_module_default$3["infotip-trigger"], global_css_defense_module_default.button),
+			openOnHover: true,
+			delay: 200,
+			closeDelay: 200,
+			render
+		}) : render,
+		variant: "body-sm",
+		children: [children, infotip && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
+			icon: help_default,
+			size: 16,
+			"aria-hidden": "true",
+			className: style_module_default$3["infotip-icon"]
+		})]
+	});
+	return infotip ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(infotip.popover.Root, { children: [badge, infotip.popup] }) : badge;
+});
+
+// packages/admin-ui/build-module/navigable-region/index.mjs
+const NavigableRegion = (0, import_element.forwardRef)(({ children, className, ariaLabel, as: Tag = "div", ...props }, ref) => {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Tag, {
+		ref,
+		className: clsx("admin-ui-navigable-region", className),
+		"aria-label": ariaLabel,
+		role: "region",
+		tabIndex: "-1",
+		...props,
+		children
+	});
+});
+NavigableRegion.displayName = "NavigableRegion";
+
+// packages/admin-ui/build-module/navigation/index.mjs
+const STYLE_HASH_ATTRIBUTE$2 = "data-wp-hash";
+/**
+* Returns the shared style runtime registry.
+*
+* The registry is stored on `globalThis` so separately bundled copies of this
+* package can coordinate through the same document and style maps.
+*
+* @return The shared runtime registry.
+*/
+function getRuntime$2() {
+	const globalScope = globalThis;
+	if (globalScope.__wpStyleRuntime) return globalScope.__wpStyleRuntime;
+	globalScope.__wpStyleRuntime = {
+		documents: /* @__PURE__ */ new Map(),
+		styles: /* @__PURE__ */ new Map(),
+		injectedStyles: /* @__PURE__ */ new WeakMap()
+	};
+	if (typeof document !== "undefined") registerDocument$2(document);
+	return globalScope.__wpStyleRuntime;
+}
+/**
+* Checks whether a document already contains a style tag for a hash.
+*
+* @param targetDocument Document to inspect.
+* @param hash           Stable hash for the transformed CSS.
+*
+* @return Whether the style hash already exists in the document.
+*/
+function documentContainsStyleHash$2(targetDocument, hash) {
+	if (!targetDocument.head) return false;
+	for (const style of targetDocument.head.querySelectorAll(`style[${STYLE_HASH_ATTRIBUTE$2}]`)) if (style.getAttribute(STYLE_HASH_ATTRIBUTE$2) === hash) return true;
+	return false;
+}
+/**
+* Injects a registered style into a document, unless that document already
+* contains a style tag for the same hash.
+*
+* @param targetDocument Document to inject the style into.
+* @param hash           Stable hash for the transformed CSS.
+* @param css            CSS text to inject.
+*/
+function injectStyle$2(targetDocument, hash, css) {
+	if (!targetDocument.head) return;
+	const runtime = getRuntime$2();
+	let injectedStyles = runtime.injectedStyles.get(targetDocument);
+	if (!injectedStyles) {
+		injectedStyles = /* @__PURE__ */ new Set();
+		runtime.injectedStyles.set(targetDocument, injectedStyles);
+	}
+	if (injectedStyles.has(hash)) return;
+	if (documentContainsStyleHash$2(targetDocument, hash)) {
+		injectedStyles.add(hash);
+		return;
+	}
+	const style = targetDocument.createElement("style");
+	style.setAttribute(STYLE_HASH_ATTRIBUTE$2, hash);
+	style.appendChild(targetDocument.createTextNode(css));
+	targetDocument.head.appendChild(style);
+	injectedStyles.add(hash);
+}
+/**
+* Registers a document as a style injection target.
+*
+* Existing registered styles are replayed into the document immediately.
+* Documents are reference-counted so multiple providers can safely register the
+* same document without one cleanup removing it while another registration is
+* still active.
+*
+* @param targetDocument Document to receive registered styles.
+* @return Cleanup function that unregisters this document registration.
+*/
+function registerDocument$2(targetDocument) {
+	const runtime = getRuntime$2();
+	runtime.documents.set(targetDocument, (runtime.documents.get(targetDocument) ?? 0) + 1);
+	for (const [hash, css] of runtime.styles) injectStyle$2(targetDocument, hash, css);
+	return () => {
+		const count = runtime.documents.get(targetDocument);
+		if (count === void 0) return;
+		if (count <= 1) {
+			runtime.documents.delete(targetDocument);
+			return;
+		}
+		runtime.documents.set(targetDocument, count - 1);
+	};
+}
+/**
+* Registers a style and injects it into all registered documents.
+*
+* The hash is used as the deduplication key, so calling this repeatedly with
+* the same hash will not add duplicate style tags to a document.
+* Registered styles are retained for the lifetime of the page so they can be
+* replayed into documents that are registered later.
+*
+* @param hash Stable hash for the transformed CSS.
+* @param css  CSS text to inject.
+*/
+function registerStyle$2(hash, css) {
+	const runtime = getRuntime$2();
+	runtime.styles.set(hash, css);
+	for (const targetDocument of runtime.documents.keys()) injectStyle$2(targetDocument, hash, css);
+}
+registerStyle$2("73643ec0a7", ".c1e78b6d2e68225c__list{--focus-ring-size:calc(var(--wpds-border-width-focus, var(--wp-admin-border-width-focus, 2px))*2);list-style:none;margin:calc(var(--focus-ring-size)*-1);overflow-x:auto;padding:var(--focus-ring-size);scroll-padding:var(--focus-ring-size)}._3e14e8043696860f__li{flex-shrink:0}.e1422d0e8f9e67df__item{align-items:center;color:var(--wpds-color-foreground-interactive-neutral-weak,#707070);display:flex;font-weight:var(--wpds-typography-font-weight-default,400);min-block-size:44px;min-inline-size:44px;text-decoration:none}.e1422d0e8f9e67df__item:hover,.e1422d0e8f9e67df__item[aria-current=page]{color:var(--wpds-color-foreground-interactive-neutral-weak-active,#1e1e1e)}.e1422d0e8f9e67df__item[aria-current=page]{font-weight:var(--wpds-typography-font-weight-emphasis,600)}");
+var style_module_default$2 = {
+	"list": "c1e78b6d2e68225c__list",
+	"li": "_3e14e8043696860f__li",
+	"item": "e1422d0e8f9e67df__item"
+};
+/**
+* Renders a horizontal list of links for navigating between the sections of a
+* screen. The item whose `href` matches `currentHref` is marked with
+* `aria-current="page"`.
+*
+* Internal to the package: configured through the `Page` `navigation` prop.
+*/
+const Navigation = ({ items, currentHref, ariaLabel = (0, import_i18n.__)("Sections"), linkComponent, className }) => {
+	if (!items.length) return null;
+	const LinkComponent = linkComponent ?? "a";
+	{
+		const invalidItem = items.find((item) => typeof item.href !== "string");
+		if (invalidItem) throw new Error(`Navigation: item "${invalidItem.label}" is missing an \`href\` prop.`);
+		const duplicate = items.find((item, index) => items.findIndex((other) => other.href === item.href) !== index);
+		if (duplicate) throw new Error(`Navigation: duplicate \`href\` "${duplicate.href}". Each item must have a unique \`href\` so a single item receives \`aria-current="page"\`.`);
+	}
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", {
+		"aria-label": ariaLabel,
+		className,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Stack, {
+			render: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", { role: "list" }),
+			direction: "row",
+			align: "center",
+			gap: "md",
+			className: style_module_default$2.list,
+			children: items.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
+				className: style_module_default$2.li,
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text, {
+					variant: "body-md",
+					className: style_module_default$2.item,
+					render: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+						variant: "unstyled",
+						"aria-current": item.href === currentHref ? "page" : void 0,
+						render: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LinkComponent, { href: item.href })
+					}),
+					children: item.label
+				})
+			}, item.href))
+		})
+	});
+};
+
+// \0wp-global:@wordpress/components
+var require_components = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = window.wp.components;
+}));
+
 // packages/admin-ui/build-module/page/sidebar-toggle-slot.mjs
-var import_components = __toESM(require_components(), 1);
-var { Fill: SidebarToggleFill, Slot: SidebarToggleSlot } = (0, import_components.createSlotFill)("SidebarToggle");
+var import_components = require_components();
+const { Fill: SidebarToggleFill, Slot: SidebarToggleSlot } = (0, import_components.createSlotFill)("SidebarToggle");
 
 // packages/admin-ui/build-module/page/header.mjs
-var import_jsx_runtime3 = __toESM(require_jsx_runtime(), 1);
-function Header({
-  headingLevel = 2,
-  breadcrumbs,
-  badges,
-  title,
-  subTitle,
-  actions,
-  showSidebarToggle = true
-}) {
-  const HeadingTag = `h${headingLevel}`;
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
-    Stack,
-    {
-      direction: "column",
-      className: "admin-ui-page__header",
-      render: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("header", {}),
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(Stack, { direction: "row", justify: "space-between", gap: "sm", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(Stack, { direction: "row", gap: "sm", align: "center", justify: "start", children: [
-            showSidebarToggle && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-              SidebarToggleSlot,
-              {
-                bubblesVirtually: true,
-                className: "admin-ui-page__sidebar-toggle-slot"
-              }
-            ),
-            title && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(HeadingTag, { className: "admin-ui-page__header-title", children: title }),
-            breadcrumbs,
-            badges
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-            Stack,
-            {
-              direction: "row",
-              gap: "sm",
-              style: { width: "auto", flexShrink: 0 },
-              className: "admin-ui-page__header-actions",
-              align: "center",
-              children: actions
-            }
-          )
-        ] }),
-        subTitle && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { className: "admin-ui-page__header-subtitle", children: subTitle })
-      ]
-    }
-  );
+const STYLE_HASH_ATTRIBUTE$1 = "data-wp-hash";
+/**
+* Returns the shared style runtime registry.
+*
+* The registry is stored on `globalThis` so separately bundled copies of this
+* package can coordinate through the same document and style maps.
+*
+* @return The shared runtime registry.
+*/
+function getRuntime$1() {
+	const globalScope = globalThis;
+	if (globalScope.__wpStyleRuntime) return globalScope.__wpStyleRuntime;
+	globalScope.__wpStyleRuntime = {
+		documents: /* @__PURE__ */ new Map(),
+		styles: /* @__PURE__ */ new Map(),
+		injectedStyles: /* @__PURE__ */ new WeakMap()
+	};
+	if (typeof document !== "undefined") registerDocument$1(document);
+	return globalScope.__wpStyleRuntime;
+}
+/**
+* Checks whether a document already contains a style tag for a hash.
+*
+* @param targetDocument Document to inspect.
+* @param hash           Stable hash for the transformed CSS.
+*
+* @return Whether the style hash already exists in the document.
+*/
+function documentContainsStyleHash$1(targetDocument, hash) {
+	if (!targetDocument.head) return false;
+	for (const style of targetDocument.head.querySelectorAll(`style[${STYLE_HASH_ATTRIBUTE$1}]`)) if (style.getAttribute(STYLE_HASH_ATTRIBUTE$1) === hash) return true;
+	return false;
+}
+/**
+* Injects a registered style into a document, unless that document already
+* contains a style tag for the same hash.
+*
+* @param targetDocument Document to inject the style into.
+* @param hash           Stable hash for the transformed CSS.
+* @param css            CSS text to inject.
+*/
+function injectStyle$1(targetDocument, hash, css) {
+	if (!targetDocument.head) return;
+	const runtime = getRuntime$1();
+	let injectedStyles = runtime.injectedStyles.get(targetDocument);
+	if (!injectedStyles) {
+		injectedStyles = /* @__PURE__ */ new Set();
+		runtime.injectedStyles.set(targetDocument, injectedStyles);
+	}
+	if (injectedStyles.has(hash)) return;
+	if (documentContainsStyleHash$1(targetDocument, hash)) {
+		injectedStyles.add(hash);
+		return;
+	}
+	const style = targetDocument.createElement("style");
+	style.setAttribute(STYLE_HASH_ATTRIBUTE$1, hash);
+	style.appendChild(targetDocument.createTextNode(css));
+	targetDocument.head.appendChild(style);
+	injectedStyles.add(hash);
+}
+/**
+* Registers a document as a style injection target.
+*
+* Existing registered styles are replayed into the document immediately.
+* Documents are reference-counted so multiple providers can safely register the
+* same document without one cleanup removing it while another registration is
+* still active.
+*
+* @param targetDocument Document to receive registered styles.
+* @return Cleanup function that unregisters this document registration.
+*/
+function registerDocument$1(targetDocument) {
+	const runtime = getRuntime$1();
+	runtime.documents.set(targetDocument, (runtime.documents.get(targetDocument) ?? 0) + 1);
+	for (const [hash, css] of runtime.styles) injectStyle$1(targetDocument, hash, css);
+	return () => {
+		const count = runtime.documents.get(targetDocument);
+		if (count === void 0) return;
+		if (count <= 1) {
+			runtime.documents.delete(targetDocument);
+			return;
+		}
+		runtime.documents.set(targetDocument, count - 1);
+	};
+}
+/**
+* Registers a style and injects it into all registered documents.
+*
+* The hash is used as the deduplication key, so calling this repeatedly with
+* the same hash will not add duplicate style tags to a document.
+* Registered styles are retained for the lifetime of the page so they can be
+* replayed into documents that are registered later.
+*
+* @param hash Stable hash for the transformed CSS.
+* @param css  CSS text to inject.
+*/
+function registerStyle$1(hash, css) {
+	const runtime = getRuntime$1();
+	runtime.styles.set(hash, css);
+	for (const targetDocument of runtime.documents.keys()) injectStyle$1(targetDocument, hash, css);
+}
+registerStyle$1("603e22a829", ".a601da1d3e3fb3fd__page{text-wrap:pretty;background-color:var(--wpds-color-background-surface-neutral,#fcfcfc);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);display:flex;flex-flow:column;height:100%;position:relative;z-index:1}._04c95d85dee161fd__header{background:var(--wpds-color-background-surface-neutral-strong,#fff);border-block-end:var(--wpds-border-width-xs,1px) solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);inset-block-start:0;padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px);position:sticky;z-index:1}.bacecf0582e29643__header-content{min-height:var(--wpds-dimension-size-md,32px)}.a377058511394079__header-actions{flex-shrink:0}.dea03f8da2e8f042__header-lockup{min-width:0}._2361437ecf7e72e7__header-title{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}._75a71e5e0a35e8f7__header-visual{display:grid;flex-shrink:0;grid-template-columns:1fr;grid-template-rows:1fr;height:var(--wpds-dimension-size-sm,24px);width:var(--wpds-dimension-size-sm,24px);>*{grid-column:1/-1;grid-row:1/-1;max-height:100%;max-width:100%}}.b810958ef8ab363b__sidebar-toggle-slot:empty{display:none}.eff378c474a49b83__header-subtitle{color:var(--wpds-color-foreground-content-neutral-weak,#707070);padding-block-end:var(--wpds-dimension-padding-xs,4px)}._04c95d85dee161fd__header._7e7496f8b3e1c468__has-navigation,._04c95d85dee161fd__header._7e7496f8b3e1c468__has-navigation .eff378c474a49b83__header-subtitle{padding-block-end:0}._214d54afaddbb8d5__header-navigation{margin-block-start:var(--wpds-dimension-gap-md,12px)}._4bcfbc76045751b8__content{display:flex;flex-direction:column;flex-grow:1;overflow:auto;&.cefc11b6ca36136d__has-padding{padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px)}}");
+var style_module_default$1 = {
+	"page": "a601da1d3e3fb3fd__page",
+	"header": "_04c95d85dee161fd__header",
+	"header-content": "bacecf0582e29643__header-content",
+	"header-actions": "a377058511394079__header-actions",
+	"header-lockup": "dea03f8da2e8f042__header-lockup",
+	"header-title": "_2361437ecf7e72e7__header-title",
+	"header-visual": "_75a71e5e0a35e8f7__header-visual",
+	"sidebar-toggle-slot": "b810958ef8ab363b__sidebar-toggle-slot",
+	"header-subtitle": "eff378c474a49b83__header-subtitle",
+	"has-navigation": "_7e7496f8b3e1c468__has-navigation",
+	"header-navigation": "_214d54afaddbb8d5__header-navigation",
+	"content": "_4bcfbc76045751b8__content",
+	"has-padding": "cefc11b6ca36136d__has-padding"
+};
+function Header({ headingLevel = 1, breadcrumbs, badges, visual, title, subTitle, actions, navigation, components, showSidebarToggle = true }) {
+	const HeadingTag = `h${headingLevel}`;
+	const hasNavigation = !!navigation?.items?.length;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Stack, {
+		direction: "column",
+		className: clsx(style_module_default$1.header, hasNavigation && style_module_default$1["has-navigation"]),
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Stack, {
+				className: style_module_default$1["header-content"],
+				direction: "row",
+				gap: "sm",
+				justify: "space-between",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Stack, {
+					direction: "row",
+					gap: "sm",
+					align: "center",
+					justify: "start",
+					className: style_module_default$1["header-lockup"],
+					children: [
+						showSidebarToggle && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarToggleSlot, {
+							bubblesVirtually: true,
+							className: style_module_default$1["sidebar-toggle-slot"]
+						}),
+						visual && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: style_module_default$1["header-visual"],
+							"aria-hidden": "true",
+							children: visual
+						}),
+						title && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text, {
+							className: style_module_default$1["header-title"],
+							render: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(HeadingTag, {}),
+							variant: "heading-lg",
+							children: title
+						}),
+						breadcrumbs,
+						badges
+					]
+				}), actions && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Stack, {
+					align: "center",
+					className: style_module_default$1["header-actions"],
+					direction: "row",
+					gap: "sm",
+					children: actions
+				})]
+			}),
+			subTitle && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text, {
+				render: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {}),
+				variant: "body-md",
+				className: style_module_default$1["header-subtitle"],
+				children: subTitle
+			}),
+			hasNavigation && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, {
+				...navigation,
+				linkComponent: components?.link,
+				className: style_module_default$1["header-navigation"]
+			})
+		]
+	});
 }
 
 // packages/admin-ui/build-module/page/index.mjs
-var import_jsx_runtime4 = __toESM(require_jsx_runtime(), 1);
-function Page({
-  headingLevel,
-  breadcrumbs,
-  badges,
-  title,
-  subTitle,
-  children,
-  className,
-  actions,
-  ariaLabel,
-  hasPadding = false,
-  showSidebarToggle = true
-}) {
-  const classes = clsx_default("admin-ui-page", className);
-  const effectiveAriaLabel = ariaLabel ?? (typeof title === "string" ? title : "");
-  return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(navigable_region_default, { className: classes, ariaLabel: effectiveAriaLabel, children: [
-    (title || breadcrumbs || badges || actions) && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
-      Header,
-      {
-        headingLevel,
-        breadcrumbs,
-        badges,
-        title,
-        subTitle,
-        actions,
-        showSidebarToggle
-      }
-    ),
-    hasPadding ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "admin-ui-page__content has-padding", children }) : children
-  ] });
+const STYLE_HASH_ATTRIBUTE = "data-wp-hash";
+/**
+* Returns the shared style runtime registry.
+*
+* The registry is stored on `globalThis` so separately bundled copies of this
+* package can coordinate through the same document and style maps.
+*
+* @return The shared runtime registry.
+*/
+function getRuntime() {
+	const globalScope = globalThis;
+	if (globalScope.__wpStyleRuntime) return globalScope.__wpStyleRuntime;
+	globalScope.__wpStyleRuntime = {
+		documents: /* @__PURE__ */ new Map(),
+		styles: /* @__PURE__ */ new Map(),
+		injectedStyles: /* @__PURE__ */ new WeakMap()
+	};
+	if (typeof document !== "undefined") registerDocument(document);
+	return globalScope.__wpStyleRuntime;
+}
+/**
+* Checks whether a document already contains a style tag for a hash.
+*
+* @param targetDocument Document to inspect.
+* @param hash           Stable hash for the transformed CSS.
+*
+* @return Whether the style hash already exists in the document.
+*/
+function documentContainsStyleHash(targetDocument, hash) {
+	if (!targetDocument.head) return false;
+	for (const style of targetDocument.head.querySelectorAll(`style[${STYLE_HASH_ATTRIBUTE}]`)) if (style.getAttribute(STYLE_HASH_ATTRIBUTE) === hash) return true;
+	return false;
+}
+/**
+* Injects a registered style into a document, unless that document already
+* contains a style tag for the same hash.
+*
+* @param targetDocument Document to inject the style into.
+* @param hash           Stable hash for the transformed CSS.
+* @param css            CSS text to inject.
+*/
+function injectStyle(targetDocument, hash, css) {
+	if (!targetDocument.head) return;
+	const runtime = getRuntime();
+	let injectedStyles = runtime.injectedStyles.get(targetDocument);
+	if (!injectedStyles) {
+		injectedStyles = /* @__PURE__ */ new Set();
+		runtime.injectedStyles.set(targetDocument, injectedStyles);
+	}
+	if (injectedStyles.has(hash)) return;
+	if (documentContainsStyleHash(targetDocument, hash)) {
+		injectedStyles.add(hash);
+		return;
+	}
+	const style = targetDocument.createElement("style");
+	style.setAttribute(STYLE_HASH_ATTRIBUTE, hash);
+	style.appendChild(targetDocument.createTextNode(css));
+	targetDocument.head.appendChild(style);
+	injectedStyles.add(hash);
+}
+/**
+* Registers a document as a style injection target.
+*
+* Existing registered styles are replayed into the document immediately.
+* Documents are reference-counted so multiple providers can safely register the
+* same document without one cleanup removing it while another registration is
+* still active.
+*
+* @param targetDocument Document to receive registered styles.
+* @return Cleanup function that unregisters this document registration.
+*/
+function registerDocument(targetDocument) {
+	const runtime = getRuntime();
+	runtime.documents.set(targetDocument, (runtime.documents.get(targetDocument) ?? 0) + 1);
+	for (const [hash, css] of runtime.styles) injectStyle(targetDocument, hash, css);
+	return () => {
+		const count = runtime.documents.get(targetDocument);
+		if (count === void 0) return;
+		if (count <= 1) {
+			runtime.documents.delete(targetDocument);
+			return;
+		}
+		runtime.documents.set(targetDocument, count - 1);
+	};
+}
+/**
+* Registers a style and injects it into all registered documents.
+*
+* The hash is used as the deduplication key, so calling this repeatedly with
+* the same hash will not add duplicate style tags to a document.
+* Registered styles are retained for the lifetime of the page so they can be
+* replayed into documents that are registered later.
+*
+* @param hash Stable hash for the transformed CSS.
+* @param css  CSS text to inject.
+*/
+function registerStyle(hash, css) {
+	const runtime = getRuntime();
+	runtime.styles.set(hash, css);
+	for (const targetDocument of runtime.documents.keys()) injectStyle(targetDocument, hash, css);
+}
+registerStyle("603e22a829", ".a601da1d3e3fb3fd__page{text-wrap:pretty;background-color:var(--wpds-color-background-surface-neutral,#fcfcfc);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);display:flex;flex-flow:column;height:100%;position:relative;z-index:1}._04c95d85dee161fd__header{background:var(--wpds-color-background-surface-neutral-strong,#fff);border-block-end:var(--wpds-border-width-xs,1px) solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);inset-block-start:0;padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px);position:sticky;z-index:1}.bacecf0582e29643__header-content{min-height:var(--wpds-dimension-size-md,32px)}.a377058511394079__header-actions{flex-shrink:0}.dea03f8da2e8f042__header-lockup{min-width:0}._2361437ecf7e72e7__header-title{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}._75a71e5e0a35e8f7__header-visual{display:grid;flex-shrink:0;grid-template-columns:1fr;grid-template-rows:1fr;height:var(--wpds-dimension-size-sm,24px);width:var(--wpds-dimension-size-sm,24px);>*{grid-column:1/-1;grid-row:1/-1;max-height:100%;max-width:100%}}.b810958ef8ab363b__sidebar-toggle-slot:empty{display:none}.eff378c474a49b83__header-subtitle{color:var(--wpds-color-foreground-content-neutral-weak,#707070);padding-block-end:var(--wpds-dimension-padding-xs,4px)}._04c95d85dee161fd__header._7e7496f8b3e1c468__has-navigation,._04c95d85dee161fd__header._7e7496f8b3e1c468__has-navigation .eff378c474a49b83__header-subtitle{padding-block-end:0}._214d54afaddbb8d5__header-navigation{margin-block-start:var(--wpds-dimension-gap-md,12px)}._4bcfbc76045751b8__content{display:flex;flex-direction:column;flex-grow:1;overflow:auto;&.cefc11b6ca36136d__has-padding{padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px)}}");
+var style_module_default = {
+	"page": "a601da1d3e3fb3fd__page",
+	"header": "_04c95d85dee161fd__header",
+	"header-content": "bacecf0582e29643__header-content",
+	"header-actions": "a377058511394079__header-actions",
+	"header-lockup": "dea03f8da2e8f042__header-lockup",
+	"header-title": "_2361437ecf7e72e7__header-title",
+	"header-visual": "_75a71e5e0a35e8f7__header-visual",
+	"sidebar-toggle-slot": "b810958ef8ab363b__sidebar-toggle-slot",
+	"header-subtitle": "eff378c474a49b83__header-subtitle",
+	"has-navigation": "_7e7496f8b3e1c468__has-navigation",
+	"header-navigation": "_214d54afaddbb8d5__header-navigation",
+	"content": "_4bcfbc76045751b8__content",
+	"has-padding": "cefc11b6ca36136d__has-padding"
+};
+function Page({ headingLevel, breadcrumbs, badges, visual, title, subTitle, children, className, actions, navigation, components, ariaLabel, hasPadding = false, showSidebarToggle = true }) {
+	const classes = clsx(style_module_default.page, className);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(NavigableRegion, {
+		className: classes,
+		ariaLabel: ariaLabel ?? (typeof title === "string" ? title : ""),
+		children: [(title || breadcrumbs || badges || actions || visual || !!navigation?.items?.length) && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Header, {
+			headingLevel,
+			breadcrumbs,
+			badges,
+			visual,
+			title,
+			subTitle,
+			actions,
+			navigation,
+			components,
+			showSidebarToggle
+		}), hasPadding ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: clsx(style_module_default.content, style_module_default["has-padding"]),
+			children
+		}) : children]
+	});
 }
 Page.SidebarToggleFill = SidebarToggleFill;
-var page_default = Page;
 
-// routes/connectors-home/stage.tsx
-var import_components4 = __toESM(require_components());
-var import_data4 = __toESM(require_data());
-var import_element8 = __toESM(require_element());
-var import_i18n4 = __toESM(require_i18n());
-var import_core_data3 = __toESM(require_core_data());
-import {
-  privateApis as connectorsPrivateApis2
-} from "@wordpress/connectors";
+// \0wp-global:@wordpress/data
+var require_data = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = window.wp.data;
+}));
+
+// \0wp-global:@wordpress/core-data
+var require_core_data = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = window.wp.coreData;
+}));
+
+// routes/lock-unlock/index.ts
+var import_data = require_data();
+var import_core_data = require_core_data();
+var import_private_apis = require_private_apis();
+const { lock, unlock } = (0, import_private_apis.__dangerousOptInToUnstableAPIsOnlyForCoreModules)("I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.", "@wordpress/routes");
 
 // routes/connectors-home/style.scss
-if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='31ffc51439']")) {
-  const style = document.createElement("style");
-  style.setAttribute("data-wp-hash", "31ffc51439");
-  style.appendChild(document.createTextNode(".connectors-page{box-sizing:border-box;margin:0 auto;max-width:680px;padding:24px;width:100%}.connectors-page .components-item{background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;padding:20px;scroll-margin-top:120px}.connectors-page .connector-settings__error{color:#cc1818}.connectors-page .connector-settings .components-text-control__input{font-family:monospace;scroll-margin-top:120px}.connectors-page--empty{align-items:center;display:flex;flex-direction:column;flex-grow:1;gap:32px;justify-content:center;text-align:center}.connectors-page .ai-plugin-callout{background:linear-gradient(90deg,#fff9,#fff9),linear-gradient(90deg,#89dcdc,#c7eb5c 46.15%,#a920c1);border-radius:8px;overflow:hidden;padding:24px;padding-inline-end:220px;position:relative}[dir=rtl] .connectors-page .ai-plugin-callout{background:linear-gradient(270deg,#fff9,#fff9),linear-gradient(270deg,#89dcdc,#c7eb5c 46.15%,#a920c1)}.connectors-page .ai-plugin-callout__content{align-items:flex-start;display:flex;flex-direction:column;gap:12px;padding-top:2px}.connectors-page .ai-plugin-callout__content p{font-size:13px;line-height:20px;margin:0}.connectors-page .ai-plugin-callout__decoration{height:248px;inset-inline-end:8px;position:absolute;top:-15px;width:248px}.connectors-page>p{color:#949494;text-align:center}@media (max-width:680px){.connectors-page .ai-plugin-callout{padding:12px;padding-inline-end:84px}.connectors-page .ai-plugin-callout__decoration{height:134px;inset-inline-end:4px;top:-8px;width:134px}}@media (max-width:480px){.connectors-page{padding:8px}.connectors-page .components-item{padding:12px}.connectors-page .components-item>.components-v-stack>.components-h-stack:first-child svg{height:32px;width:32px}.connectors-page .components-item>.components-v-stack>.components-h-stack:first-child>.components-h-stack:last-child{align-items:flex-end;flex-direction:column}}"));
-  document.head.appendChild(style);
+if (typeof document !== "undefined" && !document.head.querySelector("style[data-wp-hash='87cd95b244']")) {
+	const style = document.createElement("style");
+	style.setAttribute("data-wp-hash", "87cd95b244");
+	style.appendChild(document.createTextNode(".connectors-page{box-sizing:border-box;margin:0 auto;max-width:680px;padding:24px;width:100%}.connectors-page .components-item{background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;padding:20px;scroll-margin-top:120px}.connectors-page .connector-settings__error{color:#cc1818}.connectors-page .connector-settings .components-text-control__input{font-family:monospace;scroll-margin-top:120px}.connectors-page__file-mods-notice{margin-bottom:16px}.connectors-page--empty{align-items:center;display:flex;flex-direction:column;flex-grow:1;gap:32px;justify-content:center;text-align:center}.connectors-page .ai-plugin-callout{background-color:#e7d4e4;background-image:radial-gradient(ellipse 70% 120% at 18% 115%,rgba(202,158,198,.75) 0,rgba(202,158,198,0) 60%),radial-gradient(ellipse 55% 110% at 92% -15%,rgba(208,175,217,.7) 0,rgba(208,175,217,0) 65%),radial-gradient(ellipse 40% 85% at 58% -10%,rgba(170,130,184,.45) 0,rgba(170,130,184,0) 70%);border-radius:8px;overflow:hidden;padding:24px;padding-inline-end:150px;position:relative}[dir=rtl] .connectors-page .ai-plugin-callout{background-image:radial-gradient(ellipse 70% 120% at 82% 115%,rgba(202,158,198,.75) 0,rgba(202,158,198,0) 60%),radial-gradient(ellipse 55% 110% at 8% -15%,rgba(208,175,217,.7) 0,rgba(208,175,217,0) 65%),radial-gradient(ellipse 40% 85% at 42% -10%,rgba(170,130,184,.45) 0,rgba(170,130,184,0) 70%)}.connectors-page .ai-plugin-callout__content{align-items:flex-start;display:flex;flex-direction:column;gap:12px;padding-top:2px}.connectors-page .ai-plugin-callout__content p{font-size:13px;line-height:20px;margin:0}.connectors-page .ai-plugin-callout__decoration{height:110px;inset-inline-end:16px;position:absolute;top:12px;width:110px}.connectors-page__help-text{color:#2f2f2f}@media (max-width:680px){.connectors-page .ai-plugin-callout{padding:12px;padding-inline-end:100px}.connectors-page .ai-plugin-callout__decoration{height:75px;inset-inline-end:8px;top:8px;width:75px}}@media (max-width:480px){.connectors-page{padding:8px}.connectors-page .ai-plugin-callout{padding-inline-end:130px}.connectors-page .components-item{padding:12px}.connectors-page .components-item>.components-v-stack>.components-h-stack:first-child svg{height:32px;width:32px}.connectors-page .components-item>.components-v-stack>.components-h-stack:first-child>.components-h-stack:last-child{align-items:flex-end;flex-direction:column}}"));
+	document.head.appendChild(style);
 }
 
-// routes/connectors-home/ai-plugin-callout.tsx
-var import_components3 = __toESM(require_components());
-var import_core_data2 = __toESM(require_core_data());
-var import_data3 = __toESM(require_data());
-var import_element7 = __toESM(require_element());
-var import_i18n3 = __toESM(require_i18n());
-var import_notices2 = __toESM(require_notices());
-var import_url = __toESM(require_url());
+// \0wp-global:@wordpress/notices
+var require_notices = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = window.wp.notices;
+}));
 
-// routes/connectors-home/default-connectors.tsx
-var import_components2 = __toESM(require_components());
-var import_element6 = __toESM(require_element());
-var import_data2 = __toESM(require_data());
-var import_i18n2 = __toESM(require_i18n());
-import {
-  __experimentalRegisterConnector as registerConnector,
-  __experimentalConnectorItem as ConnectorItem,
-  __experimentalDefaultConnectorSettings as DefaultConnectorSettings,
-  privateApis as connectorsPrivateApis
-} from "@wordpress/connectors";
-
-// routes/lock-unlock.ts
-var import_private_apis = __toESM(require_private_apis());
-var { lock, unlock } = (0, import_private_apis.__dangerousOptInToUnstableAPIsOnlyForCoreModules)(
-  "I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.",
-  "@wordpress/routes"
-);
+// \0wp-global:@wordpress/url
+var require_url = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = window.wp.url;
+}));
 
 // routes/connectors-home/use-connector-plugin.ts
-var import_core_data = __toESM(require_core_data());
-var import_data = __toESM(require_data());
-var import_element5 = __toESM(require_element());
-var import_i18n = __toESM(require_i18n());
-var import_notices = __toESM(require_notices());
-function useConnectorPlugin({
-  file: pluginFileFromServer,
-  settingName,
-  connectorName,
-  isInstalled,
-  isActivated,
-  keySource = "none",
-  initialIsConnected = false
-}) {
-  const [isExpanded, setIsExpanded] = (0, import_element5.useState)(false);
-  const [isBusy, setIsBusy] = (0, import_element5.useState)(false);
-  const [connectedState, setConnectedState] = (0, import_element5.useState)(initialIsConnected);
-  const [pluginStatusOverride, setPluginStatusOverride] = (0, import_element5.useState)(null);
-  const pluginBasename = pluginFileFromServer?.replace(/\.php$/, "");
-  const pluginSlug = pluginBasename?.includes("/") ? pluginBasename.split("/")[0] : pluginBasename;
-  const {
-    derivedPluginStatus,
-    canManagePlugins,
-    currentApiKey,
-    canInstallPlugins
-  } = (0, import_data.useSelect)(
-    (select2) => {
-      const store2 = select2(import_core_data.store);
-      const siteSettings = store2.getEntityRecord("root", "site");
-      const apiKey = siteSettings?.[settingName] ?? "";
-      const canCreate = !!store2.canUser("create", {
-        kind: "root",
-        name: "plugin"
-      });
-      if (!pluginFileFromServer) {
-        const hasLoaded = store2.hasFinishedResolution(
-          "getEntityRecord",
-          ["root", "site"]
-        );
-        return {
-          derivedPluginStatus: hasLoaded ? "active" : "checking",
-          canManagePlugins: void 0,
-          currentApiKey: apiKey,
-          canInstallPlugins: canCreate
-        };
-      }
-      const plugin = store2.getEntityRecord(
-        "root",
-        "plugin",
-        pluginBasename
-      );
-      const hasFinished = store2.hasFinishedResolution(
-        "getEntityRecord",
-        ["root", "plugin", pluginBasename]
-      );
-      if (!hasFinished) {
-        return {
-          derivedPluginStatus: "checking",
-          canManagePlugins: void 0,
-          currentApiKey: apiKey,
-          canInstallPlugins: canCreate
-        };
-      }
-      if (plugin) {
-        return {
-          derivedPluginStatus: plugin.status === "active" ? "active" : "inactive",
-          canManagePlugins: true,
-          currentApiKey: apiKey,
-          canInstallPlugins: canCreate
-        };
-      }
-      let status = "not-installed";
-      if (isActivated) {
-        status = "active";
-      } else if (isInstalled) {
-        status = "inactive";
-      }
-      return {
-        derivedPluginStatus: status,
-        canManagePlugins: false,
-        currentApiKey: apiKey,
-        canInstallPlugins: canCreate
-      };
-    },
-    [pluginBasename, settingName, isInstalled, isActivated]
-  );
-  const pluginStatus = pluginStatusOverride ?? derivedPluginStatus;
-  const canActivatePlugins = canManagePlugins;
-  const isConnected = pluginStatus === "active" && connectedState || // After install/activate, if settings re-fetch reveals an existing key,
-  // update connected state (mirrors what the server would report on page load).
-  pluginStatusOverride === "active" && !!currentApiKey;
-  const { saveEntityRecord, invalidateResolution } = (0, import_data.useDispatch)(import_core_data.store);
-  const { createSuccessNotice, createErrorNotice } = (0, import_data.useDispatch)(import_notices.store);
-  const installPlugin = async () => {
-    if (!pluginSlug) {
-      return;
-    }
-    setIsBusy(true);
-    try {
-      await saveEntityRecord(
-        "root",
-        "plugin",
-        { slug: pluginSlug, status: "active" },
-        { throwOnError: true }
-      );
-      setPluginStatusOverride("active");
-      invalidateResolution("getEntityRecord", ["root", "site"]);
-      setIsExpanded(true);
-      createSuccessNotice(
-        (0, import_i18n.sprintf)(
-          /* translators: %s: Name of the connector (e.g. "OpenAI"). */
-          (0, import_i18n.__)("Plugin for %s installed and activated successfully."),
-          connectorName
-        ),
-        {
-          id: "connector-plugin-install-success",
-          type: "snackbar"
-        }
-      );
-    } catch {
-      createErrorNotice(
-        (0, import_i18n.sprintf)(
-          /* translators: %s: Name of the connector (e.g. "OpenAI"). */
-          (0, import_i18n.__)("Failed to install plugin for %s."),
-          connectorName
-        ),
-        {
-          id: "connector-plugin-install-error",
-          type: "snackbar"
-        }
-      );
-    } finally {
-      setIsBusy(false);
-    }
-  };
-  const activatePlugin = async () => {
-    if (!pluginFileFromServer) {
-      return;
-    }
-    setIsBusy(true);
-    try {
-      await saveEntityRecord(
-        "root",
-        "plugin",
-        {
-          plugin: pluginBasename,
-          status: "active"
-        },
-        { throwOnError: true }
-      );
-      setPluginStatusOverride("active");
-      invalidateResolution("getEntityRecord", ["root", "site"]);
-      setIsExpanded(true);
-      createSuccessNotice(
-        (0, import_i18n.sprintf)(
-          /* translators: %s: Name of the connector (e.g. "OpenAI"). */
-          (0, import_i18n.__)("Plugin for %s activated successfully."),
-          connectorName
-        ),
-        {
-          id: "connector-plugin-activate-success",
-          type: "snackbar"
-        }
-      );
-    } catch {
-      createErrorNotice(
-        (0, import_i18n.sprintf)(
-          /* translators: %s: Name of the connector (e.g. "OpenAI"). */
-          (0, import_i18n.__)("Failed to activate plugin for %s."),
-          connectorName
-        ),
-        {
-          id: "connector-plugin-activate-error",
-          type: "snackbar"
-        }
-      );
-    } finally {
-      setIsBusy(false);
-    }
-  };
-  const handleButtonClick = () => {
-    if (pluginStatus === "not-installed") {
-      if (canInstallPlugins === false) {
-        return;
-      }
-      installPlugin();
-    } else if (pluginStatus === "inactive") {
-      if (canActivatePlugins === false) {
-        return;
-      }
-      activatePlugin();
-    } else {
-      setIsExpanded(!isExpanded);
-    }
-  };
-  const getButtonLabel = () => {
-    if (isBusy) {
-      return pluginStatus === "not-installed" ? (0, import_i18n.__)("Installing\u2026") : (0, import_i18n.__)("Activating\u2026");
-    }
-    if (isExpanded) {
-      return (0, import_i18n.__)("Cancel");
-    }
-    if (isConnected) {
-      return (0, import_i18n.__)("Edit");
-    }
-    switch (pluginStatus) {
-      case "checking":
-        return (0, import_i18n.__)("Checking\u2026");
-      case "not-installed":
-        return (0, import_i18n.__)("Install");
-      case "inactive":
-        return (0, import_i18n.__)("Activate");
-      case "active":
-        return (0, import_i18n.__)("Set up");
-    }
-  };
-  const saveApiKey = async (apiKey) => {
-    const previousApiKey = currentApiKey;
-    try {
-      const updatedRecord = await saveEntityRecord(
-        "root",
-        "site",
-        { [settingName]: apiKey },
-        { throwOnError: true }
-      );
-      const record = updatedRecord;
-      const returnedKey = record?.[settingName];
-      if (apiKey && (returnedKey === previousApiKey || !returnedKey)) {
-        throw new Error(
-          "It was not possible to connect to the provider using this key."
-        );
-      }
-      setConnectedState(true);
-      createSuccessNotice(
-        (0, import_i18n.sprintf)(
-          /* translators: %s: Name of the connector (e.g. "OpenAI"). */
-          (0, import_i18n.__)("%s connected successfully."),
-          connectorName
-        ),
-        {
-          id: "connector-connect-success",
-          type: "snackbar"
-        }
-      );
-    } catch (error) {
-      console.error("Failed to save API key:", error);
-      throw error;
-    }
-  };
-  const removeApiKey = async () => {
-    try {
-      await saveEntityRecord(
-        "root",
-        "site",
-        { [settingName]: "" },
-        { throwOnError: true }
-      );
-      setConnectedState(false);
-      createSuccessNotice(
-        (0, import_i18n.sprintf)(
-          /* translators: %s: Name of the connector (e.g. "OpenAI"). */
-          (0, import_i18n.__)("%s disconnected."),
-          connectorName
-        ),
-        {
-          id: "connector-disconnect-success",
-          type: "snackbar"
-        }
-      );
-    } catch (error) {
-      console.error("Failed to remove API key:", error);
-      createErrorNotice(
-        (0, import_i18n.sprintf)(
-          /* translators: %s: Name of the connector (e.g. "OpenAI"). */
-          (0, import_i18n.__)("Failed to disconnect %s."),
-          connectorName
-        ),
-        {
-          id: "connector-disconnect-error",
-          type: "snackbar"
-        }
-      );
-      throw error;
-    }
-  };
-  return {
-    pluginStatus,
-    canInstallPlugins,
-    canActivatePlugins,
-    isExpanded,
-    setIsExpanded,
-    isBusy,
-    isConnected,
-    currentApiKey,
-    keySource,
-    handleButtonClick,
-    getButtonLabel,
-    saveApiKey,
-    removeApiKey
-  };
+var import_url = require_url();
+var import_notices = require_notices();
+function useConnectorPlugin({ file: pluginFileFromServer, settingName, connectorName, isInstalled, isActivated, keySource = "none", initialIsConnected = false }) {
+	const [isExpanded, setIsExpanded] = (0, import_element.useState)(false);
+	const [isBusy, setIsBusy] = (0, import_element.useState)(false);
+	const [connectedState, setConnectedState] = (0, import_element.useState)(initialIsConnected);
+	const [pluginStatusOverride, setPluginStatusOverride] = (0, import_element.useState)(null);
+	const pluginBasename = pluginFileFromServer?.replace(/\.php$/, "");
+	const pluginSlug = pluginBasename?.includes("/") ? pluginBasename.split("/")[0] : pluginBasename;
+	const { derivedPluginStatus, canManagePlugins, currentApiKey, currentUsername, hasStoredCredentials, hasResolvedSettings, canInstallPlugins } = (0, import_data.useSelect)((select) => {
+		const store = select(import_core_data.store);
+		const settingValue = store.getEntityRecord("root", "site")?.[settingName];
+		const apiKey = typeof settingValue === "string" ? settingValue : "";
+		const credentials = typeof settingValue === "object" && settingValue !== null ? settingValue : void 0;
+		const credentialsExist = credentials !== void 0 ? !!credentials.username && !!credentials.password : !!apiKey;
+		const settingsResolved = store.hasFinishedResolution("getEntityRecord", ["root", "site"]);
+		const canCreate = !!store.canUser("create", {
+			kind: "root",
+			name: "plugin"
+		});
+		const common = {
+			currentApiKey: apiKey,
+			currentUsername: credentials?.username ?? "",
+			hasStoredCredentials: credentialsExist,
+			hasResolvedSettings: settingsResolved,
+			canInstallPlugins: canCreate
+		};
+		if (!pluginFileFromServer) return {
+			...common,
+			derivedPluginStatus: settingsResolved ? "active" : "checking",
+			canManagePlugins: void 0
+		};
+		const plugin = store.getEntityRecord("root", "plugin", pluginBasename);
+		if (!store.hasFinishedResolution("getEntityRecord", [
+			"root",
+			"plugin",
+			pluginBasename
+		])) return {
+			...common,
+			derivedPluginStatus: "checking",
+			canManagePlugins: void 0
+		};
+		if (plugin) {
+			const isPluginActive = plugin.status === "active" || plugin.status === "network-active";
+			return {
+				...common,
+				derivedPluginStatus: isPluginActive ? "active" : "inactive",
+				canManagePlugins: true
+			};
+		}
+		let status = "not-installed";
+		if (isActivated) status = "active";
+		else if (isInstalled) status = "inactive";
+		return {
+			...common,
+			derivedPluginStatus: status,
+			canManagePlugins: false
+		};
+	}, [
+		pluginFileFromServer,
+		pluginBasename,
+		settingName,
+		isInstalled,
+		isActivated
+	]);
+	const pluginStatus = pluginStatusOverride ?? derivedPluginStatus;
+	const canActivatePlugins = canManagePlugins;
+	const isConnected = pluginStatus === "active" && connectedState || pluginStatusOverride === "active" && hasStoredCredentials;
+	const { saveEntityRecord, invalidateResolution } = (0, import_data.useDispatch)(import_core_data.store);
+	const { createSuccessNotice, createErrorNotice } = (0, import_data.useDispatch)(import_notices.store);
+	const saveConnectorSetting = (value) => saveEntityRecord("root", "site", { [settingName]: value }, { throwOnError: true });
+	const createConnectedNotice = () => {
+		createSuccessNotice((0, import_i18n.sprintf)((0, import_i18n.__)("%s connected successfully."), connectorName), {
+			id: "connector-connect-success",
+			type: "snackbar"
+		});
+	};
+	const createDisconnectedNotice = () => {
+		createSuccessNotice((0, import_i18n.sprintf)((0, import_i18n.__)("%s disconnected."), connectorName), {
+			id: "connector-disconnect-success",
+			type: "snackbar"
+		});
+	};
+	const createDisconnectErrorNotice = () => {
+		createErrorNotice((0, import_i18n.sprintf)((0, import_i18n.__)("Failed to disconnect %s."), connectorName), {
+			id: "connector-disconnect-error",
+			type: "snackbar"
+		});
+	};
+	const installPlugin = async () => {
+		if (!pluginSlug) return;
+		setIsBusy(true);
+		try {
+			await saveEntityRecord("root", "plugin", {
+				slug: pluginSlug,
+				status: "active"
+			}, { throwOnError: true });
+			setPluginStatusOverride("active");
+			invalidateResolution("getEntityRecord", ["root", "site"]);
+			setIsExpanded(true);
+			createSuccessNotice((0, import_i18n.sprintf)((0, import_i18n.__)("Plugin for %s installed and activated successfully."), connectorName), {
+				id: "connector-plugin-install-success",
+				type: "snackbar"
+			});
+		} catch {
+			createErrorNotice((0, import_i18n.sprintf)((0, import_i18n.__)("Failed to install plugin for %s."), connectorName), {
+				id: "connector-plugin-install-error",
+				type: "snackbar"
+			});
+		} finally {
+			setIsBusy(false);
+		}
+	};
+	const activatePlugin = async () => {
+		if (!pluginFileFromServer) return;
+		setIsBusy(true);
+		try {
+			await saveEntityRecord("root", "plugin", {
+				plugin: pluginBasename,
+				status: "active"
+			}, { throwOnError: true });
+			setPluginStatusOverride("active");
+			invalidateResolution("getEntityRecord", ["root", "site"]);
+			setIsExpanded(true);
+			createSuccessNotice((0, import_i18n.sprintf)((0, import_i18n.__)("Plugin for %s activated successfully."), connectorName), {
+				id: "connector-plugin-activate-success",
+				type: "snackbar"
+			});
+		} catch {
+			createErrorNotice((0, import_i18n.sprintf)((0, import_i18n.__)("Failed to activate plugin for %s."), connectorName), {
+				id: "connector-plugin-activate-error",
+				type: "snackbar"
+			});
+		} finally {
+			setIsBusy(false);
+		}
+	};
+	const handleButtonClick = () => {
+		if (pluginStatus === "not-installed") {
+			if (canInstallPlugins === false) return;
+			installPlugin();
+		} else if (pluginStatus === "inactive") {
+			if (canActivatePlugins === false) return;
+			activatePlugin();
+		} else setIsExpanded(!isExpanded);
+	};
+	const getButtonLabel = () => {
+		if (isBusy) return pluginStatus === "not-installed" ? (0, import_i18n.__)("Installing…") : (0, import_i18n.__)("Activating…");
+		if (isExpanded) return (0, import_i18n.__)("Cancel");
+		if (isConnected) return (0, import_i18n.__)("Edit");
+		switch (pluginStatus) {
+			case "checking": return (0, import_i18n.__)("Checking…");
+			case "not-installed": return (0, import_i18n.__)("Install");
+			case "inactive": return (0, import_i18n.__)("Activate");
+			case "active": return (0, import_i18n.__)("Set up");
+		}
+	};
+	const saveApiKey = async (apiKey) => {
+		const previousApiKey = currentApiKey;
+		try {
+			const returnedKey = (await saveConnectorSetting(apiKey))?.[settingName];
+			if (apiKey && (returnedKey === previousApiKey || !returnedKey)) throw new Error("It was not possible to connect to the provider using this key.");
+			setConnectedState(true);
+			createConnectedNotice();
+		} catch (error) {
+			console.error("Failed to save API key:", error);
+			throw error;
+		}
+	};
+	const saveCredentials = async ({ username, applicationPassword }) => {
+		try {
+			const credentials = (await saveConnectorSetting({
+				username,
+				password: applicationPassword
+			}))?.[settingName];
+			if (!credentials?.username || !credentials?.password) throw new Error((0, import_i18n.__)("It was not possible to save these credentials."));
+			setConnectedState(true);
+			createConnectedNotice();
+		} catch (error) {
+			console.error("Failed to save credentials:", error);
+			throw error;
+		}
+	};
+	const removeApiKey = async () => {
+		try {
+			await saveConnectorSetting("");
+			setConnectedState(false);
+			createDisconnectedNotice();
+		} catch (error) {
+			console.error("Failed to remove API key:", error);
+			createDisconnectErrorNotice();
+		}
+	};
+	const removeCredentials = async () => {
+		try {
+			await saveConnectorSetting({
+				username: "",
+				password: ""
+			});
+			setConnectedState(false);
+			createDisconnectedNotice();
+		} catch (error) {
+			console.error("Failed to remove credentials:", error);
+			createDisconnectErrorNotice();
+		}
+	};
+	return {
+		pluginStatus,
+		canInstallPlugins,
+		canActivatePlugins,
+		isExpanded,
+		setIsExpanded,
+		isBusy,
+		isConnected,
+		currentApiKey,
+		currentUsername,
+		hasResolvedSettings,
+		keySource,
+		handleButtonClick,
+		getButtonLabel,
+		saveApiKey,
+		removeApiKey,
+		saveCredentials,
+		removeCredentials
+	};
 }
 
 // routes/connectors-home/logos.tsx
-var OpenAILogo = () => /* @__PURE__ */ React.createElement(
-  "svg",
-  {
-    width: "40",
-    height: "40",
-    viewBox: "0 0 24 24",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg",
-    "aria-hidden": "true"
-  },
-  /* @__PURE__ */ React.createElement(
-    "path",
-    {
-      d: "M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364l2.0201-1.1685a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.4043-.6813zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z",
-      fill: "currentColor"
-    }
-  )
-);
-var ClaudeLogo = () => /* @__PURE__ */ React.createElement(
-  "svg",
-  {
-    width: "40",
-    height: "40",
-    viewBox: "0 0 32 32",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg",
-    "aria-hidden": "true"
-  },
-  /* @__PURE__ */ React.createElement(
-    "path",
-    {
-      d: "M6.2 21.024L12.416 17.536L12.52 17.232L12.416 17.064H12.112L11.072 17L7.52 16.904L4.44 16.776L1.456 16.616L0.704 16.456L0 15.528L0.072 15.064L0.704 14.64L1.608 14.72L3.608 14.856L6.608 15.064L8.784 15.192L12.008 15.528H12.52L12.592 15.32L12.416 15.192L12.28 15.064L9.176 12.96L5.816 10.736L4.056 9.456L3.104 8.808L2.624 8.2L2.416 6.872L3.28 5.92L4.44 6L4.736 6.08L5.912 6.984L8.424 8.928L11.704 11.344L12.184 11.744L12.376 11.608L12.4 11.512L12.184 11.152L10.4 7.928L8.496 4.648L7.648 3.288L7.424 2.472C7.344 2.136 7.288 1.856 7.288 1.512L8.272 0.176L8.816 0L10.128 0.176L10.68 0.656L11.496 2.52L12.816 5.456L14.864 9.448L15.464 10.632L15.784 11.728L15.904 12.064H16.112V11.872L16.28 9.624L16.592 6.864L16.896 3.312L17 2.312L17.496 1.112L18.48 0.464L19.248 0.832L19.88 1.736L19.792 2.32L19.416 4.76L18.68 8.584L18.2 11.144H18.48L18.8 10.824L20.096 9.104L22.272 6.384L23.232 5.304L24.352 4.112L25.072 3.544H26.432L27.432 5.032L26.984 6.568L25.584 8.344L24.424 9.848L22.76 12.088L21.72 13.88L21.816 14.024L22.064 14L25.824 13.2L27.856 12.832L30.28 12.416L31.376 12.928L31.496 13.448L31.064 14.512L28.472 15.152L25.432 15.76L20.904 16.832L20.848 16.872L20.912 16.952L22.952 17.144L23.824 17.192H25.96L29.936 17.488L30.976 18.176L31.6 19.016L31.496 19.656L29.896 20.472L27.736 19.96L22.696 18.76L20.968 18.328H20.728V18.472L22.168 19.88L24.808 22.264L28.112 25.336L28.28 26.096L27.856 26.696L27.408 26.632L24.504 24.448L23.384 23.464L20.848 21.328H20.68V21.552L21.264 22.408L24.352 27.048L24.512 28.472L24.288 28.936L23.488 29.216L22.608 29.056L20.8 26.52L18.936 23.664L17.432 21.104L17.248 21.208L16.36 30.768L15.944 31.256L14.984 31.624L14.184 31.016L13.76 30.032L14.184 28.088L14.696 25.552L15.112 23.536L15.488 21.032L15.712 20.2L15.696 20.144L15.512 20.168L13.624 22.76L10.752 26.64L8.48 29.072L7.936 29.288L6.992 28.8L7.08 27.928L7.608 27.152L10.752 23.152L12.648 20.672L13.872 19.24L13.864 19.032H13.792L5.44 24.456L3.952 24.648L3.312 24.048L3.392 23.064L3.696 22.744L6.208 21.016L6.2 21.024Z",
-      fill: "#D97757"
-    }
-  )
-);
-var DefaultConnectorLogo = () => /* @__PURE__ */ React.createElement(
-  "svg",
-  {
-    width: "40",
-    height: "40",
-    viewBox: "0 0 32 32",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg",
-    "aria-hidden": "true"
-  },
-  /* @__PURE__ */ React.createElement(
-    "path",
-    {
-      d: "M0 4C0 1.79086 1.79086 0 4 0H28C30.2091 0 32 1.79086 32 4V28C32 30.2091 30.2091 32 28 32H4C1.79086 32 0 30.2091 0 28V4Z",
-      fill: "#F0F0F0"
-    }
-  ),
-  /* @__PURE__ */ React.createElement(
-    "path",
-    {
-      d: "M14.5 8V12H17.5V8H19V12H20.5C20.7652 12 21.0196 12.1054 21.2071 12.2929C21.3946 12.4804 21.5 12.7348 21.5 13V17L18.5 21V23C18.5 23.2652 18.3946 23.5196 18.2071 23.7071C18.0196 23.8946 17.7652 24 17.5 24H14.5C14.2348 24 13.9804 23.8946 13.7929 23.7071C13.6054 23.5196 13.5 23.2652 13.5 23V21L10.5 17V13C10.5 12.7348 10.6054 12.4804 10.7929 12.2929C10.9804 12.1054 11.2348 12 11.5 12H13V8H14.5ZM15 20.5V22.5H17V20.5L20 16.5V13.5H12V16.5L15 20.5Z",
-      fill: "#949494"
-    }
-  )
-);
-var AkismetLogo = () => /* @__PURE__ */ React.createElement(
-  "svg",
-  {
-    width: "40",
-    height: "40",
-    viewBox: "0 0 44 44",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg",
-    "aria-hidden": "true"
-  },
-  /* @__PURE__ */ React.createElement("rect", { width: "44", height: "44", fill: "#357B49", rx: "6" }),
-  /* @__PURE__ */ React.createElement(
-    "path",
-    {
-      fill: "#fff",
-      fillRule: "evenodd",
-      d: "m29.746 28.31-6.392-16.797c-.152-.397-.305-.672-.789-.675-.673 0-1.408.611-1.746 1.316l-7.378 16.154c-.072.16-.143.311-.214.454-.5.995-1.045 1.546-2.357 1.626a.399.399 0 0 0-.16.033l-.01.004a.399.399 0 0 0-.23.392v.01c0 .054.01.106.03.155l.004.01a.416.416 0 0 0 .394.252h6.212a.417.417 0 0 0 .307-.12.416.416 0 0 0 .124-.305.398.398 0 0 0-.105-.302.399.399 0 0 0-.294-.127c-.757 0-2.197-.062-2.197-1.164.02-.318.103-.63.245-.916l1.399-3.152c.52-1.163 1.654-1.163 2.572-1.163h5.843c.023 0 .044 0 .062.003.13.014.16.081.214.242l1.534 4.07a2.857 2.857 0 0 1 .216 1.04c0 .054-.003.104-.01.153-.09.726-.831.887-1.49.887a.4.4 0 0 0-.294.127l-.007.008-.007.008a.401.401 0 0 0-.092.286v.01c0 .054.01.106.03.155l.005.01a.42.42 0 0 0 .395.252h7.011a.413.413 0 0 0 .279-.13.412.412 0 0 0 .11-.297.387.387 0 0 0-.09-.294.388.388 0 0 0-.277-.135c-1.448-.122-2.295-.643-2.847-2.08Zm-11.985-5.844 2.847-6.304c.361-.728.659-1.486.889-2.265 0-.06.03-.092.06-.092s.061.032.061.091c.02.122.045.247.073.374.197.888.584 1.878.914 2.723l.176.453 1.684 4.529a.927.927 0 0 1 .092.4.473.473 0 0 1-.009.094c-.041.202-.228.272-.602.272h-6.063c-.122 0-.184-.03-.184-.092a.36.36 0 0 1 .062-.183Zm17.107-.721c0 .786-.446 1.231-1.25 1.231-.806 0-1.125-.409-1.125-1.034 0-.786.465-1.231 1.25-1.231.785 0 1.125.427 1.125 1.034ZM9.629 23.002c.803 0 1.25-.447 1.25-1.231 0-.607-.343-1.036-1.128-1.036-.785 0-1.25.447-1.25 1.231 0 .625.325 1.036 1.128 1.036Z",
-      clipRule: "evenodd"
-    }
-  )
-);
-var GeminiLogo = () => /* @__PURE__ */ React.createElement(
-  "svg",
-  {
-    width: "40",
-    height: "40",
-    style: { flex: "none", lineHeight: 1 },
-    viewBox: "0 0 24 24",
-    xmlns: "http://www.w3.org/2000/svg",
-    "aria-hidden": "true"
-  },
-  /* @__PURE__ */ React.createElement(
-    "path",
-    {
-      d: "M20.616 10.835a14.147 14.147 0 01-4.45-3.001 14.111 14.111 0 01-3.678-6.452.503.503 0 00-.975 0 14.134 14.134 0 01-3.679 6.452 14.155 14.155 0 01-4.45 3.001c-.65.28-1.318.505-2.002.678a.502.502 0 000 .975c.684.172 1.35.397 2.002.677a14.147 14.147 0 014.45 3.001 14.112 14.112 0 013.679 6.453.502.502 0 00.975 0c.172-.685.397-1.351.677-2.003a14.145 14.145 0 013.001-4.45 14.113 14.113 0 016.453-3.678.503.503 0 000-.975 13.245 13.245 0 01-2.003-.678z",
-      fill: "#3186FF"
-    }
-  ),
-  /* @__PURE__ */ React.createElement(
-    "path",
-    {
-      d: "M20.616 10.835a14.147 14.147 0 01-4.45-3.001 14.111 14.111 0 01-3.678-6.452.503.503 0 00-.975 0 14.134 14.134 0 01-3.679 6.452 14.155 14.155 0 01-4.45 3.001c-.65.28-1.318.505-2.002.678a.502.502 0 000 .975c.684.172 1.35.397 2.002.677a14.147 14.147 0 014.45 3.001 14.112 14.112 0 013.679 6.453.502.502 0 00.975 0c.172-.685.397-1.351.677-2.003a14.145 14.145 0 013.001-4.45 14.113 14.113 0 016.453-3.678.503.503 0 000-.975 13.245 13.245 0 01-2.003-.678z",
-      fill: "url(#lobe-icons-gemini-fill-0)"
-    }
-  ),
-  /* @__PURE__ */ React.createElement(
-    "path",
-    {
-      d: "M20.616 10.835a14.147 14.147 0 01-4.45-3.001 14.111 14.111 0 01-3.678-6.452.503.503 0 00-.975 0 14.134 14.134 0 01-3.679 6.452 14.155 14.155 0 01-4.45 3.001c-.65.28-1.318.505-2.002.678a.502.502 0 000 .975c.684.172 1.35.397 2.002.677a14.147 14.147 0 014.45 3.001 14.112 14.112 0 013.679 6.453.502.502 0 00.975 0c.172-.685.397-1.351.677-2.003a14.145 14.145 0 013.001-4.45 14.113 14.113 0 016.453-3.678.503.503 0 000-.975 13.245 13.245 0 01-2.003-.678z",
-      fill: "url(#lobe-icons-gemini-fill-1)"
-    }
-  ),
-  /* @__PURE__ */ React.createElement(
-    "path",
-    {
-      d: "M20.616 10.835a14.147 14.147 0 01-4.45-3.001 14.111 14.111 0 01-3.678-6.452.503.503 0 00-.975 0 14.134 14.134 0 01-3.679 6.452 14.155 14.155 0 01-4.45 3.001c-.65.28-1.318.505-2.002.678a.502.502 0 000 .975c.684.172 1.35.397 2.002.677a14.147 14.147 0 014.45 3.001 14.112 14.112 0 013.679 6.453.502.502 0 00.975 0c.172-.685.397-1.351.677-2.003a14.145 14.145 0 013.001-4.45 14.113 14.113 0 016.453-3.678.503.503 0 000-.975 13.245 13.245 0 01-2.003-.678z",
-      fill: "url(#lobe-icons-gemini-fill-2)"
-    }
-  ),
-  /* @__PURE__ */ React.createElement("defs", null, /* @__PURE__ */ React.createElement(
-    "linearGradient",
-    {
-      gradientUnits: "userSpaceOnUse",
-      id: "lobe-icons-gemini-fill-0",
-      x1: "7",
-      x2: "11",
-      y1: "15.5",
-      y2: "12"
-    },
-    /* @__PURE__ */ React.createElement("stop", { stopColor: "#08B962" }),
-    /* @__PURE__ */ React.createElement("stop", { offset: "1", stopColor: "#08B962", stopOpacity: "0" })
-  ), /* @__PURE__ */ React.createElement(
-    "linearGradient",
-    {
-      gradientUnits: "userSpaceOnUse",
-      id: "lobe-icons-gemini-fill-1",
-      x1: "8",
-      x2: "11.5",
-      y1: "5.5",
-      y2: "11"
-    },
-    /* @__PURE__ */ React.createElement("stop", { stopColor: "#F94543" }),
-    /* @__PURE__ */ React.createElement("stop", { offset: "1", stopColor: "#F94543", stopOpacity: "0" })
-  ), /* @__PURE__ */ React.createElement(
-    "linearGradient",
-    {
-      gradientUnits: "userSpaceOnUse",
-      id: "lobe-icons-gemini-fill-2",
-      x1: "3.5",
-      x2: "17.5",
-      y1: "13.5",
-      y2: "12"
-    },
-    /* @__PURE__ */ React.createElement("stop", { stopColor: "#FABC12" }),
-    /* @__PURE__ */ React.createElement("stop", { offset: ".46", stopColor: "#FABC12", stopOpacity: "0" })
-  ))
-);
+const OpenAILogo = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+	width: "40",
+	height: "40",
+	viewBox: "0 0 24 24",
+	fill: "none",
+	xmlns: "http://www.w3.org/2000/svg",
+	"aria-hidden": "true",
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+		d: "M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364l2.0201-1.1685a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.4043-.6813zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z",
+		fill: "currentColor"
+	})
+});
+const ClaudeLogo = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+	width: "40",
+	height: "40",
+	viewBox: "0 0 32 32",
+	fill: "none",
+	xmlns: "http://www.w3.org/2000/svg",
+	"aria-hidden": "true",
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+		d: "M6.2 21.024L12.416 17.536L12.52 17.232L12.416 17.064H12.112L11.072 17L7.52 16.904L4.44 16.776L1.456 16.616L0.704 16.456L0 15.528L0.072 15.064L0.704 14.64L1.608 14.72L3.608 14.856L6.608 15.064L8.784 15.192L12.008 15.528H12.52L12.592 15.32L12.416 15.192L12.28 15.064L9.176 12.96L5.816 10.736L4.056 9.456L3.104 8.808L2.624 8.2L2.416 6.872L3.28 5.92L4.44 6L4.736 6.08L5.912 6.984L8.424 8.928L11.704 11.344L12.184 11.744L12.376 11.608L12.4 11.512L12.184 11.152L10.4 7.928L8.496 4.648L7.648 3.288L7.424 2.472C7.344 2.136 7.288 1.856 7.288 1.512L8.272 0.176L8.816 0L10.128 0.176L10.68 0.656L11.496 2.52L12.816 5.456L14.864 9.448L15.464 10.632L15.784 11.728L15.904 12.064H16.112V11.872L16.28 9.624L16.592 6.864L16.896 3.312L17 2.312L17.496 1.112L18.48 0.464L19.248 0.832L19.88 1.736L19.792 2.32L19.416 4.76L18.68 8.584L18.2 11.144H18.48L18.8 10.824L20.096 9.104L22.272 6.384L23.232 5.304L24.352 4.112L25.072 3.544H26.432L27.432 5.032L26.984 6.568L25.584 8.344L24.424 9.848L22.76 12.088L21.72 13.88L21.816 14.024L22.064 14L25.824 13.2L27.856 12.832L30.28 12.416L31.376 12.928L31.496 13.448L31.064 14.512L28.472 15.152L25.432 15.76L20.904 16.832L20.848 16.872L20.912 16.952L22.952 17.144L23.824 17.192H25.96L29.936 17.488L30.976 18.176L31.6 19.016L31.496 19.656L29.896 20.472L27.736 19.96L22.696 18.76L20.968 18.328H20.728V18.472L22.168 19.88L24.808 22.264L28.112 25.336L28.28 26.096L27.856 26.696L27.408 26.632L24.504 24.448L23.384 23.464L20.848 21.328H20.68V21.552L21.264 22.408L24.352 27.048L24.512 28.472L24.288 28.936L23.488 29.216L22.608 29.056L20.8 26.52L18.936 23.664L17.432 21.104L17.248 21.208L16.36 30.768L15.944 31.256L14.984 31.624L14.184 31.016L13.76 30.032L14.184 28.088L14.696 25.552L15.112 23.536L15.488 21.032L15.712 20.2L15.696 20.144L15.512 20.168L13.624 22.76L10.752 26.64L8.48 29.072L7.936 29.288L6.992 28.8L7.08 27.928L7.608 27.152L10.752 23.152L12.648 20.672L13.872 19.24L13.864 19.032H13.792L5.44 24.456L3.952 24.648L3.312 24.048L3.392 23.064L3.696 22.744L6.208 21.016L6.2 21.024Z",
+		fill: "#D97757"
+	})
+});
+const DefaultConnectorLogo = () => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
+	width: "40",
+	height: "40",
+	viewBox: "0 0 32 32",
+	fill: "none",
+	xmlns: "http://www.w3.org/2000/svg",
+	"aria-hidden": "true",
+	children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+		d: "M0 4C0 1.79086 1.79086 0 4 0H28C30.2091 0 32 1.79086 32 4V28C32 30.2091 30.2091 32 28 32H4C1.79086 32 0 30.2091 0 28V4Z",
+		fill: "#F0F0F0"
+	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+		d: "M14.5 8V12H17.5V8H19V12H20.5C20.7652 12 21.0196 12.1054 21.2071 12.2929C21.3946 12.4804 21.5 12.7348 21.5 13V17L18.5 21V23C18.5 23.2652 18.3946 23.5196 18.2071 23.7071C18.0196 23.8946 17.7652 24 17.5 24H14.5C14.2348 24 13.9804 23.8946 13.7929 23.7071C13.6054 23.5196 13.5 23.2652 13.5 23V21L10.5 17V13C10.5 12.7348 10.6054 12.4804 10.7929 12.2929C10.9804 12.1054 11.2348 12 11.5 12H13V8H14.5ZM15 20.5V22.5H17V20.5L20 16.5V13.5H12V16.5L15 20.5Z",
+		fill: "#949494"
+	})]
+});
+const AkismetLogo = () => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
+	width: "40",
+	height: "40",
+	viewBox: "0 0 44 44",
+	fill: "none",
+	xmlns: "http://www.w3.org/2000/svg",
+	"aria-hidden": "true",
+	children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("rect", {
+		width: "44",
+		height: "44",
+		fill: "#357B49",
+		rx: "6"
+	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+		fill: "#fff",
+		fillRule: "evenodd",
+		d: "m29.746 28.31-6.392-16.797c-.152-.397-.305-.672-.789-.675-.673 0-1.408.611-1.746 1.316l-7.378 16.154c-.072.16-.143.311-.214.454-.5.995-1.045 1.546-2.357 1.626a.399.399 0 0 0-.16.033l-.01.004a.399.399 0 0 0-.23.392v.01c0 .054.01.106.03.155l.004.01a.416.416 0 0 0 .394.252h6.212a.417.417 0 0 0 .307-.12.416.416 0 0 0 .124-.305.398.398 0 0 0-.105-.302.399.399 0 0 0-.294-.127c-.757 0-2.197-.062-2.197-1.164.02-.318.103-.63.245-.916l1.399-3.152c.52-1.163 1.654-1.163 2.572-1.163h5.843c.023 0 .044 0 .062.003.13.014.16.081.214.242l1.534 4.07a2.857 2.857 0 0 1 .216 1.04c0 .054-.003.104-.01.153-.09.726-.831.887-1.49.887a.4.4 0 0 0-.294.127l-.007.008-.007.008a.401.401 0 0 0-.092.286v.01c0 .054.01.106.03.155l.005.01a.42.42 0 0 0 .395.252h7.011a.413.413 0 0 0 .279-.13.412.412 0 0 0 .11-.297.387.387 0 0 0-.09-.294.388.388 0 0 0-.277-.135c-1.448-.122-2.295-.643-2.847-2.08Zm-11.985-5.844 2.847-6.304c.361-.728.659-1.486.889-2.265 0-.06.03-.092.06-.092s.061.032.061.091c.02.122.045.247.073.374.197.888.584 1.878.914 2.723l.176.453 1.684 4.529a.927.927 0 0 1 .092.4.473.473 0 0 1-.009.094c-.041.202-.228.272-.602.272h-6.063c-.122 0-.184-.03-.184-.092a.36.36 0 0 1 .062-.183Zm17.107-.721c0 .786-.446 1.231-1.25 1.231-.806 0-1.125-.409-1.125-1.034 0-.786.465-1.231 1.25-1.231.785 0 1.125.427 1.125 1.034ZM9.629 23.002c.803 0 1.25-.447 1.25-1.231 0-.607-.343-1.036-1.128-1.036-.785 0-1.25.447-1.25 1.231 0 .625.325 1.036 1.128 1.036Z",
+		clipRule: "evenodd"
+	})]
+});
+const GeminiLogo = () => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
+	width: "40",
+	height: "40",
+	style: {
+		flex: "none",
+		lineHeight: 1
+	},
+	viewBox: "0 0 24 24",
+	xmlns: "http://www.w3.org/2000/svg",
+	"aria-hidden": "true",
+	children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+			d: "M20.616 10.835a14.147 14.147 0 01-4.45-3.001 14.111 14.111 0 01-3.678-6.452.503.503 0 00-.975 0 14.134 14.134 0 01-3.679 6.452 14.155 14.155 0 01-4.45 3.001c-.65.28-1.318.505-2.002.678a.502.502 0 000 .975c.684.172 1.35.397 2.002.677a14.147 14.147 0 014.45 3.001 14.112 14.112 0 013.679 6.453.502.502 0 00.975 0c.172-.685.397-1.351.677-2.003a14.145 14.145 0 013.001-4.45 14.113 14.113 0 016.453-3.678.503.503 0 000-.975 13.245 13.245 0 01-2.003-.678z",
+			fill: "#3186FF"
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+			d: "M20.616 10.835a14.147 14.147 0 01-4.45-3.001 14.111 14.111 0 01-3.678-6.452.503.503 0 00-.975 0 14.134 14.134 0 01-3.679 6.452 14.155 14.155 0 01-4.45 3.001c-.65.28-1.318.505-2.002.678a.502.502 0 000 .975c.684.172 1.35.397 2.002.677a14.147 14.147 0 014.45 3.001 14.112 14.112 0 013.679 6.453.502.502 0 00.975 0c.172-.685.397-1.351.677-2.003a14.145 14.145 0 013.001-4.45 14.113 14.113 0 016.453-3.678.503.503 0 000-.975 13.245 13.245 0 01-2.003-.678z",
+			fill: "url(#lobe-icons-gemini-fill-0)"
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+			d: "M20.616 10.835a14.147 14.147 0 01-4.45-3.001 14.111 14.111 0 01-3.678-6.452.503.503 0 00-.975 0 14.134 14.134 0 01-3.679 6.452 14.155 14.155 0 01-4.45 3.001c-.65.28-1.318.505-2.002.678a.502.502 0 000 .975c.684.172 1.35.397 2.002.677a14.147 14.147 0 014.45 3.001 14.112 14.112 0 013.679 6.453.502.502 0 00.975 0c.172-.685.397-1.351.677-2.003a14.145 14.145 0 013.001-4.45 14.113 14.113 0 016.453-3.678.503.503 0 000-.975 13.245 13.245 0 01-2.003-.678z",
+			fill: "url(#lobe-icons-gemini-fill-1)"
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+			d: "M20.616 10.835a14.147 14.147 0 01-4.45-3.001 14.111 14.111 0 01-3.678-6.452.503.503 0 00-.975 0 14.134 14.134 0 01-3.679 6.452 14.155 14.155 0 01-4.45 3.001c-.65.28-1.318.505-2.002.678a.502.502 0 000 .975c.684.172 1.35.397 2.002.677a14.147 14.147 0 014.45 3.001 14.112 14.112 0 013.679 6.453.502.502 0 00.975 0c.172-.685.397-1.351.677-2.003a14.145 14.145 0 013.001-4.45 14.113 14.113 0 016.453-3.678.503.503 0 000-.975 13.245 13.245 0 01-2.003-.678z",
+			fill: "url(#lobe-icons-gemini-fill-2)"
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("defs", { children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("linearGradient", {
+				gradientUnits: "userSpaceOnUse",
+				id: "lobe-icons-gemini-fill-0",
+				x1: "7",
+				x2: "11",
+				y1: "15.5",
+				y2: "12",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", { stopColor: "#08B962" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", {
+					offset: "1",
+					stopColor: "#08B962",
+					stopOpacity: "0"
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("linearGradient", {
+				gradientUnits: "userSpaceOnUse",
+				id: "lobe-icons-gemini-fill-1",
+				x1: "8",
+				x2: "11.5",
+				y1: "5.5",
+				y2: "11",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", { stopColor: "#F94543" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", {
+					offset: "1",
+					stopColor: "#F94543",
+					stopOpacity: "0"
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("linearGradient", {
+				gradientUnits: "userSpaceOnUse",
+				id: "lobe-icons-gemini-fill-2",
+				x1: "3.5",
+				x2: "17.5",
+				y1: "13.5",
+				y2: "12",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", { stopColor: "#FABC12" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", {
+					offset: ".46",
+					stopColor: "#FABC12",
+					stopOpacity: "0"
+				})]
+			})
+		] })
+	]
+});
 
 // routes/connectors-home/default-connectors.tsx
-var { store: connectorsStore } = unlock(connectorsPrivateApis);
-function getConnectorData() {
-  try {
-    const parsed = JSON.parse(
-      document.getElementById(
-        "wp-script-module-data-options-connectors-wp-admin"
-      )?.textContent ?? ""
-    );
-    return parsed?.connectors ?? {};
-  } catch {
-    return {};
-  }
+const { store: connectorsStore } = unlock(privateApis);
+function getConnectorScriptModuleData() {
+	try {
+		const script = document.querySelector("script[id=\"wp-script-module-data-options-connectors-wp-admin\"]");
+		if (script instanceof HTMLScriptElement) return JSON.parse(script.text);
+	} catch {}
+	return {};
 }
-var CONNECTOR_LOGOS = {
-  google: GeminiLogo,
-  openai: OpenAILogo,
-  anthropic: ClaudeLogo,
-  akismet: AkismetLogo
+/**
+* Reads connector data passed from PHP via the script module data mechanism.
+*/
+function getConnectorData() {
+	return getConnectorScriptModuleData().connectors ?? {};
+}
+function getIsFileModDisabled() {
+	return !!getConnectorScriptModuleData().isFileModDisabled;
+}
+const CONNECTOR_LOGOS = {
+	google: GeminiLogo,
+	openai: OpenAILogo,
+	anthropic: ClaudeLogo,
+	akismet: AkismetLogo
 };
 function getConnectorLogo(connectorId, logoUrl) {
-  if (logoUrl) {
-    return /* @__PURE__ */ React.createElement("img", { src: logoUrl, alt: "", width: 40, height: 40 });
-  }
-  const Logo = CONNECTOR_LOGOS[connectorId];
-  if (Logo) {
-    return /* @__PURE__ */ React.createElement(Logo, null);
-  }
-  return /* @__PURE__ */ React.createElement(DefaultConnectorLogo, null);
+	if (logoUrl) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+		src: logoUrl,
+		alt: "",
+		width: 40,
+		height: 40
+	});
+	const Logo = CONNECTOR_LOGOS[connectorId];
+	if (Logo) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Logo, {});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DefaultConnectorLogo, {});
 }
-var ConnectedBadge = () => /* @__PURE__ */ React.createElement(
-  "span",
-  {
-    style: {
-      color: "#345b37",
-      backgroundColor: "#eff8f0",
-      padding: "4px 12px",
-      borderRadius: "2px",
-      fontSize: "13px",
-      fontWeight: 500,
-      whiteSpace: "nowrap"
-    }
-  },
-  (0, import_i18n2.__)("Connected")
-);
-var UnavailableActionBadge = () => /* @__PURE__ */ React.createElement(Badge, null, (0, import_i18n2.__)("Not available"));
-function ApiKeyConnector({
-  name,
-  description,
-  logo,
-  authentication,
-  plugin
-}) {
-  const auth = authentication?.method === "api_key" ? authentication : void 0;
-  const settingName = auth?.settingName ?? "";
-  const helpUrl = auth?.credentialsUrl ?? void 0;
-  const pluginFile = plugin?.file?.replace(/\.php$/, "");
-  const pluginSlug = pluginFile?.includes("/") ? pluginFile.split("/")[0] : pluginFile;
-  let helpLabel;
-  try {
-    if (helpUrl) {
-      helpLabel = new URL(helpUrl).hostname;
-    }
-  } catch {
-  }
-  const {
-    pluginStatus,
-    canInstallPlugins,
-    canActivatePlugins,
-    isExpanded,
-    setIsExpanded,
-    isBusy,
-    isConnected,
-    currentApiKey,
-    keySource,
-    handleButtonClick,
-    getButtonLabel,
-    saveApiKey,
-    removeApiKey
-  } = useConnectorPlugin({
-    file: plugin?.file,
-    settingName,
-    connectorName: name,
-    isInstalled: plugin?.isInstalled,
-    isActivated: plugin?.isActivated,
-    keySource: auth?.keySource,
-    initialIsConnected: auth?.isConnected
-  });
-  const isExternallyConfigured = keySource === "env" || keySource === "constant";
-  const showUnavailableBadge = pluginStatus === "not-installed" && canInstallPlugins === false || pluginStatus === "inactive" && canActivatePlugins === false;
-  const showActionButton = !showUnavailableBadge;
-  const actionButtonRef = (0, import_element6.useRef)(null);
-  const pendingFocusRef = (0, import_element6.useRef)(false);
-  (0, import_element6.useEffect)(() => {
-    if (pendingFocusRef.current && !isBusy) {
-      pendingFocusRef.current = false;
-      actionButtonRef.current?.focus();
-    }
-  }, [isBusy, isExpanded, isConnected]);
-  const handleActionClick = () => {
-    if (pluginStatus === "not-installed" || pluginStatus === "inactive") {
-      pendingFocusRef.current = true;
-    }
-    handleButtonClick();
-  };
-  return /* @__PURE__ */ React.createElement(
-    ConnectorItem,
-    {
-      className: pluginSlug ? `connector-item--${pluginSlug}` : void 0,
-      logo,
-      name,
-      description,
-      actionArea: /* @__PURE__ */ React.createElement(import_components2.__experimentalHStack, { spacing: 3, expanded: false }, isConnected && /* @__PURE__ */ React.createElement(ConnectedBadge, null), showUnavailableBadge && /* @__PURE__ */ React.createElement(UnavailableActionBadge, null), showActionButton && /* @__PURE__ */ React.createElement(
-        import_components2.Button,
-        {
-          ref: actionButtonRef,
-          variant: isExpanded || isConnected ? "tertiary" : "secondary",
-          size: "compact",
-          onClick: handleActionClick,
-          disabled: pluginStatus === "checking" || isBusy,
-          isBusy
-        },
-        getButtonLabel()
-      ))
-    },
-    isExpanded && pluginStatus === "active" && /* @__PURE__ */ React.createElement(
-      DefaultConnectorSettings,
-      {
-        key: isConnected ? "connected" : "setup",
-        initialValue: isExternallyConfigured ? "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022" : currentApiKey,
-        helpUrl,
-        helpLabel,
-        readOnly: isConnected || isExternallyConfigured,
-        keySource,
-        onRemove: isExternallyConfigured ? void 0 : async () => {
-          pendingFocusRef.current = true;
-          try {
-            await removeApiKey();
-          } catch {
-            pendingFocusRef.current = false;
-          }
-        },
-        onSave: async (apiKey) => {
-          await saveApiKey(apiKey);
-          pendingFocusRef.current = true;
-          setIsExpanded(false);
-        }
-      }
-    )
-  );
+const ConnectedBadge = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+	style: {
+		color: "#345b37",
+		backgroundColor: "#eff8f0",
+		padding: "4px 12px",
+		borderRadius: "2px",
+		fontSize: "13px",
+		fontWeight: "var(--wpds-typography-font-weight-emphasis)",
+		whiteSpace: "nowrap"
+	},
+	children: (0, import_i18n.__)("Connected")
+});
+const PluginDirectoryLink = ({ slug }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+	href: (0, import_i18n.sprintf)((0, import_i18n.__)("https://wordpress.org/plugins/%s/"), slug),
+	openInNewTab: true,
+	children: (0, import_i18n.__)("Learn more")
+});
+const UnavailableActionBadge = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, { children: (0, import_i18n.__)("Not available") });
+function ConnectorActionArea({ isConnected, showUnavailableBadge, pluginSlug, isExpanded, isBusy, pluginStatus, actionButtonRef, handleButtonClick, getButtonLabel }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_components.__experimentalHStack, {
+		spacing: 3,
+		expanded: false,
+		children: [
+			isConnected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ConnectedBadge, {}),
+			showUnavailableBadge && (pluginSlug ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PluginDirectoryLink, { slug: pluginSlug }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(UnavailableActionBadge, {})),
+			!showUnavailableBadge && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_components.Button, {
+				ref: actionButtonRef,
+				variant: isExpanded || isConnected ? "tertiary" : "secondary",
+				size: "compact",
+				onClick: handleButtonClick,
+				disabled: pluginStatus === "checking" || isBusy,
+				isBusy,
+				accessibleWhenDisabled: true,
+				children: getButtonLabel()
+			})
+		]
+	});
+}
+function getPluginSlug(pluginFile) {
+	const pluginBasename = pluginFile?.replace(/\.php$/, "");
+	return pluginBasename?.includes("/") ? pluginBasename.split("/")[0] : pluginBasename;
+}
+function ApiKeyConnector({ name, description, logo, authentication, plugin }) {
+	const auth = authentication?.method === "api_key" ? authentication : void 0;
+	const settingName = auth?.settingName ?? "";
+	const helpUrl = auth?.credentialsUrl ?? void 0;
+	const pluginSlug = getPluginSlug(plugin?.file);
+	const { pluginStatus, canInstallPlugins, canActivatePlugins, isExpanded, setIsExpanded, isBusy, isConnected, currentApiKey, hasResolvedSettings, keySource, handleButtonClick, getButtonLabel, saveApiKey, removeApiKey } = useConnectorPlugin({
+		file: plugin?.file,
+		settingName,
+		connectorName: name,
+		isInstalled: plugin?.isInstalled,
+		isActivated: plugin?.isActivated,
+		keySource: auth?.keySource,
+		initialIsConnected: auth?.isConnected
+	});
+	const isExternallyConfigured = keySource === "env" || keySource === "constant";
+	const isReadOnly = isConnected || isExternallyConfigured || !!currentApiKey;
+	const showUnavailableBadge = pluginStatus === "not-installed" && canInstallPlugins === false || pluginStatus === "inactive" && canActivatePlugins === false;
+	const actionButtonRef = (0, import_element.useRef)(null);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(__experimentalConnectorItem, {
+		className: pluginSlug ? `connector-item--${pluginSlug}` : void 0,
+		logo,
+		name,
+		description,
+		actionArea: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ConnectorActionArea, {
+			isConnected,
+			showUnavailableBadge,
+			pluginSlug,
+			isExpanded,
+			isBusy,
+			pluginStatus,
+			actionButtonRef,
+			handleButtonClick,
+			getButtonLabel
+		}),
+		children: isExpanded && pluginStatus === "active" && hasResolvedSettings && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(__experimentalDefaultConnectorSettings, {
+			initialValue: isExternallyConfigured ? "••••••••••••••••" : currentApiKey,
+			helpUrl,
+			readOnly: isReadOnly,
+			keySource,
+			onRemove: isExternallyConfigured ? void 0 : async () => {
+				await removeApiKey();
+				actionButtonRef.current?.focus();
+			},
+			onSave: async (apiKey) => {
+				await saveApiKey(apiKey);
+				setIsExpanded(false);
+				actionButtonRef.current?.focus();
+			}
+		}, isReadOnly ? "read-only" : "setup")
+	});
+}
+function ApplicationPasswordConnector({ name, description, logo, authentication, plugin }) {
+	const auth = authentication?.method === "application_password" ? authentication : void 0;
+	const settingName = auth?.settingName ?? "";
+	const helpUrl = auth?.credentialsUrl ?? void 0;
+	const pluginSlug = getPluginSlug(plugin?.file);
+	const { pluginStatus, canInstallPlugins, canActivatePlugins, isExpanded, setIsExpanded, isBusy, isConnected, currentUsername, hasResolvedSettings, keySource, handleButtonClick, getButtonLabel, saveCredentials, removeCredentials } = useConnectorPlugin({
+		file: plugin?.file,
+		settingName,
+		connectorName: name,
+		isInstalled: plugin?.isInstalled,
+		isActivated: plugin?.isActivated,
+		keySource: auth?.keySource,
+		initialIsConnected: auth?.isConnected
+	});
+	const isExternallyConfigured = keySource === "env" || keySource === "constant";
+	const actionButtonRef = (0, import_element.useRef)(null);
+	const showUnavailableBadge = pluginStatus === "not-installed" && canInstallPlugins === false || pluginStatus === "inactive" && canActivatePlugins === false;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(__experimentalConnectorItem, {
+		className: pluginSlug ? `connector-item--${pluginSlug}` : void 0,
+		logo,
+		name,
+		description,
+		actionArea: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ConnectorActionArea, {
+			isConnected,
+			showUnavailableBadge,
+			pluginSlug,
+			isExpanded,
+			isBusy,
+			pluginStatus,
+			actionButtonRef,
+			handleButtonClick,
+			getButtonLabel
+		}),
+		children: isExpanded && pluginStatus === "active" && hasResolvedSettings && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(__experimentalApplicationPasswordConnectorSettings, {
+			initialUsername: isExternallyConfigured ? "••••••••••••••••" : currentUsername,
+			helpUrl,
+			readOnly: isConnected || isExternallyConfigured,
+			keySource,
+			onRemove: isExternallyConfigured ? void 0 : async () => {
+				await removeCredentials();
+				actionButtonRef.current?.focus();
+			},
+			onSave: async (credentials) => {
+				await saveCredentials(credentials);
+				setIsExpanded(false);
+				actionButtonRef.current?.focus();
+			}
+		}, isConnected ? "connected" : "setup")
+	});
 }
 function registerDefaultConnectors() {
-  const connectors = getConnectorData();
-  const sanitize = (s) => s.replace(/[^a-z0-9-_]/gi, "-");
-  for (const [connectorId, data] of Object.entries(connectors)) {
-    if (connectorId === "akismet" && !data.plugin?.isInstalled) {
-      continue;
-    }
-    const { authentication } = data;
-    const connectorName = sanitize(connectorId);
-    const args = {
-      name: data.name,
-      description: data.description,
-      type: data.type,
-      logo: getConnectorLogo(connectorId, data.logoUrl),
-      authentication,
-      plugin: data.plugin
-    };
-    const existing = unlock((0, import_data2.select)(connectorsStore)).getConnector(
-      connectorName
-    );
-    if (authentication.method === "api_key" && !existing?.render) {
-      args.render = ApiKeyConnector;
-    }
-    registerConnector(connectorName, args);
-  }
+	const connectors = getConnectorData();
+	const sanitize = (s) => s.replace(/[^a-z0-9-_]/gi, "-");
+	for (const [connectorId, data] of Object.entries(connectors)) {
+		if (connectorId === "akismet" && !data.plugin?.isInstalled) continue;
+		const { authentication } = data;
+		const connectorName = sanitize(connectorId);
+		const args = {
+			name: data.name,
+			description: data.description,
+			type: data.type,
+			logo: getConnectorLogo(connectorId, data.logoUrl),
+			authentication,
+			plugin: data.plugin
+		};
+		const existing = unlock((0, import_data.select)(connectorsStore)).getConnector(connectorName);
+		if (authentication.method === "api_key" && !existing?.render) args.render = ApiKeyConnector;
+		else if (authentication.method === "application_password" && !existing?.render) args.render = ApplicationPasswordConnector;
+		__experimentalRegisterConnector(connectorName, args);
+	}
 }
 
 // routes/connectors-home/wp-logo-decoration.tsx
+/**
+* Decoration for the AI plugin callout: a halftone beaker / experiment glyph
+* rendered as an embedded PNG inside an SVG so it can scale with the slot
+* defined in `.ai-plugin-callout__decoration` styles.
+*/
 function WpLogoDecoration() {
-  return /* @__PURE__ */ React.createElement("div", { className: "ai-plugin-callout__decoration", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement(
-    "svg",
-    {
-      viewBox: "0 0 248 248",
-      xmlns: "http://www.w3.org/2000/svg",
-      xmlnsXlink: "http://www.w3.org/1999/xlink",
-      focusable: "false",
-      style: { width: "100%", height: "100%" }
-    },
-    /* @__PURE__ */ React.createElement(
-      "image",
-      {
-        href: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPgAAAD4CAYAAADB0SsLAACAAElEQVR4XuzdB7hlRZEH8D73zRBniJLDzBAEVFQMKCaCWXENa1oTYM45hwXEtOa0ZgVzWnPOBHPWVcxgzjnrGvb/O91n5s5lZnjAe4Bw6vvqO3XPPed0rO6q6urqUkYYYYQRRhhhhBFGGGGEEUYYYYQRRhhhhBFGGGGEEUYYYYQRRhhhhBFGGGGEEUYYYYQRRhhhhBFGGGGEEUYYYYQRRhhhhBFGGGGEEUYYYYQRRhhhhBFGGGGEEUYYYYQRRhhhhBFGGGGEEUYYYYQRRhhhhBFGGGGEEUYYYYQRRhhhhBFGGGGEEUYYYYQRRhhhhBFGGGGEEUaYD3RdtxY9/XuEEUb4F4aBoWdxhBFG+BeHxsxg0+BmwSXBrYPbBTfOI3Dz4NKZV0cYYYTFhMlkskGcm5tbC6f/m5mtlwavGLxacKt8+k7BY4N7B/cLHhbceTrtaRi+A2bTX7JkSY9Lly4tG220UY8jjDDCmcAsM8/iLHOfCYObtS8bPCi4ZfCIJPHw4J6lMvlVgzuslYEpmP7WbPoDc08z+MYbEwpGGGGEdcIUo24V3CG4WXB5o103R4fBtgpuFkRvm3ubBrcPXiTMuElw+66K4uhdgrt3VUx33Se4PMltF1wRREOMTmTfrNHL2/s7BLfMtzdq+dgmaW4UBt8+zH2RYHh7o+2C24fBl45MPsKFGsx8U4w8O+MO918U/FnwLsGH5f5Pcz0ueJT7YbAXB68f/HnwncGr5pmfBD/Z1Rn79OA3ggcEP5N3fpzrFYLvDqKvkaycEPxx8BbBxwd/Erxv8F6NflKeu0lL+1W5HtzS/lDKcLlcfxLm/lLw0mHq0zbZZJOf5rqPmVwZlWWEES5UQJwddNdp0RozTGPuvTb4z+B9MXbu/SPXpwbv6n7efV3wxo3+SPDQPPPP4Le6ysi/C/46ePk8813Phb5K8FPtuesnO28K/jNIbH9Wox8RfEijn5fnbtWef2fwmi1Pn096Vwz+I+X4Ucp0uTD1bzbddNN/ht5vGMC6kcFHuDCBma3prBuHCTYJg4QPJht1VQyeBKfp/YJmZeL1KnSe3TO4W967Wt6/WK475nrl4KVCbx28XJ7bv6u6tpkbbtHumdXd913PbVOqHn75UkX13RvN4LYjOs+sCBL56e/7JO1tglcJXiq4ZdK7StK+fHDLlOmg4JVCL8/9jfO/ciwp1VK/SamWela4gR5hhH9tMEPDaWNUcJsw+qeDX8l/FwsjvC2McGoQc704+OXQ1w4eG/x88NbBu6Pz7IOCN897X8w3n5ZvHZDvvCLX/8zvTlrDzDkfPDNoz+2bb94r12sEr9TyQbowaHw2ab4vaNY+JfhJ94Nme2U6KJ95WfDLwesGn9ToO86kMe88jTDC+QKGDovh4MDowR2iqxJ/idaXy3+no/Psobme0uj/yPWVjX5g8AnoPPtszIbOd94ZvFrE4q9E7315mHzO9+fL5GcGU8/K49OCBprrlZqnrwWv1OhfJs0Dg3/xO1ez/XfRQXr+xxp9y+DrG82KP8II/5owy0wzDM76fI3gdXOPZZoYfr2uOqBcIa/TjYnIl87vfwvuEbxYoy+e5/fMezcMQxONt8v1KpnFLxWcLOQ69FT+ifX7BnfuqjX9Bl1VF1juD09erhFkVb9O8Lru5//Duqrjs8QbCAwMuwUvU2r5LjqV1AgjnH9hihFW/27XywQ/GDw+nX6fMOP7g28JE+yR6+uC7wi9V/573qSKtEReDLRvXqc3n2GggNODxSD2L5aTyWzasygv68Lh/wZPDb6j1PX2Bzf634J3Dn6wXW/caA44PQzvD+mMMML5Da5Vqgj7veAV0WFCIuwBYc5eRE/HZeH+YXuOjnux0Ga/nWaZaejomHuawReLuQeYzcNsfoY8zTJ4A5z5pVLF8lsF39zoBwSf0eint9/o99TXRhjhfA6YNJfb5nqjdPrtgrcOI9wiuG3wdsE7BTmi3Cx4Z88Ht+qqKMx3fPaT/4qAwc3OdwnuFbx68K7BSwYvGzyyVMs9l1m0/0cY4XwFNwy+vNROzGqMfmhwn+DzgkeHWVeEwZ87qcaqLaZnu2HGm8WzA9Oz5/R31kcPvwfw/rruLxIwuj0/eJMgAyP69qUyvDq0Hq8O0U8pdbltLVhMyWWEEQZ4bKni5f+U6jCC/mTw2o3+QddEdBgm2nl9DA7OBcY6v8BLSq2TZwYf1GgiPFEe/flSZ3T0r4LLvDSoJwNSU0YYYTHhysFHBm8QvHipS0A6KSeSxwTvE6bdNddjgo/oquPJWoys016QYT2D1+Glusdep1TJB81llpFRHd62VOebhwXvHrRpZrXOf27ZIEa48IClK3qkjRjEcmvTDGkHBh9VqmWYkQx9ZH1l3TDfWXp9IvN63t++VAeSm5Wa12NKzQtbgBmSpIFhMMvjSl2qunWjDyiV4dCHBA8uleGIzxcpVRrxzFowSCDrgvXdnwdcotR8367U/KI5+rBNPC7fPSYMbpPL7cLYd2uOQz3DjzDCOQEd3Hout84TShUd6YZ0xVkR/Yv1lTUwzNrrYc6FgP2Dny1VzLXe3KsEwcsFf9doS1XfCP6j1AHJ0pT79ogTmf8ePK7UwcH915VqACNGW85aLyxg2ejhsyL6T7vq6deXKcy8f5j6pE033fSrYfCLmskHS/4II5xdGLZW8qUmSjIKEcuJmK8olUno2oOBqIeh029otlsgMIPfo1T1gD/5k4P/Fdyl1PVlTLqy1CWp/y6Vce8QfG6pUsi/l2oUNFsLAoE2w29bahkNGgsK6xkQBkMlMZ2R7YTgf3V1m+szU4dPCYPvFLxjGPu+uVqVWMueMcII8wE9Rae3rLOqVLdLsxjGMCuarV0XC8xe0iOyWlIygPB00+mJ4oeWyryYlHcYRqS33jCdfMtcbx68aegt3CuV8bcO8nO/TakDAi+62wQNXNJwn5pBD3bfrOm/I0stP3FfntSLAU+euLDauOKZO4R23wBoVcHz5xiadGD14XbB/5irnnP/Eea+Q64XsfyY+3fLM7u1Z2c/McIIZxAzWb6+XqpYiFne1ej7lDq7oc1+iwU8vqTB+8tMTHx+TqmztPtvK1XMJm5/IXi1dv/npTJrL86mPGbe37bf3Ea/1u7Tud/X7hOLbXRBm+3/s9FmUrow+pRSZ3fpnV6qtOL+H/MtA92QnkHoR+05g9Q5htYuBp4+jTD0AWHovzVaOKre9z3X6w9tODL5CGvBdMeY6hyDm6XObI80mrhqVqe/mqV6GN5xXSBRnGHs7aXq/WbEt5bKbGZutIGG3v2WUq31DID2dxt0VgRfXarqwAf8Bf5L3jxjR5fBgbOJMtnNZnAgCbjPsGbGRyufVQK0lQLSBPppeWfP4JuDx3d1nf9Vwf9xv9SBSB4x5VmGaVF7qk12Db43/705TL1H8JXBtwf3zr1nd3W/uu2x62rHES7MMHSorsYvu2ZXN3YQec1GGMymiUuXKgqvnHp1IQDD0uUFRJSeWVl6VAGDCesxhmWxX1mqVZuOjJHAwaUyHkeQQ4IHdjViKoOaAA8bdzXo4qHBTXOPjzy3WKK7TSzKy6Nuj/y+VlfFXGkS5cVss3nEzM1X3juet1dc+KerT+r+cOGiRHs5LLh5V7eV+haVgE6tTMR1hsobBQ0O82bA4VntBMPUS+fqJhcbXOxLt/nlepO60UVZb9xVnX3eaYxwAQVLLHPNvzsdxM6pX5Qq7mE8Vmli4U1LnbnQROaFAmrAD0r9rln0w6WKtjdP+sN20fsHe2eaXPlv03s9/4ZSBwD3P93Vvdfu/zC0wQj9f6EvGSS29+JzcPANx8CD2kEyMPN7hnhu7RnNsv4f7ZkPlDVWbdtFe7E8dfbb1N2l+dn7PVe3wH6/vW8g+kR7h5pjpQH98K4xrHqfdlxZH3h+aKfgdhtvvHGfXt65Qn6fjs73rpPnTkbnehfvDOmMcCEEwQEHRwmdKx3FTETU+2yudNeXlbrkpaNaEvvfUg1ZPeg8CwBvDH66VJH52UEhlQ4OPjJ5+EyuDGW37yoT37OreqZnHt3VKC1ooZVEakG/MbgyeFLwg/nGykkNKuG/iwZPaGl4l3X60/nfrHz/dp//PMOZ9B7c1YHuU8Gnhr6U+6FfkXeIxp9Knb07uGrp0qUnpQ4/HnqvoDzIuy2vVht865Cg0FPu3xbTDQw+MPlArw+mvNe2Tpt9IvjV/L543nlTvvXloNmbuP7ZIGPj6ll/ZPILGWDuhkvSUQ5Ip7l0OstmwUunMxwYXJYOQty0AYQ/pB6i982bq3WwBt4jRhO7fcsVQ6PttSY2C9dEdL3spEZS3SV4mUn1Xb9IkGHJdVlQHncKinluhqYDA9FULhrsgqLFQExz0eAlQ4sRtYf352pYpV2DB4QWqdWGGOltHbRP/TK5L4KqjS/S3j3oHXqu0FG+JVSUaC6CTeyfOrxUrsRn4aSUw7sGgsvP1b3vK3O9Yq7b57rLXA0UsWve2d5MHNx72AK7Phj+D05auiLZTFp+klx38eCVJrWuVoW+wmTKPXiECwFMMTfcWbDAXP8RRr9sOk5vkU2nob/qLFfv6tLPmcLQiQbs1uiAK0oVTX2bB9mPct9vrq1f9p+OGHw/Ou/eMOkfj04HvmfwGHTuPSn/sXh7nlGr35Ka6ylBa9nob+W5SwT/lPd+h9ly7UXmSWVgszH66vmvD7o4qUtP/fbNXB8SNJujbZCxJCa9t4em16OFbbpUe/dHZtHU3e9Fqgl9qdTht9r7dOOTGn2T4Ksafc/ctzKA/q+800epyXtvxbwkqpk2KtMwMPmSNqPPrb0OztovX7cJUjHQx3rGs6Nb6wUc0glncdugkL/fTuPrqJ9KRxAa2F5tgQb76CVTzLpOGDrb0OFcW4dzNUDQrz8QevdcPx78elcNW+/r6p5xMyzR93t59xrpwE9Mxxax9DbB+yRfGOlhwZtOapTUZ4QW9PAHwf9JmvsHvx8UG22vvPP14FeCewQ/EfTcfvn/rZ4LfcXg8/PdH+a/64d+VO5/L/Sdg3d0P/eOC17LfcyS62W9G/pdue4T/G5Qfe2Z508Nnp539wmenHveF1r5da1M1879ZylHrrcLPlTeXYNHpKw/zn8vnmXu6baaBv8tmWHw1kbE9Z/k3k1yNSCqk/svnRk4RrgAwtDIraH7WVnHCb1f8OIbV3F9WToNy2wv902q6LdB2c7frZP1hwFMqhjtN9GXWKsjEkUxt2fpyHu1DrnbpIrV7u8U3DfPTZbWAwX2TX42ynULdHB5/tskKELMRZZUERW9k7LlundwBTqI6aDyuuc/z+y8tDJhF9wGnf/ncl2WK3rTliYXUOl2eeeiwe2UsTH2zgOd+6vad/du70jboEJ0ByuCF8/vTYPySZQXhVX5hJraMbhVkKFuRXAT17TFTsFNguhdg5MNMab6a4OpqK4izCrDnsHLJf0dllafdfVxEd9RLyNcgGBgQh0wjXuJzTff/J9m7jT2PhHRf77ZZpv9tnWm1eJfY9rZT60Fw8zeGPrf8x0i4at0/txnpPO/JTdWbzMf77PPBL9vBs+zH096f8x9NoA3h/5T8ned5OM5y5Ytk8c7Bh8W/L/cPy7/39ozwRcHD8tzf87994W+TPAPob8Y3DfP/yz44/x/0eBXQ/vuJfPMibmir5r7r5RGrjfJ/0+QRvDewbu3tJ+a566f//+a914XPDB5/EOuH871Yrn/x/z/jSV1ADBL/8z93Pt8/pPHKwTfpXy5d3juvaR9987BY6WXe653bvePz2/qyZ/znfekXa6inVJHn8h12RZbbNFtvfXW6xWjWhtMt/NLg38J3j/4qKaKvSB0/7/nRrgAAUbUqDphGvivaejTghj81+lg/5frqnSyszW6N0bnIPL7XF+dNPbG7KEFecDg7w5y1LDTi+eZ00VW5ven2qDAQEUH/XPwOsnDfyc/f0+HxOAP1dFz7zHBW+e5v+SZ4zG4d3PvA43BlYmovE/K83sDV+i98v63vJ//L5HfH27PXTnffk1L40Z55om+FRqD38P9XJ+W567nft55w5IaA13+PpZ63BdThj5trsaWI8b/Iv/vl3tf8E7oA0O/W37znesHj2/fvVPwuDbIPjpp3jmI2V+c3zfwbr75pm233dZ6Ouv4u8PYy5YvXz4JkjzWqvtpwOD+14bBl+d76udBwUdKI9cX+n8YvOEIFxBIZ7EMVk2uc3MXx4StI+yajrAinW8uOPvafIA12/c5yoiCyvKuE7EWO99LpyO6C6roOYcZENPRLLx763Bz9ZwxIrrnic/EcqLm8iDG2WJJtfQTf1meged3XVqtymhLVsq0dzr0UL6VS9eIz7vkmYHe1v383wU3a7SDxojsewc395x6WrJmU4e8DiK6mXsQ0VnqIXrPuWZdD+yeq7omolMPpkV0EsX2GzURXRtsWeEyO+6448X33nvvXXbdddfL7rDDDpcIbp4ZfKuUact8S/vNtsFqaGWGxH9l3Trv7L60ShS84Bw6YbVgUKVmPzHCvwJgoCngcnla8I1pUC6bX83/p6ShN9IZzNzzZe6Z73Lx/Gap2yyl4bvWpVeG/mKuzvTipfaRUoMK8u5iWf7frsZh4275rUk16L1kUq3gTi55XDrjd4O3SP7uGSQCPyj//XueOT30U5dUI9u3g68JMrJ9K9cPYrA8/6XgF/P+qlw/vFE1gBkA3pDnTltSZ+Nn5t53gtcKPiTPSO+I3Bc/ThoPDx7imfx+TtK9RPL7zeAbQhvIHNIgWuyqXD8e/EJotgXl/HresZzHcCi9w4JPaWW6VfABrUwPDDoe6bQ894S0wWG5vi//PWqPPfa4Yhj6HsH7hcF53X0k+Ml81+DWq1Hrg4HJl9aBzGD08HxXOVjUbx36By1v40x+AYHBC+ujpe7I+nPwO2lY67Z9Jzib4LA+37UFUxo2hfDDlsZfSnUeMXN7hpcZ495PvdPVo4GGZTLM8F50rg4VfBE617sG+YGjn5j/jmjPvDp4zUZ/ODh4lp0+V2dPevMfl1T9+IftfZb6YZmMiym7wLCExZEHfb9gv2yV/5/Z1fjmaM4ydpcpx6fy23KfTSynRqTm0vqtMNQ/w6DW+DkH/WVSl+747Hv/8CDfeGncJSi4hPuPDfLtVwf0496RJ3k/ZtWqVZblMOq9d9llF8clSfunKQ9j5Jnq0NrUIOC5vMsHX3qW/npvwK76tq9mcDjCvy5QrK3d2nwBdMqViG4Dy1/zALHCbK8cwNKXGbunG3PrPOhBLEdzcEG7x88bzQ+cUwk1giOLdWuWeGeCcRzhjMLxhTsoxxMqh3PGOJMs9cxcXQNnXefMgil6m8Nc3YHV52NSHV04w+wYxPREXtZnNKu/b3Ga6QNE5vtm7kG96B1r0PnuJTF0ROdNw+QXD+6PjjRk7Z1PgeOGe0eXSRWHV0yqE5FDE5SPEwqVwYrAQXnvotG7t4u+fdUVK1Zc/sADD7xYmPzKwcuvXLlyh4juB3kuuJH8tzJMVf0Zwf8NV03qkicnHSsXh6YM6kddL2l4pt8b4TwGHW8KbBSx/nx0qQz9mlJFaWAP87xh5rtmbSK3/dP2SfPTFgrJrM1Z5dhS90vbjvncvOsc7/el81APeHdx5Xx/V0X3F3XVrdQSGtfRU7p6OCAf9A8Hr593uHYST4VXvm67/6iubvrw/LPyP1fVk7vqALMy+J7gu4J2YTlL7ORJ9ez67/YckfdRk+okc1Dwjo3m4umklZO66s9tgwiV4phSB68PBZ9tFu3qmvMTdtppJ3r4HYP32X777TGQ3WZcWA18T/N+VzeBiEkn7zbz3LGrIvedgjbbeOZhGTCunPffmm89EpNnkHgk9SHfNSC+Jfi2fJc9g5eeQcsgVzYE/p/GfOMWwY+F/q/gYcHPTep5awakM5UMRjj/AP2YWPfaUiOSfC5oEwfgXXZ2AxI8s9TvCo98VKkbRGyRPLjdJ2oTYYmBHFrsDvtns6qbrf7a/jNjswt4xwaRE9t9Hb73ZAt9j+Ax6EllnKFMNm70m02CzgS3E83zorhyi3X/r6ENOj9r//ElJz6jr1LqVlO0M8AdQIA2sNiKiqZ2GCR9y8YU+8ypIP+bvBgwPfMmBrHQGOOe2223HWmEDt5b0UvdR/73rpbJAOsdwRl6T7bg40MbHOX1FfmGlQhlfUukAd6EnIPevPnmm5O+nIVOxCcJOAPt0EmVcCS/QZhibni/UvNhABS3XXrfwOCYm2i/8QbW3Ec4/4CoJWZYMw/QSUQ4PaewMohBlpfqT07/ZTwDBhJr3QBD2OChUxFT+ZzraDZ6XBldKmMbGID901xjHb3LWGXLpeN7DQR2f60Kbh/E2NxoSQC2ctKNqQqeF6WFlMAecGhXfdylZYsoK78Z2ekp6D1DH9KesWXUu3zwWRsx1+CiSxde2Wi73pyRRkQ/eKuttrrirrvuuv0222xzYKN3yEB2UBjl6mESPvXqw2YWZ6/Jsx1fVhGkTRqxxEbKYHe4VN7hQ3696N1XiEi+XdK4dvCq+eZWuX+Dhr5LbfEs0bplbcPQ1XaADJo8Aq/SBot/z/VaSWcJ5macw+AMryOc/wCT2OLI2GNWMxPesVSR/DFTz50p6AxTIAADSWDYI/7CUju+2UtABfuczdTuC2uESRjKHtlVeGHwGa2DMV4dH9SDqAwvL1Wk5wNOwpD3I7tqgcf8RFoBHGwjxYRokUZtWEH/Z1cZhq83kdggJkKLvOyY/54efEVX93nbDopemSsRXNrEezPny7o6GCjjS4M36qo7LVrwB3vR0UR74Z9Z/Y+L+CxG2n3CJA/IDG4ftjK/IPekQcp5ZX4bXH1DHg8tdQuuvDvZ5TDPBO/aBgT5eGTe78JokzAazz4edWutXw84X+jq4Opqw8vjg06aoZ5YWXhivu845ncnvdfmuiUmPwfG1xEWCXQWFlOd6IhSLb3TkUZfPzyowc8CiK7iffuaHx0kZhNlndDhPnHWMhkRlh6OMdwngpMkiIH2Z1tPdh+amb/XaDM5ewFagASMh753njEIoA0QgwWYPjqIz1SPIYQSC/0gokN68K8bjclObbTB6R2NFiCh32xSqn3hno2mdgxqALXD7I+mdhhQerUjaBecaK2nRpQ2ONlS+tOUl2QxlImILkor+m7BJzaaqC4MlRUHzE9k/k2QjrxaHx6WuzD5wNRnhbl9Z4rBDZREcqsS/WaaXG091Xf+2ZyCth2W2UY4fwFmYg3eps0g9m/r/ERYoY/6pRdwFhkc8+oMgDRgABmsMVfrqp4NMMQQqggDCsQAHLtLPJWupSczGKBCkDj0VnkT7JDoTbwXiGFFVw1iZnQMujLXo4KeZUM4MnjdUoMuouVxy1IjovquLa83KfWctM1yvWapARjdl4Y6Qa9o70qb6uEdhj+VhCYtAPk+WDnaDHh46jnkhJRxo2XLlhGfGeluGeYQQIOqwBipfujNR5Qa0UVZlMmecX4Jt/fd4KpSDZb/Lg2I0RYCWp4hEd1aOBHdPoC7B29OXE9Z7h48Knnn+LPBtfYRziXQcFOgsxNTWYOJz2Y/nX1eMPOtB5b6LQYlIuwjShWlGdDMQnaZYZojg/ZGG+69Iw8APaT9kOC9G83I86hGE+dJBAYgDh+P7apF/fBSDyIws9N7Hx+kR5tFn5ArxpQvMyDR1/LfE0pVJTDTMaWuHmB8+fBd+SUBPKarujy1wnMs4gxi8oTBfEtZ3ROmyTq8QQmn+SbGnAseE8a4X5iAzeBBwYeEKTyPQY9OfcjHkaWmh6kNFMpEmjJb9mUq1YahHAaCRYXG4NNoKfLpwQckv/sGn57yHJfrMrP+IEGMcP4BDEn0E0nE7E3cIzKfHRjEWYYsVmtiOaagV7oPzOSnlLo01u/JLtVjbWWpZ2qJAmNQcJ8YiuGI8X5jpO+jG+N+tNEGk94ppFQ1gO0AzXpvQEC/tauRUdF820kK6J93dXZEQ4OcOkAbLL7aaBLAOxttMBxEdOKyAQMtwowZGE1E37/RvNkGFeSPYY6VpZVpUh1gqB2s4kR0W2P/VuoAQT3qreilMrTVB6L6oBJQGRYdZhjcQClPXw0z9yJ66D9N6lr97IA/wvkAdEgzIlGZWPnYUkXdHs5igzHOmckcJIDJ6afE85WlDh6ilJi1b1aqYQxgjkMafUSp+QB3KFUMBZjUt4DvPLjUI5EsVwn4L71rlTWRTDEvQ9ohpZaJocxAQ7Q9OnhE/jNYuM8LjZpCYvBdAwqmVQ4zuPSk4b68eYbxTDoGE0BMx3QGB7O2+4e0/xgC6bCcQh4UvEuQRf5ewfuFVg5lFe5JXbFRGBDlj2QjbQOFEM6McaQTA5K8q8cezmI7nWUYGLyrjkXDDE5cf0zwYZMaPHLR8zHCemCm4hlwdBy6Nr0S82D0swo6M2bAHJgME5ltzMCYDHNoeLqvNC1HyQidk1gN6LFmStAvYbWOQgc3Mw/P+BYwC2N8yp48c2bBfNK7a6lMjKmJvWZEM6Q80qUxDUYk+hKH0b7rfYMIcZw+TvS19oxmwDMIodkVjipV515Zms5eaoRWxsRhSRGNCUHv3KNMYYKjgjdvjMJ2QHQ34MnPHUJTO9QBpxZ1KD15Mvv7Hiu+pUNlUr5BtZlt30WBgcmnmF0Iqwd01flG3VJ39AX1OcK5CTMdgPhMxHtUqbP3/5VqkT2rQH8cxFnr3KKqEj110t5vu5zRio4p3Gdx9s6fgu9O/uiy7ltP3SUXQQn91lmIpmidiDiLNih8pNEGDyK65+jt7AjuP6tMieilDg5oIjrmQf+srLF2QzOzMvmWwe8r7f7BZY2IznL99EYbJAYR3T2iPNqz+6BTtm91TUS3xzr0yvYMml3gh42WHhFd2qQFji5oZaB/e8fVIGpvwFtKg3ODwcEMg/d1mOtvuqkjn0u1dYxwbsJMByASnlBqJzILHF+qcaeHs9BZrEvbdMF9dM9SR+8XdHWGOSL4nK46a9DVdH4xyHX6pwZtkiAae/+2G220kW8RZ2+y2Wabmel9ywAE6NR0XrMd8dUS29aldnS2A7O2gcP6OlGWNd6aOkY0iLy41FnRLIj2be94BsOQJujP1tvNwu69sN0fysQf3uz9vFIZ1yBmADHQWAVQPmlt2t4nfbA4yff98i5ruR1mNovwY39qrpbxOLQcXeqApz4MGGgDgjI9t1SjGhVE2sqGmZTbwNLDWWizcwzSaihIhzX7Z3V1oJJX9UZiG+HchJkOoMPQ3zCljo52bz5AjLRsBOmMOpylIDT9kJhufze90TIX0Zb4fmhQZ6Zzes4sDdDyAGymsMRlhhC8QEcGmNYgAYjdOjvAsAYoTGX92gytc2EODEbPN+sTgZWPWE7cP6RUyQBtkKNDe97SFakE8xoclNWM7D6a6E+94L0m/yza7lNVzGbyMYD6AMpnw4k24F1niRBNbOdJ5xnlmy4TT7Y+amypaVg+k961Uy+WAQ0EpBZ10UP7zrkCbfZ2pX5x+uFFuE1QP2BvUIfnap5GWBuIfkQps6HZA/3K4c8zaZhBlCY6YpoflSqWY4RPt/8wGjWAGGkmZwF2n95P3PxdqbMR5hrEWaIxUfUTpTKl+57DlKzpfptdv91ozHZSo6V3QqnWZ0azYxttVh3E5zeXqk/L62fKmrPJ5J9o7D5VxYz88/bfFUq16ruP0d7e7rMk+/YfSl3CM+u6Txrx3Z+W6qSiTO6fWuoAJI3fpn4FhHCfeMs1d1A7MPegdhjQXl5qPd+u1OU5ao6ykcA888bS4EzabEFhSky3Q4/ziyW/YcWgVzvkZ8ARzn0gCr+v1NlWZz2lVFG0B423ATAbv7ehGfK1pW76wHBEZ0zH4EW8lobZkFHM0huR04yPoTGiAeLdperoBg6DwtNKnV3tp35tV4/84SpqmcvsT+TFaBj/P0vd1CFthsIPlbq8hCFOLJW5zXTK51ki9MmliuMYWV7ZHpTDdyw7Eb+HMmFQ4rLvmi2PafQhpRq/5F0dKhP6iPaO5a0HlFqm95Sa3opS6+M1XZ2Nlcc7JA6DnbTV7TGllo/IK/9vK1UkNzjRuUkdBlP3V7fZuclIUwxul5pddQyHewTfFnxXV89FW83g52beLsyACQ4uVXQ0Ew7i7/kWdIzWkfadNNG9q9Z3TAQwBEZlUf+XgNmO3zq/2d0MCHYsdZABBjRi+gCCUWwa/V15Ob9QRc4TmGLyAW3xPSRoxxoVjYplI1Afjmtk8kUAFT8FJ5YqQtGdzRjoo6cfOD+BDjF4RrE85xanEBtBvoYulSnMjsTnYTntfA+zzN06/ndKLRNj3QcbTQoa2kn5qAK/L21dPfiLUo2j5xkMzK2NchX62dbUv01qUI1hZaDfBTgy+CLATKWyMH+5VHHSYXZiod11eOasNIBGnX5vQ/R80TftRtpss836WG/Q7xYr7KPBL3KHzLOvC34haKajB3+uqwcJzhtm056+tz76nKLyDT7itlUOO68wR/5/e1fLZDMNcf7zpRoeqR10clKKdvtoWSOif7hMDdDSOC9gGISDu0W6EGPui5Ma9ea9ydNXurpuf57l78IEq4I2KnDSoL9a++Vffb6qfIyNAYLLgg5WwBiCBoqgilEweZ/vUh1MhiUZS1KcQ87X4vqwbzrX3cLgO7fdXkJBDXor67nVhtlXZ4EeP1jqz1NoDA4uAic1jJWVA3v6+yi58yjPCOcQGGX+mIo2AzyTFberYYxWzzDnNgxpD2hGa8y91bJly07OldENM/wyKOKJ0L1OwvxbV9erxR5XDgYwFnqzmqWa8wXMlg8zY/Dg1inbH9o2S2GbvxzG+EfKJpjD21uZ2EweF/x2K5/3iesMlgyJPy7VqNnDedF+AzQGd4KM3WYOMjRgCdD596C95KvrYITFA8tg9CLW2Cemsi3XPHSo+POig0x3funrKJg8M/ZyzJ3ri8IMjub5etApIAIRfiDP/zR4kVIdVZxTRh/njspbTec/38B0GYfy2UGW8n03+KOUy0z+0fwnvJI1bo4jPwuy7Bu0hItmUKOHf6vU3XbXDH6j1COKpw1daxI+F2Fg8MbcfBkwOFH9l5MaNHKtehhhAaBVJM+vqvhVcY5ex0tsYwzS1SWo86zSk64DEIij/UaFdAR7ih0kgMmdibWs6eEOL9i8ibPDe7Of8x+/8NU/p2j3h3rgAUdNWRToasaoCa7O5+UAQq3o1YuUwYClTLsGd0KnyLZakk4GJrCddObLZwBqSv/d4MZ5v4+Pdh4yuait8iAQow3v+wVFYTUoa2NRZvW786y/XSBgpoE/UKooZ1mJRfbbpXp1nWcj6kz+eND9Knl4Q1fPpf51GOCjwZXp+L8Ic38jV4f8OfnTDE63s54uXjoPMiLqV0p18aR6KCOD2y1LjQxjLdo69Q9KXYs+tFQnFmv4PSwCQ5AseKZZwuL08stSI6CKy/bLMMCpKcuKzN6nB50QuuPSenaZGZwebs1fm5FKrN0rh+/cttTjlInovPe+k+eenG8K+ywC7RMGBjcQnhcg7YZ2DX4p+ItJndGdCPvrrm4gOtf73AUKZjrsJyc1+D14RanLLBxbejgfVLSADfRN0TqJd/TsLwb3oHOn8/88nd8xPc4MswRD4uAtZ2mMOyRxVvkYDQGnFc4smMH9h5XK+H8q1Qfduqz7LNM9LEIdGGwwpPXrPj15Doqb/reUwekkznRzvpvy7tJ0cMuAq/IcBx95ZDnns8+LjwWdY5D7LOvsDPaPvzDvXHKzzTb7bN5/xsBgGP28gCkGF/DRUcnKLhjlR1s92N67GHV+4YEZBmdhZowCNnPodNP+0uc18FNn2bc8ZL+0s7oEJCS27hymdhYYevPc78/Fap1jPtNu7w/dgHOMGR+YGVcMfyxCZ5M31n1Xde4QBIEVtc2eKccuGDBlNHM7iw1D2ojSW85bfqbzPk2TDgbwzUFER+8wVT+LCUO5BpVnzR9rGNzhCMptiUwebUqxDXi6jCOcHZipPP7QXyy1Uz+50fMyQg0NsdCNMTMAyQs/7edP6trpV4Jv1Pkzg38p6GRPZ4ifmPufbe++LPip9j4jFPdPHl82h/A3HzagmOm5rFoz/kKpPtx8zr9Uqo93Dwtdvhk4MGgt2Nr9ykk1PL0/DL1tyqRsnzZw5b/Xd3UdnH2Aq652Mhg/sNQAkcrAzVc5SCeMbF/M84JaOCCBTwNpZlHabAakTW1g0GTjWQ1T6Ysg+6GWL3X+6uDXQnt3sfN3wYaZysM8xNmDy5qIoEcNf84w27kCM/nDgP8I6gx2YxHDvxmkv/6TCBt6qyARm4hnZtTJlYMkgtmtDKws1Yfbfb7ndy11YwYdlojuPvH9sFLrA/OfG3D1Ust3alfj3SnPr1LvnEL6DTShxVf/JrrUTTZsDGiDwwsbTa0ymPnWI0qtN/dfWupg5v4w6C02DPXJ9rHWLD7F4GZqnnbajLpikPLO+WYJ818WZhjIbMbohBn4N9NPOYOcX2AwSBHhWMadJ2YtmNi6D2Nbo1lgual6x6i0PjVj+v6glwMbN8yOgIPPRaf+W2wgmgptZEAlpfTlm9Rzx3rRvatbageHHRaygQaYfgCrIIMFzT57bUnhvlxZEwJrsUGbHVKqNHSGGaKVR0gqvugOjKBiqHOTzLSKMcLZgSkGV/ncU80IGuNMYWZwMBh8vNRZcrFkKjPqB0s9jocawbrtbDJLRoxNg9h5QqnqBniQ5xvN+PSkUvN3eKm70TCvvL+91DV/xio7xe5d1vivP7FU24TtnWbEM+iTCwQGWPXvLDS2hfdmsHr5pJ40QmwlmnuO+vSG9o7yEX9tpLl9qTvvMDDJZNi9pnzqiuFNGtSUJ5TK5CeVKhIvVpmk/aFS+1Y/2Mz0m9Uz+RRY3fAOKU25rOtvO/3ACPMABhuzwzCKljWbGOald88Anda73y7rGKnPLsjfFFAXpMGqTc/s0+vaIQG5/qWrMc+J1f5j3MGg1I1hJnOfSI/Rib1ESMzs/nGlLsURYQ0Qh7b7ny2V2T9W6qCwPongnMK1Si2HkE29iM57LXWw86SubviP8Y9O+7dSZ7gT3S91LzoRHH2bskYFObZUxkdTOwxyaIMxaUhdUVsWrEwzbaY+padMvT+CfscYOg1TDO5lTjnagIhOCqG6cLUdYb7QrLFrMXmpBhGVOi2uzheIiRpTJ10sWFHq7raDS3U+MQsL9i//hwSv0MphFjbqA5tMVjYamBEGmBZTzXpDJ6cHSktnE0WF2Ey0pef6dg9TnXKhwCzlQAJlSbNMRGQZyid//UaMsrZITpUY8sQ5ybZeDxF11ZNvMipeo1TVQxlFmVEW93m8abMFL0wD56SJ2qIsfX9rqx4bOnABQ+uH4sl7yKC93odHmIGhonPdMtcXB1ltHR97bNC5VcS4+XRgnYaoSEw045hBHj38OY/3zwmYhRmVGMbMagI7PK79d0ypUWGA2cv6NtBxHtpo4p9ZHLPw4/a+GQ0TiA3HUEWffX5oMdJ2L9XV9Uk6nbItdPm6qovq1Dz1xA2XtkMN3H9sWaNq3L2sOQeOtZzqQC8nlj+rVGnDIEV9odZoz+eX6rZqRlRvnHqUT5l8d5BwFgSGusnVQZD61H+mPM4151L84lyXYfJ1ONl48ehS+5KBi3RFhVjMieOCBVMMbm11EP0cunc6urT90uvqwDP3BtH2Q6WKfsSq73rMn+t6fwHB7CRt6WFKFme/zWLyQYTlcsof232zgAgnPMUES8DQ7mMQe6bRBgiMjSaKYw60LaZmRrSIoMN6clkoaN8jldgPbbC111u7/KmrEV36diqVkb9TqmhtcDq51NBOBqdXtGdYzakbaNc7Nvo1papfaCsDDKpo3npWHBYE1iWipwxfy/1D0fbrp60cfbUuJxuVOrSZfsgeoqz3W/3AAtb7BRKmGJzxRmD9+3b1ZMxbB9Gr5tmBzdqYHHMTfRlxMEwP83j/nAAPsLuU6korIZ2aPg3MZAOtExPlgdnrOo1mUfacdzGNUzgxEiYTg5xIbIC4fWgi7Rapp7vnesSkOmbMduRzDF3VUfmM2zJpFhc//KatLZRzKNPBpdo8AIPocN+gwNvPILey1DoR78xAQJKxBu6/O5XaZspNGqCzLxawjzjg8Rapr53S7+4bxr7zXN1Nti4GB1yHvUNqunap/cqgPMJ8YOicweWTesrEcZPq9qixH9vV2WM+DErPNUOY9TTGsaWuKZ8bwKr9yFI7K2OaWXhIW2dWFsAybiAAmN1sBujfdytVvF8RvE8rN2Z4YFfDBxlEHpbrrVI/26UzOg/s/sElg+1ioaExM7Q2/IiuBdlwLTW/wKw4lA8DGGTp09QOore2IJY/pNQBAJMJ2mEN3ECs3jC1Qe5RpQaBZHchqhP9DXILBeqZ2mawstR3bPAhkxqyaTWDz/Q17XVcV0MrG7z0MTaDEeYDUwxurZgoOzgYsM4SjSytzFZ6DzP37lGq+GRph4HOu0TmcwPMYn8Onl7qUpe0B8vyIM4Sy4mzRHbGtg+2+wam5zaa0Y4HGFoHN3ug2RZ6ET1l5lHWi+icaUJzhV3NjAsJwze7JqJvsskm0jeYDWUyw7N6ozHuRxutPl7Z6KPKmvPW6O53bvRry5rDHIjoyqRuflzqgOC+39NGvHMK+pJ24byjj/VqR+pw62kGnxksv9nekVciunyNIvp8YYrBzeBmb/uEdRYd/Wmlit7zqcjLl2rMYrwh3j6xTDXEIsPKUhnynmaDUo1tZi9gg8VgWDNTmckAQ83wDMMamhWa6M7zi5Wa4enoru5k4jBDohEJVISYJ0esfNSkwmIzuBn8cUHShN/aZigHBn5Eo81wZmTitkFWPSiPZbNjuxqeyiyK4ZXJ7K7eSDlmcOvh6oG1He05Us1CwT6lHYCYtHdLvT0l9XhMroJBnoHBW1nl5+ldPRCDdCi/4ww+X1CZTcTcfFLPv7pb0AYOot89usrs8+m8OtIdSnVmoK8eWapuR88jNupEay94LhwQKY8MHr506VJWZstLh7cOQmwlmgOz1LCur8P4b4CBxuQ37upMib5F6AO66jF2m9TNNUPb8XT7oCUfsyhxWV2REuZTV/OCln9IB7/dVJnMZkM5zITsB4AITj9Xz2Z9ARYx7qpS7SHKbEY20GESbXNEqYMBUfyorkbtwdRHNqTyLBRoJ2lcP3UnPNOd0veOCG48q4NPld2pMLa1Wq1Q1iPLeLzR/GGKwW3S6EU/FRnsrZddO8RPZc/CzD16ofd5SbHievfrpXY69/9Q6syyGHBoqWmcmrJYFvqlFYHQ9GaiOxFPR/92e87MNYjoJI9BRNfxLfOhzWCYAv0/Kcs1Gs2KbkZUPtFTGOD6eguuap2yLARMfUuZfP93pUpHvSpVqnGR2sFyrtN/uN1XH4OIbmClt6JJIOwU6Gkr+ifKmuOYifyMWEOZqDM9LEC5BjXny12VJnrnnbTTVtMM3vrjgPdIv3QiqXK/vtT9+UcOH/TMCBuAQTRSyXNtHXxS44hbOnpLVx075tO4vMl0qsH4Y5nmmFINOa8q9RCABVt+mQFqhEMBjt5ss82sHT84ZXhIaNFNnhx8Ycs/8dW6r56ko1sPNuiYEblPEl8tTb2ktCORu+rqiklIMi/vqrFrZfBVQaLjitw/IdeXBm3+mE9dzQumvmNwUofPKnWN+smlLu0BZZJ3UhNJ6cWlDmAGq+ODwhCz/MufM91IMS8rVbQnMr+8VH8ADKT9iNBmWvd9ay0j2wKUTdrUnj31tTD2C3IVdWetGXyKwRk4SUrKJ8/PLvN0nx6hrMXgLJmHB28yqadOWJ4RMqh35JgHGOmJuYP4ZLRmwOJ1RFS/eqneYAsKA0PpIBnpl2y77bYGqkuFuS+lXJtssgld2pKQx3VoMzYw8AwdBZObiYGOxGNM2enzB3dVTBQwwplgwz5lZ6cdPKmB+q/bVbFzwdfEwfC94dtBA/DgeUfsHjz19ih1+csL1Cz+DLZfsh8c0tXlT2eVYRrtpEzEcyqIdnb+mQGOiI/muacODBACLpytKKfD8111rVWHIqaK3KLOrpN2sq13LQYHA5MPaQZXtb+00QjzgSkGt+mfGM0yLFSORqdvir82+1oPM/dZZ1ld31GaiF7q2Vw8kNz/dWmzwfq+d3YhnaMLQ0+22GKLTXLtO0Hy/+Ctttpqd5bnUsVCuieLrN869/sbTa8bRPQjgw9uNGMOqzqaxdkA5Tsi3Qwi+g9TbxhencGVQ6dcSGj1ZVcZBu2aQxL1h41AHfuN0U9q9KF5zAzclyn0o9G5EtXv0GjhnSyVeeYjXVM1cv1OVwcP9/nzo6kG/ttfXlp+5gXD8+0dhk3qhP35vYie+7+eayL6rE86GBi8Aeck+TrCD/cXuq4vcDDF4NsE3xn8SCpNDDAdykjbHx8zDzBLnxJ8tE4RPDnIvRLDnRx8U9cCAi5Go4S5J8uWLVtKRM/3bx285zbbbLNtV10jxfUyuDjKl+5t+Uyn/0CpjEGtcN9sbaY6satGrYNzD80/QPSYk3K1u4t32Sm5vjb15UigD6RzfiDXHdc1E50TUF8Nt5vUIITD/WcG/SC2s3vQxw1KIseKiPKAVg6zNaelk9rVoK1tWOQN4gaFp3RVSnFffRlIPpi03pkr//G3hjYIrOzOAoMPz04h9eCUXJ+fOhKG6iOpr7cGxc5bHfd9Gmb6yrGlthnpYjWDL0Z/usCAztg6pdC1YlMfGrQuaYdDj7PvTAFdz95de5OHM6V0FOIeURGjs2oTeXtxeFKdGkRA3dB3zzKEubt0ELO4b18sHWWfVrZ9kqb9zzqEfBJve4Zp+UMTY9HKu2nwEkHeagI1XnpSd3ChL5dv+q5lnSvk25cJLk/nvFLSvEpw0/X4VJ8jGDrxFJK2iN3yzn9BnQ+0iKSeMSBgIuUhDotSus2keiweMKll4oVHAhnet6f+Yt5P+S6Xcvgt4unlcr1ycBP/wTOD9j3PGiy0/96h+dT7zqXn6qx91dTXQblulbY7aNNNN71K2m3TWSaf+h5PPCoE9Ul7KEM/6M0nTxdKGESjXLfL9Ve5JZjfZdc3E6lIld2ApZmY9exgL87mf4Y5M5/7RDEiOvrHrYGvkO9eKUyx8QZ2EJ1lcKpJKws9lBj31XQaA9APuhq0j+fUqf4LrRO/u9FEbwZAtGVC68vK8bigNX30K4O9FT15N+v0Inqu3056l046f2MNTnlWmIXgQkPr4JAc+ykrHl31rvtSqXk3QL0PnbxePXg8Ovk9MvTR7f7RwSPb/eNDE5nd/1De7dspND/xvfK/gxV+nzLumSuffe/sp0+sq19Mg/8nrZ8Eecb1/SJIylNvnw7ytPtnyvGj4OVb/XHm2Ws4fgpo06Hspe7T/3tX3XYPzn9PzTevOZ88XSgBY0/hNqnozwe/m4ref7g/C0PDNeBwYW8vhw9r0N9JpT8v9OVT4afl+qagGdQzAvRvlWcuke9fMrhkIRnBYNHytqLUuGTEaYa0jwRPDb1j0n9H8ndarnvk9wtz/WauJA0dX7inm+T/OyWP3871fsEbyHuuT85/B+X+6cHX5jcD3mmhT0y6pIWvpUN+LeXZxewz4ELC0Mm7GnqKmPqJSZ2l39HKIdoLpv1G8mdWfELydnquNw7ewzO53jPXGyuH/0NfKfitvPPSSW0ndfDu/LdL3hV2+vNLawDLTwYNZntiOLghwGyTNdLGEUF1/ry8d1i+89185y25Xj74ndTZx1JXjKJfDZ6Welw5zeD64NS3XhQ8Pd+6ZZA09aD8Pkh6cIQp0EiNibeAqWxB9S+TCr9Crn6vd4/uwOBd1dXo6TunggXgPyC4a3BpEBPsMVcBvV/SWaKTJI29gwvK4FMMINM80+jJfu8V1Hl1AlFJ924dgqMFsVHH2aLdnyypR+zuvaQelsABY9+g882S9aUXD64Mkj4MUvumDETKSwcPCG4eXBlUvk0XsnwDtLpXplUt78TUla1MPOz2SF67oB1aewVZqB2awFbgCtCCN3qnj0bb3ldup6XoF3ulfHu2fnDR/L5UrnPtv9lsnQGmmHKX4IHSaWleTj3mW0JaX67V25Zh6MsGD9y0wmoGB/LW8kqyIAGyF4kqe8lW5pHBp0FlwUY/JBV9P42ZSv1+dNl/pMIx+joZXKMNzFTqOvfvU7lPyndu3sSs1y+p50z9KXhKkBfSH3PPEUL75du/zHN/zvdXSmMRmIBH3U+DXyt12ei0oGCFjqj9TAvGeInk5y1BftDE2ae3PB6RZx7YynFs6FsG/xx8SX4f5n7y+0EdM/iX0KemPPvnm79L3f3cTJTrt4Oeu/z66vAcAss5C7pjlwygn25lInW9I/in4NWT7vPb+WW3CT5cWXN9WO7ftpWvn1GDyk0KMHj9Kfc/l+suy5cv/2vK8ZP83jHX70nDwKw8Z1YmzDbF4HcNSuO1+e5123c+HLxy8K/Bb2DuzN6/Sr7+EHqPaQaXlr5qUAn9llam2+XeE5POn4OPHxh86NMXelARDY3oD0iF3TuVt8cm9cSMP2Fwz62rIWcYnK/zb1K5T8x3/j2NhRleHfrKuffb4Id0nPz+XfArG9UZ78dpvF8vIoNbAvtJqQyO2b+evDolgy75yaT3R8yQ/Lyx5fEawacF5bFn8JRfOY4O/kfu/T7XFwYPUzd5/70Y3HeC/4vBMTdmCH3JIFEdo1x2PswwX2j1DawAYPDv5p7Z91NJ4w/J56WCb1PXSyuDP7eV47YYu5XjYcHbtPvPyb1DPZ9vvCUoAMPv8t6n8t+Oeea3wR/k93atX/wxtFn9TGdwzDbD4Or2VcHrSjv1c3K+ww7zh9Bfyz2z90/D5L8+EwZ/kz6W37cNYmyTy2OlBz03QlmzNJYKyWVul1x3TgWyPhPD6EbzFdFZbS8zqfot0RbjONbWd1mid5+r505h8r3y/Um+2evgaailmHt9aZwD0Mr8yKkPk+C+ycfFWplXzK0xFDnkbt+WP8Y/1nHnYy2fq5byLZZUcX0Q0Ym61Izdk+eNcr1Y8n/R4EbpoBcPXiL0ZsqX/y4b7KOUnBkznE1wTJHlQAy0x6Qe+qAc2pIoDIjD6E2DVBC0MimH57dt9UB3H8TcVcEdllSG6l1UG0MT2/fVfsrj/zODgcHlaVJtMlSg1SJ6kD3GIMhIuWXq74Aw9eWCm2HuTaZsGC0/rr2InqujhqmCxHUbgkYRfRpaY/adPGhkfclcDTX82aDjcTDqOjunRpsCftvf6aqR6nDv5jtcD+nljoB961zV8b6b/z6R7+2RBmXdPj1Xhpx1prEQ0KQMy1+2dzL47Zl8vF8eJ3UZ7GUtj4dOqsUc/R/Buzf6wXPVq+87uT5jSVU7HKnz+uT5UsHvJ/8fCe6TzvgtM3dos+An8ox6oB8ueMczaOXCYg55op3Y8msZ7FUtv4cE7dRC3zx430bfJ3izRhNxlUn7vWJS/R6+HXxf7l0k5WCU+8JcXTJ1yIKyGwDmVaZW//DI4Hfz3RflvWvmm98Pvi31d0V0rh9PvV0q9ffNMPa3c3X22mrJTv+Q3qQOGIyB3w/eIvf0OfQj23/zyteFAoYKCdqy994gEU2n/1Eagz53WZWFyWdBo03BY0tdouGTbSuf5RAOLXaUuf+p/L4EujXsvmnMP6QB/d7d9+VjoUEeW/ms+/5qrp7dZRb/Sql55F//HnRXd2jxT0eLaMO3G/34SVtSmtRlsmFJ6eTku9+YsbRa1englnfomZj6e0Ma82WGswJdDfhIheJXYPfaN0pNz2pAv4Em1+vl90sbfYfQgyfbMaFv3+iXBPsy5co5pt8Dnv+tOOyWfDsL7deTuo5tj7jnhhjtNTNnAl1lcBFY+n4RtOtN//pkkAehfsCqzl7x54jo9PO9MPfA4EMfgflWvx8819vn99Pbd58y/L/Qdf0vC0OFTNY4dej8xDjnMRvVBWCcT4XZoMA7SSfwLUH1iI+Al9Rg6WVFHxxP6IqXCT3xX3t29rvnCIa8tzQ4a7DiOpbW+jfpAr1n0rURw7G08izvZnwOMO7bBspBxPvEQQ461JG9llTr+mWaqOnI4gNy4fRCpOcY4zBEjjLzZob5groKkl9xgIq7VMuvo505gsij7aV80dG2tiqT9nDlGILmocYJyfsr2ne5oqoXtLoaHIE4Cqmf+QaYNDPQvXyfc5Hdibwj7XG4qvTnqopwFYNlkEX9oOBVgpvPSnZDmvIUPLirquGqRrvOJ08XHhg63qT6Tn882BvDgu+eq+LYeh0aZiryLqXGB7eLSWV/vKuBCexFdv9FXe1I0nhzvseV84NBbp4a5m155vNlgWNsDeWbq3r0iUGSBG8tO84+KX9ddfX8RFc9o4RismXyRrkeWWqccGGQ+Gork5nPJhXums9J59PxnXr5+sw0LNknJQ11uEee49b5qW6Nl9xUzhYcMNEbS82jOvzvVg57AYRfUg6z5h3bM3fIlcSCFrbpQHTuqQv1g7ZLjpfch0O/B13q/gL/8TFYJ6jvKRDogy/Cw0uN4vKpUiPQYvRPT6qobfDR196u76VOnbf2sdTjrpjbzA1mvmvWVrf29wvL5bvCa/V/zjx74YWBAYJ9KKBUkCUts9xv/M51veLlUJkNeLLZm2wLn+ACvvX2rp0VlqtD7vq9zEnr55OqB9ts4D+i+w/QpcZHWzCYKt9FMhv4vvTNVKej5S94cqMFOHgZutSBqhdngyLbYAy0UNK2j/4peHJ0xWGzCecMjPVX6aRsjhf6WfsP88zW10KDnV7q0GYe23U/Wmp+MdVrGn235KH3OCw1Uuxd0V3d7tqHbMrVe8O+dnVkJQJtL72VCP1Cu+kv64SZcooE5H3bcfv0gvza5WvoF4eg1VeQ4axvp7k1fgr9h2aYdtjDf+dSz3dHP3P4c2TwBipPZeRKjLxerteeq6FrrxFkLOtjZA2j6AZgVanx0HtLZqk7s9zT4M52ZsGWFo+pfvvmpAbvPyjXuVzNNN5fyMB+0wy+tKubLWxOYJDiK48mwtJj0daV7ZiyNdLMtbLUCCcrSo15do18hwWZ2nJYmPvS22+//dZbbbXVlYOX22abbZYHrpq64jpJTDZ4+K5tmbMdf6EBFxxcat6lRy+nV/PVxow2lhBnlcU2TaK4Zbarl3qmm+2th5W6711j+1a/nbar7sZsKdIweKiTNd4nGwaDt1nWVX9As3tQ5UgQ+gZ1ga2AHwJbybVSv/qi0GGrmbVbu/7kzbe4IGszwUhcR5iGYYQM9tFB0zEfnqvln5enI789v/dcH4PPVDjDmigbfLb5Mr+21BC3lqmIw49OQ1lrf32+99+hbWg5IVeBE4QLErTA+3us/uICgDw2tH/5lcE3dlUXNNoTac1Q1vDdN3OZZQRWxBBm9P8pNeSwTi5/95rUM6sZ2x6w00477Zcy3S14ux133JGdgS/+CSmbYBPPa2ksaJnWA/RwW12lR1IifSgHRmfcUg7MTLpCCwd9aKnnmtlBR/pQPuI8pkGbfQWY0JYnlLpL7UWlfpfNZZ2gvqfgiFKPYzbTGhhs8xQXj3HSfeK6IB1vzpUax3agv8iXOlwfg2sz75sUqBu+e9Tw58yzF16YYnBul58M0lP5A/diUmjri7Ov9TBTiU8qVUzSyXorev63iaOPOppG+lpXZ8QhAinf8D4NjVpqBM//KzUo4IKBPDakP/bpBRmJBpWApMFGgNb5X43uaoA/Yqz7z8pvNgbi75snbaOETpiZm0Ryp/wumcEPaM//1SCQa79hp6wJILGYIIDCz0tND+PSSdE3LZXp5Zfa8ZR2X3v1mz9KPW/NDIj2Xt9mpYZs6lW3hgYOqgkRfb22kpl+YSD1rogwbBloW1pv3GibfuQX/atuzUES8nvRof3AzHdPac8ZnIj/aBuFeph59sILUwzOqeM6RPO5KqJbXzwyVzP7OnXwGdChzd5GY5E/b1ZqyF01/W9dtbwaja8zqZZljWBE7/fzlipOYrA+WOFCwdBBumptNsLfJfS2pRqc7PNGE92PKPXMKzaA23YtwB86yKK8Mld7qA/MIGhjxy0zCB6y5557rsjva2XQOni33XbbKWL7DfPfjVNfRFhBD32X6L/YwNR8y1KNaAYzM5u8E4Utm/VlKpVhlYM1fEWpgSyIu+pB3LmDuxoSySBtICMZaEvBK+n5yqSdtyjzAzO1PGFcA4TZliog7duXGiJLAA71RKogMciT/PZx+7p1M7jy+e5FS80/eojQM8IAUwwuprftdocFeQc9bq6K0tbH18ngMxXO8PTkUkP6qPQnlhqFVCNZI7+954OCQNyr0US1o0tdSrEbzayisc8NIIqaXeiiZhYqAobWsVlo2QQMQNb1r1+qqEtkvVXqwgYPPvd32nbbbYnlDwzeMTM4Zjom+Jj8tuRG18c4a4GyD2LnAgMRWh7U531LLROGxjDKRDq6dqnlMKCSLJ5a6sDKgIY2APJcQz+41MFJu2pDqtRxpX7XILJOUL4pIBkwvBok1CmaxKOu0dp9z0ZTK6gH+oH02QhWw8x3zdzeMSBTpdCkghGmYYrBrUta1jo6tN1Xf83fRGnr4evskDMVrlFYWolLZoJBFOsdQYJEdKMz2jleZgYir98alc/4X8oijcIzebWk1IuzXdVDe3E29H8Eiatonnn/hS5V9BvES0tfjDtEVb7fOq373+OFVWodeJ8KQppR/gV3sl8HaCCd3exICvpSqfnCvHRV9H1KZRw0UZ3Ijn5D8juIzJ8pa0R0baIMaGiwoEahL1nmB6LMeP74Ug/EQNviShJA2ycgz+jfljVpQxPF+uAjpT6jXXrnpFLPD+9hpr0v3NBmaLHQDwteLSi8kbPIHhF68HOefW0WLIeZkem0HCuMzMQonVvDsu6qeAargdb5btfeF/nTmqlZYrGBOGIG4KnGWGSGe2RXbQHEUjQHEFZwM70ymXFEUb1+6sqs/9DgLcLULMBCIh0VGmMxaEEiM1CX50Zvk4ayrCi1zonnymdmJoE8olSm1E7WpK0iYF5tZla3+vHQUgcEbWD2Jk4TxdkjDA5D+Ty31uy6AdAHjilVwrNagTabY16GMmK6PMurbxsYDa4PKRvuC9SRY0v9pvyTLEglI6wLBiaGXfWEIkY/pKteXPMZEc1kxEKziI6GqQ8ulZk04mHtO8Sp/ntdXQvFXEDHYvQhEg6dc5/230KD0YqYqBPLqw6nU/Hc0lkMTpiBSCtemYiklmB0dFFTrQwYjG6a+tLR0UeEpo4oN+yXHdZTb0eUxT9XS70q06quBlSUdzOwGfL+XV2bVyZ5Z4NQD9pPm2Bk9w2+jHeYW5kwu4HRd9dSPWbKybCnfJbW9AsDAnWHhIM2ext40NIYBhffph5IW343ZI/RZt65dKnfVafoEdYHjbmhHUW9mNRtIBb6zL1B9CMu6VzE72kR3VZNzNsfE9veHUQxnesXjcZUnytV1MX0iwFmOOnJI/GwF9FLzffr0cmfGYQdwX0rA4N4+Y6uOWkE/7ervvasyr/o6nq6+75rJloffKLU5+4/3JiHhHRW4dRS88WmMIjopDK6OFp79SJ67ln2Gso0LaL/tKwtopNiqG6+i6lWw0xfeGupzx9d1qg5J5Q1VnsiuoEefXZFdA45nlEGA8J3y+LW578+DIzcVecP65PP66of82wDrguIgf9dqvOBmYHuxdpqFKbv3bF957hujZGN2MiwAjDUM7q6nKXR6L3z1fPOKphdzTAvSHpmEjPUC0qdAUgP7rMmKxObgs6v46GP6urMR9+7X1fP9FJundnsg3GU12y3PpCe9eRDZu6fI5hpI9KJ/HJcOaLRZlMHHsg7kdlgqp7ZTKgnaAOZcjBaaR8zNaPak9p97frSMrMOPpM20V75iMys5Ohbljqjo/kaaFu0WVja8mdZckWp6UmHzWZ9QJz3/lVLXd9nBKQOjLA+aEyHZITSqTXKfEMlE/8872qmZrQx4gOdyUzg+8RdrqJo4rwGAhrfIXiWs9BmnrU60QKC4d0y2W1K7URmEGd/22ii06Mx/rCkpDOuzNWARSLZvtSyHtLVM8ictkEMXl5quYmgyrE+kB6m29AMdZZhpp2IxCQSkoQ8o9kODE7yTv2xN4CUpD2Uw6xqILMCIGQ0hmFLUCb9oVc75gH0fOVTf/s3msVenaLZNKg5BlMqkfqUP2kYUIjf2l99rg8OKfVblt5GOIug07MSE4GIneuEmQ5FFPtDqeKsxvLuu8sakYvIqFHRvym1IQdRzKhNHETrjER09GKK6EN6mO3jjZbv16JTNjPgait6fg8i+tu6NRbnL5RqZ0D7nk48XabVMFNXg3hJtOxh5v+zBTPfGKzoGOVNjbYZY1ClzMirHV26umlDuakrfTm6ehyxAcEz1A6MuE6YSXtQCRgoH9/oF5e1HV0GK7p+cWijf1XmL6IPji7sASOcRdis1POo3lbqEtY6YaZRjyh1p9GdS20knYqhxPt0PCLUpqW6SdrpxPj2slJ3LDHkcPEUZhljENWkbTZdDDATKd8HSxUV5U3ezTz3bbQZHsOjGQlZ/tEP7qpL69tLHQDMIGi2B+u59M+3lBlmmKmrxwTfWdacCrogMJUGgohL1yUN0U3lkVMRKUTdWhIk2srrPbq6PRR9TKlr6eheTA6NYV/bbeC4opl7mE75SATqEM2AZrZGP7LUgRz9tFKlO/QJpTK1vJocNmTHoNp5x8A0wtkA4jNRClNqDI0z36URyxs6FmYFGGKg6YQcRXQKPt3DEThoHleYj2hvVDfLnxswlE9n1tnQxNc9SmVs1nWdnthre6mlL+Jrf5RwVzdpWHaSd4Pj5sOH1wOkIiL9UCeLDeoTM7NvsKmoW+WhSvXt1NUY6wZmYjRgZdcmvSrV1SVDYa9mmXldYNBUvpWlfg9tIGQtp66xdRgA1bNBXH9RtweX9Rwr3dK1SqEPesY3zs06vEAB3YeVmbVURQ7ingqdD5jx/lyqqGag8O7nu3q++LBd1F7fXhSb1DjeP0DnGcz2iVJFwpsOHWqRraKfLjWPjE2vRHf1OJ9evMyVL/ogXpJMBoszcVanRP+kVCMUKYCdgRqwGmYY48RS32FMnP1vMcCMLT0i+aB2KBtjl/KtPpssV6JvbzkPfXpXBzl7ErST8NLrbIuZ/L++1DQeXqq0gmZE69MrVSoa6vDzperTaH3uDIN6qx+gbzDcYXRivndGy/nZACMk8QejGXWJ0pZP1isyz1Qu0ZNeS9Q2cvvOi7u6BfPTwbfNzc1tnU4joubH52o8a5s4Phdk/GEd/WyeO7Q17oIzwcz3Tih1ADKLHNtoDjn2T6OtGzM6of+rq8EK0Md31SEG/a6uHs5oQDwg2Ec8mU5rwFLtFDo249zsfwsCM9+ib3+2VJGZqIy+c1f17s/kyrHHsUUGOgEfzK6CKbwm7SHayqeCH56rkX7O4La8jjJod+U7otRAIGiOQWwXaPvrSYdouwlJNGhMi3nXgvZdYFurfJKSnlnqO1SNmTdGWCfMNNSq4V6p1mzrnhuyavbQ3qVT78/91W9M29W9yP5zwICwR31kzKVrTsjYc65GkhFbiUgsPJKwSSs16qSe3DE7kJxt8J2pshJFiaH2TlMf0PJOnL3ipPrjG5zQ8rb1pJ66KlILvZQ7L0a3r32os9XpBHOrj+piw42NOHZJEel9UxpCR1EJFqx8M0BMvnype8OVy+GJ1AwOTTad9KfGdlUVWb1qos4bQ4s4K358v214msHbe1AbCxclDVs+lY8aYGsuelVX+wBa+T2nnqlo0rxCV+vHvv216rD9BuqQX4Y6HNLot5ROPz/CemBgoK42/A+JZSo1f32yVJHZDLfOytxss8364HjtfcswxKeXdlWs+l3wpNYoInWI5CkW+h9sHQ2TXzQzuWin/hNN5sOeCx6ee724F/q+Q/50snMKOulUeT+cW0RQM+rx6Fzvnd/Wyvtgfl3dLuq+We2G8pfrh4MHy3d+i2Yqbtvq+nFtaei0X2zvKxPVBX1kaGvo6CcM+VmI8k3no1TDpvZQhr5M+e/YroZtUg7SFW829wXeNMgRy7+aeto97TScTSbC6ur8zdThye27JB8GR/SDgkc32kmsd2zpvTFoSdR9IaNIRP8Ifr+rA8/qvA/fn9SgIP3qSq7e7cuU+2IO9M9MDzwjrAPaaK0BnTr5+dBC0RqZiesqX0Osk8G32GKL1Yf+5R3WWiLrcekYDC5fDv5PVy3k35urkTT7M6822WST7+SZlUT14E+W1LO+3hT80Vzd3eZ4WfSdpvI3k/pZh+nOGdoGkh+1Tve0rp71fcf8flCuDko8Jmht/Ie5Pm+uRr358Vw9JMCsLn+fmdRjj/pvDmk0dHyTI3g91x8G2NK72aSGaUY/3HtwIcrnO1Nt9cJcHbxoC+aD81u7PmBSQw4r65NDO6DiB7m+KteVyYMBXmyA3dM+P871tCXtiKN1MfikMq1y3LirTlLq6m7B+7f7j8nzQlGjhea+ZqPfEezrsKsHVPYSxNDHpr5PsjP4eEdknRc2WqTY1XU+wgZgaDw4VyOfiqYp6uiqVDjrN5F5nQwOnMsdhp3bdtttt86MvtfOO++8Q0b/OSdU5JuOufXunrnu2tJxhNBw5hXawQJOSli1pMZjt0d9ZVDk1T4Iv061EDB8q6GyOhZX1NGVk3o0MPHU+WVoV+dfocUDdx6WU1f7QxHmav6ESZb31Xmcqk/nnIlW630hsPacq7HupCEsMbpXW4Z3FwK0U6tze9s5s1AtGMpENd0qaW08V+OeKY9nbX0dDkHQBn046+Bm2sI3/R5gyG/Dvg7navmGOhRrf6hD5VReYbj39NykRqkl/pN8qGHiuS+VZziThsMcPNun0fJKten71fD8CBsAESwbCl37zeCv52p44BPTOX4dFMtrnQy+1VZbdWHsuS233HLjvO/MZ0f93G7rrbc2g5+ed96Z7+xdqs+2IPo6kNNLf9xE9C9kMHDUjtMu3hP8bfC6wZdtVI/jufvAMBr8nMIU88H3LqnH9two+Jzgb1t6j5R28vD40Hdo908IHp77jv/x3lVz/ze5fnluJsT01PedVvixVo5rB82SvnXr4JOXVvH3WM961/Wcgu8MHT/4cunlqgwOBxDj/GGhb6McSe/ZoQ8Oam8Rby/W6v/zU2U4Q76GvDZ8l3LM1cMUiOOOsbp37jsDTR0+OfTtWrlfGdS2jjH6YO45J9yZcV+Z1Jhsqxl26vsOOxRtVX6vm3de1tIQv75/Xn5G2AAsXcPgjg/+sbBNqUyzCz3pT92abZ6zr2LwyTbbbDMXht4k73NP1Ci3yu9Lt80lJ06qhfwPuX59rp58+bM8+5vgPhvXc6noemJjfyj4f6GvH3y193PVWVaP6OcUlHPoPKFPSSdU1psFnbrxl1zvlfvHtLR1zju2+05/uYH7ecfBB1cL/j3oGF6z4hkYPO8vybOf805+Xye/39C+5VytZ7TDHx7jWe+6nlPwjaHTB1+vfGmDO+feMdoy10fm/hEtbWrQocG/hn5Xrpdo5aaDmznPkKfh20MZg+9v5btF8LnSyPV++cYj2reent9HtjQcSnm9lvZHcu8q+d5fgqevj8Hz/lzK8On2joCMbCHecfrMOIPPF3R8lRkkchGJ6OOcOzg+sF6uk8FBmHlu2bJlG+24447bZybfd7fddtt9+fLlm6SBBSbsI8P41qSGTNZBnO8FibCOS7pkcBN0/nN4AIZhZWd4cyzxJLjRpKoNs8mfZRg6T3A4p4xK4MyrK87VpTtipZh0RFXH6qKJtIxNjtthWV6+pB4r7LhdsK7vO8KXyuG7RNghDSKrM9uca+26IIPXAMP3JvVYYasXLP4s2ftjpPy3yaSeBT6I6J4Z9v+rj/70kvbf6u+2/913fpuDH5xTZta/QgbqbcOEjoVG7xSm3C14hfy3Ms8R2dXhcB6a1QeHbRC50UR27XsGBm91qL7VlfzynaC7O1duZPD5whSDq0w6Ef1IfHPbPQ9dH4MT0cPMvQ6e5z3HCPLg/Kb7fa6rsbct1xDDPhTU4J9NOl/Mde9cPxh0BpaTLozO35irp30+K/e+taSKd2K5PXRSLdfrzMdZhaED6cStI1sH/mauZpv7J0+n5/qI4K1z75u5PjN47dw/LejYYYPT6u9Mgzz65pIK71COuTpTPrd969/naiTb03Jl0OvfWYhyDTB8c/hu0O6tr+Z6z9y7Yf7/Wq7HTeoRTtrmJZPK6J5h1OqG98FA5z3tfJugWdrgLSKqE1b/LeV5TGgnq94pzM3KTWJ7VPAWee4bQaHArq4+cn1D0BKZ/uUwibUmkVZ/cC74VnUVZKjkfKSdbjedvxHOBDB4KpDV1xoljyzLFl8pdZnlerPPDxDmLptvvnn/fiqbvzOR8BWh7Rb7ffAToenj7rN+mvX+THScq2us3/PfXGXij6FzFcCQH7v7lq0Om9TzpwRuXDBG0IGGTtK15ZdcWX/5qMvHM4McRNA6ZL/ZJO99UUcfOuE0DJ3UN+eq8a2vw9wTs673LMt/R4V+TrvPgWbByjQNQ121bw+bTY7u6sktaMx5SKM/0NXdc5ZFT+uae6pvDN9qaNmKD/txTnTpqp/+LyLB3Sp10S/9RXJ7QP6z4USUWXp+v0zW1T0HfP3RHG0Obmn/pGvLZFPprB5QAr1HZa7/Nlmz1NifZtKe6fM4wplAGoje5SAEaOsgD7bDSvUf1ku09hmGTBXcOhPHCaMyi3l/yMCkWm6tB6MZ7nR6YipkzWUddVYVMZIjhlmaUwZx0qmfK1rjW6PlM77gzNC+yfGCMXH3SV0PtiRDjJW+mcOJJUReNHEzl7U715CvroL/PUQEFdCSw44yWXcmLqsjNCcTr6nXhS3Y2rCy1IMHOJrYFszRpZ81G23LLPqypW4j7V8arkB5g/qIo4T3zMC+LAP8ZSPFHbbffvvtue+++15uxYoV17xEYPfdd7/YFltscViecWAENeSwSbWWUwWUWz/RXw7uquNK7wEojVz7ypvU+sPgVDXtoQ6pjfpFn9/p/I0wD2gVDLmtvjR4Uql+5WYArqdmsTPAUNlTlW6jiV1NdpDpxMTz1wZXBN+RBnvPpJ5r/Wr/dZXBnp3nT+yqBHFc8OSuujkarYlxIpP035fPcwoz3zg2KD1OL3cKntLVABXSd//Y4CHuT6pY6lC91d+YGuSs51JtPjapXm7PD548qae5PKZUxx/+Asp0cqnBMexP5+L7n0NmFqF8dwq+q9RtpDaa2LXFR3xVqT7iHGHs4uI2qt17UEbQyuZqsObDflLE8stnUjgmZX9VGPqaYeZbZva+3W677Xbj7bff/lZ59v1h7vvkGa6xyv3YIMlOnzq+a3U4ja0eLcvankv6OyBIteFchLGn++iQzRHmC1OVZpQ/vVRxSHQOzEqcIrL2MNsJZyrdO57/cle3WRJNLbldYm5NWCgz9o8areH5vfsPU/Xhf7q6H9v2RTT9a8EYfKaDDOGGOIQMGzOInMPe6bd2Na7cUKYzMHjrnKQNIYiIlMpEvPxH7qsPDPb3/H/7UiPJ9CJzqdso/1bqWWI9zOTtbMFMHT251H37RGeba6RNTTBj/zX4obImTNP3S5MmhnxM1bt+8W3PRQy/Vn7/T/CzO+2000223HLLm3s2s/otwuh9vaUOnhcG50lnA5OzyW7Y0qB797P2kIb8tnokWfy6vX9I17wB8z9dvn9uIdr/wg6USzuNNJqNJzqr0Z/BbD5ArLe5nxfcFqWe2mm5TRTXG8Cubrm0dZAXFHHt0FID7fPTtjvrZqWen6UTyofrgsHQsRpcqdTyWdKji6JtHvEbLT8rS82HGbhXvodvNIOQzulophsEb5rfnGSI5zfNTLZzfjuP7ab5TYrhQCTgv33Q6lRZF7R8M2DzD5fjYeuvPQbDzjebPvZstPY4uNFnYPCuAo++m0bv3jni+aHbbLPNzQ466KADg9ddtWrVTa5xjWtce//997/q1ltvfYswvXO/rY7cPGV2HhmVZ4iEc4Y6bLYgqps6vPlcXdWgFt1y0mL1j8y9MGCkthvp1aV2ADMb+urTD20AdCBbMB14sDJXYp3Ya3QnLpT8oDU20f8VpTLSMfn9qlI3SNw3iLZN8IhGi8TZw9ApzgnMfEO8NOVjUMTQaOlJHy0/9k2jH1/W3zmX5WrWso5vuZGl+hURX3m9UTFelv90dGL5K7vqXy1NdXXn/mNT3z0nMPMNAwhf8cNKjYVGXQC4RfAF22KBwRiuBb7VkJHticFXRETfP2V9UMrzor322uuwHXfc8dZh+nvsscceN95hhx04vrx4o402OjLPsG1YTXlAUNtqyyeW2sdWw2wdBl+Xb+w3qdZ+Kyw2+owMvkBgdO8t3KVGOTmp0UTm+QAxm1j2ja6dO5Xr77u6rXIQ0c1YP2+0WUMoJDRRmF6IvlepouQgMi8YzDBAn16pwQANbOjnlTWHBPj/po0WEXQ1g+twc2uWdbYZzndLZ2dL+F90xFaMzLf/j5NqRSeiE8uPKVVs9g5L/oLBDCM8o9Q06PmkkG+VWk5BIdzXvsDAbLA9AyhrV20z+sXfwoDXye++X2yxxRa3DTNzDHp3GP8+ocWSt2rynOCwH/w9pe4HZ6mX/voYfGubkbyTeqV39ysRufJpny3XCGcTNOQdSo16SoxkKDHLEV/nA3uUGsLHZg2np1h/dSYYjyVGLPuStyv1LCqzh22TZhm6mxnG3nK0AQHzYzQi/GKBjoe5zTDEdWW1d5mYjjbLXqzU+jiyzDA4bB10k3TuO2T2vsfOO++8avvtt79hOutt995770tGZL1e/rt7GIDDB6Pb3bvqK47J2Dakt1jAsIbRMDD1SXuuaP8Rl5UbbNpwndBVEJDyHikrZ5YbBu+57bbbXiyi+jVD3yn6+EH57Tjle6Ssh+Y5thbr4uwQVAXSoL6lj62GKQbfNHiH4H1ST8RyBjubZHoHnJHBFwcYSohVB5YaPVVDnSEKxzTo/I0BbDx4YvBhk7pJ4JiunlXGamsQeHzoVaV2cuKvDk+EZezCCDojWtifa5RqdNNBepDGAoP0lNUVs6MZxs4ArYzCTdsBx4nDzquHp6M+OmLrxdPBbxZmv+VlLnOZq2y33XY3z3+PJtrmWbPfY1MXGI+EY+0dAwC6MkZcLGBMu1/Qcp+B6ohSRff1gWf8Tz8XmEHYaNtc9wgeFXxCpJYDUi4OPMdmQDs0ZWaAe2zq4UYpszZ8QqkHBa4XSEENbXLhUvukSd1cYoCghy9obIAR1oZPlypmmQWM/Eb9DRrcGnND6+n/JLqGps/34ldXAwX8sv0+JNhbS0sVhYmznjFzi4TiPpHyYY0mMvewCAxONJeGcENmb/SJ0w+AxtxQbDED1qPSMUkuvRU9M9nBZnPP7rrrrofnv170T6cnydCHWdQNdqzo0qCbrix1SfJI7y0SULOkR/XRHoJQPn2tJ9YGMzrRHpMyuH6/1LbB8KcE/x5mPCK/2RGI1Ta2GLDsY2Bv0Wf+L3hy+946Yaq/sKL/sdRvHTKpfuecjri3jgy+UDDDONZRzaKYVegcxrIzGGOmYWiMSY3k8l9tBucscmxX15V9Q7RSszbGILI+IWjTyuoZvFQbAI8vgwox1v3FNLhZysGM0jXDmsGPmn4AeKehQBmCE14xzLttyvfglPWYPfbY42KZyW5qBj/ggAOunBncppZj2wzOEm9dmJMHf//HlaqWbFJqmvutndqCAumAqmGFQ3q3nfl/FnjzkDIYBzkkDTM4/4bbo1MeOwnF0kPbiKN8nuGVqA0NDmcqdbnf8vSwrnr5SUNQTisvfRSXkcEXCGYagdGMwYtoTkx+YKlLR+uFKQang98reGRXl8Po33fpmg5e6oxCXGdco3djdsx8z64yuyU6aRP1zDho//ewvs5yVmDmGwYRkoMrZkAT19cHW5Wa77vO1dNaGZzusssuu+wepr7B5ptvfuvo4PtFB7+W+xtvvLG95bzK1AEvMsxMBcJEpCPfMsj0sBDlmwE2FQ42Qlb5ONVAva4PGFzvmketJFhmE7mHu6rQTIyH7Cv82A9r7cxjkaca+pDWhtpMmfrCrKNM1D5qA9QXqA0cjaQxPZiu9dII5wBmKvMTpVrF6aIvK1XEM7P1sK6KHxi8a1b0ICs6y/kgojPs9Fb0Uk8LmRbRB6u2zj5Y0aXHEMYKy6+7h3WlfVZh5huDSjBtRf/Q8Ofw7NQ7GMYzRFWMokx/CmMbkPqVgeXLlzu8UJn+mGeI6MR/77Cgi0KKPr6scUJR3z0sQvkw6m9KDTp5SKnpfWDq/1ng3tq3Wakeit9Gd2tEdPQRpS71oR/VVYnE8y8u1bai76wW0ddRJuvwQxrsPL9qtMF9ZO7FgJkKpYNZxjmkVHHVerDllvXC0Chdjcn2xuALgjYoiJ4KzdTWYF/e1cB6x5S6NozxMRadlLRAXEezspu50XTjHhai4We+obPyKiNd6MTKSmLpYXh26p0dSu3Iz8+AtjL3nxx8ie2T+f2o4AkR03nwUUFOyJVIru5eXur3+RagzaoGCAMo42MPC1G+GZAeGwA1x4qFtmDZXh9QyQx6L+vqmWyPy1U7WVXwnjVuYrh1fPThXV0R0U7qUhnfWOpg1sM6yjTUIZQn/cL7JMYRzgXYvNTzyihAZmGzLKYkvtkcQjdb6wXg3gzqLIIXQsYU1mTea0S/Q0r1fiOWmfWJ7KuC/NTRNhpofDRbwGKBpTkdlHg+eJnRi3sYyjlVJlb0fws64G9ZGJpjxw2W1NBTopagRX2x2eLwXIVPsqHF8+wQRFK09WcrE9QB5V8rvQWElaWmZ7UCiJ67oRURVnTLhJYStfNhpapsZnY2BO1nmdPgpG1ET8X8+ogZfz6wrNTvQ3kxkHt/8LwbYZFBZ9ew9E0zGpGLN5Q1VbuDuJSuszMO9xti2F4U6+pM/ZP2++CuRc8slcmJ4OjVvuilLqGZ2dBvKosH/11qGlQDuiP6/cOf1A4wVaZevJzUKKvq6Rel+p8r3+CLjumHlYFblaZ2hCaemwWlYSY1mLA4f1gaCwUz7cLAJr3XlXrE1KPLhg1t2py/uvyKT/6tRl+za44uuXqfFOK7jyi1b6CJ7fOBWRH9Z41ePbCOsLhAnNa4y0vtIHSvo/zu6k6w3hiyPvBfQ9sFBRR4T+h9g68JnthVxsBYJ3X17O1jStXZWLLpcOijSh3Vdaqj65cXBgambXD/Uk8voatKD/3k4c+hLIONISjqi91xdpEZwHRq+6vN/ganD7XyWQ5TVh5unH1OLHUwM2OjOfwQdenDVgoWDGbKx0j20VLrmGhMVLf2vj7YtNTTaj6YPOsHxGjlsD5NHbHzziD/kEb7vrYySK0W/dXZBoAU866GZv83lGqHUG8jnJvQ1QD2ZlziJdRhN+hlNMUMwgWJxUV0Jc7aL321Sd0iyKvLt4h+mB/tkICVQe/Yq22ppE/Pc6Va8i85m945BD1x6I3TdL1RmdtOqF0n1XFHuCHlEKGVr7YBj5Vc0AT2B4H90b0YG7TX3q4z20kNmPbOo+13591FBVpZqiun2YwV+twGDSltebFMJt+Wq5RbO1kWXBakNtnPb3lQm1h6M9hrs4PLhk8KtcxqpYK6hdaWjGrUOHCGuh/h3IHBWvrw4LHoNK4oLj0Tz60jwsZwf66GH/7bknrmlVhcvdNErgYMI7bv2nlmBEdbPuL4gT62q0s1f8n1JV01VBHjzBqrZ9XFhCGNrg5sjw59j6CgBpwy/jypAQl+VGp+zT6fabSObxaUX3oqIxL6/rnPYIh+dqkSC/rtpc7mROMvlwaLXb4p2LXUfPyuVPGZ2qEcBhv5QR+W/FBderUj9PHoXB1X1PeLXF86fHBoI9hgOL/uh6W6yv6pVPVkgw5UIywCtE49/HxK8LuT6mF093Tsb89VV9Rpd8Opt9dyQ9wtzP0VmHc5fAifK16X2Y+4bnOKjmPn2Te7uqWS3m0PtvRYmtGPznuss5ahjh86zmIzgO83NNveNVfbIFcmL0JCf3pSY8m/P3hqV2dvu6DsfSbOPqWrMciIs9QANL9u2yKV1YkgZrGvljoAEFVPLVP2hoUon3oacPr3DJCO1O1H89+OuZ48qfHaGAeFXvr6pEotL07exZa7fvBxadfTc8/hEQat73RTIamGuptKnzHTxh2edKQw6Rk8VrY8jHBeQBpm4zTU8kkNVk//FNReWB6HAdj7u85g/n6nA4jBs1lw07kas8y5ZKJ2iOLKWQIjEN2J40472WrjjTfecaONNrrk8uXLd7jIRS6y3bJlyy651VZb7bbNNtts6f6kelStq5MuOAydNKgO+pBO7be8WxaTD7O75UA0x56VjSbSOrMLLWCE54bOTqzt46CVelopUR3sFuw9uIb0z2Xoz07r6tZeIjiafzi3Ufu2SWS82LS9gy1si+Xso29YXSDSTzO4OmCQVQ8s5yzvpALqCNHcas25XsgRGgyNNTRYGvTxAijm+qw0rAio/wi+DzO3zr7W++5P4f+3dy/AmhTVHcB77iLC3c2yBhZQF3YvPsDoSpnSKJa6gEpekkppLOOrQFETX4SKEo1GBY2SxKI0vlIqiQjxDRrK4Ks0IBQqiRqVSolGixXEoAZ8RTSJ0ZzfnOm9w8e9y33iZe1/1ak533zz6Jnp033O6dOnpR7eOai3bOyPB/0kyDpe77A/zj8xiJf363HMs4OeMBz/grivoRs937vdq153NTFUUiSPu3LITirvnAT+355KIVcmCQfNB5e0n9rKJjcn/n+7HB4z0eR/YitC7GneYZfzrI9xbsnx5Ls7t6Sav+v+txKMjlDPv9Glr+Ga4Tmkv7Zc00/W5aIJ/2h/vIvHxDO8GR/04r2GhJbdqL4MJKOrZ6UZcKZ61p0lI9ka1gJ8KB+PMImtDrox6Mx1uQaVVS4u8H/9wJOoghi0Mc67MsiiCJIy8qx/L7aivtjY3w8y3ZT3WTrlp8SxvM7u+9Tp6enj4r8vBJ07uubE3VYW9dm7XAXVSiHW1dKTXxO0cyp79M/F/zdM5frnH44yeQ5ONIE+eMNLJmTgxXI/MY4R5XdakHhvUWYCUeCGMjtXe9UF3POhkt51vgSNlSmbX4oyet4jpjI/mhVTHhT7zvf9gh4VAv4GE4pC43rhMO1zV3nrdYN+e3huZoyZep6PWt4EfC2hCtNUJqCnYpsSKpE9/rCpXDpXgr4+d9kkfPy9Mrc4L7ShM55oqjaVm4qu17BowH7r168/ONTzIw899NCZ7du3HzEzM3PUEUcc8Stbt269Y6jr26NibVORamVaTYwqqmejskov5bdtjZvmIa/LJvOQGwnAa330jPUadfleNM4LzrNeoeJLbdX/qNvVwqg8yPfYNvAaLg2W94yntTBTmGZMqf3iW2mwLS65Ye9cd26u69bREtemklPPxeILpmlYCxgEu5K44/+MrVlgHE7XB1GZ2Vo8x3oumLzMTXrc4RgZP77dZYyzWG35sh8XJHCCI+dpUYF+z71i+8yNGzceF/u/FP9b82vVBdwzjIiH/Lqgy7q0tzkHOaEI+eVBVs0URMIh9a0uI7skjRTYY2iIQ83z9U62Yb+gF0NGris01Pl60Y/0BSi3qoB7jmu7fCZCfkXQdV0OX1ox1XeidcmK6/tbk65P2ECwoxef77rm9DvXeHd91s+V1oOvHVRhGj6YgAy22RuCFzDBvvpIlwEwx3Y55xsmL9NjdB3SWeecC/wQCy5a7qQukwW4x3Pj3ifG7w/FlmlQh5QEzqx65Z+A8WH35gnnLf9B0A1BhpcsHOA9zARdNhynQfj7gdcwvWzgTcN98sB7TsKPF2WmZ8OL8LtVMHwLtDXesXf+nS57W4LomcxA6yfQdOkv+NDAP9k3UDcI+W7g23qmT5aMUjNxyFApr33DWsGoIvRrXnXZ4lNNOZNUeKq537vUy/lQr1VyvFV8NO/qtiAedTHcB4Yw3ztU9QP3339/XvQjN23atCV68A2xnzd3ZjifOrC6Rvgs3NBEiOoJt+293V0G6rBhQRTYOJ56HPM9rtRj3vH1OcSJ12vdGujq9wiS8JB/Ac/z7V0L5GGa+Da85Lzhpryap7C7Rtbz+JP5cZ+SATBUdN9bDP6t9d0aFopRRagfVuCJcVuqqGgzvZt84irFYlXo1wRRCznVBLd8Pnjjq0JHBbY8PwR/R8neTYir4Rb3Fu99U/1w5fDQoC+WXBhA7/rZkmPUbGxluqjLJBj2/XNJoWVq8IIb7jIjT3mN/+q1nS/JgzBRvKAe6ZQcI5bbOc51v60lx4kvKhn5VlYByuX5Lozrs60/E3TZVPpDqOW+gXFwQUhXBIlsm6wDPSZ++2YcaQKWjPN7Pqp9E+q1jokPae52rzJ3mQqY6mahOUvQ7Eqqt0Cwx12rRrKJcDqtyyyr9p8VvJlH9guUqKrtzrKCAj6utCVnULnHp0qq6D+N/6+JLSefZ/3vMut9dhx1XRw7Xk/1roE3BfYVA+/5TnKtkvHuRw/7LxjO+UnJVFZ6PPu/U3JG12TZVgK82p5jZ5ez9njE/bayqiEzvJ77y/iS00An68Bc6E23klNGzRL7cclnWnBlaFgb0OP46Bxr1HMzqCz1WofUdjlhFgC9CUG4Y0l1XYwyj72ZTbKFCMBwITzHD6F2jJDH1YJ7E4IaX03V7MMqu1zA4LBhvzJX3jnbBp6nWE9cwYlWMd7PVGGmAE2hBsfwZ4gJ7wVqkRrRQkBl9nxUbvcQQ9/fL+5lDjunKZODc8y3XZBjLL654/T23pX3cUzJOPfdtgoNaxRD5ZDN5KNRMV4XdM/4yJcFWQZWUvte2BcBs6w4cx5T0kHFA6vnE954YdDpXc6lxhs/Xq2eQaUUI0591juLLWdKqPTnlszIAq8u6SSjghrDp9JS3fXUeMJMw5FAwzU1ZvbTSNjceNNkqfh6vZfHO9Ngnh909lRGia3GmL9GyjRdJo+IMkk6qNLm+5t/wPzx3HPCdx+hzgNn1jCfzgl6zuzfDbdJDMKN2M68sFT0XvXbd999/d6kYk5UhluC6YlUPIJVVXR2KfsVf0lJjyx1lsq8Wio6DzA1nH2tcXFv3mVqOR4R5OtLqtzGvNmbeA0QgXbM0WVWRX9KyamV+DNLPgez4/1Do2X/Z6enp2diewOVOUiYb79s8wrDdzJywasN7q3sBP/G4XdNEnFL0AA7/k9K5mJj2y90bnjDWsVIwKmVhrhk1dw/KuTjgx4ZfB9vvUgBpxI+oaS6SmiMpVaw6fSCajtnjt+rBR5wQ3Psb6i9EzAN6n7lrD0Ys6Xy+5WbJjek4lfYX9Uaz1MDZR4YDeM9Q6jXhZAfFZrP/aI372hAGzZULX7FoHGiRTB1wHtG+5RMRMGWdsxCQEvxfrbFMzBZCLkGpOG2jpGQV/KRzwrZNrPIpAVq9FllaWOfR5dUITm8VKI3lFRn8ZIknl5ysoae44/LrC27EjAsJoHDH5Yc7nllySygQBX/04HnbHzpwGuYXj7wvOV4Kr2e8GUlEx1sHngCz7xwzG/ts88+JmqcEu/t+EMOOeTgEOrfDOF+2KZNm9YLJNm4caGytmBsK/k+PYsG81UltQoCPicmGmqmFM2KYB9b8nzfqWFPw4SA64Gpaz8MXiWm9vk9djItFKLanCtopHq1P1FyeSM89VIPenlJ7/pSGpH50I8MlBy6Iuye45slG5GqzqrxNwy/NQKGtqi9HGfvKWlGGCoi0I6R6kgGFPv/sqQmYP/b9t57bwEm7w0BP3XLli3UdXb3joMOOugAfgwq+oSALRd1JMIogHdYvxOtaSGoJojG9UUls8saJmzYEzEScCrai0tmQiVwTx9oKW5gSQKkTqY66rX/qMsEEXptvekJJVVhPgA284rZ4yV7WpFnvPvwuBGvPHpoIMBUeaC2116MZ12ZQC9ejwfOw2pUU5MFmfBeHx8q+v03b958h+jBH0hFp65T0asvYwWFvL5DjY53+LySjjFlXQiYRxJYmI8gaeRzulwyevK4hj0YejuVhrBT/U4uqVbzHi8W4rv16NRg3l2qJfVZg4LXEKyEiv7ckgJIwJWbcw84yB4x8AS6+gaOKenxB3Yn2xX0+hoFMFxUGwHQCNgHBMxQI+G1iMKxoa7fLgTaVMvjqO4hQGbZ8XH06vMyhIhG9VclnWL8Bd4bk2deTNzL+3a+kQDP8+IuM63yIUjrNLPCjVDDWsPExyWIVZ2Fbw2/tfiLxYklz/1USbvPNanonFT2I8K+KOg5Rzix5HXeVdIMMH+Z+q83tv/a4bjvDb/hGyWDOQgfL7r9MyWz0QoYoYbzD3yuzDoFHcNu52xzrghA59j/+RBynvofhHALNqEFyYTymW4Yi16MAM3zfJ8t2TAxFb5d5rG75xDW+nw0J15y5sjphDu0jL/pMqXy5DkNezCofpwvotPYqKeWjODSeywW1HUOO8LCRsUTEtd6VZcTYZYb9WU4jL2sd9KDu/7jh//M/tLbQt3Co8rswgzUbaou6M3rWPDWksNj1XPOZCHQwIZ96FBmPare2jNYc/vpA/+0kmu59Scs4/k0rIYhfQeBKG8qOYR3s0CF+h4n7uU5OR6ZIoRchKGEFvwHZv6JfJs8p+EXCFRTKrYeimBQD4VJLhldzq2mvloiqI/bXkYFI3SGiEyo0auxoetQF0/x9oHXwFQBJbw1ok5PX4edNBCVV6A6rAaG0mohjy6zDZ7IQPOnPQN7VgARvtd46nNN9MorDtcf7muYU4NjvW9lpIHwS/ROQKjvu9Jql61h7YIDjBda8IiKT02k7vEqLxldZv4UVEOdrUkYJg+bFxMVUuX9bkn1k/NM+ajohBhPHQf8DwfePr/Z/zzuTAe9Iy+6/Q8qmZPc8Rq3x5ZU/f+iZI/qGBFzAkyovIJEmBr2f7fLVMt94AleeXnVFxHnf4uo74wjr9Lg9JPoon++Lld7vRRf0ha/2fmLee8Nex72LjkefkHJWVQi1Qy1LDggovYsMKpUxto/EHRel1M3l1PRDB29taQ6bVjvnJJON57lvytpb7p+bxIM/EtKjskDFdYzelYONuqwnnxHySEkw1EEmWrMqy6Y5i0lZ5uJDT+7pCORynx2l5lZ3cOMvbNC8G7Ho14zqEwmWlgIxu+n8oMw7xLu6rWfSrw+6B/iOOaLMfsPlWHiyRirEErbcBsHYeKh5lHnKKMOU3sFhdivEdgtagWdpGXA3GzeYM5BoErX8XvJD2R/VfGlMer5LueC67GBwPKeg2EwAl0x5o0IVImggdTxe+bAzPAc8sBJeuh+spc+gOAFHR7Cfd+g6clUSYvF6J0Jsjkq7vFrQesF2cT2d4P2i3sfHfQ7QWLUl/t+G35BoJbwyFJV2eXvK6n6cSYZhvlO0J+rTCr47tTRUSVdicp3Ysly6MVpFuLELynDWlpRlquDNgX9LATLbyu3XDecI0BE3DqeAPPEU9cNuXFk2W946qSSqjhn4zEDT6vRsDnGvPit+BAw2Vu38Kb7He/h7sG/a/369VfE/e9FuHf3bm4Jo/cmwu7SdZkh9/ANGzb09zMOH7+/io9jJMdciXfcsKdiVDkw55acP62S81xfVtJ7zb77WMm10Ppzhp6ynnszVNVyBUCVNmvslC4nf1xcMnzTOO/Hg86NsuwbFf/DQRfGPTmhpEeW/IGKbcTg4yVDUnnTL+4y4b+xcfuptob4XJdaTkuxn5rPicXGfWOXyxpdEtd/X9DmEOKPhDBfGttDYvvCUM3fGPzMcm3x+n67HIpjdpwR99vifkGfDl4q6PPiWa+I5z5q0CYmL9PQMCfYmYjkqujmEG+OCtWv6RXbg6KnkgKKjd2ngkKrAKo0gawgODUIhYe/TgS5S5TpThqSqPCHxDF3HmzVzVHpa7ZVHv2ZgTdkx94mFFTgnh+Ar2PPVPqqonsPdT64lWAOH9Tye8f97nO7BP6ooP2WIuCj9+j+Gh9RdMp3v9jeN+5JK6GqS5NsgYq9ggTeTDXhblgqONt4ik8o6Xyr6qx48NOi8j1c5VLZOZZQqKo9LQUTFfWUkvcDfgE96tjDbeVQKjeV+StRhjtHw/OzuLf84AfGvq/F/9R1DREthDrLln77wNNKziiprhsWpKG4Ls3gN0oGm5xf0t7H/0ucIx+5+32DkEev/X3Tb0OYjwy+V5nj3g9ZiIBrkMbk2QcBF9WmHJ+O3/wD1wddG//jr/XfVK5osssJ19CwVAha+feSIZ8CPwwVGdeWqfVFDlA5VeaxcKOo+KPLLAwTlZWq/E8lc8wJpmE7KwPHnwgySRDuEXRVCNXFBDzu+6Wgf4vyUJ8vjbJdFaQXf09c+6rY3jvIemtXTeVa4a5n/wldpk7eGb8FsjBPvlIybbJG4aogyxLLWnN1nEtNPjzucWUI9s649/bgPxHb/1g363Qr88H7qsdUqkIexDHoud8W+4zfG+KTAprW8umgq4P6deCbcDcsF8aQRb31avtUOq+6DRs2bJzKZPsbh97qgBDwO4Rw7RW0NWhLCHi3FCGfD50aPQvjwN0gEIdEOQ5UjhC2rVGOQzU28dvUTmmHHXPAVC4EgeeBtoYZO11GUsKyb5ceawLMWedeHHiG0oAdX9f3Wh/XnB4EU2acXwqyeIQloCTSsNbbbEkn4L9BoJ1roQrneRYLFljEwP/MESMC9v/yVC4LrLzmpjI36vppDQ0rh9prBJ0YvOWCXhKV8TiqcQjzB0OwHjw9Pf3ToCtDyPcZBG2XKokGIanq6JIxXIP6fUGU4fVxn21RhhuCriPkcfsrY3tj7L9rCNHHgn4Q939AbM+JfZZpMvuN2SFo5VlBT4/r/FfsPzNIdNuHS86+u8k963NUQR0auDl74/GzVhqde4r3Fr//OniLFwjA6RuskuP0r43y8xfIzbZ9KlMlL/u9NTTMi1HlfeaQ+um1se8R0XP+OCrjB0OoHmwoJ/77YvzeR8Wvlb3SZIWfD5PHTQrJQGKtec3fFPcyjPTDuPf1ce+7RVm+Yo2uKJ+VUy2o+KPY7ojf7xjKbgUYQ383xjVMrzw5zrH/NVM5zdKIwUsny+O+VbgnBXzy+ebC6Bonxzk/Cv71se3fW/CnB22Lw/42jjszrmuJoSrg/fJT8123oWHZqJV7KpctpqKbH03F5GS6a9D6oF8NYpOaL02VR2ArMb+eSM+En3PNtIVAWaYyFfQBcZ9Ncb8uBPvgENKDBj9An2plaJQsq2uJZeozNVrZmRtGAbZ1uVQydX1bbKnAyiXPevXaLwhVALtU+V2PaWPrPlT82w/3YmJI4MhZdtBeuT7cYVEma8T1Jk/wUmxJC8VT3id4bGhYdRDwCZLvjTPr3KiYDwjhtsTtR6NiWrTw6tj/hfifM0ygyNe6XIHF+PTXu5yrvOReSaVXBj2o4JLq6GP742vAySDku7ZoaCAmNYKb7J+rXHX/XDT8D0JH318ynbT0S9eUDNaRTuqa2Pe8Lp16X+1yjNscgH8N/o2T5ajP2NBwq2FCEJ5Ycqjq4iDBItRiywwbv+3X1Qo6Moit67c837zghqqOnbj0olEFFxFmgl0FnYCPhXpMk0JEQOt2TItFl+B9Fz0nh/m7Sz7rs6fSJMCLlzc0Zzjs7JIJK6SYslhFXw7lbmj4uWEkHAJKOInutS7VXymNBMRswAfdHx//3z/oQVO54ikhV/l56OmeuijSNBe/1nRT5amSX8tZ99f/DGmZXkrdp708ZCqXHpoJevCwZQIIIuJHYAqY2urYJTUsDVWRoScAAAP6SURBVA0rjtrbjGnUS1qw8ElBjw26Uwj9R2P7yTjGsNQ7u1zeV1CHGV/i383iOn3gzfh6xsCbxbXrfnVb+Xrfyrs31F568ph67lKo5Piz6bRmbgmZvahkskmRbu8tOdXWyieeyfNJGPHSoMvj/o+JMh0fWsY5sX208oyu29CwNjGPcCOrkZ4R9GfBc8D1EyXiOCufCtbwm4pOQPCE+p0DLwBFJpiqwv7cMQij4TNlYm4IgDGH3m/BN+xs/MPKMLkljjHHnOAzYU6Nd/GM6enpr4WQn1oboDkakYaGtY1BwG8fdI+gu69Ldf34oEdNpZdab22BBIEkZodJqSTunADhDys58wtvvvPPFSMB5A2XCumYIKbGw4N+3f6SGWDY0qa27oh9jw4SRcfRZkjOexDA8tAQ9LvxF3hPDQ23SdSefD7P9Qg8zjXBxLMG3rxzGWXwJ5SMff9AyZlgxqgvLDl91VRO+wWGmCgidlzACBv47OE4DcWrh+PYuUJs8XpaOdjwQnE1OI5Xhh0Dz2SQz0ziitd1ObHlvKA3x3PcKejsoLfH/pk4Tgis8vbzyz1jpardjJ2BqKHhNo0q2Lcg4FeUVG2lTSKc+OeXnJeNl3FFRhY8YSSIeOf1XvuSyf3rJBRkkYfvD/zRQV8eeBqBABa8Oe5vGXgRbacN/Lklh7RMQrm0ZL4z6vbOKLuY+Lq+25HD8f7TS39z+K1MNxPwsQnTPOQNezQmBNxkEon+9bqSMMjOarqkHh1vjFh2FceY5bUtSGipRRUOLjkppar75ndrKPB6Zf85Rlaap5bMAqPnNiNOj69RIOicfe6BJ8TK8uySmoPQUQs7/H4I6YFBzwxyH88hqeQfBLmf4cKTy9Jyyzc0NAzYu6S9zu7dVjL18wtKCqLppK8YeHHkEj1QnzUUeOr6SfgQSur6I2NrP6HX87oWxxjjWHooqZ56TPbG4x56osFqaGhYBgidnp7zbUdJtVgqqV59HoiKLltqVdH7udolVfSLBl4v/taB5wdgb/9fmV1HnNDr2XuMhXkuAW+C3tAwByZt8vn4CeiVqcVbS9rqbHbqN0F9Wcke3Pj5K4dj2fB6ag6wJw28HlzeObze+5iSyR6o9tKi3qWket9DOeu2er9rbz7+v6GhoaGhoaGhoeEXHGMVf2wHL4SHsWq9G5OgoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaFhDeL/AbL/6dpoj+OHAAAAAElFTkSuQmCC",
-        width: "248",
-        height: "248",
-        style: { mixBlendMode: "multiply" }
-      }
-    ),
-    /* @__PURE__ */ React.createElement("rect", { x: "184.055", y: "54.995", width: "2.187", height: "2.187" }),
-    /* @__PURE__ */ React.createElement("rect", { x: "170.059", y: "44.06", width: "2.187", height: "2.187" }),
-    /* @__PURE__ */ React.createElement("rect", { x: "200.238", y: "77.302", width: "2.187", height: "2.187" }),
-    /* @__PURE__ */ React.createElement("rect", { x: "212.048", y: "87.8", width: "2.187", height: "2.187" }),
-    /* @__PURE__ */ React.createElement("rect", { x: "206.799", y: "83.425", width: "2.187", height: "2.187" }),
-    /* @__PURE__ */ React.createElement("rect", { x: "204.175", y: "85.612", width: "2.187", height: "2.187" }),
-    /* @__PURE__ */ React.createElement("rect", { x: "219.046", y: "103.108", width: "2.187", height: "2.187" }),
-    /* @__PURE__ */ React.createElement("rect", { x: "154.751", y: "30.064", width: "2.187", height: "2.187" }),
-    /* @__PURE__ */ React.createElement("rect", { x: "188.866", y: "63.742", width: "2.187", height: "2.187" }),
-    /* @__PURE__ */ React.createElement("rect", { x: "148.189", y: "34", width: "2.187", height: "2.187" }),
-    /* @__PURE__ */ React.createElement("rect", { x: "134.051", y: "31.707", width: "2.187", height: "2.187" }),
-    /* @__PURE__ */ React.createElement("rect", { x: "126.124", y: "24.771", width: "2.187", height: "2.187" }),
-    /* @__PURE__ */ React.createElement("rect", { x: "115.385", y: "29.19", width: "2.187", height: "2.187" }),
-    /* @__PURE__ */ React.createElement("rect", { x: "95.702", y: "31.376", width: "2.187", height: "2.187" }),
-    /* @__PURE__ */ React.createElement("rect", { x: "91.766", y: "27.002", width: "2.187", height: "2.187" }),
-    /* @__PURE__ */ React.createElement("rect", { x: "90.454", y: "32.688", width: "2.187", height: "2.187" }),
-    /* @__PURE__ */ React.createElement("rect", { x: "184.389", y: "45.58", width: "2.187", height: "2.187" }),
-    /* @__PURE__ */ React.createElement("rect", { x: "162.185", y: "41.873", width: "2.187", height: "2.187" })
-  ));
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "ai-plugin-callout__decoration",
+		"aria-hidden": "true",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+			viewBox: "0 0 248 248",
+			xmlns: "http://www.w3.org/2000/svg",
+			xmlnsXlink: "http://www.w3.org/1999/xlink",
+			focusable: "false",
+			style: {
+				width: "100%",
+				height: "100%"
+			},
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("image", {
+				href: "data:image/png;base64,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",
+				width: "248",
+				height: "248",
+				style: { mixBlendMode: "multiply" }
+			})
+		})
+	});
 }
 
 // routes/connectors-home/ai-plugin-callout.tsx
-var AI_PLUGIN_SLUG = "ai";
-var AI_PLUGIN_PAGE_SLUG = "ai-wp-admin";
-var AI_PLUGIN_ID = "ai/ai";
-var AI_PLUGIN_URL = "https://wordpress.org/plugins/ai/";
-var connectorDataValues = Object.values(getConnectorData());
-var hasAiProviders = connectorDataValues.some(
-  (c) => c.type === "ai_provider"
-);
-var aiProviderSettingNames = [];
-for (const c of connectorDataValues) {
-  if (c.type === "ai_provider" && c.authentication.method === "api_key") {
-    aiProviderSettingNames.push(c.authentication.settingName);
-  }
-}
+const AI_PLUGIN_SLUG = "ai";
+const AI_PLUGIN_PAGE_SLUG = "ai-wp-admin";
+const AI_PLUGIN_ID = "ai/ai";
+const AI_PLUGIN_URL = "https://wordpress.org/plugins/ai/";
+const connectorDataValues = Object.values(getConnectorData());
+const hasAiProviders = connectorDataValues.some((c) => c.type === "ai_provider");
+const aiProviderSettingNames = [];
+for (const c of connectorDataValues) if (c.type === "ai_provider" && c.authentication.method === "api_key") aiProviderSettingNames.push(c.authentication.settingName);
 function AiPluginCallout() {
-  const [isBusy, setIsBusy] = (0, import_element7.useState)(false);
-  const [justActivated, setJustActivated] = (0, import_element7.useState)(false);
-  const actionButtonRef = (0, import_element7.useRef)(null);
-  (0, import_element7.useEffect)(() => {
-    if (justActivated) {
-      actionButtonRef.current?.focus();
-    }
-  }, [justActivated]);
-  const initialHasConnectedProvider = (0, import_element7.useRef)(
-    connectorDataValues.some(
-      (c) => c.type === "ai_provider" && c.authentication.method === "api_key" && c.authentication.isConnected
-    )
-  ).current;
-  const {
-    pluginStatus,
-    canInstallPlugins,
-    canManagePlugins,
-    hasConnectedProvider
-  } = (0, import_data3.useSelect)((select2) => {
-    const store2 = select2(import_core_data2.store);
-    const canCreate = !!store2.canUser("create", {
-      kind: "root",
-      name: "plugin"
-    });
-    const siteSettings = store2.getEntityRecord("root", "site");
-    const hasConnected = initialHasConnectedProvider || aiProviderSettingNames.some(
-      (name) => !!siteSettings?.[name]
-    );
-    const plugin = store2.getEntityRecord(
-      "root",
-      "plugin",
-      AI_PLUGIN_ID
-    );
-    const hasFinished = store2.hasFinishedResolution("getEntityRecord", [
-      "root",
-      "plugin",
-      AI_PLUGIN_ID
-    ]);
-    if (!hasFinished) {
-      return {
-        pluginStatus: "checking",
-        canInstallPlugins: canCreate,
-        canManagePlugins: void 0,
-        hasConnectedProvider: hasConnected
-      };
-    }
-    if (!plugin) {
-      return {
-        pluginStatus: "not-installed",
-        canInstallPlugins: canCreate,
-        canManagePlugins: canCreate,
-        hasConnectedProvider: hasConnected
-      };
-    }
-    return {
-      pluginStatus: plugin.status === "active" ? "active" : "inactive",
-      canInstallPlugins: canCreate,
-      canManagePlugins: true,
-      hasConnectedProvider: hasConnected
-    };
-  }, []);
-  const { saveEntityRecord } = (0, import_data3.useDispatch)(import_core_data2.store);
-  const { createSuccessNotice, createErrorNotice } = (0, import_data3.useDispatch)(import_notices2.store);
-  const installPlugin = async () => {
-    setIsBusy(true);
-    try {
-      await saveEntityRecord(
-        "root",
-        "plugin",
-        { slug: AI_PLUGIN_SLUG, status: "active" },
-        { throwOnError: true }
-      );
-      setJustActivated(true);
-      createSuccessNotice(
-        (0, import_i18n3.__)("AI plugin installed and activated successfully."),
-        {
-          id: "ai-plugin-install-success",
-          type: "snackbar"
-        }
-      );
-    } catch {
-      createErrorNotice((0, import_i18n3.__)("Failed to install the AI plugin."), {
-        id: "ai-plugin-install-error",
-        type: "snackbar"
-      });
-    } finally {
-      setIsBusy(false);
-    }
-  };
-  const activatePlugin = async () => {
-    setIsBusy(true);
-    try {
-      await saveEntityRecord(
-        "root",
-        "plugin",
-        { plugin: AI_PLUGIN_ID, status: "active" },
-        { throwOnError: true }
-      );
-      setJustActivated(true);
-      createSuccessNotice((0, import_i18n3.__)("AI plugin activated successfully."), {
-        id: "ai-plugin-activate-success",
-        type: "snackbar"
-      });
-    } catch {
-      createErrorNotice((0, import_i18n3.__)("Failed to activate the AI plugin."), {
-        id: "ai-plugin-activate-error",
-        type: "snackbar"
-      });
-    } finally {
-      setIsBusy(false);
-    }
-  };
-  if (!hasAiProviders) {
-    return null;
-  }
-  if (pluginStatus === "checking") {
-    return null;
-  }
-  if (pluginStatus === "active" && initialHasConnectedProvider && !justActivated) {
-    return null;
-  }
-  if (pluginStatus === "not-installed" && canInstallPlugins === false) {
-    return null;
-  }
-  if (pluginStatus === "inactive" && canManagePlugins === false) {
-    return null;
-  }
-  const isActiveNoProvider = pluginStatus === "active" && !hasConnectedProvider;
-  const isJustConnected = pluginStatus === "active" && hasConnectedProvider && (!initialHasConnectedProvider || justActivated);
-  const showInstallActivate = pluginStatus === "not-installed" || pluginStatus === "inactive";
-  const getMessage = () => {
-    if (isJustConnected) {
-      return (0, import_i18n3.__)(
-        "The <strong>AI plugin</strong> is ready to use. You can use it to generate featured images, alt text, titles, excerpts and more. <a>Learn more</a>"
-      );
-    }
-    if (isActiveNoProvider) {
-      return (0, import_i18n3.__)(
-        "The <strong>AI plugin</strong> is installed. Connect a provider below to generate featured images, alt text, titles, excerpts, and more. <a>Learn more</a>"
-      );
-    }
-    return (0, import_i18n3.__)(
-      "The <strong>AI plugin</strong> can use your connectors to generate featured images, alt text, titles, excerpts and more. <a>Learn more</a>"
-    );
-  };
-  const getPrimaryButtonProps = () => {
-    if (pluginStatus === "not-installed") {
-      return {
-        label: isBusy ? (0, import_i18n3.__)("Installing\u2026") : (0, import_i18n3.__)("Install the AI plugin"),
-        disabled: isBusy,
-        onClick: isBusy ? void 0 : installPlugin
-      };
-    }
-    return {
-      label: isBusy ? (0, import_i18n3.__)("Activating\u2026") : (0, import_i18n3.__)("Activate the AI plugin"),
-      disabled: isBusy,
-      onClick: isBusy ? void 0 : activatePlugin
-    };
-  };
-  return /* @__PURE__ */ React.createElement("div", { className: "ai-plugin-callout" }, /* @__PURE__ */ React.createElement("div", { className: "ai-plugin-callout__content" }, /* @__PURE__ */ React.createElement("p", null, (0, import_element7.createInterpolateElement)(getMessage(), {
-    strong: /* @__PURE__ */ React.createElement("strong", null),
-    // @ts-ignore children are injected by createInterpolateElement at runtime.
-    a: /* @__PURE__ */ React.createElement(import_components3.ExternalLink, { href: AI_PLUGIN_URL })
-  })), showInstallActivate ? /* @__PURE__ */ React.createElement(
-    import_components3.Button,
-    {
-      variant: "primary",
-      size: "compact",
-      isBusy,
-      disabled: getPrimaryButtonProps().disabled,
-      accessibleWhenDisabled: true,
-      onClick: getPrimaryButtonProps().onClick
-    },
-    getPrimaryButtonProps().label
-  ) : /* @__PURE__ */ React.createElement(
-    import_components3.Button,
-    {
-      ref: actionButtonRef,
-      variant: "secondary",
-      size: "compact",
-      href: (0, import_url.addQueryArgs)("options-general.php", {
-        page: AI_PLUGIN_PAGE_SLUG
-      })
-    },
-    (0, import_i18n3.__)("Control features in the AI plugin")
-  )), /* @__PURE__ */ React.createElement(WpLogoDecoration, null));
+	const [isBusy, setIsBusy] = (0, import_element.useState)(false);
+	const [justActivated, setJustActivated] = (0, import_element.useState)(false);
+	const actionButtonRef = (0, import_element.useRef)(null);
+	(0, import_element.useEffect)(() => {
+		if (justActivated) actionButtonRef.current?.focus();
+	}, [justActivated]);
+	const initialHasConnectedProvider = (0, import_element.useRef)(connectorDataValues.some((c) => c.type === "ai_provider" && c.authentication.method === "api_key" && c.authentication.isConnected)).current;
+	const { pluginStatus, canInstallPlugins, canManagePlugins, hasConnectedProvider } = (0, import_data.useSelect)((select) => {
+		const store = select(import_core_data.store);
+		const canCreate = !!store.canUser("create", {
+			kind: "root",
+			name: "plugin"
+		});
+		const siteSettings = store.getEntityRecord("root", "site");
+		const hasConnected = initialHasConnectedProvider || aiProviderSettingNames.some((name) => !!siteSettings?.[name]);
+		const plugin = store.getEntityRecord("root", "plugin", AI_PLUGIN_ID);
+		if (!store.hasFinishedResolution("getEntityRecord", [
+			"root",
+			"plugin",
+			AI_PLUGIN_ID
+		])) return {
+			pluginStatus: "checking",
+			canInstallPlugins: canCreate,
+			canManagePlugins: void 0,
+			hasConnectedProvider: hasConnected
+		};
+		if (!plugin) return {
+			pluginStatus: "not-installed",
+			canInstallPlugins: canCreate,
+			canManagePlugins: canCreate,
+			hasConnectedProvider: hasConnected
+		};
+		return {
+			pluginStatus: plugin.status === "active" ? "active" : "inactive",
+			canInstallPlugins: canCreate,
+			canManagePlugins: true,
+			hasConnectedProvider: hasConnected
+		};
+	}, []);
+	const { saveEntityRecord } = (0, import_data.useDispatch)(import_core_data.store);
+	const { createSuccessNotice, createErrorNotice } = (0, import_data.useDispatch)(import_notices.store);
+	const installPlugin = async () => {
+		setIsBusy(true);
+		try {
+			await saveEntityRecord("root", "plugin", {
+				slug: AI_PLUGIN_SLUG,
+				status: "active"
+			}, { throwOnError: true });
+			setJustActivated(true);
+			createSuccessNotice((0, import_i18n.__)("AI plugin installed and activated successfully."), {
+				id: "ai-plugin-install-success",
+				type: "snackbar"
+			});
+		} catch {
+			createErrorNotice((0, import_i18n.__)("Failed to install the AI plugin."), {
+				id: "ai-plugin-install-error",
+				type: "snackbar"
+			});
+		} finally {
+			setIsBusy(false);
+		}
+	};
+	const activatePlugin = async () => {
+		setIsBusy(true);
+		try {
+			await saveEntityRecord("root", "plugin", {
+				plugin: AI_PLUGIN_ID,
+				status: "active"
+			}, { throwOnError: true });
+			setJustActivated(true);
+			createSuccessNotice((0, import_i18n.__)("AI plugin activated successfully."), {
+				id: "ai-plugin-activate-success",
+				type: "snackbar"
+			});
+		} catch {
+			createErrorNotice((0, import_i18n.__)("Failed to activate the AI plugin."), {
+				id: "ai-plugin-activate-error",
+				type: "snackbar"
+			});
+		} finally {
+			setIsBusy(false);
+		}
+	};
+	if (!hasAiProviders) return null;
+	if (pluginStatus === "checking") return null;
+	if (pluginStatus === "active" && initialHasConnectedProvider && !justActivated) return null;
+	if (pluginStatus === "inactive" && canManagePlugins === false) return null;
+	const isActiveNoProvider = pluginStatus === "active" && !hasConnectedProvider;
+	const isJustConnected = pluginStatus === "active" && hasConnectedProvider && (!initialHasConnectedProvider || justActivated);
+	const showInstallActivate = pluginStatus === "not-installed" || pluginStatus === "inactive";
+	const hideButtons = pluginStatus === "not-installed" && canInstallPlugins === false;
+	const getMessage = () => {
+		if (isJustConnected) return (0, import_i18n.__)("The <strong>AI plugin</strong> is ready to use. You can use it to generate featured images, alt text, titles, excerpts and more. <a>Learn more</a>");
+		if (isActiveNoProvider) return (0, import_i18n.__)("The <strong>AI plugin</strong> is installed. Connect an AI provider below to generate featured images, alt text, titles, excerpts, and more. <a>Learn more</a>");
+		return (0, import_i18n.__)("The <strong>AI plugin</strong> can use your AI connectors to generate featured images, alt text, titles, excerpts and more. <a>Learn more</a>");
+	};
+	const getPrimaryButtonProps = () => {
+		if (pluginStatus === "not-installed") return {
+			label: isBusy ? (0, import_i18n.__)("Installing…") : (0, import_i18n.__)("Install the AI plugin"),
+			disabled: isBusy,
+			onClick: isBusy ? void 0 : installPlugin
+		};
+		return {
+			label: isBusy ? (0, import_i18n.__)("Activating…") : (0, import_i18n.__)("Activate the AI plugin"),
+			disabled: isBusy,
+			onClick: isBusy ? void 0 : activatePlugin
+		};
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "ai-plugin-callout",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "ai-plugin-callout__content",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: (0, import_element.createInterpolateElement)(getMessage(), {
+				strong: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {}),
+				a: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_components.ExternalLink, { href: AI_PLUGIN_URL })
+			}) }), !hideButtons && (showInstallActivate ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_components.Button, {
+				variant: "primary",
+				size: "compact",
+				isBusy,
+				disabled: getPrimaryButtonProps().disabled,
+				accessibleWhenDisabled: true,
+				onClick: getPrimaryButtonProps().onClick,
+				children: getPrimaryButtonProps().label
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_components.Button, {
+				ref: actionButtonRef,
+				variant: "secondary",
+				size: "compact",
+				href: (0, import_url.addQueryArgs)("options-general.php", { page: AI_PLUGIN_PAGE_SLUG }),
+				children: (0, import_i18n.__)("Control features in the AI plugin")
+			}))]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WpLogoDecoration, {})]
+	});
 }
 
 // routes/connectors-home/stage.tsx
-var { store } = unlock(connectorsPrivateApis2);
+const { store } = unlock(privateApis);
 registerDefaultConnectors();
 function ConnectorsPage() {
-  const { connectors, canInstallPlugins } = (0, import_data4.useSelect)(
-    (select2) => ({
-      connectors: unlock(select2(store)).getConnectors(),
-      canInstallPlugins: select2(import_core_data3.store).canUser("create", {
-        kind: "root",
-        name: "plugin"
-      })
-    }),
-    []
-  );
-  const renderableConnectors = connectors.filter(
-    (connector) => connector.render
-  );
-  const isEmpty = renderableConnectors.length === 0;
-  return /* @__PURE__ */ React.createElement(
-    page_default,
-    {
-      title: (0, import_i18n4.__)("Connectors"),
-      headingLevel: 1,
-      subTitle: (0, import_i18n4.__)(
-        "All of your API keys and credentials are stored here and shared across plugins. Configure once and use everywhere."
-      )
-    },
-    /* @__PURE__ */ React.createElement(
-      "div",
-      {
-        className: `connectors-page${isEmpty ? " connectors-page--empty" : ""}`
-      },
-      isEmpty ? /* @__PURE__ */ React.createElement(
-        import_components4.__experimentalVStack,
-        {
-          alignment: "center",
-          spacing: 3,
-          style: { maxWidth: 480 }
-        },
-        /* @__PURE__ */ React.createElement(import_components4.__experimentalVStack, { alignment: "center", spacing: 2 }, /* @__PURE__ */ React.createElement(import_components4.__experimentalHeading, { level: 2, size: 15, weight: 600 }, (0, import_i18n4.__)("No connectors yet")), /* @__PURE__ */ React.createElement(import_components4.__experimentalText, { size: 12 }, (0, import_i18n4.__)(
-          "Connectors appear here when you install plugins that use external services. Each plugin registers the API keys it needs, and you manage them all in one place."
-        ))),
-        /* @__PURE__ */ React.createElement(import_components4.Button, { variant: "secondary", href: "plugin-install.php" }, (0, import_i18n4.__)("Learn more"))
-      ) : /* @__PURE__ */ React.createElement(import_components4.__experimentalVStack, { spacing: 3 }, /* @__PURE__ */ React.createElement(AiPluginCallout, null), connectors.map((connector) => {
-        if (connector.render) {
-          return /* @__PURE__ */ React.createElement(
-            connector.render,
-            {
-              key: connector.slug,
-              slug: connector.slug,
-              name: connector.name,
-              description: connector.description,
-              type: connector.type,
-              logo: connector.logo,
-              authentication: connector.authentication,
-              plugin: connector.plugin
-            }
-          );
-        }
-        return null;
-      })),
-      canInstallPlugins && /* @__PURE__ */ React.createElement("p", null, (0, import_element8.createInterpolateElement)(
-        (0, import_i18n4.__)(
-          "If the connector you need is not listed, <a>search the plugin directory</a> to see if a connector is available."
-        ),
-        {
-          a: (
-            // eslint-disable-next-line jsx-a11y/anchor-has-content
-            /* @__PURE__ */ React.createElement("a", { href: "plugin-install.php?s=connector&tab=search&type=tag" })
-          )
-        }
-      ))
-    )
-  );
+	const isFileModDisabled = getIsFileModDisabled();
+	const { connectors, canInstallPlugins, isAiPluginInstalled } = (0, import_data.useSelect)((select) => {
+		const coreSelect = select(import_core_data.store);
+		const aiPlugin = coreSelect.getEntityRecord("root", "plugin", "ai/ai");
+		return {
+			connectors: unlock(select(store)).getConnectors(),
+			canInstallPlugins: coreSelect.canUser("create", {
+				kind: "root",
+				name: "plugin"
+			}),
+			isAiPluginInstalled: !!aiPlugin
+		};
+	}, []);
+	const renderableConnectors = connectors.filter((connector) => connector.render);
+	const aiProviderPluginSlugs = Array.from(new Set(connectors.filter((connector) => connector.type === "ai_provider").map((connector) => connector.plugin?.file?.split("/")[0]).filter((slug) => !!slug))).sort();
+	const installedPluginSlugs = new Set(connectors.filter((connector) => connector.plugin?.isInstalled).map((connector) => connector.plugin?.file?.split("/")[0]).filter((slug) => !!slug));
+	if (isAiPluginInstalled) installedPluginSlugs.add("ai");
+	const manualInstallPluginSlugs = ["ai", ...aiProviderPluginSlugs].filter((slug) => !installedPluginSlugs.has(slug));
+	const isEmpty = renderableConnectors.length === 0;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Page, {
+		title: (0, import_i18n.__)("Connectors"),
+		subTitle: (0, import_i18n.__)("All of your API keys and credentials are stored here and shared across plugins. Configure once and use everywhere."),
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: `connectors-page${isEmpty ? " connectors-page--empty" : ""}`,
+			children: [
+				manualInstallPluginSlugs.length > 0 && (isFileModDisabled || !canInstallPlugins) && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root, {
+					intent: "info",
+					className: "connectors-page__file-mods-notice",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Description, { children: isFileModDisabled ? (0, import_i18n.__)("Plugins cannot be installed here due to your site configuration. Install them manually using your normal deployment workflow.") : (0, import_i18n.__)("You do not have permission to install plugins. Please ask a site administrator to install them for you.") })
+				}),
+				isEmpty ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_components.__experimentalVStack, {
+					alignment: "center",
+					spacing: 3,
+					style: { maxWidth: 480 },
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_components.__experimentalVStack, {
+						alignment: "center",
+						spacing: 2,
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_components.__experimentalHeading, {
+							level: 2,
+							size: 15,
+							children: (0, import_i18n.__)("No connectors yet")
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_components.__experimentalText, {
+							size: 12,
+							children: (0, import_i18n.__)("Connectors appear here when you install plugins that use external services. Each plugin registers the API keys it needs, and you manage them all in one place.")
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_components.Button, {
+						variant: "secondary",
+						href: "plugin-install.php",
+						__next40pxDefaultSize: true,
+						children: (0, import_i18n.__)("Learn more")
+					})]
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_components.__experimentalVStack, {
+					spacing: 3,
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AiPluginCallout, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_components.__experimentalVStack, {
+						spacing: 3,
+						role: "list",
+						children: connectors.map((connector) => {
+							if (connector.render) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(connector.render, {
+								slug: connector.slug,
+								name: connector.name,
+								description: connector.description,
+								type: connector.type,
+								logo: connector.logo,
+								authentication: connector.authentication,
+								plugin: connector.plugin
+							}, connector.slug);
+							return null;
+						})
+					})]
+				}),
+				canInstallPlugins && !isFileModDisabled && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "connectors-page__help-text",
+					children: (0, import_element.createInterpolateElement)((0, import_i18n.__)("If the connector you need is not listed, <a>search the plugin directory</a> to see if a connector is available."), { a: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", { href: "plugin-install.php?s=connector&tab=search&type=tag" }) })
+				})
+			]
+		})
+	});
 }
 function Stage() {
-  return /* @__PURE__ */ React.createElement(ConnectorsPage, null);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ConnectorsPage, {});
 }
-var stage = Stage;
-export {
-  stage
-};
+const stage = Stage;
+
+export { stage };

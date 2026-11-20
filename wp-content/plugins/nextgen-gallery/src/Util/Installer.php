@@ -287,6 +287,18 @@ class Installer {
 			// failing probe re-reports.
 			\delete_option( 'ngg_schema_check_reported' );
 
+			// Re-arm the #1107 originals relocation on every version change. Its DONE flag is
+			// otherwise permanent, so "*_backup" siblings that appear after it latched - a
+			// downgrade then re-upgrade, a files-only restore, a folder of a gallery deleted with
+			// deleteImg off - would never be swept and would stay at the anonymously derivable
+			// URL. Re-running is cheap when there is nothing to move: the batch skips every image
+			// whose original is already relocated.
+			\delete_option( 'ngg_originals_relocated' );
+			\delete_option( 'ngg_originals_relocation_cursor' );
+			\delete_option( 'ngg_originals_relocation_passes' );
+			\delete_option( 'ngg_originals_relocation_incomplete' );
+			\delete_option( 'ngg_originals_relocation_dirs_cursor' );
+
 			// Clear APC cache.
 			if ( \function_exists( 'apc_clear_cache' ) ) {
 				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
@@ -303,6 +315,9 @@ class Installer {
 			// Clear all of our transients.
 			\wp_cache_flush();
 			Transient::flush();
+
+			// POPE no longer persists its cache (#1248); remove the file older versions left.
+			self::remove_legacy_pope_cache();
 
 			// Remove all NGG created cron jobs.
 			self::refresh_cron();
@@ -381,6 +396,54 @@ class Installer {
 		}
 
 		return $retval;
+	}
+
+	/**
+	 * Deletes the `pope_cache` file that POPE wrote before nextgen-gallery#1248.
+	 *
+	 * POPE kept its cache, including the class name => file path map its autoloader includes
+	 * from, in one file in the system temp directory (or POPE_CACHE_DIR). It now keeps it in
+	 * memory, so the file is dead weight that other installs on the host could still read.
+	 * Best effort: only a regular file owned by the user PHP runs as is removed. A symlink or
+	 * a file another account created is left alone, since the temp directory is shared and
+	 * deleting another account's file is not ours to do.
+	 *
+	 * @param string[]|null $dirs Directories to look in. Defaults to the system temp dir and
+	 *                            POPE_CACHE_DIR when defined.
+	 * @return string[] The files that were removed.
+	 */
+	public static function remove_legacy_pope_cache( $dirs = null ) {
+		if ( null === $dirs ) {
+			$dirs = [ \sys_get_temp_dir() ];
+			if ( \defined( 'POPE_CACHE_DIR' ) ) {
+				$dirs[] = (string) \constant( 'POPE_CACHE_DIR' );
+			}
+		}
+
+		// Without POSIX there is no way to tell whose file it is.
+		if ( ! \function_exists( 'posix_geteuid' ) ) {
+			return [];
+		}
+		$uid = \posix_geteuid();
+
+		$removed = [];
+		foreach ( \array_unique( \array_filter( $dirs ) ) as $dir ) {
+			$file = \rtrim( $dir, '/\\' ) . DIRECTORY_SEPARATOR . 'pope_cache';
+
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- best effort; open_basedir may forbid the temp dir.
+			if ( @\is_link( $file ) || ! @\is_file( $file ) || @\fileowner( $file ) !== $uid ) {
+				continue;
+			}
+
+			\wp_delete_file( $file );
+			\clearstatcache( true, $file );
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- see above.
+			if ( ! @\file_exists( $file ) ) {
+				$removed[] = $file;
+			}
+		}
+
+		return $removed;
 	}
 
 	public static function refresh_cron() {

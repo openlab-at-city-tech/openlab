@@ -481,7 +481,7 @@ class TablePress_CSSTidy_Optimise {
 				continue;
 			}
 
-			if ( abs( $number[0] ) > 0 ) {
+			if ( abs( (float) $number[0] ) > 0 ) {
 				if ( '' === $number[1] && in_array( $this->property, $unit_values, true ) ) {
 					$number[1] = 'px';
 				}
@@ -515,9 +515,9 @@ class TablePress_CSSTidy_Optimise {
 		$return[0] = (float) $a_string;
 		if ( abs( $return[0] ) > 0 && abs( $return[0] ) < 1 ) {
 			if ( $return[0] < 0 ) {
-				$return[0] = '-' . ltrim( substr( $return[0], 1 ), '0' );
+				$return[0] = '-' . ltrim( substr( (string) $return[0], 1 ), '0' );
 			} else {
-				$return[0] = ltrim( $return[0], '0' );
+				$return[0] = ltrim( (string) $return[0], '0' );
 			}
 		}
 

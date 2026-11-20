@@ -5,7 +5,7 @@
  * @category Core
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.joedolson.com/wp-to-twitter/
  */
 
@@ -40,9 +40,9 @@ function wpt_max_length( $service = false ) {
 	 *
 	 * @hook wpt_max_length
 	 *
-	 * @param {array} $values Array with various values used for calculating how long your status update can be.
+	 * @param array $values Array with various values used for calculating how long your status update can be.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	return apply_filters( 'wpt_max_length', $values, $service );
 }
@@ -114,10 +114,10 @@ function wpt_truncate_status( $update, $post, $post_ID, $repost = false, $ref = 
 		 *
 		 * @hook wpt_tweet_sentence
 		 *
-		 * @param {string} $update Template for this status update.
-		 * @param {int}    $post_ID Post ID.
+		 * @param string $update Template for this status update.
+		 * @param int    $post_ID Post ID.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$update   = apply_filters( 'wpt_tweet_sentence', $update, $post_ID );
 		$update   = trim( wpt_custom_shortcodes( $update, $post_ID ) );
@@ -140,13 +140,13 @@ function wpt_truncate_status( $update, $post, $post_ID, $repost = false, $ref = 
 			 * Filter an update template that does not contain any XPoster template tags.
 			 *
 			 * @hook wpt_custom_truncate
-			 * @param {string} $post_status Text to status update truncated to maximum allowed length.
-			 * @param {string} $update Original passed text.
-			 * @param {int}    $post_ID Post ID.
-			 * @param {bool}   $repost Boolean flag that indicates whether this is being reposted.
-			 * @param {int}    $reference Pass reference (1).
+			 * @param string $post_status Text to status update truncated to maximum allowed length.
+			 * @param string $update Original passed text.
+			 * @param int    $post_ID Post ID.
+			 * @param bool   $repost Boolean flag that indicates whether this is being reposted.
+			 * @param int    $reference Pass reference (1).
 			 *
-			 * @return {string}
+			 * @return string
 			 */
 			return apply_filters( 'wpt_custom_truncate', $post_update, $update, $post_ID, $repost, 1 );
 		}
@@ -165,13 +165,13 @@ function wpt_truncate_status( $update, $post, $post_ID, $repost = false, $ref = 
 			 * Filter an update template after tags have been parsed but prior to truncating for length.
 			 *
 			 * @hook wpt_custom_truncate
-			 * @param {string} $post_update Text to Tweet truncated to maximum allowed length.
-			 * @param {string} $update Original passed text.
-			 * @param {int}    $post_ID Post ID.
-			 * @param {bool}   $repost Boolean flag that indicates whether this is being reposted.
-			 * @param {int}    $reference Pass reference (2).
+			 * @param string $post_update Text to Tweet truncated to maximum allowed length.
+			 * @param string $update Original passed text.
+			 * @param int    $post_ID Post ID.
+			 * @param bool   $repost Boolean flag that indicates whether this is being reposted.
+			 * @param int    $reference Pass reference (2).
 			 *
-			 * @return {string}
+			 * @return string
 			 */
 			return apply_filters( 'wpt_custom_truncate', $post_update, $update, $post_ID, $repost, 2 ); // return early if all is well.
 		} else {
@@ -251,11 +251,11 @@ function wpt_truncate_status( $update, $post, $post_ID, $repost = false, $ref = 
 								 * Filter a template tag value after truncation. If a value like an excerpt or post content has been truncated, you can modify the output using this filter.
 								 *
 								 * @hook wpt_filter_truncated_value
-								 * @param {string} $new_value Text truncated to maximum allowed length.
-								 * @param {string} $key Template tag.
-								 * @param {string} $old_value Text prior to truncation.
+								 * @param string $new_value Text truncated to maximum allowed length.
+								 * @param string $key Template tag.
+								 * @param string $old_value Text prior to truncation.
 								 *
-								 * @return {string}
+								 * @return string
 								 */
 								$new_value = apply_filters( 'wpt_filter_truncated_value', $new_value, $key, $old_value );
 							}
@@ -284,6 +284,7 @@ function wpt_truncate_status( $update, $post, $post_ID, $repost = false, $ref = 
 				} else {
 					$post_update = mb_substr( $post_update, 0, ( $length + $diff ), $encoding );
 					$update      = true;
+					$tag         = '';
 				}
 
 				if ( ! $update ) {
@@ -306,13 +307,13 @@ function wpt_truncate_status( $update, $post, $post_ID, $repost = false, $ref = 
 	 * Filter a status update template after all content checks are completed.
 	 *
 	 * @hook wpt_custom_truncate
-	 * @param {string} $post_update Text to status update truncated to maximum allowed length.
-	 * @param {string} $update Original passed text.
-	 * @param {int}    $post_ID Post ID.
-	 * @param {bool}   $repost Boolean flag that indicates whether this is being reposted.
-	 * @param {int}    $reference Pass reference (3).
+	 * @param string $post_update Text to status update truncated to maximum allowed length.
+	 * @param string $update Original passed text.
+	 * @param int    $post_ID Post ID.
+	 * @param bool   $repost Boolean flag that indicates whether this is being reposted.
+	 * @param int    $reference Pass reference (3).
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	return apply_filters( 'wpt_custom_truncate', $post_update, $update, $post_ID, $repost, 3 );
 }
@@ -388,9 +389,9 @@ function wpt_tags() {
 	 *
 	 * @hook wpt_tags
 	 *
-	 * @param {array} $tags Array of strings for each tag, e.g. 'blog' for #blog#.
+	 * @param array $tags Array of strings for each tag, e.g. 'blog' for #blog#.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	return apply_filters( 'wpt_tags', array( 'url', 'title', 'blog', 'post', 'category', 'categories', 'date', 'author', 'displayname', 'tags', 'modified', 'reference', 'account', '@', 'cat_desc', 'longurl' ) );
 }
@@ -424,12 +425,12 @@ function wpt_create_values( $post, $post_ID, $ref, $service ) {
 	 *
 	 * @hook wptt_shorten_link
 	 *
-	 * @param {string} $permalink The post permalink.
-	 * @param {string} $title The post title.
-	 * @param {int}    $post_ID The post ID.
-	 * @param {bool}   $test False because this is not a test cycle.
+	 * @param string $permalink The post permalink.
+	 * @param string $title The post title.
+	 * @param int    $post_ID The post ID.
+	 * @param bool   $test False because this is not a test cycle.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$shortlink = apply_filters( 'wptt_shorten_link', $post['postLink'], $post['postTitle'], $post_ID, false );
 	$shrink    = ( '' !== $post['shortUrl'] && false !== $post['shortUrl'] ) ? $post['shortUrl'] : $shortlink;
@@ -448,6 +449,10 @@ function wpt_create_values( $post, $post_ID, $ref, $service ) {
 	$tags        = wpt_generate_hash_tags( $post_ID );
 	$date        = trim( (string) $post['postDate'] );
 	$modified    = trim( (string) $post['postModified'] );
+
+	$account_field = false;
+	$user_setting  = false;
+	$user_field    = false;
 	switch ( $service ) {
 		case 'x':
 			$account_field = 'wtt_twitter_username';
@@ -465,11 +470,11 @@ function wpt_create_values( $post, $post_ID, $ref, $service ) {
 			$user_field    = 'wpt_mastodon_username';
 			break;
 	}
-	$account = get_option( $account_field, '' );
+	$account = ( $account_field ) ? get_option( $account_field, '' ) : '';
 	// The setting.
-	$user_meta = get_user_meta( $auth, $user_setting, true );
+	$user_meta = ( $user_setting ) ? get_user_meta( $auth, $user_setting, true ) : '';
 	// If connected to service.
-	$user_account = get_user_meta( $auth, $user_field, true );
+	$user_account = ( $user_field ) ? get_user_meta( $auth, $user_field, true ) : '';
 	$user_account = ( $user_account ) ? $user_account : $user_meta;
 
 	$account = ( '' !== $account ) ? "@$account" : ''; // value of #account#.
@@ -518,10 +523,10 @@ function wpt_create_values( $post, $post_ID, $ref, $service ) {
 			 *
 			 * @hook wpt_custom_tag
 			 *
-			 * @param {string} $tag_value The output for a custom tag. Default empty.
-			 * @param {int}     $post_ID The post ID.
+			 * @param string $tag_value The output for a custom tag. Default empty.
+			 * @param int     $post_ID The post ID.
 			 *
-			 * @return {string}
+			 * @return string
 			 */
 			$return[ $key ] = trim( apply_filters( 'wpt_custom_tag', '', $post_ID ) );
 		} else {
@@ -538,9 +543,10 @@ function wpt_create_values( $post, $post_ID, $ref, $service ) {
  * @param array  $values All values.
  * @param string $encoding Current encoding.
  *
- * @return array.
+ * @return array
  */
 function wpt_length_array( $values, $encoding ) {
+	$array = array();
 	foreach ( $values as $key => $value ) {
 		$array[ $key ] = mb_strlen( wpt_normalize( $value ), $encoding );
 	}
@@ -573,11 +579,11 @@ function wpt_custom_shortcodes( $sentence, $post_ID ) {
 			 *
 			 * @hook wpt_custom_shortcode
 			 *
-			 * @param {string} $value Returned singular value of a post meta field, tags stripped.
-			 * @param {int}    $post_ID Post ID.
-			 * @param {string} $field Post meta field name.
+			 * @param string $value Returned singular value of a post meta field, tags stripped.
+			 * @param int    $post_ID Post ID.
+			 * @param string $field Post meta field name.
 			 *
-			 * @return {string}
+			 * @return string
 			 */
 			$custom   = apply_filters( 'wpt_custom_shortcode', $value, $post_ID, $field );
 			$sentence = str_replace( $shortcode, $custom, $sentence );
@@ -611,11 +617,11 @@ function wpt_user_meta_shortcodes( $sentence, $auth_id ) {
 			 *
 			 * @hook wpt_user_meta_shortcode
 			 *
-			 * @param {string} $value Returned singular value of a post meta field, tags stripped.
-			 * @param {int}  $auth_id User ID.
-			 * @param {string} $field Name of user meta field.
+			 * @param string $value Returned singular value of a post meta field, tags stripped.
+			 * @param int  $auth_id User ID.
+			 * @param string $field Name of user meta field.
 			 *
-			 * @return {string}
+			 * @return string
 			 */
 			$custom   = apply_filters( 'wpt_user_meta_shortcode', wp_strip_all_tags( get_user_meta( $auth_id, $field, true ) ), $auth_id, $field );
 			$sentence = str_replace( $shortcode, $custom, $sentence );

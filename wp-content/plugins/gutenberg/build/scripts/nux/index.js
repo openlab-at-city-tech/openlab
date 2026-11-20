@@ -1,328 +1,206 @@
-var wp;
-(wp ||= {}).nux = (() => {
-  var __create = Object.create;
-  var __defProp = Object.defineProperty;
-  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-  var __getOwnPropNames = Object.getOwnPropertyNames;
-  var __getProtoOf = Object.getPrototypeOf;
-  var __hasOwnProp = Object.prototype.hasOwnProperty;
-  var __commonJS = (cb, mod) => function __require() {
-    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-  };
-  var __export = (target, all) => {
-    for (var name in all)
-      __defProp(target, name, { get: all[name], enumerable: true });
-  };
-  var __copyProps = (to, from, except, desc) => {
-    if (from && typeof from === "object" || typeof from === "function") {
-      for (let key of __getOwnPropNames(from))
-        if (!__hasOwnProp.call(to, key) && key !== except)
-          __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-    }
-    return to;
-  };
-  var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-    // If the importer is in node compatibility mode or this is not an ESM
-    // file that has been converted to a CommonJS file using a Babel-
-    // compatible transform (i.e. "__esModule" has not been set), then set
-    // "default" to the CommonJS "module.exports" for node compatibility.
-    isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-    mod
-  ));
-  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+(function(exports, _wordpress_deprecated, _wordpress_data) {
 
-  // package-external:@wordpress/deprecated
-  var require_deprecated = __commonJS({
-    "package-external:@wordpress/deprecated"(exports, module) {
-      module.exports = window.wp.deprecated;
-    }
-  });
+"use strict";
+// \0rolldown/runtime.js
+	var __create = Object.create;
+	var __defProp = Object.defineProperty;
+	var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+	var __getOwnPropNames = Object.getOwnPropertyNames;
+	var __getProtoOf = Object.getPrototypeOf;
+	var __hasOwnProp = Object.prototype.hasOwnProperty;
+	var __exportAll = (all, no_symbols) => {
+		let target = {};
+		for (var name in all) {
+			__defProp(target, name, {
+				get: all[name],
+				enumerable: true
+			});
+		}
+		if (!no_symbols) {
+			__defProp(target, Symbol.toStringTag, { value: "Module" });
+		}
+		return target;
+	};
+	var __copyProps = (to, from, except, desc) => {
+		if (from && typeof from === "object" || typeof from === "function") {
+			for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
+				key = keys[i];
+				if (!__hasOwnProp.call(to, key) && key !== except) {
+					__defProp(to, key, {
+						get: ((k) => from[k]).bind(null, key),
+						enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+					});
+				}
+			}
+		}
+		return to;
+	};
+	var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule || !__hasOwnProp.call(mod, "default") ? __defProp(target, "default", {
+		value: mod,
+		enumerable: true
+	}) : target, mod));
 
-  // package-external:@wordpress/data
-  var require_data = __commonJS({
-    "package-external:@wordpress/data"(exports, module) {
-      module.exports = window.wp.data;
-    }
-  });
+_wordpress_deprecated = __toESM(_wordpress_deprecated, 1);
 
-  // package-external:@wordpress/compose
-  var require_compose = __commonJS({
-    "package-external:@wordpress/compose"(exports, module) {
-      module.exports = window.wp.compose;
-    }
-  });
+// packages/nux/build-module/store/reducer.mjs
+/**
+	* Deprecated NUX store state kept only so the core/nux store can still be
+	* registered for backward compatibility.
+	*/
+	const DEFAULT_STATE = {
+		guides: [],
+		preferences: {
+			areTipsEnabled: false,
+			dismissedTips: {}
+		}
+	};
+	/**
+	* Reducer that preserves state without responding to actions.
+	*
+	* @param {Object} state Current state.
+	*
+	* @return {Object} Current state.
+	*/
+	function reducer(state = DEFAULT_STATE) {
+		return state;
+	}
 
-  // package-external:@wordpress/components
-  var require_components = __commonJS({
-    "package-external:@wordpress/components"(exports, module) {
-      module.exports = window.wp.components;
-    }
-  });
+// packages/nux/build-module/store/actions.mjs
+	var actions_exports = /* @__PURE__ */ __exportAll({
+		disableTips: () => disableTips,
+		dismissTip: () => dismissTip,
+		enableTips: () => enableTips,
+		triggerGuide: () => triggerGuide
+	}, 1);
+	/**
+	* Returns a no-op action object. This package is deprecated and no longer
+	* displays tips, but the action remains for backward compatibility.
+	*
+	* @param {string[]} tipIds Which tips would have been shown in the guide.
+	*
+	* @return {Object} Action object.
+	*/
+	function triggerGuide(tipIds) {
+		return {
+			type: "TRIGGER_GUIDE",
+			tipIds
+		};
+	}
+	/**
+	* Returns a no-op action object. This package is deprecated and no longer
+	* displays tips, but the action remains for backward compatibility.
+	*
+	* @param {string} id The tip that would have been dismissed.
+	*
+	* @return {Object} Action object.
+	*/
+	function dismissTip(id) {
+		return {
+			type: "DISMISS_TIP",
+			id
+		};
+	}
+	/**
+	* Returns a no-op action object. This package is deprecated and no longer
+	* displays tips, but the action remains for backward compatibility.
+	*
+	* @return {Object} Action object.
+	*/
+	function disableTips() {
+		return { type: "DISABLE_TIPS" };
+	}
+	/**
+	* Returns a no-op action object. This package is deprecated and no longer
+	* displays tips, but the action remains for backward compatibility.
+	*
+	* @return {Object} Action object.
+	*/
+	function enableTips() {
+		return { type: "ENABLE_TIPS" };
+	}
 
-  // package-external:@wordpress/i18n
-  var require_i18n = __commonJS({
-    "package-external:@wordpress/i18n"(exports, module) {
-      module.exports = window.wp.i18n;
-    }
-  });
+// packages/nux/build-module/store/selectors.mjs
+	var selectors_exports = /* @__PURE__ */ __exportAll({
+		areTipsEnabled: () => areTipsEnabled,
+		getAssociatedGuide: () => getAssociatedGuide,
+		isTipVisible: () => isTipVisible
+	}, 1);
+	/**
+	* An object containing information about a guide.
+	*
+	* @typedef {Object} NUXGuideInfo
+	* @property {string[]} tipIds       Which tips the guide contains.
+	* @property {?string}  currentTipId The guide's currently showing tip.
+	* @property {?string}  nextTipId    The guide's next tip to show.
+	*/
+	/**
+	* Returns null because the deprecated NUX package no longer displays guides.
+	*
+	* @return {null} No associated guide.
+	*/
+	function getAssociatedGuide() {
+		return null;
+	}
+	/**
+	* Returns false because the deprecated NUX package no longer displays tips.
+	*
+	* @return {boolean} Whether or not the given tip is showing.
+	*/
+	function isTipVisible() {
+		return false;
+	}
+	/**
+	* Returns false because the deprecated NUX package no longer displays tips.
+	*
+	* @return {boolean} Whether tips are globally enabled.
+	*/
+	function areTipsEnabled() {
+		return false;
+	}
 
-  // package-external:@wordpress/element
-  var require_element = __commonJS({
-    "package-external:@wordpress/element"(exports, module) {
-      module.exports = window.wp.element;
-    }
-  });
+// packages/nux/build-module/store/index.mjs
+	const STORE_NAME = "core/nux";
+	/**
+	* Store definition for the nux namespace.
+	*
+	* @see https://github.com/WordPress/gutenberg/blob/HEAD/packages/data/README.md#createReduxStore
+	*
+	* @type {Object}
+	*/
+	const store = (0, _wordpress_data.createReduxStore)(STORE_NAME, {
+		reducer,
+		actions: actions_exports,
+		selectors: selectors_exports,
+		persist: ["preferences"]
+	});
+	(0, _wordpress_data.registerStore)(STORE_NAME, {
+		reducer,
+		actions: actions_exports,
+		selectors: selectors_exports,
+		persist: ["preferences"]
+	});
 
-  // package-external:@wordpress/primitives
-  var require_primitives = __commonJS({
-    "package-external:@wordpress/primitives"(exports, module) {
-      module.exports = window.wp.primitives;
-    }
-  });
+// packages/nux/build-module/components/dot-tip/index.mjs
+/**
+	* Deprecated no-op DotTip component.
+	*
+	* @return {null} Nothing.
+	*/
+	function DotTip() {
+		return null;
+	}
 
-  // vendor-external:react/jsx-runtime
-  var require_jsx_runtime = __commonJS({
-    "vendor-external:react/jsx-runtime"(exports, module) {
-      module.exports = window.ReactJSXRuntime;
-    }
-  });
+// packages/nux/build-module/index.mjs
+	(0, _wordpress_deprecated.default)("wp.nux", {
+		since: "5.4",
+		hint: "wp.components.Guide can be used to show a user guide.",
+		version: "6.2"
+	});
 
-  // packages/nux/build-module/index.mjs
-  var index_exports = {};
-  __export(index_exports, {
-    DotTip: () => dot_tip_default,
-    store: () => store
-  });
-  var import_deprecated = __toESM(require_deprecated(), 1);
-
-  // packages/nux/build-module/store/index.mjs
-  var import_data3 = __toESM(require_data(), 1);
-
-  // packages/nux/build-module/store/reducer.mjs
-  var import_data = __toESM(require_data(), 1);
-  function guides(state = [], action) {
-    switch (action.type) {
-      case "TRIGGER_GUIDE":
-        return [...state, action.tipIds];
-    }
-    return state;
-  }
-  function areTipsEnabled(state = true, action) {
-    switch (action.type) {
-      case "DISABLE_TIPS":
-        return false;
-      case "ENABLE_TIPS":
-        return true;
-    }
-    return state;
-  }
-  function dismissedTips(state = {}, action) {
-    switch (action.type) {
-      case "DISMISS_TIP":
-        return {
-          ...state,
-          [action.id]: true
-        };
-      case "ENABLE_TIPS":
-        return {};
-    }
-    return state;
-  }
-  var preferences = (0, import_data.combineReducers)({ areTipsEnabled, dismissedTips });
-  var reducer_default = (0, import_data.combineReducers)({ guides, preferences });
-
-  // packages/nux/build-module/store/actions.mjs
-  var actions_exports = {};
-  __export(actions_exports, {
-    disableTips: () => disableTips,
-    dismissTip: () => dismissTip,
-    enableTips: () => enableTips,
-    triggerGuide: () => triggerGuide
-  });
-  function triggerGuide(tipIds) {
-    return {
-      type: "TRIGGER_GUIDE",
-      tipIds
-    };
-  }
-  function dismissTip(id) {
-    return {
-      type: "DISMISS_TIP",
-      id
-    };
-  }
-  function disableTips() {
-    return {
-      type: "DISABLE_TIPS"
-    };
-  }
-  function enableTips() {
-    return {
-      type: "ENABLE_TIPS"
-    };
-  }
-
-  // packages/nux/build-module/store/selectors.mjs
-  var selectors_exports = {};
-  __export(selectors_exports, {
-    areTipsEnabled: () => areTipsEnabled2,
-    getAssociatedGuide: () => getAssociatedGuide,
-    isTipVisible: () => isTipVisible
-  });
-  var import_data2 = __toESM(require_data(), 1);
-  var getAssociatedGuide = (0, import_data2.createSelector)(
-    (state, tipId) => {
-      for (const tipIds of state.guides) {
-        if (tipIds.includes(tipId)) {
-          const nonDismissedTips = tipIds.filter(
-            (tId) => !Object.keys(
-              state.preferences.dismissedTips
-            ).includes(tId)
-          );
-          const [currentTipId = null, nextTipId = null] = nonDismissedTips;
-          return { tipIds, currentTipId, nextTipId };
-        }
-      }
-      return null;
-    },
-    (state) => [state.guides, state.preferences.dismissedTips]
-  );
-  function isTipVisible(state, tipId) {
-    if (!state.preferences.areTipsEnabled) {
-      return false;
-    }
-    if (state.preferences.dismissedTips?.hasOwnProperty(tipId)) {
-      return false;
-    }
-    const associatedGuide = getAssociatedGuide(state, tipId);
-    if (associatedGuide && associatedGuide.currentTipId !== tipId) {
-      return false;
-    }
-    return true;
-  }
-  function areTipsEnabled2(state) {
-    return state.preferences.areTipsEnabled;
-  }
-
-  // packages/nux/build-module/store/index.mjs
-  var STORE_NAME = "core/nux";
-  var store = (0, import_data3.createReduxStore)(STORE_NAME, {
-    reducer: reducer_default,
-    actions: actions_exports,
-    selectors: selectors_exports,
-    persist: ["preferences"]
-  });
-  (0, import_data3.registerStore)(STORE_NAME, {
-    reducer: reducer_default,
-    actions: actions_exports,
-    selectors: selectors_exports,
-    persist: ["preferences"]
-  });
-
-  // packages/nux/build-module/components/dot-tip/index.mjs
-  var import_compose = __toESM(require_compose(), 1);
-  var import_components = __toESM(require_components(), 1);
-  var import_i18n = __toESM(require_i18n(), 1);
-  var import_data4 = __toESM(require_data(), 1);
-  var import_element = __toESM(require_element(), 1);
-
-  // packages/icons/build-module/library/close.mjs
-  var import_primitives = __toESM(require_primitives(), 1);
-  var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
-  var close_default = /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.Path, { d: "m13.06 12 6.47-6.47-1.06-1.06L12 10.94 5.53 4.47 4.47 5.53 10.94 12l-6.47 6.47 1.06 1.06L12 13.06l6.47 6.47 1.06-1.06L13.06 12Z" }) });
-
-  // packages/nux/build-module/components/dot-tip/index.mjs
-  var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
-  function onClick(event) {
-    event.stopPropagation();
-  }
-  function DotTip({
-    position = "middle right",
-    children,
-    isVisible,
-    hasNextTip,
-    onDismiss,
-    onDisable
-  }) {
-    const anchorParent = (0, import_element.useRef)(null);
-    const onFocusOutsideCallback = (0, import_element.useCallback)(
-      (event) => {
-        if (!anchorParent.current) {
-          return;
-        }
-        if (anchorParent.current.contains(event.relatedTarget)) {
-          return;
-        }
-        onDisable();
-      },
-      [onDisable, anchorParent]
-    );
-    if (!isVisible) {
-      return null;
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
-      import_components.Popover,
-      {
-        className: "nux-dot-tip",
-        position,
-        focusOnMount: true,
-        role: "dialog",
-        "aria-label": (0, import_i18n.__)("Editor tips"),
-        onClick,
-        onFocusOutside: onFocusOutsideCallback,
-        children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { children }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-            import_components.Button,
-            {
-              __next40pxDefaultSize: true,
-              variant: "link",
-              onClick: onDismiss,
-              children: hasNextTip ? (0, import_i18n.__)("See next tip") : (0, import_i18n.__)("Got it")
-            }
-          ) }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-            import_components.Button,
-            {
-              size: "small",
-              className: "nux-dot-tip__disable",
-              icon: close_default,
-              label: (0, import_i18n.__)("Disable tips"),
-              onClick: onDisable
-            }
-          )
-        ]
-      }
-    );
-  }
-  var dot_tip_default = (0, import_compose.compose)(
-    (0, import_data4.withSelect)((select, { tipId }) => {
-      const { isTipVisible: isTipVisible2, getAssociatedGuide: getAssociatedGuide2 } = select(store);
-      const associatedGuide = getAssociatedGuide2(tipId);
-      return {
-        isVisible: isTipVisible2(tipId),
-        hasNextTip: !!(associatedGuide && associatedGuide.nextTipId)
-      };
-    }),
-    (0, import_data4.withDispatch)((dispatch, { tipId }) => {
-      const { dismissTip: dismissTip2, disableTips: disableTips2 } = dispatch(store);
-      return {
-        onDismiss() {
-          dismissTip2(tipId);
-        },
-        onDisable() {
-          disableTips2();
-        }
-      };
-    })
-  )(DotTip);
-
-  // packages/nux/build-module/index.mjs
-  (0, import_deprecated.default)("wp.nux", {
-    since: "5.4",
-    hint: "wp.components.Guide can be used to show a user guide.",
-    version: "6.2"
-  });
-  return __toCommonJS(index_exports);
-})();
+exports.DotTip = DotTip;
+exports.store = store;
+Object.defineProperty(exports, '__esModule', { value: true });
+(window.wp ||= {}).nux = exports;
+return exports;
+})({}, window.wp.deprecated, window.wp.data);
 //# sourceMappingURL=index.js.map

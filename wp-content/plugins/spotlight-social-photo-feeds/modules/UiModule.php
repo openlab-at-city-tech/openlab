@@ -163,6 +163,7 @@ class UiModule extends Module
                         'sli-admin-vendors',
                         'sli-common',
                         'sli-feed',
+                        'wp-url',
                     ]),
                     'sli-editor' => Asset::script("{$url}/feed-editor.js", $ver, [
                         'sli-admin-common',

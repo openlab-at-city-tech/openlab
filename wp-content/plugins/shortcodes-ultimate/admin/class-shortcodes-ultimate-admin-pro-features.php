@@ -10,13 +10,13 @@ class Shortcodes_Ultimate_Admin_Pro_Features {
         }
         foreach ( $this->get_shortcodes() as $shortcode ) {
             su_add_shortcode( wp_parse_args( $shortcode, array(
-                'group'              => 'extra',
                 'image'              => $this->get_image_url( 'icon-available-shortcodes.png' ),
                 'icon'               => $this->get_image_url( 'icon-generator.png' ),
                 'desc'               => '',
                 'callback'           => '__return_empty_string',
                 'atts'               => array(),
                 'generator_callback' => array($this, 'generator_callback'),
+                'is_pro'             => true,
             ) ) );
         }
     }
@@ -43,64 +43,89 @@ class Shortcodes_Ultimate_Admin_Pro_Features {
     private function get_shortcodes() {
         return array(
             array(
-                'id'   => 'splash',
-                'name' => __( 'Splash screen', 'shortcodes-ultimate' ),
+                'id'    => 'countdown',
+                'name'  => __( 'Countdown Timer', 'shortcodes-ultimate' ),
+                'group' => 'content',
             ),
             array(
-                'id'   => 'exit_popup',
-                'name' => __( 'Exit popup', 'shortcodes-ultimate' ),
+                'id'    => 'posts_grid',
+                'name'  => __( 'Posts Grid', 'shortcodes-ultimate' ),
+                'group' => 'content',
             ),
             array(
-                'id'   => 'panel',
-                'name' => __( 'Panel', 'shortcodes-ultimate' ),
+                'id'    => 'icon_text',
+                'name'  => __( 'Text with icon', 'shortcodes-ultimate' ),
+                'group' => 'content',
             ),
             array(
-                'id'   => 'photo_panel',
-                'name' => __( 'Photo panel', 'shortcodes-ultimate' ),
+                'id'    => 'icon',
+                'name'  => __( 'Icon', 'shortcodes-ultimate' ),
+                'group' => 'content',
             ),
             array(
-                'id'   => 'icon_panel',
-                'name' => __( 'Icon panel', 'shortcodes-ultimate' ),
+                'id'    => 'progress_bar',
+                'name'  => __( 'Progress bar', 'shortcodes-ultimate' ),
+                'group' => 'content',
             ),
             array(
-                'id'   => 'icon_text',
-                'name' => __( 'Text with icon', 'shortcodes-ultimate' ),
+                'id'    => 'progress_pie',
+                'name'  => __( 'Progress pie', 'shortcodes-ultimate' ),
+                'group' => 'content',
             ),
             array(
-                'id'   => 'progress_pie',
-                'name' => __( 'Progress pie', 'shortcodes-ultimate' ),
+                'id'    => 'exit_popup',
+                'name'  => __( 'Exit popup', 'shortcodes-ultimate' ),
+                'group' => 'box',
             ),
             array(
-                'id'   => 'progress_bar',
-                'name' => __( 'Progress bar', 'shortcodes-ultimate' ),
+                'id'    => 'icon_panel',
+                'name'  => __( 'Icon panel', 'shortcodes-ultimate' ),
+                'group' => 'box',
             ),
             array(
-                'id'   => 'member',
-                'name' => __( 'Member', 'shortcodes-ultimate' ),
+                'id'    => 'member',
+                'name'  => __( 'Member', 'shortcodes-ultimate' ),
+                'group' => 'box',
             ),
             array(
-                'id'   => 'section',
-                'name' => __( 'Section', 'shortcodes-ultimate' ),
+                'id'    => 'panel',
+                'name'  => __( 'Panel', 'shortcodes-ultimate' ),
+                'group' => 'box',
             ),
             array(
-                'id'   => 'pricing_table',
-                'name' => __( 'Pricing table', 'shortcodes-ultimate' ),
+                'id'    => 'photo_panel',
+                'name'  => __( 'Photo panel', 'shortcodes-ultimate' ),
+                'group' => 'box',
             ),
             array(
-                'id'   => 'testimonial',
-                'name' => __( 'Testimonial', 'shortcodes-ultimate' ),
+                'id'    => 'pricing_table',
+                'name'  => __( 'Pricing table', 'shortcodes-ultimate' ),
+                'group' => 'box',
             ),
             array(
-                'id'   => 'icon',
-                'name' => __( 'Icon', 'shortcodes-ultimate' ),
+                'id'    => 'section',
+                'name'  => __( 'Section', 'shortcodes-ultimate' ),
+                'group' => 'box',
             ),
             array(
-                'id'   => 'content_slider',
-                'name' => __( 'Content slider', 'shortcodes-ultimate' ),
+                'id'    => 'splash',
+                'name'  => __( 'Splash screen', 'shortcodes-ultimate' ),
+                'group' => 'box',
             ),
             array(
-                'id'   => 'shadow',
-                'name' => __( 'Shadow', 'shortcodes-ultimate' ),
+                'id'    => 'testimonial',
+                'name'  => __( 'Testimonial', 'shortcodes-ultimate' ),
+                'group' => 'box',
+            ),
+            array(
+                'id'    => 'content_slider',
+                'name'  => __( 'Content slider', 'shortcodes-ultimate' ),
+                'group' => 'gallery',
+            ),
+            array(
+                'id'    => 'shadow',
+                'name'  => __( 'Shadow', 'shortcodes-ultimate' ),
+                'group' => 'other',
             )
         );
     }

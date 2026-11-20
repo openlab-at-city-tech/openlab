@@ -888,9 +888,9 @@ class ngg_Thumbnail {
 			$color = '000000';
 		}
 
-		// set font path
-		$wmFontPath = NGGALLERY_ABSPATH . "fonts/" . $wmFont;
-		if ( !is_readable( $wmFontPath )) {
+		// set font path. SECURITY (#1084): a font is a file name inside fonts/, never a path.
+		$wmFontPath = NGGALLERY_ABSPATH . "fonts/" . basename( str_replace( '\\', '/', (string) $wmFont ) );
+		if ( ! is_file( $wmFontPath ) || ! is_readable( $wmFontPath ) ) {
 			return;
 		}
 
@@ -927,6 +927,8 @@ class ngg_Thumbnail {
 	 * @param string $relPOS
 	 * @param int    $xPOS
 	 * @param int    $yPOS
+	 * @return bool True when the watermark was composited; false when its image
+	 *              could not be loaded (refused, unreachable or not an image).
 	 */
 	public function watermarkImage( $relPOS = 'botRight', $xPOS = 0, $yPOS = 0 ) {
 
@@ -934,12 +936,13 @@ class ngg_Thumbnail {
 		if (is_resource( $this->watermarkImgPath ) || $this->watermarkImgPath instanceof GdImage) {
 			$this->workingImage = $this->watermarkImgPath;
 		} else {
-			// Would you really want to use anything other than a png?
-			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-			$this->workingImage = @imagecreatefrompng( $this->watermarkImgPath );
-			// if it's not a valid file die...
-			if (empty( $this->workingImage ) or ( !$this->workingImage )) {
-				return;
+			// One loader for every renderer and the settings preview (#1104): an own-site
+			// URL is read from disk, another http(s) URL is fetched with wp_safe_remote_get(),
+			// any other stream wrapper is refused (#1084) and a local path is contained to
+			// the install before it is opened.
+			$this->workingImage = \Imagely\NGG\Util\Security::load_watermark_image( $this->watermarkImgPath );
+			if ( ! $this->workingImage ) {
+				return false;
 			}
 		}
 
@@ -1004,6 +1007,8 @@ class ngg_Thumbnail {
 			imagesavealpha( $this->newImage, true );
 		}
 		imagecopy( $this->newImage, $this->workingImage, $dest_x, $dest_y, 0, 0, $watermarkfile_width, $watermarkfile_height );
+
+		return true;
 	}
 
 	/**

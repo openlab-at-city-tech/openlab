@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Add a separator to the WordPress admin menus
  *
- * @since 2.0.0 bbPress (r2957)
+ * @since 2.0.0 bbPress (r2464)
  */
 function bbp_admin_separator() {
 
@@ -41,13 +41,14 @@ function bbp_admin_separator() {
 
 	global $menu;
 
+	// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 	$menu[] = array( '', 'read', 'separator-bbpress', '', 'wp-menu-separator bbpress' );
 }
 
 /**
  * Tell WordPress we have a custom menu order
  *
- * @since 2.0.0 bbPress (r2957)
+ * @since 2.0.0 bbPress (r2958)
  *
  * @param bool $menu_order Menu order
  * @return mixed True if separator, false if not
@@ -63,7 +64,7 @@ function bbp_admin_custom_menu_order( $menu_order = false ) {
 /**
  * Move our custom separator above our custom post types
  *
- * @since 2.0.0 bbPress (r2957)
+ * @since 2.0.0 bbPress (r2958)
  *
  * @param array $menu_order Menu Order
  * @return array Modified menu order
@@ -116,7 +117,7 @@ function bbp_admin_menu_order( $menu_order ) {
 /**
  * Sanitize permalink slugs when saving the settings page.
  *
- * @since 2.6.0 bbPress (r5364)
+ * @since 2.6.0 bbPress (r5365)
  *
  * @param string $slug
  * @return string
@@ -146,7 +147,7 @@ function bbp_sanitize_slug( $slug = '' ) {
 /**
  * Uninstall all bbPress options and capabilities from a specific site.
  *
- * @since 2.1.0 bbPress (r3765)
+ * @since 2.1.0 bbPress (r3766)
  *
  * @param int $site_id
  */
@@ -170,7 +171,7 @@ function bbp_do_uninstall( $site_id = 0 ) {
  * The conditional prevents the override when the user is viewing settings or
  * any third-party plugins.
  *
- * @since 2.1.0 bbPress (r3888)
+ * @since 2.1.0 bbPress (r3894)
  *
  * @global string $plugin_page
  * @global array $submenu_file
@@ -180,6 +181,8 @@ function bbp_tools_modify_menu_highlight() {
 
 	// This tweaks the Tools subnav menu to only show one bbPress menu item
 	if ( ! in_array( $plugin_page, array( 'bbp-settings' ), true ) ) {
+
+		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		$submenu_file = 'bbp-repair';
 	}
 }

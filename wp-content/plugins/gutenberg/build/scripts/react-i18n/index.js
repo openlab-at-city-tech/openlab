@@ -1,97 +1,108 @@
+(function(exports, _wordpress_element, _wordpress_i18n, react_jsx_runtime) {
+
 "use strict";
-var wp;
-(wp ||= {}).reactI18n = (() => {
-  var __create = Object.create;
-  var __defProp = Object.defineProperty;
-  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-  var __getOwnPropNames = Object.getOwnPropertyNames;
-  var __getProtoOf = Object.getPrototypeOf;
-  var __hasOwnProp = Object.prototype.hasOwnProperty;
-  var __commonJS = (cb, mod) => function __require() {
-    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-  };
-  var __export = (target, all) => {
-    for (var name in all)
-      __defProp(target, name, { get: all[name], enumerable: true });
-  };
-  var __copyProps = (to, from, except, desc) => {
-    if (from && typeof from === "object" || typeof from === "function") {
-      for (let key of __getOwnPropNames(from))
-        if (!__hasOwnProp.call(to, key) && key !== except)
-          __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-    }
-    return to;
-  };
-  var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-    // If the importer is in node compatibility mode or this is not an ESM
-    // file that has been converted to a CommonJS file using a Babel-
-    // compatible transform (i.e. "__esModule" has not been set), then set
-    // "default" to the CommonJS "module.exports" for node compatibility.
-    isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-    mod
-  ));
-  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+// packages/react-i18n/build-module/index.mjs
+/**
+	* Utility to make a new context value
+	*
+	* @param i18n
+	*/
+	function makeContextValue(i18n) {
+		return {
+			__: i18n.__.bind(i18n),
+			_x: i18n._x.bind(i18n),
+			_n: i18n._n.bind(i18n),
+			_nx: i18n._nx.bind(i18n),
+			isRTL: i18n.isRTL.bind(i18n),
+			hasTranslation: i18n.hasTranslation.bind(i18n)
+		};
+	}
+	const I18nContext = (0, _wordpress_element.createContext)(makeContextValue(_wordpress_i18n.defaultI18n));
+	I18nContext.displayName = "I18nContext";
+	/**
+	* The `I18nProvider` should be mounted above any localized components:
+	*
+	* @example
+	* ```js
+	* import { createI18n } from '@wordpress/i18n';
+	* import { I18nProvider } from '@wordpress/react-i18n';
+	* const i18n = createI18n();
+	*
+	* ReactDom.render(
+	* 	<I18nProvider i18n={ i18n }>
+	* 		<App />
+	* 	</I18nProvider>,
+	* 	el
+	* );
+	* ```
+	*
+	* You can also instantiate the provider without the `i18n` prop. In that case it will use the
+	* default `I18n` instance exported from `@wordpress/i18n`.
+	*
+	* @param props i18n provider props.
+	* @return Children wrapped in the I18nProvider.
+	*/
+	function I18nProvider(props) {
+		const { children, i18n = _wordpress_i18n.defaultI18n } = props;
+		const [update, forceUpdate] = (0, _wordpress_element.useReducer)(() => [], []);
+		(0, _wordpress_element.useEffect)(() => i18n.subscribe(forceUpdate), [i18n]);
+		const value = (0, _wordpress_element.useMemo)(() => makeContextValue(i18n), [i18n, update]);
+		return /* @__PURE__ */ (0, react_jsx_runtime.jsx)(I18nContext.Provider, {
+			value,
+			children
+		});
+	}
+	/**
+	* React hook providing access to i18n functions. It exposes the `__`, `_x`, `_n`, `_nx`,
+	* `isRTL` and `hasTranslation` functions from [`@wordpress/i18n`](../i18n).
+	* Refer to their documentation there.
+	*
+	* @example
+	* ```js
+	* import { useI18n } from '@wordpress/react-i18n';
+	*
+	* function MyComponent() {
+	* 	const { __ } = useI18n();
+	* 	return __( 'Hello, world!' );
+	* }
+	* ```
+	*/
+	const useI18n = () => (0, _wordpress_element.useContext)(I18nContext);
+	/**
+	* React higher-order component that passes the i18n translate functions (the same set
+	* as exposed by the `useI18n` hook) to the wrapped component as props.
+	*
+	* @example
+	* ```js
+	* import { withI18n } from '@wordpress/react-i18n';
+	*
+	* function MyComponent( { __ } ) {
+	* 	return __( 'Hello, world!' );
+	* }
+	*
+	* export default withI18n( MyComponent );
+	* ```
+	*
+	* @param InnerComponent React component to be wrapped and receive the i18n functions like `__`
+	* @return The wrapped component
+	*/
+	function withI18n(InnerComponent) {
+		const EnhancedComponent = (props) => {
+			const i18nProps = useI18n();
+			return /* @__PURE__ */ (0, react_jsx_runtime.jsx)(InnerComponent, {
+				...props,
+				...i18nProps
+			});
+		};
+		EnhancedComponent.displayName = `WithI18n(${InnerComponent.displayName || InnerComponent.name || "Component"})`;
+		return EnhancedComponent;
+	}
 
-  // package-external:@wordpress/element
-  var require_element = __commonJS({
-    "package-external:@wordpress/element"(exports, module) {
-      module.exports = window.wp.element;
-    }
-  });
-
-  // package-external:@wordpress/i18n
-  var require_i18n = __commonJS({
-    "package-external:@wordpress/i18n"(exports, module) {
-      module.exports = window.wp.i18n;
-    }
-  });
-
-  // vendor-external:react/jsx-runtime
-  var require_jsx_runtime = __commonJS({
-    "vendor-external:react/jsx-runtime"(exports, module) {
-      module.exports = window.ReactJSXRuntime;
-    }
-  });
-
-  // packages/react-i18n/build-module/index.mjs
-  var index_exports = {};
-  __export(index_exports, {
-    I18nProvider: () => I18nProvider,
-    useI18n: () => useI18n,
-    withI18n: () => withI18n
-  });
-  var import_element = __toESM(require_element(), 1);
-  var import_i18n = __toESM(require_i18n(), 1);
-  var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
-  function makeContextValue(i18n) {
-    return {
-      __: i18n.__.bind(i18n),
-      _x: i18n._x.bind(i18n),
-      _n: i18n._n.bind(i18n),
-      _nx: i18n._nx.bind(i18n),
-      isRTL: i18n.isRTL.bind(i18n),
-      hasTranslation: i18n.hasTranslation.bind(i18n)
-    };
-  }
-  var I18nContext = (0, import_element.createContext)(makeContextValue(import_i18n.defaultI18n));
-  I18nContext.displayName = "I18nContext";
-  function I18nProvider(props) {
-    const { children, i18n = import_i18n.defaultI18n } = props;
-    const [update, forceUpdate] = (0, import_element.useReducer)(() => [], []);
-    (0, import_element.useEffect)(() => i18n.subscribe(forceUpdate), [i18n]);
-    const value = (0, import_element.useMemo)(() => makeContextValue(i18n), [i18n, update]);
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(I18nContext.Provider, { value, children });
-  }
-  var useI18n = () => (0, import_element.useContext)(I18nContext);
-  function withI18n(InnerComponent) {
-    const EnhancedComponent = (props) => {
-      const i18nProps = useI18n();
-      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(InnerComponent, { ...props, ...i18nProps });
-    };
-    const innerComponentName = InnerComponent.displayName || InnerComponent.name || "Component";
-    EnhancedComponent.displayName = `WithI18n(${innerComponentName})`;
-    return EnhancedComponent;
-  }
-  return __toCommonJS(index_exports);
-})();
+exports.I18nProvider = I18nProvider;
+exports.useI18n = useI18n;
+exports.withI18n = withI18n;
+Object.defineProperty(exports, '__esModule', { value: true });
+(window.wp ||= {}).reactI18n = exports;
+return exports;
+})({}, window.wp.element, window.wp.i18n, window.ReactJSXRuntime);
 //# sourceMappingURL=index.js.map

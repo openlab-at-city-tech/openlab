@@ -2,7 +2,6 @@
 /**
  * DWMessageBox class
  *
- * @version $Id$
  * @copyright 2011 Jacco Drabbe
  */
 

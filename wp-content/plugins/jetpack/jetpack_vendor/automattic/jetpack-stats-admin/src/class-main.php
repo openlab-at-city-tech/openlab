@@ -9,6 +9,7 @@ namespace Automattic\Jetpack\Stats_Admin;
 
 use Automattic\Jetpack\Connection\Manager;
 use Automattic\Jetpack\Stats\Options as Stats_Options;
+use Automattic\Jetpack\Status\Host;
 use Automattic\Jetpack\Tracking;
 
 /**
@@ -22,7 +23,7 @@ class Main {
 	/**
 	 * Stats version.
 	 */
-	const VERSION = '0.30.9';
+	const VERSION = '0.39.3';
 
 	/**
 	 * Singleton Main instance.
@@ -51,7 +52,7 @@ class Main {
 	 * @return void
 	 */
 	private function __construct() {
-		add_action( 'rest_api_init', array( new REST_Controller(), 'register_rest_routes' ) );
+		add_action( 'rest_api_init', array( REST_Controller::class, 'register' ) );
 		// Disable JITM assets on the Stats page.
 		// JITM is handled separately by Stats: https://github.com/Automattic/wp-calypso/pull/95273.
 		add_filter(
@@ -68,6 +69,48 @@ class Main {
 
 		// Register stats-admin transient prefix for cleanup by the stats package.
 		add_filter( 'jetpack_stats_transient_cleanup_prefixes', array( $this, 'register_transient_cleanup_prefix' ) );
+
+		if ( self::needs_own_dashboard() ) {
+			Dashboard::init();
+		}
+	}
+
+	/**
+	 * Whether the site can talk to WordPress.com.
+	 *
+	 * Simple sites always can, and hold no Jetpack blog token to check.
+	 *
+	 * @return bool
+	 */
+	public static function is_site_connected() {
+		return ( new Host() )->is_wpcom_simple() || ( new Manager( 'jetpack' ) )->is_connected();
+	}
+
+	/**
+	 * Whether Stats has to register its own dashboard because nothing else will.
+	 *
+	 * The Jetpack plugin registers the Stats menu from its stats module, and modules are not
+	 * loaded until the site is connected. Registering the dashboard here keeps Stats reachable
+	 * before that happens, where the app offers a plan and drives the connection itself.
+	 *
+	 * @return bool
+	 */
+	private static function needs_own_dashboard() {
+		if ( self::is_site_connected() ) {
+			return false;
+		}
+
+		/**
+		 * Filters whether Stats registers its own dashboard while the site is not connected.
+		 *
+		 * A host that offers its own Stats page before connection returns false, so the site
+		 * does not show two Stats menus. Read when the package initializes, on `plugins_loaded`.
+		 *
+		 * @since 0.39.2
+		 *
+		 * @param bool $register Whether to register the pre-connection dashboard. Default true.
+		 */
+		return (bool) apply_filters( 'jetpack_stats_admin_pre_connection_dashboard', true );
 	}
 
 	/**

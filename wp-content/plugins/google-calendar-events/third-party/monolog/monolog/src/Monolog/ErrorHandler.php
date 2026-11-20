@@ -136,7 +136,24 @@ class ErrorHandler
      */
     protected function defaultErrorLevelMap(): array
     {
-        return [\E_ERROR => LogLevel::CRITICAL, \E_WARNING => LogLevel::WARNING, \E_PARSE => LogLevel::ALERT, \E_NOTICE => LogLevel::NOTICE, \E_CORE_ERROR => LogLevel::CRITICAL, \E_CORE_WARNING => LogLevel::WARNING, \E_COMPILE_ERROR => LogLevel::ALERT, \E_COMPILE_WARNING => LogLevel::WARNING, \E_USER_ERROR => LogLevel::ERROR, \E_USER_WARNING => LogLevel::WARNING, \E_USER_NOTICE => LogLevel::NOTICE, \E_STRICT => LogLevel::NOTICE, \E_RECOVERABLE_ERROR => LogLevel::ERROR, \E_DEPRECATED => LogLevel::NOTICE, \E_USER_DEPRECATED => LogLevel::NOTICE];
+        return [
+            \E_ERROR => LogLevel::CRITICAL,
+            \E_WARNING => LogLevel::WARNING,
+            \E_PARSE => LogLevel::ALERT,
+            \E_NOTICE => LogLevel::NOTICE,
+            \E_CORE_ERROR => LogLevel::CRITICAL,
+            \E_CORE_WARNING => LogLevel::WARNING,
+            \E_COMPILE_ERROR => LogLevel::ALERT,
+            \E_COMPILE_WARNING => LogLevel::WARNING,
+            \E_USER_ERROR => LogLevel::ERROR,
+            \E_USER_WARNING => LogLevel::WARNING,
+            \E_USER_NOTICE => LogLevel::NOTICE,
+            2048 => LogLevel::NOTICE,
+            // E_STRICT
+            \E_RECOVERABLE_ERROR => LogLevel::ERROR,
+            \E_DEPRECATED => LogLevel::NOTICE,
+            \E_USER_DEPRECATED => LogLevel::NOTICE,
+        ];
     }
     /**
      * @phpstan-return never
@@ -154,7 +171,7 @@ class ErrorHandler
         if ($this->previousExceptionHandler) {
             ($this->previousExceptionHandler)($e);
         }
-        if (!headers_sent() && !ini_get('display_errors')) {
+        if (!headers_sent() && in_array(strtolower((string) ini_get('display_errors')), ['0', '', 'false', 'off', 'none', 'no'], \true)) {
             http_response_code(500);
         }
         exit(255);
@@ -235,7 +252,7 @@ class ErrorHandler
                 return 'E_USER_WARNING';
             case \E_USER_NOTICE:
                 return 'E_USER_NOTICE';
-            case \E_STRICT:
+            case 2048:
                 return 'E_STRICT';
             case \E_RECOVERABLE_ERROR:
                 return 'E_RECOVERABLE_ERROR';

@@ -1318,13 +1318,15 @@ class Kadence_CSS {
 	 *
 	 * @param array   $font Font settings array
 	 * @return string Calculated preferred value as calc expression
+	 *
+	 * @since 1.6.0 A missing clamp field no longer raises a PHP warning.
 	 */
 	public function calculate_preferred_value_with_viewports( $font ) {
 
-		$min_value = $font['minFontSize'];
-		$max_value = $font['maxFontSize'];
-		$min_viewport = $font['minScreenSize'];
-		$max_viewport = $font['maxScreenSize'];
+		$min_value = $font['minFontSize'] ?? '';
+		$max_value = $font['maxFontSize'] ?? '';
+		$min_viewport = $font['minScreenSize'] ?? '';
+		$max_viewport = $font['maxScreenSize'] ?? '';
 		$unit = $font['fontSizeUnit'] ?? 'px';
 		$viewport_unit = $font['screenSizeUnit'] ?? 'px';
 
@@ -1379,12 +1381,14 @@ class Kadence_CSS {
 	 *
 	 * @param array $font Font settings array
 	 * @return string Generated clamp value
+	 *
+	 * @since 1.6.0 A missing clamp field no longer raises a PHP warning.
 	 */
 	public function generate_clamp_value( $font ) {
 		$clamped = ( isset( $font['clamped'] ) && true === $font['clamped'] ? true : false );
 		if ( $clamped ) {
-			$min_value = $font['minFontSize'];
-			$max_value = $font['maxFontSize'];
+			$min_value = $font['minFontSize'] ?? '';
+			$max_value = $font['maxFontSize'] ?? '';
 			$unit = $font['fontSizeUnit'] ?? 'px';
 
 			$preferred = $this->calculate_preferred_value_with_viewports( $font );

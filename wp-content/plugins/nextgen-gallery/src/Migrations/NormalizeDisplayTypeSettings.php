@@ -259,13 +259,13 @@ class NormalizeDisplayTypeSettings {
 
 		// The column is not in the table's CREATE TABLE; the data mapper adds it lazily on first
 		// construction. Until that happens, querying it raises a database error, so resolve it from
-		// the live schema. SHOW TABLES runs first because SHOW COLUMNS errors on a missing table.
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$table_exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table ) ) );
+		// the live schema. The existence check runs first because SHOW COLUMNS errors on a missing
+		// table; it is not SHOW TABLES LIKE, which scans the whole schema on a large network (#1059).
+		$table_exists = \Imagely\NGG\Util\Schema::table_exists( $table );
 
 		// A failed schema query returns the same empty result as genuine absence, so it has to be
 		// ruled out before the result is read that way. Retrying is bounded by the failure count.
-		if ( '' !== $wpdb->last_error ) {
+		if ( null === $table_exists ) {
 			return self::FAILED;
 		}
 

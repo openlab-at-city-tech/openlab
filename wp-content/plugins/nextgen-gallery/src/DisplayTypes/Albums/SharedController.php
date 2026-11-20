@@ -19,6 +19,7 @@ use Imagely\NGG\DataTypes\DisplayedGallery;
 use Imagely\NGG\Display\{DisplayManager, LightboxManager, View, ViewElement, StaticAssets};
 use Imagely\NGG\DisplayedGallery\Renderer;
 use Imagely\NGG\Util\Router;
+use Imagely\NGG\PrivateGalleries\Visibility;
 
 /**
  * SharedController definition.
@@ -119,6 +120,13 @@ class SharedController extends ParentController {
 	 * @var array
 	 */
 	public $breadcrumb_cache = [];
+
+	/**
+	 * Contained `?gallery=` drill-downs this request; read by Pro's lightbox store.
+	 *
+	 * @var array<string,bool>
+	 */
+	public static $contained_request_galleries = [];
 
 	/**
 	 * Cache of album children from the database.
@@ -513,7 +521,8 @@ class SharedController extends ParentController {
 		if ( ( [ '0' ] === $container_ids || [ '' ] === $container_ids )
 			&& empty( $displayed_gallery->exclusions )
 			&& empty( $displayed_gallery->entity_ids ) ) {
-			return (bool) GalleryMapper::get_instance()->find( $gallery_id );
+			return (bool) GalleryMapper::get_instance()->find( $gallery_id )
+				&& ! \Imagely\NGG\PrivateGalleries\Visibility::is_hidden( $gallery_id );
 		}
 
 		$mapper  = AlbumMapper::get_instance();
@@ -843,6 +852,9 @@ class SharedController extends ParentController {
 				return $displayed_gallery;
 			}
 
+			// Vouch only once contained.
+			self::$contained_request_galleries[ (string) $gallery ] = true;
+
 			$gallery_params = [
 				'source'                  => 'galleries',
 				'container_ids'           => [ $gallery ],
@@ -969,7 +981,7 @@ class SharedController extends ParentController {
 		// an exact match for what the child renders, so it is carried whole - the same slice the
 		// standalone render path applies, which is the parity #787 asks for.
 		$out = ! empty( $stored[ $child_type ] ) && is_array( $stored[ $child_type ] )
-			? $this->filter_child_display_settings( $stored[ $child_type ], $child_type )
+			? $this->filter_child_display_settings( GalleryMapper::normalize_display_type_settings( $child_type, $stored[ $child_type ] ), $child_type )
 			: [];
 
 		$geometry = $this->cross_type_child_settings( $stored, $child_type, $out, $gallery_entity->display_type ?? '' );
@@ -1146,8 +1158,9 @@ class SharedController extends ParentController {
 				$nested_album                = $album_mapper->find( $nested_album_id );
 
 				if ( $nested_album ) {
-					// If nested album has a preview pic, use it.
-					if ( ! empty( $nested_album->previewpic ) && $nested_album->previewpic > 0 ) {
+					// If nested album has a preview pic, use it, unless it shows a private gallery.
+					if ( ! empty( $nested_album->previewpic ) && $nested_album->previewpic > 0
+						&& ! Visibility::is_hidden_image( $nested_album->previewpic ) ) {
 						return $nested_album->previewpic;
 					}
 
@@ -1160,12 +1173,13 @@ class SharedController extends ParentController {
 					}
 				}
 			} else {
-				// This is a gallery ID.
+				// This is a gallery ID. A private gallery never provides the cover.
 				$gallery_id = intval( $entity_id );
-				$gallery    = $gallery_mapper->find( $gallery_id );
+				$gallery    = Visibility::is_hidden( $gallery_id ) ? null : $gallery_mapper->find( $gallery_id );
 
 				if ( $gallery ) {
-					if ( ! empty( $gallery->previewpic ) && $gallery->previewpic > 0 ) {
+					if ( ! empty( $gallery->previewpic ) && $gallery->previewpic > 0
+						&& ! Visibility::is_hidden_image( $gallery->previewpic ) ) {
 						return $gallery->previewpic;
 					}
 
@@ -1192,6 +1206,29 @@ class SharedController extends ParentController {
 		}
 
 		return null;
+	}
+
+	/**
+	 * The cover image of an album tile: its own preview image, or for an album the first one of its
+	 * children. A cover from a private gallery is never shown outside its client page.
+	 *
+	 * @param object $entity       Gallery or album entity.
+	 * @param bool   $is_album     Whether the entity is an album.
+	 * @param object $image_mapper Image mapper.
+	 * @return int|null
+	 */
+	public function get_preview_image_id( $entity, $is_album, $image_mapper ) {
+		$preview_image_id = isset( $entity->previewpic ) ? (int) $entity->previewpic : 0;
+
+		if ( $preview_image_id > 0 && Visibility::is_hidden_image( $preview_image_id ) ) {
+			$preview_image_id = 0;
+		}
+
+		if ( $preview_image_id <= 0 && $is_album && ! empty( $entity->sortorder ) ) {
+			$preview_image_id = (int) $this->get_first_image_from_album( $entity, $image_mapper );
+		}
+
+		return $preview_image_id > 0 ? $preview_image_id : null;
 	}
 
 	/**
@@ -1226,6 +1263,32 @@ class SharedController extends ParentController {
 	 * @param int|string $entity_id Gallery ID.
 	 * @return null|object Album object.
 	 */
+	/**
+	 * Returns the url child album and gallery links are built on: the current url without its gallery parameters.
+	 *
+	 * Album and gallery values are written as bare path segments, which remove_parameter() cannot
+	 * find again, so building a child link on the current url appended each drill-down to the
+	 * previous one instead of replacing it. Every nested url still rendered, giving crawlers an
+	 * unbounded url space to walk (#1245). Stripping the parameters first, as the breadcrumbs do,
+	 * keeps every child link at /<page>/<slug>/<album>/<gallery> whichever url the visitor is on.
+	 * Only the path is stripped, so a query string the page needs (e.g. ?page_id=) survives.
+	 *
+	 * @param \Imagely\NGG\Util\RoutingApp $app The routed app.
+	 * @return string
+	 */
+	public function get_child_link_base_url( $app ) {
+		$url   = $app->get_routed_url( true );
+		$parts = wp_parse_url( $url );
+
+		if ( ! is_array( $parts ) || ! isset( $parts['path'] ) ) {
+			return $app->strip_param_segments( $url );
+		}
+
+		$parts['path'] = $app->strip_param_segments( $parts['path'] );
+
+		return $app->construct_url_from_parts( $parts );
+	}
+
 	public function get_parent_album_for( $entity_id ) {
 		$retval = null;
 
@@ -1262,6 +1325,15 @@ class SharedController extends ParentController {
 		// Are we to display a gallery? Ensure our 'gallery' isn't just a paginated album view.
 		$gallery = $router->get_parameter( 'gallery' );
 		$album   = $router->get_parameter( 'album' );
+
+		// Array params (`?gallery[]=`) would fatal below.
+		if ( ! is_scalar( $gallery ) ) {
+			$gallery = null;
+		}
+		if ( ! is_scalar( $album ) ) {
+			$album = null;
+		}
+
 		if ( $gallery && strpos( $gallery, 'nggpage--' ) !== 0 ) {
 			// Resolve the drill-down before claiming the one-gallery-per-post slot. The
 			// alternate comes back unchanged when ?gallery= names a gallery outside this
@@ -1505,12 +1577,11 @@ class SharedController extends ParentController {
 
 		$app = $router->get_routed_app();
 
-		$ajax_pagination_referrer = $router->get_parameter( 'ajax_pagination_referrer' );
-		$pagination_result        = $this->create_pagination(
+		$pagination_result = $this->create_pagination(
 			$this->get_current_page( $displayed_gallery ),
 			$displayed_gallery->get_entity_count(),
 			$params['galleries_per_page'],
-			urldecode( $ajax_pagination_referrer ? $ajax_pagination_referrer : '' )
+			urldecode( $this->get_pagination_referrer() )
 		);
 
 		$params['displayed_gallery'] = $displayed_gallery;
@@ -1549,12 +1620,7 @@ class SharedController extends ParentController {
 			// Get the preview image url.
 			$gallery->previewurl                       = '';
 			$gallery->previewpic_fullsized_display_url = '';
-			$preview_image_id                          = $gallery->previewpic;
-
-			// If no preview is set for an album, try to get the first image from its children.
-			if ( ( ! $preview_image_id || $preview_image_id <= 0 ) && $gallery->is_album && ! empty( $gallery->sortorder ) ) {
-				$preview_image_id = $this->get_first_image_from_album( $gallery, $image_mapper );
-			}
+			$preview_image_id                          = $this->get_preview_image_id( $gallery, ! empty( $gallery->is_album ), $image_mapper );
 
 			if ( $preview_image_id && $preview_image_id > 0 ) {
 				$image = $image_mapper->find( intval( $preview_image_id ) );
@@ -1585,7 +1651,7 @@ class SharedController extends ParentController {
 					}
 				}
 				if ( empty( $gallery->pagelink ) ) {
-					$pagelink          = $app->get_routed_url( true );
+					$pagelink          = $this->get_child_link_base_url( $app );
 					$pagelink          = $app->remove_parameter( 'album', null, $pagelink );
 					$pagelink          = $app->remove_parameter( 'gallery', null, $pagelink );
 					$pagelink          = $app->remove_parameter( 'nggpage', null, $pagelink );
@@ -1604,7 +1670,7 @@ class SharedController extends ParentController {
 				}
 
 				if ( empty( $gallery->pagelink ) ) {
-					$pagelink     = $app->get_routed_url();
+					$pagelink     = $this->get_child_link_base_url( $app );
 					$parent_album = $this->get_parent_album_for( $gallery->$id_field );
 					if ( $parent_album ) {
 						$pagelink = $app->remove_parameter( 'album', null, $pagelink );

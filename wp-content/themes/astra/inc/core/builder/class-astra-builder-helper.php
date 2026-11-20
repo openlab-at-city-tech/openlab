@@ -934,12 +934,12 @@ final class Astra_Builder_Helper {
 				),
 				'widget-3'          => array(
 					'name' => __( 'Widget 3', 'astra' ),
-					'icon' => 'wordpress',
+					'icon' => 'wordpress-logo',
 					'pro'  => true,
 				),
 				'widget-4'          => array(
 					'name' => __( 'Widget 4', 'astra' ),
-					'icon' => 'wordpress',
+					'icon' => 'wordpress-logo',
 					'pro'  => true,
 				),
 				'menu-3'            => array(

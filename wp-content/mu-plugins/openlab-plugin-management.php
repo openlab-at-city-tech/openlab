@@ -350,7 +350,8 @@ add_filter( 'jetpack_get_available_modules', 'openlab_jetpack_module_management'
 function openlab_jetpack_adminbar_management() {
 	//remove JetPack stats in adminbar
 	if ( class_exists( 'Jetpack' ) ) {
-		remove_action( 'admin_bar_menu', 'stats_admin_bar_menu', 100 );
+		remove_action( 'admin_bar_menu', [ 'Automattic\Jetpack\Stats_Admin\Admin_Bar', 'maybe_add_chart_node' ], 100 );
+		remove_action( 'wp_before_admin_bar_render', [ 'Automattic\Jetpack\Stats_Admin\Admin_Bar', 'add_site_menu_link' ] );
 
 		//remove JetPack likes in adminbar
 		if ( class_exists( 'Jetpack_Likes' ) ) {

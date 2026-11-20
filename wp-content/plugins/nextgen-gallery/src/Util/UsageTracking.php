@@ -244,6 +244,13 @@ class UsageTracking {
 		// deferred, so the deferred and never-examined populations stay distinguishable.
 		$settings['pictures_guard_deferred'] = (string) get_option( 'ngg_pictures_guard_deferred', '' );
 
+		// Private galleries, for the "Delivered" activation level. Counts only, no visitor data.
+		$private = $this->get_private_gallery_info();
+
+		$settings['private_galleries_count']     = $private['count'];
+		$settings['private_galleries_delivered'] = $private['delivered'];
+		$settings['private_galleries_access']    = $private['access'];
+
 		$data['nextgen_version'] = NGG_PLUGIN_VERSION;
 		$data['ng_type']         = 'lite';
 
@@ -289,6 +296,53 @@ class UsageTracking {
 		$data['locale']           = get_locale();
 
 		return $data;
+	}
+
+	/**
+	 * Private gallery totals: how many, how many were opened in the last 90 days, and each one's
+	 * access count and last access.
+	 *
+	 * @return array{count:int,delivered:int,access:string}
+	 */
+	private function get_private_gallery_info() {
+		global $wpdb;
+
+		// The mapper adds the access columns on first use.
+		\Imagely\NGG\DataMappers\Gallery::get_instance();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Weekly check-in.
+		$rows = $wpdb->get_results( "SELECT gid, access_count, last_access_at FROM {$wpdb->nggallery} WHERE is_private = 1" );
+
+		$cutoff    = time() - 90 * DAY_IN_SECONDS;
+		$delivered = 0;
+		$access    = [];
+		$set_up    = \Imagely\NGG\PrivateGalleries\Registry::get_all();
+
+		foreach ( (array) $rows as $row ) {
+			// Galleries flagged before client pages existed are not private galleries yet.
+			if ( ! isset( $set_up[ (int) $row->gid ] ) ) {
+				continue;
+			}
+
+			$last = ! empty( $row->last_access_at ) ? strtotime( $row->last_access_at . ' UTC' ) : 0;
+
+			if ( $last && $last >= $cutoff ) {
+				++$delivered;
+			}
+
+			$access[] = [
+				'gid'            => (int) $row->gid,
+				'access_count'   => (int) $row->access_count,
+				'last_access_at' => $last ? gmdate( 'c', $last ) : '',
+			];
+		}
+
+		return [
+			'count'     => count( $access ),
+			'delivered' => $delivered,
+			// A string: the receiving end stores settings values as they arrive.
+			'access'    => (string) wp_json_encode( $access ),
+		];
 	}
 
 	/**

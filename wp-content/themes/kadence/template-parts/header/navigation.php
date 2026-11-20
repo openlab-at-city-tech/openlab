@@ -8,7 +8,7 @@
 namespace Kadence;
 
 ?>
-<div class="site-header-item site-header-focus-item site-header-item-main-navigation header-navigation-layout-stretch-<?php echo ( kadence()->option( 'primary_navigation_stretch' ) ? 'true' : 'false' ); ?> header-navigation-layout-fill-stretch-<?php echo ( kadence()->option( 'primary_navigation_fill_stretch' ) ? 'true' : 'false' ); ?>" data-section="kadence_customizer_primary_navigation">
+<div class="site-header-item site-header-focus-item site-header-item-main-navigation header-navigation-layout-stretch-<?php echo kadence()->option( 'primary_navigation_stretch' ) ? 'true' : 'false'; ?> header-navigation-layout-fill-stretch-<?php echo kadence()->option( 'primary_navigation_fill_stretch' ) ? 'true' : 'false'; ?>" data-section="kadence_customizer_primary_navigation">
 	<?php
 	/**
 	 * Kadence Primary Navigation

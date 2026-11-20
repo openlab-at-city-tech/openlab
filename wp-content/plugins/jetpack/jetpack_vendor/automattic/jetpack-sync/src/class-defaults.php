@@ -57,6 +57,7 @@ class Defaults {
 		'disabled_likes',
 		'disabled_reblogs',
 		'disallowed_keys',
+		'enable_blocks_comments',
 		'enable_header_ad',
 		'gmt_offset',
 		'gravatar_disable_hovercards',
@@ -84,10 +85,12 @@ class Defaults {
 		'jetpack_options',
 		'jetpack_portfolio',
 		'jetpack_portfolio_posts_per_page',
+		'jetpack_premium_analytics_enabled',
 		'jetpack_protect_global_whitelist',
 		'jetpack_protect_key',
 		'jetpack_publicize_options',
 		'jetpack_relatedposts',
+		'jetpack_social_message_template',
 		'jetpack_social_notes_config',
 		'jetpack_social_settings',
 		'jetpack_social_utm_settings',
@@ -166,7 +169,11 @@ class Defaults {
 		'uploads_use_yearmonth_folders',
 		'users_can_register',
 		'verification_services_codes',
+		'videopress_auto_subtitles_disabled',
+		'videopress_player_preload_disabled',
+		'videopress_playlist_index',
 		'videopress_private_enabled_for_site',
+		'videopress_share_menu_disabled',
 		'wordads_ccpa_enabled',
 		'wordads_ccpa_privacy_policy_url',
 		'wordads_cmp_enabled',
@@ -359,6 +366,8 @@ class Defaults {
 		'jetpack_connection_active_plugins' => array( 'Automattic\\Jetpack\\Sync\\Functions', 'get_jetpack_connection_active_plugins' ),
 		'jetpack_package_versions'          => array( 'Automattic\\Jetpack\\Sync\\Functions', 'get_jetpack_package_versions' ),
 		'jetpack_sync_active_modules'       => array( 'Automattic\\Jetpack\\Sync\\Functions', 'get_jetpack_sync_active_modules' ),
+		// Carries the `blog_public` value, but reports -1 when the site is private.
+		'jetpack_site_visibility'           => array( 'Automattic\\Jetpack\\Sync\\Functions', 'get_site_visibility' ),
 	);
 
 	/**
@@ -780,6 +789,7 @@ class Defaults {
 		'_wpas_customize_per_network',
 		'_wpas_mess',
 		'_wpas_options',
+		'_jetpack_social_image_focal_point', // Publicize_Base::ATTACHMENT_IMAGE_FOCAL_POINT.
 		'advanced_seo_description', // Jetpack_SEO_Posts::DESCRIPTION_META_KEY.
 		'content_width',
 		'custom_css_add',
@@ -825,6 +835,8 @@ class Defaults {
 		'hc_foreign_user_id',
 		'hc_post_as',
 		'hc_wpcom_id_sig',
+		'jetpack_comment_identity_avatar',
+		'jetpack_comment_identity_id',
 		'protocol',
 	);
 

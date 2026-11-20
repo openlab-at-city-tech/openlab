@@ -64,6 +64,7 @@ class TabsComponent extends Component {
 						</Button>
 					</div>
 				</div>
+				{ this.props.control.renderNotice() }
 			</div>
 		);
 	}

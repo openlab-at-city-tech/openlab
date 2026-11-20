@@ -925,10 +925,27 @@ To start using the **Jetpack AI Assistant**, type `/AI` in the block editor.',
     'version' => '12.5.0',
     'textdomain' => 'jetpack',
     'category' => 'monetize',
-    'icon' => '<svg viewBox=\'0 0 24 24\' width=\'24\' height=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M16.5 4.5c2.206 0 4 1.794 4 4 0 4.67-5.543 8.94-8.5 11.023C9.043 17.44 3.5 13.17 3.5 8.5c0-2.206 1.794-4 4-4 1.298 0 2.522.638 3.273 1.706L12 7.953l1.227-1.746c.75-1.07 1.975-1.707 3.273-1.707m0-1.5c-1.862 0-3.505.928-4.5 2.344C11.005 3.928 9.362 3 7.5 3 4.462 3 2 5.462 2 8.5c0 5.72 6.5 10.438 10 12.85 3.5-2.412 10-7.13 10-12.85C22 5.462 19.538 3 16.5 3z\' /></svg>',
+    'icon' => '<svg viewBox=\'0 0 24 24\' width=\'24\' height=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><g transform=\'translate(1.2 1.2) scale(0.9)\'><path d=\'M16.5 4.5c2.206 0 4 1.794 4 4 0 4.67-5.543 8.94-8.5 11.023C9.043 17.44 3.5 13.17 3.5 8.5c0-2.206 1.794-4 4-4 1.298 0 2.522.638 3.273 1.706L12 7.953l1.227-1.746c.75-1.07 1.975-1.707 3.273-1.707m0-1.5c-1.862 0-3.505.928-4.5 2.344C11.005 3.928 9.362 3 7.5 3 4.462 3 2 5.462 2 8.5c0 5.72 6.5 10.438 10 12.85 3.5-2.412 10-7.13 10-12.85C22 5.462 19.538 3 16.5 3z\' /></g></svg>',
     'supports' => 
     array (
       'html' => false,
+      'color' => 
+      array (
+        'background' => true,
+        'text' => true,
+        'button' => true,
+        'link' => true,
+        'gradients' => false,
+      ),
+      'typography' => 
+      array (
+        'fontSize' => true,
+        'fontFamily' => true,
+        'fontStyle' => true,
+        'fontWeight' => true,
+        'lineHeight' => true,
+        'letterSpacing' => true,
+      ),
     ),
     'attributes' => 
     array (
@@ -987,6 +1004,14 @@ To start using the **Jetpack AI Assistant**, type `/AI` in the block editor.',
         'type' => 'boolean',
         'default' => true,
       ),
+      'defaultInterval' => 
+      array (
+        'type' => 'string',
+      ),
+      'customAmountPlaceholder' => 
+      array (
+        'type' => 'number',
+      ),
       'chooseAmountText' => 
       array (
         'type' => 'string',
@@ -998,6 +1023,162 @@ To start using the **Jetpack AI Assistant**, type `/AI` in the block editor.',
       'fallbackLinkUrl' => 
       array (
         'type' => 'string',
+      ),
+      'activeTabBackgroundColor' => 
+      array (
+        'type' => 'string',
+      ),
+      'activeTabTextColor' => 
+      array (
+        'type' => 'string',
+      ),
+      'inactiveTabBackgroundColor' => 
+      array (
+        'type' => 'string',
+      ),
+      'inactiveTabTextColor' => 
+      array (
+        'type' => 'string',
+      ),
+      'selectedAmountBackgroundColor' => 
+      array (
+        'type' => 'string',
+      ),
+      'selectedAmountTextColor' => 
+      array (
+        'type' => 'string',
+      ),
+      'selectedAmountOutlineColor' => 
+      array (
+        'type' => 'string',
+      ),
+      'tabsAppearance' => 
+      array (
+        'type' => 'string',
+        'enum' => 
+        array (
+          0 => 'tabs',
+          1 => 'buttons',
+        ),
+        'default' => 'tabs',
+      ),
+      'tabBorderColor' => 
+      array (
+        'type' => 'string',
+      ),
+      'tabFontSize' => 
+      array (
+        'type' => 'string',
+      ),
+      'tabPadding' => 
+      array (
+        'type' => 'object',
+      ),
+      'buttonFontSize' => 
+      array (
+        'type' => 'string',
+      ),
+      'buttonPadding' => 
+      array (
+        'type' => 'object',
+      ),
+      'buttonAlignment' => 
+      array (
+        'type' => 'string',
+        'enum' => 
+        array (
+          0 => '',
+          1 => 'left',
+          2 => 'center',
+          3 => 'right',
+          4 => 'full',
+        ),
+        'default' => '',
+      ),
+      'amountFontSize' => 
+      array (
+        'type' => 'string',
+      ),
+      'amountBorder' => 
+      array (
+        'type' => 'object',
+      ),
+      'amountBorderRadius' => 
+      array (
+        'type' => 
+        array (
+          0 => 'string',
+          1 => 'object',
+        ),
+      ),
+      'buttonBorderRadius' => 
+      array (
+        'type' => 
+        array (
+          0 => 'string',
+          1 => 'object',
+        ),
+      ),
+      'contentAlignment' => 
+      array (
+        'type' => 'string',
+        'enum' => 
+        array (
+          0 => '',
+          1 => 'left',
+          2 => 'center',
+          3 => 'right',
+        ),
+        'default' => '',
+      ),
+      'minimumAmount' => 
+      array (
+        'type' => 'number',
+      ),
+      'maximumAmount' => 
+      array (
+        'type' => 'number',
+      ),
+      'displayMode' => 
+      array (
+        'type' => 'string',
+        'enum' => 
+        array (
+          0 => 'inline',
+          1 => 'modal',
+        ),
+        'default' => 'inline',
+      ),
+      'triggerButtonText' => 
+      array (
+        'type' => 'string',
+      ),
+      'triggerIcon' => 
+      array (
+        'type' => 'string',
+        'default' => 'heart',
+      ),
+      'triggerSticky' => 
+      array (
+        'type' => 'boolean',
+        'default' => false,
+      ),
+      'blockBorder' => 
+      array (
+        'type' => 'object',
+      ),
+      'blockBorderRadius' => 
+      array (
+        'type' => 
+        array (
+          0 => 'string',
+          1 => 'object',
+        ),
+      ),
+      'variationName' => 
+      array (
+        'type' => 'string',
+        'default' => '',
       ),
     ),
     'example' => 
@@ -1608,6 +1789,11 @@ To start using the **Jetpack AI Assistant**, type `/AI` in the block editor.',
     array (
       'defaultStylePicker' => false,
       'html' => false,
+      'align' => 
+      array (
+        0 => 'wide',
+        1 => 'full',
+      ),
     ),
     'attributes' => 
     array (
@@ -1894,7 +2080,7 @@ Markdown is a text formatting syntax that is converted into HTML. You can _empha
     'version' => '12.5.0',
     'textdomain' => 'jetpack',
     'category' => 'monetize',
-    'icon' => '<svg viewBox=\'0 0 24 24\' width=\'24\' height=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M20 4H4c-1.105 0-2 .895-2 2v12c0 1.105.895 2 2 2h16c1.105 0 2-.895 2-2V6c0-1.105-.895-2-2-2zm0 2v2H4V6h16zM4 18v-6h16v6H4zm2-4h7v2H6v-2zm9 0h3v2h-3v-2z\'/></svg>',
+    'icon' => '<svg viewBox=\'0 0 24 24\' width=\'24\' height=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path fill-rule=\'evenodd\' clip-rule=\'evenodd\' d=\'M5.5 9.5v-2h13v2h-13zm0 3v4h13v-4h-13zM4 7a1 1 0 011-1h14a1 1 0 011 1v10a1 1 0 01-1 1H5a1 1 0 01-1-1V7z\'/></svg>',
     'supports' => 
     array (
       '__experimentalExposeControlsToChildren' => true,
@@ -2237,7 +2423,7 @@ Markdown is a text formatting syntax that is converted into HTML. You can _empha
     'version' => '12.5.0',
     'textdomain' => 'jetpack',
     'category' => 'monetize',
-    'icon' => '<svg viewBox=\'0 0 24 24\' width=\'24\' height=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'m12.74,14.43l-4.1-1.26-.13.71-.42,6.87c-.03.49.52.81.93.54l3.72-2.48,4,2.51c.42.26.96-.07.92-.56l-.64-6.87v-.71l-4.28,1.26Z\'/><path d=\'m12.74,15.14c-3.55,0-6.44-2.89-6.44-6.44s2.89-6.44,6.44-6.44,6.44,2.89,6.44,6.44-2.89,6.44-6.44,6.44Zm0-11.89c-3,0-5.44,2.44-5.44,5.44s2.44,5.44,5.44,5.44,5.44-2.44,5.44-5.44-2.44-5.44-5.44-5.44Z\'/><path d=\'M11.95 11.08 9.36 8.48 10.06 7.77 11.95 9.66 15.42 6.19 16.13 6.9 11.95 11.08z\'/></svg>',
+    'icon' => '<svg viewBox=\'0 0 24 24\' width=\'24\' height=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path fill-rule=\'evenodd\' clip-rule=\'evenodd\' d=\'M12 1.75a6.75 6.75 0 014 12.19l1.36 6.48a.85.85 0 01-1.22.93L12 19.6l-4.14 1.75a.85.85 0 01-1.22-.93l1.36-6.48A6.75 6.75 0 0112 1.75zm0 1.5a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5zm-2.2 12.05l-.86 4.06 2.77-1.17a.85.85 0 01.66 0l2.77 1.17-.86-4.06A6.72 6.72 0 0112 15.25a6.72 6.72 0 01-2.2-.37zM11.3 11.6 9 9.3l1.1-1.1 1.2 1.2 2.5-2.5 1.1 1.1z\'/></svg>',
     'supports' => 
     array (
       'html' => false,
@@ -2438,7 +2624,7 @@ Markdown is a text formatting syntax that is converted into HTML. You can _empha
     'version' => '12.5.0',
     'textdomain' => 'jetpack',
     'category' => 'monetize',
-    'icon' => '<svg viewBox=\'0 0 24 24\' width=\'24\' height=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M20 4H4c-1.105 0-2 .895-2 2v12c0 1.105.895 2 2 2h16c1.105 0 2-.895 2-2V6c0-1.105-.895-2-2-2zm0 2v2H4V6h16zM4 18v-6h16v6H4zm2-4h7v2H6v-2zm9 0h3v2h-3v-2z\'/></svg>',
+    'icon' => '<svg viewBox=\'0 0 24 24\' width=\'24\' height=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path fill-rule=\'evenodd\' clip-rule=\'evenodd\' d=\'M5.5 9.5v-2h13v2h-13zm0 3v4h13v-4h-13zM4 7a1 1 0 011-1h14a1 1 0 011 1v10a1 1 0 01-1 1H5a1 1 0 01-1-1V7z\'/></svg>',
     'supports' => 
     array (
       'html' => false,
@@ -2705,6 +2891,13 @@ Markdown is a text formatting syntax that is converted into HTML. You can _empha
       'reusable' => false,
       'html' => false,
     ),
+    'example' => 
+    array (
+      'attributes' => 
+      array (
+        'service' => 'facebook',
+      ),
+    ),
     'viewScript' => 'file:./view.js',
     'editorScript' => 'jetpack-blocks-editor',
   ),
@@ -2809,6 +3002,7 @@ Markdown is a text formatting syntax that is converted into HTML. You can _empha
       ),
       'anchor' => true,
       '__experimentalExposeControlsToChildren' => true,
+      'listView' => true,
       'layout' => 
       array (
         'allowSwitching' => false,
@@ -2853,6 +3047,13 @@ Markdown is a text formatting syntax that is converted into HTML. You can _empha
           'blockGap' => true,
           'margin' => true,
           'padding' => false,
+        ),
+      ),
+      '__experimentalStyle' => 
+      array (
+        'spacing' => 
+        array (
+          'blockGap' => '0',
         ),
       ),
     ),
@@ -3538,7 +3739,7 @@ Markdown is a text formatting syntax that is converted into HTML. You can _empha
     'version' => '12.5.0',
     'textdomain' => 'jetpack',
     'category' => 'monetize',
-    'icon' => '<svg viewBox=\'0 0 24 24\' width=\'24\' height=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M10 15.619C6.84915 15.619 4.28572 13.0542 4.28572 9.90176C4.28572 7.24269 6.10957 5.00183 8.57143 4.36551V0C3.72557 0.693782 0 4.86162 0 9.90176C0 15.4274 4.47715 19.9069 10 19.9069C12.2461 19.9069 14.3193 19.1658 15.9887 17.9148L12.9003 14.825C12.0494 15.3287 11.0581 15.619 10 15.619 M15.7135 9.90176C15.7135 10.9604 15.4233 11.9522 14.9199 12.8035L18.0082 15.8935C19.2585 14.2232 19.9992 12.149 19.9992 9.90176C19.9992 4.86162 16.2736 0.693782 11.4277 0V4.36551C13.8896 5.00183 15.7135 7.24269 15.7135 9.90176\'/></svg>',
+    'icon' => '<svg viewBox=\'0 0 24 24\' width=\'24\' height=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><g transform=\'translate(3.7 3.45) scale(0.86)\'><path d=\'M10 15.619C6.84915 15.619 4.28572 13.0542 4.28572 9.90176C4.28572 7.24269 6.10957 5.00183 8.57143 4.36551V0C3.72557 0.693782 0 4.86162 0 9.90176C0 15.4274 4.47715 19.9069 10 19.9069C12.2461 19.9069 14.3193 19.1658 15.9887 17.9148L12.9003 14.825C12.0494 15.3287 11.0581 15.619 10 15.619 M15.7135 9.90176C15.7135 10.9604 15.4233 11.9522 14.9199 12.8035L18.0082 15.8935C19.2585 14.2232 19.9992 12.149 19.9992 9.90176C19.9992 4.86162 16.2736 0.693782 11.4277 0V4.36551C13.8896 5.00183 15.7135 7.24269 15.7135 9.90176\'/></g></svg>',
     'supports' => 
     array (
       'align' => true,
@@ -3742,6 +3943,47 @@ Markdown is a text formatting syntax that is converted into HTML. You can _empha
     ),
     'example' => 
     array (
+    ),
+    'editorScript' => 'jetpack-blocks-editor',
+  ),
+  'zoom-scheduler' => 
+  array (
+    '$schema' => 'https://schemas.wp.org/trunk/block.json',
+    'apiVersion' => 3,
+    'name' => 'jetpack/zoom-scheduler',
+    'title' => 'Zoom Scheduler',
+    'description' => 'Embed a Zoom Scheduler booking page.',
+    'keywords' => 
+    array (
+      0 => 'scheduling',
+      1 => 'appointment',
+      2 => 'booking',
+      3 => 'schedule',
+      4 => 'calendar',
+    ),
+    'version' => '12.5.0',
+    'textdomain' => 'jetpack',
+    'category' => 'grow',
+    'icon' => '<svg width=\'24\' height=\'24\' viewBox=\'0 0 150.0027008 150.0027008\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'><path fill=\'currentColor\' d=\'M100.0018005,64.5862427c-20.7117157,0-37.5006714,16.7895508-37.5006714,37.4997559,0,20.7103729,16.7889709,37.4998322,37.5006714,37.4998322,20.7112122,0,37.5006714-16.7894745,37.5006714-37.4998474,0-20.7102051-16.7894745-37.4997559-37.5006714-37.4997559v.0000153ZM114.7312317,116.8212738c-.8141785.8133545-1.8800354,1.2200165-2.9467163,1.2200165-1.0658569,0-2.1317139-.4066772-2.9458923-1.2200165l-11.7835388-11.7927094c-.7816925-.7808533-1.2208557-1.8392029-1.2208557-2.9458923v-20.8329468c0-2.3030396,1.8633728-4.1665802,4.166748-4.1665802,2.3025513,0,4.166748,1.8635254,4.166748,4.1665802v19.1079254l10.5635223,10.5710297c1.627533,1.6283722,1.627533,4.2642365,0,5.8926086l-.0000153-.0000153ZM97.9176025,39.5833817c-2.3033752,0-4.166748-1.8636169-4.166748-4.1666565V10.4167786c0-2.3030396,1.8633728-4.1666565,4.166748-4.1666565,2.3025513,0,4.166748,1.8636169,4.166748,4.1666565v24.9998627c0,2.3030396-1.8641968,4.1667404-4.166748,4.1667404ZM52.0832672,39.5833817c-2.3031311,0-4.166748-1.8636169-4.166748-4.1666565V10.4167786c0-2.3030396,1.8636169-4.1666565,4.166748-4.1666565s4.166748,1.8636169,4.166748,4.1666565v24.9998627c0,2.3030396-1.8636169,4.1667404-4.166748,4.1667404ZM112.5020294,18.7531738h-2.084198v16.6635513c0,6.9010391-5.5992584,12.4999771-12.5002289,12.4999771s-12.5002289-5.5989304-12.5002289-12.4999771v-16.6635513h-20.8338776v16.6635513c0,6.9010391-5.5991058,12.4999771-12.5002289,12.4999771s-12.5002289-5.5989304-12.5002289-12.4999771v-16.6635513h-2.0823669c-13.8074188,0-25.0004501,11.1927872-25.0004501,24.9998627v66.6664429c0,13.8069153,11.1930313,24.9996185,25.0004501,24.9996185h23.4715118c2.3010406,0,4.166748-1.86586,4.166748-4.166748,0-2.301712-1.8657074-4.166748-4.166748-4.166748l-23.4715118-.0008392c-9.2042465,0-16.6669693-7.4626312-16.6669693-16.6661377v-37.5001831c0-9.2039948,7.4627151-16.6664734,16.6669693-16.6664734h75.001358c6.157608,0,11.4802094,3.3742218,14.3585815,8.3434753.3441772.594101.8283539,1.0905151,1.3675232,1.5137024.0383301.0305023.0774994.0599976.1158295.0904999,3.7067413,2.9266357,9.158493.2289276,9.158493-4.4931641v-17.9534073c0-13.8070831-11.1927032-24.9999466-25.0004578-24.9999466l.0000305.0000458Z\'/></svg>',
+    'supports' => 
+    array (
+      'align' => true,
+      'alignWide' => false,
+      'html' => false,
+    ),
+    'attributes' => 
+    array (
+      'url' => 
+      array (
+        'type' => 'string',
+      ),
+    ),
+    'example' => 
+    array (
+      'attributes' => 
+      array (
+        'url' => 'https://scheduler.zoom.us/wordpresscom/book-a-meeting',
+      ),
     ),
     'editorScript' => 'jetpack-blocks-editor',
   ),

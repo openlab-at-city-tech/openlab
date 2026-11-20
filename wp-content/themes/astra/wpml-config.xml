@@ -116,6 +116,14 @@
 			<key name="woo-cart-button-text"/>
 			<key name="single-product-shipping-text"/>
 			<key name="woo-header-cart-label-display"/>
+			<key name="ast-dynamic-archive-post-custom-title"/>
+			<key name="ast-dynamic-archive-post-custom-description"/>
+			<key name="ast-dynamic-archive-product-custom-title"/>
+			<key name="ast-dynamic-archive-product-custom-description"/>
+			<key name="ast-dynamic-archive-download-custom-title"/>
+			<key name="ast-dynamic-archive-download-custom-description"/>
+			<key name="ast-dynamic-archive-sc_product-custom-title"/>
+			<key name="ast-dynamic-archive-sc_product-custom-description"/>
 		</key>
 	</admin-texts>
 </wpml-config>

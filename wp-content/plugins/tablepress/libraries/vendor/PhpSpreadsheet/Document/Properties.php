@@ -71,6 +71,11 @@ class Properties
 	private string $category = '';
 
 	/**
+	 * Language, as a BCP 47 tag such as "en-US".
+	 */
+	private string $language = '';
+
+	/**
 	 * Manager.
 	 */
 	private string $manager = '';
@@ -143,7 +148,7 @@ class Properties
 	}
 
 	/**
-				 * @param null|bool|float|int|string $timestamp
+				 * @param bool|float|int|string|null $timestamp
 				 * @return float|int
 				 */
 				private static function intOrFloatTimestamp($timestamp)
@@ -177,7 +182,7 @@ class Properties
 				 * Set Created.
 				 *
 				 * @return $this
-				 * @param null|float|int|string $timestamp
+				 * @param float|int|string|null $timestamp
 				 */
 				public function setCreated($timestamp): self
 	{
@@ -199,7 +204,7 @@ class Properties
 				 * Set Modified.
 				 *
 				 * @return $this
-				 * @param null|float|int|string $timestamp
+				 * @param float|int|string|null $timestamp
 				 */
 				public function setModified($timestamp): self
 	{
@@ -284,6 +289,23 @@ class Properties
 	public function setKeywords(string $keywords): self
 	{
 		$this->keywords = $keywords;
+
+		return $this;
+	}
+
+	public function getLanguage(): string
+	{
+		return $this->language;
+	}
+
+	/**
+	 * Set Language, as a BCP 47 tag such as "en-US".
+	 *
+	 * @return $this
+	 */
+	public function setLanguage(string $language): self
+	{
+		$this->language = $language;
 
 		return $this;
 	}
@@ -388,7 +410,7 @@ class Properties
 	}
 
 	/**
-				 * @param bool|int|float|string|null $propertyValue
+				 * @param bool|float|int|string|null $propertyValue
 				 */
 				private function identifyPropertyType($propertyValue): string
 	{
@@ -411,7 +433,7 @@ class Properties
 				 * @param ?string $propertyType see `self::VALID_PROPERTY_TYPE_LIST`
 				 *
 				 * @return $this
-				 * @param bool|int|float|string|null $propertyValue
+				 * @param bool|float|int|string|null $propertyValue
 				 */
 				public function setCustomProperty(string $propertyName, $propertyValue = '', ?string $propertyType = null): self
 	{
@@ -463,7 +485,7 @@ class Properties
 
 	/**
 				 * Convert property to form desired by Excel.
-				 * @param bool|int|float|string|null $propertyValue
+				 * @param bool|float|int|string|null $propertyValue
 				 * @return bool|float|int|string|null
 				 */
 				public static function convertProperty($propertyValue, string $propertyType)
@@ -473,7 +495,7 @@ class Properties
 
 	/**
 				 * Convert property to form desired by Excel.
-				 * @param bool|int|float|string|null $propertyValue
+				 * @param bool|float|int|string|null $propertyValue
 				 * @return bool|float|int|string|null
 				 */
 				private static function convertProperty2($propertyValue, string $type)

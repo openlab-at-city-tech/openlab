@@ -16,14 +16,14 @@ if ( ! class_exists( 'BBP_Users_Admin' ) ) :
  *
  * @package bbPress
  * @subpackage Administration
- * @since 2.0.0 bbPress (r2464)
+ * @since 2.0.0 bbPress (r3095)
  */
 class BBP_Users_Admin {
 
 	/**
 	 * The bbPress users admin loader
 	 *
-	 * @since 2.0.0 bbPress (r2515)
+	 * @since 2.0.0 bbPress (r3095)
 	 */
 	public function __construct() {
 		$this->setup_actions();
@@ -32,11 +32,11 @@ class BBP_Users_Admin {
 	/**
 	 * Setup the admin hooks, actions and filters
 	 *
-	 * @since 2.0.0 bbPress (r2646)
+	 * @since 2.0.0 bbPress (r3376)
 	 *
 	 * @access private
 	 */
-	function setup_actions() {
+	private function setup_actions() {
 
 		// Bail if in network admin
 		if ( is_network_admin() ) {
@@ -70,7 +70,8 @@ class BBP_Users_Admin {
 	/**
 	 * Default interface for setting a forum role
 	 *
-	 * @since 2.2.0 bbPress (r4285)
+	 * @since 2.2.0 bbPress (r4301)
+	 * @since 2.6.19 bbPress (r7686) Show only assignable roles.
 	 *
 	 * @param WP_User $profileuser User data
 	 * @return bool Always false
@@ -82,13 +83,8 @@ class BBP_Users_Admin {
 			return;
 		}
 
-		// Get the roles
-		$dynamic_roles = bbp_get_dynamic_roles();
-
-		// Only keymasters can set other keymasters
-		if ( ! bbp_is_user_keymaster() ) {
-			unset( $dynamic_roles[ bbp_get_keymaster_role() ] );
-		} ?>
+		// Get the roles this user may assign.
+		$dynamic_roles = bbp_get_user_editable_forum_roles( $profileuser->ID ); ?>
 
 		<h2><?php esc_html_e( 'Forums', 'bbpress' ); ?></h2>
 
@@ -131,8 +127,9 @@ class BBP_Users_Admin {
 	/**
 	 * Add bulk forums role dropdown to the WordPress users table
 	 *
-	 * @since 2.2.0 bbPress (r4360)
+	 * @since 2.2.0 bbPress (r4365)
 	 * @since 2.6.0 bbPress (r6055) Introduced the `$which` parameter.
+	 * @since 2.6.19 bbPress (r7686) Show only assignable roles.
 	 *
 	 * @param string $which The location of the extra table nav markup: 'top' or 'bottom'.
 	 */
@@ -150,20 +147,15 @@ class BBP_Users_Admin {
 		}
 
 		// Get the roles
-		$dynamic_roles = bbp_get_dynamic_roles();
-
-		// Only keymasters can set other keymasters
-		if ( ! bbp_is_user_keymaster() ) {
-			unset( $dynamic_roles[ bbp_get_keymaster_role() ] );
-		}
+		$dynamic_roles = bbp_get_user_editable_forum_roles();
 
 		$select_id = 'bottom' === $which ? 'bbp-new-role2' : 'bbp-new-role';
 		$button_id = 'bottom' === $which ? 'bbp-change-role2' : 'bbp-change-role';
 		?>
 
-		<label class="screen-reader-text" for="<?php echo $select_id; ?>"><?php esc_html_e( 'Change forum role to&hellip;', 'bbpress' ) ?></label>
+		<label class="screen-reader-text" for="<?php echo $select_id; ?>"><?php esc_html_e( 'Change forum role to&hellip;', 'bbpress' ); ?></label>
 		<select name="<?php echo $select_id; ?>" id="<?php echo $select_id; ?>" style="display:inline-block; float:none;">
-			<option value=''><?php esc_html_e( 'Change forum role to&hellip;', 'bbpress' ) ?></option>
+			<option value=''><?php esc_html_e( 'Change forum role to&hellip;', 'bbpress' ); ?></option>
 			<?php foreach ( $dynamic_roles as $role => $details ) : ?>
 				<option value="<?php echo esc_attr( $role ); ?>"><?php echo bbp_translate_user_role( $details['name'] ); ?></option>
 			<?php endforeach; ?>
@@ -177,6 +169,7 @@ class BBP_Users_Admin {
 	 * Table
 	 *
 	 * @since 2.2.0 bbPress (r4365)
+	 * @since 2.6.19 bbPress (r7686) Check each user and assignable role.
 	 *
 	 * @return bool Always false
 	 */
@@ -200,6 +193,7 @@ class BBP_Users_Admin {
 		}
 
 		// Check that the new role exists
+		$new_role = is_string( $new_role ) ? sanitize_text_field( wp_unslash( $new_role ) ) : '';
 		$dynamic_roles = bbp_get_dynamic_roles();
 		if ( ! $new_role || empty( $dynamic_roles[ $new_role ] ) ) {
 			return;
@@ -225,12 +219,21 @@ class BBP_Users_Admin {
 				continue;
 			}
 
+			// Only change roles for users on this site who the current user may promote.
+			if ( ! is_user_member_of_blog( $user_id ) || ! bbp_current_user_can_edit_user_field( 'forum_role', $user_id ) || ! current_user_can( 'promote_user', $user_id ) ) {
+				continue;
+			}
+
 			// Set up user and role data
 			$user_role = bbp_get_user_role( $user_id );
-			$new_role  = sanitize_text_field( $new_role );
 
-			// Only keymasters can set other keymasters
-			if ( in_array( bbp_get_keymaster_role(), array( $user_role, $new_role ), true ) && ! bbp_is_user_keymaster() ) {
+			// Check the roles allowed for this target user.
+			if ( ! array_key_exists( $new_role, bbp_get_user_editable_forum_roles( $user_id ) ) ) {
+				continue;
+			}
+
+			// Only keymasters and site administrators can change keymaster roles.
+			if ( in_array( bbp_get_keymaster_role(), array( $user_role, $new_role ), true ) && ! bbp_is_user_keymaster() && ! current_user_can( 'manage_options' ) ) {
 				continue;
 			}
 
@@ -267,7 +270,7 @@ class BBP_Users_Admin {
 	 * Add Forum Role column to the WordPress Users table, and change the
 	 * core role title to "Site Role"
 	 *
-	 * @since 2.2.0 bbPress (r4337)
+	 * @since 2.2.0 bbPress (r4338)
 	 *
 	 * @param array $columns Users table columns
 	 * @return array $columns
@@ -294,7 +297,7 @@ class BBP_Users_Admin {
 	/**
 	 * Return user's forums role for display in the WordPress Users list table
 	 *
-	 * @since 2.2.0 bbPress (r4337)
+	 * @since 2.2.0 bbPress (r4338)
 	 *
 	 * @param string $retval
 	 * @param string $column_name
@@ -328,7 +331,7 @@ class BBP_Users_Admin {
 	 * Ensures forum roles are only displayed under the Forum Role list in the
 	 * WordPress Users list table
 	 *
-	 * @since 2.6.0 bbPress (r6051)
+	 * @since 2.6.0 bbPress (r6052)
 	 *
 	 * @return array $roles
 	 */

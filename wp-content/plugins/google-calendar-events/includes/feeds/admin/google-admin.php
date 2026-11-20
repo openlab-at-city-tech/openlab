@@ -65,9 +65,9 @@ class Google_Admin
 		$screen = simcal_is_admin_screen();
 
 		if ('calendar' == $screen) {
-			$this->test_api_key_connection($this->google_calendar_id);
 			add_filter('simcal_settings_meta_tabs_li', [$this, 'add_settings_meta_tab_li'], 10, 1);
 			add_action('simcal_settings_meta_panels', [$this, 'add_settings_meta_panel'], 10, 1);
+			add_action('admin_init', [$this, 'maybe_refresh_stored_error_notice'], 20);
 		}
 
 		add_action('simcal_process_settings_meta', [$this, 'process_meta'], 10, 1);
@@ -88,16 +88,17 @@ class Google_Admin
 				'<div class="simcal-text-sm simcal-font-poppins simcal-font-normal simcal-text-sc_grey-100 simcal-mt-[5px]">' .
 				__(
 					"To read events from your public Google Calendars you'll need create a Google API key and save it here.",
-					'google-calendar-events'
+					'google-calendar-events',
 				) .
 				'</div><br/><br/>' .
 				'<em style="font-size: 14px;">' .
 				sprintf(
+					/* translators: %s: URL to Google Calendar Pro add-on */
 					__(
 						'<strong>Note:</strong> Calendars configured to use the <a href="%s" class=" hover:simcal-text-green-600 simcal-underline" target="_blank">Google Calendar Pro add-on</a> use a different method of authorization.',
-						'google-calendar-events'
+						'google-calendar-events',
 					),
-					simcal_ga_campaign_url(simcal_get_url('addons'), 'core-plugin', 'settings-link')
+					simcal_ga_campaign_url(simcal_get_url('addons'), 'core-plugin', 'settings-link'),
 				) .
 				'</em><section class="simcal-mt-[15px]"><hr></section>',
 			'fields' => [
@@ -145,18 +146,20 @@ class Google_Admin
 		$message =
 			'<p class="description">' .
 			sprintf(
+				/* translators: %s: URL to Google API key documentation */
 				__(
 					'<a href="%s" class="simcal-underline hover:simcal-text-green-600 simcal-text-[13px]" target="_blank">Step-by-step instructions</a> ',
-					'google-calendar-events'
+					'google-calendar-events',
 				),
-				simcal_ga_campaign_url(simcal_get_url('docs') . '/google-api-key/', 'core-plugin', 'settings-link')
+				simcal_ga_campaign_url(simcal_get_url('docs') . '/google-api-key/', 'core-plugin', 'settings-link'),
 			) .
 			sprintf(
+				/* translators: %s: URL to Google Developers Console */
 				__(
 					'<a href="%s" class="simcal-pl-[20px] simcal-underline hover:simcal-text-green-600 simcal-text-[13px]" target="_blank">Google Developers Console</a> ',
-					'google-calendar-events'
+					'google-calendar-events',
 				),
-				simcal_get_url('gdev-console')
+				simcal_get_url('gdev-console'),
 			) .
 			'</p>';
 
@@ -203,11 +206,11 @@ class Google_Admin
 					'title' => __('Calendar ID', 'google-calendar-events'),
 					'tooltip' => __(
 						'Visit your Google Calendar account, copy your public calendar ID, then paste it here.',
-						'google-calendar-events'
+						'google-calendar-events',
 					),
 					'placeholder' => __('Enter a valid Google Calendar ID from a public calendar', 'google-calendar-events'),
 					'escaping' => [$this->feed, 'esc_google_calendar_id'],
-					'validation' => [$this, 'test_api_key_connection'],
+					'validation' => [$this, 'google_calendar_id_field_help'],
 				],
 				'_google_events_search_query' => [
 					'type' => 'standard',
@@ -217,7 +220,7 @@ class Google_Admin
 					'title' => __('Search Query', 'google-calendar-events'),
 					'tooltip' => __(
 						'Type in keywords if you only want display events that match these terms. You can use basic boolean search operators too.',
-						'google-calendar-events'
+						'google-calendar-events',
 					),
 					'placeholder' => __('Filter events to display by search terms...', 'google-calendar-events'),
 				],
@@ -240,7 +243,7 @@ class Google_Admin
 					'title' => __('Maximum Events', 'google-calendar-events'),
 					'tooltip' => __(
 						'Google Calendar only allows to query for a maximum amount of 2500 events from a calendar each time.',
-						'google-calendar-events'
+						'google-calendar-events',
 					),
 					'class' => ['simcal-field-small'],
 					'default' => '2500',
@@ -254,12 +257,93 @@ class Google_Admin
 		<div id="google-settings-panel" class="simcal-panel">
 			<table>
 				<thead>
-					<tr><th colspan="2"><?php _e('Google Calendar Settings', 'google-calendar-events'); ?></th></tr>
+					<tr><th colspan="2"><?php esc_html_e('Google Calendar Settings', 'google-calendar-events'); ?></th></tr>
 				</thead>
 				<?php Settings::print_panel_fields($inputs, $post_id); ?>
 			</table>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Calendar ID field help text (no remote API call).
+	 *
+	 * @since  4.0.6
+	 *
+	 * @return string
+	 */
+	public function google_calendar_id_field_help()
+	{
+		return sprintf(
+			'<p class="description">' .
+				/* translators: %1$s: URL to documentation for making a Google Calendar public */
+				__(
+					'Step 1: Set the Google Calendar you want to use as <strong>"public."</strong> <a href="%1$s" target="_blank">Detailed instructions</a>',
+					'google-calendar-events',
+				) .
+				'<br />' .
+				/* translators: %2$s: URL to documentation for finding a Google Calendar ID */
+				__(
+					'Step 2: Copy and paste your Google Calendar ID here. <a href="%2$s" target="_blank">Detailed instructions</a>',
+					'google-calendar-events',
+				) .
+				'</p>',
+			simcal_ga_campaign_url(simcal_get_url('docs') . '/make-google-calendar-public/', 'core-plugin', 'settings-link'),
+			simcal_ga_campaign_url(simcal_get_url('docs') . '/find-google-calendar-id/', 'core-plugin', 'settings-link'),
+		);
+	}
+
+	/**
+	 * Re-test and clear a stored error notice when credentials are valid.
+	 *
+	 * Only runs when a stale google-error-response notice exists for the current calendar.
+	 *
+	 * @since 4.0.6
+	 */
+	public function maybe_refresh_stored_error_notice()
+	{
+		global $post;
+
+		if (!($post instanceof \WP_Post) || 'calendar' !== $post->post_type) {
+			return;
+		}
+
+		$notices = get_option('simple-calendar_admin_notices', []);
+		if (empty($notices['calendar_' . $post->ID]['google-error-response'])) {
+			return;
+		}
+
+		$this->test_api_key_connection('');
+	}
+
+	/**
+	 * Resolve a calendar ID for API requests (plain text, not base64).
+	 *
+	 * @since  4.0.6
+	 *
+	 * @param  string $google_calendar_id
+	 * @param  int    $post_id
+	 *
+	 * @return string
+	 */
+	private function normalize_calendar_id_for_request($google_calendar_id, $post_id = 0)
+	{
+		if (!empty($google_calendar_id)) {
+			$decoded = base64_decode($google_calendar_id, true);
+			if ($decoded !== false && base64_encode($decoded) === $google_calendar_id) {
+				return $decoded;
+			}
+			return $google_calendar_id;
+		}
+
+		if ($post_id > 0) {
+			$stored = get_post_meta($post_id, '_google_calendar_id', true);
+			if (!empty($stored)) {
+				return $this->feed->esc_google_calendar_id($stored);
+			}
+		}
+
+		return $this->google_calendar_id;
 	}
 
 	/**
@@ -281,30 +365,9 @@ class Google_Admin
 			$feed = sanitize_title(current($feed_type)->name);
 		}
 
-		$message = '';
+		$message = $this->google_calendar_id_field_help();
 		$error = '';
 		$has_errors = false;
-
-		$message .=
-			'<p class="description">' .
-			sprintf(
-				__(
-					'Step 1: Set the Google Calendar you want to use as <strong>"public."</strong> <a href="%1s" target="_blank">Detailed instructions</a>',
-					'google-calendar-events'
-				) .
-					'<br />' .
-					__(
-						'Step 2: Copy and paste your Google Calendar ID here. <a href="%2s" target="_blank">Detailed instructions</a>',
-						'google-calendar-events'
-					),
-				simcal_ga_campaign_url(
-					simcal_get_url('docs') . '/make-google-calendar-public/',
-					'core-plugin',
-					'settings-link'
-				),
-				simcal_ga_campaign_url(simcal_get_url('docs') . '/find-google-calendar-id/', 'core-plugin', 'settings-link')
-			) .
-			'</p>';
 
 		if ($post_id > 0 && !is_null($feed) && !empty($this->feed->type)) {
 			$no_key_notice = new Notice([
@@ -317,11 +380,12 @@ class Google_Admin
 					'<p>' .
 					'<i class="simcal-icon-warning"></i> ' .
 					sprintf(
+						/* translators: %s: URL to Simple Calendar settings page */
 						__(
 							'Your Google Calendar events will not show up until you <a href="%s">create and save a Google API key</a>.',
-							'google-calendar-events'
+							'google-calendar-events',
 						),
-						admin_url('edit.php?post_type=calendar&page=simple-calendar_settings&tab=feeds')
+						admin_url('edit.php?post_type=calendar&page=simple-calendar_settings'),
 					) .
 					'</p>',
 			]);
@@ -332,11 +396,15 @@ class Google_Admin
 			} else {
 				$no_key_notice->remove();
 
-				try {
-					$this->feed->make_request($google_calendar_id);
-				} catch (Google_Service_Exception $e) {
-					$error = $e->getMessage();
-					$message = !empty($error) ? '<blockquote>' . $error . '</blockquote>' : '';
+				$calendar_id_for_request = $this->normalize_calendar_id_for_request($google_calendar_id, $post_id);
+
+				if (!empty($calendar_id_for_request)) {
+					try {
+						$this->feed->make_request($calendar_id_for_request);
+					} catch (Google_Service_Exception $e) {
+						$error = $e->getMessage();
+						$message = !empty($error) ? '<blockquote>' . $error . '</blockquote>' : '';
+					}
 				}
 
 				$error_notice = new Notice([
@@ -354,7 +422,7 @@ class Google_Admin
 						'<br>' .
 						__(
 							'Please ensure that both your Google Calendar ID and API Key are valid and that the Google Calendar you want to display is public.',
-							'google-calendar-events'
+							'google-calendar-events',
 						) .
 						'</p>',
 				]);
@@ -381,7 +449,10 @@ class Google_Admin
 	 */
 	public function process_meta($post_id)
 	{
-		$calendar_id = isset($_POST['_google_calendar_id']) ? base64_encode(esc_attr($_POST['_google_calendar_id'])) : '';
+		$calendar_id_raw = isset($_POST['_google_calendar_id'])
+			? sanitize_text_field(wp_unslash($_POST['_google_calendar_id']))
+			: '';
+		$calendar_id = $calendar_id_raw ? base64_encode($calendar_id_raw) : '';
 		update_post_meta($post_id, '_google_calendar_id', $calendar_id);
 
 		$search_query = isset($_POST['_google_events_search_query']) ? esc_attr($_POST['_google_events_search_query']) : '';
@@ -396,6 +467,6 @@ class Google_Admin
 		$max_results = absint($max_results_sanitize);
 		update_post_meta($post_id, '_google_events_max_results', $max_results);
 
-		$this->test_api_key_connection($calendar_id);
+		$this->test_api_key_connection($calendar_id_raw);
 	}
 }

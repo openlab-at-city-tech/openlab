@@ -139,7 +139,7 @@ class Settings extends Page {
 						],
 					]
 				),
-				esc_url( Links::get_utm_link( 'https://wp-pdf.com/docs/premium-instructions-attributes/', 'Admin - Settings', 'Override Shortcode Defaults' ) )
+				esc_url( Links::get_utm_link( 'https://wp-pdf.com/docs/using-the-pdf-embedder-shortcode/', 'Admin - Settings', 'Override Shortcode Defaults' ) )
 			);
 			?>
 		</p>

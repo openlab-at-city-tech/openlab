@@ -3,9 +3,9 @@ Contributors: kylephillips, hookandfilter
 Donate link: https://hookandfilter.com/
 Tags: pages, admin, nested, tree view, page tree, sort
 Requires at least: 3.8
-Tested up to: 7.1
+Tested up to: 7.2
 Requires PHP: 8.0
-Stable tag: 3.3.2
+Stable tag: 3.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -104,6 +104,12 @@ No. The menu synchronization currently only works within the pages post type.
 9. The Nested Pages interface can be enabled on a per-post-type basis, with customizable options for each type.
 
 == Changelog ==
+
+= 3.3.4 =
+* Style tweaks.
+* Bug fix when saving default orderby and order settings per post type
+* Default post status now set to "Draft" when adding a child or inserting posts in the Nested Pages inteface
+* Bug fix where taxonomy terms were not being saved correctly in quick edit
 
 = 3.3.3 =
 * Security Update. Thanks to Ananda Dhakal for the responsible disclosure.

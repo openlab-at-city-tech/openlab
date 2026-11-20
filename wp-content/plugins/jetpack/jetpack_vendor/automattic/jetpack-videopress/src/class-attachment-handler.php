@@ -39,6 +39,7 @@ class Attachment_Handler {
 		add_filter( 'wp_mime_type_icon', array( __CLASS__, 'wp_mime_type_icon' ), 10, 3 );
 		add_filter( 'wp_video_extensions', array( __CLASS__, 'add_videopress_extenstion' ) );
 
+		add_filter( 'attachment_fields_to_edit', array( __CLASS__, 'conversion_failure_field' ), 10, 2 );
 		add_filter( 'wp_prepare_attachment_for_js', array( __CLASS__, 'prepare_attachment_for_js' ) );
 		add_filter( 'ajax_query_attachments_args', array( __CLASS__, 'ajax_query_attachments_args' ) );
 		add_action( 'pre_get_posts', array( __CLASS__, 'media_list_table_query' ) );
@@ -173,7 +174,7 @@ class Attachment_Handler {
 
 		$status = get_post_meta( $post_id, 'videopress_status', true );
 
-		if ( $status === 'complete' ) {
+		if ( $status === 'complete' || $status === 'failed' ) {
 			return $icon;
 		}
 
@@ -210,6 +211,26 @@ class Attachment_Handler {
 			}
 		}
 		return $post;
+	}
+
+	/**
+	 * Explain a terminal conversion failure in the Media Library details.
+	 *
+	 * @since 0.58.0
+	 *
+	 * @param array   $fields Attachment fields.
+	 * @param WP_Post $post Attachment.
+	 * @return array
+	 */
+	public static function conversion_failure_field( $fields, $post ) {
+		if ( 'failed' === get_post_meta( $post->ID, 'videopress_status', true ) ) {
+			$fields['videopress_conversion_error'] = array(
+				'label' => __( 'VideoPress', 'jetpack-videopress-pkg' ),
+				'input' => 'html',
+				'html'  => esc_html__( 'Conversion failed. Delete this video and upload it again.', 'jetpack-videopress-pkg' ),
+			);
+		}
+		return $fields;
 	}
 
 	/**
@@ -285,12 +306,12 @@ class Attachment_Handler {
 	public static function disable_delete_if_disconnected( $allcaps, $cap, $args ) {
 
 		// Only apply this filter to `delete_post` checks
-		if ( 'delete_post' !== $args[0] ) {
+		if ( ! isset( $args[0] ) || 'delete_post' !== $args[0] ) {
 			return $allcaps;
 		}
 
 		// Only apply this filter to VideoPress attachments
-		if ( ! is_videopress_attachment( $args[2] ) ) {
+		if ( ! isset( $args[2] ) || ! is_videopress_attachment( $args[2] ) ) {
 			return $allcaps;
 		}
 
@@ -368,7 +389,12 @@ class Attachment_Handler {
 
 		$statuses = array();
 		foreach ( $data['videopress_processing_ids'] as $id ) {
-			$id     = (int) $id;
+			$id = (int) $id;
+
+			if ( ! current_user_can( 'edit_post', $id ) ) {
+				continue;
+			}
+
 			$status = get_post_meta( $id, 'videopress_status', true );
 			if ( $status ) {
 				$statuses[ $id ] = $status;

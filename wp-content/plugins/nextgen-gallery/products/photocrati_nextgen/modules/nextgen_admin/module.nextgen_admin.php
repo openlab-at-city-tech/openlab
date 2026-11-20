@@ -187,20 +187,6 @@ class M_NextGen_Admin extends C_Base_Module {
 			add_action( 'all_admin_notices', 'M_NextGEN_Admin::emit_do_notices_action' );
 		}
 
-		if ( defined( 'PHP_VERSION_ID' ) ) {
-			$php_id = PHP_VERSION_ID;
-		} else {
-			$version = explode( '.', PHP_VERSION );
-			$php_id  = ( $version[0] * 10000 + $version[1] * 100 + $version[2] );
-		}
-
-		if ( $php_id < 50300 ) {
-			$notices->add(
-				'ngg_php52_deprecation',
-				[ 'message' => __( 'PHP 5.2 will be deprecated in a future version of NextGEN. Please upgrade your PHP installation to 5.3 or above.', 'nggallery' ) ]
-			);
-		}
-
 		// Add review notices.
 		$review_notice_1 = new \Imagely\NGG\Admin\Notifications\Review(
 			[
@@ -237,6 +223,13 @@ class M_NextGen_Admin extends C_Base_Module {
 		$notices->add( $review_notice_3->get_name(), $review_notice_3 );
 
 		$notices->add( 'nextgen_first_run_notification', 'C_NextGen_First_Run_Notification_Wizard' );
+
+		// An upload that could not be watermarked (#1104) is reported until an admin
+		// dismisses it; the next miss shows it again.
+		$notices->add( \Imagely\NGG\Admin\Notifications\WatermarkUploadFailed::TRANSIENT, new \Imagely\NGG\Admin\Notifications\WatermarkUploadFailed() );
+
+		// Cached copies of a re-watermarked image that could not be deleted (#1236).
+		$notices->add( \Imagely\NGG\Admin\Notifications\CachedCopiesNotDeleted::TRANSIENT, new \Imagely\NGG\Admin\Notifications\CachedCopiesNotDeleted() );
 
 		$notices->add( 'mailchimp_opt_in', 'C_Mailchimp_OptIn_Notice' );
 	}

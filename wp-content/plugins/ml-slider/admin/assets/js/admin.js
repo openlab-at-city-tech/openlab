@@ -1,6 +1,67 @@
+if (!window.metaslider) {
+    window.metaslider = {}
+}
+
+/**
+ * Shared wp-color-picker + alpha-plugin init, used by ThemeViewer.vue,
+ * Caption.vue, and inc/metaslider.imagestyles.class.php's inline preview JS -
+ * one implementation instead of three independently-drifting copies. Defined
+ * as top-level code (not inside the jQuery-ready wrapper below) because this
+ * file is enqueued before app.js, and app.js mounts the Vue app - which can
+ * synchronously fire a mounted() hook that calls this - as its own top-level
+ * code, before any ready event fires.
+ *
+ * @since 3.112
+ *
+ * @param {string|jQuery} selector    CSS selector or jQuery collection of the `.colorpicker` input(s) to initialize.
+ * @param {?Object}       tooltipText Localized strings with `.tone`/`.opacity` properties for the iris-strip tooltips, or null/falsy to skip them.
+ *
+ * @return void
+ */
+var init_color_picker = window.metaslider.init_color_picker = function (selector, tooltipText) {
+    var $ = window.jQuery
+    if (!$ || !$.fn || !$.fn.wpColorPicker) { return }
+    $(selector).each(function () {
+        var $input = $(this)
+        if ($input.hasClass('wp-color-picker')) { return }
+        $input.wpColorPicker({
+            change: function (event, ui) {
+                var input = $(this).parents('.wp-picker-container').find('input.colorpicker')
+                var btn = $(this).parents('.wp-picker-container').find('button.wp-color-result')
+                var color = ui.color.toCSS('rgba')
+                input.attr('value', color)
+                btn.trigger('change')
+            }
+        }).promise().done(function () {
+            if (tooltipText) {
+                $(this).parents('.wp-picker-container').find('.iris-strip').eq(0).prepend('<span class="ms-color-tooltip">' + tooltipText.tone + '</span>')
+                $(this).parents('.wp-picker-container').find('.iris-strip').eq(1).prepend('<span class="ms-color-tooltip">' + tooltipText.opacity + '</span>')
+            }
+        })
+    })
+}
+
 window.jQuery(function ($) {
 
     const APP = window.metaslider.app ? window.metaslider.app.MetaSlider : null
+
+    /**
+     * The message from a failed AJAX response: a refused slide or slideshow sends a plain string, other errors send { message }
+     *
+     * @since 3.114.0
+     *
+     * @param {Object} xhr      The failed jqXHR
+     * @param {string} fallback Message to use when the response has none
+     *
+     * @return {string}
+     */
+    var server_error_message = function (xhr, fallback) {
+        var data = xhr && xhr.responseJSON && xhr.responseJSON.data
+        if (typeof data === 'string' && data) {
+            return data
+        }
+        return (data && data.message) || fallback
+    }
 
     /**
      * Event listening to media library edits
@@ -108,40 +169,20 @@ window.jQuery(function ($) {
             data: data,
             type: 'POST',
             error: function (xhr, status, error) {
-                var err = JSON.parse(xhr.responseText);
-                APP && APP.notifyError('metaslider/slide-create-failed', err.data.messages[1]['errors']['create_failed'][0], true)
+                var err = xhr.responseJSON && xhr.responseJSON.data;
+                // A refused slideshow sends a plain message; a failed image sends a list of errors
+                var message = (typeof err === 'string' && err)
+                    || (err && err.messages && err.messages[1] && err.messages[1]['errors']['create_failed'][0])
+                    || (APP && APP.__('Undefined error occurred', 'ml-slider'));
+                APP && APP.notifyError('metaslider/slide-create-failed', message, true)
             },
             success: function (response) {
                 if(window.location.href.indexOf('metaslider-start') > -1) {
                     window.location.href = 'admin.php?page=metaslider&id=' + response.data;
                 } else {
-                    // Mount and render each new slide
-                    response.data.forEach(function (slide) {
-                        // TODO: Eventually move the creation to the slideshow or slide vue component
-                        // TODO: Be careful about the handling of filters (ex. scheduling)
-                        var res = window.metaslider.app.Vue.compile(slide['html'])
-
-
-                        // Mount the slide to the beginning or end of the list
-                        const cont_ = (new window.metaslider.app.Vue({
-                            render: res.render,
-                            staticRenderFns: res.staticRenderFns
-                        }).$mount()).$el;
-
-                        if (metaslider.newSlideOrder === 'last') {
-                            $('#metaslider-slides-list > tbody').append(cont_);
-                        } else {
-                            $('#metaslider-slides-list > tbody').prepend(cont_);
-                        }
-                    })
-
-                    /* Get the last added slide to avoid multiple scrollTo calls 
-                     * when adding more than one slide in bulk */
-                    var last_item = response.data[response.data.length - 1].slide_id;
-
-                    $([document.documentElement, document.body]).animate({
-                        scrollTop: metaslider.newSlideOrder === 'last' ? $("#slide-"+last_item).offset().top : 0
-                    }, 2000);
+                    // Mount and insert each new slide - shared with the Pixabay/Unsplash "Add Slide" flow in External.vue
+                    window.metaslider.app.mountNewSlides(response.data)
+                    window.metaslider.app.scrollToSlide(response.data[response.data.length - 1].slide_id)
 
                     // Add timeouts to give some breating room to the notice animations
                     setTimeout(function () {
@@ -313,8 +354,7 @@ window.jQuery(function ($) {
                 data: data,
                 type: 'POST',
                 error: function (error) {
-                    var err = JSON.parse(error.responseText);
-                    APP && APP.notifyError('metaslider/slide-update-failed', err.data.message, true)
+                    APP && APP.notifyError('metaslider/slide-update-failed', server_error_message(error, APP.__('There is an error', 'ml-slider')), true)
                 },
                 success: function (response) {
                     /**
@@ -395,7 +435,7 @@ window.jQuery(function ($) {
             data: data,
             type: 'POST',
             error: function (error) {
-                APP && APP.notifyError('metaslider/slide-duplicate-failed', error, true)
+                APP && APP.notifyError('metaslider/slide-duplicate-failed', server_error_message(error, APP.__('Duplicating the slide failed.', 'ml-slider')), true)
             },
             success: function (response) {
 
@@ -651,7 +691,6 @@ window.jQuery(function ($) {
      * @since 3.94
      */
     $('.metaslider').on('change', '.ms-settings-table input[name="settings[progressBar]"], .ms-settings-table input[name="settings[infiniteLoop]"]', function () {
-        console.log('trigger!');
         showHideCustomProgressBarColor();
     });
 
@@ -668,6 +707,7 @@ window.jQuery(function ($) {
     window.metaslider.app.EventManager.$on("metaslider/theme-updated", function () {
         setTimeout(() => {
             showHideCustomProgressBarColor();
+            addTooltips();
         }, 1000);
     });
 
@@ -774,12 +814,50 @@ window.jQuery(function ($) {
     showHideImageOptions();
 
     /**
-     * Add all the image APIs. Add events everytime the modal is open
-     * TODO: refactor out hard-coded unsplash (can wait until we add a second service)
+     * External image API tabs (Unsplash, Pixabay, ...). Add events everytime the modal is open
      * TODO: right now this replaces the content pane. It might take some time but look for more native integration
      * TODO: It gets a little bit buggy when someone triggers a download and clicks around. Maybe not important.
      */
-    var unsplash_api_events = function (event) {
+    var image_api_tabs = [
+        {
+            source: 'unsplash',
+            className: 'unsplash-tab',
+            label: function () { return window.metaslider.app.MetaSlider.__('Unsplash Library', 'ml-slider') }
+        },
+        {
+            source: 'pixabay',
+            className: 'pixabay-tab',
+            label: function () { return window.metaslider.app.MetaSlider.__('Pixabay Library', 'ml-slider') }
+        }
+    ]
+
+    // Let addons register extra tabs. Read at call-time (not here, at parse-time) so it
+    // doesn't matter whether this script or the addon's runs first
+    // Drop tabs an addon registers for a source that's already built in here - MetaSlider
+    // Slideshow Pro 2.60.0 and older push their own 'pixabayvideo' tab, which would
+    // otherwise be appended a second time alongside ours
+    var dedupe_api_tabs = function (tabs) {
+        var seen = {}
+        return tabs.filter(function (tab) {
+            if (seen[tab.source]) {
+                return false
+            }
+            seen[tab.source] = true
+            return true
+        })
+    }
+
+    var get_image_api_tabs = function () {
+        return dedupe_api_tabs(image_api_tabs.concat(window.metaslider.image_api_tabs || []))
+    }
+
+    var get_image_api_tab_selector = function () {
+        var tabs = get_image_api_tabs()
+        // Avoid returning the invalid selector '.' when there are no tabs at all
+        return tabs.length ? '.' + tabs.map(function (tab) { return tab.className }).join(', .') : ''
+    }
+
+    var image_api_events = function (event) {
         event.preventDefault()
 
         // Some things shouldn't happen when we're about to reload
@@ -795,33 +873,31 @@ window.jQuery(function ($) {
             return
         }
 
+        var source = $(this).data('source')
+
         // Move the content and trigger vue to fetch the data
         // Add a container to house the content
         $(this).parents('.media-frame-router').siblings('.media-frame-content').append('<div id="image-api-container"></div>')
 
         // Add content to the container
-        $('#image-api-container').append('<metaslider-external source="unsplash" :slideshow-id="' + window.parent.metaslider_slider_id + '" :slide-id="' + window.metaslider.slide_id + '" slide-type="' + (window.metaslider.slide_type || 'image') + '"></metaslider-external>')
+        $('#image-api-container').append('<metaslider-external source="' + source + '" :slideshow-id="' + window.parent.metaslider_slider_id + '" :slide-id="' + window.metaslider.slide_id + '" slide-type="' + (window.metaslider.slide_type || 'image') + '"></metaslider-external>')
 
         // Tell our app to render a new component
         $(window).trigger('metaslider/initialize_external_api', {
             'selector': '#image-api-container'
         })
-
-        // Discard these
-        delete window.metaslider.slide_id
-        delete window.metaslider.slide_type
     }
 
-    var add_image_apis = window.metaslider.add_image_apis = function (slide_type, slide_id, unsplash = true) {
+    var add_image_apis = window.metaslider.add_image_apis = function (slide_type, slide_id, show_external_apis = true) {
 
-        // This is the pro layer screen (not currently used)
-        if ($('.media-menu-item.active:contains("Layer")').length) {
-            // If this is the layer slide screen and pro isnt installed, exit
-            if (!window.metaslider.pro_supports_imports) {
-                return
-            }
+        var APP = window.metaslider.app.MetaSlider;
+
+        // Pro's "Add Slide > Layer Slide" screen (its 'insert-html' media-frame state) - matched by id, not by its translatable label
+        var is_layer_screen = $('.media-menu-item.active').is('#menu-item-insert-html')
+        if (is_layer_screen && !window.metaslider.pro_supports_imports) {
+            return
         }
-        window.metaslider.slide_type = 'layer'
+        window.metaslider.slide_type = is_layer_screen ? 'layer' : 'image'
 
         // If slide type is set then override the above because we're just updating an image
         if (slide_type) {
@@ -830,11 +906,13 @@ window.jQuery(function ($) {
 
         window.metaslider.slide_id = slide_id
 
-        // Unsplash - First remove potentially leftover tabs in case the WP close event doesn't fire
-        $('.unsplash-tab').remove()
-        if (unsplash) {
-            $('.media-frame-router .media-router').append('<a href="#" id="unsplash-tab" class="text-black hover:text-blue-dark unsplash-tab media-menu-item">Unsplash Library</a>')
-            $('.toplevel_page_metaslider').on('click', '.unsplash-tab', unsplash_api_events)
+        // First remove potentially leftover tabs in case the WP close event doesn't fire
+        $(get_image_api_tab_selector()).remove()
+        if (show_external_apis) {
+            get_image_api_tabs().forEach(function (tab) {
+                $('.media-frame-router .media-router').append('<a href="#" data-source="' + tab.source + '" class="text-black hover:text-blue-dark ' + tab.className + ' media-menu-item">' + ( APP && tab.label() ) + '</a>')
+            })
+            $('.toplevel_page_metaslider').on('click', get_image_api_tab_selector(), image_api_events)
         }
 
         // Each API will fake the container, so if we click on a native WP container, we should delete the API container
@@ -849,7 +927,7 @@ window.jQuery(function ($) {
     }
 
     /**
-     * Remove tab and events for api type images. Add this when a modal closes to avoid duplicate events
+     * Remove tabs and events for api type images. Add this when a modal closes to avoid duplicate events
      */
     var remove_image_apis = window.metaslider.remove_image_apis = function () {
 
@@ -861,8 +939,89 @@ window.jQuery(function ($) {
         // Tell tell components they are about to be removed
         $(window).trigger('metaslider/destroy_external_api')
 
-        $('.toplevel_page_metaslider').off('click', '.unsplash-tab', unsplash_api_events)
-        $('.unsplash-tab').remove()
+        $('.toplevel_page_metaslider').off('click', get_image_api_tab_selector(), image_api_events)
+        $(get_image_api_tab_selector()).remove()
+
+        // Discard these only once the modal closes: re-opening an API tab after a native one rebuilds the component from them
+        delete window.metaslider.slide_id
+        delete window.metaslider.slide_type
+
+        // Since we will destroy the container each time we should add the active class to whatever is first
+        $('.media-frame-router .media-router > a').first().trigger('click')
+    }
+
+    /**
+     * External VIDEO API tabs. Only ever invoked by the Local Video module when picking a
+     * slide's main video source - a parallel, video-scoped version of add_image_apis() above.
+     */
+    var video_api_tabs = [
+        {
+            source: 'pixabayvideo',
+            className: 'pixabayvideo-tab',
+            label: function () { return window.metaslider.app.MetaSlider.__('Pixabay Library', 'ml-slider') }
+        }
+    ]
+
+    // Read at call-time (not here, at parse-time) so it doesn't matter whether this script or
+    // the addon's runs first
+    var get_video_api_tabs = function () {
+        return dedupe_api_tabs(video_api_tabs.concat(window.metaslider.video_api_tabs || []))
+    }
+
+    var get_video_api_tab_selector = function () {
+        var tabs = get_video_api_tabs()
+        // Avoid returning the invalid selector '.' when there are no tabs at all
+        return tabs.length ? '.' + tabs.map(function (tab) { return tab.className }).join(', .') : ''
+    }
+
+    var add_video_apis = window.metaslider.add_video_apis = function (slide_id) {
+
+        var APP = window.metaslider.app.MetaSlider;
+
+        window.metaslider.slide_type = 'local_video'
+        window.metaslider.slide_id = slide_id
+
+        // First remove potentially leftover tabs in case the WP close event doesn't fire
+        var video_api_tab_selector = get_video_api_tab_selector()
+        $(video_api_tab_selector).remove()
+        get_video_api_tabs().forEach(function (tab) {
+            $('.media-frame-router .media-router').append('<a href="#" data-source="' + tab.source + '" class="text-black hover:text-blue-dark ' + tab.className + ' media-menu-item">' + ( APP && tab.label() ) + '</a>')
+        })
+        // An empty delegated selector would throw on every click that bubbles up, so only
+        // bind when something actually registered a tab
+        if (video_api_tab_selector) {
+            $('.toplevel_page_metaslider').on('click', video_api_tab_selector, image_api_events)
+        }
+
+        // Each API will fake the container, so if we click on a native WP container, we should delete the API container
+        $('.media-frame-router .media-router .media-menu-item').on('click', function () {
+
+            // Destroy the component (does clean up)
+            $(window).trigger('metaslider/destroy_external_api')
+
+            // Additionally set the active tab
+            $(this).addClass('active').siblings().removeClass('active')
+        })
+    }
+
+    /**
+     * Remove tabs and events for api type videos. Add this when a modal closes to avoid duplicate events
+     */
+    var remove_video_apis = window.metaslider.remove_video_apis = function () {
+
+        // Some things shouldn't happen when we're about to reload
+        if (window.metaslider.about_to_reload) {
+            return
+        }
+
+        // Tell tell components they are about to be removed
+        $(window).trigger('metaslider/destroy_external_api')
+
+        var video_api_tab_selector = get_video_api_tab_selector()
+        if (video_api_tab_selector) {
+            $('.toplevel_page_metaslider').off('click', video_api_tab_selector, image_api_events)
+        }
+        $(video_api_tab_selector).remove()
 
         // Since we will destroy the container each time we should add the active class to whatever is first
         $('.media-frame-router .media-router > a').first().trigger('click')
@@ -897,7 +1056,7 @@ window.jQuery(function ($) {
             error: function (response) {
 
                 // Delete failed. Remove delete state UI
-                alert(response.responseJSON.data.message);
+                alert(server_error_message(response, 'There was an error with the server and the action could not be completed.'));
                 $slide = $this.parents('#slide-' + $this.data('slideId'));
                 $slide.removeClass('ms-deleting');
                 $slide.find('.ms-delete-overlay').remove();
@@ -913,6 +1072,7 @@ window.jQuery(function ($) {
                         .find('.metaslider-ui-controls').append(
                         '<button class="undo-delete-slide" title="' + metaslider.restore_language + '" data-slide-id="' + $this.data('slideId') + '">' + metaslider.restore_language + '</button>'
                     );
+                    $slide.find('.ms-delete-overlay').remove();
 
                     // Grab the image from the slide
                     var img = $slide.find('.thumb').css('background-image')
@@ -984,12 +1144,7 @@ window.jQuery(function ($) {
                 $slide.removeClass('ms-restoring').addClass('ms-deleted');
                 $slide.find('.ms-delete-overlay').remove();
 
-                // If there was a WP error, this should be populated:
-                if (response.responseJSON) {
-                    alert(response.responseJSON.data.message);
-                } else {
-                    alert('There was an error with the server and the action could not be completed.');
-                }
+                alert(server_error_message(response, 'There was an error with the server and the action could not be completed.'));
             },
             success: function (response) {
 
@@ -999,7 +1154,7 @@ window.jQuery(function ($) {
                 $slide.removeClass('ms-deleting')
                     .find('.undo-delete-slide, .trash-view-restore').remove();
                 $slide.find('.ms-delete-overlay').remove();
-                $('#slide-' + $this.data('slideId') + ' h4').after('<span class="ms-delete-status is-success">' + metaslider.restored_language + '</span>');
+                $('#slide-' + $this.data('slideId') + ' .slide-details').after('<span class="ms-delete-status is-success">' + metaslider.restored_language + '</span>');
 
                 // We can try to remove the buton actions too (trashed view)
                 $('#slide-' + $this.data('slideId')).find('.row-actions.trash-btns').html('');
@@ -1052,7 +1207,7 @@ window.jQuery(function ($) {
             type: 'POST',
             error: function (response) {
                 // Delete failed. Remove delete state UI
-                alert(response.responseJSON.data.message);
+                alert(server_error_message(response, 'There was an error with the server and the action could not be completed.'));
                 $slide = $this.parents('#slide-' + $this.data('slideId'));
                 $slide.removeClass('ms-deleting');
                 $slide.find('.ms-delete-overlay').remove();
@@ -1068,6 +1223,7 @@ window.jQuery(function ($) {
                         .find('.metaslider-ui-controls').append(
                         '<button class="undo-delete-slide" title="' + metaslider.restore_language + '" data-slide-id="' + $this.data('slideId') + '">' + metaslider.restore_language + '</button>'
                     );
+                    $slide.find('.ms-delete-overlay').remove();
 
                     // Grab the image from the slide
                     var img = $slide.find('.thumb').css('background-image')
@@ -1237,7 +1393,7 @@ window.jQuery(function ($) {
                 setTimeout(function () {
                     APP && APP.notifyError(
                         'metaslider/slide-update-failed',
-                        APP.__('There was an error when saving crop position or cropping the image', 'ml-slider'),
+                        server_error_message(error, APP.__('There was an error when saving crop position or cropping the image', 'ml-slider')),
                         true
                     );
                 }, 1000);
@@ -1503,6 +1659,26 @@ window.jQuery(function ($) {
         let id = $(this).data("id");
         $("#modal-" + id).fadeIn();
         $("#overlay-" + id).fadeIn();
+
+        // Empty when "Load Slideshow Usage on Demand" is on, so load it now (#2613)
+        let $results = $("#modal-" + id + " .usage-results");
+        if ($results.html() === '' || $results.data('failed')) {
+            $results.text(metaslider.loading).data('failed', false);
+            $.post(metaslider.ajaxurl, {
+                action: 'ms_get_slideshow_usage',
+                slideshow_id: id,
+                METASLIDER_NONCE: metaslider.request_nonce
+            }, function (response) {
+                if (response.success) {
+                    $results.html(response.data.html);
+                } else {
+                    $results.text(metaslider.usage_error).data('failed', true);
+                }
+            }).fail(function () {
+                // Flag it so reopening the window tries again
+                $results.text(metaslider.usage_error).data('failed', true);
+            });
+        }
     });
 
     $(".close-modal, .modal-overlay").on("click", function () {
@@ -1707,6 +1883,7 @@ window.jQuery(function ($) {
         const filters = {
             features: $('#ms-qs-slide-features').val(),
             price: $('#ms-qs-slide-price').val(),
+            theme: $('#ms-qs-slide-theme').val(),
             animation: $('#ms-qs-slide-animation').val(),
             integration: $('#ms-qs-slide-integration').val(),
             type: $('#ms-qs-slide-type').val()
@@ -1720,6 +1897,7 @@ window.jQuery(function ($) {
             const data = {
                 features: $el.data('features') || [],
                 price: $el.data('price'),
+                theme: $el.data('theme'),
                 animation: $el.data('animation') || [],
                 integration: $el.data('integration') || [],
                 type: $el.data('type') || []
@@ -1735,6 +1913,7 @@ window.jQuery(function ($) {
 
             // string filters (exact match)
             if (filters.price && data.price !== filters.price) visible = false;
+            if (filters.theme && data.theme !== filters.theme) visible = false;
 
             $el.toggle(visible);
 

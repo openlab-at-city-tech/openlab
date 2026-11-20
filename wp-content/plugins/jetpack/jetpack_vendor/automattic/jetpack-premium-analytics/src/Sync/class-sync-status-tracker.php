@@ -1,0 +1,391 @@
+<?php
+/**
+ * Analytics-aware sync milestone tracker.
+ *
+ * @package automattic/jetpack-premium-analytics
+ */
+
+namespace Automattic\Jetpack\PremiumAnalytics\Sync;
+
+use Automattic\Jetpack\Sync\Modules;
+
+/**
+ * Listens for the end of the analytics full sync and persists a one-time milestone option, and
+ * records when each analytics module's first full sync starts.
+ *
+ * /jetpack/v4/sync/status reports current sync state but not whether the analytics full sync
+ * has completed at least once — which is what tells the dashboard's store section its numbers are complete.
+ */
+class Sync_Status_Tracker {
+
+	/**
+	 * Milestone (unix ts) for the analytics-module initial full sync. Marks the
+	 * dashboard's store data as complete.
+	 */
+	const INITIAL_ANALYTICS_SYNC_OPTION = 'jetpack_premium_analytics_initial_analytics_sync_finished';
+
+	/**
+	 * First full-sync start timestamps, keyed by analytics module name.
+	 *
+	 * @since 0.14.0
+	 */
+	const ANALYTICS_SYNC_STARTED_OPTION = 'jetpack_premium_analytics_analytics_sync_started';
+
+	/**
+	 * Consumer packages register their analytics module names through the sync-module filter.
+	 *
+	 * @var string[]
+	 */
+	const ANALYTICS_SYNC_MODULES = array();
+
+	/**
+	 * Action hook fired once when the analytics milestone flips. Consumer plugins
+	 * use this to fire one-time side-effects keyed to store data (emails, tracking
+	 * events, etc.).
+	 *
+	 * @var string
+	 */
+	const MILESTONE_ACTION = 'jetpack_premium_analytics_initial_full_sync_finished';
+
+	/**
+	 * Jetpack core's sync-status REST route, enriched with the milestone.
+	 */
+	const SYNC_STATUS_ROUTE = '/jetpack/v4/sync/status';
+
+	/**
+	 * Wire up the milestone listener, the full-sync start record, the script-data filter, and the sync-status enricher.
+	 *
+	 * Idempotent: safe to call more than once.
+	 *
+	 * @return void
+	 */
+	public static function configure() {
+		add_action( 'jetpack_sync_processed_actions', array( self::class, 'on_sync_processed_actions' ) );
+		add_action( 'jetpack_full_sync_start', array( self::class, 'on_full_sync_start' ) );
+		add_filter( 'jetpack_admin_js_script_data', array( self::class, 'inject_script_data' ) );
+		add_filter( 'rest_post_dispatch', array( self::class, 'enrich_sync_status_response' ), 10, 3 );
+	}
+
+	/**
+	 * Append the milestone to Jetpack core's GET /jetpack/v4/sync/status response.
+	 *
+	 * Unlike the one-time script-data snapshot ({@see inject_script_data()}), this stays live for
+	 * in-session completion — but touches only the already-authorized, successful status payload.
+	 *
+	 * @param mixed $response Result to send to the client. Usually a WP_REST_Response.
+	 * @param mixed $server   The REST server instance (unused).
+	 * @param mixed $request  The request used to generate the response.
+	 * @return mixed
+	 */
+	public static function enrich_sync_status_response( $response, $server, $request ) {
+		if ( ! $request instanceof \WP_REST_Request
+			|| self::SYNC_STATUS_ROUTE !== $request->get_route()
+			|| ! $response instanceof \WP_REST_Response
+			|| $response->is_error() ) {
+			return $response;
+		}
+
+		$data = $response->get_data();
+		if ( is_array( $data ) ) {
+			self::maybe_backfill_milestone();
+			$data['initial_full_sync_finished'] = self::milestone();
+			$response->set_data( $data );
+		}
+
+		return $response;
+	}
+
+	/**
+	 * On every batch of processed sync actions, look for the gating
+	 * jetpack_full_sync_end and flip the milestone if it hasn't already fired.
+	 *
+	 * @param array $actions Processed sync actions.
+	 * @return void
+	 */
+	public static function on_sync_processed_actions( array $actions ): void {
+		// Bail before the per-batch full-sync lookup ($module->get_status() bypasses
+		// the status cache) once the milestone is set.
+		if ( self::milestone_reached() ) {
+			return;
+		}
+
+		$module = Modules::get_module( 'full-sync' );
+		if ( ! $module ) {
+			return;
+		}
+		'@phan-var \Automattic\Jetpack\Sync\Modules\Full_Sync_Immediately|\Automattic\Jetpack\Sync\Modules\Full_Sync $module';
+
+		self::maybe_set_milestone( $module->get_status(), $actions );
+	}
+
+	/**
+	 * Resolve the configured sync-module names for analytics.
+	 *
+	 * @return string[]
+	 */
+	public static function get_analytics_sync_modules(): array {
+		/**
+		 * Filter the analytics module names whose starts are tracked and whose completion sets the milestone.
+		 *
+		 * @param string[] $module_names Default: empty array.
+		 */
+		return (array) apply_filters( 'jetpack_premium_analytics_sync_modules', self::ANALYTICS_SYNC_MODULES );
+	}
+
+	/**
+	 * Decide whether the supplied full-sync status and actions represent the analytics sync ending.
+	 *
+	 * Only a full sync whose config includes an analytics module counts — a generic sync can't mark
+	 * store data complete; split out so tests can exercise it without the sync module registry.
+	 *
+	 * @param array $full_status Result of Full_Sync_Immediately::get_status().
+	 * @param array $actions     Processed sync actions.
+	 * @return void
+	 */
+	public static function maybe_set_milestone( array $full_status, array $actions ): void {
+		if ( self::milestone_reached() ) {
+			return;
+		}
+
+		if ( ! self::includes_analytics_module( $full_status['config'] ?? array() ) ) {
+			return;
+		}
+
+		$end_action = self::find_full_sync_end_action( $actions );
+		if ( ! $end_action ) {
+			return;
+		}
+
+		// The last update_status() call in Full_Sync_Immediately::send() runs after jetpack_full_sync_end
+		// fires, so the action's own timestamp is the most reliable "finished at" value (Year 2038 problem aside).
+		$finished_at = isset( $end_action[3] ) ? (int) $end_action[3] : 0;
+		if ( $finished_at <= 0 ) {
+			// Defensive: avoid persisting a zero timestamp, which would equal the "not yet set" sentinel
+			// and cause the listener to re-trigger on the next batch.
+			return;
+		}
+
+		$full_status['finished'] = $finished_at;
+		self::set_milestone( $full_status );
+	}
+
+	/**
+	 * Set the milestone from a stored full-sync status whose analytics module already finished.
+	 *
+	 * Covers a full sync that ended before this listener ran (an older Jetpack, or before Premium Analytics was enabled).
+	 *
+	 * @return void
+	 */
+	private static function maybe_backfill_milestone(): void {
+		if ( self::milestone_reached() ) {
+			return;
+		}
+
+		$module = Modules::get_module( 'full-sync' );
+		if ( ! $module ) {
+			return;
+		}
+		'@phan-var \Automattic\Jetpack\Sync\Modules\Full_Sync_Immediately|\Automattic\Jetpack\Sync\Modules\Full_Sync $module';
+
+		$full_status = $module->get_status();
+		$finished_at = isset( $full_status['finished'] ) ? (int) $full_status['finished'] : 0;
+		if ( $finished_at <= 0 || empty( $full_status['progress'] ) || ! is_array( $full_status['progress'] ) ) {
+			return;
+		}
+
+		$progress = $full_status['progress'];
+		foreach ( self::get_analytics_sync_modules() as $module_name ) {
+			if ( isset( $progress[ $module_name ]['finished'] ) && true === $progress[ $module_name ]['finished'] ) {
+				// The sender sets the milestone before it stores `finished`, so re-read it past the
+				// request's option cache to avoid firing the action a second time.
+				if ( (int) \Jetpack_Options::get_raw_option( self::INITIAL_ANALYTICS_SYNC_OPTION, 0 ) > 0 ) {
+					return;
+				}
+				self::set_milestone( $full_status );
+				return;
+			}
+		}
+	}
+
+	/**
+	 * Persist the milestone and fire the one-time action.
+	 *
+	 * @param array $full_status Final full-sync status, with a positive `finished` timestamp.
+	 * @return void
+	 */
+	private static function set_milestone( array $full_status ): void {
+		// Record the finishing sync's modules first, so a milestone set after the update never reads as a legacy one.
+		if ( false === get_option( self::ANALYTICS_SYNC_STARTED_OPTION ) ) {
+			self::on_full_sync_start( $full_status['config'] ?? array() );
+		}
+
+		update_option( self::INITIAL_ANALYTICS_SYNC_OPTION, (int) $full_status['finished'] );
+
+		/**
+		 * Fires once when the analytics-relevant initial full sync completes.
+		 *
+		 * @param array $full_status Final full-sync status (with `finished` timestamp).
+		 */
+		do_action( self::MILESTONE_ACTION, $full_status );
+	}
+
+	/**
+	 * Record each analytics module's first full-sync start.
+	 *
+	 * A milestone set before start records existed counts as a start of every module registered then.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @param array|mixed $config Sync configuration of the full sync that began.
+	 * @return void
+	 */
+	public static function on_full_sync_start( $config ): void {
+		$config   = (array) $config;
+		$previous = (array) get_option( self::ANALYTICS_SYNC_STARTED_OPTION, array() );
+		$started  = $previous;
+		if ( self::is_legacy_start() ) {
+			$started = array_fill_keys( self::get_analytics_sync_modules(), self::milestone() );
+		}
+		foreach ( self::get_analytics_sync_modules() as $module_name ) {
+			if ( ! empty( $config[ $module_name ] ) && empty( $started[ $module_name ] ) ) {
+				$started[ $module_name ] = time();
+			}
+		}
+
+		if ( $started !== $previous ) {
+			update_option( self::ANALYTICS_SYNC_STARTED_OPTION, $started );
+		}
+	}
+
+	/**
+	 * Whether the given module's full sync has ever started on this site.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @param string $module_name Sync module name.
+	 * @return bool
+	 */
+	public static function has_module_full_sync_started( string $module_name ): bool {
+		if ( self::is_legacy_start() ) {
+			return true;
+		}
+
+		$started = (array) get_option( self::ANALYTICS_SYNC_STARTED_OPTION, array() );
+		if ( (int) ( $started[ $module_name ] ?? 0 ) > 0 ) {
+			return true;
+		}
+
+		// A cached miss can predate another request's start, and a sync begun before start records existed never records one.
+		$started = (array) \Jetpack_Options::get_raw_option( self::ANALYTICS_SYNC_STARTED_OPTION, array() );
+		if ( (int) ( $started[ $module_name ] ?? 0 ) > 0 ) {
+			return true;
+		}
+
+		$full_status = self::get_full_sync_status();
+		if ( empty( $full_status['started'] ) || empty( $full_status['config'][ $module_name ] ) ) {
+			return false;
+		}
+
+		self::on_full_sync_start( $full_status['config'] );
+		return true;
+	}
+
+	/**
+	 * The stored full-sync status, read past the option cache.
+	 *
+	 * @return array
+	 */
+	private static function get_full_sync_status(): array {
+		$module = Modules::get_module( 'full-sync' );
+		if ( ! $module ) {
+			return array();
+		}
+		'@phan-var \Automattic\Jetpack\Sync\Modules\Full_Sync_Immediately|\Automattic\Jetpack\Sync\Modules\Full_Sync $module';
+
+		return (array) $module->get_status();
+	}
+
+	/**
+	 * Whether the milestone predates the start records, so it stands in for them.
+	 *
+	 * @return bool
+	 */
+	private static function is_legacy_start(): bool {
+		return false === get_option( self::ANALYTICS_SYNC_STARTED_OPTION ) && self::milestone_reached();
+	}
+
+	/**
+	 * Whether a full-sync configuration covers an analytics module.
+	 *
+	 * @param array|mixed $config Full-sync configuration, keyed by module name.
+	 * @return bool
+	 */
+	private static function includes_analytics_module( $config ): bool {
+		$config = (array) $config;
+		foreach ( self::get_analytics_sync_modules() as $module_name ) {
+			if ( ! empty( $config[ $module_name ] ) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Inject the milestone into JetpackScriptData so the dashboard can read it at
+	 * page load without an extra HTTP roundtrip.
+	 *
+	 * @param array $data The script data passed by the assets package.
+	 * @return array
+	 */
+	public static function inject_script_data( array $data ): array {
+		$data['premium_analytics'] = array(
+			'initial_full_sync_finished' => self::milestone(),
+		);
+
+		return $data;
+	}
+
+	/**
+	 * The milestone timestamp (0 if not yet reached).
+	 *
+	 * @return int
+	 */
+	private static function milestone(): int {
+		return (int) get_option( self::INITIAL_ANALYTICS_SYNC_OPTION, 0 );
+	}
+
+	/**
+	 * Whether the milestone has fired.
+	 *
+	 * @return bool
+	 */
+	private static function milestone_reached(): bool {
+		return self::milestone() > 0;
+	}
+
+	/**
+	 * Whether the first analytics full sync has finished.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @return bool
+	 */
+	public static function has_initial_sync_finished(): bool {
+		return self::milestone_reached();
+	}
+
+	/**
+	 * Find the jetpack_full_sync_end action in a processed-actions list.
+	 *
+	 * @param array $actions Actions list.
+	 * @return array|null
+	 */
+	private static function find_full_sync_end_action( array $actions ): ?array {
+		foreach ( $actions as $action ) {
+			if ( isset( $action[0] ) && 'jetpack_full_sync_end' === $action[0] ) {
+				return $action;
+			}
+		}
+		return null;
+	}
+}

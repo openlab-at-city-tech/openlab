@@ -6,6 +6,7 @@ use FileBird\Controller\Controller;
 defined( 'ABSPATH' ) || exit;
 
 class Polylang extends Controller {
+	private static $instance = null;
 	private $active;
 	private $lang;
 	private $lang_id = null;
@@ -29,8 +30,30 @@ class Polylang extends Controller {
 				add_filter( 'fbv_data', array( $this, 'fbv_data' ), 10, 1 );
 			}
 		}
+		if ( self::$instance === null ) {
+			self::$instance = $this;
+		}
 	}
 
+	public static function applyCountQuery( $query, $folder_id, $lang = null ) {
+		// Check if Polylang is active and has media support
+		if ( ! function_exists( 'pll_get_post_translations' ) ) {
+			return $query;
+		}
+		
+		global $polylang;
+		if ( ! isset( $polylang->options['media_support'] ) || $polylang->options['media_support'] != 1 ) {
+			return $query;
+		}
+		
+		// Get or create instance
+		if ( self::$instance === null ) {
+			return $query; // Instance not initialized yet, return original query
+		}
+		
+		// Call instance method
+		return self::$instance->fbv_get_count_query( $query, $folder_id, $lang );
+	}
 	public function fbv_data( $data ) {
 		$data['pll_lang'] = \pll_current_language( 'slug' );
 		$data['icl_lang'] = '';

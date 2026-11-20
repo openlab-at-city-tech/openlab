@@ -10,7 +10,7 @@
 /**
  * Implementation of Phorum Forum converter.
  *
- * @since 2.5.0 bbPress (r5141)
+ * @since 2.5.0 bbPress (r5142)
  *
  * @link Codex Docs https://codex.bbpress.org/import-forums/phorum
  */
@@ -117,22 +117,22 @@ class Phorum extends BBP_Converter_Base {
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date_gmt',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified_gmt',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 
 		/** Topic Section *****************************************************/
@@ -434,7 +434,7 @@ class Phorum extends BBP_Converter_Base {
 			'to_fieldname'   => '_bbp_old_user_id'
 		);
 
-		// Store old user password (Stored in usermeta serialized with salt)
+		// Store old user password (Stored in serialized usermeta)
 		$this->field_map[] = array(
 			'from_tablename'  => 'users',
 			'from_fieldname'  => 'password',
@@ -443,17 +443,9 @@ class Phorum extends BBP_Converter_Base {
 			'callback_method' => 'callback_savepass'
 		);
 
-		// Store old user salt (This is only used for the SELECT row info for the above password save)
-//		$this->field_map[] = array(
-//			'from_tablename' => 'users',
-//			'from_fieldname' => 'salt',
-//			'to_type'        => 'user',
-//			'to_fieldname'   => ''
-//		);
-
 		// User password verify class (Stored in usermeta for verifying password)
 		$this->field_map[] = array(
-			'to_type'      => 'users',
+			'to_type'      => 'user',
 			'to_fieldname' => '_bbp_class',
 			'default'      => 'Phorum'
 		);
@@ -507,7 +499,6 @@ class Phorum extends BBP_Converter_Base {
 			'to_fieldname'   => '_bbp_phorum_user_sig',
 			'callback_method' => 'callback_html'
 		);
-
 	}
 
 	/**
@@ -519,13 +510,10 @@ class Phorum extends BBP_Converter_Base {
 	}
 
 	/**
-	 * This method is to save the salt and password together.  That
-	 * way when we authenticate it we can get it out of the database
-	 * as one value. Array values are auto sanitized by WordPress.
+	 * Save the password hash in serialized usermeta.
 	 */
 	public function callback_savepass( $field, $row ) {
-		$pass_array = array( 'hash' => $field, 'salt' => $row['salt'] );
-		return $pass_array;
+		return array( 'hash' => $field );
 	}
 
 	/**
@@ -533,8 +521,20 @@ class Phorum extends BBP_Converter_Base {
 	 * to a pass the user has typed in.
 	 */
 	public function authenticate_pass( $password, $serialized_pass ) {
-		$pass_array = unserialize( $serialized_pass );
-		return ( $pass_array['hash'] == md5( md5( $password ). $pass_array['salt'] ) );
+
+		// Unserialize the password, with safeguards
+		$pass_array = $this->unserialize_pass( $serialized_pass );
+
+		// Bail if the password hash is invalid
+		if ( ! is_array( $pass_array ) || ! isset( $pass_array['hash'] ) || ! is_string( $pass_array['hash'] ) ) {
+			return false;
+		}
+
+		// Return comparison
+		return hash_equals(
+			$pass_array['hash'],
+			md5( $password )
+		);
 	}
 
 	/**

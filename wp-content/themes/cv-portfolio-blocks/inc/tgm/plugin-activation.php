@@ -101,11 +101,11 @@ function install_and_activate_wordclever_plugin() {
     // Define plugin slugs and file paths
     $cv_portfolio_blocks_woocommerce_slug = 'woocommerce';
     $cv_portfolio_blocks_woocommerce_file = 'woocommerce/woocommerce.php';
-    $cv_portfolio_blocks_woocommerce_url  = 'https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip';
+    $cv_portfolio_blocks_woocommerce_url  = 'https://downloads.WordPress.org/plugin/woocommerce.latest-stable.zip';
 
     $cv_portfolio_blocks_wordclever_slug = 'wordclever-ai-content-writer';
     $cv_portfolio_blocks_wordclever_file = 'wordclever-ai-content-writer/wordclever.php';
-    $cv_portfolio_blocks_wordclever_url  = 'https://downloads.wordpress.org/plugin/wordclever-ai-content-writer.latest-stable.zip';
+    $cv_portfolio_blocks_wordclever_url  = 'https://downloads.WordPress.org/plugin/wordclever-ai-content-writer.latest-stable.zip';
 
     // Include necessary WordPress files
     include_once ABSPATH . 'wp-admin/includes/plugin.php';

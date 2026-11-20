@@ -26,6 +26,17 @@ use Imagely\NGG\Util\Transient;
  */
 class ImageREST {
 	/**
+	 * Most words of a `search` param matched one by one; a longer text is matched as a single
+	 * phrase, like WP_Query::parse_search(), so a request cannot pick the number of LIKE groups.
+	 */
+	const SEARCH_MAX_TERMS = 9;
+
+	/**
+	 * Longest `search` param accepted (characters); longer values are rejected with a 400.
+	 */
+	const SEARCH_MAX_LENGTH = 255;
+
+	/**
 	 * Register the REST API routes for images
 	 */
 	public static function register_routes() {
@@ -68,6 +79,22 @@ class ImageREST {
 						'type'              => 'string',
 						'enum'              => [ 'ASC', 'DESC' ],
 						'default'           => 'ASC',
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+					'tag'        => [
+						'type'              => 'string',
+						'description'       => 'Only images carrying at least one of these ngg_tag slugs or names (comma separated). Combines with gallery_id and search.',
+						// Not sanitize_text_field(): it strips every %xx octet, and WordPress stores the
+						// slug of a non-Latin tag percent-encoded, so the filter would silently vanish
+						// and the whole gallery would be shown (and bulk-actioned) as "matching".
+						// Each item goes through sanitize_title() in resolve_tag_term_ids().
+						'sanitize_callback' => [ self::class, 'sanitize_tag_list' ],
+					],
+					'search'     => [
+						'type'              => 'string',
+						'description'       => 'Only images whose filename, alt/title text or description contains every given word (up to ' . self::SEARCH_MAX_TERMS . ' words; a longer text is matched as one phrase).',
+						'maxLength'         => self::SEARCH_MAX_LENGTH,
+						'validate_callback' => 'rest_validate_request_arg',
 						'sanitize_callback' => 'sanitize_text_field',
 					],
 				],
@@ -517,13 +544,10 @@ class ImageREST {
 	/**
 	 * Get all images with optional filtering and pagination.
 	 *
-	 * @param WP_REST_Request $request The request object containing gallery_id, per_page, page, orderby, order parameters.
+	 * @param WP_REST_Request $request The request object containing gallery_id, tag, search, per_page, page, orderby, order parameters.
 	 * @return WP_REST_Response
 	 */
 	public static function get_images( WP_REST_Request $request ) {
-		global $wpdb;
-		$gallery_id = $request->get_param( 'gallery_id' );
-
 		// Get pagination parameters
 		$per_page_param = (int) $request->get_param( 'per_page' );
 		// Normalize all negative values to -1 (treated as "all") for consistency
@@ -539,19 +563,29 @@ class ImageREST {
 		$orderby = $request->get_param( 'orderby' ) ?? 'sortorder';
 		$order   = strtoupper( $request->get_param( 'order' ) ?? 'ASC' );
 
-		$mapper = ImageMapper::get_instance();
-		$query  = $mapper->select();
+		$gallery_id = (int) $request->get_param( 'gallery_id' );
 
-		if ( $gallery_id ) {
-			$query->where( [ 'galleryid = %d', $gallery_id ] );
+		// Tag and search narrow the list to a set of image ids. An empty set means a filter
+		// matched nothing (an unknown tag, a search without hits): answer without a query.
+		$filter_pids = self::resolve_list_filter_pids( $request );
+		if ( [] === $filter_pids ) {
+			$response = new WP_REST_Response( [] );
+			$response->header( 'X-WP-Total', 0 );
+			$response->header( 'X-WP-TotalPages', 0 );
+			return $response;
 		}
+
+		// select() resets the mapper and returns it, so the count runs on its own select()
+		// before the page query is built; both get the same gallery, tag and search filters.
+		$mapper      = ImageMapper::get_instance();
+		$count_query = $mapper->select();
+		self::apply_list_filters( $count_query, $gallery_id, $filter_pids );
 
 		// Calculate total items for pagination
-		$count_query = $mapper->select();
-		if ( $gallery_id ) {
-			$count_query->where( [ 'galleryid = %d', $gallery_id ] );
-		}
 		$total_items = count( $count_query->run_query( false, false, true ) );
+
+		$query = $mapper->select();
+		self::apply_list_filters( $query, $gallery_id, $filter_pids );
 
 		// Add ordering and pagination. Append a deterministic pid tiebreaker so the
 		// displayed order matches the order ensure_sequential_sortorders() renumbers in
@@ -582,6 +616,160 @@ class ImageREST {
 		}
 
 		return $response;
+	}
+
+	/**
+	 * Resolve the tag and search params of a GET /images request to the image ids they allow.
+	 *
+	 * Both filters are resolved to ids here, outside the mapper, on purpose: the Image mapper
+	 * rewrites the SQL it generates (every SELECT and FROM gains the extras join), so neither a
+	 * sub-select nor user-typed search text can be placed in one of its WHERE clauses.
+	 *
+	 * @param WP_REST_Request $request The request.
+	 * @return int[]|null Allowed ids; an empty array when a filter matched nothing; null when
+	 *                    neither filter was given.
+	 */
+	private static function resolve_list_filter_pids( WP_REST_Request $request ) {
+		global $wpdb;
+
+		$pids = null;
+
+		// A tag list that holds no usable slug (blank, or only separators) is no filter at all.
+		$term_ids = self::resolve_tag_term_ids( (string) $request->get_param( 'tag' ) );
+		if ( null !== $term_ids ) {
+			// Through the ngg_tag taxonomy only, so a post_tag sharing the slug never leaks in.
+			$tagged = $term_ids ? get_objects_in_term( $term_ids, 'ngg_tag' ) : [];
+			$pids   = is_wp_error( $tagged ) ? [] : array_values( array_unique( array_map( 'intval', (array) $tagged ) ) );
+			if ( empty( $pids ) ) {
+				return [];
+			}
+		}
+
+		// Every word must appear in the filename, the alt/title text or the description: the
+		// columns the legacy Manage Galleries search looks at.
+		$search = trim( (string) $request->get_param( 'search' ) );
+		if ( '' !== $search ) {
+			$words = preg_split( '/\s+/', $search, -1, PREG_SPLIT_NO_EMPTY );
+			// Like WP_Query::parse_search(): past SEARCH_MAX_TERMS words the whole text is matched
+			// as one phrase, so the request cannot choose how many LIKE groups the query gets.
+			if ( count( $words ) > self::SEARCH_MAX_TERMS ) {
+				$words = [ $search ];
+			}
+
+			$clauses = [];
+			$binds   = [];
+			foreach ( $words as $word ) {
+				$like      = '%' . $wpdb->esc_like( $word ) . '%';
+				$clauses[] = '( `filename` LIKE %s OR `alttext` LIKE %s OR `description` LIKE %s )';
+				array_push( $binds, $like, $like, $like );
+			}
+
+			$gallery_id = (int) $request->get_param( 'gallery_id' );
+			if ( $gallery_id > 0 ) {
+				$clauses[] = '`galleryid` = %d';
+				$binds[]   = $gallery_id;
+			}
+
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- $clauses holds placeholders only; every value is bound.
+			// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- id lookup on the plugin's own table, per request.
+			$matches = $wpdb->get_col(
+				$wpdb->prepare(
+					"SELECT `pid` FROM `{$wpdb->nggpictures}` WHERE " . implode( ' AND ', $clauses ),
+					$binds
+				)
+			);
+			// phpcs:enable
+
+			$matches = array_map( 'intval', (array) $matches );
+			$pids    = null === $pids ? $matches : array_values( array_intersect( $pids, $matches ) );
+			if ( empty( $pids ) ) {
+				return [];
+			}
+		}
+
+		return $pids;
+	}
+
+	/**
+	 * Sanitize the `tag` list param: plain text, tags stripped, percent-encoded slugs intact.
+	 *
+	 * @param mixed $value Raw param.
+	 * @return string
+	 */
+	public static function sanitize_tag_list( $value ) {
+		if ( ! is_scalar( $value ) ) {
+			return '';
+		}
+		return trim( wp_strip_all_tags( (string) $value ) );
+	}
+
+	/**
+	 * Restrict a mapper select to a gallery and/or a set of image ids.
+	 *
+	 * @param \Imagely\NGG\DataMapper\TableDriver $query      Mapper select query.
+	 * @param int                                 $gallery_id Gallery id, 0 for every gallery.
+	 * @param int[]|null                          $pids       Allowed image ids, null for no restriction.
+	 * @return void
+	 */
+	private static function apply_list_filters( $query, $gallery_id, $pids ) {
+		if ( $gallery_id > 0 ) {
+			$query->where( [ 'galleryid = %d', $gallery_id ] );
+		}
+
+		if ( null !== $pids ) {
+			$query->where_raw( '`pid` IN (' . implode( ',', array_map( 'intval', $pids ) ) . ')' );
+		}
+	}
+
+	/**
+	 * Resolve a comma separated list of ngg_tag slugs or names to term ids.
+	 *
+	 * Names go through sanitize_title() like the legacy tag search, so "Summer 2024" finds the
+	 * tag whose slug is summer-2024.
+	 *
+	 * A list that names a tag which cannot be resolved (it sanitizes to nothing) matches
+	 * nothing rather than everything: a filter the user asked for must never widen the set.
+	 *
+	 * @param string $tag_list Comma separated tag slugs or names.
+	 * @return int[]|null Matching term ids, empty when none of the tags exist, null when the
+	 *                    list is blank (no filter requested).
+	 */
+	private static function resolve_tag_term_ids( $tag_list ) {
+		$slugs     = [];
+		$requested = false;
+		foreach ( explode( ',', (string) $tag_list ) as $item ) {
+			$item = trim( $item );
+			if ( '' === $item ) {
+				continue;
+			}
+			$requested = true;
+			$slug      = sanitize_title( $item );
+			if ( '' !== $slug ) {
+				$slugs[] = $slug;
+			}
+		}
+		if ( ! $requested ) {
+			return null;
+		}
+		$slugs = array_values( array_unique( $slugs ) );
+		if ( empty( $slugs ) ) {
+			return [];
+		}
+
+		$term_ids = get_terms(
+			[
+				'taxonomy'   => 'ngg_tag',
+				'slug'       => $slugs,
+				'fields'     => 'ids',
+				'hide_empty' => false,
+			]
+		);
+
+		if ( is_wp_error( $term_ids ) || ! is_array( $term_ids ) ) {
+			return [];
+		}
+
+		return array_map( 'intval', $term_ids );
 	}
 
 	/**
@@ -1235,6 +1423,42 @@ class ImageREST {
 	}
 
 	/**
+	 * When a media-library import has to stop starting new attachments, so the request ends
+	 * with a response instead of being killed by max_execution_time.
+	 *
+	 * A fatal at the time limit cannot be caught: it leaves the attachment being processed
+	 * half-imported (a row with no thumbnail), drops every attachment after it and never sends
+	 * the skipped-files report. Stopping early and returning the rest lets the caller send them
+	 * in a further request.
+	 *
+	 * Measured from the start of the request, not of this handler, because booting WordPress
+	 * already counts towards the limit. 80% leaves headroom for the response.
+	 *
+	 * @return float|null Unix timestamp, or null when there is no time limit to stay under.
+	 */
+	private static function media_library_import_deadline() {
+		$limit  = (int) ini_get( 'max_execution_time' );
+		$budget = $limit > 0 ? $limit * 0.8 : 0;
+
+		/**
+		 * Seconds a media-library import request may spend before it returns the attachments it
+		 * did not start as remaining_ids. 0 disables the budget.
+		 *
+		 * @param float $budget Default budget: 80% of max_execution_time, or 0 when unlimited.
+		 * @param int   $limit  The max_execution_time in effect.
+		 */
+		$budget = (float) apply_filters( 'ngg_media_library_import_time_budget', $budget, $limit );
+
+		if ( $budget <= 0 ) {
+			return null;
+		}
+
+		$started = isset( $_SERVER['REQUEST_TIME_FLOAT'] ) ? (float) $_SERVER['REQUEST_TIME_FLOAT'] : microtime( true );
+
+		return $started + $budget;
+	}
+
+	/**
 	 * Import images from the WordPress media library into a NextGEN gallery.
 	 *
 	 * @param WP_REST_Request $request The request object containing gallery_id, gallery_name, and attachment_ids parameters.
@@ -1296,7 +1520,26 @@ class ImageREST {
 
 		$skipped = [];
 
-		foreach ( $attachment_ids as $id ) {
+		$attachment_ids = array_values( $attachment_ids );
+		$deadline       = self::media_library_import_deadline();
+		$slowest        = 0.0;
+		$item_started   = null;
+
+		foreach ( $attachment_ids as $index => $id ) {
+			// Before every attachment after the first, check that one more as slow as the slowest
+			// so far still fits. The first always runs, so every request makes progress and a
+			// caller that sends the remaining ids back cannot loop.
+			$now = microtime( true );
+			if ( null !== $item_started ) {
+				$slowest = max( $slowest, $now - $item_started );
+
+				if ( null !== $deadline && $now + $slowest >= $deadline ) {
+					$retval['remaining_ids'] = array_map( 'intval', array_slice( $attachment_ids, $index ) );
+					break;
+				}
+			}
+			$item_started = $now;
+
 			try {
 				// Each id is an object reference from the request, so it needs an object-level
 				// check of its own. check_edit_permission() authorized the *destination* - the
@@ -1409,13 +1652,18 @@ class ImageREST {
 				)
 				: __( 'Image generation failed', 'nggallery' );
 
-			return new WP_REST_Response(
-				[
-					'error'         => $error,
-					'skipped_files' => array_map( 'esc_html', $skipped ),
-				],
-				500
-			);
+			$response = [
+				'error'         => $error,
+				'skipped_files' => array_map( 'esc_html', $skipped ),
+			];
+
+			// This request ran out of time after refusing what it did start, so the error
+			// covers only those: the caller still has these to send.
+			if ( isset( $retval['remaining_ids'] ) ) {
+				$response['remaining_ids'] = $retval['remaining_ids'];
+			}
+
+			return new WP_REST_Response( $response, 500 );
 		}
 
 		// If images were imported successfully, set the first one as preview if gallery has no preview

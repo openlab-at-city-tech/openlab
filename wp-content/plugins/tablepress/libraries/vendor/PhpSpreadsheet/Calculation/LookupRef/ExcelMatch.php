@@ -76,16 +76,18 @@ class ExcelMatch
 								}
 
 		if ($valueKey !== null) {
-			return ++$valueKey; //* @phpstan-ignore-line
+			return ++$valueKey; //* @phpstan-ignore preInc.type ($valueKey can be mixed not numeric)
 		}
 
 		// Unsuccessful in finding a match, return #N/A error value
 		return ExcelError::NA();
 	}
 
-	/** @param mixed[] $lookupArray
+	/**
+				 * @param mixed[] $lookupArray
 				 * @return int|string|null
-				 * @param mixed $lookupValue */
+				 * @param mixed $lookupValue
+				 */
 				private static function matchFirstValue(array $lookupArray, $lookupValue)
 	{
 		if (is_string($lookupValue)) {
@@ -162,9 +164,11 @@ class ExcelMatch
 		return null;
 	}
 
-	/** @param mixed[] $lookupArray
+	/**
+				 * @param mixed[] $lookupArray
 				 * @return int|string|null
-				 * @param mixed $lookupValue */
+				 * @param mixed $lookupValue
+				 */
 				private static function matchSmallestValue(array $lookupArray, $lookupValue)
 	{
 		$valueKey = null;

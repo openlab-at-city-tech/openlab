@@ -102,6 +102,59 @@ eventually be removed/refactored */
     width: 100%;
 }
 
+/* Settings search */
+.metaslider .ms-settings-search {
+    margin-bottom: 20px;
+}
+.metaslider .ms-settings-search-field {
+    position: relative;
+}
+.metaslider .ms-settings-search-field .dashicons-search {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #787c82;
+    pointer-events: none;
+}
+.metaslider .ms-settings-search-input {
+    width: 100%;
+    height: 36px;
+    padding: 0 34px 0 34px;
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+.metaslider .ms-settings-search-input:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+}
+.metaslider .ms-settings-search-input::-webkit-search-cancel-button {
+    display: none;
+}
+.metaslider .ms-settings-search-clear {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    padding: 4px;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    color: #787c82;
+    line-height: 0;
+}
+.metaslider .ms-settings-search-clear:hover,
+.metaslider .ms-settings-search-clear:focus {
+    color: #2271b1;
+}
+.metaslider .ms-settings-search-empty {
+    margin: 16px 2px 0 !important;
+    color: #50575e;
+}
+
 /* Settings table */
 .metaslider .ms-settings-table {
     border-color: #c3c4c7;
@@ -144,14 +197,23 @@ eventually be removed/refactored */
     display: block;
 }
 
-.metaslider .ms-settings-table .wp-picker-container .wp-color-result-text, 
-.metaslider .ms-settings-table .wp-picker-container .wp-picker-clear {
+.metaslider .ms-edit-slideshow .wp-picker-container .wp-color-result-text, 
+.metaslider .ms-edit-slideshow .wp-picker-container .wp-picker-clear {
   display: none;
 }
-.metaslider .ms-settings-table .wp-picker-container .wp-picker-holder, 
-.metaslider .ms-settings-table .wp-picker-container .wp-picker-input-wrap {
+.metaslider .ms-edit-slideshow .wp-picker-container .wp-picker-holder, 
+.metaslider .ms-edit-slideshow .wp-picker-container .wp-picker-input-wrap {
   position: absolute;
   z-index: 9999;
+}
+
+.metaslider .ms-edit-slideshow .colorpicker {
+    width: 183px !important;
+}
+
+.metaslider .ms-edit-slideshow .wp-color-result-text, 
+.metaslider .ms-edit-slideshow .wp-picker-clear {
+    display: none;
 }
 
 .metaslider #metaslider_configuration .slider-lib {
@@ -162,9 +224,6 @@ eventually be removed/refactored */
     width: 100%;
     border-collapse: collapse;
     border-bottom: 1px solid #c3c4c7;
-}
-.metaslider .ms-settings-table tr {
-    
 }
 .metaslider .ms-settings-table tr.slider-lib {
     background: transparent;
@@ -202,6 +261,7 @@ eventually be removed/refactored */
 }
 .metaslider .ms-settings-table .ms-highlight .ms-toggle-static {
   float: right;
+  color: #50575e;
 }
 .metaslider .ms-settings-table .ms-highlight .ms-toggle-static span {
   margin-top: 6px;
@@ -280,6 +340,25 @@ eventually be removed/refactored */
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     border-radius: 50%;
+}
+.metaslider ul.ms-split-li {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+.metaslider ul.ms-split-li li {
+    width: 50%;
+    margin-bottom: 4px;
+}
+.metaslider ul.ms-split-li li .ms-switch-button + span {
+    line-height: 30px;
+    width: calc(100% - 60px);
+}
+.metaslider ul.ms-split-li li > label {
+    display: flex !important;
+    align-items: center;
+    margin-bottom: 0;
+    line-height: 30px;
 }
 
 /* Theme settings */
@@ -842,6 +921,10 @@ eventually be removed/refactored */
     opacity: 1;
 }
 
+#adminmenu .toplevel_page_metaslider .wp-menu-image.svg {
+    background-size: 30px auto;
+}
+
 .metaslider-ui, .metaslider-ui * {
     box-sizing: border-box;
 }
@@ -871,7 +954,7 @@ eventually be removed/refactored */
 .metaslider-ui .metaslider-slides-container .slide {
     border: 1px solid #c3c4c7;
     background: white;
-    overflow: hidden;
+    overflow: visible;
     transition: all .3s ease-in-out;
     -moz-transition: all .3s ease-in-out;
     -webkit-transition: all .3s ease-in-out;
@@ -1458,6 +1541,7 @@ input.no_last_pass {
 }
 .thumb-logo {
     padding: 10px;
+    height: 100%;
 }
 .default-thumb {
 	width: 70%;
@@ -1489,8 +1573,8 @@ input.no_last_pass {
 .metaslider-pro_page_metaslider-start #wpbody-content {
 	background-color: transparent;
 }
-.metaslider_page_metaslider-start #ms-toolbar .container,
-.metaslider-pro_page_metaslider-start #ms-toolbar .container{
+.slideshow_page_metaslider-start #ms-toolbar .container,
+.slideshow-pro_page_metaslider-start #ms-toolbar .container{
     margin: 0;
 }
 
@@ -1735,7 +1819,7 @@ input.no_last_pass {
 	font-size: 14px;
 	line-height: 21px;
 }
-.shortcode-modal h5 {
+.shortcode-modal h4 {
 	margin: 10px 0 0 0;
 	text-transform: uppercase;
 	font-size: 14px;
@@ -1817,6 +1901,32 @@ input.no_last_pass {
 	padding: 5px 8px !important;
 }
 
+tr.mobile_number td:last-child {
+	display: flex;
+	flex-wrap: nowrap;
+	gap: 8px;
+}
+.mobile-number-wrap {
+	background: transparent;
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	position: relative;
+	vertical-align: top;
+}
+.mobile-number-wrap .dashicons {
+	font-size: 1.5rem !important;
+	width: 1.5rem;
+	height: 1.5rem;
+	color: #50575e;
+	opacity: 1 !important;
+}
+.mobile-number-wrap input[type="number"] {
+	width: 43px;
+	padding: 0 6px;
+	margin-top: 5px;
+}
+
 /* Settngs & Help Page */
 .ms-settings-row > .ms-settings-col:not(:last-child) button {
 	display: none !important;
@@ -1847,6 +1957,12 @@ input.no_last_pass {
 #dashboard-settings form select {
 	width: 200px !important;
 }
+#external-media-settings label {
+	font-size: 16px !important;
+}
+#external-media-settings select {
+	font-size: 14px !important;
+}
 /* Comparison Chart */
 #comparison-chart {
 	width: 100%;
@@ -1861,7 +1977,7 @@ input.no_last_pass {
 	display: block;
 	height: 25px;
 }
-#comparison-chart th h3 {
+#comparison-chart th h2 {
 	text-align: right;
 	text-transform: uppercase;
 	font-size: 16px;
@@ -1886,7 +2002,7 @@ input.no_last_pass {
 #comparison-chart td {
 	padding: 10px;
 }
-#comparison-chart td h4 {
+#comparison-chart td h3 {
 	font-size: 16px;
 	font-weight: bold;
 }
@@ -1984,6 +2100,7 @@ td .dot.available {
         display: flex;
         align-content: center;
         justify-content: center;
+        color: inherit;
 
         span {
             white-space: nowrap;
@@ -2085,24 +2202,6 @@ td .dot.available {
             }
         }
     }
-
-    .colorpicker {
-        width: 183px !important;
-    }
-
-    .wp-picker-container {
-
-        .wp-picker-input-wrap,
-        .wp-picker-holder {
-            position: absolute;
-            z-index: 9999;
-        }
-
-        .wp-color-result-text, 
-        .wp-picker-clear {
-            display: none;
-        }
-    }
 }
 
 /* Color tooltips */
@@ -2114,6 +2213,7 @@ td .dot.available {
     .wp-picker-holder > div {
         /*border-bottom: none;*/
         box-shadow: 0 0 5px #ccc;
+        box-sizing: unset;
     }
 
     .wp-picker-input-wrap {
@@ -2219,16 +2319,25 @@ td .dot.available {
     font-weight: bold;
 }
 
-.media-frame-menu > .media-menu > button.media-menu-item:not(#menu-item-insert):after {
+.media-frame-menu > .media-menu > button.media-menu-item:not(#menu-item-insert):not(#menu-item-iframe\:livid):not(#menu-item-insert-local-video):after {
     background: #feb123;
     color: #333;
     content: "Pro";
 }
 
-.media-frame-menu > .media-menu > button.media-menu-item:is(#menu-item-insert)::after {
+.media-frame-menu > .media-menu > button.media-menu-item:is(#menu-item-insert, #menu-item-iframe\:livid, #menu-item-insert-local-video)::after {
     background: #ddd;
     color: #333;
     content: "Free";
+}
+
+.ms-slide-type-heading-desc {
+    padding: 16px;
+    background: #fff;
+    margin: 0;
+    border-bottom: 1px solid #ddd;
+    font-weight: normal;
+    font-size: 14px;
 }
 
 .metaslider .is-pro-setting,
@@ -2290,6 +2399,17 @@ td .dot.available {
     background: #007cba;
 }
 
+.metaslider ul.tabs .is-pro-setting {
+    width: auto;
+    font-size: 0.8rem;
+    line-height: 1.2;
+    vertical-align: middle;
+}
+
+.metaslider ul.tabs li a.has-pro-ad {
+    padding-bottom: 2px;
+}
+
 .metaslider-ui .metaslider-slides-container .slide.slide-is-hidden td > *:not(.metaslider-ui-controls) {
 	opacity: .2;
 }
@@ -2308,11 +2428,41 @@ td .dot.available {
     grid-template-columns: minmax(0, 25%) 1fr;
     align-items: center;
     position: relative;
+    overflow: hidden;
     
     a {
         position: absolute;
         top: 10px;
         right: 10px;
+    }
+}
+.ms-welcome-confetti {
+    position: absolute;
+    top: -16px;
+    opacity: 0;
+    animation-name: ms-welcome-confetti;
+    animation-timing-function: cubic-bezier(0.37, 0, 0.63, 1);
+    animation-fill-mode: forwards;
+}
+@keyframes ms-welcome-confetti {
+    0% {
+        opacity: 0;
+        transform: translate(0, -8px) rotate(0deg);
+    }
+    12% {
+        opacity: 1;
+    }
+    85% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--drift, 0), var(--fall, 160px)) rotate(var(--spin, 360deg));
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .ms-welcome-confetti {
+        display: none;
     }
 }
 #ms-qs-sections {
@@ -2357,6 +2507,11 @@ td .dot.available {
             }
 
             .quickstart-type-label {
+                background: #1e6091;
+                color: #fff;
+            }
+
+            .quickstart-hero-label {
                 background: #29375b;
                 color: #fff;
             }
@@ -2571,4 +2726,135 @@ td .dot.available {
         line-height: 32px;
         padding: 3px 10px;
     }
+}
+
+/* ── Slide reorder sidebar (floating overlay, no layout impact) ── */
+.ms-slide-sidebar {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    /* left is set dynamically by JS to match WP content area edge */
+    /* Hidden until JS sets the left position to avoid a flash in the wrong spot */
+    visibility: hidden;
+}
+
+.ms-slide-sidebar.ms-slide-sidebar--ready {
+    visibility: visible;
+}
+
+/* When open, the tab stretches to match the expanded list height (capped at 70vh) */
+.ms-slide-sidebar.ms-slide-sidebar--open {
+    align-items: stretch;
+    max-height: 80vh;
+}
+
+.ms-sidebar-toggle-tab {
+    width: 28px;
+    min-width: 28px;
+    background: #2271b1;
+    color: #fff;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.2);
+    transition: background 0.15s;
+}
+
+.ms-sidebar-toggle-tab:hover,
+.ms-sidebar-toggle-tab:focus {
+    background: #135e96;
+    outline: none;
+}
+
+.ms-sidebar-toggle-tab .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+#ms-slide-sidebar-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 0;
+    max-height: 0;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #dcdcde;
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+    overflow-y: auto;
+    transition: width 0.2s ease, max-height 0.2s ease;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.ms-slide-sidebar--open #ms-slide-sidebar-list {
+    width: 82px;
+    max-height: 80vh;
+}
+
+.ms-sidebar-slide {
+    position: relative;
+    cursor: grab;
+    padding: 4px;
+    border-bottom: 1px solid #dcdcde;
+    text-align: center;
+    background: #fff;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.ms-sidebar-slide:active {
+    cursor: grabbing;
+}
+
+.ms-sidebar-slide:hover {
+    background: #f0f6fc;
+}
+
+.ms-sidebar-slide .thumb {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 240 / 150;
+    overflow: hidden;
+    pointer-events: none;
+    border: 0;
+}
+
+.ms-sidebar-slide .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border: 0;
+}
+
+.ms-sidebar-num {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    font-size: 10px;
+    line-height: 1;
+    padding: 2px 4px;
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.slideshow_page_metaslider-start #wpbody-content {
+  background-color: #f0f0f1;
+}
+
+.media-modal-content .media-frame-title h1 {
+    margin-bottom: 0 !important;
 }

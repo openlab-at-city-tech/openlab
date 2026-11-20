@@ -124,7 +124,18 @@ function emcs_settings_page_html()
     <div class="emcs-title">
         <img src="<?php echo esc_url(EMCS_URL . 'assets/img/emc-logo.svg') ?>" alt="<?php esc_attr_e('emc logo', 'embed-calendly-scheduling'); ?>" width="200px" />
     </div>
-    <div class="emcs-subtitle"><?php esc_html_e('Settings', 'embed-calendly-scheduling'); ?></div>
+    <div class="emcs-subtitle">
+        <?php esc_html_e('Settings', 'embed-calendly-scheduling'); ?>
+
+        <div class="emcs-sync-event-types">
+            <div class="emcs-links">
+                <a href="https://simpma.com/contact/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Ask a Question', 'embed-calendly-scheduling'); ?></a> |
+                <a href="https://simpma.com/blog/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Articles', 'embed-calendly-scheduling'); ?></a> |
+                <a href="https://simpma.com/work-with-us/?utm_source=plugin&utm_medium=menu&utm_campaign=hire" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Hire An Expert', 'embed-calendly-scheduling'); ?></a> |
+                <a href="https://simpma.com/emc/pricing/?utm_source=plugin&utm_medium=menu&utm_campaign=pro" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Get Pro', 'embed-calendly-scheduling'); ?></a>
+            </div>
+        </div>
+    </div>
     <?php settings_errors('emcs_messages'); ?>
     <div class="sc-wrapper">
         <div class="sc-container">
@@ -139,45 +150,21 @@ function emcs_settings_page_html()
                     </form>
                 </div>
                 <div class="col-md-3 emcs-promotion-container">
-                    <div class="emcs-setting-ratings-section">
-                        <h3><?php esc_html_e('Like this plugin?', 'embed-calendly-scheduling'); ?></h3>
-                        <p>
-                            <?php esc_html_e('If you find this plugin useful, please show your love and support by
-                            rating it', 'embed-calendly-scheduling'); ?>
-                            <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
-                            <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
-                            <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
-                            <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
-                            <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
-                            <?php
-                            /* translators: %1$s opens a link tag, %2$s closes a link tag */
-                            printf(wp_kses_post(__('on %1$sWordPress.org%2$s 
-                            - much appreciated!', 'embed-calendly-scheduling')), '<a href="https://wordpress.org/support/plugin/embed-calendly-scheduling/reviews/#new-post" target="_blank">', '</a>');
-                            ?>
-                        </p><br>
-
-                    </div>
                     <div class="emcs-promotion">
                         <h2><?php esc_html_e('Need Support?', 'embed-calendly-scheduling'); ?></h2>
                         <p>
                             <?php
-                            /* translators: %1$s opens a link tag, %2$s closes a link tag */
-                            printf(wp_kses_post(__('Please use the %1$ssupport%2$s forums on WordPress.org to submit a support ticket or report a bug.', 'embed-calendly-scheduling')), '<a href="https://wordpress.org/support/plugin/embed-calendly-scheduling/" target="_blank">', '</a>');
+                            /* translators: %1$s & %2$s opens a link tag, %3$s closes a link tag */
+                            printf(wp_kses_post(__('Create a %1$ssupport ticket%3$s, or use the %2$ssupport forums %3$s on WordPress.org to submit your requests.', 'embed-calendly-scheduling')), '<a href="https://simpma.com/contact/" target="_blank">', '<a href="https://wordpress.org/support/plugin/embed-calendly-scheduling/" target="_blank">', '</a>');
                             ?> </p>
                     </div>
-                    <div class="emcs-thankyou" id="emcs-thankyou">
-                        <h3><?php esc_html_e('Thank you for downloading EMC Scheduling Manager', 'embed-calendly-scheduling'); ?></h3>
+                    <div class="emcs-setting-ratings-section">
+                        <h3><?php esc_html_e('Is EMC saving you time?', 'embed-calendly-scheduling'); ?></h3>
                         <p>
-                            <?php esc_html_e('I built this plugin during one of the most challenging times
-                            I\'ve been through, I was depressed and I didn\'t feel like my life meant much.
-                            So I thought to try out a random personal challenge during a weekend, nothing serious,
-                            then I built the plugin. I never expected it to have any downloads at all,
-                            but then it started coming in; and the fact that I saw my plugin,
-                            something from me, was actively used on 10 websites, then 100, 400, and 1000+,
-                            gave me a different perspective about myself, it gave me more meaning
-                            and that set me on a path that is changing my life.
-                            Thank you very much for your download, I sincerely appreciate it. :)', 'embed-calendly-scheduling'); ?>
-                            <span class="emcs-author">- Shycoder</span>
+                            <?php
+                            /* translators: %1$s opens a link tag, %2$s closes a link tag */
+                            printf(wp_kses_post(__('A quick %1$sreview on WordPress.org%2$s helps others find it, and helps us decide what to improve next.', 'embed-calendly-scheduling')), '<a href="https://wordpress.org/support/plugin/embed-calendly-scheduling/reviews/#new-post" target="_blank">', '</a>');
+                            ?>
                         </p>
                     </div>
                 </div>

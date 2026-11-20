@@ -79,7 +79,6 @@ class EMCS_Embed
         $parsed = wp_parse_url($url);
 
         if (!empty($parsed['query'])) {
-
             parse_str($parsed['query'], $query_array);
 
             // keep only allowed query params
@@ -127,15 +126,22 @@ class EMCS_Embed
 
     private function embed_inline_widget($atts = [])
     {
-        return '<div id="calendly-inline-widget" class="calendly-inline-widget ' . esc_attr($atts['style_class']) . '" 
-                    data-url="' . esc_url($this->url) . '" data-redirection="' . esc_url($this->redirection_url) . '" 
-                    style="height:' . esc_attr($atts['form_height']) . '; min-width:' . esc_attr($atts['form_width']) . '"></div>';
+        $style = 'height:' . esc_attr($atts['form_height']) . '; min-width:' . esc_attr($atts['form_width']);
+        $style = apply_filters('emcs_inline_widget_style', $style, $atts);
+        $html = '<div id="calendly-inline-widget" class="calendly-inline-widget"
+                    data-url="' . esc_url($this->url) . '" data-redirection="' . esc_url($this->redirection_url) . '"
+                    style="' . esc_attr($style) . '"></div>';
+        return apply_filters('emcs_inline_widget_html', $html, $atts);
     }
 
     private function embed_popup_text_widget($atts = [])
     {
-        return '<a id="calendly-popup-text-widget" data-url="' . esc_url($this->url) . '" data-redirection="' . esc_url($this->redirection_url) . '" class="' . esc_attr($atts['style_class']) . '" href="#" onclick="Calendly.initPopupWidget({url:\'' . esc_js($this->url) . '\'});return false;"
-                    style="font-size:' . esc_attr($atts['text_size']) . '; color:' . esc_attr($atts['text_color']) . '">' . esc_html($atts['text']) . '</a>';
+        $style = 'font-size:' . esc_attr($atts['text_size']) . '; color:' . esc_attr($atts['text_color']);
+        $style = apply_filters('emcs_popup_text_widget_style', $style, $atts);
+        $text = apply_filters('emcs_popup_text_widget_text', $atts['text'], $atts);
+        $html = '<a id="calendly-popup-text-widget" data-url="' . esc_url($this->url) . '" data-redirection="' . esc_url($this->redirection_url) . '" class="" href="#" onclick="Calendly.initPopupWidget({url:\'' . esc_js($this->url) . '\'});return false;"
+                    style="' . esc_attr($style) . '">' . $text . '</a>';
+        return apply_filters('emcs_popup_text_widget_html', $html, $atts);
     }
 
     private function embed_inline_button_widget($atts = [])
@@ -156,9 +162,12 @@ class EMCS_Embed
                 break;
         }
 
-        return '<a id="calendly-inline-button-widget" data-url="' . esc_url($this->url) . '" data-redirection="' . esc_url($this->redirection_url) . '" class="' . esc_attr($atts['style_class']) . '" href="#" onclick="Calendly.initPopupWidget({url:\'' . esc_js($this->url) . '\'});return false;"
-                    style="background-color:' . esc_attr($atts['button_color']) . '; padding:' . esc_attr($padding) . '; font-size:' . esc_attr($atts['text_size']) . ';
-                    color:' . esc_attr($atts['text_color']) . ';">' . esc_html($atts['text']) . '</a>';
+        $style = 'background-color:' . esc_attr($atts['button_color']) . '; padding:' . esc_attr($padding) . '; font-size:' . esc_attr($atts['text_size']) . '; color:' . esc_attr($atts['text_color']);
+        $style = apply_filters('emcs_inline_button_widget_style', $style, $atts);
+        $text = apply_filters('emcs_inline_button_widget_text', $atts['text'], $atts);
+        $html = '<a id="calendly-inline-button-widget" data-url="' . esc_url($this->url) . '" data-redirection="' . esc_url($this->redirection_url) . '" class="" href="#" onclick="Calendly.initPopupWidget({url:\'' . esc_js($this->url) . '\'});return false;"
+                    style="' . esc_attr($style) . '">' . $text . '</a>';
+        return apply_filters('emcs_inline_button_widget_html', $html, $atts);
     }
 
     private function embed_popup_button_widget($atts = [])
@@ -182,7 +191,9 @@ class EMCS_Embed
                 }";
         }
 
-        return "<div id='calendly-popup-button-widget' data-url='" . esc_url($this->url) . "' data-redirection='" . esc_url($this->redirection_url) . "' style='display:none'>
+        $extra_css = apply_filters('emcs_popup_button_widget_css', '', $atts);
+
+        $html = "<div id='calendly-popup-button-widget' data-url='" . esc_url($this->url) . "' data-redirection='" . esc_url($this->redirection_url) . "' style='display:none'>
             <script>
                 window.onload = function() {
                     Calendly.initBadgeWidget({
@@ -193,9 +204,14 @@ class EMCS_Embed
                         branding: " . (!empty($atts['branding']) ? 'true' : 'false') . "
                         $prefill_js
                     });
+
+                    var popupButton = document.querySelector('.calendly-badge-widget');
+
+                    " . $extra_css . "
                 };
             </script>
         </div>";
+        return apply_filters('emcs_popup_button_widget_html', $html, $atts);
     }
 
     private function prepare_embed_url($url, $url_parts = [])

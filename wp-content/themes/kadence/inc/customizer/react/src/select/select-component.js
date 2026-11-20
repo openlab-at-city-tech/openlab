@@ -71,6 +71,7 @@ class SelectComponent extends Component {
 						this.updateValues( val );
 					} }
 				/>
+				{ this.props.control.renderNotice() }
 			</div>
 		);
 	}

@@ -18,99 +18,99 @@ ob_start(); ?>
 </div>
 <?php
 $compontent_tabs = ob_get_clean();
-$settings        = array(
-	'footer_widget1_breaker' => array(
+$settings        = [
+	'footer_widget1_breaker'        => [
 		'control_type' => 'kadence_blank_control',
 		'section'      => 'sidebar-widgets-footer1',
 		'settings'     => false,
 		'priority'     => 5,
 		'description'  => $compontent_tabs,
-	),
-	'footer_widget1_align' => array(
+	],
+	'footer_widget1_align'          => [
 		'control_type' => 'kadence_radio_icon_control',
 		'section'      => 'sidebar-widgets-footer1',
 		'label'        => esc_html__( 'Content Align', 'kadence' ),
 		'priority'     => 5,
 		'default'      => kadence()->default( 'footer_widget1_align' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-		),
-		'live_method'     => array(
-			array(
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'class',
 				'selector' => '.footer-widget1',
-				'pattern'  => array(
+				'pattern'  => [
 					'desktop' => 'content-align-$',
 					'tablet'  => 'content-tablet-align-$',
 					'mobile'  => 'content-mobile-align-$',
-				),
+				],
 				'key'      => '',
-			),
-		),
-		'input_attrs'  => array(
-			'layout' => array(
-				'left'   => array(
+			],
+		],
+		'input_attrs'  => [
+			'layout'     => [
+				'left'   => [
 					'tooltip'  => __( 'Left Align', 'kadence' ),
 					'dashicon' => 'editor-alignleft',
-				),
-				'center' => array(
+				],
+				'center' => [
 					'tooltip'  => __( 'Center Align', 'kadence' ),
 					'dashicon' => 'editor-aligncenter',
-				),
-				'right'  => array(
+				],
+				'right'  => [
 					'tooltip'  => __( 'Right Align', 'kadence' ),
 					'dashicon' => 'editor-alignright',
-				),
-			),
+				],
+			],
 			'responsive' => true,
-		),
-	),
-	'footer_widget1_vertical_align' => array(
+		],
+	],
+	'footer_widget1_vertical_align' => [
 		'control_type' => 'kadence_radio_icon_control',
 		'section'      => 'sidebar-widgets-footer1',
 		'label'        => esc_html__( 'Content Vertical Align', 'kadence' ),
 		'priority'     => 5,
 		'default'      => kadence()->default( 'footer_widget1_vertical_align' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-		),
-		'live_method'  => array(
-			array(
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'class',
 				'selector' => '.footer-widget1',
-				'pattern'  => array(
+				'pattern'  => [
 					'desktop' => 'content-valign-$',
 					'tablet'  => 'content-tablet-valign-$',
 					'mobile'  => 'content-mobile-valign-$',
-				),
+				],
 				'key'      => '',
-			),
-		),
-		'input_attrs'  => array(
-			'layout' => array(
-				'top' => array(
+			],
+		],
+		'input_attrs'  => [
+			'layout'     => [
+				'top'    => [
 					'tooltip' => __( 'Top Align', 'kadence' ),
 					'icon'    => 'aligntop',
-				),
-				'middle' => array(
+				],
+				'middle' => [
 					'tooltip' => __( 'Middle Align', 'kadence' ),
 					'icon'    => 'alignmiddle',
-				),
-				'bottom' => array(
+				],
+				'bottom' => [
 					'tooltip' => __( 'Bottom Align', 'kadence' ),
 					'icon'    => 'alignbottom',
-				),
-			),
+				],
+			],
 			'responsive' => true,
-		),
-	),
-);
+		],
+	],
+];
 
 Theme_Customizer::add_settings( $settings );
 

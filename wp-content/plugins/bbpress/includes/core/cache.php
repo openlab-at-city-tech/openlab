@@ -18,14 +18,15 @@ defined( 'ABSPATH' ) || exit;
 /** Helpers *******************************************************************/
 
 /**
- * Skip invalidation of child post content when editing a parent.
+ * Legacy workaround to skip invalidation of child posts when editing a parent.
  *
- * This prevents invalidating caches for topics and replies when editing a forum
- * or a topic. Without this in place, WordPress will attempt to invalidate all
- * child posts whenever a parent post is modified. This can cause thousands of
- * cache invalidations to occur on a single edit, which is no good for anyone.
+ * Older WordPress versions invalidated child post caches when updating a parent,
+ * which could clear thousands of topic and reply caches during a single edit.
+ * Supported WordPress versions no longer need this workaround.
  *
  * @since 2.1.0 bbPress (r4011)
+ * @deprecated 2.7.0 WordPress no longer invalidates child post caches on update.
+ *                   Retained for compatibility; bbPress no longer instantiates it.
  *
  * @package bbPress
  * @subpackage Cache
@@ -118,7 +119,6 @@ class BBP_Skip_Children {
 		wp_suspend_cache_invalidation( $this->original_cache_invalidation );
 	}
 }
-new BBP_Skip_Children();
 
 /** General *******************************************************************/
 
@@ -127,8 +127,9 @@ new BBP_Skip_Children();
  *
  * Will call to clean the term object cache associated with the post ID.
  *
- * @since 2.1.0 bbPress (r4040)
+ * @since 2.1.0 bbPress (r4041)
  * @since 2.6.0 bbPress (r6053) Introduced the `$post_id` parameter.
+ * @since 2.6.21 bbPress (r8133) Invalidate queries when a bbPress parent is missing.
  *
  * @param int     $post_id The post id.
  * @param WP_Post $post    The WP_Post object.
@@ -150,19 +151,21 @@ function bbp_clean_post_cache( $post_id = null, $post = null ) {
 	/**
 	 * Fires immediately after the given post cache is cleaned.
 	 *
-	 * @since 2.1.0
+	 * @since 2.1.0 bbPress (r4041)
 	 *
 	 * @param int     $post_id Post ID.
 	 * @param WP_Post $post    Post object.
 	 */
 	do_action( 'bbp_clean_post_cache', $post->ID, $post );
 
-	// Invalidate parent caches
-	if ( ! empty( $post->post_parent ) ) {
-		clean_post_cache( $post->post_parent );
+	// Invalidate existing parent caches, including non-bbPress parents.
+	$parent = ! empty( $post->post_parent ) ? get_post( $post->post_parent ) : null;
+	if ( ! empty( $parent ) ) {
+		clean_post_cache( $parent );
+	}
 
-	// Only bump `last_changed` when forum-root is reached
-	} else {
+	// A missing or non-bbPress parent cannot propagate invalidation to a root.
+	if ( empty( $parent ) || ! in_array( $parent->post_type, $post_types, true ) ) {
 		wp_cache_set( 'last_changed', microtime(), 'bbpress_posts' );
 	}
 }

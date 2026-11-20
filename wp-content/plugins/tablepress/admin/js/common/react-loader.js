@@ -12,6 +12,7 @@
  */
 import { StrictMode } from 'react';
 import { createPortal, createRoot } from 'react-dom';
+import domReady from '@wordpress/dom-ready';
 import { addFilter } from '@wordpress/hooks';
 
 /**
@@ -21,14 +22,16 @@ import { addFilter } from '@wordpress/hooks';
  * @param {Component} Component JSX component.
  */
 export const initializeReactComponent = ( rootId, Component ) => {
-	if ( process.env.DEVELOP ) {
-		Component = <StrictMode>{ Component }</StrictMode>;
-	}
+	domReady( () => {
+		if ( process.env.DEVELOP ) {
+			Component = <StrictMode>{ Component }</StrictMode>;
+		}
 
-	const root = document.getElementById( rootId );
-	if ( root ) {
-		createRoot( root ).render( Component );
-	}
+		const root = document.getElementById( rootId );
+		if ( root ) {
+			createRoot( root ).render( Component );
+		}
+	} );
 };
 
 /**
@@ -40,14 +43,14 @@ export const initializeReactComponent = ( rootId, Component ) => {
  */
 export const initializeReactComponentInPortal = ( slug, screen, Component ) => {
 	addFilter(
-		`tablepress.${screen}ScreenFeatures`,
-		`tp/${slug}/${screen}-screen-feature`,
+		`tablepress.${ screen }ScreenFeatures`,
+		`tp/${ slug }/${ screen }-screen-feature`,
 		( features ) => ( [ ...features, slug ] ),
 	);
 
 	addFilter(
-		`tablepress.${screen}ScreenPortals`,
-		`tp/${slug}/${screen}-screen-portal`,
+		`tablepress.${ screen }ScreenPortals`,
+		`tp/${ slug }/${ screen }-screen-portal`,
 		( Portals ) => {
 			return ( props ) => (
 				<>
@@ -55,7 +58,7 @@ export const initializeReactComponentInPortal = ( slug, screen, Component ) => {
 					{
 						createPortal(
 							<Component { ...props } />,
-							document.getElementById( `tablepress-${slug}-section` ),
+							document.getElementById( `tablepress-${ slug }-section` ),
 						)
 					}
 				</>

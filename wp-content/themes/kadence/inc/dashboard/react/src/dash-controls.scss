@@ -280,3 +280,139 @@ span.kt-license-status.k-active {
     max-width: 100%;
     height: auto;
 }
+.kadence-fse-item {
+	margin-top: 1rem;
+	.link-item-foot .components-spinner {
+		margin: 0 8px 0 0;
+	}
+	.components-toggle-control,
+	.components-base-control__field {
+		margin-bottom: 0;
+	}
+	// The card footer stretches its first child; keep the link to its text.
+	&.link-item .link-item-foot > a:first-child {
+		flex-grow: 0;
+		margin-right: auto;
+	}
+	// Card links are blocks; keep the update link inside its sentence.
+	&.link-item p a,
+	&.link-item .components-notice a {
+		display: inline;
+	}
+	.kadence-fse-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 8px;
+	}
+	.kadence-fse-badge {
+		flex-shrink: 0;
+		padding: 2px 10px;
+		border: 1px solid #dba617;
+		border-radius: 2px;
+		background: #fcf9e8;
+		color: #614200;
+		font-size: 12px;
+		font-weight: 600;
+		line-height: 1.5;
+	}
+	.kadence-fse-requirement {
+		margin: 0 0 1em;
+	}
+	// Some browsers fire no hover on a disabled input; the wrapper gets it.
+	.kadence-fse-toggle input {
+		pointer-events: none;
+	}
+}
+.kadence-fse-dialog {
+	// The info box's long sentence would stretch the dialog to the screen.
+	@media (min-width: 600px) {
+		&.components-modal__frame {
+			max-width: min(840px, calc(100% - 32px));
+		}
+	}
+	.kadence-fse-alpha-notice {
+		margin: 0 0 1em;
+		p {
+			margin: 0 0 0.5em;
+		}
+		p:last-child {
+			margin-bottom: 0;
+		}
+		// Keeps the new-tab arrow next to the link text.
+		.components-external-link {
+			white-space: nowrap;
+		}
+	}
+	h2 {
+		margin: 1.5em 0 0.5em;
+		font-size: 14px;
+	}
+	// The admin stylesheet drops list bullets.
+	ul {
+		margin: 0 0 1em;
+		margin-inline-start: 1.25em;
+		list-style: disc;
+	}
+	// Pinned to the bottom, so the focused Cancel is in view when the dialog scrolls.
+	.kadence-fse-dialog-actions {
+		position: sticky;
+		bottom: 0;
+		padding: 12px 0;
+		background: #fff;
+		border-top: 1px solid #E2E8F0;
+	}
+}
+.kadence-fse-repair {
+	margin-top: 1.5rem;
+	padding-top: 1rem;
+	border-top: 1px solid #E2E8F0;
+	h5 {
+		margin: 0;
+		font-size: 14px;
+	}
+	.kadence-fse-repair-head {
+		margin-bottom: 0.5em;
+	}
+	.kadence-fse-repair-item {
+		margin: 0;
+	}
+	// The part's name, and a toggle that marks it done.
+	.kadence-fse-repair-item-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 8px;
+		margin: 0 0 0.5em;
+		h6 {
+			margin: 0;
+			font-size: 14px;
+		}
+	}
+	// The toggle's label is the status, a word as well as a color.
+	.kadence-fse-repair-status {
+		flex-shrink: 0;
+		padding: 2px 10px;
+		border: 1px solid #c3c4c7;
+		border-radius: 2px;
+		background: #f0f0f1;
+		color: #50575e;
+		font-size: 12px;
+		font-weight: 600;
+		line-height: 1.5;
+		&.is-todo {
+			border-color: #dba617;
+			background: #fcf9e8;
+			color: #614200;
+		}
+		&.is-done {
+			border-color: #00a32a;
+			background: #edfaef;
+			color: #005c12;
+		}
+	}
+	.kadence-fse-repair-details {
+		margin: 0 0 1em 1.25em;
+		list-style: disc;
+	}
+}

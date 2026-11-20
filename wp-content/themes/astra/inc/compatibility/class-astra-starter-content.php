@@ -127,26 +127,28 @@ class Astra_Starter_Content {
 	 *  @return mixed value.
 	 */
 	public function get_customizer_json() {
-		try {
-			$request = wp_remote_get( ASTRA_THEME_URI . 'inc/compatibility/starter-content/astra-settings-export.json' );
-		} catch ( Exception $ex ) {
-			$request = null;
+		// The bundled file never changes during a request; decode it once and reuse.
+		static $decoded = null;
+
+		if ( null !== $decoded ) {
+			return $decoded;
 		}
 
-		if ( is_wp_error( $request ) ) {
+		$file = ASTRA_THEME_DIR . 'inc/compatibility/starter-content/astra-settings-export.json';
+
+		if ( ! is_readable( $file ) ) {
 			return false; // Bail early.
 		}
 
-		// @codingStandardsIgnoreStart
-		/**
-		 * @psalm-suppress PossiblyNullReference
-		 * @psalm-suppress UndefinedMethod
-		 * @psalm-suppress PossiblyNullArrayAccess
-		 * @psalm-suppress PossiblyNullArgument
-		 * @psalm-suppress InvalidScalarArgument
-		 */
-		return json_decode( $request['body'], 1 );
-		// @codingStandardsIgnoreEnd
+		$contents = file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents, WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown -- Reading a static JSON file bundled inside the theme, not a remote resource.
+
+		if ( false === $contents ) {
+			return false;
+		}
+
+		$decoded = json_decode( $contents, true );
+
+		return $decoded;
 	}
 
 	/**
@@ -158,13 +160,29 @@ class Astra_Starter_Content {
 
 		$settings = self::get_customizer_json();
 
-		// Delete existing dynamic CSS cache.
-		delete_option( 'astra-settings' );
+		if ( empty( $settings['customizer-settings'] ) || ! is_array( $settings['customizer-settings'] ) ) {
+			return;
+		}
 
-		if ( ! empty( $settings['customizer-settings'] ) ) {
-			foreach ( $settings['customizer-settings'] as $option => $value ) {
-				update_option( $option, $value );
+		// Clear the existing astra-settings only when the payload will replace it,
+		// otherwise a payload without this key would wipe settings with nothing to restore.
+		if ( isset( $settings['customizer-settings']['astra-settings'] ) ) {
+			delete_option( 'astra-settings' );
+		}
+
+		/**
+		 * Only the options the bundled starter-content file is expected to provide.
+		 * Guards against an unbounded option write if the JSON payload is ever tampered with.
+		 * Keep this list in sync with the top-level keys under `customizer-settings` in
+		 * inc/compatibility/starter-content/astra-settings-export.json.
+		 */
+		$allowed_options = array( 'astra-settings', 'astra-color-palettes', 'astra-typography-presets' );
+
+		foreach ( $settings['customizer-settings'] as $option => $value ) {
+			if ( ! in_array( $option, $allowed_options, true ) ) {
+				continue;
 			}
+			update_option( $option, $value );
 		}
 	}
 

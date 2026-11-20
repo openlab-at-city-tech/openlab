@@ -7,7 +7,6 @@ use WpToTwitter_Vendor\GuzzleHttp\HandlerStack;
 use WpToTwitter_Vendor\GuzzleHttp\Promise as P;
 use WpToTwitter_Vendor\GuzzleHttp\Promise\PromiseInterface;
 use WpToTwitter_Vendor\GuzzleHttp\TransferStats;
-use WpToTwitter_Vendor\GuzzleHttp\Utils;
 use WpToTwitter_Vendor\Psr\Http\Message\RequestInterface;
 use WpToTwitter_Vendor\Psr\Http\Message\ResponseInterface;
 use WpToTwitter_Vendor\Psr\Http\Message\StreamInterface;
@@ -46,20 +45,20 @@ class MockHandler implements \Countable
      * @param callable|null $onFulfilled Callback to invoke when the return value is fulfilled.
      * @param callable|null $onRejected  Callback to invoke when the return value is rejected.
      */
-    public static function createWithMiddleware(array $queue = null, callable $onFulfilled = null, callable $onRejected = null) : HandlerStack
+    public static function createWithMiddleware(?array $queue = null, ?callable $onFulfilled = null, ?callable $onRejected = null) : HandlerStack
     {
         return HandlerStack::create(new self($queue, $onFulfilled, $onRejected));
     }
     /**
      * The passed in value must be an array of
-     * {@see \Psr\Http\Message\ResponseInterface} objects, Exceptions,
+     * {@see ResponseInterface} objects, Exceptions,
      * callables, or Promises.
      *
      * @param array<int, mixed>|null $queue       The parameters to be passed to the append function, as an indexed array.
      * @param callable|null          $onFulfilled Callback to invoke when the return value is fulfilled.
      * @param callable|null          $onRejected  Callback to invoke when the return value is rejected.
      */
-    public function __construct(array $queue = null, callable $onFulfilled = null, callable $onRejected = null)
+    public function __construct(?array $queue = null, ?callable $onFulfilled = null, ?callable $onRejected = null)
     {
         $this->onFulfilled = $onFulfilled;
         $this->onRejected = $onRejected;
@@ -131,7 +130,7 @@ class MockHandler implements \Countable
             if ($value instanceof ResponseInterface || $value instanceof \Throwable || $value instanceof PromiseInterface || \is_callable($value)) {
                 $this->queue[] = $value;
             } else {
-                throw new \TypeError('Expected a Response, Promise, Throwable or callable. Found ' . Utils::describeType($value));
+                throw new \TypeError('Expected a Response, Promise, Throwable or callable. Found ' . \get_debug_type($value));
             }
         }
     }
@@ -163,7 +162,7 @@ class MockHandler implements \Countable
     /**
      * @param mixed $reason Promise or reason.
      */
-    private function invokeStats(RequestInterface $request, array $options, ResponseInterface $response = null, $reason = null) : void
+    private function invokeStats(RequestInterface $request, array $options, ?ResponseInterface $response = null, $reason = null) : void
     {
         if (isset($options['on_stats'])) {
             $transferTime = $options['transfer_time'] ?? 0;

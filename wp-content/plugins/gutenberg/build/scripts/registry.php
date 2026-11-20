@@ -288,11 +288,6 @@ return array(
 		'asset' => 'style-engine/index.min.asset.php',
 	),
 	array(
-		'handle' => 'wp-sync',
-		'path' => 'sync/index',
-		'asset' => 'sync/index.min.asset.php',
-	),
-	array(
 		'handle' => 'wp-theme',
 		'path' => 'theme/index',
 		'asset' => 'theme/index.min.asset.php',

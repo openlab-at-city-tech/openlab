@@ -61,6 +61,22 @@ class Check {
 	}
 
 	/**
+	 * Whether a PDF URL points at the `/wp-content/uploads/securepdfs/` folder
+	 * owned by the Pro plan's Secure\Process pipeline. Lives in lite because
+	 * such URLs persist in post content after a Pro→lower-plan downgrade or
+	 * a full premium uninstall, and lite remains the only renderer in that
+	 * scenario.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string $url Absolute or relative URL (works equally on file paths).
+	 */
+	public static function is_secure_pdf_url( string $url ): bool {
+
+		return str_contains( $url, '/securepdfs/' );
+	}
+
+	/**
 	 * We can't use is_attachment() here to process only PDF attachment pages files.
 	 *
 	 * @since 4.9.0

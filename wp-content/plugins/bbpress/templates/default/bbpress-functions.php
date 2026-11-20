@@ -5,7 +5,7 @@
  *
  * @package bbPress
  * @subpackage BBP_Theme_Compat
- * @since 2.1.0 bbPress (r3732)
+ * @since 2.1.0 bbPress (r3734)
  */
 
 // Exit if accessed directly
@@ -27,7 +27,7 @@ if ( ! class_exists( 'BBP_Default' ) ) :
  *
  * See @link BBP_Theme_Compat() for more.
  *
- * @since 2.1.0 bbPress (r3732)
+ * @since 2.1.0 bbPress (r3734)
  *
  * @package bbPress
  * @subpackage BBP_Theme_Compat
@@ -39,17 +39,23 @@ class BBP_Default extends BBP_Theme_Compat {
 	/**
 	 * The main bbPress (Default) Loader
 	 *
-	 * @since 2.1.0 bbPress (r3732)
+	 * @since 2.1.0 bbPress (r3734)
 	 */
 	public function __construct( $properties = array() ) {
 
-		parent::__construct( bbp_parse_args( $properties, array(
-			'id'      => 'default',
-			'name'    => 'bbPress Default',
-			'version' => bbp_get_asset_version(),
-			'dir'     => trailingslashit( bbpress()->themes_dir . 'default' ),
-			'url'     => trailingslashit( bbpress()->themes_url . 'default' ),
-		), 'default_theme' ) );
+		parent::__construct(
+			bbp_parse_args(
+				$properties,
+				array(
+					'id'      => 'default',
+					'name'    => 'bbPress Default',
+					'version' => bbp_get_asset_version(),
+					'dir'     => trailingslashit( bbpress()->themes_dir . 'default' ),
+					'url'     => trailingslashit( bbpress()->themes_url . 'default' ),
+				),
+				'default_theme'
+			)
+		);
 
 		$this->setup_actions();
 	}
@@ -57,7 +63,7 @@ class BBP_Default extends BBP_Theme_Compat {
 	/**
 	 * Setup the theme hooks
 	 *
-	 * @since 2.1.0 bbPress (r3732)
+	 * @since 2.1.0 bbPress (r3734)
 	 *
 	 * @access private
 	 */
@@ -85,7 +91,7 @@ class BBP_Default extends BBP_Theme_Compat {
 	 * Inserts HTML at the top of the main content area to be compatible with
 	 * the Twenty Twelve theme.
 	 *
-	 * @since 2.1.0 bbPress (r3732)
+	 * @since 2.1.0 bbPress (r3734)
 	 */
 	public function before_main_content() {
 	?>
@@ -100,7 +106,7 @@ class BBP_Default extends BBP_Theme_Compat {
 	 * Inserts HTML at the bottom of the main content area to be compatible with
 	 * the Twenty Twelve theme.
 	 *
-	 * @since 2.1.0 bbPress (r3732)
+	 * @since 2.1.0 bbPress (r3734)
 	 */
 	public function after_main_content() {
 	?>
@@ -114,7 +120,7 @@ class BBP_Default extends BBP_Theme_Compat {
 	/**
 	 * Load the theme CSS
 	 *
-	 * @since 2.1.0 bbPress (r3732)
+	 * @since 2.1.0 bbPress (r3734)
 	 */
 	public function enqueue_styles() {
 
@@ -146,7 +152,7 @@ class BBP_Default extends BBP_Theme_Compat {
 	/**
 	 * Enqueue the required JavaScript files
 	 *
-	 * @since 2.1.0 bbPress (r3732)
+	 * @since 2.1.0 bbPress (r3734)
 	 */
 	public function enqueue_scripts() {
 
@@ -207,24 +213,28 @@ class BBP_Default extends BBP_Theme_Compat {
 	 *
 	 * These localizations require information that may not be loaded even by init.
 	 *
-	 * @since 2.1.0 bbPress (r3732)
+	 * @since 2.1.0 bbPress (r3734)
 	 */
 	public function localize_topic_script() {
 
 		// Single forum or topic
 		if ( bbp_is_single_forum() || bbp_is_single_topic() ) {
-			wp_localize_script( 'bbpress-engagements', 'bbpEngagementJS', array(
-				'object_id'          => get_the_ID(),
-				'bbp_ajaxurl'        => bbp_get_ajax_url(),
-				'generic_ajax_error' => esc_html__( 'Something went wrong. Refresh your browser and try again.', 'bbpress' ),
-			) );
+			wp_localize_script(
+				'bbpress-engagements',
+				'bbpEngagementJS',
+				array(
+					'object_id'          => get_the_ID(),
+					'bbp_ajaxurl'        => bbp_get_ajax_url(),
+					'generic_ajax_error' => esc_html__( 'Something went wrong. Refresh your browser and try again.', 'bbpress' ),
+				)
+			);
 		}
 	}
 
 	/**
 	 * AJAX handler to add or remove a topic from a user's favorites
 	 *
-	 * @since 2.1.0 bbPress (r3732)
+	 * @since 2.1.0 bbPress (r3734)
 	 */
 	public function ajax_favorite() {
 
@@ -240,21 +250,22 @@ class BBP_Default extends BBP_Theme_Compat {
 
 		// Get user and topic data
 		$user_id = bbp_get_current_user_id();
-		$id      = ! empty( $_POST['id']   ) ? intval( $_POST['id'] )         : 0;
-		$type    = ! empty( $_POST['type'] ) ? sanitize_key( $_POST['type'] ) : 'post';
-
-		// Bail if user cannot add favorites for this user
-		if ( ! current_user_can( 'edit_user', $user_id ) ) {
-			bbp_ajax_response( false, esc_html__( 'You do not have permission to do this.', 'bbpress' ), 302 );
+		$id      = ! empty( $_POST['id']   ) ? intval( $_POST['id'] ) : 0;
+		$type    = 'post';
+		if ( ! empty( $_POST['type'] ) ) {
+			$type = is_string( $_POST['type'] ) ? sanitize_key( $_POST['type'] ) : '';
 		}
 
 		// Get the object
-		if ( 'post' === $type ) {
-			$object = get_post( $id );
-		}
+		$object = get_post( $id );
 
-		// Bail if topic cannot be found
-		if ( empty( $object ) ) {
+		// Validate the object before checking its favorite state
+		if ( empty( $object ) || ! bbp_current_user_can_toggle_engagement( $object->ID, $type, 'favorite', 'remove', $user_id ) ) {
+			bbp_ajax_response( false, esc_html__( 'Favorite failed.', 'bbpress' ), 303 );
+		}
+		$is_favorite = bbp_is_user_favorite( $user_id, $object->ID );
+		$toggle_action = $is_favorite ? 'remove' : 'add';
+		if ( ! bbp_current_user_can_toggle_engagement( $object->ID, $type, 'favorite', $toggle_action, $user_id ) ) {
 			bbp_ajax_response( false, esc_html__( 'Favorite failed.', 'bbpress' ), 303 );
 		}
 
@@ -264,9 +275,9 @@ class BBP_Default extends BBP_Theme_Compat {
 		}
 
 		// Take action
-		$status = bbp_is_user_favorite( $user_id, $object->ID )
+		$status = $is_favorite
 			? bbp_remove_user_favorite( $user_id, $object->ID )
-			:    bbp_add_user_favorite( $user_id, $object->ID );
+			: bbp_add_user_favorite( $user_id, $object->ID );
 
 		// Bail if action failed
 		if ( empty( $status ) ) {
@@ -287,7 +298,7 @@ class BBP_Default extends BBP_Theme_Compat {
 	/**
 	 * AJAX handler to Subscribe/Unsubscribe a user from a topic
 	 *
-	 * @since 2.1.0 bbPress (r3732)
+	 * @since 2.1.0 bbPress (r3734)
 	 */
 	public function ajax_subscription() {
 
@@ -303,33 +314,34 @@ class BBP_Default extends BBP_Theme_Compat {
 
 		// Get user and topic data
 		$user_id = bbp_get_current_user_id();
-		$id      = ! empty( $_POST['id']   ) ? intval( $_POST['id'] )         : 0;
-		$type    = ! empty( $_POST['type'] ) ? sanitize_key( $_POST['type'] ) : 'post';
-
-		// Bail if user cannot add favorites for this user
-		if ( ! current_user_can( 'edit_user', $user_id ) ) {
-			bbp_ajax_response( false, esc_html__( 'You do not have permission to do this.', 'bbpress' ), 302 );
+		$id      = ! empty( $_POST['id']   ) ? intval( $_POST['id'] ) : 0;
+		$type    = 'post';
+		if ( ! empty( $_POST['type'] ) ) {
+			$type = is_string( $_POST['type'] ) ? sanitize_key( $_POST['type'] ) : '';
 		}
 
 		// Get the object
-		if ( 'post' === $type ) {
-			$object = get_post( $id );
-		}
+		$object = get_post( $id );
 
-		// Bail if topic cannot be found
-		if ( empty( $object ) ) {
+		// Validate the object before checking its subscription state
+		if ( empty( $object ) || ! bbp_current_user_can_toggle_engagement( $object->ID, $type, 'subscription', 'remove', $user_id ) ) {
+			bbp_ajax_response( false, esc_html__( 'Subscription failed.', 'bbpress' ), 303 );
+		}
+		$is_subscribed = bbp_is_user_subscribed( $user_id, $object->ID, $type );
+		$toggle_action = $is_subscribed ? 'remove' : 'add';
+		if ( ! bbp_current_user_can_toggle_engagement( $object->ID, $type, 'subscription', $toggle_action, $user_id ) ) {
 			bbp_ajax_response( false, esc_html__( 'Subscription failed.', 'bbpress' ), 303 );
 		}
 
 		// Bail if user did not take this action
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'toggle-subscription_' . $object->ID ) ) {
+		if ( ! isset( $_POST['nonce'] ) || ( ! wp_verify_nonce( $_POST['nonce'], 'toggle-subscription_post_' . $object->ID ) && ! wp_verify_nonce( $_POST['nonce'], 'toggle-subscription_' . $object->ID ) ) ) {
 			bbp_ajax_response( false, esc_html__( 'Are you sure you meant to do that?', 'bbpress' ), 304 );
 		}
 
 		// Take action
-		$status = bbp_is_user_subscribed( $user_id, $object->ID )
+		$status = $is_subscribed
 			? bbp_remove_user_subscription( $user_id, $object->ID )
-			:    bbp_add_user_subscription( $user_id, $object->ID );
+			: bbp_add_user_subscription( $user_id, $object->ID );
 
 		// Bail if action failed
 		if ( empty( $status ) ) {

@@ -61,14 +61,15 @@ class XMLRPC {
 	 *
 	 * @return array
 	 */
-	public function xmlrpc_methods( $methods, $core_methods, $user ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+	public function xmlrpc_methods( $methods, $core_methods, $user ) {
 		if ( $user && $user instanceof WP_User ) {
 			$this->current_user = $user;
 		}
 
-		$methods['jetpack.createMediaItem']             = array( $this, 'create_media_item' );
-		$methods['jetpack.updateVideoPressMediaItem']   = array( $this, 'update_videopress_media_item' );
-		$methods['jetpack.updateVideoPressPosterImage'] = array( $this, 'update_poster_image' );
+		$methods['jetpack.createMediaItem']                = array( $this, 'create_media_item' );
+		$methods['jetpack.updateVideoPressMediaItem']      = array( $this, 'update_videopress_media_item' );
+		$methods['jetpack.updateVideoPressMediaItemError'] = array( $this, 'update_videopress_media_item' );
+		$methods['jetpack.updateVideoPressPosterImage']    = array( $this, 'update_poster_image' );
 
 		return $methods;
 	}
@@ -88,10 +89,28 @@ class XMLRPC {
 		$this->authenticate_user();
 
 		foreach ( $media as & $media_item ) {
-			$title = sanitize_title( basename( $media_item['url'] ) );
-			$guid  = isset( $media['guid'] ) ? $media['guid'] : null;
+			$url   = is_string( $media_item['url'] ?? null ) ? $media_item['url'] : '';
+			$title = isset( $media_item['title'] ) && '' !== $media_item['title']
+				? sanitize_text_field( $media_item['title'] )
+				: sanitize_title( basename( $url ) );
+			$guid  = $media['guid'] ?? null;
 
-			$media_id = videopress_create_new_media_item( $title, $guid );
+			$media_id = videopress_create_new_media_item( $title, $guid, $media_item['minimum_attachment_id'] ?? 0 );
+			if ( is_wp_error( $media_id ) ) {
+				return array( 'errors' => array( $media_id->get_error_code() => $media_id->get_error_message() ) );
+			}
+
+			$post_update = array();
+			if ( isset( $media_item['description'] ) && '' !== $media_item['description'] ) {
+				$post_update['post_content'] = sanitize_textarea_field( $media_item['description'] );
+			}
+			if ( isset( $media_item['caption'] ) && '' !== $media_item['caption'] ) {
+				$post_update['post_excerpt'] = sanitize_textarea_field( $media_item['caption'] );
+			}
+			if ( $post_update ) {
+				$post_update['ID'] = $media_id;
+				wp_update_post( $post_update );
+			}
 
 			wp_update_attachment_metadata(
 				$media_id,
@@ -137,6 +156,9 @@ class XMLRPC {
 		update_post_meta( $id, 'videopress_guid', $info['guid'] );
 
 		$meta = wp_get_attachment_metadata( $id );
+		if ( ! is_array( $meta ) ) {
+			$meta = array();
+		}
 
 		$meta['width']             = $info['width'];
 		$meta['height']            = $info['height'];
@@ -149,7 +171,7 @@ class XMLRPC {
 			$meta['file_statuses'][ $format ] = $status;
 		}
 
-		if ( ! get_post_meta( $id, '_thumbnail_id', true ) ) {
+		if ( ! empty( $info['poster'] ) && ! get_post_meta( $id, '_thumbnail_id', true ) ) {
 			// Update the poster in the VideoPress info.
 			$thumbnail_id = videopress_download_poster_image( $info['poster'], $id );
 
@@ -162,8 +184,9 @@ class XMLRPC {
 
 		videopress_update_meta_data( $id );
 
-		// update the meta to tell us that we're processing or complete
-		update_post_meta( $id, 'videopress_status', videopress_is_finished_processing( $id ) ? 'complete' : 'processing' );
+		// A later auxiliary-format callback must not erase an MP4 failure.
+		$failed = 'ERROR' === ( $meta['file_statuses']['mp4'] ?? '' );
+		update_post_meta( $id, 'videopress_status', $failed ? 'failed' : ( videopress_is_finished_processing( $id ) ? 'complete' : 'processing' ) );
 
 		return true;
 	}

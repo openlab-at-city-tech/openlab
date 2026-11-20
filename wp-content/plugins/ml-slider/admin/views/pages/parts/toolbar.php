@@ -12,7 +12,7 @@
 		<div class="container h-full px-6">
 			<div class="flex items-center h-full -mx-4">
     			<a href="<?php echo esc_url(admin_url('admin.php?page=metaslider')); ?>" class="flex items-center h-full py-2 px-4 hidden sm:block">
-    				<img style="height:46px;width:auto;" class="mr-2 rtl:mr-0 rtl:ml-2" src="<?php echo esc_url(METASLIDER_ADMIN_URL); ?>images/metaslider_logo3.png" alt="MetaSlider">
+    				<img style="height:46px;width:auto;" class="mr-2 rtl:mr-0 rtl:ml-2" src="<?php echo esc_url(METASLIDER_ADMIN_URL); ?>images/metaslider_logo3.png" alt="MetaSlider Slideshow">
     			</a>
 				<?php if ($this->slider) : ?>
 				<div class="flex-grow h-full px-4">
@@ -22,6 +22,37 @@
 							<div class="flex justify-end items-center h-full text-gray">
 
                             <?php if (  ! metaslider_viewing_trashed_slides( $this->slider->id ) ) : ?>
+								<?php
+								// Whether the installed MetaSlider Gallery version (if any) is new
+								// enough to support "Convert to Gallery" (admin_post_ml_convert_slideshow,
+								// added in ml-slider-lightbox 2.35.0). Not installed at all => nothing
+								// to gate on yet, and the install prompt always installs >= 2.35.
+								$ml_gallery_installed_path = metaslider_plugin_is_installed( 'ml-slider-lightbox' );
+								$ml_gallery_version        = $ml_gallery_installed_path ? metaslider_lightbox_version() : '';
+								if ( ! $ml_gallery_installed_path || ( $ml_gallery_version && version_compare( $ml_gallery_version, '2.35', '>=' ) ) ) :
+								?>
+								<?php
+								// Shared icon + label for both the "plugin active" link and the "plugin not
+								// active" button below, so the SVG markup only needs to be maintained once.
+								$convert_to_gallery_icon_label = '<svg class="w-6 p-0.5 text-gray-dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14M14 8h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+								</svg>
+									<span class="text-sm text-gray-darkest">' . esc_html__('Convert to Gallery', 'ml-slider') . '</span>';
+								?>
+								<?php if ( metaslider_gallery_plugin_active() ) : ?>
+								<a class="ms-toolbar-button tipsy-tooltip-bottom-toolbar"
+								    title="<?php esc_attr_e('Convert this slideshow into a MetaSlider Gallery', 'ml-slider'); ?>"
+								    href="<?php echo esc_url( metaslider_convert_to_gallery_url( $this->slider->id ) ); ?>"
+								    target="_blank" rel="noopener"><?php echo $convert_to_gallery_icon_label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
+								<?php else : ?>
+								<button @click.prevent="showGalleryConvertNotice()"
+								    class="ms-toolbar-button tipsy-tooltip-bottom-toolbar"
+								    title="<?php esc_attr_e('Convert this slideshow into a MetaSlider Gallery', 'ml-slider'); ?>"><?php echo $convert_to_gallery_icon_label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></button>
+								<?php endif; ?>
+
+								<span class="border-l h-8 mx-2"></span>
+								<?php endif; ?>
+
 								<button @click.prevent="addSlide()" id="add-new-slide" class='ms-toolbar-button tipsy-tooltip-bottom-toolbar' title='<?php esc_attr_e("Add a new slide", "ml-slider") ?>'>
                                     <svg class="w-6 p-0.5 text-gray-dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -32,7 +63,7 @@
 								<button
                                     @click.prevent="preview()"
                                     id="preview-slideshow"
-                                    title="<?php esc_attr_e('Save & open the preview', 'ml-slider'); echo esc_attr(_x(' (Use Alt + P keys)', 'This is a keyboard shortcut.', 'ml-slider')); ?>" class="ms-toolbar-button tipsy-tooltip-bottom-toolbar"
+                                    title="<?php esc_attr_e('Save & open the preview', 'ml-slider'); echo esc_attr(_x(' (Use Alt or ⌥ (Option) + P keys)', 'This is a keyboard shortcut.', 'ml-slider')); ?>" class="ms-toolbar-button tipsy-tooltip-bottom-toolbar"
                                     :disabled="locked"
                                     :class="{'disabled': locked}">
                                     <svg
@@ -83,7 +114,7 @@
 
 								<!-- Pro only add css feature -->
 								<?php ob_start(); ?>
-								<button @click.prevent="showCSSManagerNotice()" title="<?php esc_attr_e('Adding custom CSS is a MetaSlider Pro feature. Click to learn more.', 'ml-slider'); ?>" class="ms-toolbar-button tipsy-tooltip-bottom-toolbar" :class="{'disabled':false}">
+								<button @click.prevent="showCSSManagerNotice()" title="<?php esc_attr_e('Adding custom CSS is a MetaSlider Slideshow Pro feature. Click to learn more.', 'ml-slider'); ?>" class="ms-toolbar-button tipsy-tooltip-bottom-toolbar" :class="{'disabled':false}">
                                     <?php 
                                     // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                     echo metaslider_upgrade_pro_small_btn( '', false ); 

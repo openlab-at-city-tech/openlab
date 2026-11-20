@@ -3,6 +3,8 @@
 namespace WpToTwitter_Vendor\Noweh\TwitterApi;
 
 use WpToTwitter_Vendor\GuzzleHttp\Client;
+use WpToTwitter_Vendor\GuzzleHttp\Exception\GuzzleException;
+use WpToTwitter_Vendor\GuzzleHttp\Exception\RequestException;
 use WpToTwitter_Vendor\GuzzleHttp\Exception\ServerException;
 use WpToTwitter_Vendor\GuzzleHttp\Subscriber\Oauth\Oauth1;
 use WpToTwitter_Vendor\GuzzleHttp\HandlerStack;
@@ -37,6 +39,8 @@ abstract class AbstractController
     private string $consumer_secret;
     /** @var string */
     private string $bearer_token;
+    /** @var bool */
+    protected bool $free_mode = \false;
     /** @var string|null $next_page_token Next Page Token for API pagination. */
     protected ?string $next_page_token = null;
     /** @var string $mode mode of operation */
@@ -45,6 +49,8 @@ abstract class AbstractController
     protected array $query_string = [];
     /** @var array<string> $post_body */
     protected array $post_body = [];
+    /** @var string> $baseUri */
+    private string $api_base_uri;
     /**
      * Creates object. Requires an array of settings.
      * @param array<string> $settings
@@ -56,20 +62,24 @@ abstract class AbstractController
         $this->extensionLoaded('json');
         $this->parseSettings($settings);
     }
+    private function getAPIBaseURI() : string
+    {
+        return $this->api_base_uri;
+    }
     /**
      * Perform the request to Twitter API
      * @param array<string, mixed> $postData
-     * @return mixed
-     * @throws \GuzzleHttp\Exception\GuzzleException|\RuntimeException|\JsonException
+     * @return \stdClass|null
+     * @throws GuzzleException|\RuntimeException|\JsonException
      */
-    public function performRequest(array $postData = [], $withHeaders = \false)
+    public function performRequest(array $postData = [], bool $withHeaders = \false) : ?\stdClass
     {
         try {
             $headers = ['Content-Type' => 'application/json', 'Accept' => 'application/json'];
             if ($this->auth_mode === 0) {
                 // Bearer Token
                 // Inject the Bearer token header
-                $client = new Client(['base_uri' => self::API_BASE_URI]);
+                $client = new Client(['base_uri' => $this->getAPIBaseURI()]);
                 $headers['Authorization'] = 'Bearer ' . $this->bearer_token;
             } elseif ($this->auth_mode === 1) {
                 // OAuth 1.0a User Context
@@ -77,7 +87,7 @@ abstract class AbstractController
                 $stack = HandlerStack::create();
                 $middleware = new Oauth1(['consumer_key' => $this->consumer_key, 'consumer_secret' => $this->consumer_secret, 'token' => $this->access_token, 'token_secret' => $this->access_token_secret]);
                 $stack->push($middleware);
-                $client = new Client(['base_uri' => self::API_BASE_URI, 'handler' => $stack, 'auth' => 'oauth']);
+                $client = new Client(['base_uri' => $this->getAPIBaseURI(), 'handler' => $stack, 'auth' => 'oauth']);
             } else {
                 // OAuth 2.0 Authorization Code Flow
                 throw new \RuntimeException('OAuth 2.0 Authorization Code Flow had not been implemented & also requires user interaction.');
@@ -90,8 +100,9 @@ abstract class AbstractController
                 // Otherwise, twitter error on empty data.
                 'json' => \count($postData) ? $postData : null,
             ]);
+            /** @var \stdClass|null $body */
             $body = \json_decode($response->getBody()->getContents(), \false, 512, \JSON_THROW_ON_ERROR);
-            if ($withHeaders) {
+            if ($withHeaders && $body) {
                 $body->headers = $response->getHeaders();
             }
             if ($response->getStatusCode() >= 400) {
@@ -104,11 +115,11 @@ abstract class AbstractController
             }
             return $body;
         } catch (ServerException $e) {
-            /** @var \stdClass $payload */
-            $payload = \json_decode(\str_replace("\n", "", $e->getResponse()->getBody()->getContents()), \false, 512, \JSON_THROW_ON_ERROR);
-            throw new \RuntimeException($payload->detail, $payload->status);
-        } catch (\WpToTwitter_Vendor\GuzzleHttp\Exception\RequestException $e) {
-            throw new \RuntimeException($e->getResponse()->getBody()->getContents(), $e->getCode());
+            /** @var \stdClass|null $payload */
+            $payload = \json_decode($e->getResponse()->getBody()->getContents(), \false, 512, \JSON_THROW_ON_ERROR);
+            throw new \RuntimeException($payload->detail ?? $e->getMessage(), $payload->status ?? $e->getCode());
+        } catch (RequestException $e) {
+            throw new \RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
     }
     private function is_windows() : bool
@@ -151,6 +162,8 @@ abstract class AbstractController
         $this->bearer_token = $settings['bearer_token'];
         $this->access_token = $settings['access_token'];
         $this->access_token_secret = $settings['access_token_secret'];
+        $this->free_mode = (bool) ($settings['free_mode'] ?? \false);
+        $this->api_base_uri = $settings['api_base_uri'] ?? self::API_BASE_URI;
     }
     /**
      * Set Endpoint value

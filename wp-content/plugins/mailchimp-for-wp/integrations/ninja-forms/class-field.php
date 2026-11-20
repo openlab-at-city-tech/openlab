@@ -21,6 +21,7 @@ class MC4WP_Ninja_Forms_Field extends NF_Abstracts_Input
 
     /**
      * NF_Fields_Checkbox constructor.
+     *
      * @since 3.0
      */
     public function __construct()
@@ -41,6 +42,7 @@ class MC4WP_Ninja_Forms_Field extends NF_Abstracts_Input
     /**
      * Admin Form Element
      * Display the checkbox on the edit submissions area.
+     *
      * @since 3.0
      *
      * @param $id Field ID.
@@ -78,7 +80,7 @@ class MC4WP_Ninja_Forms_Field extends NF_Abstracts_Input
     {
         $errors = parent::validate($field, $data);
 
-        if (isset($field['required']) && 1 == intval($field['required']) && empty($field['value'])) {
+        if (isset($field['required']) && 1 == (int) $field['required'] && empty($field['value'])) {
             $errors['slug']    = 'required-error';
             $errors['message'] = esc_html__('This field is required.', 'mailchimp-for-wp');
         }
@@ -89,6 +91,7 @@ class MC4WP_Ninja_Forms_Field extends NF_Abstracts_Input
     /**
      * Custom Columns
      * Creates what is displayed in the columns on the submissions page.
+     *
      * @since 3.0
      *
      * @param string $value checkbox value
@@ -101,9 +104,9 @@ class MC4WP_Ninja_Forms_Field extends NF_Abstracts_Input
         if ('mc4wp_optin' === $field->get_setting('type')) {
             // Backwards compatibility check for the new checked value setting.
             if (null === $field->get_setting('checked_value') && 1 === (int) $value) {
-                return __('Checked', 'ninja-forms');
+                return __('Checked', 'mailchimp-for-wp');
             } elseif (null === $field->get_setting('unchecked_value') && 0 === (int) $value) {
-                return __('Unchecked', 'ninja-forms');
+                return __('Unchecked', 'mailchimp-for-wp');
             }
 
             // If the field value is set to 1....

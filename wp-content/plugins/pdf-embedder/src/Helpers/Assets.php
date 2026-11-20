@@ -10,6 +10,13 @@ namespace PDFEmbedder\Helpers;
 class Assets {
 
 	/**
+	 * Version of the bundled PDF.js library.
+	 *
+	 * @since 5.0.2
+	 */
+	public const PDFJS_VERSION = '2.16.105';
+
+	/**
 	 * Plugin version.
 	 *
 	 * @since 4.8.0

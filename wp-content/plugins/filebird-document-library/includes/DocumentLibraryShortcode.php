@@ -83,10 +83,15 @@ class DocumentLibraryShortcode {
 			];
 		}
 		
-		$params['request']['selectedFolder'] = implode( ',', array_map(function( $id ){ 
+		$selected_folder = $params['request']['selectedFolder'];
+		if ( ! is_array( $selected_folder ) ) {
+			$selected_folder = explode( ',', (string) $selected_folder );
+		}
+		$selected_folder = array_values( array_filter( array_map( 'trim', $selected_folder ), 'strlen' ) );
+
+		$params['request']['selectedFolder'] = array_map(function( $id ){
 			return Helpers::encrypt( $id );
-		 }, explode(',', $params['request']['selectedFolder'])) );
-		$params['request']['selectedFolder'] = explode( ',', $params['request']['selectedFolder'] );
+		}, $selected_folder);
 
 		$html  = '<div id="filebird-document-library">';
 		$html .= '<div class="njt-fbdl" data-json="';

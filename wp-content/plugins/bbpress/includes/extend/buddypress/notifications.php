@@ -86,15 +86,38 @@ function bbp_format_buddypress_notifications( $content, $item_id, $secondary_ite
 	// Multiple
 	if ( $action_item_count > 1 ) {
 		$filter = 'bbp_multiple_new_subscription_notification';
-		$text   = sprintf( esc_html__( 'You have %1$d new replies to %2$s', 'bbpress' ), $action_item_count, $topic_title );
+		$text = sprintf(
+			esc_html(
+				/* translators: 1: Number of replies, 2: Topic title */
+				_n(
+					'You have %1$d new reply to %2$s',
+					'You have %1$d new replies to %2$s',
+					$action_item_count,
+					'bbpress'
+				)
+			),
+			$action_item_count,
+			$topic_title
+		);
 
 	// Single
 	} else {
 		$filter = 'bbp_single_new_subscription_notification';
 		$text   = ! empty( $secondary_item_id )
-			? sprintf( esc_html__( 'You have %1$d new reply to %2$s from %3$s', 'bbpress' ), $action_item_count, $topic_title, bp_core_get_user_displayname( $secondary_item_id ) )
-			: sprintf( esc_html__( 'You have %1$d new reply to %2$s',           'bbpress' ), $action_item_count, $topic_title );
-	}
+			? sprintf(
+				/* translators: 1: Number of replies, 2: Topic title, 3: Reply author name */
+				esc_html__( 'You have %1$d new reply to %2$s from %3$s', 'bbpress' ),
+				$action_item_count,
+				$topic_title,
+				bp_core_get_user_displayname( $secondary_item_id )
+			)
+			: sprintf(
+				/* translators: 1: Number of replies, 2: Topic title */
+				esc_html__( 'You have %1$d new reply to %2$s', 'bbpress' ),
+				$action_item_count,
+				$topic_title
+			);
+		}
 
 	// WordPress Toolbar
 	if ( 'string' === $format ) {
@@ -102,10 +125,16 @@ function bbp_format_buddypress_notifications( $content, $item_id, $secondary_ite
 
 	// Deprecated BuddyBar
 	} else {
-		$return = apply_filters( $filter, array(
-			'text' => $text,
-			'link' => $topic_link
-		), $topic_link, $action_item_count, $text, $topic_title );
+		$return = apply_filters( $filter,
+			array(
+				'text' => $text,
+				'link' => $topic_link
+			),
+			$topic_link,
+			$action_item_count,
+			$text,
+			$topic_title
+		);
 	}
 
 	do_action( 'bbp_format_buddypress_notifications', $component_action_name, $item_id, $secondary_item_id, $action_item_count, $format, $component_action_name, $component_name, $id );
@@ -117,7 +146,7 @@ function bbp_format_buddypress_notifications( $content, $item_id, $secondary_ite
  * Hooked into the new reply function, this notification action is responsible
  * for notifying topic and hierarchical reply authors of topic replies.
  *
- * @since 2.5.0 bbPress (r5156)
+ * @since 2.5.0 bbPress (r5155)
  *
  * @param int $reply_id
  * @param int $topic_id
@@ -131,6 +160,11 @@ function bbp_buddypress_add_notification( $reply_id = 0, $topic_id = 0, $forum_i
 
 	// Bail if somehow this is hooked to an edit action
 	if ( ! empty( $is_edit ) ) {
+		return;
+	}
+
+	// Bail if the reply is not published
+	if ( ! bbp_is_reply_published( $reply_id ) ) {
 		return;
 	}
 

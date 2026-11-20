@@ -171,14 +171,14 @@ function advgbRenderBlockRecentPosts($attributes)
             $postThumbID         = get_post_thumbnail_id($post->ID);
             $outputImage         = advgbCheckElementDisplay($attributes['displayFeaturedImage'], $attributes['displayFeaturedImageFor'], $key) && ( $postThumbID || $attributes['enablePlaceholderImage'] );
             $displayImageVsOrder = getDisplayImageVsOrder($attributes, $key);
-            $postThumb           = '<img src="' . esc_url($rp_default_thumb['url']) . '" />';
+            $postThumb           = '<img src="' . esc_url($rp_default_thumb['url']) . '" alt="' . esc_attr__('Post Image', 'advanced-gutenberg') . '" />';
             $postThumbCaption    = '';
             $postDate            = isset($attributes['displayDate']) && $attributes['displayDate'] ? 'created' : (isset($attributes['postDate']) ? esc_html($attributes['postDate']) : 'hide');
             $postDateDisplay     = null;
             if ($postThumbID) {
                 $postThumb = wp_get_attachment_image($postThumbID, 'large');
                 if (get_the_post_thumbnail_caption($post->ID) && $attributes['displayFeaturedImageCaption']) {
-                    $postThumbCaption = sprintf('<span class="advgb-post-caption">%1$s</span>', get_the_post_thumbnail_caption($post->ID));
+                    $postThumbCaption = sprintf('<span class="advgb-post-caption">%1$s</span>', wp_kses_post(get_the_post_thumbnail_caption($post->ID)));
                 } else {
                     $postThumbCaption = '';
                 }
@@ -188,22 +188,33 @@ function advgbRenderBlockRecentPosts($attributes)
                 }
             }
 
+            // The title link below points to the same URL, so hide the redundant image link from assistive tech
+            $postThumbLinkAttrs  = $postThumbCaption === '' ? ' aria-hidden="true" tabindex="-1"' : '';
+
             $postHtml .= '<article class="advgb-recent-post' . ( $outputImage ? '' : ' advgb-recent-post--no-image' ) . '">';
             if ($outputImage && $displayImageVsOrder === 'ignore-order') {
-                $postHtml .= sprintf('<div class="advgb-post-thumbnail"><a href="%1$s">%2$s%3$s</a></div>', get_permalink($post->ID), $postThumb, $postThumbCaption);
+                $postHtml .= sprintf('<div class="advgb-post-thumbnail"><a href="%1$s"%4$s>%2$s%3$s</a></div>', get_permalink($post->ID), $postThumb, $postThumbCaption, $postThumbLinkAttrs);
             } elseif (
                 ($postView === 'frontpage' && $attributes['frontpageStyle'] === 'headline')
                 || ($postView === 'slider' && $attributes['sliderStyle'] === 'headline')
                  && $displayImageVsOrder === 'ignore-order'
             ) {
-                $postHtml .= sprintf('<div class="advgb-post-thumbnail advgb-post-thumbnail-no-image"><a href="%1$s"></a></div>', get_permalink($post->ID));
+                $postHtml .= sprintf(
+                    '<div class="advgb-post-thumbnail advgb-post-thumbnail-no-image"><a href="%1$s" aria-label="%2$s"></a></div>',
+                    esc_url(get_permalink($post->ID)),
+                    esc_attr(sprintf(
+                        /* translators: %s: post title. */
+                        __('Read %s', 'advanced-gutenberg'),
+                        get_the_title($post->ID)
+                    ))
+                );
             } else {
             // Nothing to do here
             }
 
             $postHtml .= '<div class="advgb-post-wrapper">';
             if ($outputImage && $displayImageVsOrder === 'apply-order') {
-                $postHtml .= sprintf('<div class="advgb-post-thumbnail"><a href="%1$s">%2$s%3$s</a></div>', get_permalink($post->ID), $postThumb, $postThumbCaption);
+                $postHtml .= sprintf('<div class="advgb-post-thumbnail"><a href="%1$s"%4$s>%2$s%3$s</a></div>', get_permalink($post->ID), $postThumb, $postThumbCaption, $postThumbLinkAttrs);
             }
 
             $postHtml .= sprintf('<h2 class="advgb-post-title"><a href="%1$s">%2$s</a></h2>', get_permalink($post->ID), get_the_title($post->ID));
@@ -225,7 +236,7 @@ function advgbRenderBlockRecentPosts($attributes)
                 $infoItems = array();
                 $separator = isset($attributes['hideInfoSeparators']) && $attributes['hideInfoSeparators']
                     ? ''
-                    : (isset($attributes['infoSectionSeparator']) ? $attributes['infoSectionSeparator'] : ' ');
+                    : esc_html(isset($attributes['infoSectionSeparator']) ? $attributes['infoSectionSeparator'] : ' ');
 
                 // Build info items based on order
                 $order = isset($attributes['infoSectionOrder']) ? $attributes['infoSectionOrder'] : array('author', 'date', 'comments');
@@ -287,14 +298,14 @@ function advgbRenderBlockRecentPosts($attributes)
                                 } else {
                                     if ( $postDate === 'created' ) {
                                         $relativePrefix = $showPrefix ? (isset($attributes['relativeDateCreatedPrefix']) ? $attributes['relativeDateCreatedPrefix'] : esc_html__('Posted', 'advanced-gutenberg')) : '';
-                                        $dateDisplay = ($relativePrefix ? $relativePrefix . ' ' : '') . human_time_diff( get_the_date( 'U', $post->ID ) ) . ' ' . esc_html__( 'ago', 'advanced-gutenberg');
+                                        $dateDisplay = ($relativePrefix ? $relativePrefix . ' ' : '') . human_time_diff( (int) get_the_date( 'U', $post->ID ) ) . ' ' . esc_html__( 'ago', 'advanced-gutenberg');
                                     } else {
                                         $relativePrefix = $showPrefix ? (isset($attributes['relativeDateUpdatedPrefix']) ? $attributes['relativeDateUpdatedPrefix'] : esc_html__('Updated', 'advanced-gutenberg')) : '';
-                                        $dateDisplay = ($relativePrefix ? $relativePrefix . ' ' : '') . human_time_diff( get_the_modified_date( 'U', $post->ID ) ) . ' ' . esc_html__( 'ago', 'advanced-gutenberg');
+                                        $dateDisplay = ($relativePrefix ? $relativePrefix . ' ' : '') . human_time_diff( (int) get_the_modified_date( 'U', $post->ID ) ) . ' ' . esc_html__( 'ago', 'advanced-gutenberg');
                                     }
                                 }
 
-                                $infoItems[] = sprintf('<span class="advgb-post-datetime">%1$s</span>', $dateDisplay);
+                                $infoItems[] = sprintf('<span class="advgb-post-datetime">%1$s</span>', esc_html($dateDisplay));
                             }
                             break;
 
@@ -377,13 +388,22 @@ function advgbRenderBlockRecentPosts($attributes)
 
             $postHtml .= '<div class="advgb-post-content">';
             if (advgbCheckElementDisplay($attributes['displayExcerpt'], $attributes['displayExcerptFor'], $key)) {
-                $introText = $post->post_excerpt;
-                if (isset($attributes['displayExcerpt']) && $attributes['postTextAsExcerpt']) {
-                    if (!is_admin()) {
-                        $postContent = get_post_field('post_content', $post->ID);
-                        $postContent = strip_shortcodes($postContent);
-                        $postContent = preg_replace('/<!--(.*?-->)/is', '', $postContent);
-                        $introText   = advgbExtractHtml($postContent, $attributes['postTextExcerptLength']);
+                if (post_password_required($post)) {
+                    // Same text as core's Latest Posts block
+                    $introText = esc_html__('This content is password protected.'); // phpcs:ignore WordPress.WP.I18n.MissingArgDomain -- Use core's translation.
+                } else {
+                    $introText = wp_kses_post($post->post_excerpt);
+                    if (isset($attributes['displayExcerpt']) && $attributes['postTextAsExcerpt']) {
+                        if (!is_admin()) {
+                            $postContent = get_post_field('post_content', $post->ID);
+                            // Leave out blocks that Block Controls hides from the current visitor
+                            if (class_exists('\\PublishPress\\Blocks\\Controls')) {
+                                $postContent = \PublishPress\Blocks\Controls::removeHiddenBlocks($postContent);
+                            }
+                            $postContent = strip_shortcodes($postContent);
+                            $postContent = preg_replace('/<!--(.*?-->)/is', '', $postContent);
+                            $introText   = esc_html(advgbExtractHtml($postContent, $attributes['postTextExcerptLength']));
+                        }
                     }
                 }
 
@@ -1126,8 +1146,8 @@ function advgbAllowCPTQueryVars($query_params)
 function advgbGetRelativeDates($post)
 {
     return array(
-        'created' => __('Posted', 'advanced-gutenberg') . ' ' . human_time_diff(get_the_date('U', $post['id'])) . ' ' . __('ago', 'advanced-gutenberg'),
-        'modified' => __('Updated', 'advanced-gutenberg') . ' ' . human_time_diff(get_the_modified_date('U', $post['id'])) . ' ' . __('ago', 'advanced-gutenberg')
+        'created' => __('Posted', 'advanced-gutenberg') . ' ' . human_time_diff((int) get_the_date('U', $post['id'])) . ' ' . __('ago', 'advanced-gutenberg'),
+        'modified' => __('Updated', 'advanced-gutenberg') . ' ' . human_time_diff((int) get_the_modified_date('U', $post['id'])) . ' ' . __('ago', 'advanced-gutenberg')
     );
 }
 
@@ -1183,7 +1203,7 @@ function advgbGetSeriesOrder($post)
         && publishpress_multi_series_supported()
     ) {
 // Get the terms array from a post so later we can get the term id
-        $terms = wp_get_post_terms($post['id'], 'series');
+        $terms = wp_get_post_terms($post['id'], advgbGetSeriesTaxonomy());
         if (is_array($terms) && count($terms) && $terms[0]->term_id) {
             return (int) get_post_meta($post['id'], '_series_part_' . $terms[0]->term_id, true);
         }
@@ -1369,15 +1389,16 @@ add_filter('rest_page_query', 'advgbGetAuthorFilterREST', 10, 2);
 function advgbSetSeriesOrderREST($args, $request)
 {
     $orderby = esc_html($request['orderby']);
-    if (isset($orderby) && $orderby === 'series_order' && isset($request['series'])) {
+    $taxonomy = advgbGetSeriesTaxonomy();
+    $taxonomy_object = get_taxonomy($taxonomy);
+    $rest_base = ($taxonomy_object && ! empty($taxonomy_object->rest_base)) ? $taxonomy_object->rest_base : $taxonomy;
+    $series_param = isset($request[$rest_base]) ? $request[$rest_base] : (isset($request['series']) ? $request['series'] : null);
+    if (isset($orderby) && $orderby === 'series_order' && isset($series_param)) {
         $args['orderby'] = 'meta_value_num';
 
         // Series 2.11.4+ meta_key now uses _series_part_${id}
-        if (
-                 function_exists('publishpress_multi_series_supported')
-            && publishpress_multi_series_supported()
-        ) {
-            $ids = array_map('intval', $request['series']);
+        $ids = array_map('intval', (array) $series_param);
+        if (advgbSeriesUsesPerSeriesMetaKey($ids)) {
             foreach ($ids as $id) {
                 $args['meta_key'][] = '_series_part_' . $id;
             }
@@ -1455,40 +1476,105 @@ function advgbSeriesOrderSort()
     if (class_exists('orgSeries')) {
         add_action('pre_get_posts', function ($query) {
 
-            if (is_admin() || $query->query_vars['orderby'] !== 'series_order') {
+            if (is_admin() || ! isset($query->query_vars['orderby']) || $query->query_vars['orderby'] !== 'series_order') {
                 return $query;
             }
-            $query->set('orderby', 'meta_value');
+            $query->set('orderby', 'meta_value_num');
 
-            // Series 2.11.4+ meta_key now uses _series_part_${id}
-            if (
-                 function_exists('publishpress_multi_series_supported')
-                && publishpress_multi_series_supported()
-            ) {
-// Make sure series are selected
-                if (
-                    isset($query->query_vars['tax_query'][0]['terms'])
-                    && count($query->query_vars['tax_query'][0]['terms'])
-                ) {
-// We get the terms titles. The same stored in block's taxonomies->series attribute
-                    // @TODO - Store and use term ids instead as attributes
-                    $terms = $query->query_vars['tax_query'][0]['terms'];
-                    $metakeys = [];
-                    foreach ($terms as $term) {
-                    // Get the term object and then use the id to get the meta_key
-                        $term_obj = get_term_by('name', $term, 'series');
-                        $metakeys[] = '_series_part_' . (int) $term_obj->term_id;
-                    }
-                    $query->set('meta_key', $metakeys);
+            // The series taxonomy slug can be renamed in Series settings, e.g. "issue"
+            $taxonomy = advgbGetSeriesTaxonomy();
+            $term_ids = [];
+            $tax_query = isset($query->query_vars['tax_query']) ? (array) $query->query_vars['tax_query'] : [];
+            foreach ($tax_query as $clause) {
+                if (! is_array($clause) || ! isset($clause['taxonomy']) || $clause['taxonomy'] !== $taxonomy || empty($clause['terms'])) {
+                    continue;
                 }
+                // The terms are the ones stored in the block's taxonomies attribute (names by default)
+                // @TODO - Store and use term ids instead as attributes
+                $field = isset($clause['field']) ? $clause['field'] : 'term_id';
+                foreach ((array) $clause['terms'] as $term) {
+                    // Get the term object and then use the id to get the meta_key
+                    $term_obj = get_term_by($field, $term, $taxonomy);
+                    if ($term_obj) {
+                        $term_ids[] = (int) $term_obj->term_id;
+                    }
+                }
+            }
+
+            if (empty($term_ids)) {
+                // No series selected: nothing to sort on, as before
+                if (! (function_exists('publishpress_multi_series_supported') && publishpress_multi_series_supported())) {
+                    // Series Pro 2.11.3- and Series Free 2.11.2-
+                    $query->set('meta_key', '_series_part');
+                }
+            } elseif (advgbSeriesUsesPerSeriesMetaKey($term_ids)) {
+                // Series 2.11.4+ meta_key now uses _series_part_${id}
+                $metakeys = [];
+                foreach ($term_ids as $term_id) {
+                    $metakeys[] = '_series_part_' . $term_id;
+                }
+                $query->set('meta_key', $metakeys);
             } else {
-        // Series Pro 2.11.3- and Series Free 2.11.2-
+                // Series Pro 2.11.3- and Series Free 2.11.2-
                 $query->set('meta_key', '_series_part');
             }
 
             return $query;
         });
     }
+}
+
+/**
+ * Get the slug of the series taxonomy. It can be renamed in Series settings.
+ *
+ * @return string
+ */
+function advgbGetSeriesTaxonomy()
+{
+    if (function_exists('ppseries_get_series_slug')) {
+        $slug = ppseries_get_series_slug();
+        if (! empty($slug)) {
+            return $slug;
+        }
+    }
+
+    return 'series';
+}
+
+/**
+ * Check whether Series stores the order of the given series in _series_part_${id} meta keys.
+ *
+ * The publishpress_multi_series_supported option is only set by a Series upgrade
+ * notice, so it can be empty although the posts already use the new meta keys.
+ *
+ * @param int[] $term_ids Series term ids
+ *
+ * @return boolean
+ */
+function advgbSeriesUsesPerSeriesMetaKey($term_ids)
+{
+    $term_ids = array_filter(array_map('intval', (array) $term_ids));
+    if (empty($term_ids)) {
+        return false;
+    }
+
+    if (
+        function_exists('publishpress_multi_series_supported')
+        && publishpress_multi_series_supported()
+    ) {
+        return true;
+    }
+
+    global $wpdb;
+    $meta_keys = array_map(function ($id) {
+        return '_series_part_' . $id;
+    }, $term_ids);
+    $placeholders = implode(', ', array_fill(0, count($meta_keys), '%s'));
+
+    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- The IN fragment contains only generated placeholders.
+    $found = $wpdb->get_var($wpdb->prepare("SELECT meta_id FROM {$wpdb->postmeta} WHERE meta_key IN ($placeholders) LIMIT 1", $meta_keys)); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Query prepared above.
+
+    return ! empty($found);
 }
 
 /**

@@ -33,17 +33,22 @@ function nggallery_manage_gallery_main() {
 	}
 	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
-	$gallery_mapper            = \Imagely\NGG\DataMappers\Gallery::get_instance();
-	$total_number_of_galleries = $gallery_mapper->count();
-
-	$query = $gallery_mapper->select();
+	$gallery_mapper = \Imagely\NGG\DataMappers\Gallery::get_instance();
 
 	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for search
 	if ( ! empty( $_GET['gs'] ) ) {
-		$gs = sanitize_text_field( wp_unslash( $_GET['gs'] ) );
-		$query->where( [ 'title LIKE %s', '%' . trim( $gs ) . '%' ] );
+		$gs     = sanitize_text_field( wp_unslash( $_GET['gs'] ) );
+		$search = [ 'title LIKE %s', '%' . trim( $gs ) . '%' ];
+
+		// Pager total must match the filtered rows.
+		$count                     = $gallery_mapper->select( 'COUNT(*) AS counter' )->where( $search )->run_query( false, false, true );
+		$total_number_of_galleries = isset( $count[0]->counter ) ? (int) $count[0]->counter : 0;
+
+		$query = $gallery_mapper->select()->where( $search );
 	} else {
-		$gs = null;
+		$gs                        = null;
+		$total_number_of_galleries = $gallery_mapper->count();
+		$query                     = $gallery_mapper->select();
 	}
 	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 

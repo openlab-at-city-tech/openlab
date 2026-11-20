@@ -1,8 +1,11 @@
 <?php
 /**
-** Retrieve list data from the Listo plugin.
-** Listo http://wordpress.org/plugins/listo/
-**/
+ * Listo
+ *
+ * @link https://contactform7.com/listo/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 add_filter( 'wpcf7_form_tag_data_option', 'wpcf7_listo', 10, 3 );
 

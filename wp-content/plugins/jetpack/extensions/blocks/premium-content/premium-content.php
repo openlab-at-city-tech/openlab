@@ -48,6 +48,8 @@ function register_block() {
 			'show_in_rest'  => true,
 			'single'        => true,
 			'type'          => 'boolean',
+			/* translators: Keep the quoted values, block names and meta keys in English. */
+			'description'   => __( 'Computed on every save: true when the content has a Paid Content block (premium-content/container). Any value sent here is overwritten; add or remove the block instead.', 'jetpack' ),
 			'auth_callback' => function () {
 				return wp_get_current_user()->has_cap( 'edit_posts' );
 			},
@@ -70,6 +72,7 @@ function register_block() {
 	add_action( 'wp_after_insert_post', __NAMESPACE__ . '\add_paid_content_post_meta', 99, 2 );
 }
 add_action( 'init', __NAMESPACE__ . '\register_block' );
+add_action( 'template_redirect', __NAMESPACE__ . '\prewarm_premium_content_session_cookie' );
 
 /**
  * Render callback.

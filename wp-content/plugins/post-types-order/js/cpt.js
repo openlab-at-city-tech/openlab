@@ -23,14 +23,25 @@
                 
                                                         placeholder: {
                                                                         element: function(currentItem) {
-                                                                            var cols    =   jQuery(currentItem).children('td:visible').length + 1;
-                                                                            return jQuery('<tr class="ui-sortable-placeholder"><td colspan="' + cols + '">&nbsp;</td></tr>')[0];
+                                                                            return jQuery('<tr class="ui-sortable-placeholder"><td>&nbsp;</td></tr>')[0];
                                                                         },
                                                                         update: function(container, p) {
                                                                             return;
                                                                         }
                                                                     },
                 
+                                                        'start': function(e, ui) {
+                                                            // Set the span after Sortable inserts the actual placeholder
+                                                            // row into the table, so this updates the node being rendered.
+                                                            var cols = jQuery(this).closest('table').find('thead tr:first').children('th, td').length;
+
+                                                            if (cols) {
+                                                                ui.placeholder.children('td')
+                                                                    .prop('colSpan', cols)
+                                                                    .attr('colspan', cols);
+                                                            }
+                                                        },
+
                                                         'items': 'tr',
                                                         'handle': ".check-column",
                                                         'axis': 'y',
@@ -50,7 +61,7 @@
                                                               url: ajaxurl,
                                                               data: queryString,
                                                               cache: false,
-                                                              dataType: "html",
+                                                              dataType: "json",
                                                               success: function(data){
                                                 
                                                               },

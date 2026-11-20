@@ -7,14 +7,16 @@
  * Author URI: https://github.com/rocklobster-in/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Version: 6.1.5
- * Requires at least: 6.7
- * Requires PHP: 7.4
+ * Version: 6.2.5
+ * Requires at least: 7.1
+ * Requires PHP: 8.3
  */
 
-define( 'WPCF7_VERSION', '6.1.5' );
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-define( 'WPCF7_REQUIRED_WP_VERSION', '6.7' );
+define( 'WPCF7_VERSION', '6.2.5' );
+
+define( 'WPCF7_REQUIRED_WP_VERSION', '7.1' );
 
 define( 'WPCF7_TEXT_DOMAIN', 'contact-form-7' );
 

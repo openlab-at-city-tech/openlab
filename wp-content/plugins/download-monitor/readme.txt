@@ -3,7 +3,7 @@ Contributors: wpchill, silkalns, barrykooij, mikejolley
 Tags: download manager, file manager, digital store, ecommerce, password protection  
 Requires at least: 5.5  
 Tested up to: 7.1
-Stable tag: 5.3.7
+Stable tag: 5.3.9
 License: GPLv3  
 Requires PHP: 7.4
 
@@ -114,12 +114,22 @@ Admin hits are not counted, log out and try again!
 4. The quick add panel can be opened via a link about the post editor. This lets you quickly add a file and insert it into a post.
 
 == Changelog ==
+= 5.3.9 - 17.11.2026 =
+Added: The [download] and [download_data] shortcodes now show the translated download on translated pages (WPML).
+Fixed: Translated downloads (WPML) lost the "Members only", "Featured" and "Redirect to file" settings.
+Fixed: Critical error on the first admin page after activating the plugin with WP-CLI.
+
+= 5.3.8 - 16.11.2026 =
+Improved: Post states (Draft, Private, etc.) are now shown next to download titles in the downloads list.
+Fixed: The Max logs duration setting could not be changed and reverted to 1 Year after saving.
+
 = 5.3.7 - 04.11.2026 =
 Fixed: Incorrect file names on some downloads.
 
 = 5.3.6 - 27.10.2026 =
 Improved: The Custom Fields box is now hidden by default when editing a download or a product and can be enabled from Screen Options.
 Fixed: Duplicating a download no longer breaks meta saved by other plugins and now also copies version meta.
+Fixed: Large file downloads using byte ranges could be missing bytes.
 
 = 5.3.5 - 20.10.2026 =
 Fixed: Security update. Thanks to Karthik Ramakrishnan.

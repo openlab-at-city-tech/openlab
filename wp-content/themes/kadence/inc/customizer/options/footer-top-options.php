@@ -22,723 +22,724 @@ ob_start(); ?>
 <?php
 $compontent_tabs = ob_get_clean();
 
-ob_start(); ?>
+ob_start();
+?>
 <div class="kadence-compontent-description">
 	<p style="margin:0"><?php echo esc_html__( 'Title and Content settings affect legacy widgets. For block editor widgets use settings in the editor.', 'kadence' ); ?></p>
 </div>
 <?php
 $component_description = ob_get_clean();
 
-$settings = array(
-	'footer_top_tabs' => array(
+$settings = [
+	'footer_top_tabs'            => [
 		'control_type' => 'kadence_blank_control',
 		'section'      => 'footer_top',
 		'settings'     => false,
 		'priority'     => 1,
 		'description'  => $compontent_tabs,
-	),
-	'footer_top_contain' => array(
+	],
+	'footer_top_contain'         => [
 		'control_type' => 'kadence_radio_icon_control',
 		'section'      => 'footer_top',
 		'priority'     => 4,
 		'default'      => kadence()->default( 'footer_top_contain' ),
 		'label'        => esc_html__( 'Container Width', 'kadence' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-		),
-		'live_method'     => array(
-			array(
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'class',
 				'selector' => '.site-top-footer-wrap',
-				'pattern'  => array(
+				'pattern'  => [
 					'desktop' => 'site-footer-row-layout-$',
 					'tablet'  => 'site-footer-row-tablet-layout-$',
 					'mobile'  => 'site-footer-row-mobile-layout-$',
-				),
+				],
 				'key'      => '',
-			),
-		),
-		'input_attrs'  => array(
-			'layout' => array(
-				'standard' => array(
+			],
+		],
+		'input_attrs'  => [
+			'layout' => [
+				'standard'  => [
 					'tooltip' => __( 'Background Fullwidth, Content Contained', 'kadence' ),
 					'name'    => __( 'Standard', 'kadence' ),
 					'icon'    => '',
-				),
-				'fullwidth' => array(
+				],
+				'fullwidth' => [
 					'tooltip' => __( 'Background & Content Fullwidth', 'kadence' ),
 					'name'    => __( 'Fullwidth', 'kadence' ),
 					'icon'    => '',
-				),
-				'contained' => array(
+				],
+				'contained' => [
 					'tooltip' => __( 'Background & Content Contained', 'kadence' ),
 					'name'    => __( 'Contained', 'kadence' ),
 					'icon'    => '',
-				),
-			),
-		),
-	),
-	'footer_top_columns' => array(
+				],
+			],
+		],
+	],
+	'footer_top_columns'         => [
 		'control_type' => 'kadence_radio_icon_control',
 		'section'      => 'footer_top',
 		'label'        => esc_html__( 'Columns', 'kadence' ),
 		'priority'     => 5,
-		//'transport'    => 'refresh',
+		// 'transport'    => 'refresh',
 		'default'      => kadence()->default( 'footer_top_columns' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-		),
-		'partial'      => array(
+			],
+		],
+		'partial'      => [
 			'selector'            => '#colophon',
 			'container_inclusive' => true,
 			'render_callback'     => 'Kadence\footer_markup',
-		),
-		'input_attrs'  => array(
-			'layout' => array(
-				'1' => array(
+		],
+		'input_attrs'  => [
+			'layout'     => [
+				'1' => [
 					'name' => __( '1', 'kadence' ),
-				),
-				'2' => array(
+				],
+				'2' => [
 					'name' => __( '2', 'kadence' ),
-				),
-				'3' => array(
+				],
+				'3' => [
 					'name' => __( '3', 'kadence' ),
-				),
-				'4' => array(
+				],
+				'4' => [
 					'name' => __( '4', 'kadence' ),
-				),
-				'5' => array(
+				],
+				'5' => [
 					'name' => __( '5', 'kadence' ),
-				),
-			),
+				],
+			],
 			'responsive' => false,
 			'footer'     => 'top',
-		),
-	),
-	'footer_top_layout' => array(
+		],
+	],
+	'footer_top_layout'          => [
 		'control_type' => 'kadence_row_control',
 		'section'      => 'footer_top',
 		'label'        => esc_html__( 'Layout', 'kadence' ),
 		'priority'     => 5,
-		//'transport'    => 'refresh',
+		// 'transport'    => 'refresh',
 		'default'      => kadence()->default( 'footer_top_layout' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-		),
-		'live_method'     => array(
-			array(
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'class',
 				'selector' => '.site-top-footer-inner-wrap',
-				'pattern'  => array(
+				'pattern'  => [
 					'desktop' => 'site-footer-row-column-layout-$',
 					'tablet'  => 'site-footer-row-tablet-column-layout-$',
 					'mobile'  => 'site-footer-row-mobile-column-layout-$',
-				),
+				],
 				'key'      => '',
-			),
-		),
-		'input_attrs'  => array(
+			],
+		],
+		'input_attrs'  => [
 			'responsive' => true,
 			'footer'     => 'top',
-		),
-	),
-	'footer_top_collapse' => array(
+		],
+	],
+	'footer_top_collapse'        => [
 		'control_type' => 'kadence_radio_icon_control',
 		'section'      => 'footer_top',
 		'priority'     => 5,
 		'default'      => kadence()->default( 'footer_top_collapse' ),
 		'label'        => esc_html__( 'Row Collapse', 'kadence' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-			array(
+			],
+			[
 				'setting'  => '__device',
 				'operator' => 'in',
-				'value'    => array( 'tablet', 'mobile' ),
-			),
-		),
-		'live_method'     => array(
-			array(
+				'value'    => [ 'tablet', 'mobile' ],
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'class',
 				'selector' => '.site-top-footer-inner-wrap',
 				'pattern'  => 'ft-ro-collapse-$',
 				'key'      => '',
-			),
-		),
-		'input_attrs'  => array(
-			'layout' => array(
-				'normal' => array(
-					'name'    => __( 'Left to Right', 'kadence' ),
-					'icon'    => '',
-				),
-				'rtl' => array(
-					'name'    => __( 'Right to Left', 'kadence' ),
-					'icon'    => '',
-				),
-			),
+			],
+		],
+		'input_attrs'  => [
+			'layout'     => [
+				'normal' => [
+					'name' => __( 'Left to Right', 'kadence' ),
+					'icon' => '',
+				],
+				'rtl'    => [
+					'name' => __( 'Right to Left', 'kadence' ),
+					'icon' => '',
+				],
+			],
 			'responsive' => false,
 			'footer'     => 'top',
-		),
-	),
-	'footer_top_direction' => array(
+		],
+	],
+	'footer_top_direction'       => [
 		'control_type' => 'kadence_radio_icon_control',
 		'section'      => 'footer_top',
 		'priority'     => 5,
 		'default'      => kadence()->default( 'footer_top_direction' ),
 		'label'        => esc_html__( 'Column Direction', 'kadence' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-		),
-		'live_method'     => array(
-			array(
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'class',
 				'selector' => '.site-top-footer-inner-wrap',
-				'pattern'  => array(
+				'pattern'  => [
 					'desktop' => 'ft-ro-dir-$',
 					'tablet'  => 'ft-ro-t-dir-$',
 					'mobile'  => 'ft-ro-m-dir-$',
-				),
+				],
 				'key'      => '',
-			),
-		),
-		'input_attrs'  => array(
-			'layout' => array(
-				'row' => array(
+			],
+		],
+		'input_attrs'  => [
+			'layout'     => [
+				'row'    => [
 					'tooltip' => __( 'Left to Right', 'kadence' ),
 					'name'    => __( 'Row', 'kadence' ),
 					'icon'    => '',
-				),
-				'column' => array(
+				],
+				'column' => [
 					'tooltip' => __( 'Top to Bottom', 'kadence' ),
 					'name'    => __( 'Column', 'kadence' ),
 					'icon'    => '',
-				),
-			),
+				],
+			],
 			'responsive' => true,
 			'footer'     => 'top',
-		),
-	),
-	'footer_top_column_spacing' => array(
+		],
+	],
+	'footer_top_column_spacing'  => [
 		'control_type' => 'kadence_range_control',
 		'section'      => 'footer_top',
 		'priority'     => 5,
 		'label'        => esc_html__( 'Column Spacing', 'kadence' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-		),
-		'live_method'     => array(
-			array(
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'css',
 				'property' => 'grid-column-gap',
 				'selector' => '#colophon .site-top-footer-inner-wrap',
 				'pattern'  => '$',
 				'key'      => 'size',
-			),
-			array(
+			],
+			[
 				'type'     => 'css',
 				'property' => 'grid-row-gap',
 				'selector' => '#colophon .site-top-footer-inner-wrap',
 				'pattern'  => '$',
 				'key'      => 'size',
-			),
-		),
+			],
+		],
 		'default'      => kadence()->default( 'footer_top_column_spacing' ),
-		'input_attrs'  => array(
-			'min'     => array(
+		'input_attrs'  => [
+			'min'   => [
 				'px'  => 0,
 				'em'  => 0,
 				'rem' => 0,
-			),
-			'max'     => array(
+			],
+			'max'   => [
 				'px'  => 200,
 				'em'  => 8,
 				'rem' => 8,
-			),
-			'step'    => array(
+			],
+			'step'  => [
 				'px'  => 1,
 				'em'  => 0.01,
 				'rem' => 0.01,
-			),
-			'units'   => array( 'px', 'em', 'rem' ),
-		),
-	),
-	'footer_top_widget_spacing' => array(
+			],
+			'units' => [ 'px', 'em', 'rem' ],
+		],
+	],
+	'footer_top_widget_spacing'  => [
 		'control_type' => 'kadence_range_control',
 		'section'      => 'footer_top',
 		'priority'     => 5,
 		'label'        => esc_html__( 'Widget Spacing', 'kadence' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-		),
-		'live_method'     => array(
-			array(
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'css',
 				'property' => 'margin-bottom',
 				'selector' => '.site-top-footer-inner-wrap .widget',
 				'pattern'  => '$',
 				'key'      => 'size',
-			),
-		),
+			],
+		],
 		'default'      => kadence()->default( 'footer_top_widget_spacing' ),
-		'input_attrs'  => array(
-			'min'     => array(
+		'input_attrs'  => [
+			'min'   => [
 				'px'  => 0,
 				'em'  => 0,
 				'rem' => 0,
-			),
-			'max'     => array(
+			],
+			'max'   => [
 				'px'  => 200,
 				'em'  => 8,
 				'rem' => 8,
-			),
-			'step'    => array(
+			],
+			'step'  => [
 				'px'  => 1,
 				'em'  => 0.01,
 				'rem' => 0.01,
-			),
-			'units'   => array( 'px', 'em', 'rem' ),
-		),
-	),
-	'footer_top_top_spacing' => array(
+			],
+			'units' => [ 'px', 'em', 'rem' ],
+		],
+	],
+	'footer_top_top_spacing'     => [
 		'control_type' => 'kadence_range_control',
 		'section'      => 'footer_top',
 		'priority'     => 5,
 		'label'        => esc_html__( 'Top Spacing', 'kadence' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-		),
-		'live_method'     => array(
-			array(
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'css',
 				'selector' => '#colophon .site-top-footer-inner-wrap',
 				'pattern'  => '$',
 				'property' => 'padding-top',
 				'key'      => 'size',
-			),
-		),
+			],
+		],
 		'default'      => kadence()->default( 'footer_top_top_spacing' ),
-		'input_attrs'  => array(
-			'min'     => array(
+		'input_attrs'  => [
+			'min'   => [
 				'px'  => 0,
 				'em'  => 0,
 				'rem' => 0,
-			),
-			'max'     => array(
+			],
+			'max'   => [
 				'px'  => 200,
 				'em'  => 8,
 				'rem' => 8,
-			),
-			'step'    => array(
+			],
+			'step'  => [
 				'px'  => 1,
 				'em'  => 0.01,
 				'rem' => 0.01,
-			),
-			'units'   => array( 'px', 'em', 'rem' ),
-		),
-	),
-	'footer_top_bottom_spacing' => array(
+			],
+			'units' => [ 'px', 'em', 'rem' ],
+		],
+	],
+	'footer_top_bottom_spacing'  => [
 		'control_type' => 'kadence_range_control',
 		'section'      => 'footer_top',
 		'priority'     => 5,
 		'label'        => esc_html__( 'Bottom Spacing', 'kadence' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-		),
-		'live_method'     => array(
-			array(
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'css',
 				'selector' => '#colophon .site-top-footer-inner-wrap',
 				'pattern'  => '$',
 				'property' => 'padding-bottom',
 				'key'      => 'size',
-			),
-		),
+			],
+		],
 		'default'      => kadence()->default( 'footer_top_bottom_spacing' ),
-		'input_attrs'  => array(
-			'min'     => array(
+		'input_attrs'  => [
+			'min'   => [
 				'px'  => 0,
 				'em'  => 0,
 				'rem' => 0,
-			),
-			'max'     => array(
+			],
+			'max'   => [
 				'px'  => 200,
 				'em'  => 8,
 				'rem' => 8,
-			),
-			'step'    => array(
+			],
+			'step'  => [
 				'px'  => 1,
 				'em'  => 0.01,
 				'rem' => 0.01,
-			),
-			'units'   => array( 'px', 'em', 'rem' ),
-		),
-	),
-	'footer_top_height' => array(
+			],
+			'units' => [ 'px', 'em', 'rem' ],
+		],
+	],
+	'footer_top_height'          => [
 		'control_type' => 'kadence_range_control',
 		'section'      => 'footer_top',
 		'priority'     => 5,
 		'label'        => esc_html__( 'Min Height', 'kadence' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-		),
-		'live_method'     => array(
-			array(
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'css',
 				'selector' => '#colophon .site-top-footer-inner-wrap',
 				'pattern'  => '$',
 				'property' => 'min-height',
 				'key'      => 'size',
-			),
-		),
+			],
+		],
 		'default'      => kadence()->default( 'footer_top_height' ),
-		'input_attrs'  => array(
-			'min'     => array(
+		'input_attrs'  => [
+			'min'   => [
 				'px'  => 10,
 				'em'  => 1,
 				'rem' => 1,
 				'vh'  => 2,
-			),
-			'max'     => array(
+			],
+			'max'   => [
 				'px'  => 400,
 				'em'  => 12,
 				'rem' => 12,
 				'vh'  => 40,
-			),
-			'step'    => array(
+			],
+			'step'  => [
 				'px'  => 1,
 				'em'  => 0.01,
 				'rem' => 0.01,
 				'vh'  => 1,
-			),
-			'units'   => array( 'px', 'em', 'rem', 'vh' ),
-		),
-	),
-	'footer_top_widget_settings' => array(
+			],
+			'units' => [ 'px', 'em', 'rem', 'vh' ],
+		],
+	],
+	'footer_top_widget_settings' => [
 		'control_type' => 'kadence_blank_control',
 		'section'      => 'footer_top',
 		'settings'     => false,
 		'priority'     => 1,
 		'description'  => $component_description,
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'design',
-			),
-		),
-	),
-	'footer_top_widget_title' => array(
+			],
+		],
+	],
+	'footer_top_widget_title'    => [
 		'control_type' => 'kadence_typography_control',
 		'section'      => 'footer_top',
 		'label'        => esc_html__( 'Widget Titles', 'kadence' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'design',
-			),
-		),
+			],
+		],
 		'default'      => kadence()->default( 'footer_top_widget_title' ),
-		'live_method'     => array(
-			array(
+		'live_method'  => [
+			[
 				'type'     => 'css_typography',
 				'selector' => '.site-top-footer-wrap .site-footer-row-container-inner .widget-title',
-				'pattern'  => array(
+				'pattern'  => [
 					'desktop' => '$',
 					'tablet'  => '$',
 					'mobile'  => '$',
-				),
+				],
 				'property' => 'font',
 				'key'      => 'typography',
-			),
-		),
-		'input_attrs'  => array(
+			],
+		],
+		'input_attrs'  => [
 			'id' => 'footer_top_widget_title',
-		),
-	),
-	'footer_top_widget_content' => array(
+		],
+	],
+	'footer_top_widget_content'  => [
 		'control_type' => 'kadence_typography_control',
 		'section'      => 'footer_top',
 		'label'        => esc_html__( 'Widget Content', 'kadence' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'design',
-			),
-		),
+			],
+		],
 		'default'      => kadence()->default( 'footer_top_widget_content' ),
-		'live_method'     => array(
-			array(
+		'live_method'  => [
+			[
 				'type'     => 'css_typography',
 				'selector' => '.site-top-footer-wrap .site-footer-row-container-inner',
-				'pattern'  => array(
+				'pattern'  => [
 					'desktop' => '$',
 					'tablet'  => '$',
 					'mobile'  => '$',
-				),
+				],
 				'property' => 'font',
 				'key'      => 'typography',
-			),
-		),
-		'input_attrs'  => array(
+			],
+		],
+		'input_attrs'  => [
 			'id' => 'footer_top_widget_content',
-		),
-	),
-	'footer_top_link_colors' => array(
+		],
+	],
+	'footer_top_link_colors'     => [
 		'control_type' => 'kadence_color_control',
 		'section'      => 'footer_top',
 		'label'        => esc_html__( 'Link Colors', 'kadence' ),
 		'default'      => kadence()->default( 'footer_top_link_colors' ),
-		'live_method'     => array(
-			array(
+		'live_method'  => [
+			[
 				'type'     => 'css',
 				'selector' => '.site-footer .site-top-footer-wrap a:where(:not(.button):not(.wp-block-button__link):not(.wp-element-button))',
 				'property' => 'color',
 				'pattern'  => '$',
 				'key'      => 'color',
-			),
-			array(
+			],
+			[
 				'type'     => 'css',
 				'selector' => '.site-footer .site-top-footer-wrap a:where(:not(.button):not(.wp-block-button__link):not(.wp-element-button)):hover',
 				'property' => 'color',
 				'pattern'  => '$',
 				'key'      => 'hover',
-			),
-		),
-		'context'      => array(
-			array(
+			],
+		],
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'design',
-			),
-		),
-		'input_attrs'  => array(
-			'colors' => array(
-				'color' => array(
+			],
+		],
+		'input_attrs'  => [
+			'colors' => [
+				'color' => [
 					'tooltip' => __( 'Initial Color', 'kadence' ),
 					'palette' => true,
-				),
-				'hover' => array(
+				],
+				'hover' => [
 					'tooltip' => __( 'Hover Color', 'kadence' ),
 					'palette' => true,
-				),
-			),
-		),
-	),
-	'footer_top_link_style' => array(
+				],
+			],
+		],
+	],
+	'footer_top_link_style'      => [
 		'control_type' => 'kadence_select_control',
 		'section'      => 'footer_top',
 		'default'      => kadence()->default( 'footer_top_link_style' ),
 		'label'        => esc_html__( 'Link Style', 'kadence' ),
-		'input_attrs'  => array(
-			'options' => array(
-				'plain' => array(
+		'input_attrs'  => [
+			'options' => [
+				'plain'  => [
 					'name' => __( 'Underline on Hover', 'kadence' ),
-				),
-				'normal' => array(
+				],
+				'normal' => [
 					'name' => __( 'Underline', 'kadence' ),
-				),
-				'noline' => array(
+				],
+				'noline' => [
 					'name' => __( 'No Underline', 'kadence' ),
-				),
-			),
-		),
-		'live_method'     => array(
-			array(
+				],
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'class',
 				'selector' => '.site-top-footer-inner-wrap',
 				'pattern'  => 'ft-ro-lstyle-$',
 				'key'      => '',
-			),
-		),
-	),
-	'footer_top_background' => array(
+			],
+		],
+	],
+	'footer_top_background'      => [
 		'control_type' => 'kadence_background_control',
 		'section'      => 'footer_top',
 		'label'        => esc_html__( 'Top Row Background', 'kadence' ),
 		'default'      => kadence()->default( 'footer_top_background' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'design',
-			),
-		),
-		'live_method'     => array(
-			array(
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'css_background',
 				'selector' => '.site-top-footer-wrap .site-footer-row-container-inner',
 				'property' => 'background',
 				'pattern'  => '$',
 				'key'      => 'base',
-			),
-		),
-		'input_attrs'  => array(
-			'tooltip'  => __( 'Top Row Background', 'kadence' ),
-		),
-	),
-	'footer_top_column_border' => array(
+			],
+		],
+		'input_attrs'  => [
+			'tooltip' => __( 'Top Row Background', 'kadence' ),
+		],
+	],
+	'footer_top_column_border'   => [
 		'control_type' => 'kadence_border_control',
 		'section'      => 'footer_top',
 		'label'        => esc_html__( 'Column Border', 'kadence' ),
 		'default'      => kadence()->default( 'footer_top_column_border' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'design',
-			),
-		),
-		'live_method'     => array(
-			array(
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'css_border',
 				'selector' => '.site-top-footer-inner-wrap .site-footer-section:not(:last-child):after',
 				'pattern'  => '$',
 				'property' => 'border-right',
 				'pattern'  => '$',
 				'key'      => 'border',
-			),
-		),
-	),
-	'footer_top_border' => array(
+			],
+		],
+	],
+	'footer_top_border'          => [
 		'control_type' => 'kadence_borders_control',
 		'section'      => 'footer_top',
 		'label'        => esc_html__( 'Border', 'kadence' ),
 		'default'      => kadence()->default( 'footer_top_border' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'design',
-			),
-		),
-		'settings'     => array(
+			],
+		],
+		'settings'     => [
 			'border_top'    => 'footer_top_top_border',
 			'border_bottom' => 'footer_top_bottom_border',
-		),
-		'live_method'     => array(
-			'footer_top_top_border' => array(
-				array(
+		],
+		'live_method'  => [
+			'footer_top_top_border'    => [
+				[
 					'type'     => 'css_border',
-					'selector' => array(
+					'selector' => [
 						'desktop' => '.site-top-footer-wrap .site-footer-row-container-inner',
 						'tablet'  => '.site-top-footer-wrap .site-footer-row-container-inner',
 						'mobile'  => '.site-top-footer-wrap .site-footer-row-container-inner',
-					),
-					'pattern'  => array(
+					],
+					'pattern'  => [
 						'desktop' => '$',
 						'tablet'  => '$',
 						'mobile'  => '$',
-					),
+					],
 					'property' => 'border-top',
 					'pattern'  => '$',
 					'key'      => 'border',
-				),
-			),
-			'footer_top_bottom_border' => array( 
-				array(
+				],
+			],
+			'footer_top_bottom_border' => [ 
+				[
 					'type'     => 'css_border',
-					'selector' => array(
+					'selector' => [
 						'desktop' => '.site-top-footer-wrap .site-footer-row-container-inner',
 						'tablet'  => '.site-top-footer-wrap .site-footer-row-container-inner',
 						'mobile'  => '.site-top-footer-wrap .site-footer-row-container-inner',
-					),
-					'pattern'  => array(
+					],
+					'pattern'  => [
 						'desktop' => '$',
 						'tablet'  => '$',
 						'mobile'  => '$',
-					),
+					],
 					'property' => 'border-bottom',
 					'pattern'  => '$',
 					'key'      => 'border',
-				),
-			),
-		),
-	),
+				],
+			],
+		],
+	],
 	// 'footer_top_top_border' => array(
-	// 	'control_type' => 'kadence_border_control',
-	// 	'section'      => 'footer_top',
-	// 	'label'        => esc_html__( 'Top Border', 'kadence' ),
-	// 	'default'      => kadence()->default( 'footer_top_top_border' ),
-	// 	'context'      => array(
-	// 		array(
-	// 			'setting' => '__current_tab',
-	// 			'value'   => 'design',
-	// 		),
-	// 	),
-	// 	'live_method'     => array(
-	// 		array(
-	// 			'type'     => 'css_border',
-	// 			'selector' => array(
-	// 				'desktop' => '.site-top-footer-wrap .site-footer-row-container-inner',
-	// 				'tablet'  => '.site-top-footer-wrap .site-footer-row-container-inner',
-	// 				'mobile'  => '.site-top-footer-wrap .site-footer-row-container-inner',
-	// 			),
-	// 			'pattern'  => array(
-	// 				'desktop' => '$',
-	// 				'tablet'  => '$',
-	// 				'mobile'  => '$',
-	// 			),
-	// 			'property' => 'border-top',
-	// 			'pattern'  => '$',
-	// 			'key'      => 'border',
-	// 		),
-	// 	),
+	// 'control_type' => 'kadence_border_control',
+	// 'section'      => 'footer_top',
+	// 'label'        => esc_html__( 'Top Border', 'kadence' ),
+	// 'default'      => kadence()->default( 'footer_top_top_border' ),
+	// 'context'      => array(
+	// array(
+	// 'setting' => '__current_tab',
+	// 'value'   => 'design',
+	// ),
+	// ),
+	// 'live_method'     => array(
+	// array(
+	// 'type'     => 'css_border',
+	// 'selector' => array(
+	// 'desktop' => '.site-top-footer-wrap .site-footer-row-container-inner',
+	// 'tablet'  => '.site-top-footer-wrap .site-footer-row-container-inner',
+	// 'mobile'  => '.site-top-footer-wrap .site-footer-row-container-inner',
+	// ),
+	// 'pattern'  => array(
+	// 'desktop' => '$',
+	// 'tablet'  => '$',
+	// 'mobile'  => '$',
+	// ),
+	// 'property' => 'border-top',
+	// 'pattern'  => '$',
+	// 'key'      => 'border',
+	// ),
+	// ),
 	// ),
 	// 'footer_top_bottom_border' => array(
-	// 	'control_type' => 'kadence_border_control',
-	// 	'section'      => 'footer_top',
-	// 	'label'        => esc_html__( 'Bottom Border', 'kadence' ),
-	// 	'default'      => kadence()->default( 'footer_top_bottom_border' ),
-	// 	'context'      => array(
-	// 		array(
-	// 			'setting' => '__current_tab',
-	// 			'value'   => 'design',
-	// 		),
-	// 	),
-	// 	'live_method'     => array(
-	// 		array(
-	// 			'type'     => 'css_border',
-	// 			'selector' => array(
-	// 				'desktop' => '.site-top-footer-wrap .site-footer-row-container-inner',
-	// 				'tablet'  => '.site-top-footer-wrap .site-footer-row-container-inner',
-	// 				'mobile'  => '.site-top-footer-wrap .site-footer-row-container-inner',
-	// 			),
-	// 			'pattern'  => array(
-	// 				'desktop' => '$',
-	// 				'tablet'  => '$',
-	// 				'mobile'  => '$',
-	// 			),
-	// 			'property' => 'border-bottom',
-	// 			'pattern'  => '$',
-	// 			'key'      => 'border',
-	// 		),
-	// 	),
+	// 'control_type' => 'kadence_border_control',
+	// 'section'      => 'footer_top',
+	// 'label'        => esc_html__( 'Bottom Border', 'kadence' ),
+	// 'default'      => kadence()->default( 'footer_top_bottom_border' ),
+	// 'context'      => array(
+	// array(
+	// 'setting' => '__current_tab',
+	// 'value'   => 'design',
 	// ),
-);
+	// ),
+	// 'live_method'     => array(
+	// array(
+	// 'type'     => 'css_border',
+	// 'selector' => array(
+	// 'desktop' => '.site-top-footer-wrap .site-footer-row-container-inner',
+	// 'tablet'  => '.site-top-footer-wrap .site-footer-row-container-inner',
+	// 'mobile'  => '.site-top-footer-wrap .site-footer-row-container-inner',
+	// ),
+	// 'pattern'  => array(
+	// 'desktop' => '$',
+	// 'tablet'  => '$',
+	// 'mobile'  => '$',
+	// ),
+	// 'property' => 'border-bottom',
+	// 'pattern'  => '$',
+	// 'key'      => 'border',
+	// ),
+	// ),
+	// ),
+];
 
 Theme_Customizer::add_settings( $settings );
 

@@ -9,26 +9,11 @@ namespace Kadence;
 
 use function Kadence\kadence;
 use function add_action;
-use function get_template_part;
 use function add_filter;
 use function wp_enqueue_style;
 use function get_template_directory;
-use function wp_style_add_data;
-use function get_theme_file_uri;
-use function get_theme_file_path;
-use function wp_styles;
 use function esc_attr;
-use function esc_url;
-use function wp_style_is;
-use function _doing_it_wrong;
-use function wp_print_styles;
-use function post_password_required;
-use function get_option;
-use function comments_open;
-use function get_comments_number;
 use function apply_filters;
-use function add_query_arg;
-use function wp_add_inline_style;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -52,7 +37,7 @@ class Theme_Meta {
 	 *
 	 * @var the theme settings array.
 	 */
-	public static $settings = array();
+	public static $settings = [];
 
 	/**
 	 * Instance Control.
@@ -67,22 +52,22 @@ class Theme_Meta {
 	 * Constructor function.
 	 */
 	public function __construct() {
-		add_action( 'init', array( $this, 'plugin_register' ), 20 );
-		add_action( 'init', array( $this, 'register_meta' ), 20 );
-		add_action( 'enqueue_block_editor_assets', array( $this, 'script_enqueue' ) );
-		add_filter( 'register_post_type_args', array( $this, 'add_needed_custom_fields_support' ), 20, 2 );
+		add_action( 'init', [ $this, 'plugin_register' ], 20 );
+		add_action( 'init', [ $this, 'register_meta' ], 20 );
+		add_action( 'enqueue_block_editor_assets', [ $this, 'script_enqueue' ] );
+		add_filter( 'register_post_type_args', [ $this, 'add_needed_custom_fields_support' ], 20, 2 );
 		if ( is_admin() ) {
-			add_action( 'load-post.php', array( $this, 'init_metabox' ) );
-			add_action( 'load-post-new.php', array( $this, 'init_metabox' ) );
+			add_action( 'load-post.php', [ $this, 'init_metabox' ] );
+			add_action( 'load-post-new.php', [ $this, 'init_metabox' ] );
 		}
 	}
 	/**
 	 * Meta box initialization.
 	 */
 	public function init_metabox() {
-		add_action( 'add_meta_boxes', array( $this, 'add_metabox' ) );
-		add_action( 'add_meta_boxes', array( $this, 'add_product_metabox' ) );
-		add_action( 'save_post', array( $this, 'save_metabox' ), 10, 2 );
+		add_action( 'add_meta_boxes', [ $this, 'add_metabox' ] );
+		add_action( 'add_meta_boxes', [ $this, 'add_product_metabox' ] );
+		add_action( 'save_post', [ $this, 'save_metabox' ], 10, 2 );
 	}
 
 	/**
@@ -90,10 +75,10 @@ class Theme_Meta {
 	 */
 	public function add_metabox() {
 		$all_post_types    = kadence()->get_post_types_objects();
-		$extras_post_types = array( 'post', 'page' );
+		$extras_post_types = [ 'post', 'page' ];
 		$ignore_type       = kadence()->get_post_types_to_ignore();
 		foreach ( $all_post_types as $post_type_item ) {
-			$post_type_name  = $post_type_item->name;
+			$post_type_name = $post_type_item->name;
 			if ( ! in_array( $post_type_name, $ignore_type, true ) ) {
 				$extras_post_types[] = $post_type_name;
 			}
@@ -101,13 +86,13 @@ class Theme_Meta {
 		add_meta_box(
 			'_kad_classic_meta_control',
 			__( 'Post Settings', 'kadence' ),
-			array( $this, 'render_metabox' ),
+			[ $this, 'render_metabox' ],
 			apply_filters( 'kadence_classic_meta_box_post_types', $extras_post_types ),
 			'side',
 			'low',
-			array(
+			[
 				'__back_compat_meta_box' => true,
-			)
+			]
 		);
 	}
 	/**
@@ -117,13 +102,13 @@ class Theme_Meta {
 		add_meta_box(
 			'_kad_classic_meta_control',
 			__( 'Post Settings', 'kadence' ),
-			array( $this, 'render_product_metabox' ),
-			array( 'product' ),
+			[ $this, 'render_product_metabox' ],
+			[ 'product' ],
 			'side',
 			'low',
-			array(
+			[
 				'__back_compat_meta_box' => true,
-			)
+			]
 		);
 	}
 	/**
@@ -190,19 +175,19 @@ class Theme_Meta {
 	public function render_product_metabox( $post ) {
 		// Add nonce for security and authentication.
 		wp_nonce_field( 'kadence_theme_classic_meta_nonce_action', 'kadence_theme_classic_meta_nonce' );
-		$output = '<div class="kadence_classic_meta_boxes">';
-		$output .= '<div class="kadence_classic_meta_boxes" style="padding: 10px 0 0;">';
-		$output .= '<div style="padding-bottom:10px;">';
-		$output .= '<label for="_kad_post_transparent" style="font-weight: 600;">' . esc_html__( 'Transparent Header', 'kadence' ) . '</label>';
-		$output .= '</div>';
-		$output .= '<div>';
-		$trans_option_values = array(
+		$output              = '<div class="kadence_classic_meta_boxes">';
+		$output             .= '<div class="kadence_classic_meta_boxes" style="padding: 10px 0 0;">';
+		$output             .= '<div style="padding-bottom:10px;">';
+		$output             .= '<label for="_kad_post_transparent" style="font-weight: 600;">' . esc_html__( 'Transparent Header', 'kadence' ) . '</label>';
+		$output             .= '</div>';
+		$output             .= '<div>';
+		$trans_option_values = [
 			'default' => __( 'Default', 'kadence' ),
 			'enable'  => __( 'Enable', 'kadence' ),
 			'disable' => __( 'Disable', 'kadence' ),
-		);
-		$trans_select_value = get_post_meta( $post->ID, '_kad_post_transparent', true );
-		$output .= '<select style="width:100%; box-sizing: border-box;" name="_kad_post_transparent">';
+		];
+		$trans_select_value  = get_post_meta( $post->ID, '_kad_post_transparent', true );
+		$output             .= '<select style="width:100%; box-sizing: border-box;" name="_kad_post_transparent">';
 		foreach ( $trans_option_values as $key => $value ) {
 			if ( $key == $trans_select_value ) {
 				$output .= '<option value="' . esc_attr( $key ) . '" selected>' . esc_attr( $value ) . '</option>';
@@ -215,21 +200,21 @@ class Theme_Meta {
 		$output .= '<div class="clearfixit" style="padding: 5px 0; clear:both;"></div>';
 		$output .= '</div>';
 
-		$output .= '<div class="kadence_classic_meta_boxes" style="padding: 10px 0 0;">';
-		$output .= '<div style="padding-bottom:10px;">';
-		$output .= '<label for="_kad_post_layout" style="font-weight: 600;">' . esc_html__( 'Layout', 'kadence' ) . '</label>';
-		$output .= '</div>';
-		$output .= '<div>';
-		$layout_option_values = array(
+		$output              .= '<div class="kadence_classic_meta_boxes" style="padding: 10px 0 0;">';
+		$output              .= '<div style="padding-bottom:10px;">';
+		$output              .= '<label for="_kad_post_layout" style="font-weight: 600;">' . esc_html__( 'Layout', 'kadence' ) . '</label>';
+		$output              .= '</div>';
+		$output              .= '<div>';
+		$layout_option_values = [
 			'default'   => __( 'Default', 'kadence' ),
 			'normal'    => __( 'Normal', 'kadence' ),
 			'narrow'    => __( 'Narrow', 'kadence' ),
 			'fullwidth' => __( 'Fullwidth', 'kadence' ),
 			'left'      => __( 'Sidebar Left', 'kadence' ),
 			'right'     => __( 'Sidebar Right', 'kadence' ),
-		);
-		$layout_select_value = get_post_meta( $post->ID, '_kad_post_layout', true );
-		$output .= '<select style="width:100%; box-sizing: border-box;" name="_kad_post_layout">';
+		];
+		$layout_select_value  = get_post_meta( $post->ID, '_kad_post_layout', true );
+		$output              .= '<select style="width:100%; box-sizing: border-box;" name="_kad_post_layout">';
 		foreach ( $layout_option_values as $key => $value ) {
 			if ( $key == $layout_select_value ) {
 				$output .= '<option value="' . esc_attr( $key ) . '" selected>' . esc_attr( $value ) . '</option>';
@@ -237,22 +222,22 @@ class Theme_Meta {
 				$output .= '<option value="' . esc_attr( $key ) . '">' . esc_attr( $value ) . '</option>';
 			}
 		}
-		$output .= '</select>';
-		$output .= '</div>';
-		$output .= '<div class="clearfixit" style="padding: 5px 0; clear:both;"></div>';
-		$output .= '</div>';
-		$output .= '<div class="kadence_classic_meta_boxes" style="padding: 10px 0 0;">';
-		$output .= '<div style="padding-bottom:10px;">';
-		$output .= '<label for="_kad_post_content_style" style="font-weight: 600;">' . esc_html__( 'Content Style', 'kadence' ) . '</label>';
-		$output .= '</div>';
-		$output .= '<div>';
-		$content_option_values = array(
+		$output               .= '</select>';
+		$output               .= '</div>';
+		$output               .= '<div class="clearfixit" style="padding: 5px 0; clear:both;"></div>';
+		$output               .= '</div>';
+		$output               .= '<div class="kadence_classic_meta_boxes" style="padding: 10px 0 0;">';
+		$output               .= '<div style="padding-bottom:10px;">';
+		$output               .= '<label for="_kad_post_content_style" style="font-weight: 600;">' . esc_html__( 'Content Style', 'kadence' ) . '</label>';
+		$output               .= '</div>';
+		$output               .= '<div>';
+		$content_option_values = [
 			'default' => __( 'Default', 'kadence' ),
 			'boxed'   => __( 'Boxed', 'kadence' ),
 			'unboxed' => __( 'Unboxed', 'kadence' ),
-		);
-		$content_select_value = get_post_meta( $post->ID, '_kad_post_content_style', true );
-		$output .= '<select style="width:100%; box-sizing: border-box;" name="_kad_post_content_style">';
+		];
+		$content_select_value  = get_post_meta( $post->ID, '_kad_post_content_style', true );
+		$output               .= '<select style="width:100%; box-sizing: border-box;" name="_kad_post_content_style">';
 		foreach ( $content_option_values as $key => $value ) {
 			if ( $key == $content_select_value ) {
 				$output .= '<option value="' . esc_attr( $key ) . '" selected>' . esc_attr( $value ) . '</option>';
@@ -265,20 +250,20 @@ class Theme_Meta {
 		$output .= '<div class="clearfixit" style="padding: 5px 0; clear:both;"></div>';
 		$output .= '</div>';
 
-		$output .= '<div class="kadence_classic_meta_boxes" style="padding: 10px 0 0;">';
-		$output .= '<div style="padding-bottom:10px;">';
-		$output .= '<label for="_kad_post_vertical_padding" style="font-weight: 600;">' . esc_html__( 'Content Vertical Padding', 'kadence' ) . '</label>';
-		$output .= '</div>';
-		$output .= '<div>';
-		$padding_option_values = array(
+		$output               .= '<div class="kadence_classic_meta_boxes" style="padding: 10px 0 0;">';
+		$output               .= '<div style="padding-bottom:10px;">';
+		$output               .= '<label for="_kad_post_vertical_padding" style="font-weight: 600;">' . esc_html__( 'Content Vertical Padding', 'kadence' ) . '</label>';
+		$output               .= '</div>';
+		$output               .= '<div>';
+		$padding_option_values = [
 			'default' => __( 'Default', 'kadence' ),
 			'show'    => __( 'Enable', 'kadence' ),
 			'hide'    => __( 'Disable', 'kadence' ),
 			'top'     => __( 'Top Only', 'kadence' ),
 			'bottom'  => __( 'Bottom Only', 'kadence' ),
-		);
-		$padding_select_value = get_post_meta( $post->ID, '_kad_post_vertical_padding', true );
-		$output .= '<select style="width:100%; box-sizing: border-box;" name="_kad_post_vertical_padding">';
+		];
+		$padding_select_value  = get_post_meta( $post->ID, '_kad_post_vertical_padding', true );
+		$output               .= '<select style="width:100%; box-sizing: border-box;" name="_kad_post_vertical_padding">';
 		foreach ( $padding_option_values as $key => $value ) {
 			if ( $key == $padding_select_value ) {
 				$output .= '<option value="' . esc_attr( $key ) . '" selected>' . esc_attr( $value ) . '</option>';
@@ -303,25 +288,25 @@ class Theme_Meta {
 	public function render_metabox( $post ) {
 		// Add nonce for security and authentication.
 		wp_nonce_field( 'kadence_theme_classic_meta_nonce_action', 'kadence_theme_classic_meta_nonce' );
-		$title_position = 'normal';
+		$title_position        = 'normal';
 		$option_title_position = kadence()->option( get_post_type() . '_title_layout' );
 		if ( 'above' === $option_title_position || 'normal' === $option_title_position ) {
 			$title_position = $option_title_position;
 		}
 		$output = '<div class="kadence_classic_meta_boxes">';
 
-		$output .= '<div class="kadence_classic_meta_boxes" style="padding: 10px 0 0;">';
-		$output .= '<div style="padding-bottom:10px;">';
-		$output .= '<label for="_kad_post_transparent" style="font-weight: 600;">' . esc_html__( 'Transparent Header', 'kadence' ) . '</label>';
-		$output .= '</div>';
-		$output .= '<div>';
-		$trans_option_values = array(
+		$output             .= '<div class="kadence_classic_meta_boxes" style="padding: 10px 0 0;">';
+		$output             .= '<div style="padding-bottom:10px;">';
+		$output             .= '<label for="_kad_post_transparent" style="font-weight: 600;">' . esc_html__( 'Transparent Header', 'kadence' ) . '</label>';
+		$output             .= '</div>';
+		$output             .= '<div>';
+		$trans_option_values = [
 			'default' => __( 'Default', 'kadence' ),
 			'enable'  => __( 'Enable', 'kadence' ),
 			'disable' => __( 'Disable', 'kadence' ),
-		);
-		$trans_select_value = get_post_meta( $post->ID, '_kad_post_transparent', true );
-		$output .= '<select style="width:100%; box-sizing: border-box;" name="_kad_post_transparent">';
+		];
+		$trans_select_value  = get_post_meta( $post->ID, '_kad_post_transparent', true );
+		$output             .= '<select style="width:100%; box-sizing: border-box;" name="_kad_post_transparent">';
 		foreach ( $trans_option_values as $key => $value ) {
 			if ( $key == $trans_select_value ) {
 				$output .= '<option value="' . esc_attr( $key ) . '" selected>' . esc_attr( $value ) . '</option>';
@@ -329,22 +314,22 @@ class Theme_Meta {
 				$output .= '<option value="' . esc_attr( $key ) . '">' . esc_attr( $value ) . '</option>';
 			}
 		}
-		$output .= '</select>';
-		$output .= '</div>';
-		$output .= '<div class="clearfixit" style="padding: 5px 0; clear:both;"></div>';
-		$output .= '</div>';
-		$output .= '<div class="kadence_classic_meta_boxes" style="padding: 10px 0 0;">';
-		$output .= '<div style="padding-bottom:10px;">';
-		$output .= '<label for="_kad_post_title" style="font-weight: 600;">' . esc_html__( 'Display Title', 'kadence' ) . '</label>';
-		$output .= '</div>';
-		$output .= '<div>';
-		$option_values = array(
+		$output       .= '</select>';
+		$output       .= '</div>';
+		$output       .= '<div class="clearfixit" style="padding: 5px 0; clear:both;"></div>';
+		$output       .= '</div>';
+		$output       .= '<div class="kadence_classic_meta_boxes" style="padding: 10px 0 0;">';
+		$output       .= '<div style="padding-bottom:10px;">';
+		$output       .= '<label for="_kad_post_title" style="font-weight: 600;">' . esc_html__( 'Display Title', 'kadence' ) . '</label>';
+		$output       .= '</div>';
+		$output       .= '<div>';
+		$option_values = [
 			'default'       => __( 'Default', 'kadence' ),
 			$title_position => __( 'Enable', 'kadence' ),
 			'hide'          => __( 'Disable', 'kadence' ),
-		);
-		$select_value = get_post_meta( $post->ID, '_kad_post_title', true );
-		$output .= '<select style="width:100%; box-sizing: border-box;" name="_kad_post_title">';
+		];
+		$select_value  = get_post_meta( $post->ID, '_kad_post_title', true );
+		$output       .= '<select style="width:100%; box-sizing: border-box;" name="_kad_post_title">';
 		foreach ( $option_values as $key => $value ) {
 			if ( $key == $select_value ) {
 				$output .= '<option value="' . esc_attr( $key ) . '" selected>' . esc_attr( $value ) . '</option>';
@@ -357,21 +342,21 @@ class Theme_Meta {
 		$output .= '<div class="clearfixit" style="padding: 5px 0; clear:both;"></div>';
 		$output .= '</div>';
 
-		$output .= '<div class="kadence_classic_meta_boxes" style="padding: 10px 0 0;">';
-		$output .= '<div style="padding-bottom:10px;">';
-		$output .= '<label for="_kad_post_layout" style="font-weight: 600;">' . esc_html__( 'Layout', 'kadence' ) . '</label>';
-		$output .= '</div>';
-		$output .= '<div>';
-		$layout_option_values = array(
+		$output              .= '<div class="kadence_classic_meta_boxes" style="padding: 10px 0 0;">';
+		$output              .= '<div style="padding-bottom:10px;">';
+		$output              .= '<label for="_kad_post_layout" style="font-weight: 600;">' . esc_html__( 'Layout', 'kadence' ) . '</label>';
+		$output              .= '</div>';
+		$output              .= '<div>';
+		$layout_option_values = [
 			'default'   => __( 'Default', 'kadence' ),
 			'normal'    => __( 'Normal', 'kadence' ),
 			'narrow'    => __( 'Narrow', 'kadence' ),
 			'fullwidth' => __( 'Fullwidth', 'kadence' ),
 			'left'      => __( 'Sidebar Left', 'kadence' ),
 			'right'     => __( 'Sidebar Right', 'kadence' ),
-		);
-		$select_value = get_post_meta( $post->ID, '_kad_post_layout', true );
-		$output .= '<select style="width:100%; box-sizing: border-box;" name="_kad_post_layout">';
+		];
+		$select_value         = get_post_meta( $post->ID, '_kad_post_layout', true );
+		$output              .= '<select style="width:100%; box-sizing: border-box;" name="_kad_post_layout">';
 		foreach ( $layout_option_values as $key => $value ) {
 			if ( $key == $select_value ) {
 				$output .= '<option value="' . esc_attr( $key ) . '" selected>' . esc_attr( $value ) . '</option>';
@@ -384,18 +369,18 @@ class Theme_Meta {
 		$output .= '<div class="clearfixit" style="padding: 5px 0; clear:both;"></div>';
 		$output .= '</div>';
 
-		$output .= '<div class="kadence_classic_meta_boxes" style="padding: 10px 0 0;">';
-		$output .= '<div style="padding-bottom:10px;">';
-		$output .= '<label for="_kad_post_content_style" style="font-weight: 600;">' . esc_html__( 'Content Style', 'kadence' ) . '</label>';
-		$output .= '</div>';
-		$output .= '<div>';
-		$content_option_values = array(
+		$output               .= '<div class="kadence_classic_meta_boxes" style="padding: 10px 0 0;">';
+		$output               .= '<div style="padding-bottom:10px;">';
+		$output               .= '<label for="_kad_post_content_style" style="font-weight: 600;">' . esc_html__( 'Content Style', 'kadence' ) . '</label>';
+		$output               .= '</div>';
+		$output               .= '<div>';
+		$content_option_values = [
 			'default' => __( 'Default', 'kadence' ),
 			'boxed'   => __( 'Boxed', 'kadence' ),
 			'unboxed' => __( 'Unboxed', 'kadence' ),
-		);
-		$content_select_value = get_post_meta( $post->ID, '_kad_post_content_style', true );
-		$output .= '<select style="width:100%; box-sizing: border-box;" name="_kad_post_content_style">';
+		];
+		$content_select_value  = get_post_meta( $post->ID, '_kad_post_content_style', true );
+		$output               .= '<select style="width:100%; box-sizing: border-box;" name="_kad_post_content_style">';
 		foreach ( $content_option_values as $key => $value ) {
 			if ( $key == $content_select_value ) {
 				$output .= '<option value="' . esc_attr( $key ) . '" selected>' . esc_attr( $value ) . '</option>';
@@ -408,20 +393,20 @@ class Theme_Meta {
 		$output .= '<div class="clearfixit" style="padding: 5px 0; clear:both;"></div>';
 		$output .= '</div>';
 
-		$output .= '<div class="kadence_classic_meta_boxes" style="padding: 10px 0 0;">';
-		$output .= '<div style="padding-bottom:10px;">';
-		$output .= '<label for="_kad_post_vertical_padding" style="font-weight: 600;">' . esc_html__( 'Content Vertical Padding', 'kadence' ) . '</label>';
-		$output .= '</div>';
-		$output .= '<div>';
-		$padding_option_values = array(
+		$output               .= '<div class="kadence_classic_meta_boxes" style="padding: 10px 0 0;">';
+		$output               .= '<div style="padding-bottom:10px;">';
+		$output               .= '<label for="_kad_post_vertical_padding" style="font-weight: 600;">' . esc_html__( 'Content Vertical Padding', 'kadence' ) . '</label>';
+		$output               .= '</div>';
+		$output               .= '<div>';
+		$padding_option_values = [
 			'default' => __( 'Default', 'kadence' ),
 			'show'    => __( 'Enable', 'kadence' ),
 			'hide'    => __( 'Disable', 'kadence' ),
 			'top'     => __( 'Top Only', 'kadence' ),
 			'bottom'  => __( 'Bottom Only', 'kadence' ),
-		);
-		$padding_select_value = get_post_meta( $post->ID, '_kad_post_vertical_padding', true );
-		$output .= '<select style="width:100%; box-sizing: border-box;" name="_kad_post_vertical_padding">';
+		];
+		$padding_select_value  = get_post_meta( $post->ID, '_kad_post_vertical_padding', true );
+		$output               .= '<select style="width:100%; box-sizing: border-box;" name="_kad_post_vertical_padding">';
 		foreach ( $padding_option_values as $key => $value ) {
 			if ( $key == $padding_select_value ) {
 				$output .= '<option value="' . esc_attr( $key ) . '" selected>' . esc_attr( $value ) . '</option>';
@@ -457,112 +442,112 @@ class Theme_Meta {
 		register_post_meta(
 			'', // Pass an empty string to register the meta key across all existing post types.
 			'_kad_post_transparent',
-			array(
+			[
 				'show_in_rest'  => true,
 				'single'        => true,
 				'type'          => 'string',
 				'auth_callback' => '__return_true',
-			)
+			]
 		);
 		register_post_meta(
 			'', // Pass an empty string to register the meta key across all existing post types.
 			'_kad_post_title',
-			array(
+			[
 				'show_in_rest'  => true,
 				'single'        => true,
 				'type'          => 'string',
 				'auth_callback' => '__return_true',
-			)
+			]
 		);
 		register_post_meta(
 			'', // Pass an empty string to register the meta key across all existing post types.
 			'_kad_post_layout',
-			array(
+			[
 				'show_in_rest'  => true,
 				'single'        => true,
 				'type'          => 'string',
 				'auth_callback' => '__return_true',
-			)
+			]
 		);
 		register_post_meta(
 			'', // Pass an empty string to register the meta key across all existing post types.
 			'_kad_post_sidebar_id',
-			array(
+			[
 				'show_in_rest'  => true,
 				'single'        => true,
 				'type'          => 'string',
 				'auth_callback' => '__return_true',
-			)
+			]
 		);
 		register_post_meta(
 			'', // Pass an empty string to register the meta key across all existing post types.
 			'_kad_post_content_style',
-			array(
+			[
 				'show_in_rest'  => true,
 				'single'        => true,
 				'type'          => 'string',
 				'auth_callback' => '__return_true',
-			)
+			]
 		);
 		register_post_meta(
 			'', // Pass an empty string to register the meta key across all existing post types.
 			'_kad_post_vertical_padding',
-			array(
+			[
 				'show_in_rest'  => true,
 				'single'        => true,
 				'type'          => 'string',
 				'auth_callback' => '__return_true',
-			)
+			]
 		);
 		register_post_meta(
 			'', // Pass an empty string to register the meta key across all existing post types.
 			'_kad_post_feature',
-			array(
+			[
 				'show_in_rest'  => true,
 				'single'        => true,
 				'type'          => 'string',
 				'auth_callback' => '__return_true',
-			)
+			]
 		);
 		register_post_meta(
 			'', // Pass an empty string to register the meta key across all existing post types.
 			'_kad_post_feature_position',
-			array(
+			[
 				'show_in_rest'  => true,
 				'single'        => true,
 				'type'          => 'string',
 				'auth_callback' => '__return_true',
-			)
+			]
 		);
 		register_post_meta(
 			'', // Pass an empty string to register the meta key across all existing post types.
 			'_kad_post_header',
-			array(
+			[
 				'show_in_rest'  => true,
 				'single'        => true,
 				'type'          => 'boolean',
 				'auth_callback' => '__return_true',
-			)
+			]
 		);
 		register_post_meta(
 			'', // Pass an empty string to register the meta key across all existing post types.
 			'_kad_post_footer',
-			array(
+			[
 				'show_in_rest'  => true,
 				'single'        => true,
 				'type'          => 'boolean',
 				'auth_callback' => '__return_true',
-			)
+			]
 		);
 		register_post_meta(
 			'', // Pass an empty string to register the meta key across all existing post types.
 			'_kad_post_classname',
-			array(
+			[
 				'show_in_rest'  => true,
 				'single'        => true,
 				'type'          => 'string',
 				'auth_callback' => '__return_true',
-			)
+			]
 		);
 	}
 	/**
@@ -576,14 +561,14 @@ class Theme_Meta {
 		if ( is_customize_preview() ) {
 			return;
 		}
-		$post_type = get_post_type();
+		$post_type        = get_post_type();
 		$post_type_object = get_post_type_object( get_post_type() );
 		if ( is_object( $post_type_object ) ) {
 			$post_type_name = $post_type_object->labels->singular_name;
 		} else {
 			$post_type_name = $post_type;
 		}
-		$ignore_type       = kadence()->get_public_post_types_to_ignore();
+		$ignore_type = kadence()->get_public_post_types_to_ignore();
 		if ( in_array( $post_type, $ignore_type, true ) ) {
 			return;
 		}
@@ -645,7 +630,7 @@ class Theme_Meta {
 		wp_localize_script(
 			'kadence-meta',
 			'kadenceMetaParams',
-			array(
+			[
 				'post_type'        => $post_type,
 				'post_type_name'   => $post_type_name,
 				'layout'           => $layout,
@@ -658,17 +643,20 @@ class Theme_Meta {
 				'feature'          => $feature,
 				'feature_position' => $feature_position,
 				'sidebars'         => $this->get_sidebar_options(),
-			)
+			]
 		);
 	}
 	/**
 	 * Get all Sidebar Options
 	 */
 	public function get_sidebar_options() {
-		$sidebars = array(
-			array( 'value' => 'default', 'label' => __( 'Default', 'kadence' ) )
-		);
-		$nonsidebars = array(
+		$sidebars    = [
+			[
+				'value' => 'default',
+				'label' => __( 'Default', 'kadence' ),
+			],
+		];
+		$nonsidebars = [
 			'header1',
 			'header2',
 			'footer1',
@@ -677,10 +665,13 @@ class Theme_Meta {
 			'footer4',
 			'footer5',
 			'footer6',
-		);
+		];
 		foreach ( $GLOBALS['wp_registered_sidebars'] as $sidebar ) {
 			if ( ! in_array( $sidebar['id'], $nonsidebars, true ) ) {
-				$sidebars[] = array( 'value' => $sidebar['id'], 'label' => $sidebar['name'] );
+				$sidebars[] = [
+					'value' => $sidebar['id'],
+					'label' => $sidebar['name'],
+				];
 			}
 		}
 		return $sidebars;
@@ -696,10 +687,10 @@ class Theme_Meta {
 
 		return file_exists( $asset_path )
 			? include $asset_path
-			: array(
-				'dependencies' => array( 'wp-plugins', 'wp-edit-post', 'wp-element' ),
+			: [
+				'dependencies' => [ 'wp-plugins', 'wp-edit-post', 'wp-element' ],
 				'version'      => KADENCE_VERSION,
-			);
+			];
 	}
 	/**
 	 * Register Script for Meta options

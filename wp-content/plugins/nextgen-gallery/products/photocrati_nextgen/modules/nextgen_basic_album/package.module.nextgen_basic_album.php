@@ -12,7 +12,7 @@ class A_NextGen_Album_Breadcrumbs extends Mixin
      *
      * @var array
      */
-    public $breadcrumb_cache = array();
+    public $breadcrumb_cache = [];
     public function are_breadcrumbs_enabled($display_settings)
     {
         $retval = false;
@@ -226,7 +226,7 @@ class A_NextGen_Album_Child_Entities extends Mixin
      *
      * @var array
      */
-    public static $_entities = array();
+    public static $_entities = [];
     /**
      * The album controller will invoke this filter when its _render_album() method is called
      */

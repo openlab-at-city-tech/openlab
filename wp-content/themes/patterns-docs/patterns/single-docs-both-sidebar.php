@@ -29,7 +29,7 @@
 
 		<!-- wp:column {"width":"50%"} -->
 		<div class="wp-block-column" style="flex-basis:50%">
-			
+
 			<!-- wp:pattern {"slug":"patterns-docs/hidden-single-docs-content"} /-->
 		</div>
 		<!-- /wp:column -->

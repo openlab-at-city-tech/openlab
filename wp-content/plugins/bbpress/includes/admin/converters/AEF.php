@@ -10,7 +10,7 @@
 /**
  * Implementation of AEF Forum converter.
  *
- * @since 2.5.0 bbPress (r5139)
+ * @since 2.5.0 bbPress (r5140)
  *
  * @link Codex Docs https://codex.bbpress.org/import-forums/aef
  */
@@ -132,22 +132,22 @@ class AEF extends BBP_Converter_Base {
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date_gmt',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified_gmt',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 
 		/** Topic Section *****************************************************/
@@ -450,7 +450,7 @@ class AEF extends BBP_Converter_Base {
 
 		// User password verify class (Stored in usermeta for verifying password)
 		$this->field_map[] = array(
-			'to_type'      => 'users',
+			'to_type'      => 'user',
 			'to_fieldname' => '_bbp_class',
 			'default'      => 'AEF'
 		);
@@ -560,7 +560,6 @@ class AEF extends BBP_Converter_Base {
 			'to_type'        => 'user',
 			'to_fieldname'   => '_bbp_aef_user_private_text'
 		);
-
 	}
 
 	/**
@@ -577,7 +576,11 @@ class AEF extends BBP_Converter_Base {
 	 * as one value. Array values are auto sanitized by WordPress.
 	 */
 	public function callback_savepass( $field, $row ) {
-		$pass_array = array( 'hash' => $field, 'salt' => $row['salt'] );
+		$pass_array = array(
+			'hash' => $field,
+			'salt' => isset( $row['salt'] ) ? wp_slash( (string) $row['salt'] ) : ''
+		);
+
 		return $pass_array;
 	}
 
@@ -586,8 +589,30 @@ class AEF extends BBP_Converter_Base {
 	 * to a pass the user has typed in.
 	 */
 	public function authenticate_pass( $password, $serialized_pass ) {
-		$pass_array = unserialize( $serialized_pass );
-		return ( $pass_array['hash'] == md5( md5( $password ). $pass_array['salt'] ) );
+
+		// Unserialize the password, with safeguards
+		$pass_array = $this->unserialize_pass( $serialized_pass );
+
+		// Bail if missing or invalid values
+		if ( ! is_string( $password ) || ! is_array( $pass_array ) || ! isset( $pass_array['hash'], $pass_array['salt'] ) || ! is_string( $pass_array['hash'] ) || ! is_string( $pass_array['salt'] ) ) {
+			return false;
+		}
+
+		// AEF encodes and escapes the submitted password before hashing it
+		foreach ( array( 'UTF-8', 'ISO-8859-1' ) as $charset ) {
+			$legacy_password = addslashes( htmlentities( $password, ENT_QUOTES, $charset ) );
+
+			// Do not let invalid input collapse to an empty password
+			if ( ( '' === $legacy_password ) && ( '' !== $password ) ) {
+				continue;
+			}
+
+			if ( hash_equals( $pass_array['hash'], md5( $pass_array['salt'] . $legacy_password ) ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

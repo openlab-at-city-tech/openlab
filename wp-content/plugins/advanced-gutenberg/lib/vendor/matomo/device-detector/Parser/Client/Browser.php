@@ -75,6 +75,7 @@ class Browser extends AbstractClientParser
         '1M' => '1DM+ Browser',
         '2B' => '2345 Browser',
         '3B' => '360 Secure Browser',
+        '37' => '360 Speed Browser',
         '36' => '360 Phone Browser',
         '7B' => '7654 Browser',
         'AA' => 'Avant Browser',
@@ -194,6 +195,7 @@ class Browser extends AbstractClientParser
         'C7' => 'CM Mini',
         'CF' => 'Chrome Frame',
         'HC' => 'Headless Chrome',
+        'H0' => 'Headless Edge',
         'CH' => 'Chrome',
         'CI' => 'Chrome Mobile iOS',
         'CK' => 'Conkeror',
@@ -335,6 +337,7 @@ class Browser extends AbstractClientParser
         'I6' => 'iDesktop PC Browser',
         'IC' => 'iCab',
         'I2' => 'iCab Mobile',
+        'I0' => 'iTop Private Browser',
         '0I' => 'Ifbrowser',
         '4I' => 'iNet Browser',
         'I1' => 'Iridium',
@@ -357,6 +360,7 @@ class Browser extends AbstractClientParser
         'IG' => 'Involta Go',
         'IM' => 'IE Mobile',
         'IR' => 'Iron',
+        'IL' => 'Island',
         'JB' => 'Japan Browser',
         'JS' => 'Jasmine',
         'JA' => 'JavaFX',
@@ -393,6 +397,7 @@ class Browser extends AbstractClientParser
         'LF' => 'LieBaoFast',
         'LG' => 'LG Browser',
         'LH' => 'Light',
+        'LP' => 'Lightpanda',
         'L4' => 'Lightning Browser Plus',
         'L1' => 'Lilo',
         'LI' => 'Links',
@@ -435,8 +440,10 @@ class Browser extends AbstractClientParser
         'MA' => 'Maelstrom',
         '3M' => 'Mises',
         'MM' => 'Mmx Browser',
+        '4M' => 'Mullvad Browser',
         'NM' => 'MxNitro',
         'MY' => 'Mypal',
+        'M0' => 'MySudo',
         'MR' => 'Monument Browser',
         'MW' => 'MAUI WAP Browser',
         'N7' => 'Naenara Browser',
@@ -547,6 +554,7 @@ class Browser extends AbstractClientParser
         'P4' => 'Privacy Explorer Fast Safe',
         'X5' => 'Cloak Private Browser',
         'P3' => 'Private Internet Browser',
+        'PG' => 'PrivateBrowsing',
         'P5' => 'Proxy Browser',
         '7P' => 'Proxyium',
         '6P' => 'Proxynet',
@@ -562,6 +570,7 @@ class Browser extends AbstractClientParser
         'QI' => 'Qiyu',
         'QJ' => 'QJY TV Browser',
         'Q3' => 'Qmamu',
+        'Q8' => 'Quiche Browser',
         'Q4' => 'Quick Search TV',
         'Q2' => 'QQ Browser Lite',
         'Q1' => 'QQ Browser Mini',
@@ -598,6 +607,7 @@ class Browser extends AbstractClientParser
         'SF' => 'Safari',
         'PV' => 'Safari Technology Preview',
         'S5' => 'Safe Exam Browser',
+        'D5' => 'SafeBrowser',
         'SW' => 'SalamWeb',
         'VN' => 'Savannah Browser',
         'SD' => 'SavySoda',
@@ -643,7 +653,9 @@ class Browser extends AbstractClientParser
         'S3' => 'surf',
         '4S' => 'Surf Browser',
         'RY' => 'Surfy Browser',
+        '38' => 'Stadium',
         'SG' => 'Stargon',
+        'T6' => 'Startpage',
         'S0' => 'START Internet Browser',
         'YS' => 'Stay Browser',
         '5A' => 'Stealth Browser',
@@ -662,6 +674,7 @@ class Browser extends AbstractClientParser
         'T2' => 'tararia',
         'TH' => 'Thor',
         '1T' => 'Tor Browser',
+        'T7' => 'Teak Browser',
         'TF' => 'TenFourFox',
         'TB' => 'Tenta Browser',
         'TE' => 'Tesla Browser',
@@ -701,6 +714,7 @@ class Browser extends AbstractClientParser
         'N0' => 'Nova Video Downloader Pro',
         'VS' => 'Viasat Browser',
         'VI' => 'Vivaldi',
+        'V7' => 'Vivaldi Mobile iOS',
         'VV' => 'vivo Browser',
         'V2' => 'Vivid Browser Mini',
         'VB' => 'Vision Mobile Browser',
@@ -810,7 +824,8 @@ class Browser extends AbstractClientParser
             'W2', 'ZB', 'HN', 'Q6', 'Q7', 'G0', '00', 'R6', 'D8',
             'PQ', 'LM', 'T5', '2N', 'SJ', 'X6', 'SM', 'AY', 'BQ',
             'BC', 'NQ', 'VQ', '9C', 'KA', 'YS', 'D4', 'PZ', '0I',
-            '3F', 'Z1', 'XC', 'ZC',
+            '3F', 'Z1', 'XC', 'ZC', 'V7', 'H0', 'IL', 'PG', 'I0',
+            'T6', '37', 'FI',
         ],
         'Firefox'            => [
             'FF', 'BI', 'BF', 'BH', 'BN', 'C0', 'CU', 'EI', 'F1',
@@ -818,7 +833,7 @@ class Browser extends AbstractClientParser
             'IW', 'LH', 'LY', 'MB', 'MN', 'MO', 'MY', 'OA', 'OS',
             'PI', 'PX', 'QA', 'S5', 'SX', 'TF', 'TO', 'WF', 'ZV',
             'FP', 'AD', '2I', 'P9', 'KJ', 'WY', 'VK', 'W5',
-            '7C', 'N7', 'W7',
+            '7C', 'N7', 'W7', '4M',
         ],
         'Internet Explorer'  => ['IE', 'CZ', 'BZ', 'IM', 'PS', '3A', '4A', 'RN', '2E'],
         'Konqueror'          => ['KO'],
@@ -864,6 +879,7 @@ class Browser extends AbstractClientParser
         '2M', 'K7', '1N', '8A', 'H7', 'X3', 'X4', '5O', '6I',
         '7I', 'X5', '3P', '2E', 'T5', '2N', 'SJ', 'X6', 'SM',
         'AY', 'BQ', 'BC', 'NQ', 'VQ', 'KA', 'YS', 'D4', 'PZ',
+        'V7', 'D5', 'M0', 'Q8', 'T6', '37', '38', 'FI',
     ];
 
     /**
@@ -881,6 +897,7 @@ class Browser extends AbstractClientParser
         'Norton Private Browser'     => ['Norton Secure Browser'],
         'Opera GX'                   => ['Opera GX Android'],
         'Opera Mini'                 => ['Opera Mini Android'],
+        'Puffin Cloud Browser'       => ['Puffin'],
         'Vewd Browser'               => ['Vewd Core'],
         'Yandex Browser'             => ['YaSearchBrowser'],
     ];
@@ -1021,8 +1038,8 @@ class Browser extends AbstractClientParser
             $name          = $browserFromClientHints['name'];
             $version       = $browserFromClientHints['version'];
             $short         = $browserFromClientHints['short_name'];
-            $engine        = '';
-            $engineVersion = '';
+            $engine        = $browserFromClientHints['engine'];
+            $engineVersion = $browserFromClientHints['engine_version'];
 
             // If the version reported from the client hints is YYYY or YYYY.MM (e.g., 2022 or 2022.04),
             // then it is the Iridium browser
@@ -1052,14 +1069,26 @@ class Browser extends AbstractClientParser
                 $engineVersion = $browserFromUserAgent['engine_version'] ?? '';
             }
 
+            if ('Blink' === $engine && 'Iridium' !== $name
+                && $browserFromUserAgent['engine'] === $engine
+                && \version_compare($browserFromUserAgent['engine_version'], $engineVersion, '>')
+            ) {
+                $engineVersion = $browserFromUserAgent['engine_version'];
+            }
+
             // If client hints report Chromium, but user agent detects a Chromium based browser, we favor this instead
             if (('Chromium' === $name || 'Chrome Webview' === $name)
                 && !empty($browserFromUserAgent['name'])
                 && !\in_array($browserFromUserAgent['short_name'], ['CR', 'CV', 'AN', 'CM'])
             ) {
-                $name    = $browserFromUserAgent['name'];
-                $short   = $browserFromUserAgent['short_name'];
-                $version = $browserFromUserAgent['version'];
+                $name  = $browserFromUserAgent['name'];
+                $short = $browserFromUserAgent['short_name'];
+
+                if ((int) $browserFromUserAgent['version'] !== (int) $version
+                    || \version_compare($version, $browserFromUserAgent['version'], '<=')
+                ) {
+                    $version = $browserFromUserAgent['version'];
+                }
             }
 
             // Fix mobile browser names e.g. Chrome => Chrome Mobile
@@ -1098,6 +1127,16 @@ class Browser extends AbstractClientParser
                 && \version_compare($engineVersion, $browserFromClientHints['version'], '<')
             ) {
                 $engineVersion = $browserFromClientHints['version'];
+            }
+
+            if ('Blink' === $engine && 'Iridium' !== $name
+                && \version_compare(
+                    $browserFromUserAgent['engine_version'],
+                    $browserFromClientHints['engine_version'],
+                    '<'
+                )
+            ) {
+                $engineVersion = $browserFromClientHints['engine_version'];
             }
         } else {
             $name          = $browserFromUserAgent['name'];
@@ -1180,10 +1219,22 @@ class Browser extends AbstractClientParser
      */
     protected function parseBrowserFromClientHints(): array
     {
-        $name = $version = $short = '';
+        $name = $version = $short = $engine = $engineVersion = '';
 
         if ($this->clientHints instanceof ClientHints && $this->clientHints->getBrandList()) {
-            foreach ($this->clientHints->getBrandList() as $brand => $brandVersion) {
+            $brandList    = $this->clientHints->getBrandList();
+            $engineBrands = ['Android WebView', 'Chromium'];
+
+            foreach ($engineBrands as $engineBrand) {
+                if (\array_key_exists($engineBrand, $brandList)) {
+                    $engine        = 'Blink';
+                    $engineVersion = $brandList[$engineBrand];
+
+                    break;
+                }
+            }
+
+            foreach ($brandList as $brand => $brandVersion) {
                 $brand = $this->applyClientHintMapping($brand);
 
                 foreach (self::$availableBrowsers as $browserShort => $browserName) {
@@ -1191,6 +1242,10 @@ class Browser extends AbstractClientParser
                         || $this->fuzzyCompare($brand . ' Browser', $browserName)
                         || $this->fuzzyCompare($brand, $browserName . ' Browser')
                     ) {
+                        if ('Chrome' === $name && 'Chromium' === $browserName) {
+                            break;
+                        }
+
                         $name    = $browserName;
                         $short   = $browserShort;
                         $version = $brandVersion;
@@ -1199,8 +1254,8 @@ class Browser extends AbstractClientParser
                     }
                 }
 
-                // If we detected a brand, that is not Chromium, we will use it, otherwise we will look further
-                if (!\in_array($name, ['', 'Chromium', 'Microsoft Edge'], true)) {
+                // If we detected a brand, that is not in the array, we will use it, otherwise we will look further
+                if (!\in_array($name, ['', 'Chrome', 'Chromium', 'Microsoft Edge'], true)) {
                     break;
                 }
             }
@@ -1209,9 +1264,11 @@ class Browser extends AbstractClientParser
         }
 
         return [
-            'name'       => $name,
-            'short_name' => $short,
-            'version'    => $this->buildVersion($version, []),
+            'name'           => $name,
+            'short_name'     => $short,
+            'version'        => $this->buildVersion($version, []),
+            'engine'         => $engine,
+            'engine_version' => $engineVersion,
         ];
     }
 

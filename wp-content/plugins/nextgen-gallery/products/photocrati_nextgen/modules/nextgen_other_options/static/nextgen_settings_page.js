@@ -140,6 +140,21 @@ jQuery(function ($) {
 			data: form.serialize() + '&action=get_watermark_preview_url',
 			dataType: 'json',
 			success: function (data) {
+				// A refused request (expired nonce, missing capability, no image) has no
+				// thumbnail_url; keep the current preview and show why instead of
+				// pointing the image at an empty URL.
+				$(self).siblings('.ngg_watermark_preview_error').remove();
+				if (!data || !data.thumbnail_url) {
+					if (data && data.error) {
+						$('<span class="ngg_watermark_preview_error" role="alert"></span>')
+							.text(' ' + data.error)
+							.insertAfter(self);
+					}
+					$(self).prop('disabled', false).html(orig_html);
+					$('body').css('cursor', 'default');
+					return;
+				}
+
 				var img = self.prev();
 				var src = data.thumbnail_url;
 				queryPos = src.indexOf('?');
@@ -152,6 +167,10 @@ jQuery(function ($) {
 				$('body').css('cursor', 'default');
 			},
 			error: function (xob, err, code) {
+				$(self).siblings('.ngg_watermark_preview_error').remove();
+				$('<span class="ngg_watermark_preview_error" role="alert"></span>')
+					.text(' Could not refresh the preview. Reload the page and try again.')
+					.insertAfter(self);
 				$(self).prop('disabled', false).html(orig_html);
 				$('body').css('cursor', 'default');
 			}

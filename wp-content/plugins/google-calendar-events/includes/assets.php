@@ -185,11 +185,11 @@ class Assets
 						SIMPLE_CALENDAR_ASSETS . 'generated/vendor/imagesloaded.pkgd.min.js',
 						['simcal-qtip'],
 						SIMPLE_CALENDAR_VERSION,
-						true
+						true,
 					);
 				}
 			},
-			1000
+			1000,
 		);
 	}
 
@@ -453,7 +453,7 @@ class Assets
 									}
 								},
 								100,
-								2
+								2,
 							);
 							add_filter(
 								'simcal_front_end_styles',
@@ -465,7 +465,7 @@ class Assets
 									}
 								},
 								100,
-								2
+								2,
 							);
 						}
 					}
@@ -500,8 +500,10 @@ class Assets
 					$src = esc_url($v['src']);
 					$in_footer = isset($v['in_footer']) ? $v['in_footer'] : false;
 					$deps = isset($v['deps']) ? $v['deps'] : [];
+					// Allow add-ons to pass their own version so their asset URLs bust caches independently of core.
+					$ver = !empty($v['ver']) ? $v['ver'] : SIMPLE_CALENDAR_VERSION;
 
-					wp_enqueue_script($script, $src, $deps, SIMPLE_CALENDAR_VERSION, $in_footer);
+					wp_enqueue_script($script, $src, $deps, $ver, $in_footer);
 
 					if (!empty($v['localize']) && is_array($v['localize'])) {
 						foreach ($v['localize'] as $object => $l10n) {
@@ -533,8 +535,11 @@ class Assets
 
 					$src = esc_url($v['src']);
 					$media = isset($v['media']) ? $v['media'] : 'all';
+					$deps = isset($v['deps']) ? $v['deps'] : [];
+					// Allow add-ons to pass their own version so their asset URLs bust caches independently of core.
+					$ver = !empty($v['ver']) ? $v['ver'] : SIMPLE_CALENDAR_VERSION;
 
-					wp_enqueue_style($style, $src, [], SIMPLE_CALENDAR_VERSION, $media);
+					wp_enqueue_style($style, $src, $deps, $ver, $media);
 				} elseif (is_string($v) && !empty($v)) {
 					wp_enqueue_style($v);
 				}

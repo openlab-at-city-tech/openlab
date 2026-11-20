@@ -25,7 +25,7 @@
 /**
  * Runs on bbPress activation
  *
- * @since 2.0.0 bbPress (r2509)
+ * @since 2.0.0 bbPress (r2464)
  */
 function bbp_activation() {
 	do_action( 'bbp_activation' );
@@ -34,7 +34,7 @@ function bbp_activation() {
 /**
  * Runs on bbPress deactivation
  *
- * @since 2.0.0 bbPress (r2509)
+ * @since 2.0.0 bbPress (r2464)
  */
 function bbp_deactivation() {
 	do_action( 'bbp_deactivation' );
@@ -43,7 +43,7 @@ function bbp_deactivation() {
 /**
  * Runs when uninstalling bbPress
  *
- * @since 2.0.0 bbPress (r2509)
+ * @since 2.0.0 bbPress (r2599)
  */
 function bbp_uninstall() {
 	do_action( 'bbp_uninstall' );
@@ -99,7 +99,7 @@ function bbp_setup_globals() {
 /**
  * Register any objects before anything is initialized
  *
- * @since 2.2.0 bbPress (r4180)
+ * @since 2.2.0 bbPress (r4181)
  */
 function bbp_register() {
 	do_action( 'bbp_register' );
@@ -112,6 +112,28 @@ function bbp_register() {
  */
 function bbp_init() {
 	do_action( 'bbp_init' );
+}
+
+/**
+ * Initialize the bbPress REST API
+ *
+ * @since 2.6.17 bbPress (r7482)
+ */
+function bbp_rest_api_init() {
+	do_action( 'bbp_rest_api_init' );
+}
+
+/**
+ * Pass an XML-RPC request through bbPress.
+ *
+ * @since 2.6.17 bbPress (r7486)
+ *
+ * @param string            $method XML-RPC method name.
+ * @param array             $args   XML-RPC method arguments.
+ * @param wp_xmlrpc_server  $server XML-RPC server instance.
+ */
+function bbp_xmlrpc_call( $method = '', $args = array(), $server = null ) {
+	do_action( 'bbp_xmlrpc_call', $method, $args, $server );
 }
 
 /**
@@ -128,7 +150,7 @@ function bbp_roles_init( $wp_roles ) {
 /**
  * Initialize widgets
  *
- * @since 2.0.0 bbPress (r3389)
+ * @since 2.0.0 bbPress (r3391)
  */
 function bbp_widgets_init() {
 	do_action( 'bbp_widgets_init' );
@@ -140,7 +162,7 @@ function bbp_widgets_init() {
  * @link https://bbpress.trac.wordpress.org/ticket/2309
  * @link https://core.trac.wordpress.org/ticket/24169
  *
- * @since 2.0.0 bbPress (r2695)
+ * @since 2.0.0 bbPress (r2697)
  */
 function bbp_setup_current_user() {
 	do_action( 'bbp_setup_current_user' );
@@ -149,7 +171,7 @@ function bbp_setup_current_user() {
 /**
  * Setup the user engagements strategy
  *
- * @since 2.6.0 bbPress (r6875)
+ * @since 2.6.0 bbPress (r6876)
  */
 function bbp_setup_engagements() {
 	do_action( 'bbp_setup_engagements' );
@@ -160,7 +182,7 @@ function bbp_setup_engagements() {
 /**
  * Load translations for current language
  *
- * @since 2.0.0 bbPress (r2599)
+ * @since 2.0.0 bbPress (r3344)
  */
 function bbp_load_textdomain() {
 	do_action( 'bbp_load_textdomain' );
@@ -169,7 +191,7 @@ function bbp_load_textdomain() {
 /**
  * Setup the post types
  *
- * @since 2.0.0 bbPress (r2464)
+ * @since 2.0.0 bbPress (r2599)
  */
 function bbp_register_post_types() {
 	do_action( 'bbp_register_post_types' );
@@ -187,7 +209,7 @@ function bbp_register_post_statuses() {
 /**
  * Register the built in bbPress taxonomies
  *
- * @since 2.0.0 bbPress (r2464)
+ * @since 2.0.0 bbPress (r2599)
  */
 function bbp_register_taxonomies() {
 	do_action( 'bbp_register_taxonomies' );
@@ -205,7 +227,7 @@ function bbp_register_views() {
 /**
  * Register the default bbPress shortcodes
  *
- * @since 2.2.0 bbPress (r4211)
+ * @since 2.0.0 bbPress (r3032)
  */
 function bbp_register_shortcodes() {
 	do_action( 'bbp_register_shortcodes' );
@@ -214,7 +236,7 @@ function bbp_register_shortcodes() {
 /**
  * Register the default bbPress meta-data
  *
- * @since 2.6.0 bbPress (r46300)
+ * @since 2.6.0 bbPress (r6302)
  */
 function bbp_register_meta() {
 	do_action( 'bbp_register_meta' );
@@ -223,7 +245,7 @@ function bbp_register_meta() {
 /**
  * Enqueue bbPress specific CSS and JS
  *
- * @since 2.0.0 bbPress (r3373)
+ * @since 2.0.0 bbPress (r3374)
  */
 function bbp_enqueue_scripts() {
 	do_action( 'bbp_enqueue_scripts' );
@@ -259,7 +281,7 @@ function bbp_add_permastructs() {
 /**
  * Add the bbPress-specific login forum action
  *
- * @since 2.0.0 bbPress (r2753)
+ * @since 2.1.0 bbPress (r4072)
  */
 function bbp_login_form_login() {
 	do_action( 'bbp_login_form_login' );
@@ -289,12 +311,33 @@ function bbp_transition_post_status( $new_status = '', $old_status = '', $post =
 	do_action( 'bbp_transition_post_status', $new_status, $old_status, $post );
 }
 
+/**
+ * Add the bbPress-specific post updated action.
+ *
+ * @since 2.6.17 bbPress (r7454)
+ *
+ * @param int     $post_id     Post ID.
+ * @param WP_Post $post_after  Post object following the update.
+ * @param WP_Post $post_before Post object before the update.
+ */
+function bbp_post_updated( $post_id = 0, $post_after = false, $post_before = false ) {
+	$post_types = bbp_get_post_types();
+
+	// Bail if neither version is a bbPress post type
+	if ( ! in_array( $post_after->post_type, $post_types, true ) && ! in_array( $post_before->post_type, $post_types, true ) ) {
+		return;
+	}
+
+	// Do the action
+	do_action( 'bbp_post_updated', $post_id, $post_after, $post_before );
+}
+
 /** User Actions **************************************************************/
 
 /**
  * The main action for hooking into when a user account is updated
  *
- * @since 2.2.0 bbPress (r4304)
+ * @since 2.2.0 bbPress (r4305)
  *
  * @param int $user_id ID of user being edited
  * @param array $old_user_data The old, unmodified user data
@@ -306,7 +349,7 @@ function bbp_profile_update( $user_id = 0, $old_user_data = array() ) {
 /**
  * The main action for hooking into a user being registered
  *
- * @since 2.2.0 bbPress (r4304)
+ * @since 2.2.0 bbPress (r4305)
  *
  * @param int $user_id ID of user being edited
  */
@@ -331,7 +374,7 @@ function bbp_ready() {
  * The main action used for redirecting bbPress theme actions that are not
  * permitted by the current_user
  *
- * @since 2.1.0 bbPress (r3605)
+ * @since 2.1.0 bbPress (r3607)
  */
 function bbp_template_redirect() {
 	do_action( 'bbp_template_redirect' );
@@ -342,7 +385,7 @@ function bbp_template_redirect() {
 /**
  * The main action used for executing code before the theme has been setup
  *
- * @since 2.1.0 bbPress (r3829)
+ * @since 2.1.0 bbPress (r3830)
  */
 function bbp_register_theme_packages() {
 	do_action( 'bbp_register_theme_packages' );
@@ -351,7 +394,7 @@ function bbp_register_theme_packages() {
 /**
  * The main action used for executing code before the theme has been setup
  *
- * @since 2.1.0 bbPress (r3732)
+ * @since 2.1.0 bbPress (r3754)
  */
 function bbp_setup_theme() {
 	do_action( 'bbp_setup_theme' );
@@ -360,7 +403,7 @@ function bbp_setup_theme() {
 /**
  * The main action used for executing code after the theme has been setup
  *
- * @since 2.1.0 bbPress (r3732)
+ * @since 2.1.0 bbPress (r3733)
  */
 function bbp_after_setup_theme() {
 	do_action( 'bbp_after_setup_theme' );
@@ -369,7 +412,7 @@ function bbp_after_setup_theme() {
 /**
  * The main action used for handling theme-side POST requests
  *
- * @since 2.3.0 bbPress (r4550)
+ * @since 2.3.0 bbPress (r4551)
  */
 function bbp_post_request() {
 
@@ -378,13 +421,8 @@ function bbp_post_request() {
 		return;
 	}
 
-	// Bail if no action, or if not a string (arrays not supported)
-	if ( empty( $_POST['action'] ) || ! is_string( $_POST['action'] ) ) {
-		return;
-	}
-
-	// Sanitize the POST action
-	$action = sanitize_key( $_POST['action'] );
+	// Get the POST action
+	$action = bbp_get_post_action();
 
 	// Bail if action was totally invalid
 	if ( empty( $action ) ) {
@@ -402,7 +440,7 @@ function bbp_post_request() {
 /**
  * The main action used for handling theme-side GET requests
  *
- * @since 2.3.0 bbPress (r4550)
+ * @since 2.3.0 bbPress (r4551)
  */
 function bbp_get_request() {
 
@@ -437,7 +475,7 @@ function bbp_get_request() {
 /**
  * Filter the plugin locale and domain.
  *
- * @since 2.2.0 bbPress (r4213)
+ * @since 2.2.0 bbPress (r4214)
  *
  * @param string $locale
  * @param string $domain
@@ -451,7 +489,7 @@ function bbp_plugin_locale( $locale = '', $domain = '' ) {
 /**
  * Piggy back filter for WordPress's 'request' filter
  *
- * @since 2.1.0 bbPress (r3758)
+ * @since 2.1.0 bbPress (r3759)
  *
  * @param array $query_vars
  * @return array
@@ -466,7 +504,7 @@ function bbp_request( $query_vars = array() ) {
  * The main filter used for theme compatibility and displaying custom bbPress
  * theme files.
  *
- * @since 2.0.0 bbPress (r3311)
+ * @since 2.0.0 bbPress (r3032)
  *
  * @param string $template
  * @return string Template file to use
@@ -526,7 +564,7 @@ function bbp_map_meta_caps( $caps = array(), $cap = '', $user_id = 0, $args = ar
 /**
  * Filter the arguments used by wp_mail for bbPress specific emails
  *
- * @since 2.6.0 bbPress (r6918)
+ * @since 2.6.0 bbPress (r6919)
  *
  * @param array $args A compacted array of wp_mail() arguments, including the "to" email,
  *                    subject, message, headers, and attachments values.
@@ -550,4 +588,144 @@ function bbp_mail( $args = array() ) {
 
 	// Filter & return
 	return (array) apply_filters( 'bbp_mail', $args );
+}
+
+/**
+ * Prevent old-slug redirects from exposing unreadable topics and replies.
+ *
+ * @since 2.6.21 bbPress (r8067)
+ *
+ * @param int $post_id Old-slug redirect post ID.
+ * @return int Redirect post ID, or zero when access is denied.
+ */
+function bbp_filter_old_slug_redirect_post_id( $post_id = 0 ) {
+	$post = get_post( $post_id );
+
+	if ( $post && ( bbp_is_topic( $post ) || bbp_is_reply( $post ) ) ) {
+		$topic_id       = bbp_is_reply( $post ) ? bbp_get_reply_topic_id( $post->ID ) : $post->ID;
+		$forum_id       = bbp_get_topic_forum_id( $topic_id );
+		$can_read_forum = bbp_is_forum_visibility_valid( $forum_id )
+			&& ! bbp_is_forum_restricted_for_user( $forum_id, bbp_get_current_user_id() );
+		$can_read_topic = ! empty( $topic_id )
+			&& bbp_is_topic( $topic_id )
+			&& ( bbp_is_topic_public( $topic_id ) || current_user_can( 'read_topic', $topic_id ) );
+		$can_read_reply = ! bbp_is_reply( $post )
+			|| bbp_is_reply_public( $post->ID )
+			|| current_user_can( 'read_reply', $post->ID );
+
+		if ( ! $can_read_forum || ! $can_read_topic || ! $can_read_reply ) {
+			$post_id = 0;
+		}
+	}
+
+	return $post_id;
+}
+
+/**
+ * Check whether bbPress metadata can be exposed in an oEmbed response.
+ *
+ * @since 2.6.19 bbPress (r7636)
+ *
+ * @param int $post_id bbPress post ID.
+ * @return bool Whether the post can be embedded for the current visitor.
+ */
+function bbp_user_can_embed_post( $post_id = 0 ) {
+	$post = get_post( $post_id );
+	if ( empty( $post ) || ! bbp_is_custom_post_type( $post ) || ! is_post_publicly_viewable( $post ) || bbp_is_password_protected( $post->ID ) ) {
+		return false;
+	}
+
+	if ( bbp_is_forum( $post->ID ) ) {
+		$forum_id = $post->ID;
+	} elseif ( bbp_is_topic( $post->ID ) ) {
+		$forum_id = bbp_get_topic_forum_id( $post->ID );
+	} else {
+		$topic_id = bbp_get_reply_topic_id( $post->ID );
+		if ( ! $topic_id || ! is_post_publicly_viewable( $topic_id ) ) {
+			return false;
+		}
+		$forum_id = bbp_get_reply_forum_id( $post->ID );
+	}
+
+	if ( ! $forum_id || ! bbp_is_forum_visibility_valid( $forum_id ) ) {
+		return false;
+	}
+
+	return ! bbp_is_forum_restricted_for_user( $forum_id, bbp_get_current_user_id() );
+}
+
+/**
+ * Prevent object-by-ID oEmbed requests from disclosing restricted posts.
+ *
+ * @since 2.6.19 bbPress (r7636)
+ *
+ * @param int $post_id Resolved post ID.
+ * @return int Resolved post ID, or zero when access is denied.
+ */
+function bbp_filter_oembed_request_post_id( $post_id = 0 ) {
+	$post = get_post( $post_id );
+
+	if ( $post && bbp_is_custom_post_type( $post ) && ! bbp_user_can_embed_post( $post_id ) ) {
+		return 0;
+	}
+
+	return $post_id;
+}
+
+/**
+ * Return the post ID WordPress uses for an ID-based canonical redirect.
+ *
+ * @since 2.6.21 bbPress (r8086)
+ *
+ * @param string $requested_url Requested URL.
+ * @return int Canonical redirect post ID, or zero when none was requested.
+ */
+function bbp_get_canonical_redirect_post_id( $requested_url = '' ) {
+	$query = wp_parse_url( $requested_url, PHP_URL_QUERY );
+	if ( empty( $query ) ) {
+		return 0;
+	}
+
+	wp_parse_str( $query, $args );
+	$p             = isset( $args['p'] ) && is_scalar( $args['p'] ) && ( (int) $args['p'] >= 0 )
+		? (int) $args['p']
+		: 0;
+	$page_id       = isset( $args['page_id'] ) && is_scalar( $args['page_id'] )
+		? absint( $args['page_id'] )
+		: 0;
+	$attachment_id = isset( $args['attachment_id'] ) && is_scalar( $args['attachment_id'] )
+		? absint( $args['attachment_id'] )
+		: 0;
+
+	// Match WP_Query normalization before redirect_canonical() chooses an ID.
+	if ( isset( $args['subpost_id'] ) && is_scalar( $args['subpost_id'] ) && ( '' !== $args['subpost_id'] ) ) {
+		$attachment_id = absint( $args['subpost_id'] );
+	}
+	if ( $attachment_id ) {
+		$p = $attachment_id;
+	}
+	if ( $page_id ) {
+		$p = $page_id;
+	}
+
+	return max( $p, $page_id, $attachment_id );
+}
+
+/**
+ * Prevent canonical redirects from exposing restricted bbPress permalinks.
+ *
+ * @since 2.6.19 bbPress (r7636)
+ *
+ * @param string $redirect_url Proposed redirect URL.
+ * @param string $requested_url Requested URL.
+ * @return string|false Redirect URL, or false when access is denied.
+ */
+function bbp_do_not_redirect_restricted_posts( $redirect_url = '', $requested_url = '' ) {
+	$post_id = bbp_get_canonical_redirect_post_id( $requested_url );
+	$post    = get_post( $post_id );
+	if ( $post && bbp_is_custom_post_type( $post ) && ! bbp_user_can_embed_post( $post_id ) ) {
+		return false;
+	}
+
+	return $redirect_url;
 }

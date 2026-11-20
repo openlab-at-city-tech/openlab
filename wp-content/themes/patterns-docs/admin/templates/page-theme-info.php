@@ -56,7 +56,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</svg>
 					<div class="welcome-panel-column-content">
 						<h3>
-							<?php esc_html_e( 'Customize Templates, Template Parts & More', 'patterns-docs' ); ?>    
+							<?php esc_html_e( 'Customize Templates, Template Parts & More', 'patterns-docs' ); ?>
 						</h3>
 						<p>
 							<?php esc_html_e( 'With a block theme, you can customize every aspect of both the theme and the site, from headers and footers to individual blocks, providing a cohesive and personalized design.', 'patterns-docs' ); ?>
@@ -120,7 +120,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</h4>
 						</div>
 						<div class="patterns-docs-card-body at-p at-p">
-							<div class="patterns-docs-intro-auth--info">								
+							<div class="patterns-docs-intro-auth--info">
 								<ul class="patterns-docs-personal-detail at-flx at-flx-col at-gap">
 									<li class="">
 										<dl class="at-flx at-al-itm-ctr at-gap">
@@ -134,7 +134,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 												<a href="https://wordpress.org/support/theme/patterns-docs" target="_blank" rel="noopener noreferrer nofollow">
 													<?php esc_html_e( 'Create A Ticket', 'patterns-docs' ); ?>
 												</a>
-											</dd>                                                        
+											</dd>
 										</dl>
 									</li>
 									<li class="mt-2">
@@ -147,7 +147,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 											</dt>
 											<dd class="at-m">
 												<?php esc_html_e( 'Kathmandu, Nepal', 'patterns-docs' ); ?>
-											</dd>                                                        
+											</dd>
 										</dl>
 									</li>
 								</ul>
@@ -162,7 +162,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 											<span class="dashicons dashicons-twitter"></span>
 										</a>
 									</li>
-								</ul>	
+								</ul>
 							</div>
 						</div>
 					</div>
@@ -303,7 +303,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 										<?php
 									}
 									?>
-								</div>				
+								</div>
 							</div>
 						</div>
 							<?php
@@ -378,6 +378,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 												}
 												?>
 											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						<?php
+					}
+					?>
+					<?php
+					$changelog = function_exists( 'patterns_docs_parse_changelog' ) ? patterns_docs_parse_changelog() : '';
+					if ( $changelog ) {
+						?>
+							<div class="at-row">
+								<div class="at-col-12">
+									<div class="patterns-docs-card at-bg-cl at-bdr">
+										<div class="patterns-docs-card-header at-bdr at-p at-jfy-cont-st at-gap at-flx">
+											<span class="dashicons dashicons-backup"></span>
+											<h4 class="patterns-docs-card-header-ttl at-txt at-m">
+												<?php esc_html_e( 'Changelog', 'patterns-docs' ); ?>
+											</h4>
+										</div>
+										<div class="patterns-docs-card-body at-p">
+											<pre class="patterns-docs-changelog"><?php echo wp_kses_post( $changelog ); ?></pre>
 										</div>
 									</div>
 								</div>

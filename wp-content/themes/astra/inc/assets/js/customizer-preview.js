@@ -185,6 +185,62 @@
         } );
     } );
 
+    /**
+     * Style guide custom color swatches.
+     */
+    wp.customize( 'astra-color-palettes', function( value ) {
+        value.bind( function( palettes ) {
+            const wrap = document.querySelector( '.ast-sg-colors-section-wrap' );
+            if ( ! wrap ) {
+                return;
+            }
+
+            const items = Array.prototype.slice.call( wrap.querySelectorAll( '.ast-sg-color-item-wrap' ) );
+            if ( items.length < 9 ) {
+                return;
+            }
+
+            items.slice( 9 ).forEach( function( item ) {
+                item.remove();
+            } );
+
+            const customColors = palettes && palettes.customColors ? palettes.customColors : [];
+
+            customColors.forEach( function( customColor, customIndex ) {
+                if ( ! customColor || customColor.retired ) {
+                    return;
+                }
+
+                const slot = 9 + customIndex;
+                const item = items[ 0 ].cloneNode( true );
+
+                const picker = item.querySelector( '.ast-sg-color-picker' );
+                if ( picker ) {
+                    picker.style.background = 'var(--ast-global-color-' + slot + ')';
+                }
+
+                const title = item.querySelector( '.ast-sg-field-title' );
+                if ( title ) {
+                    const name = customColor.name && customColor.name.trim()
+                        ? customColor.name
+                        : wp.i18n.sprintf(
+                            /* translators: %d: custom color number. */
+                            wp.i18n.__( 'Custom %d', 'astra' ),
+                            customIndex + 1
+                        );
+                    title.textContent = ' ' + name;
+                }
+
+                const trigger = item.querySelector( '.ast-quick-tour-item' );
+                if ( trigger ) {
+                    trigger.setAttribute( 'data-reference', 'ast-color-' + slot );
+                }
+
+                wrap.appendChild( item );
+            } );
+        } );
+    } );
+
 } )( jQuery, wp.customize );
 
 

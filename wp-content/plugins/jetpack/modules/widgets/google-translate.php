@@ -185,7 +185,7 @@ class Jetpack_Google_Translate_Widget extends WP_Widget {
 	 * @return string|void
 	 */
 	public function form( $instance ) {
-		$title = isset( $instance['title'] ) ? $instance['title'] : false;
+		$title = $instance['title'] ?? false;
 		if ( false === $title ) {
 			$title = $this->default_title;
 		}
@@ -209,7 +209,7 @@ class Jetpack_Google_Translate_Widget extends WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 		$instance          = array();
-		$instance['title'] = wp_kses( $new_instance['title'], array() );
+		$instance['title'] = wp_kses( $new_instance['title'] ?? '', array() );
 		if ( $instance['title'] === $this->default_title ) {
 			$instance['title'] = false; // Store as false in case of language change.
 		}

@@ -41,9 +41,7 @@ class Astra_Gutenberg {
 
 			$current_post = get_post( absint( $post_id ) );
 
-			/** @psalm-suppress TooManyArguments */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			$enable_block_editor_attr = apply_filters( 'astra_disable_block_content_attr', true, $post_id );
-			/** @psalm-suppress TooManyArguments */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 
 			/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			if ( has_blocks( $current_post ) && $enable_block_editor_attr ) {

@@ -27,42 +27,7 @@ if (!class_exists('\\PublishPress\\Blocks\\Controls')) {
                 && isset($block['attrs']['advgbBlockControls'])
                 && $block['blockName']
             ) {
-                $controls = $block['attrs']['advgbBlockControls'];
-
-                $show_block = true;
-
-                // Cache device type detection for performance
-                static $device_type = null;
-                if ($device_type === null) {
-                    $device_type = self::getDeviceType();
-                }
-
-                foreach ($controls as $key => $item) {
-                    if (
-                        isset($item['control'])
-                        && self::getControlValue($item['control'], 1) === true // Is this control enabled? @TODO Dynamic way to define default value depending the control ; not all will be active (1) by default
-                        && self::isBlockEnabled($block['blockName']) // Controls are enabled for this block?
-                        && isset($item['enabled'])
-                        && (bool) $item['enabled'] === true
-                    ) {
-                        // skip some control
-                        if (in_array($item['control'], ['meta'])) {
-                            continue;
-                        }
-
-                        // apply preset control
-                        if ($item['control'] === 'presets') {
-                            if (!self::checkPresetControls($block_content, $block, $item, $key)) {
-                                $show_block = false;
-                            }
-                        } elseif (self::displayBlock($block, $item['control'], $key, $device_type) === false) {
-                                // Stop iteration; we reached a control that decides block shouln't be displayed
-                                $show_block = false;
-                        }
-
-                    }
-                }
-                if (!$show_block) {
+                if (! self::isBlockVisible($block)) {
                     return '';
                 }
                 // Generate a unique identifier for the block if it doesn't have one
@@ -74,6 +39,210 @@ if (!class_exists('\\PublishPress\\Blocks\\Controls')) {
             }
 
             return $block_content;
+        }
+
+        /**
+         * Check the block's controls for the current request
+         *
+         * @param array $block Parsed block
+         *
+         * @return bool False when a control hides the block
+         * @since 3.7.7
+         */
+        public static function isBlockVisible($block)
+        {
+            if (
+                ! Utilities::settingIsEnabled('block_controls')
+                || ! isset($block['attrs']['advgbBlockControls'])
+                || ! is_array($block['attrs']['advgbBlockControls'])
+                || empty($block['blockName'])
+            ) {
+                return true;
+            }
+
+            $controls = $block['attrs']['advgbBlockControls'];
+
+            $show_block = true;
+
+            foreach ($controls as $key => $item) {
+                if (
+                    isset($item['control'])
+                    && self::getControlValue($item['control'], 1) === true // Is this control enabled? @TODO Dynamic way to define default value depending the control ; not all will be active (1) by default
+                    && self::isBlockEnabled($block['blockName']) // Controls are enabled for this block?
+                    && isset($item['enabled'])
+                    && (bool) $item['enabled'] === true
+                ) {
+                    // skip some control
+                    if (in_array($item['control'], ['meta'])) {
+                        continue;
+                    }
+
+                    // apply preset control
+                    if ($item['control'] === 'presets') {
+                        // Presets return the content passed in when they match
+                        if (!self::checkPresetControls('1', $block, $item, $key)) {
+                            $show_block = false;
+                        }
+                    } elseif (self::displayBlock($block, $item['control'], $key) === false) {
+                        // We reached a control that decides block shouldn't be displayed
+                        $show_block = false;
+                    }
+
+                }
+            }
+
+            return $show_block;
+        }
+
+        /**
+         * Excerpts built from the post content (no manual excerpt) render the
+         * inner blocks of wrapper blocks such as core/group and core/columns
+         * without running render_block on the wrapper. While WordPress builds
+         * such an excerpt, remove the blocks hidden by their controls from the
+         * content first, so the excerpt matches what the post shows.
+         *
+         * Hooked to get_the_excerpt before wp_trim_excerpt (priority 10).
+         *
+         * @param string $excerpt Manual excerpt, empty when it will be generated
+         *
+         * @return string
+         * @since 3.7.7
+         */
+        public static function startExcerptFiltering($excerpt)
+        {
+            if (trim((string) $excerpt) === '' && Utilities::settingIsEnabled('block_controls')) {
+                self::$excerpt_depth++;
+                add_filter('content_pagination', [__CLASS__, 'removeHiddenBlocksFromPages'], 10, 1);
+            }
+
+            return $excerpt;
+        }
+
+        /**
+         * Stop filtering the content once the excerpt is built (after wp_trim_excerpt)
+         *
+         * @param string $excerpt Excerpt
+         *
+         * @return string
+         * @since 3.7.7
+         */
+        public static function endExcerptFiltering($excerpt)
+        {
+            if (self::$excerpt_depth > 0) {
+                self::$excerpt_depth--;
+                if (self::$excerpt_depth === 0) {
+                    remove_filter('content_pagination', [__CLASS__, 'removeHiddenBlocksFromPages'], 10);
+                }
+            }
+
+            return $excerpt;
+        }
+
+        /**
+         * @var int Nesting level of excerpts being generated
+         */
+        private static $excerpt_depth = 0;
+
+        /**
+         * Remove hidden blocks from the post pages used to build the excerpt
+         *
+         * @param array $pages Post content split by <!--nextpage-->
+         *
+         * @return array
+         * @since 3.7.7
+         */
+        public static function removeHiddenBlocksFromPages($pages)
+        {
+            if (! is_array($pages)) {
+                return $pages;
+            }
+
+            foreach ($pages as $index => $page) {
+                $pages[$index] = self::removeHiddenBlocks($page);
+            }
+
+            return $pages;
+        }
+
+        /**
+         * Remove blocks hidden by their controls, with their inner blocks, from block markup
+         *
+         * @param string $content Block markup
+         *
+         * @return string Content without hidden blocks; unchanged when nothing is hidden
+         * @since 3.7.7
+         */
+        public static function removeHiddenBlocks($content)
+        {
+            if (
+                ! is_string($content)
+                || strpos($content, 'advgbBlockControls') === false
+                || ! function_exists('parse_blocks')
+                || ! has_blocks($content)
+            ) {
+                return $content;
+            }
+
+            $blocks  = parse_blocks($content);
+            $changed = false;
+            $blocks  = self::filterHiddenBlocks($blocks, $changed);
+
+            return $changed ? serialize_blocks($blocks) : $content;
+        }
+
+        /**
+         * Recursively drop hidden blocks from a list of parsed blocks
+         *
+         * @param array $blocks  Parsed blocks
+         * @param bool  $changed Set to true when a block was removed
+         *
+         * @return array
+         * @since 3.7.7
+         */
+        private static function filterHiddenBlocks($blocks, &$changed)
+        {
+            $result = [];
+
+            foreach ($blocks as $block) {
+                if (! self::isBlockVisible($block)) {
+                    $changed = true;
+                    continue;
+                }
+
+                if (! empty($block['innerBlocks'])) {
+                    $inner_changed = false;
+                    $kept          = [];
+                    foreach ($block['innerBlocks'] as $inner_index => $inner_block) {
+                        $filtered = self::filterHiddenBlocks([$inner_block], $inner_changed);
+                        $kept[ $inner_index ] = $filtered ? $filtered[0] : null;
+                    }
+
+                    if ($inner_changed) {
+                        $changed = true;
+
+                        // innerContent holds a null placeholder for each inner block, in order
+                        $inner_content = [];
+                        $inner_index   = 0;
+                        foreach ($block['innerContent'] as $chunk) {
+                            if ($chunk === null) {
+                                if (isset($kept[ $inner_index ])) {
+                                    $inner_content[] = null;
+                                }
+                                $inner_index++;
+                                continue;
+                            }
+                            $inner_content[] = $chunk;
+                        }
+
+                        $block['innerContent'] = $inner_content;
+                        $block['innerBlocks']  = array_values(array_filter($kept));
+                    }
+                }
+
+                $result[] = $block;
+            }
+
+            return $result;
         }
 
         private static function getPresetItemConfig($preset_id, $presets = false) {
@@ -1108,7 +1277,7 @@ if (!class_exists('\\PublishPress\\Blocks\\Controls')) {
             if (isset($_POST['save_controls'])) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- we check nonce below
                 if (
                     !wp_verify_nonce(
-                        sanitize_key($_POST['advgb_controls_settings_nonce_field']),
+                        sanitize_key(wp_unslash($_POST['advgb_controls_settings_nonce_field'])),
                         'advgb_controls_settings_nonce'
                     )
                 ) {
@@ -1141,15 +1310,16 @@ if (!class_exists('\\PublishPress\\Blocks\\Controls')) {
                         str_replace(
                             '/wp-admin/',
                             '',
-                            sanitize_url($_POST['_wp_http_referer']) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+                            sanitize_url(wp_unslash($_POST['_wp_http_referer'])) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
                         )
                     )
                 );
+                exit;
             } // Blocks
             elseif (isset($_POST['save_blocks'])) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- we check nonce below
                 if (
                     !wp_verify_nonce(
-                        sanitize_key($_POST['advgb_controls_block_nonce_field']),
+                        sanitize_key(wp_unslash($_POST['advgb_controls_block_nonce_field'])),
                         'advgb_controls_block_nonce'
                     )
                 ) {
@@ -1163,13 +1333,14 @@ if (!class_exists('\\PublishPress\\Blocks\\Controls')) {
                 ) {
                     $blocks_list = array_map(
                         'sanitize_text_field',
-                        json_decode(stripslashes($_POST['blocks_list'])) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+                        json_decode(wp_unslash($_POST['blocks_list'])) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
                     );
-                    $active_blocks = array_map('sanitize_text_field', $_POST['active_blocks']);
+                    $active_blocks = array_map('sanitize_text_field', wp_unslash($_POST['active_blocks']));
                     $inactive_blocks = array_values(array_diff($blocks_list, $active_blocks));
 
                     // Save block controls
                     $block_controls = get_option('advgb_block_controls');
+                    $block_controls = is_array($block_controls) ? $block_controls : [];
                     $block_controls['active_blocks'] = isset($active_blocks) ? $active_blocks : '';
                     $block_controls['inactive_blocks'] = isset($inactive_blocks) ? $inactive_blocks : '';
 
@@ -1185,10 +1356,11 @@ if (!class_exists('\\PublishPress\\Blocks\\Controls')) {
                             str_replace(
                                 '/wp-admin/',
                                 '',
-                                sanitize_url($_POST['_wp_http_referer']) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+                                sanitize_url(wp_unslash($_POST['_wp_http_referer'])) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
                             )
                         )
                     );
+                    exit;
                 } else {
                     // Redirect with error message / Nothing was saved
                     wp_safe_redirect(
@@ -1199,10 +1371,11 @@ if (!class_exists('\\PublishPress\\Blocks\\Controls')) {
                             str_replace(
                                 '/wp-admin/',
                                 '',
-                                sanitize_url($_POST['_wp_http_referer']) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+                                sanitize_url(wp_unslash($_POST['_wp_http_referer'])) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
                             )
                         )
                     );
+                    exit;
                 }
             } else {
                 // Nothing to do here
@@ -1470,15 +1643,18 @@ if (!class_exists('\\PublishPress\\Blocks\\Controls')) {
          */
         public static function defaultExcludedBlocks()
         {
-            return [
-                'core/freeform',
-                'core/legacy-widget',
-                'core/widget-area',
-                'core/column',
-                'advgb/tab',
-                'advgb/column',
-                'advgb/accordion' // @TODO - Deprecated block. Remove later.
-            ];
+            return array_values(array_unique(array_merge(
+                [
+                    'core/freeform',
+                    'core/legacy-widget',
+                    'core/widget-area',
+                    'core/column',
+                    'advgb/tab',
+                    'advgb/column',
+                    'advgb/accordion' // @TODO - Deprecated block. Remove later.
+                ],
+                \AdvancedGutenbergMain::allDisabledBlocks()
+            )));
         }
 
         /**

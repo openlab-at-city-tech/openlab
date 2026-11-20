@@ -5,7 +5,7 @@
  * @category Metabox
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.joedolson.com/wp-to-twitter/
  */
 
@@ -30,7 +30,7 @@ function jd_fetch_url( $url, $method = 'GET', $body = '', $headers = '', $return
  * @param string $url Query url.
  * @param array  $query_args Arguments sent to remote query.
  *
- * @return remote JSON.
+ * @return string remote JSON.
  */
 function jd_remote_json( $url, $query_args = true ) {
 	return wpt_remote_json( $url, $query_args );
@@ -56,7 +56,7 @@ function wpt_tweet( $post_ID, $type = 'instant', $post = null, $updated = null, 
  *
  * @param int $link_id Link ID.
  *
- * @return twit link.
+ * @return string twit link.
  */
 function jd_twit_link( $link_id ) {
 	return wpt_post_update_link( $link_id );
@@ -67,7 +67,7 @@ function jd_twit_link( $link_id ) {
  *
  * @param int $post_ID Post ID.
  *
- * @return Array post data.
+ * @return array post data.
  */
 function jd_post_info( $post_ID ) {
 	return wpt_post_info( $post_ID );
@@ -79,7 +79,7 @@ function jd_post_info( $post_ID ) {
  * @param int    $post_ID Post ID.
  * @param string $type Type of post.
  *
- * @return tweet
+ * @return string tweet
  */
 function jd_twit( $post_ID, $type = 'instant' ) {
 	return wpt_post_update( $post_ID, $type );

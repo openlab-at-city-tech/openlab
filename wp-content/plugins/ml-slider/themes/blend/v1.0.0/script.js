@@ -14,4 +14,4 @@
 
 	});
 
-})(jQuery)
+})(window.metaslider_jQuery || jQuery)

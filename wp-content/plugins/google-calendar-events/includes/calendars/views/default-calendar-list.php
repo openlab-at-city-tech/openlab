@@ -167,8 +167,13 @@ class Default_Calendar_List implements Calendar_View
 	public function styles()
 	{
 		return [
+			'simcal-default-calendar-common' => [
+				'src' => SIMPLE_CALENDAR_ASSETS . 'generated/default-calendar-common.min.css',
+				'media' => 'all',
+			],
 			'simcal-default-calendar-list' => [
 				'src' => SIMPLE_CALENDAR_ASSETS . 'generated/default-calendar-list.min.css',
+				'deps' => ['simcal-default-calendar-common'],
 				'media' => 'all',
 			],
 		];
@@ -184,7 +189,7 @@ class Default_Calendar_List implements Calendar_View
 		$calendar = $this->calendar;
 
 		if ($calendar instanceof Default_Calendar) {
-			$disabled = $calendar->static === true || empty($calendar->events) ? ' disabled="disabled"' : '';
+			$is_nav_disabled = $calendar->static === true || empty($calendar->events);
 
 			$hide_header = get_post_meta($this->calendar->id, '_default_calendar_list_header', true) == 'yes' ? true : false;
 			$static_calendar = get_post_meta($this->calendar->id, '_calendar_is_static', true) == 'yes' ? true : false;
@@ -196,10 +201,10 @@ class Default_Calendar_List implements Calendar_View
 				__('Edit Calendar', 'google-calendar-events'),
 				'<p class="simcal-align-right"><small>',
 				'</small></p>',
-				$calendar->id
+				$calendar->id,
 			);
 
-			echo '<div class="simcal-calendar-list ' . $compact_list_class . '">';
+			echo '<div class="simcal-calendar-list ' . esc_attr($compact_list_class) . '">';
 
 			if (!$hide_header && !$static_calendar) {
 				echo '<nav class="simcal-calendar-head">' . "\n";
@@ -207,14 +212,11 @@ class Default_Calendar_List implements Calendar_View
 				echo "\t" . '<div class="simcal-nav">' . "\n";
 				echo "\t\t" .
 					'<button class="simcal-nav-button simcal-prev" title="' .
-					__('Previous', 'google-calendar-events') .
-					'"' .
-					$disabled .
-					' aria-label="' .
-					__('Previous', 'google-calendar-events') .
-					'">' .
-					"\n";
-				echo "\t\t\t" . '<i class="simcal-icon-left"></i>' . "\n";
+					esc_attr__('Previous', 'google-calendar-events') .
+					'"';
+				disabled($is_nav_disabled);
+				echo ' aria-label="' . esc_attr__('Previous', 'google-calendar-events') . '">' . "\n";
+				echo "\t\t\t" . '<i class="simcal-icon-left" aria-hidden="true"></i>' . "\n";
 				echo "\t\t" . '</button>' . "\n";
 				echo "\t" . '</div>' . "\n";
 
@@ -224,9 +226,9 @@ class Default_Calendar_List implements Calendar_View
 
 				echo "\t" .
 					'<div class="simcal-nav simcal-current ' .
-					$header_class .
-					'" data-calendar-current="' .
-					$calendar->start .
+					esc_attr($header_class) .
+					'" aria-live="polite" aria-atomic="true" data-calendar-current="' .
+					esc_attr((string) $calendar->start) .
 					'">' .
 					"\n";
 				echo "\t\t" . '<h3 class="simcal-current-label"> </h3>' . "\n";
@@ -235,29 +237,25 @@ class Default_Calendar_List implements Calendar_View
 				echo "\t" . '<div class="simcal-nav">';
 				echo "\t\t" .
 					'<button class="simcal-nav-button simcal-next" title="' .
-					__('Next', 'google-calendar-events') .
-					'"' .
-					$disabled .
-					' aria-label="' .
-					__('Next', 'google-calendar-events') .
-					'">';
-				echo "\t\t\t" . '<i class="simcal-icon-right"></i>' . "\n";
+					esc_attr__('Next', 'google-calendar-events') .
+					'"';
+				disabled($is_nav_disabled);
+				echo ' aria-label="' . esc_attr__('Next', 'google-calendar-events') . '">';
+				echo "\t\t\t" . '<i class="simcal-icon-right" aria-hidden="true"></i>' . "\n";
 				echo "\t\t" . '</button>' . "\n";
 				echo "\t" . '</div>' . "\n";
 
 				echo '</nav>' . "\n";
 			}
 
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- draw_list() escapes at the leaf nodes.
 			echo $this->draw_list($calendar->start);
 
 			echo '<div class="simcal-ajax-loader simcal-spinner-top" style="display: none;"><i class="simcal-icon-spinner simcal-icon-spin"></i></div>';
 
 			echo '</div>';
 
-			$is_print_calendar = get_post_meta($calendar->id, '_display_print_calendar');
-			if (isset($is_print_calendar[0]) && !empty($is_print_calendar[0]) && $is_print_calendar[0] === 'yes') {
-				echo '<button id="print-calendar-button" class="print-calendar-button demo_sc_primary_btn">Print Calendar</button>';
-			}
+			\SimpleCalendar\Ics_Export::print_actions($calendar->id);
 		}
 	}
 
@@ -437,27 +435,8 @@ class Default_Calendar_List implements Calendar_View
 
 		if ($start->day == $end->day && $start->month == $end->month && $start->year == $end->year) {
 			// Start and end on the same day.
-			// e.g. 1 February 2020
+			// Use the calendar's configured date format consistently.
 			$large = $small = date_i18n($calendar->date_format, $st);
-			if ($date_order['d'] !== false && $date_order['m'] !== false) {
-				if ($date_order['m'] > $date_order['d']) {
-					if ($date_order['y'] !== false && $date_order['y'] > $date_order['m']) {
-						$small = date_i18n('Y, d M', $st);
-					} else {
-						$small = date_i18n('d M Y', $st);
-					}
-				} else {
-					if ($date_order['y'] !== false && $date_order['y'] > $date_order['m']) {
-						if ($date_order['d'] > $date_order['m']) {
-							$small = date_i18n('M d, Y', $st);
-						} else {
-							$small = date_i18n('d M Y', $st);
-						}
-					} else {
-						$small = date_i18n('Y, M d', $st);
-					}
-				}
-			}
 		} elseif ($start->month == $end->month && $start->year == $end->year) {
 			// Start and end days on the same month.
 			// e.g. August 2020
@@ -485,20 +464,20 @@ class Default_Calendar_List implements Calendar_View
 			} else {
 				if ($date_order['y'] < $date_order['m']) {
 					// 2020, August - September.
-					$large = $small = date('Y', $st) . ', ';
+					$large = $small = gmdate('Y', $st) . ', ';
 					$large .= date_i18n('F', $st) . ' - ' . date_i18n('F', $et);
 					$small .= date_i18n('M', $st) . ' - ' . date_i18n('M', $et);
 				} else {
 					// August - September, 2020.
 					$large = date_i18n('F', $st) . ' - ' . date_i18n('F', $et) . ', ';
 					$small = date_i18n('M', $st) . ' - ' . date_i18n('M', $et) . ' ';
-					$year = date('Y', $st);
+					$year = gmdate('Y', $st);
 					$large .= $year;
 					$small .= $year;
 				}
 			}
 		} else {
-			$large = $small = date('Y', $st) . ' - ' . date('Y', $et);
+			$large = $small = gmdate('Y', $st) . ' - ' . gmdate('Y', $et);
 		}
 
 		return [
@@ -514,16 +493,25 @@ class Default_Calendar_List implements Calendar_View
 	 * @since  3.1.28
 	 * @access private
 	 */
+	private static function local_key($event)
+	{
+		return $event->start_dt instanceof Carbon ? $event->start_dt->getTimestamp() : (int) $event->start;
+	}
+
 	private static function cmp($a, $b)
 	{
-		if ($a->start == $b->start) {
+		$a_local = self::local_key($a);
+		$b_local = self::local_key($b);
+		if ($a_local === $b_local) {
+			if ($a->calendar_priority != $b->calendar_priority) {
+				return $a->calendar_priority < $b->calendar_priority ? -1 : 1;
+			}
 			if ($a->title == $b->title) {
 				return 0;
 			}
 			return $a->title < $b->title ? -1 : 1;
-		} else {
-			return $a->start < $b->start ? -1 : 1;
 		}
+		return $a_local < $b_local ? -1 : 1;
 	}
 
 	/**
@@ -545,7 +533,7 @@ class Default_Calendar_List implements Calendar_View
 
 		if (empty($calendar)) {
 			$calendar = $this->calendar = simcal_get_calendar(intval($id));
-			if (!$calendar instanceof Default_Calendar) {
+			if (!($calendar instanceof Default_Calendar)) {
 				return '';
 			}
 		}
@@ -553,6 +541,8 @@ class Default_Calendar_List implements Calendar_View
 		$now = $calendar->now;
 		$current_events = $this->get_events($timestamp);
 		$format = $calendar->date_format;
+		/* translators: 1: start date, 2: end date */
+		$nothing_from_to_format = __('Nothing from %1$s to %2$s.', 'google-calendar-events');
 
 		ob_start();
 
@@ -560,23 +550,21 @@ class Default_Calendar_List implements Calendar_View
 
 		$block_tag = $calendar->compact_list && !empty($current_events) ? 'div' : 'dl';
 
-		$data_heading = '';
 		$heading = $this->get_heading();
-		foreach ($heading as $k => $v) {
-			$data_heading .= ' data-heading-' . $k . '="' . $v . '"';
-		}
 
 		echo '<' .
-			$block_tag .
+			tag_escape($block_tag) .
 			' class="simcal-events-list-container"' .
 			' data-prev="' .
-			$this->prev .
+			esc_attr((string) $this->prev) .
 			'"' .
 			' data-next="' .
-			$this->next .
-			'"' .
-			$data_heading .
-			'>';
+			esc_attr((string) $this->next) .
+			'"';
+		foreach ($heading as $k => $v) {
+			echo ' data-heading-' . esc_attr($k) . '="' . esc_attr($v) . '"';
+		}
+		echo '>';
 
 		if (!empty($current_events) && is_array($current_events)):
 			$last_event = null;
@@ -623,17 +611,17 @@ class Default_Calendar_List implements Calendar_View
 
 					$bg_color = '#' . $the_color->getHex();
 					$color = $the_color->isDark() ? '#ffffff' : '#000000';
-					$border_style = ' style="border-bottom: 1px solid ' . $bg_color . ';" ';
-					$bg_style = ' style="background-color: ' . $bg_color . '; color: ' . $color . ';"';
+					$border_style = 'border-bottom: 1px solid ' . $bg_color . ';';
+					$bg_style = 'background-color: ' . $bg_color . '; color: ' . $color . ';';
 
-					echo "\t" . '<dt class="simcal-day-label"' . $border_style . '>';
-					echo '<span' . $bg_style . '>';
+					echo "\t" . '<dt class="simcal-day-label" style="' . esc_attr($border_style) . '">';
+					echo '<span style="' . esc_attr($bg_style) . '">';
 
 					echo $format
 						? '<span class="simcal-date-format" data-date-format="' .
-							$format .
+							esc_attr($format) .
 							'">' .
-							date_i18n($format, $day_date_ts_offset, strtotime($day_date_offset->toDateTimeString())) .
+							esc_html(date_i18n($format, $day_date_ts_offset, strtotime($day_date_offset->toDateTimeString()))) .
 							'</span> '
 						: ' ';
 
@@ -646,7 +634,7 @@ class Default_Calendar_List implements Calendar_View
 				$calendar_classes = [];
 
 				// Add day of week number to CSS class.
-				$day_classes = 'simcal-weekday-' . date('w', $day_date_ts_offset);
+				$day_classes = 'simcal-weekday-' . gmdate('w', $day_date_ts_offset);
 
 				// Is this the present, the past or the future, Doc?
 				if ($timestamp <= $now && $timestamp >= $now) {
@@ -659,26 +647,34 @@ class Default_Calendar_List implements Calendar_View
 
 				$count = 0;
 
-				foreach ($events as $day_events):
-					usort($day_events, [$this, 'cmp']);
+				// Flatten timestamp groups, then sort the whole day by start time.
+				// Calendar::set_events() orders buckets by end time for nav bounds; without this,
+				// an earlier-starting event that ends later (e.g. 1–6pm) can render after a
+				// later-starting event that ends sooner (e.g. 2–3pm) when multi-day expand is off.
+				$day_events = [];
+				foreach ($events as $event_group) {
+					foreach ($event_group as $event) {
+						$day_events[] = $event;
+					}
+				}
+				usort($day_events, [$this, 'cmp']);
 
-					foreach ($day_events as $event):
-						if ($event instanceof Event):
-							$event_classes = $event_visibility = '';
+				foreach ($day_events as $event):
+					if ($event instanceof Event):
+						$event_classes = $event_visibility = '';
 
-							$calendar_class = 'simcal-events-calendar-' . strval($event->calendar);
-							$calendar_classes[] = $calendar_class;
+						$calendar_class = 'simcal-events-calendar-' . strval($event->calendar);
+						$calendar_classes[] = $calendar_class;
 
-							$recurring = $event->recurrence ? 'simcal-event-recurring ' : '';
-							$has_location = $event->venue ? 'simcal-event-has-location ' : '';
+						$recurring = $event->recurrence ? 'simcal-event-recurring ' : '';
+						$has_location = $event->venue ? 'simcal-event-has-location ' : '';
 
-							$event_classes .= 'simcal-event ' . $recurring . $has_location . $calendar_class;
+						$event_classes .= 'simcal-event ' . $recurring . $has_location . $calendar_class;
 
-							// Toggle some events visibility if more than optional limit.
-							if ($calendar->events_limit > -1 && $count >= $calendar->events_limit):
-								$event_classes .= ' simcal-event-toggled';
-								$event_visibility = ' display: none;';
-							endif;
+						// Toggle some events visibility if more than optional limit.
+						if ($calendar->events_limit > -1 && $count >= $calendar->events_limit):
+							$event_classes .= ' simcal-event-toggled';
+							$event_visibility = ' display: none;';
 
 							$event_color = $event->get_color();
 							if (!empty($event_color)) {
@@ -689,11 +685,10 @@ class Default_Calendar_List implements Calendar_View
 							$list_events .=
 								"\t" .
 								'<li class="' .
-								$event_classes .
+								esc_attr($event_classes) .
 								'" style="' .
-								$event_visibility .
-								$event_color .
-								'" itemscope itemtype="http://schema.org/Event" data-start="' .
+								esc_attr($event_visibility . $event_color) .
+								'" data-start="' .
 								esc_attr($event->start) .
 								'">' .
 								"\n";
@@ -713,7 +708,39 @@ class Default_Calendar_List implements Calendar_View
 								$day_classes .= ' ' . trim(implode(' ', array_unique($calendar_classes)));
 							endif;
 						endif;
-					endforeach;
+
+						$event_color = $event->get_color();
+						if (!empty($event_color)) {
+							$side = is_rtl() ? 'right' : 'left';
+							$event_color = ' border-' . $side . ': 4px solid ' . $event_color . '; padding-' . $side . ': 8px;';
+						}
+
+						$list_events .=
+							"\t" .
+							'<li class="' .
+							esc_attr($event_classes) .
+							'" style="' .
+							esc_attr($event_visibility . $event_color) .
+							'" itemscope itemtype="http://schema.org/Event" data-start="' .
+							esc_attr($event->start) .
+							'">' .
+							"\n";
+						$list_events .=
+							"\t\t" . '<div class="simcal-event-details">' . $calendar->get_event_html($event) . '</div>' . "\n";
+						$list_events .= "\t" . '</li>' . "\n";
+
+						$count++;
+
+						// Event falls within today.
+						if ($this->end <= $now && $this->start >= $now):
+							$day_classes .= ' simcal-today-has-events';
+						endif;
+						$day_classes .= ' simcal-day-has-events simcal-day-has-' . strval($count) . '-events';
+
+						if ($calendar_classes):
+							$day_classes .= ' ' . trim(implode(' ', array_unique($calendar_classes)));
+						endif;
+					endif;
 				endforeach;
 
 				$list_events .= '</ul>' . "\n";
@@ -721,14 +748,24 @@ class Default_Calendar_List implements Calendar_View
 				// If events visibility is limited, print the button toggle.
 				if ($calendar->events_limit > -1 && $count > $calendar->events_limit):
 					$list_events .=
-						'<button class="simcal-events-toggle"><i class="simcal-icon-down simcal-icon-animate"></i></button>';
+						'<button class="simcal-events-toggle" type="button" aria-expanded="false" aria-label="' .
+						esc_attr__('Show more events', 'google-calendar-events') .
+						'"><i class="simcal-icon-down simcal-icon-animate" aria-hidden="true"></i></button>';
 				endif;
 
 				// Print final list of events for the current day.
 				$tag = $calendar->compact_list ? 'div' : 'dd';
-				echo '<' . $tag . ' class="' . $day_classes . '" data-events-count="' . strval($count) . '">' . "\n";
+				echo '<' .
+					tag_escape($tag) .
+					' class="' .
+					esc_attr($day_classes) .
+					'" data-events-count="' .
+					esc_attr(strval($count)) .
+					'">' .
+					"\n";
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- event HTML from get_event_html(); attrs escaped above.
 				echo "\t" . $list_events . "\n";
-				echo '</' . $tag . '>' . "\n";
+				echo '</' . tag_escape($tag) . '>' . "\n";
 			endforeach;
 		else:
 			echo "\t" . '<p>';
@@ -736,23 +773,22 @@ class Default_Calendar_List implements Calendar_View
 			$message = get_post_meta($calendar->id, '_no_events_message', true);
 
 			if ('events' == $calendar->group_type) {
-				echo !empty($message) ? $message : __('There are no upcoming events.', 'google-calendar-events');
+				echo !empty($message)
+					? wp_kses_post($message)
+					: esc_html__('There are no upcoming events.', 'google-calendar-events');
 			} else {
 				if (!empty($message)) {
-					echo $message;
+					echo wp_kses_post($message);
 				} else {
 					$from = Carbon::createFromTimestamp($this->start, $calendar->timezone)->getTimestamp();
 					$to = Carbon::createFromTimestamp($this->end, $calendar->timezone)->getTimestamp();
-					echo apply_filters(
-						'simcal_no_events_message',
-						sprintf(
-							__('Nothing from %1$s to %2$s.', 'google-calendar-events'),
-							date_i18n($calendar->date_format, $from),
-							date_i18n($calendar->date_format, $to)
-						),
-						$calendar->id,
-						$from,
-						$to
+					$nothing_message = sprintf(
+						$nothing_from_to_format,
+						date_i18n($calendar->date_format, $from),
+						date_i18n($calendar->date_format, $to),
+					);
+					echo wp_kses_post(
+						(string) apply_filters('simcal_no_events_message', $nothing_message, $calendar->id, $from, $to),
 					);
 				}
 			}
@@ -760,7 +796,7 @@ class Default_Calendar_List implements Calendar_View
 			echo "\t" . '</p>' . "\n";
 		endif;
 
-		echo '</' . $block_tag . '>';
+		echo '</' . tag_escape($block_tag) . '>';
 
 		return ob_get_clean();
 	}
@@ -775,6 +811,26 @@ class Default_Calendar_List implements Calendar_View
 		if (isset($_POST['ts']) && isset($_POST['id'])) {
 			$ts = absint($_POST['ts']);
 			$id = absint($_POST['id']);
+
+			// Security check: Verify the calendar exists and user has permission to view it
+			$post = get_post($id);
+
+			// Check if post exists and is a calendar post type
+			if (!$post || $post->post_type !== 'calendar') {
+				wp_send_json_error('Calendar not found.');
+				return;
+			}
+
+			// Check if post is published (public) or user has permission to read it
+			if ($post->post_status === 'publish') {
+				// Public calendar - allow access
+			} else {
+				// Draft, pending, or other status - check if user has permission
+				if (!current_user_can('read_post', $id)) {
+					wp_send_json_error('You do not have permission to view this calendar.');
+					return;
+				}
+			}
 
 			wp_send_json_success($this->draw_list($ts, $id));
 		} else {

@@ -13,18 +13,21 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Get the default user options and their values
  *
- * @since 2.1.0 bbPress (r3910)
+ * @since 2.1.0 bbPress (r3911)
  *
  * @return array Filtered user option names and values
  */
 function bbp_get_default_user_options() {
 
 	// Filter & return
-	return (array) apply_filters( 'bbp_get_default_user_options', array(
-		'_bbp_last_posted' => '0', // For checking flooding
-		'_bbp_topic_count' => '0', // Total topics per site
-		'_bbp_reply_count' => '0'  // Total replies per site
-	) );
+	return (array) apply_filters(
+		'bbp_get_default_user_options',
+		array(
+			'_bbp_last_posted' => '0', // For checking flooding
+			'_bbp_topic_count' => '0', // Total topics per site
+			'_bbp_reply_count' => '0'  // Total replies per site
+		)
+	);
 }
 
 /**
@@ -32,7 +35,7 @@ function bbp_get_default_user_options() {
  *
  * This is destructive, so existing bbPress user options will be overridden.
  *
- * @since 2.1.0 bbPress (r3910)
+ * @since 2.1.0 bbPress (r3911)
  */
 function bbp_add_user_options( $user_id = 0 ) {
 
@@ -57,7 +60,7 @@ function bbp_add_user_options( $user_id = 0 ) {
  * Hooked to bbp_uninstall, it is only called once when bbPress is uninstalled.
  * This is destructive, so existing bbPress user options will be destroyed.
  *
- * @since 2.1.0 bbPress (r3910)
+ * @since 2.1.0 bbPress (r3911)
  */
 function bbp_delete_user_options( $user_id = 0 ) {
 
@@ -80,7 +83,7 @@ function bbp_delete_user_options( $user_id = 0 ) {
  * Add filters to each bbPress option and allow them to be overloaded from
  * inside the $bbp->options array.
  *
- * @since 2.1.0 bbPress (r3910)
+ * @since 2.1.0 bbPress (r3911)
  */
 function bbp_setup_user_option_filters() {
 
@@ -97,7 +100,7 @@ function bbp_setup_user_option_filters() {
  * Filter default options and allow them to be overloaded from inside the
  * $bbp->user_options array.
  *
- * @since 2.1.0 bbPress (r3910)
+ * @since 2.1.0 bbPress (r3911)
  *
  * @param bool $value Optional. Default value false
  * @return mixed false if not overloaded, mixed if set
@@ -120,12 +123,14 @@ function bbp_filter_get_user_option( $value = false, $option = '', $user = 0 ) {
  * Update the topic count for a user
  *
  * @since 2.6.0 bbPress (r5309)
+ * @since 2.6.17 bbPress (r7468) Support atomic count differences.
  *
- * @param int $user_id
- * @param mixed $count
+ * @param int       $user_id    User ID.
+ * @param mixed     $count      New topic count.
+ * @param int|false $difference Optional. Difference from the previous count.
  * @return boolean
  */
-function bbp_update_user_topic_count( $user_id = 0, $count = false ) {
+function bbp_update_user_topic_count( $user_id = 0, $count = false, $difference = false ) {
 
 	// Validate user id
 	$user_id = bbp_get_user_id( $user_id );
@@ -134,6 +139,7 @@ function bbp_update_user_topic_count( $user_id = 0, $count = false ) {
 	}
 
 	// Just in time filtering of the user's topic count
+	$unfiltered_count = $count;
 	$count = apply_filters( 'bbp_update_user_topic_count', $count, $user_id );
 
 	// Bail if no count was passed
@@ -141,20 +147,31 @@ function bbp_update_user_topic_count( $user_id = 0, $count = false ) {
 		return false;
 	}
 
+	// Atomically bump an unfiltered user option
+	if ( ( false !== $difference ) && ( $count === $unfiltered_count ) ) {
+		$default  = (int) $unfiltered_count - (int) $difference;
+		$meta_key = bbp_db()->get_blog_prefix() . '_bbp_topic_count';
+		$result   = bbp_bump_count_meta( 'user', $user_id, $meta_key, $difference, $default );
+
+		return $result;
+	}
+
 	// Return the updated user option
 	return update_user_option( $user_id, '_bbp_topic_count', $count );
 }
 
 /**
- * Update the reply count for a user
+ * Update the reply count for a user.
  *
  * @since 2.6.0 bbPress (r5309)
+ * @since 2.6.17 bbPress (r7468) Support atomic count differences.
  *
- * @param int $user_id
- * @param mixed $count
+ * @param int       $user_id    User ID.
+ * @param mixed     $count      New reply count.
+ * @param int|false $difference Optional. Difference from the previous count.
  * @return boolean
  */
-function bbp_update_user_reply_count( $user_id = 0, $count = false ) {
+function bbp_update_user_reply_count( $user_id = 0, $count = false, $difference = false ) {
 
 	// Validate user id
 	$user_id = bbp_get_user_id( $user_id );
@@ -163,11 +180,21 @@ function bbp_update_user_reply_count( $user_id = 0, $count = false ) {
 	}
 
 	// Just in time filtering of the user's reply count
+	$unfiltered_count = $count;
 	$count = apply_filters( 'bbp_update_user_reply_count', $count, $user_id );
 
 	// Bail if no count was passed
 	if ( false === $count ) {
 		return false;
+	}
+
+	// Atomically bump an unfiltered user option
+	if ( ( false !== $difference ) && ( $count === $unfiltered_count ) ) {
+		$default  = (int) $unfiltered_count - (int) $difference;
+		$meta_key = bbp_db()->get_blog_prefix() . '_bbp_reply_count';
+		$result   = bbp_bump_count_meta( 'user', $user_id, $meta_key, $difference, $default );
+
+		return $result;
 	}
 
 	// Return the updated user option
@@ -299,7 +326,7 @@ function bbp_user_post_count( $user_id = 0, $integer = false ) {
 /**
  * Update a users last posted time, for use with post throttling
  *
- * @since 2.1.0 bbPress (r3910)
+ * @since 2.1.0 bbPress (r3911)
  *
  * @param int $user_id User ID to update
  * @param int $time Time in time() format
@@ -324,7 +351,7 @@ function bbp_update_user_last_posted( $user_id = 0, $time = 0 ) {
 /**
  * Output the raw value of the last posted time.
  *
- * @since 2.1.0 bbPress (r3910)
+ * @since 2.1.0 bbPress (r3911)
  *
  * @param int $user_id User ID to retrieve value for
  */
@@ -335,7 +362,7 @@ function bbp_user_last_posted( $user_id = 0 ) {
 	/**
 	 * Return the raw value of the last posted time.
 	 *
-	 * @since 2.1.0 bbPress (r3910)
+	 * @since 2.1.0 bbPress (r3911)
 	 *
 	 * @param int $user_id User ID to retrieve value for
 	 * @return mixed False if no user, time() format if exists

@@ -8,7 +8,6 @@
 namespace Kadence\Clean_Frontend;
 
 use Kadence\Component_Interface;
-use function add_action;
 use function add_filter;
 
 /**
@@ -21,7 +20,7 @@ class Component implements Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'clean_frontend';
 	}
 
@@ -29,7 +28,7 @@ class Component implements Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_filter( 'excerpt_more', array( $this, 'excerpt_more' ) );
+		add_filter( 'excerpt_more', [ $this, 'excerpt_more' ] );
 	}
 
 	/**

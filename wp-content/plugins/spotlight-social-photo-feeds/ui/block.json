@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "spotlight/instagram",
+    "title": "Spotlight Instagram Feed",
+    "description": "Embed a Spotlight Instagram feed",
+    "category": "widgets",
+    "icon": "instagram",
+    "keywords": ["instagram", "feed", "feeds", "ig", "story", "spotlight"],
+    "textdomain": "sl-insta",
+    "attributes": {
+        "feedId": {
+            "type": "number"
+        }
+    },
+    "supports": {
+        "html": false
+    },
+    "editorScript": "sli-wp-block-js",
+    "editorStyle": "sli-wp-block-css"
+}

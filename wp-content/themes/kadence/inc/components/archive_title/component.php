@@ -9,7 +9,6 @@ namespace Kadence\Archive_Title;
 
 use Kadence\Component_Interface;
 use Kadence\Templating_Component_Interface;
-use function add_action;
 use function apply_filters;
 use function Kadence\kadence;
 use function get_template_part;
@@ -27,7 +26,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'archive_title';
 	}
 
@@ -35,7 +34,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_filter( 'get_the_archive_title', array( $this, 'filter_archive_title' ) );
+		add_filter( 'get_the_archive_title', [ $this, 'filter_archive_title' ] );
 	}
 	/**
 	 * Gets template tags to expose as methods on the Template_Tags class instance, accessible through `kadence()`.
@@ -44,10 +43,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *               a callable or an array with key 'callable'. This approach is used to reserve the possibility of
 	 *               adding support for further arguments in the future.
 	 */
-	public function template_tags() : array {
-		return array(
-			'render_archive_title' => array( $this, 'render_archive_title' ),
-		);
+	public function template_tags(): array {
+		return [
+			'render_archive_title' => [ $this, 'render_archive_title' ],
+		];
 	}
 	/**
 	 * Update the archives to a better naming.
@@ -77,7 +76,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		} elseif ( class_exists( 'woocommerce' ) && is_shop() ) {
 			$shop_page_id = wc_get_page_id( 'shop' );
 			$title        = get_the_title( $shop_page_id );
-		} elseif ( is_tax( array( 'product_cat', 'product_tag' ) ) ) {
+		} elseif ( is_tax( [ 'product_cat', 'product_tag' ] ) ) {
 			$title = single_term_title( '', false );
 		} elseif ( $term ) {
 			$title = $term->name;

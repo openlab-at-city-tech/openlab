@@ -7,6 +7,7 @@ use Imagely\NGG\DataMappers\Gallery as GalleryMapper;
 use Imagely\NGG\DataMappers\Image as ImageMapper;
 use Imagely\NGG\DataStorage\Manager as StorageManager;
 use Imagely\NGG\DataTypes\DisplayedGallery;
+use Imagely\NGG\PrivateGalleries\ClientPage;
 
 /**
  * REST API controller for Attach to Post functionality.
@@ -109,6 +110,7 @@ class AttachToPost extends \WP_REST_Controller {
 		}
 
 		foreach ( $galleries as &$gallery ) {
+			$gallery              = ClientPage::without_secrets( $gallery );
 			$gallery->image_count = $counts[ (int) $gallery->gid ] ?? 0;
 
 			if ( $gallery->previewpic && isset( $preview_map[ (int) $gallery->previewpic ] ) ) {

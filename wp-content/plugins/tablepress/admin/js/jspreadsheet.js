@@ -7,7 +7,10 @@
  * This software is distributed under MIT License
  */
 
-// TablePress: var formula = ... removed.
+/* TablePress:
+ * - var formula = ... removed.
+ * - obj.updateTablePressToolbarUndoRedoState(); added
+ */
 
 ;(function (global, factory) {
 	// TablePress: Comment out next to lines to force creation of a global jspreadsheet object.
@@ -5348,7 +5351,7 @@
 							}
 
 							// Do not calculate again
-							if (eval('typeof(' + tokens[i] + ') == "undefined"')) {
+							if (typeof globalThis[tokens[i]] === 'undefined') {
 								// Coords
 								var position = jexcel.getIdFromColumnName(tokens[i], 1);
 								// Get value
@@ -6265,6 +6268,34 @@
 		}
 
 		/**
+		 * TablePress: Initialize the toolbar state for undo/redo buttons.
+		 */
+		obj.tablePressToolbarUndoRedoState = {
+			undoDisabled: true,
+			redoDisabled: true,
+		};
+
+		/**
+		 * TablePress: Updates the toolbar state for undo/redo buttons, if the state has changed.
+		 *
+		 * @return null
+		 */
+		obj.updateTablePressToolbarUndoRedoState = function() {
+			const newToolbarUndoRedoState = {
+				undoDisabled: ( -1 === obj.historyIndex ),
+				redoDisabled: ( obj.historyIndex === obj.history.length - 1 ),
+			};
+
+			if (
+				newToolbarUndoRedoState.undoDisabled !== obj.tablePressToolbarUndoRedoState.undoDisabled
+				|| newToolbarUndoRedoState.redoDisabled !== obj.tablePressToolbarUndoRedoState.redoDisabled
+			) {
+				obj.tablePressToolbarUndoRedoState = newToolbarUndoRedoState;
+				wp?.hooks?.doAction?.( 'tablepress.toolbarUndoRedoStateUpdate', newToolbarUndoRedoState );
+			}
+		};
+
+		/**
 		 * Initializes a new history record for undo/redo
 		 *
 		 * @return null
@@ -6279,6 +6310,9 @@
 
 				// Keep history
 				obj.history[index] = changes;
+
+				// TablePress: Update the toolbar state for undo/redo buttons.
+				obj.updateTablePressToolbarUndoRedoState();
 			}
 		}
 
@@ -6869,6 +6903,9 @@
 
 			// Events
 			obj.dispatch('onundo', el, historyRecord);
+
+			// TablePress: Update the toolbar state for undo/redo buttons.
+			obj.updateTablePressToolbarUndoRedoState();
 		}
 
 		/**
@@ -6936,6 +6973,9 @@
 
 			// Events
 			obj.dispatch('onredo', el, historyRecord);
+
+			// TablePress: Update the toolbar state for undo/redo buttons.
+			obj.updateTablePressToolbarUndoRedoState();
 		}
 
 		/**
@@ -7582,6 +7622,16 @@
 	 */
 	jexcel.keyDownControls = function(e) {
 		if (jexcel.current) {
+			/*
+			 * TablePress:
+			 * Ctrl/cmd+K opens WordPress' "Command palette", so the editor must be cleared, to prevent focus issues.
+			 * Ctrl/cmd+Shift+J opens the "Jump to Row" modal, so the editor must be cleared, to prevent focus issues.
+			 */
+			if ( ( e.ctrlKey || e.metaKey ) && ( ( ! e.shiftKey && e.which == 75 ) || ( e.shiftKey && e.which == 74 ) ) ) {
+				jexcel.current = null; // This is necessary to prevent problems with the focus location.
+				return;
+			}
+
 			if (jexcel.current.edition) {
 				if (e.which == 27) {
 					// Escape
@@ -7721,10 +7771,13 @@
 							// Ctrl + A
 							jexcel.current.selectAll();
 							e.preventDefault();
+						// TablePress: The ctrl/cmd+S shortcut is used for Saving Changes.
+						/*
 						} else if (e.which == 83) {
 							// Ctrl + S
 							jexcel.current.download();
 							e.preventDefault();
+						*/
 						} else if (e.which == 89) {
 							// Ctrl + Y
 							jexcel.current.redo();
@@ -7749,6 +7802,9 @@
 							// Ctrl + V
 							jexcel.pasteControls();
 						}
+					// TablePress: Do nothing for cmd/ctrl+Shift+F, which is used in React for the fullscreen toggle.
+					} else if ( (e.ctrlKey || e.metaKey) && e.shiftKey && e.which == 70 ) {
+						// Do nothing.
 					} else {
 						if (jexcel.current.selectedCell) {
 							if (jexcel.current.options.editable == true) {
@@ -8242,6 +8298,10 @@
 					}
 				}
 			} else {
+				// TablePress: Add a check to ensure that the target has the getAttribute method before calling it, to prevent errors when hovering over non-element nodes.
+				if ( ! e?.target?.getAttribute ) {
+					return;
+				}
 				var x = e.target.getAttribute('data-x');
 				var y = e.target.getAttribute('data-y');
 				var rect = e.target.getBoundingClientRect();

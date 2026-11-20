@@ -52,8 +52,8 @@ function jetpack_forms_override_script( $scripts, $handle, $src, $deps = array()
 function jetpack_forms_register_package_scripts( $scripts ) {
 	// Load build constants
 	$build_constants = require __DIR__ . '/constants.php';
-	$default_version = ! SCRIPT_DEBUG ? $build_constants['version'] : time();
-	$extension       = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.js' : '.min.js';
+	$default_version = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? time() : $build_constants['version'];
+	$extension       = '.min.js';
 
 	$scripts_dir  = __DIR__ . '/scripts';
 	$scripts_file = $scripts_dir . '/registry.php';

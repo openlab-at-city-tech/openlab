@@ -22,4 +22,5 @@ if ( bbp_allow_search() ) : ?>
 		</form>
 	</div>
 
-<?php endif;
+	<?php
+endif;

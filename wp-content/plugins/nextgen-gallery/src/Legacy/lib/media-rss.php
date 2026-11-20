@@ -39,7 +39,7 @@ class nggMediaRss {
 	 * @param int $show The number of pictures to include in one field (default 30)
 	 */
 	public static function get_last_pictures_mrss( $page = 0, $show = 30 ) {
-		$images = nggdb::find_last_images( $page, $show );
+		$images = self::without_private_images( nggdb::find_last_images( $page, $show ) );
 
 		$title       = self::decode_stored( stripslashes( get_option( 'blogname' ) ) );
 		$description = self::decode_stored( stripslashes( get_option( 'blogdescription' ) ) );
@@ -69,7 +69,9 @@ class nggMediaRss {
 		$link        = self::get_permalink( $gallery->pageid );
 		$prev_link   = ( $prev_gallery != null ) ? self::get_gallery_mrss_url( $prev_gallery->gid, true ) : '';
 		$next_link   = ( $next_gallery != null ) ? self::get_gallery_mrss_url( $next_gallery->gid, true ) : '';
-		$images      = nggdb::get_gallery( $gallery->gid, $ngg_options['galSort'], $ngg_options['galSortDir'] );
+		$images      = \Imagely\NGG\PrivateGalleries\Visibility::is_hidden( $gallery->gid )
+			? []
+			: nggdb::get_gallery( $gallery->gid, $ngg_options['galSort'], $ngg_options['galSortDir'] );
 
 		return self::get_mrss_root_node( $title, $description, $link, $prev_link, $next_link, $images );
 	}
@@ -87,9 +89,32 @@ class nggMediaRss {
 		$link        = self::get_permalink( 0 );
 		$prev_link   = '';
 		$next_link   = '';
-		$images      = $nggdb->find_images_in_album( $album->id );
+		$images      = self::without_private_images( $nggdb->find_images_in_album( $album->id ) );
 
 		return self::get_mrss_root_node( $title, $description, $link, $prev_link, $next_link, $images );
+	}
+
+	/**
+	 * Leaves out the images of private galleries, which the feed must never list.
+	 *
+	 * @param array $images Images.
+	 * @return array
+	 */
+	public static function without_private_images( $images ) {
+		$hidden = \Imagely\NGG\PrivateGalleries\Visibility::get_hidden_gallery_ids();
+
+		if ( empty( $hidden ) || ! is_array( $images ) ) {
+			return $images;
+		}
+
+		return array_values(
+			array_filter(
+				$images,
+				static function ( $image ) use ( $hidden ) {
+					return ! in_array( (int) $image->galleryid, $hidden, true );
+				}
+			)
+		);
 	}
 
 	/**

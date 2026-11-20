@@ -3,7 +3,6 @@
  * IP Module
  * Can't use DWOpts object because value = the serialized values
  *
- * @version $Id$
  * @copyright 2014 Jacco Drabbe
  */
 

@@ -49,7 +49,7 @@
 
 .customize-control-ast-builder-header-control .ahfb-builder-tab-toggle:hover, .customize-control-ast-builder-header-control .ahfb-builder-section-shortcut:hover {
     background: #eeeeee;
-    color: #0073aa;
+    color: var(--ast-customizer-color-1);
     border-color: #dddddd;
     border-bottom: unset;
 }
@@ -448,11 +448,11 @@
 
 .ahfb-build-tabs .nav-tab:hover, .ahfb-build-tabs .nav-tab:focus {
     background: #ffffff;
-    color: #0073aa;
+    color: var(--ast-customizer-color-1);
 }
 
 .ahfb-build-tabs-button.nav-tab-active:hover {
-    border-bottom-color: #0073aa;
+    border-bottom-color: var(--ast-customizer-color-1);
 }
 
 #customize-theme-controls #sub-accordion-section-section-header-builder, #customize-theme-controls #sub-accordion-section-section-footer-builder {
@@ -950,7 +950,7 @@
 }
 
 .active-builder-section.ahfb-builder-section-shortcut {
-    color: #0073aa;
+    color: var(--ast-customizer-color-1);
 }
 
 .ast-customize-control-title span.dashicons.dashicons-external {
@@ -1566,8 +1566,8 @@ li#customize-control-astra-settings-header-desktop-items, li#customize-control-a
 
 .sortable-style-tabs .components-tab-panel__tabs .components-button.active-tab {
     opacity: 1;
-    border-bottom-color: #0071a1;
-    color: #0073aa;
+    border-bottom-color: var(--ast-customizer-color-1);
+    color: var(--ast-customizer-color-1);
     background-image: linear-gradient(-180deg, #f3f5f6, #ffffff);
 }
 

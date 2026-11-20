@@ -95,8 +95,6 @@ class Astra_Header_Menu_Component {
 				'id'         => apply_filters( 'astra_header_site_navigation_id', esc_attr( $theme_location ) . '-site-navigation-' . esc_attr( $device ) ),
 				'class'      => 'site-navigation ast-flex-grow-1 navigation-accessibility site-header-focus-item',
 				'aria-label' => $nav_label,
-				'itemtype'   => 'https://schema.org/SiteNavigationElement',
-				'itemscope'  => 'itemscope',
 			)
 		);
 		$items_wrap .= '>';
@@ -158,8 +156,6 @@ class Astra_Header_Menu_Component {
 							'id'         => esc_attr( $theme_location ) . '-site-navigation',
 							'class'      => 'site-navigation ast-flex-grow-1 navigation-accessibility',
 							'aria-label' => $nav_label,
-							'itemtype'   => 'https://schema.org/SiteNavigationElement',
-							'itemscope'  => 'itemscope',
 						)
 					)
 				);

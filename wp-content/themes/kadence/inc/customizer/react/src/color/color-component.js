@@ -154,6 +154,7 @@ class ColorComponent extends Component {
 						/>
 					);
 				})}
+			{ this.props.control.renderNotice() }
 			</div>
 		);
 	}

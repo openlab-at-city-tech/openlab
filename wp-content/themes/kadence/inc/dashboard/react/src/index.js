@@ -6,6 +6,7 @@ import ChangelogTab from './changelog';
 import ProSettings from './pro-extension';
 import RecommendedTab from './recomended';
 import StarterTab from './starter';
+import FseToggle from './fse';
 import Sidebar from './sidebar';
 import CustomizerLinks from './customizer';
 import Notices from './notices';
@@ -63,6 +64,7 @@ class KadenceDashboard extends Component {
 											<div className="dashboard-modules-wrapper">
 												<div className="dashboard-customizer-settings">
 													<CustomizerLinks />
+													{ window.kadenceFseParams && <FseToggle /> }
 												</div>
 												<div className="dashboard-pro-settings">
 													<ProSettings />

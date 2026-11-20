@@ -98,6 +98,10 @@ class MetaSlider_Slideshow_Settings
             'carouselMargin' => 5,
             'minItems' => 2,
             'maxItems' => 0,
+            'carouselItems_smartphone' => 0,
+            'carouselItems_tablet' => 0,
+            'carouselItems_laptop' => 0,
+            'carouselItems_desktop' => 0,
             'forceHeight' => false,
             'firstSlideFadeIn' => false,
             'easing' => 'linear',
@@ -156,6 +160,7 @@ class MetaSlider_Slideshow_Settings
      * Convert 'on' or 'off' to boolean values
      * 
      * @since 3.92
+     * @since 3.114.0 Saves cropMultiply as an integer from 1 to 4
      * 
      * @param array $settings Slideshow settings
      * 
@@ -174,7 +179,7 @@ class MetaSlider_Slideshow_Settings
          * Reason is these settings have true/false + string options, so is better to handle all as strings
          * Keep original value if is different to 'on' and 'off'. 
          * We include actual booleans in $map just in case. */
-        $dropdowns = array('effect', 'cropMultiply', 'direction', 'easing', 'links', 'navigation', 'smartCrop', 'random', 'loop', 'layer_scaling');
+        $dropdowns = array('effect', 'direction', 'easing', 'links', 'navigation', 'smartCrop', 'random', 'loop', 'layer_scaling');
 
         foreach ($dropdowns as $dropdown) {
             if (isset($settings[$dropdown])) {
@@ -194,6 +199,71 @@ class MetaSlider_Slideshow_Settings
         foreach ($texts as $text) {
             if (isset($settings[$text])) {
                 $settings[$text] = sanitize_text_field($settings[$text]);
+            }
+        }
+
+        // Kept out of $dropdowns above - its true/false keys normalize to 1/0, corrupting numeric string values like style_rotate's '0'.
+        $style_selects = array('filter', 'style_border_style', 'style_border_color', 'style_box_shadow', 'style_rotate', 'style_flip');
+
+        foreach ($style_selects as $key) {
+            if (isset($settings[$key])) {
+                $settings[$key] = sanitize_text_field($settings[$key]);
+            }
+        }
+
+        // Kept out of $dropdowns above - its true key normalizes 1 to 'true'. Only 1x to 4x exist.
+        if (isset($settings['cropMultiply'])) {
+            $crop_multiply = absint($settings['cropMultiply']);
+            $settings['cropMultiply'] = $crop_multiply >= 1 && $crop_multiply <= 4 ? $crop_multiply : 1;
+        }
+
+        // width and height: integers or empty only
+        foreach ( array( 'width', 'height', 'style_corner_radius', 'style_border_width', 'style_opacity' ) as $key ) {
+            if ( isset( $settings[ $key ] ) ) {
+                // is_numeric('') is false, so a blank field is unset here too -
+                // letting downstream defaults apply instead of storing ''.
+                if ( is_numeric( $settings[ $key ] ) ) {
+                    $settings[ $key ] = intval( $settings[ $key ] );
+                } else {
+                    unset( $settings[ $key ] );
+                }
+            }
+        }
+
+        // Sanitize integers
+        $integers = array(
+            'delay',
+            'animationSpeed',
+            'filmstrip_delay',
+            'filmstrip_animationSpeed',
+            'minItems',
+            'maxItems',
+            'carouselItems_smartphone',
+            'carouselItems_tablet',
+            'carouselItems_laptop',
+            'carouselItems_desktop',
+            'navStep',
+            'imageWidth',
+            'imageHeight',
+            'containerPadding_top',
+            'containerPadding_bottom',
+            'containerPadding_left',
+            'containerPadding_right',
+            'containerMargin_top',
+            'containerMargin_bottom',
+            'thumb_width',
+            'thumb_height',
+            'thumb_min_width',
+            'carouselMargin'
+        );
+        
+        foreach ( $integers as $key ) {
+            if ( isset( $settings[ $key ] ) && $settings[ $key ] !== '' ) {
+                if ( is_numeric( $settings[ $key ] ) ) {
+                    $settings[ $key ] = intval( $settings[ $key ] );
+                } else {
+                    unset( $settings[ $key ] );
+                }
             }
         }
 

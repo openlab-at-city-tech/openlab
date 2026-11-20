@@ -22,7 +22,7 @@ if ( ! bbp_is_single_forum() ) : ?>
 
 	<?php bbp_topic_tag_list( bbp_get_topic_id() ); ?>
 
-	<?php bbp_single_topic_description( array( 'topic_id' => bbp_get_topic_id() ) ); ?>
+	<?php bbp_single_topic_description( [ 'topic_id' => bbp_get_topic_id() ] ); ?>
 
 	<?php bbp_get_template_part( 'alert', 'topic-lock' ); ?>
 
@@ -34,23 +34,21 @@ if ( ! bbp_is_single_forum() ) : ?>
 		<form id="new-post" name="new-post" method="post" action="<?php bbp_topic_permalink(); ?>">
 			<div class="bbpress-reply-head clearfix">
 			<?php
-				if ( bbp_is_topic_edit() ) :
-					echo '<h2 class="ktbb-reply-head-title">';
-					printf( __( 'Now Editing %s', 'kadence' ), '<strong>' . esc_html( bbp_get_topic_title() ) . '</strong>' );
-					echo '</h2>';
-				else :
-					if ( bbp_is_single_forum() && bbp_get_forum_title() ) {
+			if ( bbp_is_topic_edit() ) :
+				echo '<h2 class="ktbb-reply-head-title">';
+				printf( __( 'Now Editing %s', 'kadence' ), '<strong>' . esc_html( bbp_get_topic_title() ) . '</strong>' );
+				echo '</h2>';
+				elseif ( bbp_is_single_forum() && bbp_get_forum_title() ) :
 						echo '<div class="bbpress-reply-head-abovetitle">' . __( 'Create New Topic in:', 'kadence' ) . '</div>';
 						echo '<h2 class="bbpress-reply-head-title">';
 						echo esc_html( bbp_get_topic_title() );
 						echo '</h2>';
-					} else {
+					else :
 						echo '<h2 class="bbpress-reply-head-title">';
 						echo __( 'Create New Topic', 'kadence' );
 						echo '</h2>';
-					}
 				endif;
-				?>
+					?>
 			</div>
 			<?php do_action( 'bbp_theme_before_topic_form' ); ?>
 
@@ -96,7 +94,7 @@ if ( ! bbp_is_single_forum() ) : ?>
 
 					<?php do_action( 'bbp_theme_before_topic_form_content' ); ?>
 
-					<?php bbp_the_content( array( 'context' => 'topic' ) ); ?>
+					<?php bbp_the_content( [ 'context' => 'topic' ] ); ?>
 
 					<?php do_action( 'bbp_theme_after_topic_form_content' ); ?>
 
@@ -129,10 +127,12 @@ if ( ! bbp_is_single_forum() ) : ?>
 						<p>
 							<label for="bbp_forum_id"><?php esc_html_e( 'Forum:', 'kadence' ); ?></label><br />
 							<?php
-								bbp_dropdown( array(
-									'show_none' => esc_html__( '&mdash; No forum &mdash;', 'kadence' ),
-									'selected'  => bbp_get_form_topic_forum()
-								) );
+								bbp_dropdown(
+									[
+										'show_none' => esc_html__( '&mdash; No forum &mdash;', 'kadence' ),
+										'selected'  => bbp_get_form_topic_forum(),
+									] 
+								);
 							?>
 						</p>
 
@@ -249,10 +249,13 @@ if ( ! bbp_is_single_forum() ) : ?>
 	<div id="no-topic-<?php bbp_forum_id(); ?>" class="bbp-no-topic">
 		<div class="bbp-template-notice">
 			<ul>
-				<li><?php is_user_logged_in()
-					? esc_html_e( 'You cannot create new topics.',               'kadence' )
+				<li>
+				<?php
+				is_user_logged_in()
+					? esc_html_e( 'You cannot create new topics.', 'kadence' )
 					: esc_html_e( 'You must be logged in to create new topics.', 'kadence' );
-				?></li>
+				?>
+				</li>
 			</ul>
 		</div>
 
@@ -270,4 +273,5 @@ if ( ! bbp_is_single_forum() ) : ?>
 
 </div>
 
-<?php endif;
+	<?php
+endif;

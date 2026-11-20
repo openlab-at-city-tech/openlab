@@ -149,21 +149,29 @@ class Featured_Plugins extends Abstract_Module {
 		}
 
 		if ( isset( $args->page ) && 1 === (int) $args->page && isset( $args->search ) && ! empty( $args->search ) ) {
-			$res->plugins = $this->maybe_prepend_lms_plugin( $res->plugins, $args );
-			return $res;
+			$original_count = count( (array) $res->plugins );
+			$res->plugins   = $this->maybe_prepend_easy_mcp_plugin( $res->plugins, $args );
+			$res->plugins   = $this->maybe_prepend_lms_plugin( $res->plugins, $args );
+
+			return $this->adjust_results_count( $res, count( (array) $res->plugins ) - $original_count );
 		}
 
 		if ( ! isset( $args->browse ) || $args->browse !== 'featured' ) {
 			return $res;
 		}
 
+		// Inject only on the first page so the same plugins are not repeated on every page.
+		if ( isset( $args->page ) && (int) $args->page > 1 ) {
+			return $res;
+		}
+
 		$featured = $this->query_plugins_by_author( $args );
 
-		$plugins      = array_merge( $featured, (array) $res->plugins );
-		$plugins      = array_slice( $plugins, 0, $res->info['results'] );
-		$res->plugins = $plugins;
+		$original_count = count( (array) $res->plugins );
+		$plugins        = $this->remove_plugins_by_slug( (array) $res->plugins, $this->get_plugin_slugs( $featured ) );
+		$res->plugins   = array_merge( $featured, $plugins );
 
-		return $res;
+		return $this->adjust_results_count( $res, count( $res->plugins ) - $original_count );
 	}
 
 	/**
@@ -175,27 +183,162 @@ class Featured_Plugins extends Abstract_Module {
 	 */
 	private function maybe_prepend_lms_plugin( $plugins, $args ) {
 		$search = isset( $args->search ) ? strtolower( $args->search ) : '';
-		if (
-			strpos( $search, 'lms' ) !== false ||
-			strpos( $search, 'learn' ) !== false
-		) {
-			$filter_slugs = apply_filters( 'themeisle_sdk_masteriyo_filter_slugs', [ 'learning-management-system' ] );
-			$masteriyo    = $this->get_plugins_filtered_from_author( $args, $filter_slugs, 'masteriyo' );
+		if ( ! self::matches_lms_search_keywords( $search ) ) {
+			return $plugins;
+		}
 
-			if ( ! empty( $masteriyo ) ) {
-				// Remove existing LMS plugin if present to avoid duplicates.
-				$plugins = array_filter(
-					$plugins,
-					function( $plugin ) {
-						return ( is_object( $plugin ) && isset( $plugin->slug ) && $plugin->slug !== 'learning-management-system' ) ||
-							( is_array( $plugin ) && isset( $plugin['slug'] ) && $plugin['slug'] !== 'learning-management-system' );
-					}
-				);
+		$filter_slugs = apply_filters( 'themeisle_sdk_masteriyo_filter_slugs', [ 'learning-management-system' ] );
 
-				$plugins = array_merge( $masteriyo, $plugins );
+		return $this->prepend_author_plugins( $plugins, $args, $filter_slugs, 'masteriyo' );
+	}
+
+	/**
+	 * Prepend the given author's plugins to the list, removing existing copies to avoid duplicates.
+	 *
+	 * @param array  $plugins      The plugins array.
+	 * @param object $args         The plugin API arguments.
+	 * @param array  $filter_slugs The slugs to inject.
+	 * @param string $author       The wp.org author that owns the slugs.
+	 *
+	 * @return array
+	 */
+	private function prepend_author_plugins( $plugins, $args, $filter_slugs, $author ) {
+		$injected = $this->get_plugins_filtered_from_author( $args, $filter_slugs, $author );
+		if ( empty( $injected ) ) {
+			return $plugins;
+		}
+
+		$plugins = $this->remove_plugins_by_slug( (array) $plugins, $this->get_plugin_slugs( $injected ) );
+
+		return array_merge( $injected, $plugins );
+	}
+
+	/**
+	 * Prepend the Easy MCP AI plugin if the search query matches AI/MCP-related terms.
+	 *
+	 * @param array  $plugins The plugins array.
+	 * @param object $args The plugin API arguments.
+	 * @return array
+	 */
+	private function maybe_prepend_easy_mcp_plugin( $plugins, $args ) {
+		$search = isset( $args->search ) ? strtolower( $args->search ) : '';
+
+		// The LMS prepend keeps precedence — never stack two injected cards.
+		if ( self::matches_lms_search_keywords( $search ) || ! self::matches_ai_search_keywords( $search ) ) {
+			return $plugins;
+		}
+
+		$filter_slugs = apply_filters( 'themeisle_sdk_easy_mcp_filter_slugs', [ 'easy-mcp-ai' ] );
+
+		return $this->prepend_author_plugins( $plugins, $args, $filter_slugs, 'easymcpai' );
+	}
+
+	/**
+	 * Check if a plugin search query contains AI/MCP terms or supported client brands.
+	 *
+	 * Brand names of unrelated AI vendors are deliberately not matched — only the
+	 * category terms and the clients Easy MCP AI itself integrates with.
+	 *
+	 * @param string $search Search query.
+	 *
+	 * @return bool True if the search query matches AI/MCP-related terms.
+	 */
+	public static function matches_ai_search_keywords( $search ) {
+		// Distinctive names match as substrings (for example, "claudecode").
+		foreach ( array( 'model context protocol', 'claude', 'chatgpt' ) as $keyword ) {
+			if ( false !== stripos( $search, $keyword ) ) {
+				return true;
 			}
 		}
-		return $plugins;
+
+		// Short terms need boundaries (for example, not "email" or "fulfillment").
+		return preg_match( '/(^|[^a-z0-9])(ai|mcp|llms?)([^a-z0-9]|$)/i', $search ) === 1;
+	}
+
+	/**
+	 * Extract the slugs from a list of plugin entries.
+	 *
+	 * @param array $plugins The plugins list.
+	 *
+	 * @return array
+	 */
+	private function get_plugin_slugs( $plugins ) {
+		$slugs = [];
+		foreach ( $plugins as $plugin ) {
+			$plugin = (array) $plugin;
+			if ( isset( $plugin['slug'] ) ) {
+				$slugs[] = $plugin['slug'];
+			}
+		}
+
+		return $slugs;
+	}
+
+	/**
+	 * Remove the plugins matching the provided slugs from the list.
+	 *
+	 * @param array $plugins The plugins list.
+	 * @param array $slugs   The slugs to remove.
+	 *
+	 * @return array
+	 */
+	private function remove_plugins_by_slug( $plugins, $slugs ) {
+		return array_values(
+			array_filter(
+				$plugins,
+				function( $plugin ) use ( $slugs ) {
+					$plugin = (array) $plugin;
+
+					return ! isset( $plugin['slug'] ) || ! in_array( $plugin['slug'], $slugs, true );
+				}
+			)
+		);
+	}
+
+	/**
+	 * Adjust the reported total results count after injecting plugins.
+	 *
+	 * @param object $res   The result object.
+	 * @param int    $delta The net number of plugins added to the list.
+	 *
+	 * @return object
+	 */
+	private function adjust_results_count( $res, $delta ) {
+		if ( 0 !== $delta && isset( $res->info['results'] ) && is_numeric( $res->info['results'] ) ) {
+			$res->info['results'] = max( 0, (int) $res->info['results'] + $delta );
+		}
+
+		return $res;
+	}
+
+	/**
+	 * Check if a plugin search query matches LMS-related terms.
+	 *
+	 * @param string $search Search query.
+	 *
+	 * @return bool True if the search query matches LMS-related terms.
+	 */
+	public static function matches_lms_search_keywords( $search ) {
+		$lms_keywords = array(
+			'lms',
+			'learn',
+			'course',
+			'courses',
+			'learning',
+			'academy',
+			'training',
+			'student',
+			'students',
+			'quiz',
+		);
+
+		foreach ( $lms_keywords as $keyword ) {
+			if ( preg_match( '/(^|[^a-z0-9])' . preg_quote( $keyword, '/' ) . '([^a-z0-9]|$)/', $search ) === 1 ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -216,7 +359,39 @@ class Featured_Plugins extends Abstract_Module {
 		$filtered_from_themeisle = $this->get_plugins_filtered_from_author( $args, $themeisle_filter_slugs );
 		$featured                = array_merge( $featured, $filtered_from_themeisle );
 
-		return $featured;
+		// Easy MCP AI targets the Abilities API, available since WordPress 6.9.
+		if ( version_compare( get_bloginfo( 'version' ), '6.9', '>=' ) ) {
+			$easy_mcp_filter_slugs  = apply_filters( 'themeisle_sdk_easy_mcp_filter_slugs', [ 'easy-mcp-ai' ] );
+			$filtered_from_easy_mcp = $this->get_plugins_filtered_from_author( $args, $easy_mcp_filter_slugs, 'easymcpai' );
+			$featured               = array_merge( $featured, $filtered_from_easy_mcp );
+		}
+
+		return $this->dedupe_plugins_by_slug( $featured );
+	}
+
+	/**
+	 * Remove entries with a duplicate slug from a list of plugins, keeping the first occurrence.
+	 *
+	 * @param array $plugins The plugins list.
+	 *
+	 * @return array
+	 */
+	private function dedupe_plugins_by_slug( $plugins ) {
+		$seen    = [];
+		$deduped = [];
+
+		foreach ( $plugins as $plugin ) {
+			$array_plugin = (array) $plugin;
+			if ( isset( $array_plugin['slug'] ) ) {
+				if ( isset( $seen[ $array_plugin['slug'] ] ) ) {
+					continue;
+				}
+				$seen[ $array_plugin['slug'] ] = true;
+			}
+			$deduped[] = $plugin;
+		}
+
+		return $deduped;
 	}
 
 	/**
@@ -231,8 +406,8 @@ class Featured_Plugins extends Abstract_Module {
 	protected function get_plugins_filtered_from_author( $args, $filter_slugs = [], $author = 'Themeisle' ) {
 
 		$cached = get_transient( $this->transient_key . $author );
-		if ( $cached ) {
-			return $cached;
+		if ( false !== $cached ) {
+			return (array) $cached;
 		}
 
 		$new_args = [
@@ -245,15 +420,20 @@ class Featured_Plugins extends Abstract_Module {
 
 		$api = plugins_api( 'query_plugins', $new_args );
 		if ( is_wp_error( $api ) ) {
+			// Cache the failure for a shorter period to avoid hammering the API on every request.
+			set_transient( $this->transient_key . $author, [], HOUR_IN_SECONDS );
+
 			return [];
 		}
 
-		$filtered = array_filter(
-			$api->plugins,
-			function( $plugin ) use ( $filter_slugs ) {
-				$array_plugin = (array) $plugin;
-				return in_array( $array_plugin['slug'], $filter_slugs );
-			}
+		$filtered = array_values(
+			array_filter(
+				$api->plugins,
+				function( $plugin ) use ( $filter_slugs ) {
+					$array_plugin = (array) $plugin;
+					return in_array( $array_plugin['slug'], $filter_slugs );
+				}
+			)
 		);
 
 		set_transient( $this->transient_key . $author, $filtered, 12 * HOUR_IN_SECONDS );

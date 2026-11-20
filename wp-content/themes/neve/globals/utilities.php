@@ -228,10 +228,16 @@ function neve_search_icon( $is_link = false, $echo = false, $size = 15, $amp_rea
 
 	$amp_state = '';
 	if ( $amp_ready ) {
-		$amp_state = 'on="tap:AMP.setState({visible: !visible})" role="button"  ';
+		$amp_state = 'on="tap:AMP.setState({visible: !visible})"' . ( $is_link ? '' : ' role="button"' ) . ' ';
 	}
-	$start_tag = $is_link ? 'a aria-label="' . __( 'Search', 'neve' ) . '" href="#"' : 'span';
-	$end_tag   = $is_link ? 'a' : 'span';
+	// The icon is decorative — the wrapping control carries the name.
+	if ( strpos( $svg, 'aria-hidden' ) === false ) {
+		$svg = preg_replace( '/<svg /', '<svg aria-hidden="true" focusable="false" ', $svg, 1 );
+	}
+	// The trigger opens/closes the search dropdown: a real button with
+	// the disclosure state, not a hash link.
+	$start_tag = $is_link ? 'button type="button" aria-label="' . esc_attr__( 'Search', 'neve' ) . '" aria-expanded="false"' : 'span';
+	$end_tag   = $is_link ? 'button' : 'span';
 	$output    = '<' . $start_tag . ' class="nv-icon nv-search" ' . $amp_state . '>
 				' . neve_kses_svg( $svg ) . '
 			</' . $end_tag . '>';
@@ -390,6 +396,45 @@ function neve_get_standard_fonts( $with_variants = false ) {
 }
 
 /**
+ * Include a PHP file that returns an array, tolerating its absence.
+ *
+ * @param string  $path     Absolute path to the file.
+ * @param mixed[] $fallback Value to return when the file cannot be used.
+ *
+ * @return mixed[]
+ */
+function neve_require_array( $path, $fallback = array() ) {
+	if ( ! is_file( $path ) || ! is_readable( $path ) ) {
+		return $fallback;
+	}
+
+	$value = include $path;
+
+	return is_array( $value ) ? $value : $fallback;
+}
+
+/**
+ * Get asset meta from a generated asset file.
+ *
+ * @param string $path Absolute path to the generated asset file.
+ *
+ * @return mixed[]
+ */
+function neve_get_asset_meta( $path ) {
+	$meta = neve_require_array( $path );
+
+	if ( ! isset( $meta['dependencies'] ) || ! is_array( $meta['dependencies'] ) ) {
+		$meta['dependencies'] = array();
+	}
+
+	if ( ! isset( $meta['version'] ) ) {
+		$meta['version'] = NEVE_VERSION;
+	}
+
+	return $meta;
+}
+
+/**
  * Get all google fonts
  *
  * @param bool $with_variants should fetch variants.
@@ -397,10 +442,12 @@ function neve_get_standard_fonts( $with_variants = false ) {
  * @return array
  */
 function neve_get_google_fonts( $with_variants = false ) {
-	$fonts = ( include NEVE_MAIN_DIR . 'globals/google-fonts.php' );
+	$fonts = neve_require_array( NEVE_MAIN_DIR . 'globals/google-fonts.php' );
 
 	if ( $with_variants ) {
-		return apply_filters( 'neve_google_fonts_with_variants_array', $fonts );
+		$fonts = apply_filters( 'neve_google_fonts_with_variants_array', $fonts );
+
+		return is_array( $fonts ) ? $fonts : array();
 	}
 
 	return apply_filters( 'neve_google_fonts_array', array_keys( $fonts ) );
@@ -472,14 +519,19 @@ function neve_get_global_colors_default( $migrated = false ) {
 				'allowDeletion' => false,
 				'colors'        => [
 					'nv-primary-accent'   => '#2f5aae',
-					'nv-secondary-accent' => '#2f5aae',
+					// Hover accent: darker than the primary so hover states
+					// are perceivable; 8.9:1 on the site background.
+					'nv-secondary-accent' => '#24478c',
 					'nv-site-bg'          => '#ffffff',
 					'nv-light-bg'         => '#f4f5f7',
 					'nv-dark-bg'          => '#121212',
 					'nv-text-color'       => '#272626',
 					'nv-text-dark-bg'     => '#ffffff',
-					'nv-c-1'              => '#9463ae',
-					'nv-c-2'              => '#be574b',
+					// >= 4.5:1 on both nv-site-bg and nv-light-bg (the old
+					// values sat at exactly 4.51:1 on white and failed on
+					// the light background).
+					'nv-c-1'              => '#824c9e',
+					'nv-c-2'              => '#a4423a',
 				],
 			],
 			'darkMode' => [
@@ -487,14 +539,18 @@ function neve_get_global_colors_default( $migrated = false ) {
 				'allowDeletion' => false,
 				'colors'        => [
 					'nv-primary-accent'   => '#00c2ff',
-					'nv-secondary-accent' => '#00c2ff',
+					// Hover accent: lighter than the primary; 11.5:1 on the
+					// dark site background.
+					'nv-secondary-accent' => '#66d9ff',
 					'nv-site-bg'          => '#121212',
 					'nv-light-bg'         => '#1a1a1a',
 					'nv-dark-bg'          => '#000000',
 					'nv-text-color'       => '#ffffff',
 					'nv-text-dark-bg'     => '#ffffff',
-					'nv-c-1'              => '#198754',
-					'nv-c-2'              => '#be574b',
+					// >= 4.5:1 on the dark site background (old values were
+					// 4.1:1 and 4.2:1).
+					'nv-c-1'              => '#1fa869',
+					'nv-c-2'              => '#cd6d61',
 				],
 			],
 		],

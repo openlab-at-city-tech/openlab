@@ -28,14 +28,14 @@ class Kadence_Control_Tab extends WP_Customize_Control {
 	 *
 	 * @var array
 	 */
-	public $default = array();
+	public $default = [];
 
 	/**
 	 * Additional arguments passed to JS.
 	 *
 	 * @var array
 	 */
-	public $input_attrs = array();
+	public $input_attrs = [];
 
 	/**
 	 * Send to JS.

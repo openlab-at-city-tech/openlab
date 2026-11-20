@@ -183,7 +183,7 @@ if ( ! class_exists( 'Astra_Edd' ) ) {
 		 */
 		public function edd_set_defaults_initialization() {
 
-			$astra_theme_options = get_option( 'astra-settings' );
+			$astra_theme_options = astra_get_raw_options();
 			$edd_settings        = get_option( 'edd_settings' );
 
 			// Set flag to set the EDD style disable only once for the very first time.
@@ -995,7 +995,7 @@ if ( ! class_exists( 'Astra_Edd' ) ) {
 				if ( $is_edd_single_product_page ) {
 					$edd_single_product_sidebar = astra_get_option( 'single-download-sidebar-layout' );
 
-					if ( 'default' !== $edd_single_product_sidebar ) {
+					if ( 'default' !== $edd_single_product_sidebar && ! empty( $edd_single_product_sidebar ) ) {
 						$sidebar_layout = $edd_single_product_sidebar;
 					}
 

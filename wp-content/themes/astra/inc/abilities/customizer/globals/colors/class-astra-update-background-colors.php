@@ -221,7 +221,7 @@ class Astra_Update_Background_Colors extends Astra_Abstract_Ability {
 			);
 		}
 
-		$theme_options = get_option( ASTRA_THEME_SETTINGS, array() );
+		$theme_options = astra_get_raw_options();
 		if ( ! is_array( $theme_options ) ) {
 			$theme_options = array();
 		}

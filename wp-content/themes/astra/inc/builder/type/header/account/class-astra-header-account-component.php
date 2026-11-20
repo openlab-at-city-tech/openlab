@@ -42,7 +42,7 @@ if ( ! class_exists( 'Astra_Header_Account_Component' ) ) {
 			$astra_builder   = astra_builder();
 			$theme_location  = 'loggedin_account_menu';
 			$account_type    = astra_get_option( 'header-account-type' );
-			$enable_woo_menu = ( 'woocommerce' === $account_type && astra_get_option( 'header-account-woo-menu' ) );
+			$enable_woo_menu = ( class_exists( 'WooCommerce' ) && 'woocommerce' === $account_type && astra_get_option( 'header-account-woo-menu' ) );
 
 			/**
 			 * Filter the classes(array) for Menu (<ul>).

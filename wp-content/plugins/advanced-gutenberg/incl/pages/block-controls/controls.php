@@ -24,7 +24,7 @@ $capabilities_control = PublishPress\Blocks\Controls::getControlValue('capabilit
         <tr>
             <th scope="row">
                 <?php
-                _e('Schedule', 'advanced-gutenberg') ?>
+                esc_html_e('Schedule', 'advanced-gutenberg') ?>
             </th>
             <td>
                 <fieldset>
@@ -32,10 +32,10 @@ $capabilities_control = PublishPress\Blocks\Controls::getControlValue('capabilit
                         <input type="checkbox" name="schedule_control"
                                value="1"
                             <?php
-                            echo $schedule_control ? ' checked' : '' ?>
+                            checked($schedule_control); ?>
                         />
                         <?php
-                        _e(
+                        esc_html_e(
                             'Choose when to start showing and/or stop showing your blocks.',
                             'advanced-gutenberg'
                         )
@@ -43,13 +43,13 @@ $capabilities_control = PublishPress\Blocks\Controls::getControlValue('capabilit
                     </label><br>
                     <p class="description advgb-control-desc">
                         <?php
-                        _e('This block control is available on:', 'advanced-gutenberg') ?>
+                        esc_html_e('This block control is available on:', 'advanced-gutenberg') ?>
                         <code><?php
-                            _e('Post', 'advanced-gutenberg') ?></code>
+                            esc_html_e('Post', 'advanced-gutenberg') ?></code>
                         <code><?php
-                            _e('Widgets', 'advanced-gutenberg') ?></code>
+                            esc_html_e('Widgets', 'advanced-gutenberg') ?></code>
                         <code><?php
-                            _e('Site Editor', 'advanced-gutenberg') ?></code>
+                            esc_html_e('Site Editor', 'advanced-gutenberg') ?></code>
                     </p>
                 </fieldset>
             </td>
@@ -57,7 +57,7 @@ $capabilities_control = PublishPress\Blocks\Controls::getControlValue('capabilit
         <tr>
             <th scope="row">
                 <?php
-                _e('User roles', 'advanced-gutenberg') ?>
+                esc_html_e('User roles', 'advanced-gutenberg') ?>
             </th>
             <td>
                 <fieldset>
@@ -65,10 +65,10 @@ $capabilities_control = PublishPress\Blocks\Controls::getControlValue('capabilit
                         <input type="checkbox" name="user_role_control"
                                value="1"
                             <?php
-                            echo $user_role_control ? ' checked' : '' ?>
+                            checked($user_role_control); ?>
                         />
                         <?php
-                        _e(
+                        esc_html_e(
                             'Choose which users can see your blocks.',
                             'advanced-gutenberg'
                         )
@@ -76,13 +76,13 @@ $capabilities_control = PublishPress\Blocks\Controls::getControlValue('capabilit
                     </label><br>
                     <p class="description advgb-control-desc">
                         <?php
-                        _e('This block control is available on:', 'advanced-gutenberg') ?>
+                        esc_html_e('This block control is available on:', 'advanced-gutenberg') ?>
                         <code><?php
-                            _e('Post', 'advanced-gutenberg') ?></code>
+                            esc_html_e('Post', 'advanced-gutenberg') ?></code>
                         <code><?php
-                            _e('Widgets', 'advanced-gutenberg') ?></code>
+                            esc_html_e('Widgets', 'advanced-gutenberg') ?></code>
                         <code><?php
-                            _e('Site Editor', 'advanced-gutenberg') ?></code>
+                            esc_html_e('Site Editor', 'advanced-gutenberg') ?></code>
                     </p>
                 </fieldset>
             </td>
@@ -90,7 +90,7 @@ $capabilities_control = PublishPress\Blocks\Controls::getControlValue('capabilit
         <tr>
             <th scope="row">
                 <?php
-                _e('Device Type', 'advanced-gutenberg') ?>
+                esc_html_e('Device Type', 'advanced-gutenberg') ?>
             </th>
             <td>
                 <fieldset>
@@ -98,10 +98,10 @@ $capabilities_control = PublishPress\Blocks\Controls::getControlValue('capabilit
                         <input type="checkbox" name="device_type_control"
                                value="1"
                             <?php
-                            echo $device_type_control ? ' checked' : '' ?>
+                            checked($device_type_control); ?>
                         />
                         <?php
-                        _e(
+                        esc_html_e(
                             'Choose the device type to show your blocks on.',
                             'advanced-gutenberg'
                         )
@@ -109,13 +109,13 @@ $capabilities_control = PublishPress\Blocks\Controls::getControlValue('capabilit
                     </label><br>
                     <p class="description advgb-control-desc">
                         <?php
-                        _e('This block control is available on:', 'advanced-gutenberg') ?>
+                        esc_html_e('This block control is available on:', 'advanced-gutenberg') ?>
                         <code><?php
-                            _e('Post', 'advanced-gutenberg') ?></code>
+                            esc_html_e('Post', 'advanced-gutenberg') ?></code>
                         <code><?php
-                            _e('Widgets', 'advanced-gutenberg') ?></code>
+                            esc_html_e('Widgets', 'advanced-gutenberg') ?></code>
                         <code><?php
-                            _e('Site Editor', 'advanced-gutenberg') ?></code>
+                            esc_html_e('Site Editor', 'advanced-gutenberg') ?></code>
                     </p>
                 </fieldset>
             </td>
@@ -123,7 +123,7 @@ $capabilities_control = PublishPress\Blocks\Controls::getControlValue('capabilit
         <tr>
             <th scope="row">
                 <?php
-                _e('Device Width', 'advanced-gutenberg') ?>
+                esc_html_e('Device Width', 'advanced-gutenberg') ?>
             </th>
             <td>
                 <fieldset>
@@ -131,10 +131,10 @@ $capabilities_control = PublishPress\Blocks\Controls::getControlValue('capabilit
                         <input type="checkbox" name="device_width_control"
                                value="1"
                             <?php
-                            echo $device_width_control ? ' checked' : '' ?>
+                            checked($device_width_control); ?>
                         />
                         <?php
-                        _e(
+                        esc_html_e(
                             'Choose the device width to show your blocks on.',
                             'advanced-gutenberg'
                         )
@@ -142,13 +142,13 @@ $capabilities_control = PublishPress\Blocks\Controls::getControlValue('capabilit
                     </label><br>
                     <p class="description advgb-control-desc">
                         <?php
-                        _e('This block control is available on:', 'advanced-gutenberg') ?>
+                        esc_html_e('This block control is available on:', 'advanced-gutenberg') ?>
                         <code><?php
-                            _e('Post', 'advanced-gutenberg') ?></code>
+                            esc_html_e('Post', 'advanced-gutenberg') ?></code>
                         <code><?php
-                            _e('Widgets', 'advanced-gutenberg') ?></code>
+                            esc_html_e('Widgets', 'advanced-gutenberg') ?></code>
                         <code><?php
-                            _e('Site Editor', 'advanced-gutenberg') ?></code>
+                            esc_html_e('Site Editor', 'advanced-gutenberg') ?></code>
                     </p>
                 </fieldset>
             </td>
@@ -156,7 +156,7 @@ $capabilities_control = PublishPress\Blocks\Controls::getControlValue('capabilit
         <tr>
             <th scope="row">
                 <?php
-                _e('Term archives', 'advanced-gutenberg') ?>
+                esc_html_e('Term archives', 'advanced-gutenberg') ?>
             </th>
             <td>
                 <fieldset>
@@ -164,10 +164,10 @@ $capabilities_control = PublishPress\Blocks\Controls::getControlValue('capabilit
                         <input type="checkbox" name="archive_control"
                                value="1"
                             <?php
-                            echo $archive_control ? ' checked' : '' ?>
+                            checked($archive_control); ?>
                         />
                         <?php
-                        _e(
+                        esc_html_e(
                             'Choose on which taxonomies and terms archive pages your blocks can be displayed.',
                             'advanced-gutenberg'
                         )
@@ -175,11 +175,11 @@ $capabilities_control = PublishPress\Blocks\Controls::getControlValue('capabilit
                     </label><br>
                     <p class="description advgb-control-desc">
                         <?php
-                        _e('This block control is available on:', 'advanced-gutenberg') ?>
+                        esc_html_e('This block control is available on:', 'advanced-gutenberg') ?>
                         <code><?php
-                            _e('Widgets', 'advanced-gutenberg') ?></code>
+                            esc_html_e('Widgets', 'advanced-gutenberg') ?></code>
                         <code><?php
-                            _e('Site Editor', 'advanced-gutenberg') ?></code>
+                            esc_html_e('Site Editor', 'advanced-gutenberg') ?></code>
                     </p>
                 </fieldset>
             </td>
@@ -187,7 +187,7 @@ $capabilities_control = PublishPress\Blocks\Controls::getControlValue('capabilit
         <tr>
             <th scope="row">
                 <?php
-                _e('Pages', 'advanced-gutenberg') ?>
+                esc_html_e('Pages', 'advanced-gutenberg') ?>
             </th>
             <td>
                 <fieldset>
@@ -195,10 +195,10 @@ $capabilities_control = PublishPress\Blocks\Controls::getControlValue('capabilit
                         <input type="checkbox" name="page_control"
                                value="1"
                             <?php
-                            echo $page_control ? ' checked' : '' ?>
+                            checked($page_control); ?>
                         />
                         <?php
-                        _e(
+                        esc_html_e(
                             'Choose in which pages your blocks can be displayed.',
                             'advanced-gutenberg'
                         )
@@ -206,137 +206,137 @@ $capabilities_control = PublishPress\Blocks\Controls::getControlValue('capabilit
                     </label><br>
                     <p class="description advgb-control-desc">
                         <?php
-                        _e('This block control is available on:', 'advanced-gutenberg') ?>
+                        esc_html_e('This block control is available on:', 'advanced-gutenberg') ?>
                         <code><?php
-                            _e('Widgets', 'advanced-gutenberg') ?></code>
+                            esc_html_e('Widgets', 'advanced-gutenberg') ?></code>
                         <code><?php
-                            _e('Site Editor', 'advanced-gutenberg') ?></code>
+                            esc_html_e('Site Editor', 'advanced-gutenberg') ?></code>
                     </p>
                 </fieldset>
             </td>
         </tr>
 
         <tr>
-            <th scope="row"><?php _e('Browser & Device', 'advanced-gutenberg') ?></th>
+            <th scope="row"><?php esc_html_e('Browser & Device', 'advanced-gutenberg') ?></th>
             <td>
                 <fieldset>
                     <label>
-                        <input type="checkbox" name="browser_device_control" value="1" <?php echo $browser_device_control ? ' checked' : '' ?> />
-                        <?php _e('Choose which browsers and devices can see your blocks.', 'advanced-gutenberg') ?>
+                        <input type="checkbox" name="browser_device_control" value="1" <?php checked($browser_device_control); ?> />
+                        <?php esc_html_e('Choose which browsers and devices can see your blocks.', 'advanced-gutenberg') ?>
                     </label><br>
                     <p class="description advgb-control-desc">
-                        <?php _e('This block control is available on:', 'advanced-gutenberg') ?>
-                        <code><?php _e('Post', 'advanced-gutenberg') ?></code>
-                        <code><?php _e('Widgets', 'advanced-gutenberg') ?></code>
-                        <code><?php _e('Site Editor', 'advanced-gutenberg') ?></code>
+                        <?php esc_html_e('This block control is available on:', 'advanced-gutenberg') ?>
+                        <code><?php esc_html_e('Post', 'advanced-gutenberg') ?></code>
+                        <code><?php esc_html_e('Widgets', 'advanced-gutenberg') ?></code>
+                        <code><?php esc_html_e('Site Editor', 'advanced-gutenberg') ?></code>
                     </p>
                 </fieldset>
             </td>
         </tr>
 
         <tr>
-            <th scope="row"><?php _e('Operating System', 'advanced-gutenberg') ?></th>
+            <th scope="row"><?php esc_html_e('Operating System', 'advanced-gutenberg') ?></th>
             <td>
                 <fieldset>
                     <label>
-                        <input type="checkbox" name="operating_system_control" value="1" <?php echo $operating_system_control ? ' checked' : '' ?> />
-                        <?php _e('Choose which operating systems can see your blocks.', 'advanced-gutenberg') ?>
+                        <input type="checkbox" name="operating_system_control" value="1" <?php checked($operating_system_control); ?> />
+                        <?php esc_html_e('Choose which operating systems can see your blocks.', 'advanced-gutenberg') ?>
                     </label><br>
                     <p class="description advgb-control-desc">
-                        <?php _e('This block control is available on:', 'advanced-gutenberg') ?>
-                        <code><?php _e('Post', 'advanced-gutenberg') ?></code>
-                        <code><?php _e('Widgets', 'advanced-gutenberg') ?></code>
-                        <code><?php _e('Site Editor', 'advanced-gutenberg') ?></code>
+                        <?php esc_html_e('This block control is available on:', 'advanced-gutenberg') ?>
+                        <code><?php esc_html_e('Post', 'advanced-gutenberg') ?></code>
+                        <code><?php esc_html_e('Widgets', 'advanced-gutenberg') ?></code>
+                        <code><?php esc_html_e('Site Editor', 'advanced-gutenberg') ?></code>
                     </p>
                 </fieldset>
             </td>
         </tr>
 
         <tr>
-            <th scope="row"><?php _e('Cookie', 'advanced-gutenberg') ?></th>
+            <th scope="row"><?php esc_html_e('Cookie', 'advanced-gutenberg') ?></th>
             <td>
                 <fieldset>
                     <label>
-                        <input type="checkbox" name="cookie_control" value="1" <?php echo $cookie_control ? ' checked' : '' ?> />
-                        <?php _e('Show or hide blocks based on cookie values.', 'advanced-gutenberg') ?>
+                        <input type="checkbox" name="cookie_control" value="1" <?php checked($cookie_control); ?> />
+                        <?php esc_html_e('Show or hide blocks based on cookie values.', 'advanced-gutenberg') ?>
                     </label><br>
                     <p class="description advgb-control-desc">
-                        <?php _e('This block control is available on:', 'advanced-gutenberg') ?>
-                        <code><?php _e('Post', 'advanced-gutenberg') ?></code>
-                        <code><?php _e('Widgets', 'advanced-gutenberg') ?></code>
-                        <code><?php _e('Site Editor', 'advanced-gutenberg') ?></code>
+                        <?php esc_html_e('This block control is available on:', 'advanced-gutenberg') ?>
+                        <code><?php esc_html_e('Post', 'advanced-gutenberg') ?></code>
+                        <code><?php esc_html_e('Widgets', 'advanced-gutenberg') ?></code>
+                        <code><?php esc_html_e('Site Editor', 'advanced-gutenberg') ?></code>
                     </p>
                 </fieldset>
             </td>
         </tr>
 
         <tr>
-            <th scope="row"><?php _e('User Meta', 'advanced-gutenberg') ?></th>
+            <th scope="row"><?php esc_html_e('User Meta', 'advanced-gutenberg') ?></th>
             <td>
                 <fieldset>
                     <label>
-                        <input type="checkbox" name="user_meta_control" value="1" <?php echo $user_meta_control ? ' checked' : '' ?> />
-                        <?php _e('Show or hide blocks based on user meta values.', 'advanced-gutenberg') ?>
+                        <input type="checkbox" name="user_meta_control" value="1" <?php checked($user_meta_control); ?> />
+                        <?php esc_html_e('Show or hide blocks based on user meta values.', 'advanced-gutenberg') ?>
                     </label><br>
                     <p class="description advgb-control-desc">
-                        <?php _e('This block control is available on:', 'advanced-gutenberg') ?>
-                        <code><?php _e('Post', 'advanced-gutenberg') ?></code>
-                        <code><?php _e('Widgets', 'advanced-gutenberg') ?></code>
-                        <code><?php _e('Site Editor', 'advanced-gutenberg') ?></code>
+                        <?php esc_html_e('This block control is available on:', 'advanced-gutenberg') ?>
+                        <code><?php esc_html_e('Post', 'advanced-gutenberg') ?></code>
+                        <code><?php esc_html_e('Widgets', 'advanced-gutenberg') ?></code>
+                        <code><?php esc_html_e('Site Editor', 'advanced-gutenberg') ?></code>
                     </p>
                 </fieldset>
             </td>
         </tr>
 
         <tr>
-            <th scope="row"><?php _e('Post Meta', 'advanced-gutenberg') ?></th>
+            <th scope="row"><?php esc_html_e('Post Meta', 'advanced-gutenberg') ?></th>
             <td>
                 <fieldset>
                     <label>
-                        <input type="checkbox" name="post_meta_control" value="1" <?php echo $post_meta_control ? ' checked' : '' ?> />
-                        <?php _e('Show or hide blocks based on post meta values.', 'advanced-gutenberg') ?>
+                        <input type="checkbox" name="post_meta_control" value="1" <?php checked($post_meta_control); ?> />
+                        <?php esc_html_e('Show or hide blocks based on post meta values.', 'advanced-gutenberg') ?>
                     </label><br>
                     <p class="description advgb-control-desc">
-                        <?php _e('This block control is available on:', 'advanced-gutenberg') ?>
-                        <code><?php _e('Post', 'advanced-gutenberg') ?></code>
-                        <code><?php _e('Widgets', 'advanced-gutenberg') ?></code>
-                        <code><?php _e('Site Editor', 'advanced-gutenberg') ?></code>
+                        <?php esc_html_e('This block control is available on:', 'advanced-gutenberg') ?>
+                        <code><?php esc_html_e('Post', 'advanced-gutenberg') ?></code>
+                        <code><?php esc_html_e('Widgets', 'advanced-gutenberg') ?></code>
+                        <code><?php esc_html_e('Site Editor', 'advanced-gutenberg') ?></code>
                     </p>
                 </fieldset>
             </td>
         </tr>
 
         <tr>
-            <th scope="row"><?php _e('Query String', 'advanced-gutenberg') ?></th>
+            <th scope="row"><?php esc_html_e('Query String', 'advanced-gutenberg') ?></th>
             <td>
                 <fieldset>
                     <label>
-                        <input type="checkbox" name="query_string_control" value="1" <?php echo $query_string_control ? ' checked' : '' ?> />
-                        <?php _e('Show or hide blocks based on URL query parameters.', 'advanced-gutenberg') ?>
+                        <input type="checkbox" name="query_string_control" value="1" <?php checked($query_string_control); ?> />
+                        <?php esc_html_e('Show or hide blocks based on URL query parameters.', 'advanced-gutenberg') ?>
                     </label><br>
                     <p class="description advgb-control-desc">
-                        <?php _e('This block control is available on:', 'advanced-gutenberg') ?>
-                        <code><?php _e('Post', 'advanced-gutenberg') ?></code>
-                        <code><?php _e('Widgets', 'advanced-gutenberg') ?></code>
-                        <code><?php _e('Site Editor', 'advanced-gutenberg') ?></code>
+                        <?php esc_html_e('This block control is available on:', 'advanced-gutenberg') ?>
+                        <code><?php esc_html_e('Post', 'advanced-gutenberg') ?></code>
+                        <code><?php esc_html_e('Widgets', 'advanced-gutenberg') ?></code>
+                        <code><?php esc_html_e('Site Editor', 'advanced-gutenberg') ?></code>
                     </p>
                 </fieldset>
             </td>
         </tr>
 
         <tr>
-            <th scope="row"><?php _e('Capabilities', 'advanced-gutenberg') ?></th>
+            <th scope="row"><?php esc_html_e('Capabilities', 'advanced-gutenberg') ?></th>
             <td>
                 <fieldset>
                     <label>
-                        <input type="checkbox" name="capabilities_control" value="1" <?php echo $capabilities_control ? ' checked' : '' ?> />
-                        <?php _e('Show or hide blocks based on user capabilities.', 'advanced-gutenberg') ?>
+                        <input type="checkbox" name="capabilities_control" value="1" <?php checked($capabilities_control); ?> />
+                        <?php esc_html_e('Show or hide blocks based on user capabilities.', 'advanced-gutenberg') ?>
                     </label><br>
                     <p class="description advgb-control-desc">
-                        <?php _e('This block control is available on:', 'advanced-gutenberg') ?>
-                        <code><?php _e('Post', 'advanced-gutenberg') ?></code>
-                        <code><?php _e('Widgets', 'advanced-gutenberg') ?></code>
-                        <code><?php _e('Site Editor', 'advanced-gutenberg') ?></code>
+                        <?php esc_html_e('This block control is available on:', 'advanced-gutenberg') ?>
+                        <code><?php esc_html_e('Post', 'advanced-gutenberg') ?></code>
+                        <code><?php esc_html_e('Widgets', 'advanced-gutenberg') ?></code>
+                        <code><?php esc_html_e('Site Editor', 'advanced-gutenberg') ?></code>
                     </p>
                 </fieldset>
             </td>

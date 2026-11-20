@@ -2,7 +2,6 @@
 
 namespace TablePress\PhpOffice\PhpSpreadsheet\Reader;
 
-use Closure;
 use TablePress\PhpOffice\PhpSpreadsheet\Cell\IValueBinder;
 use TablePress\PhpOffice\PhpSpreadsheet\Exception as PhpSpreadsheetException;
 use TablePress\PhpOffice\PhpSpreadsheet\Reader\Exception as ReaderException;
@@ -10,7 +9,7 @@ use TablePress\PhpOffice\PhpSpreadsheet\Reader\Security\XmlScanner;
 use TablePress\PhpOffice\PhpSpreadsheet\Shared\File;
 use TablePress\PhpOffice\PhpSpreadsheet\Spreadsheet;
 
-abstract class BaseReader implements IReader
+abstract class BaseReader implements IReader2
 {
 	/**
 	 * Read data only?
@@ -81,12 +80,34 @@ abstract class BaseReader implements IReader
 
 	protected ?IValueBinder $valueBinder = null;
 
-	/** @var null|Closure(string):bool function to return whether image path is okay */
-	protected ?Closure $isWhitelisted = null;
+	/** @var null|callable(string):bool function to return whether image path is okay */
+	protected $isWhitelisted;
+
+	protected int $maxLength;
+
+	private const LENGTH_MULTIPLIER = [
+		'G' => 1024 * 1024 * 1024,
+		'M' => 1024 * 1024,
+		'K' => 1024,
+	];
 
 	public function __construct()
 	{
 		$this->readFilter = new DefaultReadFilter();
+		$limit = ini_get('memory_limit') ?: '128M';
+		$limit = trim(str_replace('-1', '128M', $limit));
+		$unit = strtoupper(substr($limit, -1));
+		$limit = (int) $limit;
+		$multiplier = self::LENGTH_MULTIPLIER[$unit] ?? 1;
+		$limit *= $multiplier;
+		$this->maxLength = intdiv($limit, 4);
+	}
+
+	public function setMaxLength(int $maxLength): self
+	{
+		$this->maxLength = $maxLength;
+
+		return $this;
 	}
 
 	public function getReadDataOnly(): bool
@@ -170,8 +191,10 @@ abstract class BaseReader implements IReader
 		return $this->loadSheetsOnly;
 	}
 
-	/** @param null|string|string[] $sheetList
-				 * @return static */
+	/**
+				 * @param null|string|string[] $sheetList
+				 * @return static
+				 */
 				public function setLoadSheetsOnly($sheetList)
 	{
 		if ($sheetList === null) {
@@ -234,10 +257,10 @@ abstract class BaseReader implements IReader
 				 * supplying a method which might return true
 				 * can subject the caller to security exploits.
 				 *
-				 * @param Closure(string):bool $isWhitelisted
+				 * @param callable(string):bool $isWhitelisted
 				 * @return static
 				 */
-				public function setIsWhitelisted(Closure $isWhitelisted)
+				public function setIsWhitelisted(callable $isWhitelisted)
 	{
 		$this->isWhitelisted = $isWhitelisted;
 

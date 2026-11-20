@@ -2,7 +2,7 @@
 /**
  * CV Portfolio Blocks functions and definitions
  *
- * @link https://developer.wordpress.org/themes/basics/theme-functions/
+ * @link https://developer.WordPress.org/themes/basics/theme-functions/
  *
  * @package cv-portfolio-blocks
  * @since cv-portfolio-blocks 1.0

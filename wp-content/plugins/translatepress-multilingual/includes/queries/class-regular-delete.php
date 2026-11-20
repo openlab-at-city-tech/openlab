@@ -45,12 +45,15 @@ class TRP_Regular_Delete extends TRP_Query {
             }
             $dictionary_table = $this->get_table_name( $language_code );
 
-            $wpdb->query(
+            $dictionary_deleted = $wpdb->query(
                 $wpdb->prepare(
                     "DELETE FROM `" . $dictionary_table . "` WHERE original_id IN ($ids_placeholder)",
                     ...$original_ids
                 )
             );
+            if ( $dictionary_deleted > 0 ) {
+                TRP_Dynamic_Cache::invalidate();
+            }
         }
 
         // Delete from wp_trp_original_strings

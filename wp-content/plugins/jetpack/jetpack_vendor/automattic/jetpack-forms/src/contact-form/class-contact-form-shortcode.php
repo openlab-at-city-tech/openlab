@@ -89,7 +89,7 @@ class Contact_Form_Shortcode {
 		if ( $content === null ) {
 			$this->body = null;
 		} else {
-			$this->body = do_shortcode( $content );
+			$this->body = apply_shortcodes( $content );
 		}
 	}
 
@@ -101,7 +101,7 @@ class Contact_Form_Shortcode {
 	 * @return mixed
 	 */
 	public function get_attribute( $key ) {
-		return isset( $this->attributes[ $key ] ) ? $this->attributes[ $key ] : null;
+		return $this->attributes[ $key ] ?? null;
 	}
 
 	/**

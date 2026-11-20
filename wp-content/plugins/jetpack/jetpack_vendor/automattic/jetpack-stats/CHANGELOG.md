@@ -5,6 +5,108 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.24.0] - 2026-11-02
+### Changed
+- Abilities: get-visits takes and returns `period` and `num`, matching get-top-content and get-post-views, in place of `unit` and `quantity`. [#54227]
+- Abilities: Report counts WordPress.com could not supply as null instead of 0, and name the site that was read in every Stats reader's response. [#54231]
+- Tracking pixel: Honor the WP Consent API on every site, so visitors who have not allowed statistics cookies are not counted, and remove the honor_cookie_consent option. Without the WP Consent API plugin, tracking is unchanged. [#54187]
+
+## [0.23.2] - 2026-10-28
+### Fixed
+- Abilities: Fix the views, visitors, streak, followers, top content and post views the Stats abilities report, reject dates that do not exist, and return get-followers' `publicize` as an object. [#53385]
+
+## [0.23.1] - 2026-10-26
+### Changed
+- Internal updates.
+
+## [0.23.0] - 2026-10-12
+### Added
+- Settings: Add a method that saves the WordPress.com Reader setting, and give each settings error its HTTP status. [#53357]
+
+## [0.22.1] - 2026-10-05
+### Changed
+- Internal updates.
+
+## [0.22.0] - 2026-09-23
+### Added
+- Add a Settings class that reads and validates the Stats settings a site owner can change. [#52540]
+
+## [0.21.1] - 2026-09-08
+### Fixed
+- Return uncached connection errors for Stats requests with missing or rejected blog tokens so requests recover when the connection is restored. [#51998]
+
+## [0.21.0] - 2026-09-01
+### Removed
+- Minimum supported PHP version is now 7.4. [#51515]
+
+### Fixed
+- Fix the `view_stats` capability check for users with multiple roles by checking all roles instead of only the first. [#51514]
+
+## [0.20.4] - 2026-08-25
+### Changed
+- Escape the AMP tracking pixel URL at output. [#51472]
+
+### Fixed
+- Normalize the excluded IP list so addresses written in another form still match. [#51349]
+
+## [0.20.3] - 2026-08-20
+### Changed
+- Load the rule that hides the tracking pixel through the stylesheet queue. [#51358]
+
+### Fixed
+- Let a Stats page load asking for fresh data bypass the cached copy, so a site that has just connected or bought a plan is not shown what it saw before. [#51200]
+- Stop caching the failure a request makes when the site has no WordPress.com connection, so a site that has just connected sees its stats straight away. [#51200]
+
+## [0.20.2] - 2026-08-13
+### Fixed
+- Fix daily history lookups on WordPress.com sites. [#51197]
+
+## [0.20.1] - 2026-08-10
+### Security
+- Ensure post IDs are cast to integers before they are used in the post views query on Simple sites. [#51049]
+
+### Changed
+- Rename the text domain to jetpack-stats-pkg, freeing jetpack-stats for the standalone plugin. [#51115]
+
+## [0.20.0] - 2026-07-22
+### Added
+- Add a per-site setting to make the Stats tracking pixel honor the WP Consent API statistics category. [#50602]
+
+## [0.19.7] - 2026-06-25
+### Changed
+- Defer loading the Stats REST API provider until a REST request is served, reducing the per-request PHP/opcache footprint. [#49806]
+
+## [0.19.6] - 2026-06-15
+### Changed
+- Internal updates.
+
+## [0.19.5] - 2026-06-10
+### Changed
+- Add `fetchpriority="low"` to the Stats script and remove `dns-prefetch` for `stats.wp.com` to improve LCP in Safari and Firefox. [#47936]
+
+## [0.19.4] - 2026-06-08
+### Fixed
+- Abilities: Allow readonly stats abilities with optional input to run when no input is sent. [#49370]
+
+## [0.19.3] - 2026-06-01
+### Changed
+- Internal updates.
+
+## [0.19.2] - 2026-05-25
+### Fixed
+- Phan: Address `PhanPluginDuplicateConditionalNullCoalescing` violations. [#48887]
+
+## [0.19.1] - 2026-05-19
+### Changed
+- Internal updates.
+
+## [0.19.0] - 2026-05-04
+### Added
+- Abilities API: Register jetpack-stats abilities for site overview, top content, post views, visits, followers, and stats configuration. [#48286]
+
+### Changed
+- Internal: No longer require automattic/jetpack-changelogger as a per-project dev dependency. [#48225]
+
 ## [0.18.1] - 2026-02-26
 ### Added
 - Add `AGENTS.md` for coding agent guidelines compliance. [#47330]
@@ -21,7 +123,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.17.8] - 2026-02-02
 ### Changed
-- Update dependencies. [#39260]
+- Update dependencies.
 
 ## [0.17.7] - 2025-12-15
 ### Changed
@@ -105,7 +207,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.15.2] - 2025-02-24
 ### Changed
-- Update dependencies. [#39260]
+- Update dependencies.
 
 ## [0.15.1] - 2025-02-03
 ### Fixed
@@ -312,6 +414,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixing static method which was called without self reference. [#26640]
 
+[0.24.0]: https://github.com/Automattic/jetpack-stats/compare/v0.23.2...v0.24.0
+[0.23.2]: https://github.com/Automattic/jetpack-stats/compare/v0.23.1...v0.23.2
+[0.23.1]: https://github.com/Automattic/jetpack-stats/compare/v0.23.0...v0.23.1
+[0.23.0]: https://github.com/Automattic/jetpack-stats/compare/v0.22.1...v0.23.0
+[0.22.1]: https://github.com/Automattic/jetpack-stats/compare/v0.22.0...v0.22.1
+[0.22.0]: https://github.com/Automattic/jetpack-stats/compare/v0.21.1...v0.22.0
+[0.21.1]: https://github.com/Automattic/jetpack-stats/compare/v0.21.0...v0.21.1
+[0.21.0]: https://github.com/Automattic/jetpack-stats/compare/v0.20.4...v0.21.0
+[0.20.4]: https://github.com/Automattic/jetpack-stats/compare/v0.20.3...v0.20.4
+[0.20.3]: https://github.com/Automattic/jetpack-stats/compare/v0.20.2...v0.20.3
+[0.20.2]: https://github.com/Automattic/jetpack-stats/compare/v0.20.1...v0.20.2
+[0.20.1]: https://github.com/Automattic/jetpack-stats/compare/v0.20.0...v0.20.1
+[0.20.0]: https://github.com/Automattic/jetpack-stats/compare/v0.19.7...v0.20.0
+[0.19.7]: https://github.com/Automattic/jetpack-stats/compare/v0.19.6...v0.19.7
+[0.19.6]: https://github.com/Automattic/jetpack-stats/compare/v0.19.5...v0.19.6
+[0.19.5]: https://github.com/Automattic/jetpack-stats/compare/v0.19.4...v0.19.5
+[0.19.4]: https://github.com/Automattic/jetpack-stats/compare/v0.19.3...v0.19.4
+[0.19.3]: https://github.com/Automattic/jetpack-stats/compare/v0.19.2...v0.19.3
+[0.19.2]: https://github.com/Automattic/jetpack-stats/compare/v0.19.1...v0.19.2
+[0.19.1]: https://github.com/Automattic/jetpack-stats/compare/v0.19.0...v0.19.1
+[0.19.0]: https://github.com/Automattic/jetpack-stats/compare/v0.18.1...v0.19.0
 [0.18.1]: https://github.com/Automattic/jetpack-stats/compare/v0.18.0...v0.18.1
 [0.18.0]: https://github.com/Automattic/jetpack-stats/compare/v0.17.8...v0.18.0
 [0.17.8]: https://github.com/Automattic/jetpack-stats/compare/v0.17.7...v0.17.8

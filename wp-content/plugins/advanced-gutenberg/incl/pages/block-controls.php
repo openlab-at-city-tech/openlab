@@ -32,6 +32,15 @@ $current_tab = isset($_GET['tab']) && ! empty($_GET['tab'])
     </header>
 
     <?php
+    $this->screenDescription(
+        __(
+            'Configure display controls that schedule blocks or restrict visibility by user role and other conditions.',
+            'advanced-gutenberg'
+        )
+    );
+    ?>
+
+    <?php
     $tabs = [
         [
             'title' => esc_html__('Presets', 'advanced-gutenberg'),

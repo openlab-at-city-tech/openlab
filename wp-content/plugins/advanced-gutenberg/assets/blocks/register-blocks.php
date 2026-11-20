@@ -728,28 +728,60 @@ function advgbRegisterProBlocks() {
  * Initialize all block registrations
  */
 function advgbRegisterAllBlocks() {
+    // Legacy blocks can be disabled in Settings > Extra Blocks > Legacy.
+    // Skip server-side registration for any that are turned off.
+    $legacy_enabled = array(
+        'contact-form' => true,
+        'login-form'   => true,
+        'map'          => true,
+        'newsletter'   => true,
+        'search-bar'   => true,
+        'social-links' => true,
+        'testimonial'  => true,
+        'woo-products' => true,
+    );
+    if (class_exists('AdvancedGutenbergMain')) {
+        $legacy_enabled = AdvancedGutenbergMain::getLegacyBlocksState();
+    }
+
     // Register all free blocks
     advgbRegisterBlockAccordion();
     advgbRegisterBlockButton();
     advgbRegisterBlockColumns();
-    advgbRegisterBlockContactForm();
+    if (! empty($legacy_enabled['contact-form'])) {
+        advgbRegisterBlockContactForm();
+    }
     advgbRegisterBlockCountUp();
     advgbRegisterBlockImage();
     advgbRegisterBlockImagesSlider();
     advgbRegisterBlockInfoBox();
     advgbRegisterBlockIcon();
     advgbRegisterBlockList();
-    advgbRegisterBlockLoginForm();
-    advgbRegisterBlockMap();
-    advgbRegisterBlockNewsletter();
-    advgbRegisterBlockSearchBar();
-    advgbRegisterBlockSocialLinks();
+    if (! empty($legacy_enabled['login-form'])) {
+        advgbRegisterBlockLoginForm();
+    }
+    if (! empty($legacy_enabled['map'])) {
+        advgbRegisterBlockMap();
+    }
+    if (! empty($legacy_enabled['newsletter'])) {
+        advgbRegisterBlockNewsletter();
+    }
+    if (! empty($legacy_enabled['search-bar'])) {
+        advgbRegisterBlockSearchBar();
+    }
+    if (! empty($legacy_enabled['social-links'])) {
+        advgbRegisterBlockSocialLinks();
+    }
     advgbRegisterBlockSummary();
     advgbRegisterBlockTable();
     advgbRegisterBlockTabs();
-    advgbRegisterBlockTestimonial();
+    if (! empty($legacy_enabled['testimonial'])) {
+        advgbRegisterBlockTestimonial();
+    }
     advgbRegisterBlockVideo();
-    advgbRegisterBlockWooProducts();
+    if (! empty($legacy_enabled['woo-products'])) {
+        advgbRegisterBlockWooProducts();
+    }
     advgbRegisterBlockAdvTabs();
 
     // Register Pro blocks if available

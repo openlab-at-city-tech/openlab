@@ -22,13 +22,13 @@ class Main {
 	/**
 	 * Changelog Handler.
 	 *
-	 * @var Changelog_Handler
+	 * @var Changelog_Handler|null
 	 */
 	private $cl_handler;
 	/**
 	 * Plugin Helper instance.
 	 *
-	 * @var Plugin_Helper
+	 * @var Plugin_Helper|null
 	 */
 	private $plugin_helper;
 	/**
@@ -42,8 +42,57 @@ class Main {
 	 * Main constructor.
 	 */
 	public function __construct() {
-		$this->plugin_helper = new Plugin_Helper();
-		$this->cl_handler    = new Changelog_Handler();
+		if ( class_exists( Plugin_Helper::class ) ) {
+			$this->plugin_helper = new Plugin_Helper();
+		}
+
+		if ( class_exists( Changelog_Handler::class ) ) {
+			$this->cl_handler = new Changelog_Handler();
+		}
+	}
+
+	/**
+	 * Read a changelog through the handler, if there is one.
+	 *
+	 * @param string $path Absolute path to the changelog file.
+	 *
+	 * @return mixed[]
+	 */
+	private function get_changelog( $path ) {
+		if ( null === $this->cl_handler ) {
+			return array();
+		}
+
+		return $this->cl_handler->get_changelog( $path );
+	}
+
+	/**
+	 * Plugin action data for a recommended plugin card.
+	 *
+	 * @param string $slug Plugin slug.
+	 *
+	 * @return array<string, mixed>
+	 */
+	private function get_plugin_actions( $slug ) {
+		if ( null === $this->plugin_helper ) {
+			return [
+				'cta'        => 'install',
+				'path'       => '',
+				'activate'   => '',
+				'deactivate' => '',
+				'network'    => false,
+				'version'    => '0.0.0',
+			];
+		}
+
+		return [
+			'cta'        => $this->plugin_helper->get_plugin_state( $slug ),
+			'path'       => $this->plugin_helper->get_plugin_path( $slug ),
+			'activate'   => $this->plugin_helper->get_plugin_action_link( $slug ),
+			'deactivate' => $this->plugin_helper->get_plugin_action_link( $slug, 'deactivate' ),
+			'network'    => $this->plugin_helper->get_is_network_wide( $slug ),
+			'version'    => $this->plugin_helper->get_plugin_version( $slug, '0.0.0' ),
+		];
 	}
 
 	/**
@@ -56,8 +105,65 @@ class Main {
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 		add_action( 'init', array( $this, 'register_settings' ) );
 		add_action( 'init', array( $this, 'register_about_page' ), 1 );
-		
+		add_filter( 'neve_ai_connect_metadata', array( $this, 'get_ai_connect_metadata' ) );
+		add_filter( 'neve_support_hub_metadata', array( $this, 'get_support_hub_metadata' ) );
+
 		add_action( 'admin_notices', array( $this, 'render_custom_layout_header' ) );
+	}
+
+	/**
+	 * Get the data for the SDK "Connect your AI agent" module.
+	 *
+	 * @return array<string, string|string[]>
+	 */
+	public function get_ai_connect_metadata() {
+		if ( apply_filters( 'neve_is_theme_whitelabeled', false ) || apply_filters( 'neve_is_plugin_whitelabeled', false ) ) {
+			return [];
+		}
+
+		return [
+			'name'           => 'Neve',
+			'notice_cases'   => [
+				__( 'change your colors and fonts', 'neve' ),
+				__( 'rearrange your header', 'neve' ),
+				__( 'set page layouts', 'neve' ),
+			],
+			'prompts'        => [
+				__( 'Change my Neve headings font to Poppins and my accent color to #0055ff.', 'neve' ),
+				__( 'Move the search icon to the right of my header and put the secondary menu in the top row.', 'neve' ),
+				__( 'Make my Contact page full width with no sidebar and hide its title.', 'neve' ),
+			],
+			'ability_prefix' => 'neve',
+		];
+	}
+
+	/**
+	 * Get the data for the SDK Support Hub: one Help button on the Neve dashboard
+	 * and the feedback window on the Add Themes screen. The dashboard already fires
+	 * `themeisle_internal_page`, so no `pages` list is needed.
+	 *
+	 * @return array<string, bool|array<int, array<string, string>>>
+	 */
+	public function get_support_hub_metadata() {
+		if ( apply_filters( 'neve_is_theme_whitelabeled', false ) || apply_filters( 'neve_is_plugin_whitelabeled', false ) ) {
+			return [];
+		}
+
+		return [
+			'is_pro' => defined( 'NEVE_PRO_VERSION' ) && 'valid' === apply_filters( 'product_neve_license_status', false ),
+			'links'  => [
+				[
+					'icon' => 'book-alt',
+					'text' => __( 'Documentation', 'neve' ),
+					'url'  => 'https://docs.themeisle.com/neve/neve-doc',
+				],
+				[
+					'icon' => 'groups',
+					'text' => __( 'Community Forum', 'neve' ),
+					'url'  => 'https://wordpress.org/support/theme/neve/',
+				],
+			],
+		];
 	}
 
 	/**
@@ -270,7 +376,7 @@ class Main {
 		}
 
 		$build_path   = get_template_directory_uri() . '/assets/apps/dashboard/build/';
-		$dependencies = ( include get_template_directory() . '/assets/apps/dashboard/build/dashboard.asset.php' );
+		$dependencies = neve_get_asset_meta( get_template_directory() . '/assets/apps/dashboard/build/dashboard.asset.php' );
 		$dash_data    = apply_filters( 'neve_dashboard_page_data', $this->get_localization() );
 
 		$this->register_survey( $dash_data );
@@ -320,7 +426,7 @@ class Main {
 			'upgradeURLModules'       => apply_filters( 'neve_upgrade_link_from_child_theme_filter', tsdk_translate_link( tsdk_utmify( 'https://themeisle.com/themes/neve/upgrade/', 'getpronow', 'welcomepage' ) ) ),
 			'upgradeWhiteLabelURL'    => apply_filters( 'neve_upgrade_link_from_child_theme_filter', tsdk_translate_link( tsdk_utmify( 'https://themeisle.com/themes/neve/upgrade/', 'whitelabel', 'settingspage' ) ) ),
 			'supportURL'              => esc_url( 'https://wordpress.org/support/theme/neve/' ),
-			'docsURL'                 => esc_url( 'https://docs.themeisle.com/article/946-neve-doc' ),
+			'docsURL'                 => esc_url_raw( tsdk_utmify( 'https://docs.themeisle.com/neve/neve-doc', 'documentation', 'welcomepage' ) ),
 			'codexURL'                => esc_url( 'https://codex.nevewp.com/' ),
 			'strings'                 => [
 				'proTabTitle'                   => wp_kses_post( $plugin_name ),
@@ -350,7 +456,7 @@ class Main {
 					'<a class="text-blue-600 hover:text-blue-700 hover:underline inline-flex gap-1 items-center" target="_blank" rel="external noreferrer noopener" href="' . tsdk_translate_link( 'https://store.themeisle.com/', 'query' ) . '">Themeisle<span class="sr-only">' . esc_html__( '(opens in a new tab)', 'neve' ) . '</span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link shrink-0"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></a>'
 				),
 			],
-			'changelog'               => $this->cl_handler->get_changelog( get_template_directory() . '/CHANGELOG.md' ),
+			'changelog'               => $this->get_changelog( get_template_directory() . '/CHANGELOG.md' ),
 			'onboarding'              => [],
 			'hasFileSystem'           => WP_Filesystem(),
 			'hidePluginsTab'          => apply_filters( 'neve_hide_useful_plugins', ! array_key_exists( 'useful_plugins', $old_about_config ) ),
@@ -369,7 +475,7 @@ class Main {
 			'orbitFox'                => array(
 				'isInstalled'   => file_exists( WP_PLUGIN_DIR . '/themeisle-companion/themeisle-companion.php' ),
 				'isActive'      => class_exists( 'Orbit_Fox' ),
-				'activationUrl' => $this->plugin_helper->get_plugin_action_link( 'themeisle-companion' ),
+				'activationUrl' => null === $this->plugin_helper ? '' : $this->plugin_helper->get_plugin_action_link( 'themeisle-companion' ),
 				'data'          => class_exists( 'Orbit_Fox' ) ? get_option( 'obfx_data' ) : array(),
 			),
 		];
@@ -378,7 +484,7 @@ class Main {
 			$installed_plugins                     = get_plugins();
 			$is_otter_installed                    = array_key_exists( 'otter-pro/otter-pro.php', $installed_plugins );
 			$is_sparks_installed                   = array_key_exists( 'sparks-for-woocommerce/sparks-for-woocommerce.php', $installed_plugins );
-			$data['changelogPro']                  = $this->cl_handler->get_changelog( NEVE_PRO_PATH . '/CHANGELOG.md' );
+			$data['changelogPro']                  = $this->get_changelog( NEVE_PRO_PATH . '/CHANGELOG.md' );
 			$data['isOtterProInstalled']           = $is_otter_installed;
 			$data['otterProInstall']               = $is_otter_installed ? esc_url( wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=otter-pro%2Fotter-pro.php&plugin_status=all&paged=1&s' ), 'activate-plugin_otter-pro/otter-pro.php' ) ) : esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=install_otter_pro' ), 'install_otter_pro' ) );
 			$data['sparksInstallActivateEndpoint'] = $is_sparks_installed ? esc_url( wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=sparks-for-woocommerce%2Fsparks-for-woocommerce.php&plugin_status=all&paged=1&s' ), 'activate-plugin_sparks-for-woocommerce/sparks-for-woocommerce.php' ) ) : esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=install_sparks' ), 'install_sparks' ) );
@@ -754,7 +860,7 @@ class Main {
 				'nicename'      => __( 'Header Booster', 'neve' ),
 				'description'   => __( 'Create unique sticky & transparent headers that adapt to scroll. Perfect for modern, immersive websites.', 'neve' ),
 				'documentation' => array(
-					'url' => 'https://docs.themeisle.com/article/1057-header-booster-documentation?utm_source=wpadmin&utm_medium=welcomepage&utm_campaign=headerbooster&utm_content=neve',
+					'url' => tsdk_utmify( 'https://docs.themeisle.com/neve/header-booster-documentation', 'headerbooster', 'welcomepage' ),
 				),
 			),
 			'woocommerce_booster'    => array(
@@ -772,42 +878,42 @@ class Main {
 				'nicename'      => __( 'Blog Booster', 'neve' ),
 				'description'   => __( 'Advanced layouts, reading time estimates, and social sharing to keep readers engaged longer.', 'neve' ),
 				'documentation' => array(
-					'url' => 'https://docs.themeisle.com/article/1059-blog-booster-documentation?utm_source=wpadmin&utm_medium=welcomepage&utm_campaign=blogbooster&utm_content=neve',
+					'url' => tsdk_utmify( 'https://docs.themeisle.com/neve/blog-booster-documentation', 'blogbooster', 'welcomepage' ),
 				),
 			),
 			'post_type_enhancements' => array(
 				'nicename'      => __( 'Post types enhancements', 'neve' ),
 				'description'   => __( 'Extend Neve\'s powerful features to custom post types. Create unique layouts for portfolios, testimonials, and more.', 'neve' ),
 				'documentation' => array(
-					'url' => 'https://docs.themeisle.com/article/1505-neve-post-type-enhancements-module?utm_source=wpadmin&utm_medium=welcomepage&utm_campaign=postenhancements&utm_content=neve',
+					'url' => tsdk_utmify( 'https://docs.themeisle.com/neve/neve-post-type-enhancements-module', 'postenhancements', 'welcomepage' ),
 				),
 			),
 			'performance_features'   => array(
 				'nicename'      => __( 'Performance', 'neve' ),
 				'description'   => __( 'Optimize core vitals, enable lazy loading, and minify resources for lightning-fast load times.', 'neve' ),
 				'documentation' => array(
-					'url' => 'https://docs.themeisle.com/article/1366-performance-module-documentation?utm_source=wpadmin&utm_medium=welcomepage&utm_campaign=performancemodule&utm_content=neve',
+					'url' => tsdk_utmify( 'https://docs.themeisle.com/neve/performance-module-documentation', 'performancemodule', 'welcomepage' ),
 				),
 			),
 			'block_editor_booster'   => array(
 				'nicename'      => __( 'Block Editor Booster', 'neve' ),
 				'description'   => __( 'Advanced Gutenberg blocks designed specifically for Neve. Build faster with pre-styled patterns.', 'neve' ),
 				'documentation' => array(
-					'url' => 'https://docs.themeisle.com/article/1473-neve-block-editor-booster-module?utm_source=wpadmin&utm_medium=welcomepage&utm_campaign=blockeditorbooster&utm_content=neve',
+					'url' => tsdk_utmify( 'https://docs.themeisle.com/neve/neve-block-editor-booster-module', 'blockeditorbooster', 'welcomepage' ),
 				),
 			),
 			'white_label'            => array(
 				'nicename'      => __( 'White Label', 'neve' ),
 				'description'   => __( 'Rebrand Neve as your own. Change theme name, author, and links to match your agency identity.', 'neve' ),
 				'documentation' => array(
-					'url' => 'https://docs.themeisle.com/article/1061-white-label-module-documentation?utm_source=wpadmin&utm_medium=welcomepage&utm_campaign=whitelabel&utm_content=neve',
+					'url' => tsdk_utmify( 'https://docs.themeisle.com/neve/white-label-module-documentation', 'whitelabel', 'welcomepage' ),
 				),
 			),
 			'custom_layouts'         => array(
 				'nicename'      => __( 'Custom Layouts', 'neve' ),
 				'description'   => __( 'Create conditional headers, footers, and content blocks. Perfect for custom landing pages and marketing campaigns.', 'neve' ),
 				'documentation' => array(
-					'url' => 'https://docs.themeisle.com/article/1062-custom-layouts-module?utm_source=wpadmin&utm_medium=welcomepage&utm_campaign=customlayouts&utm_content=neve',
+					'url' => tsdk_utmify( 'https://docs.themeisle.com/neve/custom-layouts-module', 'customlayouts', 'welcomepage' ),
 				),
 			),
 			'elementor_booster'      => array(
@@ -824,28 +930,28 @@ class Main {
 				'nicename'      => __( 'Typekit Fonts', 'neve' ),
 				'description'   => __( 'Access premium Adobe fonts directly in your theme. Add professional typography to any element.', 'neve' ),
 				'documentation' => array(
-					'url' => 'https://docs.themeisle.com/article/1085-typekit-fonts-documentation?utm_source=wpadmin&utm_medium=welcomepage&utm_campaign=typekitfonts&utm_content=neve',
+					'url' => tsdk_utmify( 'https://docs.themeisle.com/neve/typekit-fonts-documentation', 'typekitfonts', 'welcomepage' ),
 				),
 			),
 			'custom_sidebars'        => array(
 				'nicename'      => __( 'Custom Sidebars', 'neve' ),
 				'description'   => __( 'Create unique sidebar layouts for different sections. Show relevant content based on user context.', 'neve' ),
 				'documentation' => array(
-					'url' => 'https://docs.themeisle.com/article/1770-custom-sidebars-module-documentation?utm_source=wpadmin&utm_medium=welcomepage&utm_campaign=customsidebars&utm_content=neve',
+					'url' => tsdk_utmify( 'https://docs.themeisle.com/neve/custom-sidebars-module-documentation', 'customsidebars', 'welcomepage' ),
 				),
 			),
 			'access_restriction'     => array(
 				'nicename'      => __( 'Content restriction', 'neve' ),
 				'description'   => __( 'Create members-only content areas. Control access by user roles, logged-in status, or custom rules.', 'neve' ),
 				'documentation' => array(
-					'url' => 'https://docs.themeisle.com/article/1863-content-restriction-module-documentation?utm_source=wpadmin&utm_medium=welcomepage&utm_campaign=contentrestriction&utm_content=neve',
+					'url' => tsdk_utmify( 'https://docs.themeisle.com/neve/content-restriction-module-documentation', 'contentrestriction', 'welcomepage' ),
 				),
 			),
 			'dashboard_customizer'   => array(
 				'nicename'      => __( 'WP Dashboard Customizer', 'neve' ),
 				'description'   => __( 'Create or modify the WordPress dashboard. Customize the admin pages, admin menu, and admin bar.', 'neve' ),
 				'documentation' => array(
-					'url' => 'https://docs.themeisle.com/article/2408-wp-dashboard-customizer-module-documentation?utm_source=wpadmin&utm_medium=welcomepage&utm_campaign=dashboardcustomizer&utm_content=neve',
+					'url' => tsdk_utmify( 'https://docs.themeisle.com/neve/wp-dashboard-customizer-module-documentation', 'dashboardcustomizer', 'welcomepage' ),
 				),
 			),
 		);
@@ -907,19 +1013,7 @@ class Main {
 				continue;
 			}
 
-			$action = $this->plugin_helper->get_plugin_state( $slug );
-
-			$plugins[ $slug ] = array_merge(
-				[
-					'cta'        => $action,
-					'path'       => $this->plugin_helper->get_plugin_path( $slug ),
-					'activate'   => $this->plugin_helper->get_plugin_action_link( $slug ),
-					'deactivate' => $this->plugin_helper->get_plugin_action_link( $slug, 'deactivate' ),
-					'network'    => $this->plugin_helper->get_is_network_wide( $slug ),
-					'version'    => $this->plugin_helper->get_plugin_version( $slug, '0.0.0' ),
-				],
-				$args
-			);
+			$plugins[ $slug ] = array_merge( $this->get_plugin_actions( $slug ), $args );
 		}
 
 		return $plugins;
@@ -999,7 +1093,7 @@ class Main {
 	 */
 	public function render_custom_layout_header() {
 		$screen = get_current_screen();
-		
+
 		if ( ! $screen || ! ( $screen->id === 'edit-neve_custom_layouts' || $screen->id === 'neve_page_neve-custom-layout-upsell' ) ) {
 			return;
 		}
@@ -1057,6 +1151,12 @@ class Main {
 				line-height: 1.6;
 			}
 
+			.neve_page_neve-custom-layout-upsell .cl-btn-action .dashicons,
+			.post-type-neve_custom_layouts .cl-btn-action .dashicons,
+			.post-type-neve_custom_layouts .cl-copy-button .dashicons {
+				line-height: 1;
+			}
+
 			/* Hide text on small screens but keep it accessible to screen readers */
 			@media (max-width: 500px) {
 				.cl-header-btn-text {
@@ -1084,7 +1184,7 @@ class Main {
 						</span>
 					</button>
 					<?php if ( ! $is_white_label_active ) : ?>
-						<a href="https://docs.themeisle.com/article/1062-custom-layouts-module" target="_blank" class="button cl-btn-action">
+						<a href="<?php echo esc_url( tsdk_utmify( 'https://docs.themeisle.com/neve/custom-layouts-module', 'customlayouts', 'customlayoutspage' ) ); ?>" target="_blank" class="button cl-btn-action">
 							<span class="dashicons dashicons-welcome-learn-more" aria-hidden="true"></span>
 							<span class="cl-header-btn-text">
 								<?php esc_html_e( 'View Tutorial', 'neve' ); ?>
@@ -1239,7 +1339,7 @@ class Main {
 			</div>
 
 			<div class="nv-admin-header-right">
-				<a href="https://docs.themeisle.com/article/946-neve-doc" target="_blank">
+				<a href="<?php echo esc_url( tsdk_utmify( 'https://docs.themeisle.com/neve/neve-doc', 'documentation', 'customlayoutspage' ) ); ?>" target="_blank">
 					<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
 					<?php esc_html_e( 'Documentation', 'neve' ); ?>
 				</a>
@@ -1255,18 +1355,18 @@ class Main {
 
 	/**
 	 * Register the survey.
-	 * 
+	 *
 	 * @param array $dash_data The dashboard data.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function register_survey( $dash_data ) {
 		add_filter(
 			'themeisle-sdk/survey/neve',
 			function( $data, $page_slug ) use ( $dash_data ) {
-				
+
 				$install_days_number = intval( ( time() - get_option( 'neve_install', time() ) ) / DAY_IN_SECONDS );
-			
+
 				$data = array(
 					'environmentId' => 'clr0ply35522h8up0bay2de4y',
 					'attributes'    => array(
@@ -1288,43 +1388,67 @@ class Main {
 				return $data;
 			},
 			10,
-			2 
+			2
 		);
 	}
 
 	/**
 	 * Get the Black Friday config settings.
-	 * 
+	 *
 	 * @param array $default Optional. The default values.
-	 * 
+	 *
 	 * @return array The data.
 	 */
 	public static function get_black_friday_data( $default = array() ) {
 		$config = $default;
 
-		// translators: %1$s - HTML tag, %2$s - discount, %3$s - HTML tag, %4$s - product name.
-		$message_template = __( 'Our biggest sale of the year: %1$sup to %2$s OFF%3$s on %4$s. Don\'t miss this limited-time offer.', 'neve' );
-		$product_label    = __( 'Neve', 'neve' );
-		$discount         = '70%';
+		$message   = __( 'Custom layouts, WooCommerce tools, starter sites. What you\'ve been doing manually, Neve Pro handles for you. Exclusively for existing Neve users.', 'neve' );
+		$cta_label = __( 'Get Neve Pro', 'neve' );
 
-		$plan   = apply_filters( 'product_neve_license_plan', 0 );
+		$plan   = apply_filters( 'product_neve_license_plan', false );
 		$is_pro = 0 < $plan;
 
-		if ( $is_pro ) {
-			// translators: %1$s - HTML tag, %2$s - discount, %3$s - HTML tag, %4$s - product name.
-			$message_template = __( 'Get %1$sup to %2$s off%3$s when you upgrade your %4$s plan or renew early.', 'neve' );
-			$product_label    = __( 'Neve Pro', 'neve' );
-			$discount         = '30%';
+		$license_status      = apply_filters( 'product_neve_license_status', false );
+		$has_valid_license   = 'valid' === $license_status;
+		$has_expired_license = in_array( $license_status, array( 'expired', 'active_expired', 'active-expired' ), true );
+
+		$neve_pro_product_slug = defined( 'NEVE_PRO_BASEFILE' ) ? basename( dirname( NEVE_PRO_BASEFILE ) ) : '';
+
+		if ( $has_valid_license ) {
+			// translators: %s is the discount percentage.
+			$config['plugin_meta_message'] = sprintf( __( 'Black Friday Sale - up to %s off', 'neve' ), '30%' );
+			// translators: %1$s - the discount percentage for the upgrade, %2$s - the discount percentage for the renewal.
+			$message   = sprintf( __( 'Upgrade your Neve Pro plan: %1$s off this week. Already on the plan you need? Renew early and save up to %2$s.', 'neve' ), '30%', '20%' );
+			$cta_label = __( 'See your options', 'neve' );
+		} elseif ( $has_expired_license ) {
+			// translators: %s is the discount percentage.
+			$config['plugin_meta_message'] = sprintf( __( 'Black Friday Sale - %s off', 'neve' ), '50%' );
+			// translators: %s is the discount percentage.
+			$config['upgrade_menu_text'] = sprintf( __( 'BF Sale - %s off', 'neve' ), '50%' );
+			$message                     = __( 'Your Neve Pro features are still here, just locked. Renew at a reduced rate this week and pick up right where you left off.', 'neve' );
+			$cta_label                   = __( 'Reactivate now', 'neve' );
+		} else {
+			// translators: %s is the discount percentage.
+			$config['plugin_meta_message'] = sprintf( __( 'Black Friday Sale - %s off', 'neve' ), '60%' );
+			// translators: %s is the discount percentage.
+			$config['upgrade_menu_text'] = sprintf( __( 'BF Sale - %s off', 'neve' ), '60%' );
+			// translators: %s - the discount percentage for the upgrade.
+			$config['title'] = sprintf( __( 'Neve Pro: %s off this week', 'neve' ), '60%' );
 		}
-		
-		$product_label = sprintf( '<strong>%s</strong>', $product_label );
-		$url_params    = array(
+
+		if ( $has_valid_license || $has_expired_license ) {
+			$config['plugin_meta_targets'] = array( $neve_pro_product_slug );
+		}
+
+		$url_params = array(
 			'utm_term' => $is_pro ? 'plan-' . $plan : 'free',
 			'lkey'     => apply_filters( 'product_neve_license_key', false ),
+			'expired'  => $has_expired_license ? '1' : false,
 		);
-		
-		$config['message']  = sprintf( $message_template, '<strong>', $discount, '</strong>', $product_label );
-		$config['sale_url'] = add_query_arg(
+
+		$config['message']   = $message;
+		$config['cta_label'] = $cta_label;
+		$config['sale_url']  = add_query_arg(
 			$url_params,
 			tsdk_translate_link( tsdk_utmify( 'https://themeisle.link/neve-bf', 'bfcm', 'neve' ) )
 		);
@@ -1334,9 +1458,9 @@ class Main {
 
 	/**
 	 * Add the Black Friday data.
-	 * 
+	 *
 	 * @param array $configs An array of configurations.
-	 * 
+	 *
 	 * @return array The configurations.
 	 */
 	public function add_black_friday_data( $configs ) {

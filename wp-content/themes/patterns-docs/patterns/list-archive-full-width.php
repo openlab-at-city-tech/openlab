@@ -21,7 +21,7 @@
 	<!-- /wp:spacer -->
 	<!-- wp:group {"align":"full","style":{"spacing":{"blockGap":"0px"}},"layout":{"type":"constrained"}} -->
 	<div class="wp-block-group alignfull">
-		
+
 		<!-- wp:pattern {"slug":"patterns-docs/query-list"} /-->
 	</div>
 	<!-- /wp:group -->

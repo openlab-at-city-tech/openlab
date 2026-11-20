@@ -13,7 +13,7 @@ declare( strict_types = 1 );
  *
  * Registers and handles the ability to retrieve Akismet statistics.
  */
-class Akismet_Ability_Get_Stats extends Akismet_Ability implements Akismet_Ability_Interface {
+class Akismet_Ability_Get_Stats extends Akismet_Ability {
 
 	/**
 	 * Get the ability name.

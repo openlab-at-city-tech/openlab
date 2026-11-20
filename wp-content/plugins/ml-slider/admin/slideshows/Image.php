@@ -40,7 +40,7 @@ self::$instance = new self();
      * 
      * @return WP_Error|array - The array of ids that were uploaded
      */
-    public function import($images, $theme_id = null, $extra = array())
+    public function import($images, $theme_id = null, $extra = array(), $mime_prefix = 'image/')
     {
         /*
         If we are provided images, they should be formatted already
@@ -58,20 +58,21 @@ self::$instance = new self();
         }
 
         // Get an array or sucessful image ids
-        return $this->upload_multiple($images);
+        return $this->upload_multiple($images, $mime_prefix);
     }
 
     /**
      * Method to import images from a theme
      *
-     * @param array $images - The full path to the local image or an array that includes the path
+     * @param array  $images     - The full path to the local image or an array that includes the path
+     * @param string $mime_prefix - Expected mime type prefix ('image/' or 'video/') for the attach-time safety check
      */
-    public function upload_multiple($images)
+    public function upload_multiple($images, $mime_prefix = 'image/')
     {
 
         $successful_uploads = array();
         foreach ($images as $filename => $image) {
-            if ($image_id = $this->upload($filename, $image['source'], $image)) {
+            if ($image_id = $this->upload($filename, $image['source'], $image, $mime_prefix)) {
                 array_push($successful_uploads, $image_id);
             }
         }
@@ -82,12 +83,13 @@ self::$instance = new self();
     /**
      * Method to upload a single image, you should provide a local location on the server
      *
-     * @param string $filename  - The preferred name of the file
-     * @param string $source    - The current location of the file without the file name
-     * @param array  $meta_data - Extra data like caption, description, etc
+     * @param string $filename    - The preferred name of the file
+     * @param string $source      - The current location of the file without the file name
+     * @param array  $meta_data   - Extra data like caption, description, etc
+     * @param string $mime_prefix - Expected mime type prefix ('image/' or 'video/') for the attach-time safety check
      * @return int|boolean - returns the ID of the new image, or false
      */
-    public function upload($filename, $source, $meta_data = array())
+    public function upload($filename, $source, $meta_data = array(), $mime_prefix = 'image/')
     {
         if (!function_exists('media_handle_upload')) {
             require_once(ABSPATH . 'wp-admin/includes/image.php');
@@ -106,12 +108,12 @@ self::$instance = new self();
 
             // We want these both to return true
             if (copy($source, $destination)) {
-                if ((bool) $image_id = $this->attach_image_to_media_library($destination, $meta_data)) {
+                if ((bool) $image_id = $this->attach_image_to_media_library($destination, $meta_data, $mime_prefix)) {
                     return $image_id;
                 }
             }
 
-            // TODO: we might want to provide a specific error message if an image 
+            // TODO: we might want to provide a specific error message if an image
             // fails to upload.
             return false;
         }
@@ -299,11 +301,13 @@ continue;
      * Method to add a file to the media library
      * TODO: possible extract this into static method on a utility class
      *
-     * @param string $filename   - The full path to the image dir in the media library
-     * @param array  $image_data - Optional data to attach / override to the image
+     * @param string $filename    - The full path to the image dir in the media library
+     * @param array  $image_data  - Optional data to attach / override to the image
+     * @param string $mime_prefix - Expected mime type prefix ('image/' or 'video/'); the attachment
+     *                              is deleted and rejected if its real mime type doesn't match
      * @return int
      */
-    private function attach_image_to_media_library($filename, $image_data = array())
+    private function attach_image_to_media_library($filename, $image_data = array(), $mime_prefix = 'image/')
     {
 
         $filetype = wp_check_filetype(basename($filename), null);
@@ -339,8 +343,9 @@ continue;
         // Insert the attachment
         $attach_id = wp_insert_attachment($data, $filename);
 
-        // Double check it was an image, delete if not.
-        if (!wp_attachment_is_image($attach_id)) {
+        // Double check it's the expected type (image or video), delete if not.
+        $attached_mime_type = get_post_mime_type($attach_id);
+        if (!$attached_mime_type || strpos($attached_mime_type, $mime_prefix) !== 0) {
             wp_delete_post($attach_id, true);
             return false;
         }

@@ -2,7 +2,7 @@
 Contributors: photocrati, imagely
 Tags: gallery, wordpress gallery plugin, photo gallery, image gallery, slideshow
 Requires at least: 5.5.4
-Stable tag: 4.5.5
+Stable tag: 4.6.0
 Tested up to: 7.1
 License: GPLv3
 Requires PHP: 7.4
@@ -197,6 +197,49 @@ For more information, feel free to visit the official website for the NextGEN Ga
 
 == Changelog ==
 
+= 4.6.0 - 11.17.2026 =
+* Added: Private galleries. Make a gallery private, share it on a password-protected client page, and keep it out of every other gallery, album and search on the site.
+* Added: Support for the WordPress Abilities API (WordPress 6.9+), so AI assistants and other tools can work with your galleries within each user's permissions.
+* Added: Filter a gallery's images by tag or text in the gallery editor and bulk-manage the results.
+* Added: A notice ahead of the PHP 8.1 requirement coming in the next release. Sites running PHP 7.4 to 8.0 see it in wp-admin and keep working; sites on PHP 7.0 to 7.3 see the plugin stay inactive with an explanation on the Plugins screen.
+* Fixed: Security hardening on the Other Options reset. We recommend updating.
+* Fixed: Security hardening on lightbox content links. We recommend updating.
+* Fixed: Security hardening on the plugin's module cache. We recommend updating.
+* Fixed: The watermark preview no longer fails on sites with a large image library.
+* Fixed: Large Media Library imports run in batches, so no selected image is skipped.
+* Fixed: Watermarking images on upload no longer leaves unwatermarked high-resolution copies behind.
+* Fixed: An image watermark from your own site that previews correctly is now applied by Set Watermark.
+* Fixed: Admin actions that send no data, such as deleting, are no longer blocked by CDN firewalls like QUIC.cloud.
+* Fixed: The link-to-page pickers list every page, sorted and with readable titles, instead of stopping at 100.
+* Fixed: The pricelist selectors list every pricelist instead of stopping at 100.
+* Fixed: Links from an album to its galleries and sub-albums no longer keep growing the page address.
+* Fixed: Galleries added in Elementor's editor are styled straight away in the editor preview.
+* Fixed: Dragging an image within the same row on the legacy Sort Gallery screen works again.
+* Fixed: The Set NextGEN Featured Image window clears the previous gallery search.
+* Fixed: The Yoast image sitemap no longer logs a warning for images without a title.
+* Fixed: A fatal error on PHP 8 in the legacy image file-type check.
+* Fixed: Checking for NextGEN's database tables no longer scans the whole database, which slowed large and multisite installs.
+
+= 4.5.6 - 11.09.2026 =
+* Fixed: Security hardening on the Tag page (CVE-2026-119611). We recommend updating.
+* Fixed: Security hardening on lightbox captions (CVE-2026-116550). We recommend updating.
+* Fixed: Security hardening on Lightroom publishing (CVE-2026-118191). We recommend updating.
+* Fixed: Security hardening on image metadata handling. We recommend updating.
+* Fixed: Security hardening on how full-size image originals are stored. We recommend updating.
+* Fixed: Security hardening on gallery and image deletion. We recommend updating.
+* Fixed: Security hardening on the watermark settings. We recommend updating.
+* Fixed: Security hardening on the gallery shortcode. We recommend updating.
+* Fixed: Security hardening on the Other Options screens. We recommend updating.
+* Fixed: Security hardening on the settings REST API. We recommend updating.
+* Fixed: Security hardening on album pages. We recommend updating.
+* Fixed: Shortcodes from other plugins, such as Envira Gallery and Soliloquy, no longer stop working after an SEO plugin builds an image sitemap on the same request.
+* Fixed: The image crop tool now crops the image, and a failed crop no longer replaces the image with its original upload.
+* Fixed: Manage Galleries shows the right number of pages after a search.
+* Fixed: The Pro Blog display's image spacing setting is saved and applied.
+* Fixed: WPML translations of album gallery and sub-album titles are shown again.
+* Fixed: The setup wizard shows the upgrade offer only to NextGEN Gallery users, not to Pro, Plus or Starter users.
+* Fixed: Importing from Google Photos sends the picker session, so the selected photos are imported.
+
 = 4.5.5 - 10.29.2026 =
 * Fixed: Security hardening on the Shutter and Shutter Reloaded lightboxes, so a link title, such as one inside a visitor's comment, is shown as text instead of being run as code (CVE-2026-116563). We recommend updating.
 * Fixed: Security hardening on lightbox captions, so caption text can no longer run scripts, inject its own styling or make the visitor's browser load content from another site, in any of the three lightbox effects. We recommend updating.
@@ -332,275 +375,4 @@ For more information, feel free to visit the official website for the NextGEN Ga
 * Improved: Clearer eCommerce upgrade page for Lite users.
 * Changed: Updated the bundled HTML sanitization library to 4.19.0, which officially supports PHP 8.4.
 
-= 4.4.1 - 09.03.2026 =
-* Fixed: Sites no longer break when a gallery contains an image with damaged size information.
-* Fixed: Albums can be saved again when their preview image has been deleted or is missing.
-* Fixed: Broken album and gallery links no longer fill the error log with database errors.
-* Fixed: Tag-based galleries now respect the image limit you set for them.
-* Fixed: The Sort and Exclude tab now lists only the images that belong to a tag-based gallery, instead of every image in the library.
-* Fixed: The lightbox now follows your global lightbox setting on pages that don't contain a gallery.
-* Fixed: Removed stray markup in the image browser that could break the layout of the surrounding page.
-* Fixed: Settings in the gallery Customize tab no longer snap back to their previous values while you're editing.
-
-= 4.4.0 - 08.21.2026 =
-* Fixed: Updating no longer slows the site down or throws errors while duplicate images are cleaned up, on sites with very large galleries.
-* Fixed: If that cleanup does fail during an update, you now get a notice explaining why instead of it failing quietly.
-* Fixed: The duplicate-image cleanup now finishes on sites using the older MyISAM database format, where it previously had to be skipped and the duplicates were left behind.
-* Added: The Orders screen shows each order's live print lab status, with a "Resubmit to lab" button when a submission fails. Requires NextGEN Pro.
-* Fixed: Print products you had already picked stay selected when you reopen a pricelist item. Requires NextGEN Pro.
-* Fixed: Editing a pricelist no longer retries a failed save over and over when the print catalog is down — it now shows the real reason and keeps your edits. Requires NextGEN Pro.
-* Changed: Print lab payment setup now follows the plugin's own test-mode setting instead of guessing from the site address, so the right Stripe keys are always used. Requires NextGEN Pro.
-
-= 4.3.1 - 08.18.2026 =
-* Fixed: Thumbnails are visible again on the legacy Sort Gallery screen (Manage Galleries → open a gallery → Sort images), so images can be reordered visually.
-* Fixed: The "Add new album" field and the Add, Delete and Edit Album controls are back on the legacy Manage Albums screen for administrators, after disappearing in 4.2.1.
-* Fixed: "Scan Folder for new images" no longer creates duplicate images when it is clicked more than once, and duplicates left behind by this bug are cleaned up when you update. The button now also disables itself while a scan is running.
-* Fixed: Album breadcrumbs now appear for sub-albums nested two or more levels deep, instead of vanishing past the first sub-album level.
-* Fixed: The Selected Items list in Edit Album now shows each gallery's current image count instead of a stale "0 images".
-* Fixed: Uploading an image your server cannot process now reports the real reason and lists the formats the server actually supports, instead of a misleading WebP message. Server-side upload errors also surface in the admin instead of failing silently.
-* Fixed: Stage aspect ratio choices such as 3:2, 4:3 and 16:9 no longer revert to "1:1 (Square)" when display settings are saved. Requires NextGEN Pro.
-* Fixed: The admin order detail view now shows the current name of a renamed pricelist item, matching the customer's confirmation page. Requires NextGEN Pro.
-* Fixed: The legacy NextGEN Gallery block now behaves correctly inside the block editor's iframed canvas — the gallery picker modal, its loading spinner and its close button all work — keeping it compatible with upcoming WordPress releases.
-* Changed: NextGEN Gallery now requires PHP 7.4 or newer and will not activate on older versions, matching the requirement already listed for the plugin.
-
-= 4.3.0 - 08.10.2026 =
-* Added: Instagram integration admin screens — connect an Instagram account and configure how its images build a gallery (caption, link, image size and caching), plus a control to clear cached Instagram data. Importing from Instagram requires NextGEN Pro.
-* Added: Display Triggers setting is now available in Pro Tile gallery settings, so share, comment and cart icons can be enabled on Tile galleries. Requires NextGEN Pro.
-* Fixed: Security hardening on image and gallery deletion to better protect your site's files. We recommend updating.
-* Fixed: Clicking a gallery source for an add-on that isn't activated yet no longer causes a white screen.
-* Fixed: Alt text, titles and descriptions are no longer mangled on save or display — words such as "description", "manuscript", "medieval" and "retrieval" are preserved.
-* Fixed: The "Set NGG Image as Featured" gallery picker no longer hangs or times out on sites with thousands of galleries.
-* Fixed: Image EXIF/IPTC metadata stored in non-UTF-8 encodings is now converted correctly instead of appearing garbled.
-* Fixed: Galleries you create, edit or delete now appear immediately on sites using a persistent object cache (Redis, Memcached) instead of after a delay of up to 30 minutes.
-* Fixed: The album preview in Edit Album no longer shows a rendering error for albums migrated from older NextGEN versions.
-* Fixed: "Sort Images" (by filename, date, ID or invert) now produces a consistent, correct order on large galleries instead of a random one.
-* Fixed: Per-gallery display settings are no longer silently discarded when the matching global display settings are changed.
-* Fixed: Simple ImageBrowser navigation now works when more than one gallery appears on the same page.
-* Fixed: Galleries inserted with the legacy "Attach to Post" tool are detected again, so gallery assets load on those pages — including NextGEN Pro's lightbox, cart and image protection.
-* Fixed: Thumbnail generation no longer fails with a fatal error on PHP 8.4+ for large, heavily compressed JPEGs.
-* Fixed: A JavaScript error on every wp-admin page of a fresh install with no galleries, which broke the admin menu tooltip and other admin scripts.
-* Fixed: The album editor's "Add Items to Album" modal no longer shows "No galleries available to add" on sites with 50+ galleries, and loading an album's galleries is much faster.
-* Fixed: Alt Text on metadata import now uses the IPTC accessibility alt-text field when present, instead of falling back to the image filename.
-* Fixed: Multiple album shortcodes on one page now navigate independently — opening a sub-album no longer changes every album on the page, and breadcrumbs stay within their own section.
-* Fixed: A fatal PHP 8 error when saving theme page settings with some third-party themes (for example Gantry 5).
-* Fixed: The nextgen_load_assets_on_page filter again forces NextGEN's core frontend scripts on pages where the gallery is rendered by a third party.
-* Fixed: Saving settings from the new admin now notifies add-ons of the change, so NextGEN Pro can re-register its Stripe checkout webhook when the API keys are saved. The eCommerce Payment Setup screen also warns when Stripe is enabled without a registered webhook. Requires NextGEN Pro.
-* Changed: The POPE framework library is now bundled with the plugin instead of being pulled in as an external dependency — no functional change, but installs and updates no longer depend on an outside package source.
-* Changed: Gallery folder paths are validated more strictly when saved — a shared directory such as wp-content/uploads can no longer be set as a gallery's path.
-
-= 4.2.4 - 07.30.2026 =
-* Fixed: Security hardening on gallery tag pages to better protect your site. We recommend updating.
-* Fixed: Gallery tag pages for tags containing non-Latin characters (Cyrillic, Greek, CJK, and similar) now resolve to the correct tag instead of showing an empty page.
-* Fixed: The "Images tagged ..." heading on a tag page now shows the tag's name as it is saved in your gallery tags.
-
-= 4.2.3 - 06.30.2026 =
-* Added: Drag gallery images to a different page within the same gallery — a floating page strip appears while dragging; hover a page chip to navigate, then drop to reorder.
-* Added: Album items (galleries and sub-albums) can also be dragged across pages for easier organization.
-* Fixed: Pro Lightbox settings toggles (Display Cart, Display Comments, and others) now correctly stay OFF after being saved as off — they no longer revert to ON on page reload.
-* Fixed: Pro Slideshow and Pro Horizontal Filmstrip display settings (crop, pan, aspect ratio, width, transition, etc.) now apply correctly on the frontend after being saved in the gallery editor.
-* Fixed: The "Manage gallery" link after importing a folder now opens the correct gallery instead of showing a broken URL.
-* Fixed: Pro Mosaic galleries now display images correctly on sites using Imagely CDN when original files are no longer stored locally.
-* Fixed: Album image count ("X Photos") now shows correctly on galleries inserted with the block-based album layouts (Basic Extended and Basic Compact).
-* Fixed: Bulk "Generate Thumbnails" and "Set Watermark" no longer fail with a server error when an image's embedded metadata is incomplete.
-* Fixed: Thumbnails now correctly hide off-page images when "show all in lightbox" is enabled alongside "images per page".
-* Fixed: PHP code no longer leaks into WordPress admin HTML (which triggered some security firewalls); the gallery insert button also no longer loads on unrelated admin pages.
-* Improved: NextGEN Gallery no longer loads CSS, JavaScript, or icon files on pages that contain no galleries, reducing page weight for visitors.
-* Improved: Gallery data is now stored in the WordPress object cache (Redis, Memcached) between page loads, significantly reducing database queries on high-traffic sites.
-* Improved: Display type lookups are cached, eliminating repeated database scans on every page load.
-
-= 4.2.2 - 05.27.2026 =
-* Added: Google Photos integration — import images directly from your Google Photos account into NextGEN galleries.
-* Added: Dropbox integration — import images from Dropbox into NextGEN galleries.
-
-= 4.2.1 - 05.15.2026 =
-* Fixed: Security hardening across the plugin to better protect site data and reinforce permission checks. We recommend updating.
-* Fixed: Edit Image crop tool now uses the correct aspect ratio from your gallery's thumbnail settings and no longer briefly flickers when opening crop mode.
-* Fixed: Additional PHP 8.2+ deprecation notices on admin screens.
-
-= 4.2.0 - 04.23.2026 =
-* Fixed: Publishing galleries and albums from the Imagely Lightroom plugin could fail with a generic processing error after a recent update
-* Fixed: Albums created by Imagely Lightroom could appear empty on the front end with missing thumbnails and broken links
-* Fixed: Newly created galleries and albums sometimes did not appear in the admin list until cached data expired
-* Fixed: Upload error messages from the Imagely Lightroom plugin now include the underlying reason when a publish fails
-* Fixed: Edited images now refresh immediately in the admin without needing a manual page reload
-* Fixed: PHP warnings and notices no longer appear on the Albums edit screen related to display types
-* Fixed: PHP 8.2+ deprecation notices on admin pages and when gallery models are loaded
-
-= 4.1.3 - 04.03.2026 =
-* Fixed: Imagely admin no longer hammered the REST API with repeated settings requests when browsing Galleries and Albums (column visibility auto-save).
-
-= 4.1.2 - 04.02.2026 =
-* Added: Duplicate pricelists individually or in bulk from the Ecommerce tab with confirmation modal
-* Added: Column visibility on "Manage Galleries" and "Manage Albums" tables is now saved and restored when returning to the page
-* Added: Automatic EXIF-based JPEG rotation using ImageMagick/Imagick when available to keep uploads correctly oriented
-* Fixed: Multisite — subsite site administrators see Path to galleries as read-only in Imagely so uploads are not pointed at another site’s directory; the main site and network super administrators can still edit the path.
-* Fixed: Multisite — network Enable import function correctly turns off Import Folder for subsites (Imagely UI and REST).
-* Fixed: Gallery image counts now display correctly in the Albums edit page
-* Fixed: Image list in "Add Media > NextGEN Gallery" modal now displays with consistent row heights instead of overflowing thumbnails
-* Fixed: Block editor no longer reverts the preview to the saved gallery when choosing a different gallery with "Change" before inserting
-* Fixed: Block editor validation errors when Bluehost’s WonderBlocks feature is enabled
-* Fixed: Pro Masonry "Maximum image width" and "Image padding" settings now save and apply correctly
-* Fixed: Display type settings in the Customize tab could appear stuck or out of sync after changing layout or saving settings
-* Fixed: Shutter Reloaded lightbox showing double the image count on Mosaic/Masonry and in the admin live preview
-* Fixed: PHP 8.4 deprecation notices for implicit nullable parameters and dynamic properties
-* Fixed: Image slug not regenerating when alt text is updated in the manage gallery screen
-* Fixed: Rapid price edits in pricelists sometimes not saving
-* Fixed: "Display link to license terms?" and "Allow free downloads from cart sidebar" checkboxes reverting after save
-* Fixed: Pricelist name and item fields sometimes not showing on load
-* Fixed: Order links in the eCommerce Orders admin view now point to the configured thank-you page instead of always using /thanks/
-* Fixed: Album pages crashing on PHP 8.x when a sub-album has no images
-* Fixed: Cases where JPEG uploads with EXIF rotation could appear as failed even though files were created successfully
-* Fixed: Multi-word tag search now works correctly by preserving full phrases before sanitization
-* Improved: Gallery path validation is shared between REST and classic Image Options (safer relative paths).
-* Improved: JPEG upload handling to be more memory-aware on hosts with older GD libraries
-
-= 4.1.1 - 03.13.2026 =
-* Fixed: PNG and WEBP watermarks no longer lose transparency when applied to images
-* Fixed: Fatal error when using NextGen Gallery with older Pro add-on versions that reference the legacy C_NextGen_Settings class
-* Fixed: SinglePicture display no longer crashes when width/height settings are not configured
-* Fixed: Imagebrowser now opens to the correct image when viewing images within albums (Thumbnails display type)
-
-= 4.1.0 - 03.11.2026 =
-* Added: Features page for discovering and managing available integrations
-* Added: CDN menu item in the admin sidebar
-* Added: Gallery deletion functionality from the Image Uploader
-* Added: Dynamic image size options in gallery settings
-* Added: Caching for gallery and album queries for improved performance
-* Added: Batch gallery fetching for better admin performance
-* Fixed: Gallery images now display correctly in ImageBrowser and Slideshow layouts
-* Fixed: REST gallery response cache is now invalidated on image changes
-* Fixed: Settings page data saving issue
-* Fixed: Basic layout fatal error
-* Fixed: Media file import issue
-* Fixed: Server error messages are now shown instead of generic fallback messages
-* Fixed: Thickbox style issue
-* Fixed: Undefined array key notice
-* Fixed: Gallery image count now refreshes correctly after preview loads
-* Fixed: EXIF rotation guard restored — images with non-rotation orientations no longer trigger unnecessary re-processing
-* Fixed: Metadata methods (get_IPTC, get_XMP) now correctly return the full array when called without arguments
-* Fixed: Gallery list cache is now per-user, preventing incorrect permission display across different user roles
-* Improved: Upgrade links now include utm_content tracking for analytics
-* Improved: Extensive PHPCS code quality fixes across the entire codebase (security, sanitization, escaping, naming * conventions)
-* Improved: Image uploader UI styling and layout
-* Improved: Error handling for gallery deletion and image operations
-
-= 4.0.5 - 02.12.2026 =
-* Fixed: Unresolved template.
-* Added: Convert WordPress galleries to Imagely — convert a single gallery from the block editor ("Convert to Imagely Gallery" in the sidebar) or bulk convert from Imagely → Settings → Convert Galleries; supports classic [gallery] shortcodes and Gutenberg Gallery blocks; preserves image metadata and backs up original content before conversion.
-* Fixed: Legacy Template dropdown no longer shows internal template files; only valid legacy templates appear in the list.
-* Fixed: Imagely Widget displays correctly again after legacy template dropdown improvements.
-* Improved: PHP 8.1+ compatibility; resolved deprecation warnings when previewing galleries or using legacy templates with empty image or gallery descriptions.
-
-= v4.0.3 - 12.18.2025 =
-• Added: REST endpoint to scan a gallery folder and import newly added images, and a client hook to trigger it.
-• Added: legacy template selector and exposed available legacy templates to the admin app.
-• Added: shared Pagination component and applied it across admin list screens (galleries, albums, tags, orders).
-• Added: Image ID field to the image metadata modal.
-• Added: Digital Downloads section in order details with a direct download link.
-• Fixed: 403 rate-limiting issues by debouncing display/settings saves (longer debounce) in gallery/album customize flows.
-• Fixed: legacy template loading security by blocking traversal attempts and only allowing templates from approved directories
-• Fixed: Upgrade menu item and related admin styles/targeting to show only for Lite installs.
-• Fixed: duplicate-column errors when adding DB columns by checking column existence directly
-• Fixed: order resubmission-to-lab flow (improved success/error handling) and improved order item file details display.
-• Fixed: missing UTM parameters in upgrade links.
-
-= V4.0.2 - 12.15.2025 =
-* Fixed: Missing thumbnails on the gallery edit page for some users
-* Fixed: Creating galleries from server subfolders
-* Fixed: User and capabilities page showing for all users
-
-= V4.0.1 - 12.10.2025 =
-* Fixed: Edit gallery user permissions
-
-= V4.0.0 - 12.09.2025 =
-* Improved: Admin area user interface
-
-= V3.59.12 - 04.23.2025 =
-* Fixed: Lightbox allowed html discrepancy
-
-= V3.59.11 - 04.17.2025 =
-* Fixed: SQL formatting error on plugin activation
-* Fixed: Translation warning in some admin pages
-
-= V3.59.10 - 01.28.2025 =
-* Fixed: Frontend search not working in some cases
-
-= V3.59.9 - 01.16.2025 =
-* Fixed: Title and caption allowed html tags.
-
-= V3.59.8 - 01.06.2025 =
-* Fixed: Apostrophes not being added to image title
-* Improved: Fields sanitization
-
-= V3.59.7 - 12.05.2024 =
-* Fixed: Links and styles on about page
-* Fixed: Readme update
-
-= V3.59.6 - 11.05.2024 =
-* Fixed: Title and captions escaping
-* Added: Onboarding wizard
-* Added: Optional usage tracking
-* Fixed: Blurry images on cropping
-
-= V3.59.5 - 09.24.2024 =
-* Fixed: Improved security
-
-= V3.59.4 - 07.18.2024 =
-* Fixed: Warning on WP import file
-* Added: Create gallery nudge
-* Added: Notifications count to the navbar menu
-* Fixed: Duplicated gallery name  in the Gutenberg block
-* Fixed: Gutenberg block not working when adding into the page template
-* Added: Link on the header section logo and make it clickable
-* Fixed: Duplicate thumbnail in basic thumbnails carousel
-
-= V3.59.3 - 05.29.2024 =
-* Fixed: Improved transient registration.
-* Fixed: Rendering shortcodes on rest endpoints.
-* Fixed: Album name sanitization.
-* Removed: Deprecated admin notices.
-* Fixed: PHP 8.2 warnings
-
-= V3.59.2 - 04.10.2024 =
-* Fixed: Various bugs and improved UI/UX in various places.
-
-= V3.59.1 - 04.03.2024 =
-* Fixed: Warning when saving settings.
-* Fixed: Show ordered filenames on order details page.
-
-= V3.59  - 03.14.2024 =
-* Fixed: URI too long prevents "Sort or exclude images" from loading images.
-* Fixed: Correcting Lightroom clients being unable to sync image .
-* Fixed: Prevent PHP warning / error when watermarking.
-* Fixed: Sorting images from a Classic Editor launched IGW.
-* Fixed: Shutter lightbox randomly failing to load the captions.
-* Fixed: PHP notices and warnings.
-* Fixed: Addressed a bug reported by Dmitrii Ignatyev of Cleantalk.
-
-= V3.58  - 02.08.2024 =
-* Fixed:   A potential fatal DivisionByZeroError caused by image files being deleted outside of NextGEN.
-* Fixed:   A potential fatal error in the XML-RPC controller.
-* Fixed:   An issue with classic (non-block) themes could break Pro's "Open album children in the Pro Lightbox" feature.
-* Fixed:   Assorted potential PHP notices and warnings.
-* Fixed:   Manage Galleries' "Images per Page" feature was not working.
-* Fixed:   Passing 'gallery_width="auto"' to a Slideshow shortcode could result in a fatal error.
-
-= V3.57  - 01.10.2024 =
-* Fixed:   Albums were generating an incorrect URL to their child galleries.
-* Fixed:   Albums could generate a fatal error when viewing a sub-album.
-* Fixed:   Do not call opcache_reset() if it does not exist.
-
-= V3.56  - 01.09.2024 =
-* Fixed:   "Open album children in Pro Lightbox" feature was only working with block based themes.
-* Fixed:   Adding more than one Pro display to one page caused galleries after the first to be unstyled.
-* Fixed:   Albums with very a large number of children may have broken gallery displays if it relies on the dynamic-css feature.
-* Fixed:   Continued fixing recently introduced incompatibilies with 3rd party extensions.
-* Fixed:   Creating a new gallery from the Manage Galleries page was just reloading the page.
-* Fixed:   Display Type settings could be forced back to their default settings when upgrading.
-* Fixed:   IIS servers may generate a fatal error searching for an absolute path to template files.
-* Fixed:   Inserting NextGEN singlepic from the Add Media popup was creating an <img> without a src attribute.
-* Fixed:   Possible PHP notices, warnings.
-* Fixed:   Restored the NGG_DISABLE_SHORTCODE_MANAGER constant.
-* Fixed:   Router->fix_page_parameter() generated a warning if the global $post is not an object.
-* Fixed:   The button 'Scan folder for new images' was re-importing existing images.
-* Fixed:   Updating tags via the Manage Tags page did not flush the displayed gallery rendering cache.
+For older versions, see the [full changelog](https://plugins.svn.wordpress.org/nextgen-gallery/trunk/changelog.txt).

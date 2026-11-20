@@ -20,9 +20,11 @@ class Scroll_To_Top extends Base_View {
 	 * Add hooks for the front end.
 	 */
 	public function init() {
-		add_action( 'neve_after_primary', array( $this, 'render_button' ) );
+		add_action( 'wp_footer', array( $this, 'render_button' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		add_action( 'neve_before_header_hook', array( $this, 'scroll_to_top_amp' ) );
+		// Printed outside the header, because the button is hidden until one of these
+		// animations shows it, and the button stays on the page when the header is turned off.
+		add_action( 'neve_before_header_wrapper_hook', array( $this, 'scroll_to_top_amp' ) );
 	}
 
 	/**
@@ -31,7 +33,7 @@ class Scroll_To_Top extends Base_View {
 	 * @return void
 	 */
 	public function scroll_to_top_amp() {
-		if ( ! Scroll_To_Top_Options::is_enabled() ) {
+		if ( ! $this->is_enabled() ) {
 			return;
 		}
 
@@ -39,7 +41,10 @@ class Scroll_To_Top extends Base_View {
 			return;
 		}
 
-		echo '<amp-position-observer on="enter:hideAnim.start; exit:showAnim.start" layout="nodisplay"></amp-position-observer>';
+		// The observer watches its own parent unless it is given a target. Its parent here is
+		// the page wrapper, which is never out of the viewport, so it watches this anchor instead.
+		echo '<div id="nv-scroll-to-top-anchor"></div>';
+		echo '<amp-position-observer target="nv-scroll-to-top-anchor" on="enter:hideAnim.start; exit:showAnim.start" layout="nodisplay"></amp-position-observer>';
 
 		// We use 2 `amp-animation` elements to trigger the visibility of the button. The first one is for making the button visible
 		echo '
@@ -91,7 +96,7 @@ class Scroll_To_Top extends Base_View {
 	 * @return void
 	 */
 	public function enqueue_scripts() {
-		if ( ! Scroll_To_Top_Options::is_enabled() ) {
+		if ( ! $this->is_enabled() ) {
 			return;
 		}
 
@@ -131,7 +136,7 @@ class Scroll_To_Top extends Base_View {
 	 * @return void
 	 */
 	public function render_button() {
-		if ( ! Scroll_To_Top_Options::is_enabled() ) {
+		if ( ! $this->is_enabled() ) {
 			return;
 		}
 
@@ -145,9 +150,10 @@ class Scroll_To_Top extends Base_View {
 		$extra_class  = sprintf( 'scroll-to-top-%s %s', $position, ( ( ! $hide_on_mobile ) ? ' scroll-show-mobile ' : '' ) );
 		$extra_class .= $type;
 
-		$amp = neve_is_amp() ? 'on="tap:neve_body.scrollTo(duration=200)"' : '';
+		// A whole attribute, not a value: escaping it would mangle the quotes.
+		$amp = neve_is_amp() ? ' on="tap:neve_body.scrollTo(duration=200)"' : '';
 
-		echo '<button tabindex="0"' . esc_attr( $amp ) . ' id="scroll-to-top" class="scroll-to-top ' . esc_attr( $extra_class ) . '" aria-label="' . esc_attr__( 'Scroll To Top', 'neve' ) . '">';
+		echo '<button' . $amp . ' id="scroll-to-top" class="scroll-to-top ' . esc_attr( $extra_class ) . '" aria-label="' . esc_attr__( 'Scroll To Top', 'neve' ) . '">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $amp is a hard-coded literal.
 		
 		if ( $type === 'icon' ) {
 			echo $this->get_icon_svg( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -166,6 +172,26 @@ class Scroll_To_Top extends Base_View {
 		}
 		
 		echo '</button>';
+	}
+
+	/**
+	 * Check whether the scroll-to-top feature is available and enabled.
+	 *
+	 * @return bool
+	 */
+	private function is_enabled() {
+		$options_class = $this->get_options_class();
+
+		return class_exists( $options_class ) && $options_class::is_enabled();
+	}
+
+	/**
+	 * Get the scroll-to-top options class.
+	 *
+	 * @return class-string
+	 */
+	protected function get_options_class() {
+		return Scroll_To_Top_Options::class;
 	}
 
 	/**

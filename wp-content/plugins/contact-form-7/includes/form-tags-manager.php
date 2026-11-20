@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 /**
  * Wrapper function of WPCF7_FormTagsManager::add().
  */
@@ -74,9 +76,7 @@ class WPCF7_FormTagsManager {
 	 * @return WPCF7_FormTagsManager The singleton manager.
 	 */
 	public static function get_instance() {
-		if ( empty( self::$instance ) ) {
-			self::$instance = new self();
-		}
+		self::$instance ??= new self();
 
 		return self::$instance;
 	}
@@ -217,6 +217,8 @@ class WPCF7_FormTagsManager {
 			return $content;
 		}
 
+		$content = wp_scrub_utf8( $content );
+
 		$content = preg_replace_callback(
 			'/' . $this->tag_regex() . '/su',
 			array( $this, 'normalize_callback' ),
@@ -299,6 +301,8 @@ class WPCF7_FormTagsManager {
 			return $placeholder;
 		};
 
+		$content = wp_scrub_utf8( $content );
+
 		return preg_replace_callback(
 			'/' . $this->tag_regex() . '/su',
 			$callback,
@@ -349,6 +353,8 @@ class WPCF7_FormTagsManager {
 				return $this->scanned_tags;
 			}
 		}
+
+		$content = wp_scrub_utf8( $content );
 
 		if ( $replace ) {
 			$content = preg_replace_callback(
@@ -583,6 +589,7 @@ class WPCF7_FormTagsManager {
 
 		$whitespaces = wpcf7_get_unicode_whitespaces();
 
+		$text = wp_scrub_utf8( $text );
 		$text = preg_replace( '/[\x{00a0}\x{200b}]+/u', ' ', $text );
 		$text = wpcf7_strip_whitespaces( $text );
 

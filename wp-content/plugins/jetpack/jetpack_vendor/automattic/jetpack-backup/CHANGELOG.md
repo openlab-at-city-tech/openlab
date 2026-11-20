@@ -5,6 +5,215 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.2.2] - 2026-11-02
+### Changed
+- Update package dependencies. [#53869]
+
+### Fixed
+- Underline the "Get in touch with us", "Learn more" and "Modify" links, so they stand out from the sentence around them without relying on color. [#54290]
+
+## [5.2.1] - 2026-10-28
+### Changed
+- Update package dependencies. [#54118]
+
+## [5.2.0] - 2026-10-26
+### Added
+- Overview: Open a backup from a link even when it is not on the activity page currently shown. [#53929]
+- Recognize Jetpack Pro licenses. [#53424]
+- Restore: On sites hosted on WordPress.com, warn about known security threats in a backup and ask for confirmation before restoring it. Backups with known threats are marked in the list, and the backup details show the warning. The Activity Log's "Restore backup" now opens this restore screen when the new dashboard is on. [#53755]
+
+### Changed
+- Show the redesigned dashboard by default. Return false from the `rsm_jetpack_ui_modernization_backup` filter to keep the legacy dashboard. [#53443]
+- Update package dependencies. [#53951]
+
+### Fixed
+- Backup: Explain why connecting the site failed instead of showing a generic error. [#53289]
+- Overview: Treat backups that finished with warnings as backups, so they can be opened and restored and their links work. [#53929]
+- Show a finished backup in the list without a page reload, even when WordPress.com is slow to list it, and add a "Backup complete" notice that stays until it is dismissed. [#53999]
+- Show that Backup is unavailable in Offline Mode instead of the dashboard, and refuse Backup requests while Jetpack is in Offline Mode. [#54070]
+
+## [5.1.4] - 2026-10-19
+### Changed
+- Update package dependencies. [#53004] [#53806]
+
+## [5.1.3] - 2026-10-12
+### Changed
+- Include WordPress.com's error reason in failed backup REST responses. [#53304]
+
+## [5.1.2] - 2026-10-12
+### Changed
+- Update dependencies.
+
+## [5.1.1] - 2026-10-05
+### Changed
+- Admin menu: Label the sidebar item "Backup" with the modernized dashboard too. [#52937]
+- Update package dependencies. [#52955] [#52999]
+
+## [5.1.0] - 2026-09-29
+### Added
+- Let a host plugin initialize the Backup dashboard without re-ensuring the connection. [#52495]
+
+## [5.0.5] - 2026-09-28
+### Changed
+- Use the shared wp-build-polyfills helper to order the screen-ID alias around wp-build's generated enqueue check. [#52583]
+
+### Fixed
+- Footer: Hide the "Products" and "Help" links when My Jetpack is unavailable. [#52557]
+- Modern dashboard: Show when a backup completed with warnings, and when the Jetpack connection reports an error. [#52811]
+- Show Jetpack in-dashboard messages on the modernized dashboard. [#52641]
+
+## [5.0.4] - 2026-09-21
+### Added
+- Dashboard: Add an internal preview of the modernized dashboard, which stays off by default behind the `rsm_jetpack_ui_modernization_backup` filter. [#52338]
+
+### Changed
+- Exclude source map files from the distributed package. [#52304]
+- Update package dependencies. [#52187]
+
+### Fixed
+- Dashboard: Restore the admin screen ID after the wp-build enqueue check. [#52471]
+
+## [5.0.3] - 2026-09-15
+### Changed
+- Give the Backup sidebar item a stable key hosts can use in the sidebar visibility filter. [#52156]
+- Update package dependencies. [#52200] [#52297]
+
+## [5.0.2] - 2026-09-09
+### Changed
+- Sidebar: Sort Jetpack menu items alphabetically, pinning My Jetpack to the top and external links and Settings to the bottom. [#52003]
+
+## [5.0.1] - 2026-09-08
+### Added
+- Add an endpoint for flushing the object cache, which a database restore leaves stale. [#52059]
+
+### Changed
+- Review request: Ask about backups instead of real-time backups, which was inaccurate on daily plans. [#51803]
+- Update package dependencies. [#51701]
+
+### Fixed
+- Cache the promoted Backup subscription price so the screen shown to sites without a plan stops fetching it from WordPress.com on every load. [#51796]
+- Report a WordPress.com failure on the Backup plan check as an error instead of as a missing plan. [#51889]
+- Stop a slow or failing WordPress.com from reading as a missing Backup plan. [#51869]
+
+## [5.0.0] - 2026-09-01
+### Changed
+- Update package dependencies. [#51303] [#51802]
+
+### Removed
+- Minimum supported PHP version is now 7.4. [#51515]
+
+### Fixed
+- Abilities: Fix the backup overview reporting no storage usage, storage limit or backup time. [#51684]
+- Show a real failure message when your backup status cannot be read, instead of the "your first backup will be ready soon" screen, and let the "Back up now" button recover when a backup could not be queued. [#51625]
+- Show storage usage and the plan limit the right way round when the interface is translated. [#51664]
+
+## [4.3.15] - 2026-08-25
+### Changed
+- Internal updates.
+
+## [4.3.14] - 2026-08-20
+### Changed
+- Update package dependencies. [#51399]
+
+## [4.3.13] - 2026-08-11
+### Changed
+- Update dependencies.
+
+## [4.3.12] - 2026-08-10
+### Changed
+- Update package dependencies. [#50509] [#51008]
+
+## [4.3.11] - 2026-08-03
+### Fixed
+- Load JS translation catalogs and stamp the package text domain on the wp-build dashboard bundles. [#50762]
+
+## [4.3.10] - 2026-07-27
+### Changed
+- Update dependencies. [#50719]
+- Update package dependencies. [#50751] [#50753]
+
+## [4.3.9] - 2026-07-20
+### Changed
+- Update package dependencies. [#50510] [#50529] [#50582]
+
+## [4.3.8] - 2026-07-13
+### Changed
+- Update package dependencies. [#49272]
+- Update WPDS design tokens to the @wordpress/theme 0.16/0.17 names (see https://github.com/WordPress/gutenberg/blob/trunk/packages/theme/CHANGELOG.md#0160-2026-06-24 ). [#49272]
+
+## [4.3.7] - 2026-07-06
+### Changed
+- Update package dependencies. [#50097] [#50183] [#50212]
+
+## [4.3.6] - 2026-06-29
+### Changed
+- Update package dependencies. [#49271]
+
+## [4.3.5] - 2026-06-25
+### Changed
+- Update package dependencies. [#49831]
+
+### Fixed
+- Dashboard: Align component props with the `@wordpress/ui` 0.15 API. [#49795]
+
+## [4.3.4] - 2026-06-22
+### Changed
+- Update package dependencies. [#49631] [#49691] [#49757]
+
+## [4.3.3] - 2026-06-15
+### Changed
+- Update package dependencies. [#49273] [#49492]
+
+## [4.3.2] - 2026-06-08
+### Changed
+- Update dependencies. [#49354]
+
+### Fixed
+- Include the routes directory in the TypeScript config so dashboard route files type-check correctly. [#49368]
+
+## [4.3.1] - 2026-06-01
+### Changed
+- Update package dependencies. [#48404] [#49152]
+
+## [4.3.0] - 2026-05-25
+### Added
+- Abilities: Register Jetpack Backup abilities (overview, list, restores, run-backup) for WP 6.9+. [#48329]
+
+### Changed
+- Abilities: Rename slugs to `list-*` / `request-*` and register via the package's `actions.php`. [#48329]
+- Update package dependencies. [#48405] [#49012]
+
+### Fixed
+- Abilities: Accept fractional numeric strings in `parse_timestamp()`. [#48329]
+- Abilities: Drop dead branch in `map_event_status()` that returned the same value as the default case. [#48329]
+- Abilities: Terminate `jetpack-backup/list-backups` pagination on an empty page, not on a page shorter than `per_page`. [#48329]
+- Abilities: Report failure of `jetpack-backup/request-backup` when WordPress.com answers 200 with `{ success: false }` instead of claiming the backup was enqueued. [#48329]
+- Abilities: Replace PHP 7.4+ arrow function with a closure and initialize `$score` to support PHP 7.2. [#48329]
+
+## [4.2.56] - 2026-05-19
+### Changed
+- Build: Run webpack and wp-build scripts concurrently. [#48794]
+- Exclude development files from production builds. [#47365]
+- Update package dependencies. [#48696]
+
+## [4.2.55] - 2026-05-11
+### Changed
+- Components: Use Link from `@wordpress/ui` instead of ExternalLink. [#48529]
+
+## [4.2.54] - 2026-05-04
+### Changed
+- Internal: No longer require automattic/jetpack-changelogger as a per-project dev dependency. [#48225]
+
+## [4.2.53] - 2026-04-27
+### Changed
+- Update dependencies.
+
+## [4.2.52] - 2026-04-20
+### Changed
+- Adopt the shared Jetpack admin-page-layout mixin on the Backup admin page: pinned header, scrolling middle, pinned footer, no window-level scroll. [#48109]
+- Storage meter: Migrate ProgressBar to @wordpress/components; preserve color-by-usage-level styling via scoped CSS. [#48206]
+- Update package dependencies. [#48106] [#48126] [#48141]
+
 ## [4.2.51] - 2026-04-15
 ### Changed
 - Update package dependencies. [#47907]
@@ -52,7 +261,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.2.44] - 2026-03-02
 ### Changed
-- Update dependencies. [#46758]
+- Update dependencies.
 
 ## [4.2.43] - 2026-02-26
 ### Changed
@@ -118,7 +327,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.2.30] - 2025-11-18
 ### Changed
-- Update dependencies. [#45553]
+- Update dependencies.
 
 ## [4.2.29] - 2025-11-17
 ### Changed
@@ -142,11 +351,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.2.24] - 2025-09-29
 ### Changed
-- Update dependencies. [#44940]
+- Update dependencies.
 
 ## [4.2.23] - 2025-09-22
 ### Changed
-- Update dependencies. [#44940]
+- Update dependencies.
 
 ## [4.2.22] - 2025-09-19
 ### Changed
@@ -154,7 +363,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.2.21] - 2025-09-15
 ### Changed
-- Update dependencies. [#44940]
+- Update dependencies.
 
 ## [4.2.20] - 2025-09-08
 ### Changed
@@ -162,7 +371,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.2.19] - 2025-09-01
 ### Changed
-- Update dependencies. [#44940]
+- Update dependencies.
 
 ## [4.2.18] - 2025-08-25
 ### Changed
@@ -205,7 +414,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.2.9] - 2025-06-30
 ### Changed
-- Update dependencies. [#43971]
+- Update dependencies.
 
 ## [4.2.8] - 2025-06-27
 ### Fixed
@@ -213,7 +422,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.2.7] - 2025-06-24
 ### Changed
-- Update dependencies. [#43971]
+- Update dependencies.
 
 ## [4.2.6] - 2025-06-23
 ### Changed
@@ -311,15 +520,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.12] - 2025-02-24
 ### Changed
-- Update dependencies. [#39855]
+- Update dependencies.
 
 ## [4.0.11] - 2025-02-17
 ### Changed
-- Update dependencies. [#39855]
+- Update dependencies.
 
 ## [4.0.10] - 2025-02-11
 ### Changed
-- Update dependencies. [#39855]
+- Update dependencies.
 
 ## [4.0.9] - 2025-02-10
 ### Changed
@@ -348,7 +557,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.3] - 2024-11-26
 ### Changed
-- Update dependencies. [#39855]
+- Update dependencies.
 
 ## [4.0.2] - 2024-11-25
 ### Changed
@@ -357,7 +566,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.1] - 2024-11-18
 ### Changed
-- Update dependencies. [#39855]
+- Update dependencies.
 
 ## [4.0.0] - 2024-11-14
 ### Added
@@ -393,7 +602,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.4.11] - 2024-09-23
 ### Changed
-- Update dependencies. [#38958]
+- Update dependencies.
 
 ## [3.4.10] - 2024-09-16
 ### Changed
@@ -431,7 +640,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.4.3] - 2024-08-19
 ### Changed
-- Update dependencies. [#38861] [#38662]
+- Update dependencies. [#38662] [#38861]
 
 ### Fixed
 - Lossless image optimization for images (should improve performance with no visible changes). [#38750]
@@ -466,7 +675,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.3.13] - 2024-05-27
 ### Changed
-- Update dependencies. [#37323]
+- Update dependencies.
 
 ## [3.3.12] - 2024-05-20
 ### Changed
@@ -942,7 +1151,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.3.7] - 2022-05-31
 ### Changed
-- Updated package dependencies. [#24432] [#24573] [#24475] [#24505] [#24515]
+- Updated package dependencies. [#24432] [#24475] [#24505] [#24515] [#24573]
 
 ## [1.3.6] - 2022-05-24
 ### Changed
@@ -959,7 +1168,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.3.3] - 2022-05-18
 ### Changed
 - Changed method used to disconnect upon deactivation [#24300]
-- Updated package dependencies. [#23795] [#24372] [#24153] [#24334] [#24347] [#24344]
+- Updated package dependencies. [#23795] [#24153] [#24334] [#24344] [#24347] [#24372]
 
 ### Fixed
 - Fix new PHPCS sniffs. [#24366]
@@ -1090,6 +1299,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add API endpoints and Jetpack Backup package for managing Help…
 
+[5.2.2]: https://github.com/Automattic/jetpack-backup/compare/v5.2.1...v5.2.2
+[5.2.1]: https://github.com/Automattic/jetpack-backup/compare/v5.2.0...v5.2.1
+[5.2.0]: https://github.com/Automattic/jetpack-backup/compare/v5.1.4...v5.2.0
+[5.1.4]: https://github.com/Automattic/jetpack-backup/compare/v5.1.3...v5.1.4
+[5.1.3]: https://github.com/Automattic/jetpack-backup/compare/v5.1.2...v5.1.3
+[5.1.2]: https://github.com/Automattic/jetpack-backup/compare/v5.1.1...v5.1.2
+[5.1.1]: https://github.com/Automattic/jetpack-backup/compare/v5.1.0...v5.1.1
+[5.1.0]: https://github.com/Automattic/jetpack-backup/compare/v5.0.5...v5.1.0
+[5.0.5]: https://github.com/Automattic/jetpack-backup/compare/v5.0.4...v5.0.5
+[5.0.4]: https://github.com/Automattic/jetpack-backup/compare/v5.0.3...v5.0.4
+[5.0.3]: https://github.com/Automattic/jetpack-backup/compare/v5.0.2...v5.0.3
+[5.0.2]: https://github.com/Automattic/jetpack-backup/compare/v5.0.1...v5.0.2
+[5.0.1]: https://github.com/Automattic/jetpack-backup/compare/v5.0.0...v5.0.1
+[5.0.0]: https://github.com/Automattic/jetpack-backup/compare/v4.3.15...v5.0.0
+[4.3.15]: https://github.com/Automattic/jetpack-backup/compare/v4.3.14...v4.3.15
+[4.3.14]: https://github.com/Automattic/jetpack-backup/compare/v4.3.13...v4.3.14
+[4.3.13]: https://github.com/Automattic/jetpack-backup/compare/v4.3.12...v4.3.13
+[4.3.12]: https://github.com/Automattic/jetpack-backup/compare/v4.3.11...v4.3.12
+[4.3.11]: https://github.com/Automattic/jetpack-backup/compare/v4.3.10...v4.3.11
+[4.3.10]: https://github.com/Automattic/jetpack-backup/compare/v4.3.9...v4.3.10
+[4.3.9]: https://github.com/Automattic/jetpack-backup/compare/v4.3.8...v4.3.9
+[4.3.8]: https://github.com/Automattic/jetpack-backup/compare/v4.3.7...v4.3.8
+[4.3.7]: https://github.com/Automattic/jetpack-backup/compare/v4.3.6...v4.3.7
+[4.3.6]: https://github.com/Automattic/jetpack-backup/compare/v4.3.5...v4.3.6
+[4.3.5]: https://github.com/Automattic/jetpack-backup/compare/v4.3.4...v4.3.5
+[4.3.4]: https://github.com/Automattic/jetpack-backup/compare/v4.3.3...v4.3.4
+[4.3.3]: https://github.com/Automattic/jetpack-backup/compare/v4.3.2...v4.3.3
+[4.3.2]: https://github.com/Automattic/jetpack-backup/compare/v4.3.1...v4.3.2
+[4.3.1]: https://github.com/Automattic/jetpack-backup/compare/v4.3.0...v4.3.1
+[4.3.0]: https://github.com/Automattic/jetpack-backup/compare/v4.2.56...v4.3.0
+[4.2.56]: https://github.com/Automattic/jetpack-backup/compare/v4.2.55...v4.2.56
+[4.2.55]: https://github.com/Automattic/jetpack-backup/compare/v4.2.54...v4.2.55
+[4.2.54]: https://github.com/Automattic/jetpack-backup/compare/v4.2.53...v4.2.54
+[4.2.53]: https://github.com/Automattic/jetpack-backup/compare/v4.2.52...v4.2.53
+[4.2.52]: https://github.com/Automattic/jetpack-backup/compare/v4.2.51...v4.2.52
 [4.2.51]: https://github.com/Automattic/jetpack-backup/compare/v4.2.50...v4.2.51
 [4.2.50]: https://github.com/Automattic/jetpack-backup/compare/v4.2.49...v4.2.50
 [4.2.49]: https://github.com/Automattic/jetpack-backup/compare/v4.2.48...v4.2.49

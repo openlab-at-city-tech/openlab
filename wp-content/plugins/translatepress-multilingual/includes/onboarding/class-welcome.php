@@ -41,6 +41,9 @@ class TRP_Step_Welcome implements TRP_Onboarding_Step_Interface {
 
                 <h3 class="trp-welcome-text" ><?php esc_html_e('It takes less than a minute.', 'translatepress-multilingual'); ?></h3>
             <div class="trp-continue-onboarding"><button type="submit" class="trp-submit-btn"><?php esc_html_e('Continue', 'translatepress-multilingual');?></button></div>
+            <div class="trp-primary-text trp-ob-center trp-ob-import-link">
+                <a href="<?php echo esc_url( admin_url( 'admin.php?page=trp_import_export' ) ); ?>"><?php esc_html_e( 'I have an export file from another site', 'translatepress-multilingual' ); ?></a>
+            </div>
 
         </div>
         </form>

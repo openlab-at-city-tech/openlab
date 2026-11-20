@@ -10,7 +10,7 @@
 /**
  * Current theme version
  */
-define( 'MINIVA_VERSION', '1.7.1' );
+define( 'MINIVA_VERSION', '1.8.0' );
 
 if ( ! function_exists( 'miniva_setup' ) ) :
 	/**

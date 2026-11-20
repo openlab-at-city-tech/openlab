@@ -1,12 +1,12 @@
 /**
  * custom-fields-priority.js
  *
- * Provide more preferences to Astra meta setting so wordpress custom field not causing any kind of conflicts.
+ * Provide more preferences to Astra meta setting so WordPress custom field not causing any kind of conflicts.
  *
  * @package Astra
  */
 function removeMetaBoxSection() {
-	document.getElementById("the-list").remove();
+	document.getElementById("the-list")?.remove();
 }
 
 function buttonClickEvent() {

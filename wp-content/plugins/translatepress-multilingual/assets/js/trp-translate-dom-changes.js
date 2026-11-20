@@ -9,6 +9,7 @@ function TRP_Translator(){
     var observer = null;
     var observerConfig = {
         attributes: true,
+        attributeOldValue: true,
         childList: true,
         characterData: false,//this could be CDATA so I set it to false in v 1.4.5
         subtree: true
@@ -22,44 +23,96 @@ function TRP_Translator(){
     var already_detected = [];
     var duplicate_detections_allowed = parseInt( trp_data.duplicate_detections_allowed )
 
-    /**
-     * Ajax request to get translations for strings
-     */
-    this.ajax_get_translation = function( nodesInfo, string_originals, url, skip_machine_translation ) {
-        jQuery.ajax({
-            url: url,
-            type: 'post',
-            dataType: 'json',
-            data: {
-                action                   : ( _this.is_editor ) ? 'trp_get_translations_regular' : 'trp_get_translations_domchanges',
-                all_languages            : 'false',
-                security                 : trp_data['gettranslationsnonceregular'],
-                language                 : language_to_query,
-                original_language        : original_language, // used for trp custom ajax
-                blog_id                  : trp_data.trp_blog_id, // used for trp custom ajax on multisite
-                originals                : JSON.stringify( string_originals ),
-                skip_machine_translation : JSON.stringify( skip_machine_translation ),
-                dynamic_strings          : 'true',
-                translate_numerals_opt   : translate_numerals_opt
-            },
-            success: function( response ) {
-                if ( response === 'error' ) {
-                    _this.ajax_get_translation( nodesInfo, string_originals, wp_ajax_url, skip_machine_translation );
-                    console.log( 'Notice: TranslatePress trp-ajax request uses fall back to admin ajax.' );
-                }else{
-                    _this.update_strings( response, nodesInfo );
-                }
-            },
-            error: function( errorThrown ){
-                if ( url == custom_ajax_url && custom_ajax_url != wp_ajax_url ){
-                    _this.ajax_get_translation( nodesInfo, string_originals, wp_ajax_url, skip_machine_translation );
-                    console.log( 'Notice: TranslatePress trp-ajax request uses fall back to admin ajax.' );
-                }else{
-                    _this.update_strings( null, nodesInfo );
-                    console.log( 'TranslatePress AJAX Request Error' );
-                }
-            }
+    const translation_requests = new window.TRP_Translation_Requests(trp_data);
+    const translation_node_requests = new WeakMap();
+
+    window.addEventListener('pageshow', function (event) {
+        if (event.persisted) {
+            translation_requests.clear();
+        }
+    });
+
+    /** Capture DOM ownership, then delegate lookup/reuse/transport to the request service. */
+    this.ajax_get_translation = function (nodesInfo, string_originals, url, skip_machine_translation) {
+        const is_editor = _this.is_editor;
+        const page_url = window.location.href;
+        const display_language = current_language;
+        const data = {
+            action: is_editor ? 'trp_get_translations_regular' : 'trp_get_translations_domchanges',
+            all_languages: 'false',
+            security: trp_data.gettranslationsnonceregular,
+            language: language_to_query,
+            original_language: original_language,
+            blog_id: trp_data.trp_blog_id, // used for trp custom ajax on multisite
+            dynamic_strings: 'true',
+            translate_numerals_opt: translate_numerals_opt
+        };
+
+        function current_context() {
+            // The page URL is not compared: pushState/hash changes (infinite scroll, tabs) keep the
+            // same document, and deliver() already skips nodes whose content changed meanwhile.
+            return (
+                data.security === trp_data.gettranslationsnonceregular &&
+                data.language === language_to_query &&
+                display_language === current_language &&
+                data.original_language === original_language &&
+                is_editor === _this.is_editor
+            );
+        }
+
+        const snapshots = nodesInfo.map(function (info) {
+            const owners = translation_node_requests.get(info.node) || Object.create(null);
+            const token = {};
+            owners[info.attribute] = token;
+            translation_node_requests.set(info.node, owners);
+            return {
+                token: token,
+                value: info.attribute ? info.node.getAttribute(info.attribute) : info.node.textContent
+            };
         });
+
+        function deliver(response, current_request) {
+            // Drain queued mutations before checking which request still owns each node.
+            _this.pause_observer();
+            const current_nodes = nodesInfo.filter(function (info, index) {
+                const snapshot = snapshots[index];
+                const owners = translation_node_requests.get(info.node);
+                return (
+                    owners &&
+                    owners[info.attribute] === snapshot.token &&
+                    snapshot.value ===
+                        (info.attribute ? info.node.getAttribute(info.attribute) : info.node.textContent)
+                );
+            });
+
+            if (!current_request()) {
+                response = null;
+            }
+
+            try {
+                // update_strings adds metadata, so every consumer needs an independent copy.
+                _this.update_strings(
+                    response === null ? null : JSON.parse(JSON.stringify(response)),
+                    current_nodes
+                );
+            } finally {
+                _this.resume_observer();
+            }
+        }
+
+        translation_requests.request(
+            {
+                is_editor: is_editor,
+                page_url: page_url,
+                display_language: display_language,
+                data: data,
+                url: url,
+                string_originals: string_originals,
+                skip_machine_translation: skip_machine_translation,
+                is_current: current_context
+            },
+            deliver
+        );
     };
 
     /**
@@ -213,8 +266,13 @@ function TRP_Translator(){
                     return
                 }
 
-                // Search for modified text inside attributes of existing nodes
-                translateable = _this.get_translateable_attributes( mutation.target )
+                // Setting an attribute to its existing value (common in sliders) is not new content.
+                if ( mutation.oldValue === mutation.target.getAttribute( mutation.attributeName ) ) {
+                    return;
+                }
+
+                // Only this node's changed attribute needs a lookup, not its entire subtree.
+                translateable = _this.get_translateable_attributes( mutation.target, mutation.attributeName )
                 string_originals = string_originals.concat( translateable.string_originals );
                 nodesInfo = nodesInfo.concat( translateable.nodesInfo );
                 skip_machine_translation = skip_machine_translation.concat( translateable.skip_machine_translation );
@@ -350,7 +408,7 @@ function TRP_Translator(){
         return { 'string_originals': string_originals, 'nodesInfo': nodesInfo, 'skip_machine_translation': skip_machine_translation  };
     }
 
-    this.get_translateable_attributes = function ( node ) {
+    this.get_translateable_attributes = function ( node, changed_attribute ) {
         var nodesInfo = []
         var string_originals = []
         var skip_attr_machine_translation = [ 'href', 'src' ]
@@ -359,7 +417,12 @@ function TRP_Translator(){
             if (trp_data.trp_attributes_selectors.hasOwnProperty(trp_attribute_key)) {
                 var attribute_selector_item = trp_data.trp_attributes_selectors[trp_attribute_key]
                 if ( typeof attribute_selector_item['selector'] !== 'undefined' ){
-                    var all_nodes = jQuery( node ).find( attribute_selector_item.selector ).addBack( attribute_selector_item.selector )
+                    if ( changed_attribute && attribute_selector_item.accessor !== changed_attribute ) {
+                        continue;
+                    }
+                    var all_nodes = changed_attribute
+                        ? jQuery( node ).filter( attribute_selector_item.selector )
+                        : jQuery( node ).find( attribute_selector_item.selector ).addBack( attribute_selector_item.selector )
 
                     var all_nodes_length = all_nodes.length
                     for (var j = 0; j < all_nodes_length; j++ ) {
@@ -453,6 +516,10 @@ function TRP_Translator(){
         this.is_editor = (typeof window.parent.tpEditorApp !== 'undefined' )
         if ( this.is_editor ) {
             trp_data['gettranslationsnonceregular'] = window.parent.trp_dynamic_nonce;
+            // Sent by the editor after a successful save; it updates the preview without reloading it.
+            window.addEventListener( 'trp_translations_saved', function () {
+                translation_requests.forget();
+            } );
         }
 
         current_language = trp_data.trp_current_language;

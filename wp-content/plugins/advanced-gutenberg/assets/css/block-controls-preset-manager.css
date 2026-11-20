@@ -106,6 +106,7 @@
     border: none;
     border-radius: 0;
     line-height: 34px;
+    min-height: unset;
 }
 
 .advgb-preset-manager .advgb-advtime-control .advgb-advtime-hours-minutes input:last-of-type {
@@ -465,14 +466,18 @@
     cursor: default;
 }
 
-.advgb-set-info h4 {
+.advgb-set-info h4,
+.advgb-set-info .advgb-set-title {
+    display: block;
     margin: 0 0 8px 0;
     color: #23282d;
     font-size: 14px;
     font-weight: 600;
 }
 
-.advgb-set-info p {
+.advgb-set-info p,
+.advgb-set-info .advgb-set-description {
+    display: block;
     margin: 4px 0 0 0;
     color: #646970;
     font-size: 13px;
@@ -579,7 +584,8 @@
     color: #646970;
 }
 
-.advgb-set-title-row h4 {
+.advgb-set-title-row h4,
+.advgb-set-title-row .advgb-set-title {
     margin: 0;
     font-size: 14px;
     font-weight: 600;
@@ -693,9 +699,38 @@
     text-decoration: none;
 }
 
-.advgb-preset-manager .components-button:focus {
+.advgb-preset-manager .components-button:focus:not(:focus-visible) {
     box-shadow: none;
     outline: none;
+}
+
+.advgb-preset-manager .components-button:focus-visible {
+    box-shadow: none;
+    outline: 2px solid #2271b1;
+    outline-offset: 2px;
+}
+
+/* Header toggles converted from div to button: keep the previous look */
+button.advgb-preset-clickable-area {
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+}
+
+button.advgb-preset-clickable-area:focus-visible {
+    outline: 2px solid #2271b1;
+    outline-offset: 2px;
+}
+
+/* Inline confirmations (Delete preset / set / rule) */
+.advgb-confirm-inline:not(.is-active) .tooltip-text {
+    display: none !important;
+}
+
+.advgb-confirm-inline.is-active .tooltip-text {
+    display: block;
 }
 
 .advgb-preset-manager .components-button span {

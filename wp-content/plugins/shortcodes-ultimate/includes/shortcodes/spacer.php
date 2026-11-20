@@ -7,7 +7,7 @@ su_add_shortcode(
 		'image'    => su_get_plugin_url() . 'admin/images/shortcodes/spacer.svg',
 		'name'     => __( 'Spacer', 'shortcodes-ultimate' ),
 		'type'     => 'single',
-		'group'    => 'content other',
+		'group'    => 'content',
 		'atts'     => array(
 			'size'  => array(
 				'type'    => 'slider',

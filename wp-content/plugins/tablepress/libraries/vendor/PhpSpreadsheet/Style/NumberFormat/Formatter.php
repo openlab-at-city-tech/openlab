@@ -59,7 +59,7 @@ class Formatter extends BaseFormatter
 				 * @param mixed $value value to be formatted
 				 * @param string[] $sections
 				 *
-				 * @return mixed[]
+				 * @return array{string, string, float|int|numeric-string}
 				 */
 				private static function splitFormatForSectionSelection(array $sections, $value): array
 	{
@@ -74,9 +74,9 @@ class Formatter extends BaseFormatter
 		// Colour could be a named colour, or a numeric index entry in the colour-palette
 		$color_regex = '/\[(' . implode('|', Color::NAMED_COLORS) . '|color\s*(\d+))\]/mui';
 		$cond_regex = '/\[(>|>=|<|<=|=|<>)([+-]?\d+([.]\d+)?)\]/';
-		$colors = ['', '', '', '', ''];
-		$conditionOperations = ['', '', '', '', ''];
-		$conditionComparisonValues = [0, 0, 0, 0, 0];
+		$colors = ['', '', '', '', '']; //* @phpstan-ignore array.unusedOffset (unreasonably strict), array.unusedOffset (ditto)
+		$conditionOperations = ['', '', '', '', '']; //* @phpstan-ignore array.unusedOffset (unreasonably strict), array.unusedOffset (ditto), array.unusedOffset (ditto)
+		$conditionComparisonValues = [0, 0, 0, 0, 0]; //* @phpstan-ignore array.unusedOffset (unreasonably strict), array.unusedOffset (ditto), array.unusedOffset (ditto)
 		for ($idx = 0; $idx < $sectionCount; ++$idx) {
 			if (preg_match($color_regex, $sections[$idx], $matches)) {
 				if (isset($matches[2])) {
@@ -129,12 +129,12 @@ class Formatter extends BaseFormatter
 	 * @param null|array<mixed>|bool|float|int|RichText|string $value Value to format
 	 * @param string $format Format code: see = self::FORMAT_* for predefined values;
 	 *                          or can be any valid MS Excel custom format string
-	 * @param null|array<mixed>|callable $callBack Callback function for additional formatting of string
+	 * @param null|callable(string, string): string $callBack Callback function for additional formatting of string
 	 * @param bool $lessFloatPrecision If true, unstyled floats will be converted to a more human-friendly but less computationally accurate value
 	 *
 	 * @return string Formatted string
 	 */
-	public static function toFormattedString($value, string $format, $callBack = null, bool $lessFloatPrecision = false): string
+	public static function toFormattedString($value, string $format, ?callable $callBack = null, bool $lessFloatPrecision = false): string
 	{
 		while (is_array($value)) {
 			$value = array_shift($value);
@@ -146,20 +146,26 @@ class Formatter extends BaseFormatter
 		// Process a single block format code containing @ for text substitution
 		$formatx = str_replace('\"', self::QUOTE_REPLACEMENT, $format);
 		if (preg_match(self::SECTION_SPLIT, $format) === 0 && preg_match(self::SYMBOL_AT, $formatx) === 1) {
-			if (!str_contains($format, '"')) {
-				return str_replace('@', StringHelper::convertToString($value, true, '', false, $lessFloatPrecision), $format);
+			if (!str_contains($format, '"') && !str_contains($format, '\\')) {
+				$temp = str_replace('@', StringHelper::convertToString($value, true, '', false, $lessFloatPrecision), $format);
+				if (is_callable($callBack)) {
+					$temp = $callBack($temp, $format);
+				}
+
+				return $temp;
 			}
-			//escape any dollar signs on the string, so they are not replaced with an empty value
+			// Convert any escaped characters to quoted strings, e.g. (\X to "X")
+			$formatx = (string) preg_replace('/\\\(.)(?=(?:[^"]|"[^"]*")*$)/u', '"${1}"', $formatx);
+			//escape any backslashes and dollar signs on the string, so they are not treated as references
 			$value = str_replace(
-				['$', '"'],
-				['\$', self::QUOTE_REPLACEMENT],
+				['\\', '$', '"'],
+				['\\\\', '\$', self::QUOTE_REPLACEMENT],
 				StringHelper::convertToString($value, true, '', false, $lessFloatPrecision)
 			);
 			$temp = preg_replace(self::SYMBOL_AT, $value, $formatx) ?? $value;
 			if (is_callable($callBack)) {
 				$temp = $callBack($temp, $formatx);
 			}
-			/** @var string $temp */
 
 			return str_replace(
 				['"', self::QUOTE_REPLACEMENT],
@@ -170,7 +176,13 @@ class Formatter extends BaseFormatter
 
 		// If we have a text value, return it "as is"
 		if (!is_numeric($value)) {
-			return StringHelper::convertToString($value, true, '', false, $lessFloatPrecision);
+			$temp = StringHelper::convertToString($value, true, '', false, $lessFloatPrecision);
+			if (is_callable($callBack)) {
+				$sections = preg_split(self::SECTION_SPLIT, $format) ?: [$format];
+				$temp = $callBack($temp, $sections[3] ?? $sections[0]);
+			}
+
+			return $temp;
 		}
 
 		// For 'General' format code, we just pass the value although this is not entirely the way Excel does it,
@@ -204,7 +216,6 @@ class Formatter extends BaseFormatter
 
 		// In Excel formats, "_" is used to add spacing,
 		//    The following character indicates the size of the spacing, which we can't do in HTML, so we just use a standard space
-		/** @var string */
 		$temp = $format;
 		$format = (string) preg_replace('/_.?/ui', ' ', $temp);
 
@@ -226,11 +237,9 @@ class Formatter extends BaseFormatter
 				$value = (string) substr($format, 1, -1);
 			} elseif (preg_match('/[0#, ]%/', $format)) {
 				// % number format - avoid weird '-0' problem
-				/** @var float */
 				$temp = $value;
 				$value = PercentageFormatter::format(0 + (float) $temp, $format);
 			} else {
-				/** @var float|int|numeric-string */
 				$temp = $value;
 				$value = NumberFormatter::format($temp, $format);
 			}
@@ -240,7 +249,6 @@ class Formatter extends BaseFormatter
 		if (is_callable($callBack)) {
 			$value = $callBack($value, $colors);
 		}
-		/** @var string $value */
 
 		return str_replace(chr(0x00), '.', $value);
 	}

@@ -124,7 +124,9 @@
 
 							<?php endif; ?>
 
-							<?php if ( current_user_can( 'moderate' ) ) : ?>
+							<?php $moderation_object_id = bbp_is_topic_edit() ? bbp_get_topic_id() : bbp_get_forum_id(); ?>
+
+							<?php if ( current_user_can( 'moderate', $moderation_object_id ) ) : ?>
 
 								<?php do_action( 'bbp_theme_before_topic_form_type' ); ?>
 

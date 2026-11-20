@@ -4,14 +4,14 @@ Theme URI: https://tajam.id/miniva/
 Author: Tajam
 Author URI: https://tajam.id/
 Description: A fast, lightweight, and mobile-friendly WordPress theme for bloggers. Miniva is built with simplicity, accessibility and performance in mind. The clean and minimal design helps readers focus on your content. It supports AMP and several Jetpack modules including featured content, infinite scroll, content options and social menu. See the theme demo at https://tajam.id/miniva-demo/
-Version: 1.7.1
+Version: 1.8.0
 Requires at least: 4.5
-Tested up to: 6.5
+Tested up to: 7.0
 Requires PHP: 5.3
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Text Domain: miniva
-Tags: accessibility-ready, blog, block-styles, custom-background, custom-header, custom-logo, custom-menu, editor-style, featured-images, footer-widgets, full-width-template, grid-layout, left-sidebar, right-sidebar, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready, two-columns, wide-blocks
+Tags: blog, block-styles, custom-background, custom-header, custom-logo, custom-menu, editor-style, featured-images, footer-widgets, full-width-template, grid-layout, left-sidebar, right-sidebar, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready, two-columns, wide-blocks
 
 This theme, like WordPress, is licensed under the GPL.
 Use it to make something cool, have fun, and share what you've learned with others.
@@ -2690,6 +2690,14 @@ input.wpcf7-submit {
 	font-size: 0.75em;
 	text-align: center;
 	color: #767676;
+}
+
+.wp-block-query-pagination .page-numbers {
+	margin-bottom: 0;
+}
+
+.wp-block-query-pagination a {
+	text-decoration: none;
 }
 
 a.wp-block-button__link {

@@ -81,10 +81,6 @@ class MetaSliderSystemCheck
 return;
         }
 
-        // max_input_vars is not available < PHP5.3.9
-        if (version_compare(phpversion(), '5.3.9', '<')) {
-return;
-        }
         $max_input_vars = ini_get('max_input_vars'); // phpcs:ignore PHPCompatibility.IniDirectives.NewIniDirectives.max_input_varsFound
 
         $error = sprintf(
@@ -116,7 +112,7 @@ return;
         }
 
         if (!function_exists('wp_enqueue_media')) {
-            $error = "MetaSlider requires WordPress 3.5 or above. Please upgrade your WordPress installation.";
+            $error = "MetaSlider Slideshow requires WordPress 3.5 or above. Please upgrade your WordPress installation.";
             $this->printMessage($error, 'wordPressVersion');
         } else {
             $this->options['wordPressVersion'] = true;
@@ -133,7 +129,7 @@ return;
         }
 
         if (( !extension_loaded('gd') || !function_exists('gd_info') ) && ( !extension_loaded('imagick') || !class_exists('Imagick') || !class_exists('ImagickPixel') )) {
-            $error = "MetaSlider requires the GD or ImageMagick PHP extension. Please contact your hosting provider";
+            $error = "MetaSlider Slideshow requires the GD or ImageMagick PHP extension. Please contact your hosting provider";
             $this->printMessage($error, 'imageLibrary');
         } else {
             $this->options['imageLibrary'] = false;
@@ -174,7 +170,7 @@ return;
         }
 
         $child_footer = get_stylesheet_directory() . '/footer.php';
-        $parent_footer = TEMPLATEPATH . '/footer.php';
+        $parent_footer = TEMPLATEPATH . '/footer.php'; // phpcs:ignore WordPress.WP.DiscouragedConstants.TEMPLATEPATHUsageFound
         $theme_type = 'parent';
 
         if (file_exists($child_footer)) {

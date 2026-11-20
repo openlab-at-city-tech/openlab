@@ -1,3 +1,5 @@
+// const { jsx } = require("react/jsx-runtime");
+
 jQuery(document).ready( function()
 {
 
@@ -533,6 +535,78 @@ jQuery(document).ready( function()
 
 
 
+    /*
+
+        SET CACHE TIMER
+
+    */
+
+	jQuery("#zp-Zotpress-Options-CacheTimer-Button").click(function()
+	{
+		var $this = jQuery(this);
+
+		// Determine if using existing or adding new
+        // If adding new, also update Zotpress_StyleList option
+		// Get all post types
+		var zpTempCacheTimer = jQuery("select#zp-Zotpress-Options-CacheTimer option:selected").val();
+
+		if ( zpTempCacheTimer != "" )
+		{
+			// Prep for data validation
+			jQuery(this).attr('disabled','true');
+			jQuery('#zp-Zotpress-Options-CacheTimer .zp-Loading').show();
+
+			// AJAX
+			jQuery.ajax(
+			{
+				url: zpAccountsAJAX.ajaxurl,
+				data: {
+					'action': 'zpAccountsViaAJAX',
+					'action_type': 'default_cachetimer',
+					'cache_timer': zpTempCacheTimer,
+					'zpAccountsAJAX_nonce': zpAccountsAJAX.zpAccountsAJAX_nonce
+				},
+				xhrFields: {
+					withCredentials: true
+				},
+				success: function(xml)
+				{
+					var $result = jQuery('result', xml).attr('success');
+
+					jQuery('#zp-Zotpress-Options-CacheTimer .zp-Loading').hide();
+					jQuery('input#zp-Zotpress-Options-CacheTimer-Button').removeAttr('disabled');
+
+					if ($result == "true")
+					{
+						jQuery('#zp-Zotpress-Options-CacheTimer div.zp-Errors').hide();
+						jQuery('#zp-Zotpress-Options-CacheTimer div.zp-Success').show();
+
+						jQuery.doTimeout(1000,function() {
+							jQuery('#zp-Zotpress-Options-CacheTimer div.zp-Success').hide();
+						});
+					}
+					else // Show errors
+					{
+						jQuery('#zp-Zotpress-Options-CacheTimer div.zp-Errors').html("<p>"+jQuery('errors', xml).text()+"</p>\n");
+						jQuery('#zp-Zotpress-Options-CacheTimer div.zp-Errors').show();
+					}
+				},
+				error: function(errorThrown)
+				{
+					console.log(errorThrown);
+				}
+			});
+		}
+		else // Show errors
+		{
+			jQuery('#zp-Zotpress-Options-CacheTimer div.zp-Errors').html("No option was selected.\n");
+			jQuery('#zp-Zotpress-Options-CacheTimer div.zp-Errors').show();
+		}
+
+		// Cancel default behaviours
+		return false;
+
+	});
 
 
 
@@ -831,6 +905,99 @@ jQuery(document).ready( function()
 		});
 	});
 
+
+
+
+    /*
+
+        ADD SEARCH TO BROWSE
+
+    */
+
+    // Remove set link if there's only one account
+    if ( jQuery(".zp-Browse-Wrapper").length > 0 )
+    {
+		const zpSearchBar = document.createElement("div");
+		zpSearchBar.id = "zp-Browse-Search";
+
+		// const zpSearchBarResultsList = document.createElement("div");
+		// zpSearchBarResultsList.classList.add("zp-List");
+		const zpSearchBarResults = document.createElement("div");
+		zpSearchBarResults.id = "zp-Browse-Search-Results";
+		// zpSearchBarResults.prepend(zpSearchBarResultsList);
+		jQuery(".zp-Browse-Bar").after(zpSearchBarResults);
+
+		const zpSearchBarInput = document.createElement("input");
+		zpSearchBarInput.id = "zp-Browse-Search-Input";
+		zpSearchBarInput.type = "text";
+		zpSearchBarInput.placeholder = "Quick filter: Minimum 5 characters";
+		zpSearchBar.prepend(zpSearchBarInput);
+
+		const zpSearchBarInputX = document.createElement("div");
+		zpSearchBarInputX.id = "zp-Browse-Search-X";
+		zpSearchBarInputX.textContent = "×";
+		zpSearchBarInputX.addEventListener("click", function()
+		{
+			jQuery(zpSearchBarInput).val("");
+			jQuery(zpSearchBarResults).empty();
+			jQuery(this).hide();
+		});
+		zpSearchBar.prepend(zpSearchBarInputX);
+		// newDiv.appendChild(newContent);
+
+		let zpSearchBarQuery = "";
+
+		jQuery(".zp-Browse-Wrapper")
+			.on("keyup", "#zp-Browse-Search-Input", function( event )
+			{
+				let char = String.fromCharCode(event.which);
+  				if ( /[a-zA-Z0-9]/i.test(char)
+						|| event.keyCode === 8 ) {
+
+					let $this = jQuery(this);
+					let this_val = $this.val();
+					let this_val_re = new RegExp(this_val, 'i');
+
+					if ( this_val.length > 3 )
+					{
+						if ( jQuery(zpSearchBarResults).children().length > 0 )
+						{
+							jQuery(zpSearchBarResults).empty();
+
+							jQuery(zpSearchBarInputX).hide();
+						}
+						// console.log("test", "searching", $this.val());
+
+						// Search the items
+						jQuery(".zp-Library.zp-Browse > .zp-List .zp-Entry").each( function() {
+							// console.log("test", "each entry", jQuery(".zp-Entry").text());
+
+							// console.log("test", jQuery(this).text().search( /this_val/i ));
+
+							if ( jQuery(this).text().search(this_val_re) != -1 )
+							{
+								jQuery(zpSearchBarResults).prepend( jQuery(this).clone() );
+							}
+						});
+
+						jQuery(zpSearchBarInputX).show();
+						// console.log("test", $this )
+					}
+					else if ( this_val.length == 0 
+							|| event.keyCode == 8 )
+					{
+						// console.log("test", "delet")
+
+						// Remove results
+						jQuery(zpSearchBarResults).empty();
+
+						jQuery(zpSearchBarInputX).hide();
+					}
+				}
+			});
+
+		jQuery(".zp-Browse-Bar").prepend(zpSearchBar);
+	}
 
 
 });

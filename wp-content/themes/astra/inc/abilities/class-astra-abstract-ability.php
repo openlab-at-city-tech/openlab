@@ -128,7 +128,7 @@ abstract class Astra_Abstract_Ability {
 	 */
 	public function handle_execute( $args ) {
 		try {
-			return $this->execute( $args );
+			$result = $this->execute( $args );
 		} catch ( Exception $e ) {
 			/* translators: %s: error message */
 			return Astra_Abilities_Response::error( sprintf( __( 'An unexpected error occurred: %s', 'astra' ), $e->getMessage() ) );
@@ -136,6 +136,23 @@ abstract class Astra_Abstract_Ability {
 			/* translators: %s: error message */
 			return Astra_Abilities_Response::error( sprintf( __( 'A system error occurred: %s', 'astra' ), $e->getMessage() ) );
 		}
+
+		if ( 'write' === $this->get_tool_type() && ! empty( $result['success'] ) ) {
+			/**
+			 * Fires after an ability has updated theme settings.
+			 *
+			 * Abilities write options directly instead of going through the Customizer, so
+			 * none of the `customize_save_after` routines run. Anything that caches generated
+			 * assets or derived data should refresh on this hook.
+			 *
+			 * @since 4.13.11
+			 * @param string $ability_id Ability that performed the update.
+			 * @param array  $args       Input arguments the ability ran with.
+			 */
+			do_action( 'astra_ability_settings_updated', $this->get_id(), $args );
+		}
+
+		return $result;
 	}
 
 	/**
@@ -210,7 +227,6 @@ abstract class Astra_Abstract_Ability {
 		 * @param self   $ability_instance The ability instance.
 		 * @since 4.12.6
 		 */
-		/** @psalm-suppress TooManyArguments -- WordPress apply_filters accepts variadic args for filter callbacks. */
 		return apply_filters( 'astra_ability_show_in_rest', true, $this->id, $this );
 	}
 
@@ -251,7 +267,6 @@ abstract class Astra_Abstract_Ability {
 		 * @param string $ability_id       The ability ID (e.g. 'astra/get-font-body').
 		 * @param self   $ability_instance The ability instance.
 		 */
-		/** @psalm-suppress TooManyArguments -- WordPress apply_filters accepts variadic args for filter callbacks. */
 		$is_public = apply_filters( 'astra_ability_mcp_public', true, $this->id, $this );
 
 		return array(

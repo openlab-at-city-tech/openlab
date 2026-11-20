@@ -48,7 +48,7 @@ function bbp_get_template_part( $slug, $name = null ) {
  * inherit from a parent theme can just overload one file. If the template is
  * not found in either of those, it looks in the theme-compat folder last.
  *
- * @since 2.1.0 bbPress (r3618)
+ * @since 2.1.0 bbPress (r3623)
  *
  * @param string|array $template_names Template file(s) to search for, in order.
  * @param bool $load If true the template file will be loaded if it is found.
@@ -60,6 +60,7 @@ function bbp_locate_template( $template_names, $load = false, $require_once = tr
 
 	// No file found yet
 	$located            = false;
+	$template_name      = '';
 	$template_locations = bbp_get_template_stack();
 
 	// Try to find a template file
@@ -117,7 +118,7 @@ function bbp_locate_template( $template_names, $load = false, $require_once = tr
  *
  * See: https://bbpress.trac.wordpress.org/ticket/3218
  *
- * @since 2.6.0
+ * @since 2.6.0 bbPress (r6862)
  *
  * @param string $file
  *
@@ -166,7 +167,7 @@ function bbp_locate_enqueueable( $file = '' ) {
 /**
  * Convert an enqueueable file path to a URL
  *
- * @since 2.6.0
+ * @since 2.6.0 bbPress (r6862)
  * @param string $file
  *
  * @return string
@@ -193,7 +194,7 @@ function bbp_urlize_enqueueable( $file = '' ) {
  *
  * Registers the style if file provided (does NOT overwrite) and enqueues.
  *
- * @since 2.5.0 bbPress (r5180)
+ * @since 2.5.0 bbPress (r5181)
  *
  * @param string      $handle Name of the stylesheet.
  * @param string|bool $file   Relative path to stylesheet. Example: '/css/mystyle.css'.
@@ -238,7 +239,7 @@ function bbp_enqueue_style( $handle = '', $file = '', $deps = array(), $ver = fa
  *
  * Registers the style if file provided (does NOT overwrite) and enqueues.
  *
- * @since 2.5.0 bbPress (r5180)
+ * @since 2.5.0 bbPress (r5181)
  *
  * @param string      $handle    Name of the script.
  * @param string|bool $file      Relative path to the script. Example: '/js/myscript.js'.
@@ -285,7 +286,7 @@ function bbp_enqueue_script( $handle = '', $file = '', $deps = array(), $ver = f
  * relationship, to allow for custom template locations. Used in conjunction
  * with bbp_locate_template(), this allows for easy template overrides.
  *
- * @since 2.2.0 bbPress (r4323)
+ * @since 2.2.0 bbPress (r4324)
  *
  * @param string $location_callback Callback function that returns the
  * @param int $priority
@@ -304,7 +305,7 @@ function bbp_register_template_stack( $location_callback = '', $priority = 10 ) 
 /**
  * Deregisters a previously registered template stack location.
  *
- * @since 2.3.0 bbPress (r4652)
+ * @since 2.3.0 bbPress (r4653)
  *
  * @param string $location_callback Callback function that returns the
  * @param int $priority
@@ -325,7 +326,7 @@ function bbp_deregister_template_stack( $location_callback = '', $priority = 10 
  * Call the functions added to the 'bbp_template_stack' filter hook, and return
  * an array of the template locations.
  *
- * @since 2.2.0 bbPress (r4323)
+ * @since 2.2.0 bbPress (r4324)
  * @since 2.6.0 bbPress (r5944) Added support for `WP_Hook`
  *
  * @global array $wp_filter Stores all of the filters
@@ -342,10 +343,12 @@ function bbp_get_template_stack() {
 	$args = $stack = array();
 
 	// Add 'bbp_template_stack' to the current filter array
+	// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 	$wp_current_filter[] = $tag;
 
 	// Bail if no stack setup
 	if ( empty( $wp_filter[ $tag ] ) ) {
+		array_pop( $wp_current_filter );
 		return array();
 	}
 
@@ -358,6 +361,8 @@ function bbp_get_template_stack() {
 		// Sort
 		if ( ! isset( $merged_filters[ $tag ] ) ) {
 			ksort( $filter );
+
+			// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 			$merged_filters[ $tag ] = true;
 		}
 	}
@@ -382,7 +387,7 @@ function bbp_get_template_stack() {
 	$stack = array_unique( array_filter( $stack ) );
 
 	// Filter & return
-	return (array) apply_filters( 'bbp_get_template_stack', $stack ) ;
+	return (array) apply_filters( 'bbp_get_template_stack', $stack );
 }
 
 /**
@@ -392,8 +397,10 @@ function bbp_get_template_stack() {
  *
  * @param string $slug
  * @param string $name
+ * @param bool   $echo Whether to echo the buffered output. Default true.
  * @return string
  */
+// phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.echoFound -- Preserve the public parameter name for PHP 8 named arguments.
 function bbp_buffer_template_part( $slug, $name = null, $echo = true ) {
 	ob_start();
 
@@ -451,7 +458,7 @@ function bbp_get_query_template( $type, $templates = array() ) {
 /**
  * Get the possible subdirectories to check for templates in
  *
- * @since 2.1.0 bbPress (r3738)
+ * @since 2.1.0 bbPress (r3739)
  *
  * @param array $templates Templates we are looking for
  * @return array Possible subdirectories to look in
@@ -470,7 +477,7 @@ function bbp_get_template_locations( $templates = array() ) {
 /**
  * Add template locations to template files being searched for
  *
- * @since 2.1.0 bbPress (r3738)
+ * @since 2.3.0 bbPress (r4762)
  *
  * @param array $stacks
  * @return array()
@@ -514,7 +521,7 @@ function bbp_add_template_stack_locations( $stacks = array() ) {
  * If it's a view page, WP_Query::bbp_is_view is set to true
  * If it's a search page, WP_Query::bbp_is_search is set to true
  *
- * @since 2.0.0 bbPress (r2688)
+ * @since 2.1.0 bbPress (r3646)
  *
  * @param WP_Query $posts_query
  */
@@ -545,6 +552,12 @@ function bbp_parse_query( $posts_query ) {
 	if ( ! is_null( $bbp_user ) ) {
 
 		/** Find User *********************************************************/
+
+		// 404 and bail if the user query variable is not scalar
+		if ( ! is_scalar( $bbp_user ) ) {
+			$posts_query->bbp_is_404 = true;
+			return;
+		}
 
 		// Setup the default user variable
 		$the_user = false;
@@ -623,6 +636,11 @@ function bbp_parse_query( $posts_query ) {
 
 		// Make sure 404 is not set
 		$posts_query->is_404  = false;
+
+		// Reset singular state inherited from WordPress query variables
+		$posts_query->is_page     = false;
+		$posts_query->is_single   = false;
+		$posts_query->is_singular = false;
 
 		// Correct is_home variable
 		$posts_query->is_home = false;

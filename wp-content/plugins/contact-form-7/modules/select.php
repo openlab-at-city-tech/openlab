@@ -1,7 +1,11 @@
 <?php
 /**
-** A base module for [select] and [select*]
-**/
+ * Drop-down menu
+ *
+ * @link https://contactform7.com/checkboxes-radio-buttons-and-menus/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* form_tag handler */
 
@@ -139,7 +143,7 @@ function wpcf7_swv_add_select_rules( $schema, $contact_form ) {
 	) );
 
 	foreach ( $tags as $tag ) {
-		$schema->add_rule(
+		$schema->addRule(
 			wpcf7_swv_create_rule( 'required', array(
 				'field' => $tag->name,
 				'error' => wpcf7_get_message( 'invalid_required' ),
@@ -205,7 +209,7 @@ function wpcf7_swv_add_select_enum_rules( $schema, $contact_form ) {
 			}
 		);
 
-		$schema->add_rule(
+		$schema->addRule(
 			wpcf7_swv_create_rule( 'enum', array(
 				'field' => $field,
 				'accept' => array_values( $field_values ),
@@ -236,7 +240,11 @@ function wpcf7_tag_generator_menu( $contact_form, $options ) {
 		'select' => array(
 			'display_name' => __( 'Drop-down menu', 'contact-form-7' ),
 			'heading' => __( 'Drop-down menu form-tag generator', 'contact-form-7' ),
-			'description' => __( 'Generates a form-tag for a <a href="https://contactform7.com/checkboxes-radio-buttons-and-menus/">drop-down menu</a>.', 'contact-form-7' ),
+			'description' => sprintf(
+				/* translators: %s: URL to drop-down menu doc */
+				__( 'Generates a form-tag for a <a href="%s">drop-down menu</a>.', 'contact-form-7' ),
+				'https://contactform7.com/checkboxes-radio-buttons-and-menus/'
+			),
 		),
 	);
 

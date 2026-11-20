@@ -14,3 +14,20 @@ if ( ! defined( 'ABSPATH' ) ) {
         </a>
     </p>
 </div>
+<script>
+document.addEventListener("click", function (e) {
+	if (!e.target.closest("#filebird-empty-folder-notice button.notice-dismiss")) return;
+
+	var data = new FormData();
+	data.append("action", "fbv_first_folder_notice");
+	data.append("nonce", window.fbv_data.nonce);
+
+	if (window.fetch) {
+        fetch(window.ajaxurl, { method: "POST", body: data });
+    } else {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", window.ajaxurl);
+        xhr.send(data);
+    }
+});
+</script>

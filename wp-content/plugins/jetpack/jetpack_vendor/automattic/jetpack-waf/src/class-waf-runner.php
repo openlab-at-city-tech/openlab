@@ -54,8 +54,9 @@ class Waf_Runner {
 	 * @return void
 	 */
 	public static function add_hooks() {
-		// Register REST routes.
-		add_action( 'rest_api_init', array( new REST_Controller(), 'register_rest_routes' ) );
+		// Register REST routes. Use a static callable so the controller class is not
+		// loaded into memory/opcache on requests that never reach `rest_api_init`.
+		add_action( 'rest_api_init', array( REST_Controller::class, 'register_rest_routes' ) );
 	}
 
 	/**
@@ -119,6 +120,30 @@ class Waf_Runner {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Whether the host runs its own firewall where Jetpack's can't run.
+	 *
+	 * @since 0.31.0
+	 *
+	 * @return bool
+	 */
+	public static function is_provided_by_host() {
+		if ( self::is_supported_environment() ) {
+			return false;
+		}
+
+		/**
+		 * Filters whether the site's host runs its own firewall in place of Jetpack's.
+		 *
+		 * Only changes how the firewall's status is reported, as active rather than unavailable; it blocks nothing.
+		 *
+		 * @since 0.31.0
+		 *
+		 * @param bool $provided Whether the host provides the firewall. Default false.
+		 */
+		return (bool) apply_filters( 'jetpack_protect_firewall_provided_by_host', false );
 	}
 
 	/**
@@ -238,8 +263,12 @@ class Waf_Runner {
 		// like PHP's prepend_file setting (yay!).
 		define( 'JETPACK_WAF_RUN', defined( 'ABSPATH' ) ? 'plugin' : 'preload' );
 
-		// if the WAF is being run before a command line script, don't try to execute rules (there's no request).
-		if ( PHP_SAPI === 'cli' ) {
+		// If the WAF is being run before a command line script, or in any other non-HTTP
+		// context (e.g. server-side cron executed via a PHP wrapper that does not report
+		// PHP_SAPI as 'cli'), there is no HTTP request to evaluate. Skip rule execution so
+		// HTTP-specific rules (e.g. rule 911100, which checks the request method) don't
+		// produce a false-positive 403 block.
+		if ( PHP_SAPI === 'cli' || ! isset( $_SERVER['REQUEST_METHOD'] ) ) {
 			return;
 		}
 
@@ -256,10 +285,12 @@ class Waf_Runner {
 			// phpcs:ignore
 			$waf = new Waf_Runtime( new Waf_Transforms(), new Waf_Operators() );
 
+			// Before the rules, which stop at the IP allow list without saying why.
+			Waf_Self_Check::maybe_block( $waf );
+
 			// execute waf rules.
 			$rules_file_path = self::get_waf_file_path( JETPACK_WAF_ENTRYPOINT );
 			if ( file_exists( $rules_file_path ) ) {
-				// phpcs:ignore
 				include $rules_file_path;
 			}
 		} catch ( \Exception $err ) { // phpcs:ignore

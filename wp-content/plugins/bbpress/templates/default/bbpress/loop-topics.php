@@ -38,7 +38,7 @@ do_action( 'bbp_template_before_topics_loop' ); ?>
 	<li class="bbp-footer">
 		<div class="tr">
 			<p>
-				<span class="td colspan<?php echo ( bbp_is_user_home() && ( bbp_is_favorites() || bbp_is_subscriptions() ) ) ? '5' : '4'; ?>">&nbsp;</span>
+				<span class="td colspan<?php echo bbp_current_user_can_manage_engagements() ? '5' : '4'; ?>">&nbsp;</span>
 			</p>
 		</div><!-- .tr -->
 	</li>

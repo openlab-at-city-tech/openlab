@@ -2,9 +2,9 @@
 Contributors: tareq1988, nizamuddinbabu, wemail
 Donate link: https://getwemail.io
 Tags: posts, subscription, email, subscribe, notify, notification, newsletter, post notification, email marketing, optin, form
-Requires at least: 4.0
-Tested up to: 6.9
-Stable tag: 10.45
+Requires at least: 4.7
+Tested up to: 7.0
+Stable tag: 10.50
 Requires PHP: 5.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -71,6 +71,37 @@ This token will automatically be replaced by dynamic subscription information an
 [Visit FAQ site](https://subscribe2.wordpress.com/support/faqs/)
 
 == Changelog ==
+
+= 10.50 (16th November, 2026) =
+
+* Security: One-click unsubscribe links ({UNSUBLINK}) could be forged, allowing anyone who knew a public subscriber's email address to remove them from the list. Each link now carries a secret key and is only honoured when the key matches. Unsubscribe links in emails sent before this update no longer work; subscribers can still unsubscribe through the subscription form.
+* Fix: When notification emails were sent individually, every recipient after the first received the first recipient's unsubscribe link. Each recipient now gets their own link.
+
+= 10.49 (11th November, 2026) =
+
+* Fix: The "Save Emails to CSV File" button on the Subscribers screen exported a file containing only the header row whenever more than one subscriber was listed, because the line breaks separating the addresses were stripped before the list was split. The list is now split and each address sanitized individually, restoring one row per subscriber.
+* Fix: The exported CSV file no longer HTML-encodes its data. Subscriber display names and category names containing & or ' appeared as &amp; and &#039; in the downloaded file.
+
+= 10.48 (23rd September, 2026) =
+
+* Fix: Stored Cross-Site Scripting in the Subscribers list table. The signup IP address recorded for public subscribers was rendered unescaped, allowing content stored through the AJAX subscription form (available when the popup style subscription form is enabled) to execute in an administrator's browser. Subscriber email addresses in the list are now escaped as well.
+* Fix: The AJAX subscription handler now validates the submitted IP address and stores an empty value when it is not a valid IP address.
+* Fix: Submitting array values to the subscription form or the AJAX handler no longer causes a PHP fatal error on public pages.
+* Enhance: get_remote_ip() now validates each address header and ignores values that are not valid IP addresses.
+
+= 10.47 (10th September, 2026) =
+
+* Fix: SQL injection in the bulk "change email format" action for registered subscribers. The submitted format value was interpolated into an UPDATE statement instead of being passed through $wpdb->prepare().
+* Fix: Broken access control on the block editor REST endpoints. Sending a preview now requires permission to edit the specific post, resending a notification requires the same capability as the Send Email screen (manage_options, filterable through s2_capability) in addition to permission to edit the post, and the settings endpoint requires manage_options. The two defaults the block editor sidebar needs are now served by a separate read-only endpoint limited to those settings and to users who can edit posts.
+* Fix: Block editor email preview always used the digest branch because the plugin options were read from an undefined property, which also caused an "Undefined array key" warning during preview.
+* Fix: Subscription confirmation links no longer emit PHP warnings when the s2 parameter is missing or malformed (such as an array).
+* Fix: PHP 8.2 "creation of dynamic property" deprecation notices by declaring previously undeclared class properties.
+* Fix: PHP 8.1+ "passing null" deprecation notices when building notification emails.
+
+= 10.46 (27th July, 2026) =
+
+* Fix: The email request parameter was reflected unescaped into the email field's inline onfocus/onblur JavaScript handlers.
+* Enhance: The email field prompt now uses the standard placeholder attribute instead of inline JavaScript handlers.
 
 = 10.45 (29th Dec, 2025) =
 

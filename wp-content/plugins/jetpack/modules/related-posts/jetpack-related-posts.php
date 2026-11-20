@@ -8,6 +8,7 @@
 use Automattic\Jetpack\Assets;
 use Automattic\Jetpack\Blocks;
 use Automattic\Jetpack\Post_Media\Images;
+use Automattic\Jetpack\SEO\Content_Gate;
 use Automattic\Jetpack\Status\Request;
 use Automattic\Jetpack\Sync\Settings;
 
@@ -258,8 +259,8 @@ class Jetpack_RelatedPosts {
 			'showHeadline'      => $rp_settings['show_headline'],
 			'displayDate'       => isset( $rp_settings['show_date'] ) ? (bool) $rp_settings['show_date'] : true,
 			'displayContext'    => isset( $rp_settings['show_context'] ) && $rp_settings['show_context'],
-			'postLayout'        => isset( $rp_settings['layout'] ) ? $rp_settings['layout'] : 'grid',
-			'postsToShow'       => isset( $rp_settings['size'] ) ? $rp_settings['size'] : 3,
+			'postLayout'        => $rp_settings['layout'] ?? 'grid',
+			'postsToShow'       => $rp_settings['size'] ?? 3,
 			/** This filter is already documented in modules/related-posts/jetpack-related-posts.php */
 			'headline'          => apply_filters( 'jetpack_relatedposts_filter_headline', $this->get_headline() ),
 			'isServerRendered'  => true,
@@ -463,7 +464,7 @@ EOT;
 		$wrapper_attributes = array();
 		$post_id            = get_the_ID();
 		$block_attributes   = array(
-			'headline'        => isset( $attributes['headline'] ) ? $attributes['headline'] : null,
+			'headline'        => $attributes['headline'] ?? null,
 			'show_thumbnails' => isset( $attributes['displayThumbnails'] ) && $attributes['displayThumbnails'],
 			'show_author'     => isset( $attributes['displayAuthor'] ) ? (bool) $attributes['displayAuthor'] : false,
 			'show_headline'   => isset( $attributes['displayHeadline'] ) ? (bool) $attributes['displayHeadline'] : false,
@@ -487,6 +488,19 @@ EOT;
 			return '';
 		}
 
+		/*
+		 * The block renders through its own block callback, independently of the
+		 * module's front-end asset gate (enabled_for_request()). That gate only
+		 * enqueues our assets on single posts in classic themes, so a block placed
+		 * on a page (or any view the gate skips) would render as unstyled HTML.
+		 * Enqueue the stylesheet here, whenever the block actually outputs markup,
+		 * to keep it styled everywhere it can be used. We intentionally do not widen
+		 * enabled_for_request() itself: that governs the automatic the_content
+		 * insertion and was deliberately scoped in #39784 to avoid showing related
+		 * posts on classic-theme pages.
+		 */
+		$this->enqueue_assets( false, true );
+
 		$list_markup = $this->render_post_list( $related_posts, $block_attributes );
 
 		if ( empty( $attributes['isServerRendered'] ) ) {
@@ -506,7 +520,7 @@ EOT;
 			}
 		}
 
-		if ( empty( $headline_markup ) && $block_attributes['show_headline'] === true ) {
+		if ( empty( $headline_markup ) && $block_attributes['show_headline'] ) {
 			$headline = $block_attributes['headline'];
 			if ( strlen( trim( $headline ) ) !== 0 ) {
 				$headline_markup = sprintf(
@@ -672,7 +686,7 @@ EOT;
 			$current['show_date']       = ( isset( $input['show_date'] ) && '1' == $input['show_date'] ); // phpcs:ignore Universal.Operators.StrictComparisons.LooseEqual
 			$current['show_context']    = ( isset( $input['show_context'] ) && '1' == $input['show_context'] ); // phpcs:ignore Universal.Operators.StrictComparisons.LooseEqual
 			$current['layout']          = isset( $input['layout'] ) && in_array( $input['layout'], array( 'grid', 'list' ), true ) ? $input['layout'] : 'grid';
-			$current['headline']        = isset( $input['headline'] ) ? $input['headline'] : esc_html__( 'Related', 'jetpack' );
+			$current['headline']        = $input['headline'] ?? esc_html__( 'Related', 'jetpack' );
 		} else {
 			$current['enabled'] = false;
 		}
@@ -1291,7 +1305,7 @@ EOT;
 				$related_posts[ $index ]['url']     = esc_url( get_permalink( $real_post ) );
 				$related_posts[ $index ]['title']   = $this->to_utf8( $this->get_title( $real_post->post_title, $real_post->post_content, $real_post->ID ) );
 				$related_posts[ $index ]['date']    = get_the_date( '', $real_post );
-				$related_posts[ $index ]['excerpt'] = html_entity_decode( $this->to_utf8( $this->get_excerpt( $real_post->post_excerpt, $real_post->post_content ) ), ENT_QUOTES, 'UTF-8' );
+				$related_posts[ $index ]['excerpt'] = html_entity_decode( $this->to_utf8( $this->get_excerpt( $real_post->post_excerpt, $real_post->post_content, $real_post->ID ) ), ENT_QUOTES, 'UTF-8' );
 				$related_posts[ $index ]['img']     = $this->generate_related_post_image_params( $real_post->ID );
 				$related_posts[ $index ]['context'] = $this->generate_related_post_context( $real_post->ID );
 			}
@@ -1344,7 +1358,7 @@ EOT;
 			'author'        => $this->generate_related_post_display_author( $post->ID ),
 			'date'          => get_the_date( '', $post->ID ),
 			'format'        => get_post_format( $post->ID ),
-			'excerpt'       => html_entity_decode( $this->to_utf8( $this->get_excerpt( $post->post_excerpt, $post->post_content ) ), ENT_QUOTES, 'UTF-8' ),
+			'excerpt'       => html_entity_decode( $this->to_utf8( $this->get_excerpt( $post->post_excerpt, $post->post_content, $post->ID ) ), ENT_QUOTES, 'UTF-8' ),
 			/**
 			 * Filters the rel attribute for the Related Posts' links.
 			 *
@@ -1415,9 +1429,12 @@ EOT;
 			);
 		}
 
-		$post_title = wp_trim_words( wp_strip_all_tags( strip_shortcodes( $post_content ) ), 5, '…' );
-		if ( ! empty( $post_title ) ) {
-			return $post_title;
+		// Same gate as get_excerpt(): this fallback is five words of the raw body.
+		if ( ! Content_Gate::is_gated( $post_id ) ) {
+			$post_title = wp_trim_words( wp_strip_all_tags( strip_shortcodes( $post_content ) ), 5, '…' );
+			if ( ! empty( $post_title ) ) {
+				return $post_title;
+			}
 		}
 
 		return __( 'Untitled Post', 'jetpack' );
@@ -1428,14 +1445,18 @@ EOT;
 	 *
 	 * @param string $post_excerpt - the post excerpt.
 	 * @param string $post_content - the post content.
+	 * @param int    $post_id - the post ID.
 	 * @uses strip_shortcodes, wp_strip_all_tags, wp_trim_words
 	 * @return string
 	 */
-	protected function get_excerpt( $post_excerpt, $post_content ) {
-		if ( empty( $post_excerpt ) ) {
-			$excerpt = $post_content;
-		} else {
+	protected function get_excerpt( $post_excerpt, $post_content, $post_id ) {
+		if ( ! empty( $post_excerpt ) ) {
 			$excerpt = $post_excerpt;
+		} elseif ( Content_Gate::is_gated( $post_id ) ) {
+			// The body fall-through never passes through the `the_content` paywall, so ask the gate directly.
+			return '';
+		} else {
+			$excerpt = $post_content;
 		}
 
 		return wp_trim_words( wp_strip_all_tags( strip_shortcodes( $excerpt ) ), 50, '…' );
@@ -1482,14 +1503,26 @@ EOT;
 
 		// Try to get post image.
 		$img_url    = '';
-		$post_image = Images::get_image(
-			$post_id,
-			$thumbnail_size
-		);
+		$is_gated   = Content_Gate::is_gated( $post_id );
+		$image_args = $thumbnail_size;
+		if ( $is_gated ) {
+			// Restrict to the featured image; every other source parses the body.
+			$image_args = array_merge(
+				$image_args,
+				array(
+					'from_slideshow'  => false,
+					'from_gallery'    => false,
+					'from_attachment' => false,
+					'from_blocks'     => false,
+					'from_html'       => false,
+				)
+			);
+		}
+		$post_image = Images::get_image( $post_id, $image_args );
 
 		if ( is_array( $post_image ) ) {
 			$img_url = $post_image['src'];
-		} elseif ( class_exists( 'Jetpack_Media_Summary' ) ) {
+		} elseif ( ! $is_gated && class_exists( 'Jetpack_Media_Summary' ) ) {
 			$media = Jetpack_Media_Summary::get( $post_id );
 
 			if ( is_array( $media ) && ! empty( $media['image'] ) ) {
@@ -2009,9 +2042,9 @@ EOT;
 			 *
 			 * @since 2.8.0
 			 *
-			 * @param bool $allow_feature_toggle Display a feature toggle. Default to false.
+			 * @param bool $allow_feature_toggle Display a feature toggle. Default to true.
 			 */
-			$this->allow_feature_toggle = apply_filters( 'jetpack_relatedposts_filter_allow_feature_toggle', false );
+			$this->allow_feature_toggle = apply_filters( 'jetpack_relatedposts_filter_allow_feature_toggle', true );
 		}
 		return $this->allow_feature_toggle;
 	}

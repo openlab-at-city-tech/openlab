@@ -21,7 +21,7 @@ function gutenberg_render_block_core_post_comments_form( $attributes, $content, 
 	}
 
 	if ( post_password_required( $block->context['postId'] ) ) {
-		return;
+		return '';
 	}
 
 	$classes = array( 'comment-respond' ); // See comment further below.

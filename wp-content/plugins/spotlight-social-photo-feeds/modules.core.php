@@ -34,6 +34,7 @@ return [
     'security' => new SecurityModule(),
     'user' => new UserModule(),
     'leave_review' => new LeaveReviewModule(),
-    'survey_2023' => new Survey2023Module(),
+    'recommended_plugins' => new RecommendedPluginsModule(),
+    'black_friday' => new BlackFridayModule(),
     'dev' => new DevModule(),
 ];

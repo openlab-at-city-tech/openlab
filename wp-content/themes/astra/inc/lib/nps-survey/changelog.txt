@@ -1,3 +1,16 @@
+Version 1.0.25 - 07-10-2026
+- Fix: Add `nps_survey_required_capability` filter so a bundling product can scope the dismiss/rating REST checks and the REST nonce to its own narrower capability, instead of every product being hard-locked to `manage_options`. The filter always receives a `WP_REST_Request` carrying `plugin_slug`. Default unchanged.
+- Fix: Closing the survey now always dismisses on the client, even if the server-side dismiss request fails, so a permission or network error can no longer leave the popup stuck open.
+
+Version 1.0.24 - 20-05-2026
+- Fix: Use library-correct package name in file headers.
+
+Version 1.0.23 - 19-05-2026
+- Fix: WordPress.org compliance — use WP_Error and rest_ensure_response in REST callbacks, sanitize_key for slug params, and align JS response handling with REST format.
+
+Version 1.0.22 - 27-04-2026
+- Fix: Self-host the Figtree font used by the survey dialog instead of fetching from fonts.googleapis.com. Required for WordPress.org compliance.
+
 Version 1.0.21 - 24-03-2026
 - Improvement:
   - Updated build process to add ABSPATH guards to generated .asset.php files.

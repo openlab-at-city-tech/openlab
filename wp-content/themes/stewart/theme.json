@@ -258,7 +258,6 @@
 			},
 			"core/post-title": {
 				"typography": {
-					"fontFamily": "var(--wp--preset--font-family--system-font)",
 					"fontSize": "var(--wp--preset--font-size--huge)",
 					"lineHeight": "var(--wp--custom--heading--typography--line-height)"
 				},
@@ -340,9 +339,13 @@
 			"text": "var(--wp--preset--color--foreground)"
 		},
 		"elements": {
+			"heading": {
+				"typography": {
+					"fontFamily": "var(--wp--preset--font-family--system-font)"
+				}
+			},
 			"h1": {
 				"typography": {
-					"fontFamily": "var(--wp--preset--font-family--system-font)",
 					"fontWeight": "var(--wp--custom--heading--typography--font-weight)",
 					"lineHeight": "var(--wp--custom--heading--typography--line-height)",
 					"fontSize": "var(--wp--preset--font-size--gigantic)"
@@ -350,7 +353,6 @@
 			},
 			"h2": {
 				"typography": {
-					"fontFamily": "var(--wp--preset--font-family--system-font)",
 					"fontWeight": "var(--wp--custom--heading--typography--font-weight)",
 					"lineHeight": "var(--wp--custom--heading--typography--line-height)",
 					"fontSize": "var(--wp--preset--font-size--huge)"
@@ -358,7 +360,6 @@
 			},
 			"h3": {
 				"typography": {
-					"fontFamily": "var(--wp--preset--font-family--system-font)",
 					"fontWeight": "var(--wp--custom--heading--typography--font-weight)",
 					"lineHeight": "var(--wp--custom--heading--typography--line-height)",
 					"fontSize": "var(--wp--preset--font-size--extra-large)"
@@ -366,7 +367,6 @@
 			},
 			"h4": {
 				"typography": {
-					"fontFamily": "var(--wp--preset--font-family--system-font)",
 					"fontWeight": "var(--wp--custom--heading--typography--font-weight)",
 					"lineHeight": "var(--wp--custom--heading--typography--line-height)",
 					"fontSize": "var(--wp--preset--font-size--large)"
@@ -374,7 +374,6 @@
 			},
 			"h5": {
 				"typography": {
-					"fontFamily": "var(--wp--preset--font-family--system-font)",
 					"fontWeight": "var(--wp--custom--heading--typography--font-weight)",
 					"lineHeight": "var(--wp--custom--heading--typography--line-height)",
 					"fontSize": "var(--wp--preset--font-size--normal)"
@@ -382,7 +381,6 @@
 			},
 			"h6": {
 				"typography": {
-					"fontFamily": "var(--wp--preset--font-family--system-font)",
 					"fontWeight": "var(--wp--custom--heading--typography--font-weight)",
 					"lineHeight": "var(--wp--custom--heading--typography--line-height)",
 					"fontSize": "var(--wp--preset--font-size--small)"

@@ -1334,6 +1334,7 @@ function hasWordPressWidgetBlockEditor() {
 	astra_refresh_customizer( 'astra-settings[blog-post-meta-divider-type]' );
 	astra_refresh_customizer( 'astra-settings[blog-meta-tag-style]' );
 	astra_refresh_customizer( 'astra-settings[blog-post-content]' );
+	astra_refresh_customizer( 'astra-settings[blog-excerpt-marker]' );
 
 	wp.customize( 'astra-settings[post-card-border-radius]', function( setting ) {
 		setting.bind( function( border ) {
@@ -1895,7 +1896,7 @@ function hasWordPressWidgetBlockEditor() {
 	search_button_selector = hasWordPressWidgetBlockEditor() ? ', form[CLASS*="wp-block-search__"].wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button, .woocommerce a.button' : woo_btn_normal_sector ;
 	var search_button_hover_selector = hasWordPressWidgetBlockEditor() ? ', form[CLASS*="wp-block-search__"].wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button:hover, form[CLASS*="wp-block-search__"].wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button:focus, .woocommerce a.button:hover' : woo_btn_hover_sector ;
 
-	//Compatibility with wordpress 6.1.1
+	//Compatibility with WordPress 6.1.1
 	const global_builder_btn = '.wp-block-buttons .wp-block-button.is-style-outline > .wp-block-button__link:not(.has-text-color), .wp-block-buttons .wp-block-button.wp-block-button__link.is-style-outline:not(.has-text-color)';
 	const global_builder_btn_hover = ', .wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link:hover, .wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link:focus, .wp-block-buttons .wp-block-button.is-style-outline > .wp-block-button__link:not(.has-text-color):hover, .wp-block-buttons .wp-block-button.wp-block-button__link.is-style-outline:not(.has-text-color):hover';
 
@@ -2124,6 +2125,17 @@ function hasWordPressWidgetBlockEditor() {
 	} );
 
 	astra_generate_outside_font_family_css( 'astra-settings[body-font-family]', 'body, button, input, select, textarea, .ast-button, .ast-custom-button' );
+	// Body has no parent font to inherit, so mirror astra_body_font_family()'s system stack.
+	wp.customize( 'astra-settings[body-font-family]', ( setting ) => {
+		setting.bind( ( value ) => {
+			if ( 'inherit' === value ) {
+				astra_update_style(
+					'astra-settings-body-font-family-font-family',
+					'body, button, input, select, textarea, .ast-button, .ast-custom-button { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif }'
+				);
+			}
+		} );
+	} );
 	astra_generate_font_weight_css( 'astra-settings[body-font-family]', 'astra-settings[body-font-weight]', 'font-weight', 'body, button, input, select, textarea, .ast-button, .ast-custom-button' );
 	astra_font_extras_css( 'body-font-extras', 'body, button, input, select, textarea, .ast-button, .ast-custom-button' );
 	wp.customize('astra-settings[font-size-body]', function (value) {

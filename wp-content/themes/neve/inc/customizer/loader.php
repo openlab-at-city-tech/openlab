@@ -13,6 +13,7 @@ use Neve\Admin\Dashboard\Main;
 use Neve\Core\Factory;
 use Neve\Core\Settings\Config;
 use Neve\Customizer\Options\Colors_Background;
+use Neve\Views\Font_Manager;
 
 /**
  * Main customizer handler.
@@ -116,7 +117,7 @@ class Loader {
 		);
 		 
 		$bundle_path  = get_template_directory_uri() . '/assets/apps/customizer-controls/build/';
-		$dependencies = ( include get_template_directory() . '/assets/apps/customizer-controls/build/controls.asset.php' );
+		$dependencies = neve_get_asset_meta( get_template_directory() . '/assets/apps/customizer-controls/build/controls.asset.php' );
 		wp_register_script( 'react-controls', $bundle_path . 'controls.js', $dependencies['dependencies'], $dependencies['version'], true );
 		wp_localize_script(
 			'react-controls',
@@ -142,7 +143,7 @@ class Loader {
 					'dashUpdatesMessage'            => sprintf( 'Please %s to the latest version of Neve Pro to manage the conditional headers.', '<a href="' . esc_url( admin_url( 'update-core.php' ) ) . '">' . __( 'update', 'neve' ) . '</a>' ),
 					'bundlePath'                    => get_template_directory_uri() . '/assets/apps/customizer-controls/build/',
 					'localGoogleFonts'              => array(
-						'learnMore' => apply_filters( 'neve_external_link', 'https://docs.themeisle.com/article/1349-how-to-load-neve-fonts-locally', esc_html__( 'Learn more', 'neve' ) ),
+						'learnMore' => apply_filters( 'neve_external_link', tsdk_utmify( 'https://docs.themeisle.com/neve/how-to-load-neve-fonts-locally', 'load-fonts-locally', 'customizer' ), esc_html__( 'Learn more', 'neve' ) ),
 						'key'       => Config::OPTION_LOCAL_GOOGLE_FONTS_HOSTING,
 					),
 					'preloadFonts'                  => array(
@@ -196,8 +197,13 @@ class Loader {
 			}
 		}
 
-		$fonts  = neve_get_google_fonts();
-		$chunks = array_chunk( $fonts, absint( count( $fonts ) / 5 ) );
+		$fonts = $this->get_remote_preview_fonts();
+
+		if ( empty( $fonts ) ) {
+			return;
+		}
+
+		$chunks = array_chunk( $fonts, max( 1, absint( count( $fonts ) / 5 ) ) );
 
 		foreach ( $chunks as $index => $fonts_chunk ) {
 			wp_enqueue_style(
@@ -207,6 +213,31 @@ class Loader {
 				NEVE_VERSION
 			);
 		}
+	}
+
+	/**
+	 * Get the Google fonts whose control previews load remotely.
+	 *
+	 * When fonts are hosted locally, the already downloaded faces are inlined instead.
+	 *
+	 * @return string[]
+	 */
+	private function get_remote_preview_fonts(): array {
+		$fonts = neve_get_google_fonts();
+
+		if ( ! Font_Manager::should_load_fonts_locally() ) {
+			return $fonts;
+		}
+
+		$local_faces = Font_Manager::get_downloaded_font_faces();
+
+		if ( empty( $local_faces['variants'] ) ) {
+			return $fonts;
+		}
+
+		wp_add_inline_style( 'react-controls', $local_faces['css'] );
+
+		return array_values( array_diff( $fonts, array_keys( $local_faces['variants'] ) ) );
 	}
 
 	/**
@@ -276,6 +307,9 @@ class Loader {
 	 * @return void
 	 */
 	private function load_modules() {
+		if ( ! class_exists( Factory::class ) ) {
+			return;
+		}
 		$factory = new Factory( $this->customizer_modules );
 		$factory->load_modules();
 	}

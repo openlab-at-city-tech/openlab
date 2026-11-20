@@ -112,10 +112,10 @@ class WPCOM_Widget_Facebook_LikeBox extends WP_Widget {
 	 * @param array $instance The settings for the particular instance of the widget.
 	 */
 	public function widget( $args, $instance ) {
-		$before_widget = isset( $args['before_widget'] ) ? $args['before_widget'] : '';
-		$before_title  = isset( $args['before_title'] ) ? $args['before_title'] : '';
-		$after_title   = isset( $args['after_title'] ) ? $args['after_title'] : '';
-		$after_widget  = isset( $args['after_widget'] ) ? $args['after_widget'] : '';
+		$before_widget = $args['before_widget'] ?? '';
+		$before_title  = $args['before_title'] ?? '';
+		$after_title   = $args['after_title'] ?? '';
+		$after_widget  = $args['after_widget'] ?? '';
 		$like_args     = $this->get_default_args();
 
 		if ( isset( $instance['like_args'] ) ) {
@@ -217,13 +217,13 @@ class WPCOM_Widget_Facebook_LikeBox extends WP_Widget {
 	public function update( $new_instance, $old_instance ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 		$instance = array();
 
-		$instance['title'] = trim( wp_strip_all_tags( stripslashes( $new_instance['title'] ) ) );
+		$instance['title'] = trim( wp_strip_all_tags( stripslashes( $new_instance['title'] ?? '' ) ) );
 
 		// Set up widget values.
 		$instance['like_args'] = array(
-			'href'         => trim( wp_strip_all_tags( stripslashes( $new_instance['href'] ) ) ),
-			'width'        => (int) $new_instance['width'],
-			'height'       => (int) $new_instance['height'],
+			'href'         => trim( wp_strip_all_tags( stripslashes( $new_instance['href'] ?? '' ) ) ),
+			'width'        => (int) ( $new_instance['width'] ?? $this->default_width ),
+			'height'       => (int) ( $new_instance['height'] ?? $this->default_height ),
 			'show_faces'   => isset( $new_instance['show_faces'] ),
 			'stream'       => isset( $new_instance['stream'] ),
 			'cover'        => isset( $new_instance['cover'] ),

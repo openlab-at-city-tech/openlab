@@ -335,7 +335,7 @@ class NameDirectoryGeneralSettingsPage
      */
     public function input_field_option($field)
     {
-        printf('<label for"' . $field . '_input"><input type="text" id="' . $field . '_input" name="name_directory_general_option[' . $field . ']" value="%s"></label>', empty($this->options[$field]) ? '' : $this->options[$field]);
+        printf('<label for"' . $field . '_input"><input type="text" id="' . $field . '_input" name="name_directory_general_option[' . $field . ']" value="%s"></label>', esc_attr(empty($this->options[$field]) ? '' : $this->options[$field]));
     }
 
     /**

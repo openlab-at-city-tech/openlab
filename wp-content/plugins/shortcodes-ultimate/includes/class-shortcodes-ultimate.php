@@ -281,6 +281,10 @@ class Shortcodes_Ultimate {
      */
     private function define_common_hooks() {
         /**
+         * Load translation files
+         */
+        add_action( 'init', 'su_load_textdomain', 5 );
+        /**
          * Add default shortcodes.
          */
         add_action( 'init', array('Shortcodes_Ultimate_Shortcodes', 'add_default_shortcodes'), 20 );

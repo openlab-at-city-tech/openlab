@@ -2,11 +2,18 @@
 Contributors: Anlino
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=anders%40andersnoren%2ese&lc=US&item_name=Free%20WordPress%20Themes%20from%20Anders%20Noren&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 4.5
-Tested up to: 6.0
+Tested up to: 7.1
 Requires PHP: 5.6
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+A clean and beautiful two-column theme for bloggers.
+
+
+== Description ==
+
+Hemingway is a clean and beautiful two-column theme for bloggers. It features a responsive design, retina-ready assets, Block Editor support, full-width header image with parallax scrolling effect, custom accent color settings, custom logo upload, and editor styles. Demo: https://hemingway.andersnoren.se
 
 
 == Installation ==
@@ -15,6 +22,12 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 2. Activate the theme
 
 All theme specific options are handled through the WordPress Customizer.
+
+
+== Copyright ==
+
+Hemingway WordPress Theme, Copyright 2014-2026 Anders Norén
+Hemingway is distributed under the terms of the GNU GPL.
 
 
 == Licenses ==
@@ -29,18 +42,36 @@ Source: https://fonts.google.com/specimen/Raleway
 
 Default header image included in the theme
 License: CC0 Public Domain 
-Source: http://www.unsplash.com
+Source: Unsplash (added before the 2017 change to the Unsplash license, when its photos were released under CC0)
 
 screenshot.png header image
 License: CC0 Public Domain 
-Source: http://www.unsplash.com
+Source: Unsplash (added before the 2017 change to the Unsplash license, when its photos were released under CC0)
 
 screenshot.png post image 
 License: CC0 Public Domain 
-Source: http://www.unsplash.com
+Source: Unsplash (added before the 2017 change to the Unsplash license, when its photos were released under CC0)
+
+
+== Frequently Asked Questions ==
+
+= Where can I get support? =
+Post your question in the Hemingway support forum on WordPress.org: https://wordpress.org/support/theme/hemingway/
+
+= Where can I request a feature or report a bug? =
+Open an issue in the Hemingway GitHub repository: https://github.com/andersnoren/hemingway
 
 
 == Changelog ==
+
+Version 2.3.4 (2026-11-03)
+-------------------------
+- Tested with WordPress 7.1.
+- Replaced deprecated jQuery event shorthands with .on() and .off().
+- Updated the demo URL.
+- Fixed the block editor styles not loading in the iframed editor.
+- Made the "Up" link in the footer reachable with the keyboard.
+- Added the Requires at least header to style.css, and Description, FAQ, Copyright and Upgrade Notice sections to the readme.
 
 Version 2.3.2 (2022-10-03)
 -------------------------
@@ -536,3 +567,9 @@ Version 1.01 (2014-01-31)
 
 Version 1 (2014-01-31)
 -------------------------
+
+
+== Upgrade Notice ==
+
+= 2.3.4 =
+Tested with WordPress 7.1. Fixes the block editor styles in the iframed editor and improves keyboard accessibility.

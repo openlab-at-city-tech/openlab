@@ -1035,8 +1035,14 @@ class LegacyThumbnail {
 			$color = '000000';
 		}
 		// set font path.
-		$wmFontPath = NGGALLERY_ABSPATH . 'fonts/' . $wmFont;
-		if ( ! is_readable( $wmFontPath ) ) {
+		// SECURITY: the font is a file NAME inside the bundled fonts directory, never a
+		// path. basename() strips any "../" traversal so wmFont cannot walk out of
+		// fonts/ to read an arbitrary file (e.g. "../../../../etc/passwd") through
+		// is_readable()/FreeType below.
+		$wmFontPath = NGGALLERY_ABSPATH . 'fonts/' . basename( str_replace( '\\', '/', (string) $wmFont ) );
+		// is_file(), not is_readable(): an empty or refused font name leaves the fonts/
+		// directory itself, which is readable and would reach FreeType as a "font".
+		if ( ! is_file( $wmFontPath ) || ! is_readable( $wmFontPath ) ) {
 			return;
 		}
 
@@ -1158,6 +1164,8 @@ class LegacyThumbnail {
 	 * @param string $relPOS
 	 * @param int    $xPOS
 	 * @param int    $yPOS
+	 * @return bool True when the watermark was composited; false when its image
+	 *              could not be loaded (refused, unreachable or not an image).
 	 */
 	public function watermarkImage( $relPOS = 'botRight', $xPOS = 0, $yPOS = 0 ) {
 
@@ -1165,24 +1173,13 @@ class LegacyThumbnail {
 		if ( is_resource( $this->watermarkImgPath ) || $this->watermarkImgPath instanceof \GdImage ) {
 			$this->workingImage = $this->watermarkImgPath;
 		} else {
-			// (possibly) search for the file from the document root.
-			if ( ! is_file( $this->watermarkImgPath ) ) {
-				$fs = \Imagely\NGG\Util\Filesystem::get_instance();
-				if ( is_file( $fs->join_paths( $fs->get_document_root( 'content' ), $this->watermarkImgPath ) ) ) {
-					$this->watermarkImgPath = $fs->get_document_root( 'content' ) . $this->watermarkImgPath;
-				}
-			}
-
-			if ( empty( $this->watermarkImgPath ) ) {
-				return;
-			}
-
-			// Would you really want to use anything other than a png?
-			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-			$this->workingImage = @imagecreatefrompng( $this->watermarkImgPath );
-			// if it's not a valid file die...
-			if ( empty( $this->workingImage ) || ( ! $this->workingImage ) ) {
-				return;
+			// One loader for every renderer and the settings preview (#1104): an own-site
+			// URL is read from disk, another http(s) URL is fetched with wp_safe_remote_get(),
+			// any other stream wrapper is refused (#1084) and a local path is contained to
+			// the install before it is opened.
+			$this->workingImage = \Imagely\NGG\Util\Security::load_watermark_image( $this->watermarkImgPath );
+			if ( ! $this->workingImage ) {
+				return false;
 			}
 		}
 
@@ -1255,6 +1252,8 @@ class LegacyThumbnail {
 				100
 			);
 		}
+
+		return true;
 	}
 
 	/**

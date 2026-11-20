@@ -8,12 +8,6 @@
 namespace Kadence\BuddyBoss;
 
 use Kadence\Component_Interface;
-use function Kadence\kadence;
-use function add_action;
-use function add_theme_support;
-use function have_posts;
-use function the_post;
-use function is_search;
 use function bp_core_get_directory_page_id;
 use function bp_current_component;
 
@@ -27,7 +21,7 @@ class Component implements Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'buddyboss';
 	}
 
@@ -35,7 +29,7 @@ class Component implements Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_filter( 'kadence_post_layout', array( $this, 'filter_layout_for_component_pages' ) );
+		add_filter( 'kadence_post_layout', [ $this, 'filter_layout_for_component_pages' ] );
 	}
 	/**
 	 * Filters the layout array to check the pages which are component pages for buddyboss
@@ -52,12 +46,12 @@ class Component implements Component_Interface {
 					$layout['layout'] = $postlayout;
 				}
 				// Sidebar ID.
-				$postsidebar    = get_post_meta( $component_id, '_kad_post_sidebar_id', true );
+				$postsidebar = get_post_meta( $component_id, '_kad_post_sidebar_id', true );
 				if ( isset( $postsidebar ) && ! empty( $postsidebar ) && 'defualt' !== $postsidebar && 'default' !== $postsidebar ) {
 					$layout['sidebar_id'] = $postsidebar;
 				}
 				// Boxed Style.
-				$postboxed      = get_post_meta( $component_id, '_kad_post_content_style', true );
+				$postboxed = get_post_meta( $component_id, '_kad_post_content_style', true );
 				if ( isset( $postboxed ) && ( 'unboxed' === $postboxed || 'boxed' === $postboxed ) ) {
 					$layout['boxed'] = $postboxed;
 				}

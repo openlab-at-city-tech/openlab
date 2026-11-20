@@ -42,6 +42,8 @@ jQuery(document).ready(function()
 			zpSearchBarParams += "&item_type=items";
 			zpSearchBarParams += "&downloadable="+jQuery(".ZOTPRESS_AC_DOWNLOAD").val();
 			zpSearchBarParams += "&style="+jQuery(".ZP_STYLE").text();
+			// 7.4.3: Added via @alhrath
+			zpSearchBarParams += "&collection_id="+jQuery(".ZP_COLLECTION_ID").text();
 			zpSearchBarParams += "&sortby="+jQuery(".ZP_SORTBY").text();
 			zpSearchBarParams += "&order="+jQuery(".ZP_ORDER").text();
 			zpSearchBarParams += "&citeable="+jQuery(".ZOTPRESS_AC_CITE").val();
@@ -179,18 +181,22 @@ jQuery(document).ready(function()
 								success: function(data)
 								{
 									var zp_items = jQuery.parseJSON( data );
-																		
-									// 7.4: Major change to passing and parsing bib HTML
-									jQuery.each( zp_items.data, function (i, ic) {
-										var ic_decode = new DOMParser().parseFromString(ic.bib, "text/html");
-										zp_items.data[i].bib = ic_decode.documentElement.textContent;
-									});
 
-									if ( zp_items.updateneeded )
-										zpUpdateNeeded = zp_items.updateneeded;
-								
-									console.log('zp: calling zp_get_items with update check?', 'always');
-									console.log('zp: is an update needed?', zpUpdateNeeded);			
+									// 7.4.4: Can throw empty if term not found
+									if ( zp_items.status != "empty" ) {
+																			
+										// 7.4: Major change to passing and parsing bib HTML
+										jQuery.each( zp_items.data, function (i, ic) {
+											var ic_decode = new DOMParser().parseFromString(ic.bib, "text/html");
+											zp_items.data[i].bib = ic_decode.documentElement.textContent;
+										});
+
+										if ( zp_items.updateneeded )
+											zpUpdateNeeded = zp_items.updateneeded;
+									
+										console.log('zp: calling zp_get_items with update check?', 'always');
+										console.log('zp: is an update needed?', zpUpdateNeeded);
+									}
 								},
 								error: function(errorThrown)
 								{
@@ -241,8 +247,7 @@ jQuery(document).ready(function()
 				{
 					// Don't search if the term doesn't change
 					// if ( jQuery.trim(jQuery(this).val()) != zpLastTerm ) {
-						
-						console.log('zp: autocomplete response?', ui.content[4]);
+						console.log('zp: autocomplete response?', ui.content[0].label);
 
 						var tempCurrentTerm = jQuery(this).val();
 
@@ -250,8 +255,10 @@ jQuery(document).ready(function()
 						jQuery(".zp-List .zpSearchLoading").removeClass("show");
 
 						// First, deal with any errors or blank results
-						if ( ui.content == "0"
-								|| ui.content[0].label == "empty" )
+						// 7.4.4: Caused errors so simplifying:
+						if ( ui.content[0].label == "empty" )
+						// if ( ui.content === "0"
+						// 		|| ( ui.content.length !== 0 && ui.content[0].label == "empty" ) )
 						{
 							if ( jQuery(".zpSearchResultsPaging").length > 0 ) {
 

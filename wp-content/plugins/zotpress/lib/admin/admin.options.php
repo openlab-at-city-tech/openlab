@@ -18,8 +18,53 @@ if ( current_user_can('edit_others_posts') )
 
 				<?php include(__DIR__ . '/admin.options.form.php'); ?>
 
-
 				<hr>
+
+				<!-- START OF CACHETIME -->
+				<div class="zp-Column-1">
+					<div class="zp-Column-Inner">
+
+						<h4><?php esc_html_e('Set Cache Timer','zotpress'); ?></h4>
+
+						<p class="note"><?php esc_html_e('Modify how often Zotpress pings Zotero for updates to the cache.','zotpress'); ?></p>
+
+						<div id="zp-Zotpress-Options-CacheTimer" class="zp-Zotpress-Options">
+
+							<div class="zp-CacheTimer-Container">
+								<label for="zp-Zotpress-Options-CacheTimer"><?php esc_html_e('Choose Cache Timer','zotpress'); ?>:</label>
+								<select id="zp-Zotpress-Options-CacheTimer"><?php
+
+							// See if default exists
+                            $zp_default_cachetimer = "10";
+                            if (get_option("Zotpress_DefaultCacheTimer"))
+                                $zp_default_cachetimer = get_option("Zotpress_DefaultCacheTimer");
+
+							echo "<option value=\"10\" ";
+							if ( $zp_default_cachetimer == "10" ) echo "selected=\"selected\" ";
+							echo ">Every 10 minutes</option>\n";
+
+							echo "<option value=\"30\" ";
+							if ( $zp_default_cachetimer == "30" ) echo "selected=\"selected\" ";
+							echo ">Every 30 minutes</option>\n";
+
+							echo "<option value=\"60\" ";
+							if ( $zp_default_cachetimer == "60" ) echo "selected=\"selected\" ";
+							echo ">Every 60 minutes</option>\n";
+
+							echo "<option value=\"1440\" ";
+							if ( $zp_default_cachetimer == "1440" ) echo "selected=\"selected\" ";
+							echo ">Every 24 hours</option>\n";
+
+							?></select></div><!-- .zp-CacheTimer-Container -->
+
+							<input type="button" id="zp-Zotpress-Options-CacheTimer-Button" class="button-secondary" value="<?php esc_html_e('Set Cache Timer','zotpress'); ?>">
+							<div class="zp-Loading">loading</div>
+							<div class="zp-Success"><?php esc_html_e('Success','zotpress'); ?>!</div>
+							<div class="zp-Errors"><?php esc_html_e('Errors','zotpress'); ?>!</div>
+
+						</div>
+					</div>
+				</div><!-- END OF CACHETIME -->
 
 
 				<!-- START OF CPT -->
@@ -28,7 +73,7 @@ if ( current_user_can('edit_others_posts') )
 
 						<h4><?php esc_html_e('Set Reference Widget','zotpress'); ?></h4>
 
-						<p class="note"><?php esc_html_e('Enable or disable the Zotpress Reference widget for specific post types.','zotpress'); ?></p>
+						<p class="note"><?php esc_html_e('Add or remove the Zotpress Reference widget for specific post types.','zotpress'); ?></p>
 
 						<div id="zp-Zotpress-Options-CPT" class="zp-Zotpress-Options">
 
@@ -62,9 +107,9 @@ if ( current_user_can('edit_others_posts') )
 
 						</div>
 					</div>
-				</div><!-- END OF EDITOR -->
+				</div><!-- END OF CPT -->
 
-
+				<hr>
 
 				<!-- START OF RESET -->
 				<div class="zp-Column-1">

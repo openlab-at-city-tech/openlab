@@ -13,7 +13,7 @@
 ?>
 <!-- wp:group {"metadata":{"name":"Featured Section 4"},"align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"},"blockGap":"0"}},"backgroundColor":"quinary","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull has-quinary-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
-	
+
 <!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|10"}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group">
 	<!-- wp:heading {"textAlign":"center"} -->

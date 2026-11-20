@@ -47,6 +47,14 @@
 	max-width: 100%;
 }
 
+.sp-no-js .sp-layer {
+	display: none !important;
+}
+
+.sp-no-js .sp-slide:not(:first-child) {
+	display: none !important;
+}
+
 /* Thumbnails
 --------------------------------------------------*/
 .sp-thumbnails-container {
@@ -388,12 +396,14 @@
 	height: 10px;
 	border: 2px solid #000;
 	border-radius: 50%;
-	margin: 4px;
+	margin: 4px 8px;
 	display: inline-block;
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	cursor: pointer;
+	vertical-align: middle;
+	transition: all 0.2s ease;
 }
 
 .sp-selected-button {
@@ -404,6 +414,7 @@
 	.sp-button {
 		width: 14px;
 		height: 14px;
+		margin: 4px 8px;
 	}
 }
 
@@ -411,6 +422,7 @@
 	.sp-button {
 		width: 16px;
 		height: 16px;
+		margin: 4px 8px;
 	}
 }
 
@@ -418,6 +430,7 @@
 	.sp-button {
 		width: 18px;
 		height: 18px;
+		margin: 4px 8px;
 	}
 }
 
@@ -774,6 +787,16 @@ a.sp-video:after {
 
 /* CSS for preventing styling issues in WordPress
 --------------------------------------------------*/
+.slider-pro,
+.slider-pro .sp-slides-container,
+.slider-pro .sp-mask,
+.slider-pro .sp-slides,
+.slider-pro .sp-slide,
+.slider-pro .sp-image-container,
+.slider-pro .sp-image {
+	border-radius: 0 !important;
+}
+
 .slider-pro img.sp-image,
 .slider-pro img.sp-thumbnail {
 	max-width: none;
@@ -851,4 +874,40 @@ a.sp-video:after {
 
 .slider-pro img.sp-layer {
 	border: none;
+}
+/* Post Title Spacing & Center Alignment */
+.uris-slider-title,
+#uris-slider-title {
+	margin-top: 15px;
+	margin-bottom: 25px;
+	clear: both;
+	text-align: center;
+}
+.uris-slider-title .uris-slider-post-title,
+#uris-slider-title .uris-slider-post-title {
+	margin: 0 auto 15px auto;
+	padding: 0;
+	line-height: 1.4;
+	text-align: center;
+	display: block;
+}
+
+
+/* Unified Caption Layer - Overlap Prevention */
+.uris-slide-content-layer {
+	width: 90%;
+	max-width: 90%;
+	pointer-events: none;
+	text-align: center;
+}
+
+.uris-slide-content-wrap {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	width: 100%;
+	margin: 0 auto;
+	pointer-events: auto;
 }

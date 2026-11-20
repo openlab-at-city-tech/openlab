@@ -21,8 +21,8 @@ class Shortcodes_Ultimate_Activator {
 	 */
 	public static function activate() {
 
-		self::$required_php = '5.4';
-		self::$required_wp  = '5.0';
+		self::$required_php = '7.0';
+		self::$required_wp  = '6.0';
 
 		self::check_php_version();
 		self::check_wp_version();

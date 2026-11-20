@@ -8,6 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
              srcset="<?php echo esc_url(plugins_url('assets/img/eztoc-logo.png', dirname(__FILE__))) ?> 1x, <?php echo esc_url(plugins_url('assets/img/eztoc-logo.png', dirname(__FILE__))) ?> 2x">
     </a>
     <h1 style="display:none;">&nbsp;</h1>
+    <?php settings_errors(); ?>
     <div class="toc-tab-panel">
         <a id="eztoc-welcome" class="eztoc-tablinks" data-href="no" href="#welcome"
            onclick="ezTocTabToggle(event, 'welcome')"><?php esc_html_e( 'Welcome', 'easy-table-of-contents' ) ?></a>
@@ -69,7 +70,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
             <button class="button-toc" style="display: inline-block;font-size: 20px;">
                 <span><?php esc_html_e( 'YES! I want to Support by UPGRADING.', 'easy-table-of-contents' ) ?></span></button>
         </a>
-        <a href="<?php echo esc_url(add_query_arg('page', 'table-of-contents', admin_url('options-general.php'))); ?>"
+        <a href="<?php echo esc_url( admin_url( 'admin.php?page=table-of-contents' ) ); ?>"
            style="text-decoration: none;">
             <button class="button-toc1"
                     style="display: block;text-align: center;border: 0;margin: 0 auto;background: none;">
@@ -438,7 +439,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                             ?></li>
                     </ol>
                     <h3><?php esc_html_e('5. MORE DOCUMENTATION:', 'easy-table-of-contents'); ?></h3>
-                    <p><?php esc_html__('You can visit this link ', 'easy-table-of-contents') . '<a href="https://tocwp.com/docs/" target="_blank">' . esc_html__('More Documentation', 'easy-table-of-contents') . '</a>' . esc_html__(' for more documentation of `Easy Table of Contents`', 'easy-table-of-contents'); ?></p>
+                    <p><?php echo esc_html__('You can visit this link ', 'easy-table-of-contents') . '<a href="https://tocwp.com/docs/" target="_blank">' . esc_html__('More Documentation', 'easy-table-of-contents') . '</a>' . esc_html__(' for more documentation of `Easy Table of Contents`', 'easy-table-of-contents'); ?></p>
                 </div>
                 <div class="eztoc-tabcontent-technical" id="eztoc-technical-shortcode" style="display: none;">
                     <h1><?php esc_html_e('Shortcode', 'easy-table-of-contents'); ?></h1>

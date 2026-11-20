@@ -32,6 +32,11 @@ function enhanced_og_image( $tags ) {
 		return $tags;
 	}
 
+	// A gated body's embedded media is withheld along with the body.
+	if ( \Automattic\Jetpack\SEO\Content_Gate::is_gated( $post ) ) {
+		return $tags;
+	}
+
 	// Always favor featured images.
 	if ( enhanced_og_has_featured_image( $post->ID ) ) {
 		return $tags;
@@ -71,6 +76,11 @@ function enhanced_og_gallery( $tags ) {
 
 	// Bail if we do not have info about the post.
 	if ( ! $post instanceof WP_Post ) {
+		return $tags;
+	}
+
+	// A gated body's embedded media is withheld along with the body.
+	if ( \Automattic\Jetpack\SEO\Content_Gate::is_gated( $post ) ) {
 		return $tags;
 	}
 
@@ -128,6 +138,11 @@ function enhanced_og_video( $tags ) {
 		return $tags;
 	}
 
+	// A gated body's embedded media is withheld along with the body.
+	if ( \Automattic\Jetpack\SEO\Content_Gate::is_gated( $post ) ) {
+		return $tags;
+	}
+
 	// Always favor featured images.
 	if ( enhanced_og_has_featured_image( $post->ID ) ) {
 		return $tags;
@@ -154,7 +169,7 @@ function enhanced_og_video( $tags ) {
 	$tags['og:image:secure_url'] = $summary['secure']['image'];
 
 	// This should be html by default for youtube/vimeo, since we're linking to HTML pages.
-	$tags['og:video:type'] = isset( $summary['video_type'] ) ? $summary['video_type'] : 'text/html';
+	$tags['og:video:type'] = $summary['video_type'] ?? 'text/html';
 
 	$video_url        = $summary['video'];
 	$secure_video_url = $summary['secure']['video'];

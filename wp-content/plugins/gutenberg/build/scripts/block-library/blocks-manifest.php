@@ -21,13 +21,17 @@ return array(
 			'background' => array(
 				'backgroundImage' => true,
 				'backgroundSize' => true,
+				'gradient' => true,
 				'__experimentalDefaultControls' => array(
 					'backgroundImage' => true
 				)
 			),
 			'color' => array(
 				'background' => true,
-				'gradients' => true
+				'gradients' => true,
+				'link' => true,
+				'heading' => true,
+				'button' => true
 			),
 			'__experimentalBorder' => array(
 				'color' => true,
@@ -118,6 +122,9 @@ return array(
 		),
 		'supports' => array(
 			'anchor' => true,
+			'background' => array(
+				'gradient' => true
+			),
 			'color' => array(
 				'background' => true,
 				'gradients' => true
@@ -150,6 +157,7 @@ return array(
 					'letterSpacing'
 				),
 				'fontSize' => true,
+				'lineHeight' => true,
 				'__experimentalFontFamily' => true,
 				'__experimentalFontWeight' => true,
 				'__experimentalFontStyle' => true,
@@ -166,6 +174,7 @@ return array(
 			'lock' => false
 		),
 		'selectors' => array(
+			'spacing' => '.wp-block-accordion-heading .wp-block-accordion-heading__toggle',
 			'typography' => array(
 				'letterSpacing' => '.wp-block-accordion-heading .wp-block-accordion-heading__toggle-title',
 				'textDecoration' => '.wp-block-accordion-heading .wp-block-accordion-heading__toggle-title'
@@ -216,9 +225,15 @@ return array(
 		),
 		'supports' => array(
 			'html' => false,
+			'background' => array(
+				'gradient' => true
+			),
 			'color' => array(
 				'background' => true,
-				'gradients' => true
+				'gradients' => true,
+				'link' => true,
+				'heading' => true,
+				'button' => true
 			),
 			'interactivity' => true,
 			'spacing' => array(
@@ -226,6 +241,7 @@ return array(
 					'top',
 					'bottom'
 				),
+				'padding' => true,
 				'blockGap' => true
 			),
 			'__experimentalBorder' => array(
@@ -285,10 +301,19 @@ return array(
 			'core/accordion-open-by-default'
 		),
 		'supports' => array(
+			'__experimentalOnEnter' => true,
 			'html' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'color' => array(
 				'background' => true,
-				'gradients' => true
+				'gradients' => true,
+				'link' => true,
+				'heading' => true,
+				'button' => true
 			),
 			'interactivity' => true,
 			'spacing' => array(
@@ -386,6 +411,18 @@ return array(
 				'width' => true,
 				'style' => true
 			),
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
+			'dimensions' => array(
+				'minHeight' => true
+			),
 			'html' => false,
 			'spacing' => array(
 				'margin' => true,
@@ -480,6 +517,14 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'align' => true,
+			'color' => array(
+				'background' => false,
+				'link' => true,
+				'text' => false,
+				'__experimentalDefaultControls' => array(
+					'link' => true
+				)
+			),
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true,
@@ -555,12 +600,16 @@ return array(
 			'filter' => array(
 				'duotone' => true
 			),
+			'shadow' => array(
+				'__experimentalSkipSerialization' => true
+			),
 			'interactivity' => array(
 				'clientNavigation' => true
 			)
 		),
 		'selectors' => array(
 			'border' => '.wp-block-avatar img',
+			'shadow' => '.wp-block-avatar img',
 			'filter' => array(
 				'duotone' => '.wp-block-avatar img'
 			)
@@ -601,7 +650,8 @@ return array(
 			'interactivity' => array(
 				'clientNavigation' => true
 			),
-			'customCSS' => false
+			'customCSS' => false,
+			'visibility' => false
 		)
 	),
 	'breadcrumbs' => array(
@@ -649,6 +699,9 @@ return array(
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true
+			),
+			'background' => array(
+				'gradient' => true
 			),
 			'color' => array(
 				'gradients' => true,
@@ -768,6 +821,12 @@ return array(
 			'splitting' => true,
 			'align' => false,
 			'alignWide' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalSkipSerialization' => true
+			),
 			'color' => array(
 				'__experimentalSkipSerialization' => true,
 				'gradients' => true,
@@ -888,6 +947,15 @@ return array(
 			),
 			'html' => false,
 			'__experimentalExposeControlsToChildren' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'color' => array(
 				'gradients' => true,
 				'text' => false,
@@ -922,6 +990,10 @@ return array(
 					'fontSize' => true
 				)
 			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
 			'__experimentalBorder' => array(
 				'color' => true,
 				'radius' => true,
@@ -945,7 +1017,8 @@ return array(
 				'clientNavigation' => true
 			),
 			'listView' => true,
-			'contentRole' => true
+			'contentRole' => true,
+			'shadow' => true
 		),
 		'editorStyle' => 'wp-block-buttons-editor',
 		'style' => 'wp-block-buttons'
@@ -1055,6 +1128,15 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'align' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'html' => false,
 			'spacing' => array(
 				'margin' => true,
@@ -1067,6 +1149,7 @@ return array(
 			'typography' => array(
 				'fontSize' => true,
 				'lineHeight' => true,
+				'textColumns' => true,
 				'__experimentalFontFamily' => true,
 				'__experimentalFontWeight' => true,
 				'__experimentalFontStyle' => true,
@@ -1100,7 +1183,8 @@ return array(
 					'width' => true,
 					'style' => true
 				)
-			)
+			),
+			'shadow' => true
 		),
 		'editorStyle' => 'wp-block-categories-editor',
 		'style' => 'wp-block-categories'
@@ -1127,6 +1211,19 @@ return array(
 				'wide'
 			),
 			'anchor' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
 			'typography' => array(
 				'fontSize' => true,
 				'lineHeight' => true,
@@ -1170,6 +1267,7 @@ return array(
 					'text' => true
 				)
 			),
+			'shadow' => true,
 			'interactivity' => array(
 				'clientNavigation' => true
 			)
@@ -1212,6 +1310,15 @@ return array(
 			'anchor' => true,
 			'reusable' => false,
 			'html' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'color' => array(
 				'gradients' => true,
 				'heading' => true,
@@ -1311,6 +1418,19 @@ return array(
 					'background' => true,
 					'text' => true
 				)
+			),
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
 			),
 			'spacing' => array(
 				'blockGap' => array(
@@ -1450,6 +1570,9 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'html' => false,
+			'background' => array(
+				'gradient' => true
+			),
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true
@@ -1511,8 +1634,13 @@ return array(
 		),
 		'supports' => array(
 			'anchor' => true,
+			'background' => array(
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
+				'heading' => true,
+				'button' => true,
 				'link' => true,
 				'__experimentalDefaultControls' => array(
 					'background' => true,
@@ -1584,6 +1712,9 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'html' => false,
+			'background' => array(
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
@@ -1652,6 +1783,9 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'html' => false,
+			'background' => array(
+				'gradient' => true
+			),
 			'color' => array(
 				'link' => true,
 				'gradients' => true,
@@ -1711,6 +1845,9 @@ return array(
 		),
 		'supports' => array(
 			'anchor' => true,
+			'background' => array(
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
@@ -1831,8 +1968,18 @@ return array(
 				'full'
 			),
 			'html' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'color' => array(
 				'gradients' => true,
+				'button' => true,
 				'heading' => true,
 				'link' => true,
 				'__experimentalDefaultControls' => array(
@@ -1912,6 +2059,9 @@ return array(
 			'align' => true,
 			'reusable' => false,
 			'html' => false,
+			'background' => array(
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
@@ -1928,6 +2078,11 @@ return array(
 					'type' => 'flex'
 				)
 			),
+			'spacing' => array(
+				'padding' => true,
+				'margin' => true,
+				'blockGap' => true
+			),
 			'typography' => array(
 				'fontSize' => true,
 				'lineHeight' => true,
@@ -1940,6 +2095,12 @@ return array(
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true
 				)
+			),
+			'__experimentalBorder' => array(
+				'color' => true,
+				'radius' => true,
+				'style' => true,
+				'width' => true
 			),
 			'interactivity' => array(
 				'clientNavigation' => true
@@ -1961,7 +2122,8 @@ return array(
 		'textdomain' => 'default',
 		'attributes' => array(
 			'label' => array(
-				'type' => 'string'
+				'type' => 'string',
+				'role' => 'content'
 			)
 		),
 		'usesContext' => array(
@@ -1972,6 +2134,9 @@ return array(
 			'anchor' => true,
 			'reusable' => false,
 			'html' => false,
+			'background' => array(
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'text' => false,
@@ -1994,8 +2159,21 @@ return array(
 			),
 			'interactivity' => array(
 				'clientNavigation' => true
+			),
+			'spacing' => array(
+				'padding' => true,
+				'__experimentalDefaultControls' => array(
+					'padding' => false
+				)
+			),
+			'__experimentalBorder' => array(
+				'radius' => true,
+				'color' => true,
+				'width' => true,
+				'style' => true
 			)
-		)
+		),
+		'style' => 'wp-block-comments-pagination-next'
 	),
 	'comments-pagination-numbers' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
@@ -2015,6 +2193,9 @@ return array(
 			'anchor' => true,
 			'reusable' => false,
 			'html' => false,
+			'background' => array(
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'text' => false,
@@ -2044,6 +2225,12 @@ return array(
 				'__experimentalDefaultControls' => array(
 					'padding' => true
 				)
+			),
+			'__experimentalBorder' => array(
+				'radius' => true,
+				'color' => true,
+				'width' => true,
+				'style' => true
 			)
 		)
 	),
@@ -2060,7 +2247,8 @@ return array(
 		'textdomain' => 'default',
 		'attributes' => array(
 			'label' => array(
-				'type' => 'string'
+				'type' => 'string',
+				'role' => 'content'
 			)
 		),
 		'usesContext' => array(
@@ -2071,6 +2259,12 @@ return array(
 			'anchor' => true,
 			'reusable' => false,
 			'html' => false,
+			'background' => array(
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'gradient' => true
+				)
+			),
 			'color' => array(
 				'gradients' => true,
 				'text' => false,
@@ -2093,8 +2287,21 @@ return array(
 			),
 			'interactivity' => array(
 				'clientNavigation' => true
+			),
+			'spacing' => array(
+				'padding' => true,
+				'__experimentalDefaultControls' => array(
+					'padding' => false
+				)
+			),
+			'__experimentalBorder' => array(
+				'radius' => true,
+				'color' => true,
+				'width' => true,
+				'style' => true
 			)
-		)
+		),
+		'style' => 'wp-block-comments-pagination-previous'
 	),
 	'comments-title' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
@@ -2132,6 +2339,9 @@ return array(
 			'anchor' => true,
 			'align' => true,
 			'html' => false,
+			'background' => array(
+				'gradient' => true
+			),
 			'__experimentalBorder' => array(
 				'radius' => true,
 				'color' => true,
@@ -2266,6 +2476,17 @@ return array(
 				'source' => 'attribute',
 				'selector' => 'video',
 				'attribute' => 'poster'
+			),
+			'allowedVideoProviders' => array(
+				'type' => 'array',
+				'default' => array(
+					'youtube',
+					'vimeo',
+					'videopress',
+					'animoto',
+					'tiktok',
+					'wordpress-tv'
+				)
 			)
 		),
 		'usesContext' => array(
@@ -2273,6 +2494,7 @@ return array(
 			'postType'
 		),
 		'supports' => array(
+			'__experimentalOnEnter' => true,
 			'anchor' => true,
 			'align' => true,
 			'html' => false,
@@ -2304,6 +2526,8 @@ return array(
 			'color' => array(
 				'heading' => true,
 				'text' => true,
+				'link' => true,
+				'button' => true,
 				'background' => false,
 				'__experimentalSkipSerialization' => array(
 					'gradients'
@@ -2311,7 +2535,8 @@ return array(
 				'enableContrastChecker' => false
 			),
 			'dimensions' => array(
-				'aspectRatio' => true
+				'aspectRatio' => true,
+				'minWidth' => true
 			),
 			'typography' => array(
 				'fontSize' => true,
@@ -2330,7 +2555,8 @@ return array(
 				'allowJustification' => false
 			),
 			'interactivity' => array(
-				'clientNavigation' => true
+				'clientNavigation' => true,
+				'interactive' => true
 			),
 			'filter' => array(
 				'duotone' => true
@@ -2386,9 +2612,20 @@ return array(
 				'full'
 			),
 			'anchor' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
+				'heading' => true,
+				'button' => true,
 				'__experimentalDefaultControls' => array(
 					'background' => true,
 					'text' => true
@@ -2400,6 +2637,7 @@ return array(
 				'style' => true
 			),
 			'html' => false,
+			'shadow' => true,
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true,
@@ -2408,6 +2646,9 @@ return array(
 					'margin' => false,
 					'padding' => false
 				)
+			),
+			'dimensions' => array(
+				'minWidth' => true
 			),
 			'typography' => array(
 				'fontSize' => true,
@@ -2478,8 +2719,13 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'align' => true,
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
 			'spacing' => array(
-				'margin' => true
+				'margin' => true,
+				'padding' => true
 			),
 			'interactivity' => array(
 				'clientNavigation' => true
@@ -2559,9 +2805,22 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'align' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
 			),
 			'color' => array(
 				'gradients' => true,
@@ -2582,6 +2841,20 @@ return array(
 					'color' => true,
 					'width' => true,
 					'style' => true
+				)
+			),
+			'shadow' => true,
+			'typography' => array(
+				'fontSize' => true,
+				'lineHeight' => true,
+				'__experimentalFontFamily' => true,
+				'__experimentalFontWeight' => true,
+				'__experimentalFontStyle' => true,
+				'__experimentalTextTransform' => true,
+				'__experimentalTextDecoration' => true,
+				'__experimentalLetterSpacing' => true,
+				'__experimentalDefaultControls' => array(
+					'fontSize' => true
 				)
 			),
 			'interactivity' => true
@@ -2606,6 +2879,15 @@ return array(
 		),
 		'supports' => array(
 			'anchor' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'__experimentalBorder' => array(
 				'radius' => true,
 				'color' => true,
@@ -2631,6 +2913,7 @@ return array(
 			'multiple' => false,
 			'reusable' => false,
 			'inserter' => false,
+			'shadow' => true,
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true,
@@ -2638,6 +2921,10 @@ return array(
 					'margin' => false,
 					'padding' => false
 				)
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
 			),
 			'typography' => array(
 				'fontSize' => true,
@@ -2658,210 +2945,6 @@ return array(
 			)
 		),
 		'style' => 'wp-block-footnotes'
-	),
-	'form' => array(
-		'$schema' => 'https://schemas.wp.org/trunk/block.json',
-		'apiVersion' => 3,
-		'__experimental' => true,
-		'name' => 'core/form',
-		'title' => 'Form',
-		'category' => 'common',
-		'allowedBlocks' => array(
-			'core/paragraph',
-			'core/heading',
-			'core/form-input',
-			'core/form-submit-button',
-			'core/form-submission-notification',
-			'core/group',
-			'core/columns'
-		),
-		'description' => 'A form.',
-		'keywords' => array(
-			'container',
-			'wrapper',
-			'row',
-			'section'
-		),
-		'textdomain' => 'default',
-		'attributes' => array(
-			'submissionMethod' => array(
-				'type' => 'string',
-				'default' => 'email'
-			),
-			'method' => array(
-				'type' => 'string',
-				'default' => 'post'
-			),
-			'action' => array(
-				'type' => 'string'
-			),
-			'email' => array(
-				'type' => 'string'
-			)
-		),
-		'supports' => array(
-			'anchor' => true,
-			'color' => array(
-				'gradients' => true,
-				'link' => true,
-				'__experimentalDefaultControls' => array(
-					'background' => true,
-					'text' => true,
-					'link' => true
-				)
-			),
-			'spacing' => array(
-				'margin' => true,
-				'padding' => true
-			),
-			'typography' => array(
-				'fontSize' => true,
-				'lineHeight' => true,
-				'__experimentalFontFamily' => true,
-				'__experimentalTextDecoration' => true,
-				'__experimentalFontStyle' => true,
-				'__experimentalFontWeight' => true,
-				'__experimentalLetterSpacing' => true,
-				'__experimentalTextTransform' => true,
-				'__experimentalDefaultControls' => array(
-					'fontSize' => true
-				)
-			)
-		)
-	),
-	'form-input' => array(
-		'$schema' => 'https://schemas.wp.org/trunk/block.json',
-		'apiVersion' => 3,
-		'__experimental' => true,
-		'name' => 'core/form-input',
-		'title' => 'Input Field',
-		'category' => 'common',
-		'ancestor' => array(
-			'core/form'
-		),
-		'description' => 'The basic building block for forms.',
-		'keywords' => array(
-			'input',
-			'form'
-		),
-		'textdomain' => 'default',
-		'attributes' => array(
-			'type' => array(
-				'type' => 'string',
-				'default' => 'text'
-			),
-			'name' => array(
-				'type' => 'string'
-			),
-			'label' => array(
-				'type' => 'rich-text',
-				'default' => 'Label',
-				'selector' => '.wp-block-form-input__label-content',
-				'source' => 'rich-text',
-				'role' => 'content'
-			),
-			'inlineLabel' => array(
-				'type' => 'boolean',
-				'default' => false
-			),
-			'required' => array(
-				'type' => 'boolean',
-				'default' => false,
-				'selector' => '.wp-block-form-input__input',
-				'source' => 'attribute',
-				'attribute' => 'required'
-			),
-			'placeholder' => array(
-				'type' => 'string',
-				'selector' => '.wp-block-form-input__input',
-				'source' => 'attribute',
-				'attribute' => 'placeholder',
-				'role' => 'content'
-			),
-			'value' => array(
-				'type' => 'string',
-				'default' => '',
-				'selector' => 'input',
-				'source' => 'attribute',
-				'attribute' => 'value'
-			),
-			'visibilityPermissions' => array(
-				'type' => 'string',
-				'default' => 'all'
-			)
-		),
-		'supports' => array(
-			'anchor' => true,
-			'reusable' => false,
-			'spacing' => array(
-				'margin' => array(
-					'top',
-					'bottom'
-				)
-			),
-			'__experimentalBorder' => array(
-				'radius' => true,
-				'__experimentalSkipSerialization' => true,
-				'__experimentalDefaultControls' => array(
-					'radius' => true
-				)
-			)
-		),
-		'style' => array(
-			'wp-block-form-input'
-		)
-	),
-	'form-submission-notification' => array(
-		'$schema' => 'https://schemas.wp.org/trunk/block.json',
-		'apiVersion' => 3,
-		'__experimental' => true,
-		'name' => 'core/form-submission-notification',
-		'title' => 'Form Submission Notification',
-		'category' => 'common',
-		'ancestor' => array(
-			'core/form'
-		),
-		'description' => 'Provide a notification message after the form has been submitted.',
-		'keywords' => array(
-			'form',
-			'feedback',
-			'notification',
-			'message'
-		),
-		'textdomain' => 'default',
-		'icon' => 'feedback',
-		'attributes' => array(
-			'type' => array(
-				'type' => 'string',
-				'default' => 'success'
-			)
-		)
-	),
-	'form-submit-button' => array(
-		'$schema' => 'https://schemas.wp.org/trunk/block.json',
-		'apiVersion' => 3,
-		'__experimental' => true,
-		'name' => 'core/form-submit-button',
-		'title' => 'Form Submit Button',
-		'category' => 'common',
-		'icon' => 'button',
-		'ancestor' => array(
-			'core/form'
-		),
-		'allowedBlocks' => array(
-			'core/buttons',
-			'core/button'
-		),
-		'description' => 'A submission button for forms.',
-		'keywords' => array(
-			'submit',
-			'button',
-			'form'
-		),
-		'textdomain' => 'default',
-		'style' => array(
-			'wp-block-form-submit-button'
-		)
 	),
 	'freeform' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
@@ -2895,7 +2978,9 @@ return array(
 		'title' => 'Gallery',
 		'category' => 'media',
 		'usesContext' => array(
-			'galleryId'
+			'galleryId',
+			'postId',
+			'postType'
 		),
 		'allowedBlocks' => array(
 			'core/image'
@@ -2961,6 +3046,9 @@ return array(
 				'default' => array(
 					
 				)
+			),
+			'dynamicContent' => array(
+				'type' => 'object'
 			),
 			'navigationButtonType' => array(
 				'type' => 'string',
@@ -3031,6 +3119,15 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'align' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'__experimentalBorder' => array(
 				'radius' => true,
 				'color' => true,
@@ -3053,11 +3150,11 @@ return array(
 				'margin' => true,
 				'padding' => true,
 				'blockGap' => array(
-					'horizontal',
-					'vertical'
-				),
-				'__experimentalSkipSerialization' => array(
-					'blockGap'
+					'sides' => array(
+						'horizontal',
+						'vertical'
+					),
+					'__experimentalDefault' => 'var( --wp--style--gallery-gap-default, var( --gallery-block--gutter-size, var( --wp--style--block-gap, 0.5em ) ) )'
 				),
 				'__experimentalDefaultControls' => array(
 					'blockGap' => true,
@@ -3070,18 +3167,36 @@ return array(
 				'background' => true,
 				'gradients' => true
 			),
+			'shadow' => true,
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
 			'layout' => array(
 				'allowSwitching' => false,
 				'allowInheriting' => false,
-				'allowEditing' => false,
+				'allowEditing' => true,
+				'allowOrientation' => false,
+				'allowJustification' => false,
+				'allowVerticalAlignment' => false,
+				'allowWrap' => false,
+				'allowSizingOnChildren' => true,
 				'default' => array(
 					'type' => 'flex'
 				)
+			),
+			'filter' => array(
+				'duotone' => true
 			),
 			'interactivity' => array(
 				'clientNavigation' => true
 			),
 			'listView' => true
+		),
+		'selectors' => array(
+			'filter' => array(
+				'duotone' => '.wp-block-gallery :where(img)'
+			)
 		),
 		'editorStyle' => 'wp-block-gallery-editor',
 		'style' => 'wp-block-gallery'
@@ -3120,7 +3235,6 @@ return array(
 		),
 		'supports' => array(
 			'__experimentalOnEnter' => true,
-			'__experimentalOnMerge' => true,
 			'__experimentalSettings' => true,
 			'align' => array(
 				'wide',
@@ -3155,14 +3269,18 @@ return array(
 					'bottom'
 				),
 				'padding' => true,
-				'blockGap' => true,
+				'blockGap' => array(
+					'horizontal',
+					'vertical'
+				),
 				'__experimentalDefaultControls' => array(
 					'padding' => true,
 					'blockGap' => true
 				)
 			),
 			'dimensions' => array(
-				'minHeight' => true
+				'minHeight' => true,
+				'minWidth' => true
 			),
 			'__experimentalBorder' => array(
 				'color' => true,
@@ -3182,6 +3300,7 @@ return array(
 			'typography' => array(
 				'fontSize' => true,
 				'lineHeight' => true,
+				'textColumns' => true,
 				'__experimentalFontFamily' => true,
 				'__experimentalFontWeight' => true,
 				'__experimentalFontStyle' => true,
@@ -3241,6 +3360,16 @@ return array(
 			'anchor' => true,
 			'className' => true,
 			'splitting' => true,
+			'background' => array(
+				'backgroundClip' => true,
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'__experimentalBorder' => array(
 				'color' => true,
 				'radius' => true,
@@ -3255,6 +3384,11 @@ return array(
 					'text' => true
 				)
 			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
+			'shadow' => true,
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true,
@@ -3267,6 +3401,7 @@ return array(
 				'fontSize' => true,
 				'lineHeight' => true,
 				'textAlign' => true,
+				'textIndent' => true,
 				'__experimentalFontFamily' => true,
 				'__experimentalFontStyle' => true,
 				'__experimentalFontWeight' => true,
@@ -3274,6 +3409,7 @@ return array(
 				'__experimentalTextTransform' => true,
 				'__experimentalTextDecoration' => true,
 				'__experimentalWritingMode' => true,
+				'textShadow' => true,
 				'fitText' => true,
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true
@@ -3303,6 +3439,13 @@ return array(
 			'label' => array(
 				'type' => 'string',
 				'role' => 'content'
+			),
+			'opensInNewTab' => array(
+				'type' => 'boolean',
+				'default' => false
+			),
+			'description' => array(
+				'type' => 'string'
 			)
 		),
 		'usesContext' => array(
@@ -3318,6 +3461,11 @@ return array(
 			'anchor' => true,
 			'reusable' => false,
 			'html' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'typography' => array(
 				'fontSize' => true,
 				'lineHeight' => true,
@@ -3329,6 +3477,31 @@ return array(
 				'__experimentalLetterSpacing' => true,
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true
+				)
+			),
+			'shadow' => true,
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
+			'__experimentalBorder' => array(
+				'color' => true,
+				'radius' => true,
+				'style' => true,
+				'width' => true,
+				'__experimentalDefaultControls' => array(
+					'color' => false,
+					'radius' => false,
+					'style' => false,
+					'width' => false
+				)
+			),
+			'spacing' => array(
+				'margin' => true,
+				'padding' => true,
+				'__experimentalDefaultControls' => array(
+					'margin' => false,
+					'padding' => false
 				)
 			),
 			'interactivity' => array(
@@ -3352,8 +3525,7 @@ return array(
 		'attributes' => array(
 			'content' => array(
 				'type' => 'string',
-				'source' => 'raw',
-				'role' => 'content'
+				'role' => 'local'
 			)
 		),
 		'supports' => array(
@@ -3363,6 +3535,7 @@ return array(
 			'interactivity' => array(
 				'clientNavigation' => true
 			),
+			'listView' => true,
 			'customCSS' => false,
 			'visibility' => false
 		),
@@ -3384,6 +3557,18 @@ return array(
 			'icon' => array(
 				'type' => 'string',
 				'role' => 'content'
+			),
+			'flipHorizontal' => array(
+				'type' => 'boolean',
+				'default' => false
+			),
+			'flipVertical' => array(
+				'type' => 'boolean',
+				'default' => false
+			),
+			'rotation' => array(
+				'type' => 'number',
+				'default' => 0
 			)
 		),
 		'supports' => array(
@@ -3396,14 +3581,25 @@ return array(
 				'center',
 				'right'
 			),
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalSkipSerialization' => true
+			),
 			'html' => false,
 			'color' => array(
-				'background' => true,
-				'text' => true,
-				'__experimentalSkipSerialization' => true
+				'__experimentalSkipSerialization' => true,
+				'__experimentalDefaultControls' => array(
+					'background' => true,
+					'text' => true
+				)
 			),
 			'interactivity' => array(
 				'clientNavigation' => true
+			),
+			'shadow' => array(
+				'__experimentalSkipSerialization' => true
 			),
 			'__experimentalBorder' => array(
 				'color' => true,
@@ -3431,8 +3627,12 @@ return array(
 			),
 			'dimensions' => array(
 				'width' => true,
+				'minWidth' => true,
+				'minHeight' => true,
 				'__experimentalSkipSerialization' => array(
-					'width'
+					'width',
+					'minWidth',
+					'minHeight'
 				),
 				'__experimentalDefaultControls' => array(
 					'width' => true
@@ -3442,6 +3642,7 @@ return array(
 		'selectors' => array(
 			'root' => '.wp-block-icon svg',
 			'css' => '.wp-block-icon',
+			'shadow' => '.wp-block-icon svg',
 			'spacing' => array(
 				'margin' => '.wp-block-icon'
 			)
@@ -3560,6 +3761,10 @@ return array(
 				'source' => 'attribute',
 				'selector' => 'figure > a',
 				'attribute' => 'target'
+			),
+			'isDecorative' => array(
+				'type' => 'boolean',
+				'default' => false
 			)
 		),
 		'supports' => array(
@@ -3598,6 +3803,7 @@ return array(
 			)
 		),
 		'selectors' => array(
+			'dimensions' => '.wp-block-image img, .wp-block-image .components-placeholder',
 			'border' => '.wp-block-image img, .wp-block-image .wp-block-image__crop-area, .wp-block-image .components-placeholder',
 			'shadow' => '.wp-block-image img, .wp-block-image .wp-block-image__crop-area, .wp-block-image .components-placeholder',
 			'filter' => array(
@@ -3657,6 +3863,15 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'align' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
@@ -3666,11 +3881,22 @@ return array(
 					'link' => true
 				)
 			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
 			'html' => false,
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true
 			),
+			'__experimentalBorder' => array(
+				'color' => true,
+				'radius' => true,
+				'style' => true,
+				'width' => true
+			),
+			'shadow' => true,
 			'typography' => array(
 				'fontSize' => true,
 				'lineHeight' => true,
@@ -3735,14 +3961,6 @@ return array(
 				'type' => 'boolean',
 				'default' => false
 			),
-			'postLayout' => array(
-				'type' => 'string',
-				'default' => 'list'
-			),
-			'columns' => array(
-				'type' => 'number',
-				'default' => 3
-			),
 			'order' => array(
 				'type' => 'string',
 				'default' => 'desc'
@@ -3784,6 +4002,16 @@ return array(
 			'anchor' => true,
 			'align' => true,
 			'html' => false,
+			'layout' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
@@ -3793,9 +4021,19 @@ return array(
 					'link' => true
 				)
 			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
 			'spacing' => array(
 				'margin' => true,
-				'padding' => true
+				'padding' => true,
+				'blockGap' => array(
+					'__experimentalDefault' => '1.25em'
+				),
+				'__experimentalDefaultControls' => array(
+					'blockGap' => true
+				)
 			),
 			'typography' => array(
 				'fontSize' => true,
@@ -3822,6 +4060,7 @@ return array(
 					'style' => true
 				)
 			),
+			'shadow' => true,
 			'interactivity' => array(
 				'clientNavigation' => true
 			)
@@ -3874,6 +4113,10 @@ return array(
 		),
 		'supports' => array(
 			'anchor' => true,
+			'align' => array(
+				'wide',
+				'full'
+			),
 			'html' => false,
 			'__experimentalBorder' => array(
 				'color' => true,
@@ -3894,6 +4137,15 @@ return array(
 					'fontSize' => true
 				)
 			),
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
@@ -3901,6 +4153,10 @@ return array(
 					'background' => true,
 					'text' => true
 				)
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
 			),
 			'spacing' => array(
 				'margin' => true,
@@ -3910,6 +4166,7 @@ return array(
 					'padding' => false
 				)
 			),
+			'shadow' => true,
 			'__unstablePasteTextInline' => true,
 			'__experimentalOnMerge' => true,
 			'__experimentalSlashInserter' => true,
@@ -3919,7 +4176,9 @@ return array(
 			'listView' => true
 		),
 		'selectors' => array(
-			'border' => '.wp-block-list:not(.wp-block-list .wp-block-list)'
+			'border' => '.wp-block-list:not(.wp-block-list .wp-block-list)',
+			'dimensions' => '.wp-block-list:not(.wp-block-list .wp-block-list)',
+			'shadow' => '.wp-block-list:not(.wp-block-list .wp-block-list)'
 		),
 		'editorStyle' => 'wp-block-list-editor',
 		'style' => 'wp-block-list'
@@ -3954,6 +4213,11 @@ return array(
 			'html' => false,
 			'className' => false,
 			'splitting' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'__experimentalBorder' => array(
 				'color' => true,
 				'radius' => true,
@@ -3976,6 +4240,7 @@ return array(
 					'padding' => false
 				)
 			),
+			'shadow' => true,
 			'typography' => array(
 				'fontSize' => true,
 				'lineHeight' => true,
@@ -3995,7 +4260,8 @@ return array(
 		),
 		'selectors' => array(
 			'root' => '.wp-block-list > li',
-			'border' => '.wp-block-list:not(.wp-block-list .wp-block-list) > li'
+			'border' => '.wp-block-list:not(.wp-block-list .wp-block-list) > li',
+			'shadow' => '.wp-block-list:not(.wp-block-list .wp-block-list) > li'
 		)
 	),
 	'loginout' => array(
@@ -4027,11 +4293,24 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'className' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'color' => array(
 				'background' => true,
 				'text' => false,
 				'gradients' => true,
 				'link' => true
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
 			),
 			'spacing' => array(
 				'margin' => true,
@@ -4060,9 +4339,11 @@ return array(
 				'width' => true,
 				'style' => true
 			),
+			'shadow' => true,
 			'interactivity' => array(
 				'clientNavigation' => true
-			)
+			),
+			'contentRole' => true
 		),
 		'style' => 'wp-block-loginout'
 	),
@@ -4089,6 +4370,15 @@ return array(
 				'style' => true,
 				'width' => true
 			),
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'color' => array(
 				'gradients' => true,
 				'__experimentalDefaultControls' => array(
@@ -4096,6 +4386,11 @@ return array(
 					'text' => true
 				)
 			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
+			'shadow' => true,
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true,
@@ -4109,11 +4404,16 @@ return array(
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true
 				)
+			),
+			'interactivity' => array(
+				'clientNavigation' => true
 			)
 		),
 		'attributes' => array(
 			'latex' => array(
 				'type' => 'string',
+				'source' => 'text',
+				'selector' => 'math annotation[encoding="application/x-tex"]',
 				'role' => 'content'
 			),
 			'mathML' => array(
@@ -4234,6 +4534,11 @@ return array(
 				'full'
 			),
 			'html' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'__experimentalBorder' => array(
 				'color' => true,
 				'radius' => true,
@@ -4250,15 +4555,21 @@ return array(
 				'gradients' => true,
 				'heading' => true,
 				'link' => true,
+				'button' => true,
 				'__experimentalDefaultControls' => array(
 					'background' => true,
 					'text' => true
 				)
 			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true
 			),
+			'shadow' => true,
 			'typography' => array(
 				'fontSize' => true,
 				'lineHeight' => true,
@@ -4272,10 +4583,18 @@ return array(
 					'fontSize' => true
 				)
 			),
+			'filter' => array(
+				'duotone' => true
+			),
 			'interactivity' => array(
 				'clientNavigation' => true
 			),
 			'allowedBlocks' => true
+		),
+		'selectors' => array(
+			'filter' => array(
+				'duotone' => '.wp-block-media-text > .wp-block-media-text__media img, .wp-block-media-text > .wp-block-media-text__media video'
+			)
 		),
 		'editorStyle' => 'wp-block-media-text-editor',
 		'style' => 'wp-block-media-text'
@@ -4321,7 +4640,7 @@ return array(
 		'name' => 'core/more',
 		'title' => 'More',
 		'category' => 'design',
-		'description' => 'Content before this block will be shown in the excerpt on your archives page.',
+		'description' => 'Content before this block is shown in the excerpt on blog and archive pages. Where a theme shows the full content instead, visitors get a “Read more” link to the rest of the post.',
 		'keywords' => array(
 			'read more'
 		),
@@ -4527,6 +4846,9 @@ return array(
 			'interactivity' => true,
 			'renaming' => false
 		),
+		'selectors' => array(
+			'css' => '.wp-block-navigation:not(.wp-block-navigation__container)'
+		),
 		'editorStyle' => 'wp-block-navigation-editor',
 		'style' => 'wp-block-navigation'
 	),
@@ -4534,7 +4856,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
 		'name' => 'core/navigation-link',
-		'title' => 'Custom Link',
+		'title' => 'Navigation Link',
 		'category' => 'design',
 		'parent' => array(
 			'core/navigation'
@@ -4621,7 +4943,7 @@ return array(
 		),
 		'selectors' => array(
 			'states' => array(
-				'@current' => '.wp-block-navigation .current-menu-item'
+				'-current' => '.wp-block-navigation .current-menu-item'
 			)
 		),
 		'editorStyle' => 'wp-block-navigation-link-editor',
@@ -4663,8 +4985,20 @@ return array(
 					'text' => true
 				)
 			),
+			'shadow' => true,
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
+			'__experimentalBorder' => array(
+				'color' => true,
+				'radius' => true,
+				'style' => true,
+				'width' => true
+			),
 			'spacing' => array(
 				'padding' => true,
+				'margin' => true,
 				'__experimentalDefaultControls' => array(
 					'padding' => true
 				)
@@ -4729,7 +5063,14 @@ return array(
 			),
 			'isTopLevelItem' => array(
 				'type' => 'boolean'
+			),
+			'isParentSubmenu' => array(
+				'type' => 'boolean',
+				'default' => true
 			)
+		),
+		'providesContext' => array(
+			'core/isInsideSubmenu' => 'isParentSubmenu'
 		),
 		'usesContext' => array(
 			'textColor',
@@ -4765,9 +5106,15 @@ return array(
 					'fontSize' => true
 				)
 			),
+			'shadow' => array(
+				'__experimentalSkipSerialization' => true
+			),
 			'interactivity' => array(
 				'clientNavigation' => true
 			)
+		),
+		'selectors' => array(
+			'shadow' => '.wp-block-navigation-submenu > .wp-block-navigation__submenu-container'
 		),
 		'editorStyle' => 'wp-block-navigation-submenu-editor',
 		'style' => 'wp-block-navigation-submenu'
@@ -4818,10 +5165,6 @@ return array(
 			'parentPageID' => array(
 				'type' => 'integer',
 				'default' => 0
-			),
-			'isNested' => array(
-				'type' => 'boolean',
-				'default' => false
 			)
 		),
 		'usesContext' => array(
@@ -4838,7 +5181,8 @@ return array(
 			'showSubmenuIcon',
 			'style',
 			'openSubmenusOnClick',
-			'submenuVisibility'
+			'submenuVisibility',
+			'core/isInsideSubmenu'
 		),
 		'supports' => array(
 			'anchor' => true,
@@ -4859,6 +5203,15 @@ return array(
 			),
 			'interactivity' => array(
 				'clientNavigation' => true
+			),
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
 			),
 			'color' => array(
 				'text' => true,
@@ -4884,6 +5237,11 @@ return array(
 					'padding' => false,
 					'margin' => false
 				)
+			),
+			'shadow' => true,
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
 			),
 			'contentRole' => true
 		),
@@ -4940,6 +5298,7 @@ return array(
 			'submenuVisibility'
 		),
 		'supports' => array(
+			'contentRole' => true,
 			'anchor' => true,
 			'reusable' => false,
 			'html' => false,
@@ -4994,12 +5353,19 @@ return array(
 			'splitting' => true,
 			'anchor' => true,
 			'className' => false,
+			'background' => array(
+				'backgroundClip' => true,
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'__experimentalBorder' => array(
 				'color' => true,
 				'radius' => true,
 				'style' => true,
 				'width' => true
 			),
+			'shadow' => true,
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
@@ -5007,6 +5373,10 @@ return array(
 					'background' => true,
 					'text' => true
 				)
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
 			),
 			'spacing' => array(
 				'margin' => true,
@@ -5029,6 +5399,7 @@ return array(
 				'__experimentalLetterSpacing' => true,
 				'__experimentalTextTransform' => true,
 				'__experimentalWritingMode' => true,
+				'textShadow' => true,
 				'fitText' => true,
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true
@@ -5075,7 +5446,6 @@ return array(
 	'playlist' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
-		'__experimental' => true,
 		'name' => 'core/playlist',
 		'title' => 'Playlist',
 		'category' => 'media',
@@ -5089,9 +5459,6 @@ return array(
 			'core/playlist-track'
 		),
 		'attributes' => array(
-			'currentTrack' => array(
-				'type' => 'string'
-			),
 			'type' => array(
 				'type' => 'string',
 				'default' => 'audio'
@@ -5108,6 +5475,10 @@ return array(
 				'type' => 'boolean',
 				'default' => true
 			),
+			'showPlayButtonArtwork' => array(
+				'type' => 'boolean',
+				'default' => false
+			),
 			'showArtists' => array(
 				'type' => 'boolean',
 				'default' => true
@@ -5116,17 +5487,54 @@ return array(
 				'type' => 'boolean',
 				'default' => true
 			),
+			'showTrackLength' => array(
+				'type' => 'boolean',
+				'default' => true
+			),
+			'waveformStyle' => array(
+				'type' => 'string',
+				'enum' => array(
+					'bars',
+					'mirror',
+					'line',
+					'blocks',
+					'dots',
+					'seekbar'
+				),
+				'default' => 'bars'
+			),
+			'waveformColor' => array(
+				'type' => 'string'
+			),
+			'waveformGradient' => array(
+				'type' => 'string'
+			),
+			'waveformBackgroundColor' => array(
+				'type' => 'string'
+			),
+			'waveformBackgroundGradient' => array(
+				'type' => 'string'
+			),
 			'caption' => array(
 				'type' => 'string'
 			)
 		),
 		'providesContext' => array(
 			'showArtists' => 'showArtists',
-			'currentTrack' => 'currentTrack'
+			'showImages' => 'showImages'
 		),
 		'supports' => array(
 			'anchor' => true,
 			'align' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
@@ -5137,20 +5545,29 @@ return array(
 			),
 			'__experimentalBorder' => array(
 				'color' => true,
-				'radius' => true,
 				'style' => true,
 				'width' => true,
 				'__experimentalDefaultControls' => array(
 					'color' => true,
-					'radius' => true,
 					'style' => true,
 					'width' => true
 				)
 			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
 			'interactivity' => true,
+			'shadow' => true,
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true
+			),
+			'typography' => array(
+				'fontSize' => true,
+				'__experimentalDefaultControls' => array(
+					'fontSize' => true
+				)
 			)
 		),
 		'editorStyle' => 'wp-block-playlist-editor',
@@ -5159,7 +5576,6 @@ return array(
 	'playlist-track' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
-		'__experimental' => true,
 		'name' => 'core/playlist-track',
 		'title' => 'Playlist track',
 		'category' => 'media',
@@ -5174,7 +5590,7 @@ return array(
 		'textdomain' => 'default',
 		'usesContext' => array(
 			'showArtists',
-			'currentTrack'
+			'showImages'
 		),
 		'attributes' => array(
 			'blob' => array(
@@ -5182,32 +5598,40 @@ return array(
 				'role' => 'local'
 			),
 			'id' => array(
-				'type' => 'number'
-			),
-			'uniqueId' => array(
-				'type' => 'string'
+				'type' => 'number',
+				'role' => 'content'
 			),
 			'src' => array(
-				'type' => 'string'
+				'type' => 'string',
+				'role' => 'content'
 			),
 			'type' => array(
 				'type' => 'string',
 				'default' => 'audio'
 			),
 			'album' => array(
-				'type' => 'string'
+				'type' => 'string',
+				'role' => 'content'
 			),
 			'artist' => array(
-				'type' => 'string'
+				'type' => 'string',
+				'role' => 'content'
 			),
 			'image' => array(
-				'type' => 'string'
+				'type' => 'string',
+				'role' => 'content'
+			),
+			'imageAlt' => array(
+				'type' => 'string',
+				'role' => 'content'
 			),
 			'length' => array(
-				'type' => 'string'
+				'type' => 'string',
+				'role' => 'content'
 			),
 			'title' => array(
-				'type' => 'string'
+				'type' => 'string',
+				'role' => 'content'
 			)
 		),
 		'supports' => array(
@@ -5338,6 +5762,9 @@ return array(
 				'margin' => true,
 				'padding' => true
 			),
+			'background' => array(
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
@@ -5350,6 +5777,8 @@ return array(
 				'fontSize' => true,
 				'lineHeight' => true,
 				'textAlign' => true,
+				'textColumns' => true,
+				'textIndent' => true,
 				'__experimentalFontFamily' => true,
 				'__experimentalFontWeight' => true,
 				'__experimentalFontStyle' => true,
@@ -5408,6 +5837,11 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'html' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true
@@ -5503,6 +5937,9 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'html' => false,
+			'background' => array(
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'__experimentalDefaultControls' => array(
@@ -5555,7 +5992,17 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'html' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'color' => array(
+				'button' => true,
 				'gradients' => true,
 				'heading' => true,
 				'link' => true,
@@ -5563,6 +6010,10 @@ return array(
 					'background' => true,
 					'text' => true
 				)
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
 			),
 			'spacing' => array(
 				'margin' => true,
@@ -5572,6 +6023,7 @@ return array(
 				'fontSize' => true,
 				'lineHeight' => true,
 				'textAlign' => true,
+				'__experimentalFontFamily' => true,
 				'__experimentalFontStyle' => true,
 				'__experimentalFontWeight' => true,
 				'__experimentalLetterSpacing' => true,
@@ -5704,13 +6156,16 @@ return array(
 			'background' => array(
 				'backgroundImage' => true,
 				'backgroundSize' => true,
+				'gradient' => true,
 				'__experimentalDefaultControls' => array(
 					'backgroundImage' => true
 				)
 			),
 			'dimensions' => array(
-				'minHeight' => true
+				'minHeight' => true,
+				'minWidth' => true
 			),
+			'shadow' => true,
 			'spacing' => array(
 				'blockGap' => true,
 				'padding' => true,
@@ -5722,6 +6177,7 @@ return array(
 			),
 			'color' => array(
 				'gradients' => true,
+				'button' => true,
 				'heading' => true,
 				'link' => true,
 				'__experimentalDefaultControls' => array(
@@ -5732,6 +6188,7 @@ return array(
 			'typography' => array(
 				'fontSize' => true,
 				'lineHeight' => true,
+				'textAlign' => true,
 				'__experimentalFontFamily' => true,
 				'__experimentalFontWeight' => true,
 				'__experimentalFontStyle' => true,
@@ -5794,6 +6251,9 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'html' => false,
+			'background' => array(
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
@@ -5871,6 +6331,11 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'html' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
@@ -5880,9 +6345,14 @@ return array(
 					'link' => true
 				)
 			),
+			'shadow' => true,
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
 			),
 			'typography' => array(
 				'fontSize' => true,
@@ -6004,6 +6474,7 @@ return array(
 			'__experimentalBorder' => array(
 				'color' => true,
 				'radius' => true,
+				'style' => true,
 				'width' => true,
 				'__experimentalSkipSerialization' => true,
 				'__experimentalDefaultControls' => array(
@@ -6028,6 +6499,7 @@ return array(
 			)
 		),
 		'selectors' => array(
+			'dimensions' => '.wp-block-post-featured-image img',
 			'border' => '.wp-block-post-featured-image img, .wp-block-post-featured-image .block-editor-media-placeholder, .wp-block-post-featured-image .wp-block-post-featured-image__overlay',
 			'shadow' => '.wp-block-post-featured-image img, .wp-block-post-featured-image .components-placeholder',
 			'filter' => array(
@@ -6078,6 +6550,12 @@ return array(
 			'anchor' => true,
 			'reusable' => false,
 			'html' => false,
+			'background' => array(
+				'__experimentalSkipSerialization' => true,
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'color' => array(
 				'link' => true
 			),
@@ -6096,9 +6574,46 @@ return array(
 					'fontSize' => true
 				)
 			),
+			'shadow' => array(
+				'__experimentalSkipSerialization' => true
+			),
 			'interactivity' => array(
 				'clientNavigation' => true
+			),
+			'dimensions' => array(
+				'__experimentalSkipSerialization' => true,
+				'minHeight' => true,
+				'minWidth' => true
+			),
+			'spacing' => array(
+				'__experimentalSkipSerialization' => true,
+				'margin' => true,
+				'padding' => true,
+				'__experimentalDefaultControls' => array(
+					'margin' => false,
+					'padding' => false
+				)
+			),
+			'__experimentalBorder' => array(
+				'__experimentalSkipSerialization' => true,
+				'color' => true,
+				'radius' => true,
+				'style' => true,
+				'width' => true,
+				'__experimentalDefaultControls' => array(
+					'color' => false,
+					'radius' => false,
+					'style' => false,
+					'width' => false
+				)
 			)
+		),
+		'selectors' => array(
+			'background' => '.wp-block-post-navigation-link:not(:empty)',
+			'border' => '.wp-block-post-navigation-link:not(:empty)',
+			'dimensions' => '.wp-block-post-navigation-link:not(:empty)',
+			'shadow' => '.wp-block-post-navigation-link:not(:empty)',
+			'spacing' => '.wp-block-post-navigation-link:not(:empty)'
 		),
 		'style' => 'wp-block-post-navigation-link'
 	),
@@ -6120,7 +6635,8 @@ return array(
 			'templateSlug',
 			'previewPostType',
 			'enhancedPagination',
-			'postType'
+			'postType',
+			'postId'
 		),
 		'supports' => array(
 			'anchor' => true,
@@ -6131,9 +6647,20 @@ return array(
 				'full'
 			),
 			'layout' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
+				'heading' => true,
+				'button' => true,
 				'__experimentalDefaultControls' => array(
 					'background' => true,
 					'text' => true
@@ -6164,6 +6691,10 @@ return array(
 					'margin' => false
 				)
 			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
 			'interactivity' => array(
 				'clientNavigation' => true
 			),
@@ -6172,7 +6703,8 @@ return array(
 				'color' => true,
 				'width' => true,
 				'style' => true
-			)
+			),
+			'shadow' => true
 		),
 		'style' => 'wp-block-post-template',
 		'editorStyle' => 'wp-block-post-template-editor'
@@ -6214,6 +6746,11 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'html' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
@@ -6223,6 +6760,11 @@ return array(
 					'link' => true
 				)
 			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
+			'shadow' => true,
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true
@@ -6287,6 +6829,11 @@ return array(
 		),
 		'supports' => array(
 			'anchor' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'__experimentalDefaultControls' => array(
@@ -6294,7 +6841,12 @@ return array(
 					'text' => true
 				)
 			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
 			'html' => false,
+			'shadow' => true,
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true,
@@ -6379,6 +6931,15 @@ return array(
 				'full'
 			),
 			'html' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
@@ -6388,6 +6949,11 @@ return array(
 					'link' => true
 				)
 			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
+			'shadow' => true,
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true
@@ -6402,6 +6968,7 @@ return array(
 				'__experimentalTextTransform' => true,
 				'__experimentalTextDecoration' => true,
 				'__experimentalLetterSpacing' => true,
+				'fitText' => true,
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true
 				)
@@ -6443,13 +7010,24 @@ return array(
 		),
 		'supports' => array(
 			'anchor' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
+				'link' => true,
 				'__experimentalDefaultControls' => array(
 					'background' => true,
 					'text' => true
 				)
 			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
+			'shadow' => true,
 			'spacing' => array(
 				'padding' => true,
 				'margin' => true
@@ -6505,9 +7083,6 @@ return array(
 				'source' => 'rich-text',
 				'selector' => 'cite',
 				'role' => 'content'
-			),
-			'textAlign' => array(
-				'type' => 'string'
 			)
 		),
 		'supports' => array(
@@ -6521,8 +7096,10 @@ return array(
 			'background' => array(
 				'backgroundImage' => true,
 				'backgroundSize' => true,
+				'gradient' => true,
 				'__experimentalDefaultControls' => array(
-					'backgroundImage' => true
+					'backgroundImage' => true,
+					'gradient' => true
 				)
 			),
 			'color' => array(
@@ -6536,10 +7113,9 @@ return array(
 			),
 			'dimensions' => array(
 				'minHeight' => true,
-				'__experimentalDefaultControls' => array(
-					'minHeight' => false
-				)
+				'minWidth' => true
 			),
+			'shadow' => true,
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true
@@ -6547,12 +7123,15 @@ return array(
 			'typography' => array(
 				'fontSize' => true,
 				'lineHeight' => true,
+				'textAlign' => true,
+				'textIndent' => true,
 				'__experimentalFontFamily' => true,
 				'__experimentalFontWeight' => true,
 				'__experimentalFontStyle' => true,
 				'__experimentalTextTransform' => true,
 				'__experimentalTextDecoration' => true,
 				'__experimentalLetterSpacing' => true,
+				'__experimentalWritingMode' => true,
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true
 				)
@@ -6623,7 +7202,8 @@ return array(
 					),
 					'format' => array(
 						
-					)
+					),
+					'excludeCurrent' => null
 				)
 			),
 			'tagName' => array(
@@ -6639,7 +7219,8 @@ return array(
 			)
 		),
 		'usesContext' => array(
-			'templateSlug'
+			'templateSlug',
+			'postType'
 		),
 		'providesContext' => array(
 			'queryId' => 'queryId',
@@ -6655,6 +7236,9 @@ return array(
 			),
 			'html' => false,
 			'layout' => true,
+			'spacing' => array(
+				'blockGap' => true
+			),
 			'interactivity' => true
 		),
 		'editorStyle' => 'wp-block-query-editor'
@@ -6679,9 +7263,28 @@ return array(
 			'align' => true,
 			'reusable' => false,
 			'html' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
-				'link' => true
+				'link' => true,
+				'heading' => true,
+				'button' => true
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
+			'spacing' => array(
+				'padding' => true,
+				'margin' => true,
+				'__experimentalDefaultControls' => array(
+					'margin' => false,
+					'padding' => false
+				)
 			),
 			'typography' => array(
 				'fontSize' => true,
@@ -6698,8 +7301,16 @@ return array(
 			),
 			'interactivity' => array(
 				'clientNavigation' => true
-			)
-		)
+			),
+			'__experimentalBorder' => array(
+				'radius' => true,
+				'color' => true,
+				'width' => true,
+				'style' => true
+			),
+			'shadow' => true
+		),
+		'style' => 'wp-block-query-no-results'
 	),
 	'query-pagination' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
@@ -6740,6 +7351,9 @@ return array(
 			'align' => true,
 			'reusable' => false,
 			'html' => false,
+			'background' => array(
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
@@ -6748,6 +7362,11 @@ return array(
 					'text' => true,
 					'link' => true
 				)
+			),
+			'spacing' => array(
+				'padding' => true,
+				'margin' => true,
+				'blockGap' => true
 			),
 			'layout' => array(
 				'allowSwitching' => false,
@@ -6767,6 +7386,18 @@ return array(
 				'__experimentalLetterSpacing' => true,
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true
+				)
+			),
+			'__experimentalBorder' => array(
+				'color' => true,
+				'radius' => true,
+				'style' => true,
+				'width' => true,
+				'__experimentalDefaultControls' => array(
+					'color' => false,
+					'radius' => false,
+					'style' => false,
+					'width' => false
 				)
 			),
 			'interactivity' => array(
@@ -6789,7 +7420,8 @@ return array(
 		'textdomain' => 'default',
 		'attributes' => array(
 			'label' => array(
-				'type' => 'string'
+				'type' => 'string',
+				'role' => 'content'
 			)
 		),
 		'usesContext' => array(
@@ -6803,6 +7435,9 @@ return array(
 			'anchor' => true,
 			'reusable' => false,
 			'html' => false,
+			'background' => array(
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'text' => false,
@@ -6854,6 +7489,9 @@ return array(
 			'anchor' => true,
 			'reusable' => false,
 			'html' => false,
+			'background' => array(
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'text' => false,
@@ -6876,9 +7514,28 @@ return array(
 			),
 			'interactivity' => array(
 				'clientNavigation' => true
+			),
+			'spacing' => array(
+				'padding' => true,
+				'__experimentalDefaultControls' => array(
+					'padding' => true
+				)
+			),
+			'__experimentalBorder' => array(
+				'radius' => true,
+				'color' => true,
+				'width' => true,
+				'style' => true,
+				'__experimentalDefaultControls' => array(
+					'color' => true,
+					'radius' => true,
+					'style' => true,
+					'width' => true
+				)
 			)
 		),
-		'editorStyle' => 'wp-block-query-pagination-numbers-editor'
+		'editorStyle' => 'wp-block-query-pagination-numbers-editor',
+		'style' => 'wp-block-query-pagination-numbers'
 	),
 	'query-pagination-previous' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
@@ -6893,7 +7550,8 @@ return array(
 		'textdomain' => 'default',
 		'attributes' => array(
 			'label' => array(
-				'type' => 'string'
+				'type' => 'string',
+				'role' => 'content'
 			)
 		),
 		'usesContext' => array(
@@ -6907,6 +7565,9 @@ return array(
 			'anchor' => true,
 			'reusable' => false,
 			'html' => false,
+			'background' => array(
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'text' => false,
@@ -6975,6 +7636,9 @@ return array(
 				'full'
 			),
 			'html' => false,
+			'background' => array(
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'__experimentalDefaultControls' => array(
@@ -7046,9 +7710,18 @@ return array(
 				'full'
 			),
 			'html' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
 			),
 			'color' => array(
 				'gradients' => true,
@@ -7082,6 +7755,7 @@ return array(
 					'style' => true
 				)
 			),
+			'shadow' => true,
 			'interactivity' => array(
 				'clientNavigation' => true
 			)
@@ -7131,8 +7805,10 @@ return array(
 			'background' => array(
 				'backgroundImage' => true,
 				'backgroundSize' => true,
+				'gradient' => true,
 				'__experimentalDefaultControls' => array(
-					'backgroundImage' => true
+					'backgroundImage' => true,
+					'gradient' => true
 				)
 			),
 			'__experimentalBorder' => array(
@@ -7149,6 +7825,7 @@ return array(
 			),
 			'dimensions' => array(
 				'minHeight' => true,
+				'minWidth' => true,
 				'__experimentalDefaultControls' => array(
 					'minHeight' => false
 				)
@@ -7164,6 +7841,7 @@ return array(
 				'__experimentalTextTransform' => true,
 				'__experimentalTextDecoration' => true,
 				'__experimentalLetterSpacing' => true,
+				'__experimentalWritingMode' => true,
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true
 				)
@@ -7172,11 +7850,13 @@ return array(
 				'gradients' => true,
 				'heading' => true,
 				'link' => true,
+				'button' => true,
 				'__experimentalDefaultControls' => array(
 					'background' => true,
 					'text' => true
 				)
 			),
+			'shadow' => true,
 			'layout' => array(
 				'allowEditing' => false
 			),
@@ -7228,6 +7908,11 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'html' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'text' => true
@@ -7246,6 +7931,10 @@ return array(
 					'textDecoration' => true
 				)
 			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
 			'spacing' => array(
 				'margin' => array(
 					'top',
@@ -7259,11 +7948,13 @@ return array(
 			'__experimentalBorder' => array(
 				'color' => true,
 				'radius' => true,
+				'style' => true,
 				'width' => true,
 				'__experimentalDefaultControls' => array(
 					'width' => true
 				)
 			),
+			'shadow' => true,
 			'interactivity' => array(
 				'clientNavigation' => true
 			)
@@ -7345,6 +8036,16 @@ return array(
 					'margin' => false
 				)
 			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
+			'shadow' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'color' => array(
 				'background' => true,
 				'text' => true,
@@ -7403,6 +8104,10 @@ return array(
 				'default' => array(
 					
 				)
+			),
+			'tagName' => array(
+				'type' => 'string',
+				'default' => ''
 			)
 		),
 		'supports' => array(
@@ -7411,6 +8116,10 @@ return array(
 				'left',
 				'center',
 				'right'
+			),
+			'background' => array(
+				'gradient' => true,
+				'__experimentalSkipSerialization' => true
 			),
 			'color' => array(
 				'gradients' => true,
@@ -7439,6 +8148,7 @@ return array(
 			'__experimentalBorder' => array(
 				'color' => true,
 				'radius' => true,
+				'style' => true,
 				'width' => true,
 				'__experimentalSkipSerialization' => true,
 				'__experimentalDefaultControls' => array(
@@ -7447,8 +8157,17 @@ return array(
 					'width' => true
 				)
 			),
+			'shadow' => array(
+				'__experimentalSkipSerialization' => true
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true,
+				'__experimentalSkipSerialization' => true
+			),
 			'spacing' => array(
-				'margin' => true
+				'margin' => true,
+				'padding' => true
 			),
 			'html' => false
 		),
@@ -7456,7 +8175,10 @@ return array(
 		'style' => 'wp-block-search',
 		'selectors' => array(
 			'color' => '.wp-block-search .wp-block-search__button, .wp-block-search.wp-block-search__no-button .wp-block-search__input',
-			'border' => '.wp-block-search.wp-block-search__button-outside .wp-block-search__input, .wp-block-search.wp-block-search__button-outside .wp-block-search__button, .wp-block-search.wp-block-search__no-button .wp-block-search__input, .wp-block-search.wp-block-search__button-only .wp-block-search__input, .wp-block-search.wp-block-search__button-only .wp-block-search__button, .wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper'
+			'background' => '.wp-block-search .wp-block-search__button, .wp-block-search.wp-block-search__no-button .wp-block-search__input',
+			'border' => '.wp-block-search.wp-block-search__button-outside .wp-block-search__input, .wp-block-search.wp-block-search__button-outside .wp-block-search__button, .wp-block-search.wp-block-search__no-button .wp-block-search__input, .wp-block-search.wp-block-search__button-only .wp-block-search__input, .wp-block-search.wp-block-search__button-only .wp-block-search__button, .wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper',
+			'shadow' => '.wp-block-search.wp-block-search__button-outside .wp-block-search__input, .wp-block-search.wp-block-search__button-outside .wp-block-search__button, .wp-block-search.wp-block-search__no-button .wp-block-search__input, .wp-block-search.wp-block-search__button-only .wp-block-search__input, .wp-block-search.wp-block-search__button-only .wp-block-search__button, .wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper',
+			'dimensions' => '.wp-block-search .wp-block-search__inside-wrapper'
 		)
 	),
 	'separator' => array(
@@ -7677,6 +8399,11 @@ return array(
 				'full'
 			),
 			'html' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'__experimentalDefaultControls' => array(
@@ -7685,6 +8412,10 @@ return array(
 				)
 			),
 			'contentRole' => true,
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true,
@@ -7704,6 +8435,7 @@ return array(
 				'__experimentalFontWeight' => true,
 				'__experimentalLetterSpacing' => true,
 				'__experimentalWritingMode' => true,
+				'fitText' => true,
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true
 				)
@@ -7716,7 +8448,8 @@ return array(
 				'color' => true,
 				'width' => true,
 				'style' => true
-			)
+			),
+			'shadow' => true
 		),
 		'editorStyle' => 'wp-block-site-tagline-editor',
 		'style' => 'wp-block-site-tagline'
@@ -7767,6 +8500,11 @@ return array(
 				'full'
 			),
 			'html' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
@@ -7775,6 +8513,10 @@ return array(
 					'text' => true,
 					'link' => true
 				)
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
 			),
 			'spacing' => array(
 				'padding' => true,
@@ -7795,6 +8537,7 @@ return array(
 				'__experimentalFontWeight' => true,
 				'__experimentalLetterSpacing' => true,
 				'__experimentalWritingMode' => true,
+				'fitText' => true,
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true
 				)
@@ -7807,7 +8550,8 @@ return array(
 				'color' => true,
 				'width' => true,
 				'style' => true
-			)
+			),
+			'shadow' => true
 		),
 		'editorStyle' => 'wp-block-site-title-editor',
 		'style' => 'wp-block-site-title'
@@ -7927,6 +8671,9 @@ return array(
 					'type' => 'flex'
 				)
 			),
+			'background' => array(
+				'gradient' => true
+			),
 			'color' => array(
 				'enableContrastChecker' => false,
 				'background' => true,
@@ -7971,6 +8718,7 @@ return array(
 					'style' => true
 				)
 			),
+			'shadow' => true,
 			'contentRole' => true,
 			'listView' => true
 		),
@@ -8030,14 +8778,117 @@ return array(
 		'editorStyle' => 'wp-block-spacer-editor',
 		'style' => 'wp-block-spacer'
 	),
-	'tab' => array(
+	'tab-list' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
-		'__experimental' => true,
 		'apiVersion' => 3,
-		'name' => 'core/tab',
-		'title' => 'Tab',
+		'name' => 'core/tab-list',
+		'title' => 'Tab List',
+		'description' => 'Display the tab buttons for a tabbed interface.',
+		'category' => 'design',
+		'textdomain' => 'default',
+		'parent' => array(
+			'core/tabs'
+		),
+		'usesContext' => array(
+			'core/tabs-list'
+		),
+		'attributes' => array(
+			'tabs' => array(
+				'type' => 'array',
+				'source' => 'query',
+				'selector' => 'button',
+				'query' => array(
+					'label' => array(
+						'type' => 'rich-text',
+						'source' => 'rich-text',
+						'role' => 'content'
+					)
+				),
+				'default' => array(
+					
+				)
+			)
+		),
+		'supports' => array(
+			'html' => false,
+			'ariaLabel' => true,
+			'visibility' => false,
+			'lock' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalSkipSerialization' => true
+			),
+			'color' => array(
+				'background' => true,
+				'text' => true,
+				'__experimentalSkipSerialization' => true,
+				'__experimentalDefaultControls' => array(
+					'background' => true,
+					'text' => true
+				)
+			),
+			'typography' => array(
+				'fontSize' => true,
+				'lineHeight' => true,
+				'__experimentalFontFamily' => true,
+				'__experimentalFontWeight' => true,
+				'__experimentalTextTransform' => true,
+				'__experimentalLetterSpacing' => true
+			),
+			'__experimentalBorder' => array(
+				'color' => true,
+				'radius' => true,
+				'style' => true,
+				'width' => true,
+				'__experimentalSkipSerialization' => true
+			),
+			'layout' => array(
+				'default' => array(
+					'type' => 'flex',
+					'flexWrap' => 'wrap'
+				),
+				'allowVerticalAlignment' => false,
+				'allowOrientation' => false,
+				'allowWrap' => false
+			),
+			'spacing' => array(
+				'padding' => true,
+				'blockGap' => true,
+				'__experimentalSkipSerialization' => array(
+					'padding'
+				),
+				'__experimentalDefaultControls' => array(
+					'padding' => true,
+					'blockGap' => true
+				)
+			),
+			'shadow' => array(
+				'__experimentalSkipSerialization' => true
+			)
+		),
+		'selectors' => array(
+			'background' => '.wp-block-tab-list button',
+			'border' => '.wp-block-tab-list button',
+			'shadow' => '.wp-block-tab-list button',
+			'color' => array(
+				'background' => '.wp-block-tab-list button',
+				'text' => '.wp-block-tab-list button'
+			),
+			'spacing' => array(
+				'padding' => '.wp-block-tab-list button'
+			)
+		),
+		'style' => 'wp-block-tab-list',
+		'editorStyle' => 'wp-block-tab-list-editor'
+	),
+	'tab-panel' => array(
+		'$schema' => 'https://schemas.wp.org/trunk/block.json',
+		'apiVersion' => 3,
+		'name' => 'core/tab-panel',
+		'title' => 'Tab Panel',
 		'description' => 'Content for a tab in a tabbed interface.',
-		'version' => '1.0.0',
 		'category' => 'design',
 		'textdomain' => 'default',
 		'attributes' => array(
@@ -8047,19 +8898,28 @@ return array(
 			)
 		),
 		'parent' => array(
-			'core/tab-panel'
+			'core/tab-panels'
 		),
 		'usesContext' => array(
-			'core/tabs-activeTabIndex',
-			'core/tabs-editorActiveTabIndex',
 			'core/tabs-id'
 		),
 		'supports' => array(
 			'anchor' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'html' => false,
-			'reusable' => false,
 			'color' => array(
 				'background' => true,
+				'button' => true,
+				'heading' => true,
+				'link' => true,
 				'text' => true,
 				'__experimentalDefaultControls' => array(
 					'background' => true,
@@ -8067,88 +8927,92 @@ return array(
 				)
 			),
 			'layout' => true,
+			'shadow' => true,
 			'spacing' => array(
 				'blockGap' => true,
-				'padding' => true,
-				'margin' => false
+				'padding' => true
 			),
 			'typography' => array(
 				'fontSize' => true,
+				'lineHeight' => true,
 				'__experimentalFontFamily' => true,
+				'__experimentalFontWeight' => true,
+				'__experimentalFontStyle' => true,
+				'__experimentalTextTransform' => true,
+				'__experimentalTextDecoration' => true,
+				'__experimentalLetterSpacing' => true,
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true,
 					'__experimentalFontFamily' => true
 				)
 			),
-			'renaming' => true
+			'__experimentalBorder' => array(
+				'color' => true,
+				'radius' => true,
+				'style' => true,
+				'width' => true
+			),
+			'visibility' => false
 		),
 		'providesContext' => array(
 			'core/tab-label' => 'label'
 		),
-		'editorScript' => 'file:./index.js',
-		'style' => 'file:./style-index.css'
+		'style' => 'wp-block-tab-panel'
 	),
-	'tab-panel' => array(
+	'tab-panels' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
-		'__experimental' => true,
 		'apiVersion' => 3,
-		'name' => 'core/tab-panel',
-		'title' => 'Tab Panel',
+		'name' => 'core/tab-panels',
+		'title' => 'Tab Panels',
 		'description' => 'Container for tab panel content in a tabbed interface.',
-		'version' => '1.0.0',
 		'category' => 'design',
 		'textdomain' => 'default',
 		'parent' => array(
 			'core/tabs'
 		),
 		'allowedBlocks' => array(
-			'core/tab'
-		),
-		'attributes' => array(
-			
+			'core/tab-panel'
 		),
 		'supports' => array(
-			'anchor' => false,
 			'html' => false,
-			'reusable' => false,
+			'visibility' => false,
 			'lock' => false,
-			'dimensions' => array(
-				'aspectRatio' => false,
-				'height' => false,
-				'minHeight' => false,
-				'width' => false
-			),
 			'color' => array(
 				'background' => true,
 				'text' => true,
 				'heading' => true,
+				'button' => true,
 				'link' => true,
 				'__experimentalDefaultControls' => array(
 					'background' => true,
 					'text' => true
 				)
 			),
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
+			'shadow' => true,
 			'spacing' => array(
-				'blockGap' => false,
-				'padding' => true,
-				'margin' => true
+				'padding' => true
+			),
+			'dimensions' => array(
+				'minHeight' => true
 			),
 			'typography' => array(
 				'fontSize' => true,
-				'__experimentalFontFamily' => true
-			),
-			'layout' => array(
-				'default' => array(
-					'type' => 'flex',
-					'flexWrap' => 'nowrap',
-					'justifyContent' => 'stretch',
-					'orientation' => 'vertical'
-				),
-				'allowSwitching' => false,
-				'allowVerticalAlignment' => false,
-				'allowOrientation' => false,
-				'allowJustification' => true,
-				'allowSizingOnChildren' => false
+				'lineHeight' => true,
+				'__experimentalFontFamily' => true,
+				'__experimentalFontWeight' => true,
+				'__experimentalFontStyle' => true,
+				'__experimentalTextTransform' => true,
+				'__experimentalTextDecoration' => true,
+				'__experimentalLetterSpacing' => true
 			),
 			'__experimentalBorder' => array(
 				'radius' => true,
@@ -8156,9 +9020,7 @@ return array(
 				'width' => true,
 				'style' => true
 			)
-		),
-		'editorScript' => 'file:./index.js',
-		'style' => 'file:./style-index.css'
+		)
 	),
 	'table' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
@@ -8333,9 +9195,18 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'align' => true,
-			'color' => array(
+			'background' => array(
 				'__experimentalSkipSerialization' => true,
+				'gradient' => true
+			),
+			'color' => array(
+				'__experimentalSkipSerialization' => array(
+					'text',
+					'background',
+					'gradients'
+				),
 				'gradients' => true,
+				'link' => true,
 				'__experimentalDefaultControls' => array(
 					'background' => true,
 					'text' => true
@@ -8350,6 +9221,9 @@ return array(
 				)
 			),
 			'typography' => array(
+				'__experimentalSkipSerialization' => array(
+					'textAlign'
+				),
 				'fontSize' => true,
 				'lineHeight' => true,
 				'__experimentalFontFamily' => true,
@@ -8358,6 +9232,7 @@ return array(
 				'__experimentalLetterSpacing' => true,
 				'__experimentalTextTransform' => true,
 				'__experimentalTextDecoration' => true,
+				'textAlign' => true,
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true
 				)
@@ -8408,16 +9283,11 @@ return array(
 			'summary'
 		),
 		'textdomain' => 'default',
+		'usesContext' => array(
+			'postId',
+			'postType'
+		),
 		'attributes' => array(
-			'headings' => array(
-				'type' => 'array',
-				'items' => array(
-					'type' => 'object'
-				),
-				'default' => array(
-					
-				)
-			),
 			'onlyIncludeCurrentPage' => array(
 				'type' => 'boolean',
 				'default' => false
@@ -8434,12 +9304,18 @@ return array(
 			'anchor' => true,
 			'ariaLabel' => true,
 			'html' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'color' => array(
 				'text' => true,
 				'background' => true,
 				'gradients' => true,
 				'link' => true
 			),
+			'shadow' => true,
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true
@@ -8447,6 +9323,7 @@ return array(
 			'typography' => array(
 				'fontSize' => true,
 				'lineHeight' => true,
+				'textAlign' => true,
 				'__experimentalFontFamily' => true,
 				'__experimentalFontWeight' => true,
 				'__experimentalFontStyle' => true,
@@ -8477,17 +9354,15 @@ return array(
 	),
 	'tabs' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
-		'__experimental' => true,
 		'apiVersion' => 3,
 		'name' => 'core/tabs',
 		'title' => 'Tabs',
 		'description' => 'Display content in a tabbed interface to help users navigate detailed content with ease.',
-		'version' => '1.0.0',
 		'category' => 'design',
 		'textdomain' => 'default',
 		'allowedBlocks' => array(
-			'core/tabs-menu',
-			'core/tab-panel'
+			'core/tab-list',
+			'core/tab-panels'
 		),
 		'attributes' => array(
 			'activeTabIndex' => array(
@@ -8502,97 +9377,24 @@ return array(
 		'supports' => array(
 			'align' => true,
 			'anchor' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true
+				)
+			),
 			'color' => array(
 				'text' => true,
 				'background' => true,
+				'heading' => true,
+				'button' => true,
+				'link' => true,
 				'__experimentalDefaultControls' => array(
 					'text' => true,
 					'background' => true
 				)
-			),
-			'layout' => array(
-				'default' => array(
-					'type' => 'flex',
-					'flexWrap' => 'nowrap',
-					'justifyContent' => 'stretch',
-					'verticalAlignment' => 'stretch',
-					'orientation' => 'vertical'
-				),
-				'allowSwitching' => false,
-				'allowVerticalAlignment' => true,
-				'allowJustification' => true,
-				'allowOrientation' => true,
-				'allowSizingOnChildren' => true
-			),
-			'html' => false,
-			'interactivity' => true,
-			'spacing' => array(
-				'blockGap' => true,
-				'margin' => true,
-				'padding' => true
-			),
-			'typography' => array(
-				'fontSize' => true,
-				'__experimentalFontFamily' => true
-			),
-			'renaming' => true
-		),
-		'providesContext' => array(
-			'core/tabs-activeTabIndex' => 'activeTabIndex',
-			'core/tabs-editorActiveTabIndex' => 'editorActiveTabIndex'
-		),
-		'usesContext' => array(
-			'core/tabs-list',
-			'core/tabs-id'
-		),
-		'editorScript' => 'file:./index.js',
-		'editorStyle' => 'file:./index.css',
-		'style' => 'file:./style-index.css',
-		'viewScriptModule' => '@wordpress/block-library/tabs/view'
-	),
-	'tabs-menu' => array(
-		'$schema' => 'https://schemas.wp.org/trunk/block.json',
-		'__experimental' => true,
-		'apiVersion' => 3,
-		'name' => 'core/tabs-menu',
-		'title' => 'Tabs Menu',
-		'description' => 'Display the tab buttons for a tabbed interface.',
-		'version' => '1.0.0',
-		'category' => 'design',
-		'textdomain' => 'default',
-		'parent' => array(
-			'core/tabs'
-		),
-		'allowedBlocks' => array(
-			'core/tabs-menu-item'
-		),
-		'usesContext' => array(
-			'core/tabs-list'
-		),
-		'attributes' => array(
-			
-		),
-		'supports' => array(
-			'html' => false,
-			'reusable' => false,
-			'lock' => false,
-			'dimensions' => array(
-				'aspectRatio' => false,
-				'height' => false,
-				'minHeight' => false,
-				'width' => false
-			),
-			'color' => array(
-				'background' => true,
-				'text' => true,
-				'__experimentalDefaultControls' => array(
-					'background' => true,
-					'text' => true
-				)
-			),
-			'typography' => array(
-				'fontSize' => true,
-				'__experimentalFontFamily' => true
 			),
 			'__experimentalBorder' => array(
 				'color' => true,
@@ -8601,90 +9403,35 @@ return array(
 				'width' => true
 			),
 			'layout' => array(
-				'default' => array(
-					'type' => 'flex',
-					'flexWrap' => 'nowrap',
-					'orientation' => 'horizontal'
-				),
-				'allowSwitching' => false,
-				'allowVerticalAlignment' => true,
-				'allowJustification' => true,
-				'allowOrientation' => true
+				'allowEditing' => false
 			),
+			'html' => false,
+			'interactivity' => true,
 			'spacing' => array(
-				'padding' => true,
-				'margin' => true,
 				'blockGap' => true,
-				'__experimentalDefaultControls' => array(
-					'padding' => true,
-					'margin' => true,
-					'blockGap' => true
-				)
+				'margin' => true,
+				'padding' => true
+			),
+			'dimensions' => array(
+				'minWidth' => true
+			),
+			'shadow' => true,
+			'typography' => array(
+				'fontSize' => true,
+				'lineHeight' => true,
+				'__experimentalFontFamily' => true,
+				'__experimentalFontWeight' => true,
+				'__experimentalFontStyle' => true,
+				'__experimentalTextTransform' => true,
+				'__experimentalLetterSpacing' => true
 			)
-		),
-		'editorScript' => 'file:./index.js',
-		'editorStyle' => 'file:./editor.css'
-	),
-	'tabs-menu-item' => array(
-		'$schema' => 'https://schemas.wp.org/trunk/block.json',
-		'__experimental' => true,
-		'apiVersion' => 3,
-		'name' => 'core/tabs-menu-item',
-		'title' => 'Tab Menu Item',
-		'description' => 'A single tab button in the tabs menu.',
-		'version' => '1.0.0',
-		'category' => 'design',
-		'textdomain' => 'default',
-		'parent' => array(
-			'core/tabs-menu'
 		),
 		'usesContext' => array(
 			'core/tabs-list',
-			'core/tabs-activeTabIndex',
-			'core/tabs-editorActiveTabIndex',
-			'core/tabs-menu-item-index',
-			'core/tabs-menu-item-id',
-			'core/tabs-menu-item-label'
+			'core/tabs-id'
 		),
-		'supports' => array(
-			'html' => false,
-			'reusable' => false,
-			'lock' => false,
-			'color' => array(
-				'background' => true,
-				'text' => true,
-				'__experimentalDefaultControls' => array(
-					'background' => true,
-					'text' => true
-				)
-			),
-			'typography' => array(
-				'fontSize' => true,
-				'__experimentalFontFamily' => true,
-				'textAlign' => true,
-				'__experimentalDefaultControls' => array(
-					'fontSize' => true
-				)
-			),
-			'spacing' => array(
-				'padding' => true,
-				'__experimentalDefaultControls' => array(
-					'padding' => true
-				)
-			),
-			'__experimentalBorder' => array(
-				'radius' => true,
-				'color' => true,
-				'width' => true,
-				'style' => true
-			),
-			'layout' => array(
-				'allowEditing' => false
-			)
-		),
-		'editorScript' => 'file:./index.js',
-		'editorStyle' => 'file:./editor.css',
-		'style' => 'file:./style-index.css'
+		'style' => 'wp-block-tabs',
+		'viewScriptModule' => '@wordpress/block-library/tabs/view'
 	),
 	'tag-cloud' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
@@ -8731,8 +9478,27 @@ return array(
 		),
 		'supports' => array(
 			'anchor' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'html' => false,
 			'align' => true,
+			'color' => array(
+				'background' => true,
+				'link' => true,
+				'text' => false,
+				'__experimentalDefaultControls' => array(
+					'background' => true,
+					'link' => true
+				)
+			),
+			'shadow' => true,
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true
@@ -8805,7 +9571,8 @@ return array(
 		'textdomain' => 'default',
 		'usesContext' => array(
 			'termId',
-			'taxonomy'
+			'taxonomy',
+			'termData'
 		),
 		'attributes' => array(
 			'bracketType' => array(
@@ -8823,6 +9590,11 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'html' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'__experimentalDefaultControls' => array(
@@ -8830,12 +9602,19 @@ return array(
 					'text' => true
 				)
 			),
+			'shadow' => true,
 			'spacing' => array(
+				'margin' => true,
 				'padding' => true
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
 			),
 			'typography' => array(
 				'fontSize' => true,
 				'lineHeight' => true,
+				'textAlign' => true,
 				'__experimentalFontFamily' => true,
 				'__experimentalFontWeight' => true,
 				'__experimentalFontStyle' => true,
@@ -8882,12 +9661,24 @@ return array(
 				'full'
 			),
 			'html' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true
+				)
+			),
 			'color' => array(
 				'link' => true,
 				'__experimentalDefaultControls' => array(
 					'background' => true,
 					'text' => true
 				)
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
 			),
 			'spacing' => array(
 				'padding' => true,
@@ -8910,6 +9701,7 @@ return array(
 			'interactivity' => array(
 				'clientNavigation' => true
 			),
+			'shadow' => true,
 			'__experimentalBorder' => array(
 				'radius' => true,
 				'color' => true,
@@ -8940,9 +9732,6 @@ return array(
 			'taxonomy'
 		),
 		'attributes' => array(
-			'textAlign' => array(
-				'type' => 'string'
-			),
 			'level' => array(
 				'type' => 'number',
 				'default' => 0
@@ -8962,6 +9751,15 @@ return array(
 				'full'
 			),
 			'html' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
@@ -8971,12 +9769,19 @@ return array(
 					'link' => true
 				)
 			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
+			'shadow' => true,
 			'spacing' => array(
-				'padding' => true
+				'padding' => true,
+				'margin' => true
 			),
 			'typography' => array(
 				'fontSize' => true,
 				'lineHeight' => true,
+				'textAlign' => true,
 				'__experimentalFontFamily' => true,
 				'__experimentalFontWeight' => true,
 				'__experimentalFontStyle' => true,
@@ -9027,9 +9832,19 @@ return array(
 				'full'
 			),
 			'layout' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true
+				)
+			),
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
+				'heading' => true,
+				'button' => true,
 				'__experimentalDefaultControls' => array(
 					'background' => true,
 					'text' => true
@@ -9047,6 +9862,10 @@ return array(
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true
 				)
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
 			),
 			'spacing' => array(
 				'margin' => true,
@@ -9068,7 +9887,8 @@ return array(
 				'color' => true,
 				'width' => true,
 				'style' => true
-			)
+			),
+			'shadow' => true
 		),
 		'style' => 'wp-block-term-template',
 		'editorStyle' => 'wp-block-term-template-editor'
@@ -9123,6 +9943,11 @@ return array(
 			),
 			'html' => false,
 			'layout' => true,
+			'spacing' => array(
+				'padding' => true,
+				'margin' => true,
+				'blockGap' => true
+			),
 			'interactivity' => true
 		)
 	),
@@ -9202,8 +10027,10 @@ return array(
 			'background' => array(
 				'backgroundImage' => true,
 				'backgroundSize' => true,
+				'gradient' => true,
 				'__experimentalDefaultControls' => array(
-					'backgroundImage' => true
+					'backgroundImage' => true,
+					'gradient' => true
 				)
 			),
 			'color' => array(
@@ -9216,6 +10043,7 @@ return array(
 			),
 			'dimensions' => array(
 				'minHeight' => true,
+				'minWidth' => true,
 				'__experimentalDefaultControls' => array(
 					'minHeight' => false
 				)
@@ -9225,16 +10053,20 @@ return array(
 				'__experimentalFontFamily' => true,
 				'lineHeight' => true,
 				'textAlign' => true,
+				'textColumns' => true,
+				'textIndent' => true,
 				'__experimentalFontStyle' => true,
 				'__experimentalFontWeight' => true,
 				'__experimentalLetterSpacing' => true,
 				'__experimentalTextTransform' => true,
 				'__experimentalTextDecoration' => true,
 				'__experimentalWritingMode' => true,
+				'fitText' => true,
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true
 				)
 			),
+			'shadow' => true,
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true,
@@ -9327,6 +10159,12 @@ return array(
 				'attribute' => 'src',
 				'role' => 'content'
 			),
+			'width' => array(
+				'type' => 'number'
+			),
+			'height' => array(
+				'type' => 'number'
+			),
 			'playsInline' => array(
 				'type' => 'boolean',
 				'source' => 'attribute',
@@ -9347,6 +10185,9 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'align' => true,
+			'filter' => array(
+				'duotone' => true
+			),
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true,
@@ -9356,7 +10197,23 @@ return array(
 				)
 			),
 			'interactivity' => array(
-				'clientNavigation' => true
+				'clientNavigation' => true,
+				'interactive' => true
+			),
+			'shadow' => array(
+				'__experimentalSkipSerialization' => true
+			),
+			'dimensions' => array(
+				'minWidth' => true,
+				'minHeight' => true,
+				'__experimentalSkipSerialization' => true
+			)
+		),
+		'selectors' => array(
+			'dimensions' => '.wp-block-video video',
+			'shadow' => '.wp-block-video video',
+			'filter' => array(
+				'duotone' => '.wp-block-video video'
 			)
 		),
 		'editorStyle' => 'wp-block-video-editor',

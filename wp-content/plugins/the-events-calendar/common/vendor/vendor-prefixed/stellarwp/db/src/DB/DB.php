@@ -46,6 +46,16 @@ class DB {
 	private static $provider;
 
 	/**
+	 * Current transaction nesting depth.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @var int
+	 */
+	private static $transactionDepth = 0;
+
+
+	/**
 	 * Initializes the service provider.
 	 *
 	 * @since 1.0.0
@@ -61,9 +71,21 @@ class DB {
 	}
 
 	/**
+	 * Returns the current transaction nesting depth.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @return int
+	 */
+	public static function transactionLevel() {
+		return self::$transactionDepth;
+	}
+
+	/**
 	 * Runs the dbDelta function and returns a WP_Error with any errors that occurred during the process
 	 *
 	 * @since 1.0.0
+	 * @since 1.3.1 Loads wp-admin/includes/upgrade.php here instead of before every query.
 	 *
 	 * @param $delta
 	 *
@@ -75,6 +97,12 @@ class DB {
 	public static function delta( $delta ) {
 		return self::runQueryWithErrorChecking(
 			function () use ( $delta ) {
+				/*
+				 * Loaded only here: on multisite, upgrade.php pulls in wp-admin/includes/ms.php, and a later
+				 * plain require of ms.php by other code fatals with "Cannot redeclare check_upload_size()".
+				 */
+				require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
 				return dbDelta( $delta );
 			}
 		);
@@ -211,39 +239,72 @@ class DB {
 	}
 
 	/**
-	 * Manually starts a transaction
+	 * Manually starts a transaction.
+	 *
+	 * Nested calls create savepoints instead of starting a new transaction,
+	 * preventing MySQL's implicit commit behavior.
 	 *
 	 * @since 1.0.0
+	 * @since 1.3.0 Added savepoint support for nested transactions.
 	 *
 	 * @return void
 	 */
 	public static function beginTransaction() {
 		global $wpdb;
-		$wpdb->query( 'START TRANSACTION' );
+
+		if ( self::$transactionDepth === 0 ) {
+			$wpdb->query( 'START TRANSACTION' );
+		} else {
+			$wpdb->query( 'SAVEPOINT sp_' . self::$transactionDepth );
+		}
+
+		self::$transactionDepth++;
 	}
 
 	/**
-	 * Manually rolls back a transaction
+	 * Manually rolls back a transaction.
+	 *
+	 * When nested, rolls back to the current savepoint. When at the outermost
+	 * level, issues a real ROLLBACK.
 	 *
 	 * @since 1.0.0
+	 * @since 1.3.0 Added savepoint support for nested transactions.
 	 *
 	 * @return void
 	 */
 	public static function rollback() {
 		global $wpdb;
-		$wpdb->query( 'ROLLBACK' );
+
+		self::$transactionDepth = max( 0, self::$transactionDepth - 1 );
+
+		if ( self::$transactionDepth === 0 ) {
+			$wpdb->query( 'ROLLBACK' );
+		} else {
+			$wpdb->query( 'ROLLBACK TO SAVEPOINT sp_' . self::$transactionDepth );
+		}
 	}
 
 	/**
-	 * Manually commits a transaction
+	 * Manually commits a transaction.
+	 *
+	 * When nested, releases the current savepoint. When at the outermost
+	 * level, issues a real COMMIT.
 	 *
 	 * @since 1.0.0
+	 * @since 1.3.0 Added savepoint support for nested transactions.
 	 *
 	 * @return void
 	 */
 	public static function commit() {
 		global $wpdb;
-		$wpdb->query( 'COMMIT' );
+
+		self::$transactionDepth = max( 0, self::$transactionDepth - 1 );
+
+		if ( self::$transactionDepth === 0 ) {
+			$wpdb->query( 'COMMIT' );
+		} else {
+			$wpdb->query( 'RELEASE SAVEPOINT sp_' . self::$transactionDepth );
+		}
 	}
 
 	/**
@@ -271,7 +332,6 @@ class DB {
 	 */
 	private static function runQueryWithErrorChecking( $queryCaller ) {
 		global $wpdb, $EZSQL_ERROR;
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 		$errorCount    = is_array( $EZSQL_ERROR ) ? count( $EZSQL_ERROR ) : 0;
 		$hasShowErrors = $wpdb->hide_errors();
@@ -329,7 +389,7 @@ class DB {
 	/**
 	 * Get all the results from a query in batches.
 	 *
-	 * @since TBD
+	 * @since 1.1.1
 	 *
 	 * @param string  $query      The SQL query.
 	 * @param int     $batch_size The number of results to return in each batch.
@@ -398,7 +458,7 @@ class DB {
 	 *
 	 * This method should be used to run an unbounded query in batches.
 	 *
-	 * @since TBD
+	 * @since 1.1.1
 	 *
 	 * @param string|null $query      The SQL query.
 	 * @param string      $output     The required return type. One of OBJECT, ARRAY_A, ARRAY_N.
@@ -406,7 +466,7 @@ class DB {
 	 *
 	 * @return Generator<array|object|null> A generator to get all the results of the query.
 	 */
-	public static function generate_results( string $query = null, string $output = OBJECT, int $batch_size = 20 ): Generator {
+	public static function generate_results( ?string $query = null, string $output = OBJECT, int $batch_size = 20 ): Generator {
 		yield from self::run_batched_query( $query, $batch_size, static function ( string $run_query ) use ( $output ) {
 			return self::get_results( $run_query, $output );
 		} );
@@ -415,7 +475,7 @@ class DB {
 	/**
 	 * Get all the values in a column from a query in batches.
 	 *
-	 * @since TBD
+	 * @since 1.1.1
 	 *
 	 * @param string|null $query      The SQL query.
 	 * @param int         $x          The column number to return.
@@ -423,7 +483,7 @@ class DB {
 	 *
 	 * @return Generator<mixed> The values of the column.
 	 */
-	public function generate_col( string $query = null, int $x = 0, int $batch_size = 50 ): Generator {
+	public function generate_col( ?string $query = null, int $x = 0, int $batch_size = 50 ): Generator {
 		yield from self::run_batched_query( $query, $batch_size, static function ( string $run_query ) use ( $x ) {
 			return self::get_col( $run_query, $x );
 		} );

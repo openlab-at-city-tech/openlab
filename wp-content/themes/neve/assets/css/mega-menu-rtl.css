@@ -63,7 +63,7 @@
     pointer-events: none;
   }
   .header--row .nv-nav-wrap .primary-menu-ul .neve-mega-menu:hover > .sub-menu,
-  .header--row .nv-nav-wrap .primary-menu-ul .neve-mega-menu:focus > .sub-menu {
+  .header--row .nv-nav-wrap .primary-menu-ul .neve-mega-menu > .sub-menu.dropdown-open {
     display: flex;
     opacity: 1;
     visibility: visible;
@@ -73,7 +73,7 @@
     position: unset;
   }
   .header--row .nv-nav-wrap .primary-menu-ul .neve-mega-menu .neve-mm-col > .sub-menu {
-    visibility: visible;
+    visibility: inherit;
     position: relative;
     right: initial;
     left: initial;

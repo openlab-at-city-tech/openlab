@@ -147,6 +147,9 @@ class TRP_Failed_Translations_Cleanup {
             $result['error'] = $wpdb->last_error !== '' ? $wpdb->last_error : 'Query returned false for table: ' . $table;
         } else {
             $result['affected_rows'] = (int) $wpdb->rows_affected;
+            if ( $result['affected_rows'] > 0 && strpos( $table, $wpdb->prefix . 'trp_dictionary_' ) === 0 ) {
+                TRP_Dynamic_Cache::invalidate();
+            }
             if ( $result['affected_rows'] === 0 ) {
                 $result['status'] = 'completed';
             }

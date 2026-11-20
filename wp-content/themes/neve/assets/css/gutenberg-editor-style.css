@@ -22,6 +22,7 @@
   line-height: var(--btnlineheight, 1.6);
   letter-spacing: var(--btnletterspacing, var(--bodyletterspacing));
   text-transform: var(--btntexttransform, none);
+  box-shadow: var(--primarybtnshadow, none);
 }
 
 .editor-styles-wrapper .wp-block-button.is-style-primary .wp-block-button__link:hover {
@@ -72,6 +73,7 @@
 .editor-styles-wrapper {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: var(--bodyfontfamily);
 }
 .editor-styles-wrapper, .editor-styles-wrapper > *:not(.block-canvas-cover) {
   background-color: var(--nv-site-bg);
@@ -142,7 +144,7 @@
 .editor-styles-wrapper .has-nv-c-2-background-color {
   background-color: var(--nv-c-2) !important;
 }
-.editor-styles-wrapper main, body .editor-styles-wrapper, body .editor-styles-wrapper p {
+.editor-styles-wrapper main, body .editor-styles-wrapper, .editor-styles-wrapper:is(body), body .editor-styles-wrapper p {
   color: var(--nv-text-color);
   font-size: var(--bodyfontsize);
   line-height: var(--bodylineheight);
@@ -182,62 +184,106 @@
   margin-bottom: 30px;
   margin-top: 0;
 }
-.editor-styles-wrapper h1.wp-block, .editor-styles-wrapper h1,
-.editor-styles-wrapper h2.wp-block,
-.editor-styles-wrapper h2,
-.editor-styles-wrapper h3.wp-block,
-.editor-styles-wrapper h3,
-.editor-styles-wrapper h4.wp-block,
-.editor-styles-wrapper h4,
-.editor-styles-wrapper h5.wp-block,
-.editor-styles-wrapper h5,
-.editor-styles-wrapper h6.wp-block,
-.editor-styles-wrapper h6 {
+html :where(.editor-styles-wrapper) h1,
+html :where(.editor-styles-wrapper) h2,
+html :where(.editor-styles-wrapper) h3,
+html :where(.editor-styles-wrapper) h4,
+html :where(.editor-styles-wrapper) h5,
+html :where(.editor-styles-wrapper) h6,
+.branch-5-5 .editor-styles-wrapper h1,
+.branch-5-5 .editor-styles-wrapper h2,
+.branch-5-5 .editor-styles-wrapper h3,
+.branch-5-5 .editor-styles-wrapper h4,
+.branch-5-5 .editor-styles-wrapper h5,
+.branch-5-5 .editor-styles-wrapper h6,
+.branch-5-6 .editor-styles-wrapper h1,
+.branch-5-6 .editor-styles-wrapper h2,
+.branch-5-6 .editor-styles-wrapper h3,
+.branch-5-6 .editor-styles-wrapper h4,
+.branch-5-6 .editor-styles-wrapper h5,
+.branch-5-6 .editor-styles-wrapper h6,
+.branch-5-7 .editor-styles-wrapper h1,
+.branch-5-7 .editor-styles-wrapper h2,
+.branch-5-7 .editor-styles-wrapper h3,
+.branch-5-7 .editor-styles-wrapper h4,
+.branch-5-7 .editor-styles-wrapper h5,
+.branch-5-7 .editor-styles-wrapper h6,
+.branch-5-8 .editor-styles-wrapper h1,
+.branch-5-8 .editor-styles-wrapper h2,
+.branch-5-8 .editor-styles-wrapper h3,
+.branch-5-8 .editor-styles-wrapper h4,
+.branch-5-8 .editor-styles-wrapper h5,
+.branch-5-8 .editor-styles-wrapper h6 {
   font-family: var(--headingsfontfamily, var(--bodyfontfamily));
   color: var(--headingcolor, inherit);
 }
-.editor-styles-wrapper h1.wp-block, .editor-styles-wrapper h1 {
+html :where(.editor-styles-wrapper) h1,
+.branch-5-5 .editor-styles-wrapper h1,
+.branch-5-6 .editor-styles-wrapper h1,
+.branch-5-7 .editor-styles-wrapper h1,
+.branch-5-8 .editor-styles-wrapper h1 {
   font-size: var(--h1fontsize);
   font-weight: var(--h1fontweight);
   line-height: var(--h1lineheight);
   letter-spacing: var(--h1letterspacing);
   text-transform: var(--h1texttransform);
 }
-.editor-styles-wrapper h2.wp-block, .editor-styles-wrapper h2 {
+html :where(.editor-styles-wrapper) h2,
+.branch-5-5 .editor-styles-wrapper h2,
+.branch-5-6 .editor-styles-wrapper h2,
+.branch-5-7 .editor-styles-wrapper h2,
+.branch-5-8 .editor-styles-wrapper h2 {
   font-size: var(--h2fontsize);
   font-weight: var(--h2fontweight);
   line-height: var(--h2lineheight);
   letter-spacing: var(--h2letterspacing);
   text-transform: var(--h2texttransform);
 }
-.editor-styles-wrapper h3.wp-block, .editor-styles-wrapper h3 {
+html :where(.editor-styles-wrapper) h3,
+.branch-5-5 .editor-styles-wrapper h3,
+.branch-5-6 .editor-styles-wrapper h3,
+.branch-5-7 .editor-styles-wrapper h3,
+.branch-5-8 .editor-styles-wrapper h3 {
   font-size: var(--h3fontsize);
   font-weight: var(--h3fontweight);
   line-height: var(--h3lineheight);
   letter-spacing: var(--h3letterspacing);
   text-transform: var(--h3texttransform);
 }
-.editor-styles-wrapper h4.wp-block, .editor-styles-wrapper h4 {
+html :where(.editor-styles-wrapper) h4,
+.branch-5-5 .editor-styles-wrapper h4,
+.branch-5-6 .editor-styles-wrapper h4,
+.branch-5-7 .editor-styles-wrapper h4,
+.branch-5-8 .editor-styles-wrapper h4 {
   font-size: var(--h4fontsize);
   font-weight: var(--h4fontweight);
   line-height: var(--h4lineheight);
   letter-spacing: var(--h4letterspacing);
   text-transform: var(--h4texttransform);
 }
-.editor-styles-wrapper h5.wp-block, .editor-styles-wrapper h5 {
+html :where(.editor-styles-wrapper) h5,
+.branch-5-5 .editor-styles-wrapper h5,
+.branch-5-6 .editor-styles-wrapper h5,
+.branch-5-7 .editor-styles-wrapper h5,
+.branch-5-8 .editor-styles-wrapper h5 {
   font-size: var(--h5fontsize);
   font-weight: var(--h5fontweight);
   line-height: var(--h5lineheight);
   letter-spacing: var(--h5letterspacing);
   text-transform: var(--h5texttransform);
 }
-.editor-styles-wrapper h6.wp-block, .editor-styles-wrapper h6 {
+html :where(.editor-styles-wrapper) h6,
+.branch-5-5 .editor-styles-wrapper h6,
+.branch-5-6 .editor-styles-wrapper h6,
+.branch-5-7 .editor-styles-wrapper h6,
+.branch-5-8 .editor-styles-wrapper h6 {
   font-size: var(--h6fontsize);
   font-weight: var(--h6fontweight);
   line-height: var(--h6lineheight);
   letter-spacing: var(--h6letterspacing);
   text-transform: var(--h6texttransform);
 }
+
 .editor-styles-wrapper .editor-post-title__block .editor-post-title__input {
   color: var(--nv-text-color);
   font-size: var(--h1fontsize);
@@ -250,6 +296,7 @@
 .editor-styles-wrapper ol {
   padding-left: 20px;
   margin: 30px 0;
+  font-family: var(--bodyfontfamily);
 }
 .editor-styles-wrapper ul li,
 .editor-styles-wrapper ol li {
@@ -314,6 +361,7 @@
 .editor-styles-wrapper th,
 .editor-styles-wrapper td {
   border: 0;
+  font-family: var(--bodyfontfamily);
 }
 .editor-styles-wrapper th:not([class*=has-text-align]),
 .editor-styles-wrapper td:not([class*=has-text-align]) {
@@ -371,13 +419,17 @@
   border: 0;
   background: transparent;
 }
-.editor-styles-wrapper a:not(.wp-block-button__link) {
+html :where(.editor-styles-wrapper) a:where(:not(.wp-block-button__link)) {
   color: var(--nv-primary-accent);
 }
-.editor-styles-wrapper a:not(.wp-block-button__link):hover {
+html :where(.editor-styles-wrapper) a:where(:not(.wp-block-button__link)):focus, html :where(.editor-styles-wrapper) a:where(:not(.wp-block-button__link)):active {
+  color: var(--nv-primary-accent);
+}
+html :where(.editor-styles-wrapper) a:where(:not(.wp-block-button__link)):hover {
   color: var(--nv-secondary-accent);
   text-decoration: none;
 }
+
 .editor-styles-wrapper .wp-block-code {
   border: 0;
   border-radius: 0;

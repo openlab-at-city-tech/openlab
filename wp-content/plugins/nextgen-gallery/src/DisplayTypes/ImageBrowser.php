@@ -92,9 +92,9 @@ class ImageBrowser extends ParentController {
 		// 'show' is set when using the imagebrowser as an alternate view to a thumbnail or slideshow for which the
 		// basic-gallery module will rewrite the show parameter into existence as long as 'image' is set. We remove
 		// 'show' here so navigation appears fluid.
-		$current_url = $application->get_routed_url();
-		if ( $router->get_parameter( 'ajax_pagination_referrer' ) ) {
-			$current_url = $router->get_parameter( 'ajax_pagination_referrer' );
+		$current_url = $this->get_pagination_referrer();
+		if ( ! $current_url ) {
+			$current_url = $application->get_routed_url();
 		}
 
 		$prev_image_link = $application->set_parameter_value(

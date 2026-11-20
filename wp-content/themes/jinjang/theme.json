@@ -448,12 +448,14 @@
 				"color": {
 					"text": "var(--wp--preset--color--base)"
 				},
-				"css": ".wp-block-navigation:not(.has-background) .wp-block-navigation__submenu-container {border-color:var(--wp--preset--color--base);} :where(.wp-block-navigation .wp-block-navigation__submenu-container .wp-block-navigation-item a:not(.wp-element-button)), :where(.wp-block-navigation .wp-block-navigation__submenu-container .wp-block-navigation-submenu a:not(.wp-element-button)), :where(.wp-block-navigation .wp-block-navigation__submenu-container .wp-block-navigation-submenu button.wp-block-navigation-item__content), :where(.wp-block-navigation .wp-block-navigation__submenu-container .wp-block-pages-list__item button.wp-block-navigation-item__content) {padding:0.5em;} .wp-block-navigation:not(.has-background) .wp-block-navigation__submenu-container {border-color:var(--wp--preset--color--contrast);} .wp-block-navigation-item__label{display:block;}",
 				"elements": {
 					"link": {
 						":hover": {
 							"color": {
 								"text": "var(--wp--preset--color--base)"
+							},
+							"typography": {
+								"textDecoration": "underline"
 							}
 						},
 						"color": {
@@ -474,20 +476,6 @@
 					"lineHeight": "0.8",
 					"textDecoration": "none",
 					"textTransform": "uppercase"
-				}
-			},
-			"core/page-list": {
-				"elements": {
-					"link": {
-						":hover": {
-							"typography": {
-								"textDecoration": "underline"
-							}
-						},
-						"typography": {
-							"textDecoration": "none"
-						}
-					}
 				}
 			},
 			"core/paragraph": {
@@ -843,6 +831,7 @@
 			"background": "var(--wp--preset--color--base)",
 			"text": "var(--wp--preset--color--contrast)"
 		},
+		"css": ".wp-block-navigation .has-child .wp-block-navigation__submenu-container >.wp-block-navigation-item >.wp-block-navigation-item__content{padding:0.25em;}",
 		"elements": {
 			"button": {
 				":active": {
@@ -957,10 +946,10 @@
 		"spacing": {
 			"blockGap": "var(--wp--preset--spacing--50)",
 			"padding": {
-				"bottom": "0",
+				"bottom": "0px",
 				"left": "var(--wp--preset--spacing--70)",
 				"right": "var(--wp--preset--spacing--70)",
-				"top": "0"
+				"top": "0px"
 			}
 		},
 		"typography": {

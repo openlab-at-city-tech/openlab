@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
 /**
  * A list of themes. For now they will be sorted outside this file,
@@ -12,7 +15,7 @@ return array(
         'type' => 'free',
         'supports' => array('flex'),
         'tags' => array(),
-        'description' => __('This is the default MetaSlider theme.', 'ml-slider')
+        'description' => __('This is the default MetaSlider Slideshow theme.', 'ml-slider')
     ),
     'bitono' => array(
         'folder' => 'bitono',

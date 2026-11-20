@@ -290,6 +290,11 @@ final class Shortcodes_Ultimate_Admin_Settings extends Shortcodes_Ultimate_Admin
 			return;
 		}
 
+		if (!su_fs()->can_use_premium_code() && !su_has_active_addons()) {
+			wp_enqueue_script('plugin-install');
+			add_thickbox();
+		}
+
 		if (function_exists('wp_enqueue_code_editor')) {
 			wp_enqueue_code_editor(array('type' => 'text/css'));
 		}

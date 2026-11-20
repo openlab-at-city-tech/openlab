@@ -51,6 +51,18 @@
 		 * Private methods
 		 */
 
+		// SECURITY (#1246): href is read from the clicked link (any a > img under the "all
+		// images" contexts, so content links too) and concatenated into double-quoted
+		// attributes of the swf and iframe markup. Entity-encode it so a quote cannot end
+		// the attribute; the browser decodes the entities, so the loaded URL is unchanged.
+		escAttr = function (value) {
+			return String(value)
+				.replace(/&/g, '&amp;')
+				.replace(/"/g, '&quot;')
+				.replace(/'/g, '&#39;')
+				.replace(/</g, '&lt;')
+				.replace(/>/g, '&gt;');
+		},
 		_abort = function () {
 			loading.hide();
 
@@ -155,6 +167,16 @@
 				}
 			}
 
+			function isSameOriginHttpUrl(value) {
+				try {
+					var u = new URL(value, document.baseURI);
+					var scheme = u.protocol.toLowerCase();
+					return (scheme === 'http:' || scheme === 'https:') && u.origin === window.location.origin;
+				} catch (e) {
+					return false;
+				}
+			}
+
 			function sanitizeTitle(title) {
 				const parser = new DOMParser();
 				const doc = parser.parseFromString(title, 'text/html');
@@ -184,7 +206,10 @@
 
 			href = selectedOpts.href || (obj.nodeName ? $(obj).attr('href') : obj.href) || null;
 
-			if (/^(?:javascript)/i.test(href) || href == '#') {
+			// SECURITY (#1246): a prefix regex missed " javascript:" (leading whitespace or
+			// control characters), which then reached the iframe src. Parse the scheme with
+			// isSafeUrl() instead: only http/https (and mailto) links are opened.
+			if (href == '#' || (href && !isSafeUrl(href, false))) {
 				href = null;
 			}
 
@@ -314,7 +339,7 @@
 						'" height="' +
 						selectedOpts.height +
 						'"><param name="movie" value="' +
-						href +
+						escAttr(href) +
 						'"></param>';
 					emb = '';
 
@@ -325,7 +350,7 @@
 
 					str +=
 						'<embed src="' +
-						href +
+						escAttr(href) +
 						'" type="application/x-shockwave-flash" width="' +
 						selectedOpts.width +
 						'" height="' +
@@ -342,6 +367,17 @@
 				case 'ajax':
 					busy = false;
 
+					// SECURITY (#1246): the response below is inserted with tmp.html(), so its
+					// inline handlers and scripts run in this page's origin. The "Try to apply
+					// to all images" context makes any a > img a trigger, so only same-origin
+					// http/https URLs may be loaded; any other link opens as a plain link.
+					if (!isSameOriginHttpUrl(href)) {
+						if (isSafeUrl(href, false)) {
+							window.location.assign(href);
+						}
+						return;
+					}
+
 					$.fancybox.showActivity();
 
 					selectedOpts.ajax.win = selectedOpts.ajax.success;
@@ -349,6 +385,10 @@
 					ajaxLoader = $.ajax(
 						$.extend({}, selectedOpts.ajax, {
 							url: href,
+							// SECURITY (#1246): always parse the response as HTML text. Without a
+							// dataType jQuery infers it from Content-Type and evals a JavaScript
+							// response (e.g. a same-origin JSONP endpoint) in this page.
+							dataType: 'html',
 							data: selectedOpts.ajax.data || {},
 							error: function (XMLHttpRequest, textStatus, errorThrown) {
 								if (XMLHttpRequest.status > 0) {
@@ -763,7 +803,7 @@
 						' scrolling="' +
 						selectedOpts.scrolling +
 						'" src="' +
-						currentOpts.href +
+						escAttr(currentOpts.href) +
 						'"></iframe>'
 				).appendTo(content);
 			}

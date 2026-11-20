@@ -11,7 +11,7 @@
 	<h3 class="su-generator-pro-features-banner-title"><?php esc_html_e( 'Shortcodes Ultimate PRO', 'shortcodes-ultimate' ); ?></h3>
 	<p class="su-generator-pro-features-banner-description">
 		<?php // translators: %s - shortcode name ?>
-		<?php printf( esc_html( __( 'This shortcode is available in the Pro version. Upgrade now to get 15 additional shortcodes, including %s and others', 'shortcodes-ultimate' ) ), '<strong style="text-transform:capitalize">' . esc_html( $data['shortcode']['name'] ) . '</strong>' ); ?>
+		<?php printf( esc_html( __( 'This shortcode is available in the Pro version. Upgrade now to unlock advanced shortcodes, including %s and others', 'shortcodes-ultimate' ) ), '<strong style="text-transform:capitalize">' . esc_html( $data['shortcode']['name'] ) . '</strong>' ); ?>
 	</p>
 	<p class="su-generator-pro-features-banner-action">
 		<a href="<?php echo esc_attr( esc_attr( su_get_utm_link( 'https://getshortcodes.com/pricing/', 'wp-dashboard', 'generator', 'shortcode' ) ) ); ?>" target="_blank" class="button button-primary"><?php esc_html_e( 'Details & Pricing', 'shortcodes-ultimate' ); ?> &rarr;</a>

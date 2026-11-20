@@ -247,7 +247,13 @@ legend.variant-selector {
 .tweet-buttons .wpt-buttons {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 3px;
+	justify-content: space-between;
+}
+
+.tweet-buttons .wpt-buttons button {
+	min-height: 32px;
+	line-height: 2;
+	padding: 0 11px;
 }
 
 .wpt-wrap {
@@ -305,7 +311,7 @@ legend.variant-selector {
 }
 
 .toggle-btn-group input[type="radio"]:checked + label {
-    background-color: #0073aa;
+    background-color: var(--wp-admin-theme-color, #0073aa );
 	outline: 1px solid #00a0d2;
 	text-decoration: none;
     cursor: text;

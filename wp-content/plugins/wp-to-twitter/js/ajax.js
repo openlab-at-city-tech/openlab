@@ -20,7 +20,6 @@
 			}
 			let text = $('#wpt_custom_tweet').val();
 			let date = $('#wpt_set_tweet_time .date');
-			console.log( date );
 				date = ( 0 !== date.length ) ? date.val() : '';
 			let time = $('#wpt_set_tweet_time .time');
 				time = ( 0 !== time.length ) ? time.val() : '';
@@ -61,7 +60,7 @@
 				'omit': omit_services,
 				'security': wpt_data.security
 			};
-			console.log( data );
+
 			$.post(ajaxurl, data, function (response) {
 				$('.wpt_log').text(response).show(300);
 			});

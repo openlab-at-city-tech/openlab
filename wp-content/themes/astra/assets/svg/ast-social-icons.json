@@ -3527,7 +3527,7 @@
                 "personal",
                 "post",
                 "web 2.0",
-                "wordpress",
+                "WordPress",
                 "writing"
             ]
         },
@@ -41601,7 +41601,7 @@
             "solid"
         ]
     },
-    "wordpress": {
+    "wordpress-logo": {
         "search": {
             "terms": []
         },
@@ -41631,7 +41631,7 @@
         "styles": [
             "brands"
         ],
-        "label": "Wordpress Simple",
+        "label": "WordPress Simple",
         "svg": {
             "brands": {
                 "viewBox": [

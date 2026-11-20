@@ -40,8 +40,10 @@
 		var mousemoveTimer = null;
 		var lastMousemoveX = null;
 		var lastMousemoveY = null;
+		var lastMousemoveTime = null;
 		var mousemoveStart = null;
 		var mousemoves = [];
+		var intervalsBetweenMousemovesAndClicks = [];
 
 		var touchmoveCountTimer = null;
 		var touchmoveCount = 0;
@@ -79,6 +81,7 @@
 				var ak_bte = prepare_array_for_request( touchEvents );
 				var ak_bmm = prepare_array_for_request( mousemoves );
 				var ak_bcc = prepare_array_for_request( mouseclickCoordinates );
+				var ak_bibmac = intervalsBetweenMousemovesAndClicks.slice( 0, 100 ).join( ';' );
 
 				var input_fields = {
 					// When did the user begin entering any input?
@@ -124,7 +127,10 @@
 					'bmm' : ak_bmm,
 
 					// Click coordinates
-					'bcc' : ak_bcc
+					'bcc' : ak_bcc,
+
+					// Milliseconds between last mouse movement and each click
+					'bibmac' : ak_bibmac
 				};
 
 				var akismet_field_prefix = 'ak_';
@@ -234,6 +240,10 @@
 		document.addEventListener( 'mousedown', function ( e ) {
 			lastMousedown = ( new Date() ).getTime();
 
+			if ( lastMousemoveTime ) {
+				intervalsBetweenMousemovesAndClicks.push( lastMousedown - lastMousemoveTime );
+			}
+
 			var mouseclickCoordinate = [];
 
 			var rect = e.target.getBoundingClientRect();
@@ -277,12 +287,14 @@
 		}, supportsPassive ? { passive: true } : false  );
 
 		document.addEventListener( 'mousemove', function ( e ) {
+			lastMousemoveTime = ( new Date() ).getTime();
+
 			if ( mousemoveTimer ) {
 				clearTimeout( mousemoveTimer );
 				mousemoveTimer = null;
 			}
 			else {
-				mousemoveStart = ( new Date() ).getTime();
+				mousemoveStart = lastMousemoveTime;
 				lastMousemoveX = e.offsetX;
 				lastMousemoveY = e.offsetY;
 			}

@@ -2,6 +2,11 @@
 
 ## Changelog
 
+## v2.1.2
+
+* Ref: Update WordPress spell
+* Ref: Remove wptt/.gitattributes file
+
 ## v2.1.1
 
 * Fix: Gradient color picker error under new WP version

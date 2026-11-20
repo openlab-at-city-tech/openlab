@@ -50,6 +50,8 @@ class AdvGbCustomStyles {
     setActiveTab() {
         this.$('.advgb-main-tabs .advgb-tab').removeClass('active');
         this.$(`.advgb-main-tabs .advgb-tab[data-tab="${this.activeTab}"]`).addClass('active');
+        this.syncTabsState(this.$('.advgb-main-tabs .advgb-tabs-panel'));
+        this.syncTabsState(this.$('.advgb-sub-tabs .advgb-tabs-panel'));
 
         this.$('.advgb-tab-content.main-tab-content').hide();
         this.$(`[data-tab-content="${this.activeTab}"]`).show();
@@ -138,6 +140,19 @@ class AdvGbCustomStyles {
 
             self.$(this).addClass('active');
             self.$(`[data-tab-content="${tabId}"]`).show();
+            self.syncTabsState(tabWrap);
+        });
+    }
+
+    // Expose the active tab to assistive technology (aria-current on the active link)
+    syncTabsState($panels) {
+        $panels.find('.advgb-tab').each((index, tab) => {
+            const $link = this.$(tab).children('a');
+            if (this.$(tab).hasClass('active')) {
+                $link.attr('aria-current', 'true');
+            } else {
+                $link.removeAttr('aria-current');
+            }
         });
     }
 
@@ -199,8 +214,26 @@ class AdvGbCustomStyles {
             this.editor = CodeMirror.fromTextArea(cssArea, {
                 mode: 'css',
                 lineNumbers: true,
-                extraKeys: { "Ctrl-Space": "autocomplete" }
+                extraKeys: {
+                    "Ctrl-Space": "autocomplete",
+                    // Keyboard trap escape: Esc leaves the editor so Tab can move on
+                    "Esc": (cm) => {
+                        cm.getInputField().blur();
+                    }
+                }
             });
+
+            // Give the CodeMirror input an accessible name and help text
+            const inputField = this.editor.getInputField();
+            const cssLabel = document.querySelector('label[for="advgb-customstyles-css"]');
+            if (inputField) {
+                if (cssLabel) {
+                    inputField.setAttribute('aria-label', cssLabel.textContent.trim());
+                }
+                if (document.getElementById('advgb-customstyles-css-help')) {
+                    inputField.setAttribute('aria-describedby', 'advgb-customstyles-css-help');
+                }
+            }
 
             this.setupEditorEvents();
         }
@@ -1186,10 +1219,10 @@ class AdvGbCustomStyles {
                 success: (res) => {
                     const newItem = `
                         <li class="advgb-customstyles-items" data-id-customstyle="${res.id}">
-                            <a><i class="title-icon"></i>
+                            <a href="#"><i class="title-icon" aria-hidden="true"></i>
                             <span class="advgb-customstyles-items-title">${res.title}</span></a>
-                            <a class="copy"><span class="dashicons dashicons-admin-page"></span></a>
-                            <a class="trash"><span class="dashicons dashicons-no"></span></a>
+                            <a href="#" class="copy" title="${window.advgbCustomStyles.copyLabel}" aria-label="${window.advgbCustomStyles.copyLabel}"><span class="dashicons dashicons-admin-page" aria-hidden="true"></span></a>
+                            <a href="#" class="trash" title="${window.advgbCustomStyles.deleteLabel}" aria-label="${window.advgbCustomStyles.deleteLabel}"><span class="dashicons dashicons-no" aria-hidden="true"></span></a>
                             <ul style="margin-left: 30px">
                                 <li class="advgb-customstyles-items-class">(${res.name})</li>
                             </ul>
@@ -1215,6 +1248,7 @@ class AdvGbCustomStyles {
         const self = this;
         this.$('#mybootstrap .advgb-customstyles-items a.trash').off('click').on('click', function (e) {
             e.preventDefault();
+            e.stopPropagation();
             const that = this;
             const styleName = self.$(this).prev().prev().text().trim();
             const cf = confirm(`Do you really want to delete "${styleName}"?`);
@@ -1233,7 +1267,19 @@ class AdvGbCustomStyles {
                         self.$('#customstyles-tab').append('<div class="advgb-overlay-box"></div>');
                     },
                     success: (res) => {
-                        self.$(that).parent().remove();
+                        const item = self.$(that).parent();
+                        const restoreFocus = item[0].contains(document.activeElement);
+                        let focusTarget = item.nextAll('.advgb-customstyles-items').first();
+                        if (!focusTarget.length) {
+                            focusTarget = item.prevAll('.advgb-customstyles-items').first();
+                        }
+                        focusTarget = focusTarget.length
+                            ? focusTarget.children('a').first()
+                            : self.$('.advgb-customstyles-new');
+                        item.remove();
+                        if (restoreFocus) {
+                            focusTarget.trigger('focus');
+                        }
                         if (res.id == self.styleId) {
                             self.customStylePreview();
                         } else {
@@ -1252,6 +1298,7 @@ class AdvGbCustomStyles {
         const self = this;
         this.$('#mybootstrap .advgb-customstyles-items a.copy').off('click').on('click', function (e) {
             e.preventDefault();
+            e.stopPropagation();
             const that = this;
             const id = self.$(that).parent().data('id-customstyle');
             const nonce_val = self.$('#advgb_cstyles_nonce_field').val();
@@ -1268,10 +1315,10 @@ class AdvGbCustomStyles {
                 success: (res) => {
                     self.$(that).parent().after(
                         `<li class="advgb-customstyles-items" data-id-customstyle="${res.id}">
-                            <a><i class="title-icon" style="background-color: ${res.identifyColor}"></i>
+                            <a href="#"><i class="title-icon" aria-hidden="true" style="background-color: ${res.identifyColor}"></i>
                             <span class="advgb-customstyles-items-title">${res.title}</span></a>
-                            <a class="copy"><span class="dashicons dashicons-admin-page"></span></a>
-                            <a class="trash"><span class="dashicons dashicons-no"></span></a>
+                            <a href="#" class="copy" title="${window.advgbCustomStyles.copyLabel}" aria-label="${window.advgbCustomStyles.copyLabel}"><span class="dashicons dashicons-admin-page" aria-hidden="true"></span></a>
+                            <a href="#" class="trash" title="${window.advgbCustomStyles.deleteLabel}" aria-label="${window.advgbCustomStyles.deleteLabel}"><span class="dashicons dashicons-no" aria-hidden="true"></span></a>
                             <ul style="margin-left: 30px">
                                 <li class="advgb-customstyles-items-class">(${res.name})</li>
                             </ul>

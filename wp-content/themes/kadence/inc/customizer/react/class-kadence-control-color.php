@@ -28,21 +28,21 @@ class Kadence_Control_Color extends WP_Customize_Control {
 	 *
 	 * @var array
 	 */
-	public $default = array();
+	public $default = [];
 
 	/**
 	 * Additional arguments passed to JS.
 	 *
 	 * @var array
 	 */
-	public $input_attrs = array();
+	public $input_attrs = [];
 
 	/**
 	 * Send to JS.
 	 */
 	public function to_json() {
 		parent::to_json();
-		$this->json['default'] = $this->default;
+		$this->json['default']     = $this->default;
 		$this->json['input_attrs'] = $this->input_attrs;
 	}
 	/**

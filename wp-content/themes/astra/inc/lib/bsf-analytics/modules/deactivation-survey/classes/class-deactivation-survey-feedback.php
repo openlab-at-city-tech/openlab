@@ -82,6 +82,7 @@ if ( ! class_exists( 'Deactivation_Survey_Feedback' ) ) {
 				'popup_reasons'     => self::get_default_reasons(),
 				'popup_description' => __( 'If you have a moment, please share why you are deactivating the plugin.', 'astra' ),
 				'show_on_screens'   => array( 'plugins' ),
+				'extra_options'     => array(),
 			);
 
 			// Parse the arguments with defaults.
@@ -148,6 +149,8 @@ if ( ! class_exists( 'Deactivation_Survey_Feedback' ) ) {
 								<?php } ?>
 							</fieldset>
 
+							<?php self::render_extra_options( $args['extra_options'], $product_slug ); ?>
+
 							<div class="uds-feedback-form-sumbit--actions">
 								<button class="button button-primary uds-feedback-submit" data-action="submit"><?php esc_html_e( 'Submit & Deactivate', 'astra' ); ?></button>
 								<button class="button button-secondary uds-feedback-skip" data-action="skip"><?php esc_html_e( 'Skip & Deactivate', 'astra' ); ?></button>
@@ -161,6 +164,140 @@ if ( ! class_exists( 'Deactivation_Survey_Feedback' ) ) {
 				</div>
 			</div>
 			<?php
+		}
+
+		/**
+		 * Render a product's extra options inside its own feedback popup.
+		 *
+		 * A generic slot so a product can surface one of its own settings at the
+		 * moment a user is on their way out, without this library knowing what
+		 * the setting means. The product owns the storage and the capability
+		 * check; this only renders the control and carries the value.
+		 *
+		 * Supported types:
+		 *
+		 *  - `checkbox` - requires `name`, `label`, `ajax_action` and `nonce`, all
+		 *    strings. `checked` is optional and reflects the product's stored
+		 *    value. It is read with FILTER_VALIDATE_BOOLEAN, which is an
+		 *    allowlist: only true, 1, '1', 'true', 'on' and 'yes' tick the box.
+		 *    Everything else - including 'no', 'off', 'false' and any other
+		 *    truthy string such as 'enabled' or 'Y' - leaves it unticked. Pass a
+		 *    real boolean unless your stored value is one of those forms.
+		 *  - `note`     - requires `text`, a string. Static copy, for a product
+		 *    that wants to point at a setting rather than repeat a control
+		 *    living elsewhere.
+		 *
+		 * Entries with an unknown type, a missing required key, or a value of the
+		 * wrong type are skipped silently: a half-rendered control is worse than
+		 * none, and a fatal here would take down the whole plugins screen.
+		 *
+		 * The checkbox is saved when the user commits by deactivating, not when
+		 * they tick it, so closing the popup without deactivating changes
+		 * nothing. Only a box the user changed is posted at all. The
+		 * deactivation waits for that save; if it fails the user is told the
+		 * value is unchanged and offered "Deactivate anyway".
+		 *
+		 * The wire value is the string '1' or '0' - a product must compare
+		 * strictly rather than cast, since casting reads "no" as true.
+		 *
+		 * The product's own handler is responsible for the rest of the contract,
+		 * and a handler that breaks it makes its own plugin awkward to deactivate
+		 * from the popup. It must:
+		 *
+		 *  - verify the nonce it supplied here, and check its own capability;
+		 *  - compare `'1' === $_POST['checked']` strictly;
+		 *  - always reply through wp_send_json_success() / wp_send_json_error(),
+		 *    never by echoing, or admin-ajax appends '0' and the save is read as
+		 *    a failure.
+		 *
+		 * @param array  $options      Extra option definitions.
+		 * @param string $product_slug Slug used to keep element IDs unique, since
+		 *                             every product's popup renders on the page at once.
+		 * @return void
+		 * @since 1.1.30
+		 */
+		public static function render_extra_options( $options, $product_slug ) {
+
+			if ( empty( $options ) || ! is_array( $options ) ) {
+				return;
+			}
+
+			$rendered = array();
+
+			foreach ( $options as $index => $option ) {
+
+				if ( ! is_array( $option ) || empty( $option['type'] ) ) {
+					continue;
+				}
+
+				if ( 'note' === $option['type'] ) {
+					if ( empty( $option['text'] ) || ! is_string( $option['text'] ) ) {
+						continue;
+					}
+
+					$rendered[] = sprintf(
+						'<p class="uds-extra-option--note">%s</p>',
+						wp_kses(
+							$option['text'],
+							array(
+								'a'      => array(
+									'href'   => array(),
+									'target' => array(),
+									'rel'    => array(),
+								),
+								'strong' => array(),
+								'em'     => array(),
+							)
+						)
+					);
+					continue;
+				}
+
+				if ( 'checkbox' !== $option['type'] ) {
+					continue;
+				}
+
+				// is_string() as well as empty(): empty() is false for an array, so a
+				// mistyped config would reach preg_match()/esc_html() below and fatal
+				// the whole plugins screen - including the screen an admin would use
+				// to deactivate the product that shipped the typo.
+				foreach ( array( 'name', 'label', 'ajax_action', 'nonce' ) as $required ) {
+					if ( empty( $option[ $required ] ) || ! is_string( $option[ $required ] ) ) {
+						continue 2;
+					}
+				}
+
+				// Deliberately not sanitize_key(), which lowercases: an action hook
+				// and an input name are both case sensitive, so a product using
+				// `wp_ajax_myPlugin_setPref` would post to a handler that does not
+				// exist. Validate the shape instead and keep the case.
+				// \z, not $: $ also matches immediately before a trailing newline, so
+				// "my_action\n" would validate, survive esc_attr() into the attribute
+				// and then match no registered handler - every save failing with
+				// nothing to see.
+				if ( ! preg_match( '/^[A-Za-z0-9_-]+\z/', $option['name'] )
+					|| ! preg_match( '/^[A-Za-z0-9_-]+\z/', $option['ajax_action'] ) ) {
+					continue;
+				}
+
+				$field_id = $product_slug . '_uds_extra_' . $index;
+
+				$rendered[] = sprintf(
+					'<div class="uds-extra-option"><input type="checkbox" class="uds-extra-option--checkbox" id="%1$s" name="%2$s" data-ajax_action="%3$s" data-nonce="%4$s"%5$s><label class="uds-extra-option--label" for="%1$s">%6$s</label></div>',
+					esc_attr( $field_id ),
+					esc_attr( $option['name'] ),
+					esc_attr( $option['ajax_action'] ),
+					esc_attr( $option['nonce'] ),
+					filter_var( $option['checked'] ?? false, FILTER_VALIDATE_BOOLEAN ) ? ' checked="checked"' : '',
+					esc_html( $option['label'] )
+				);
+			}
+
+			if ( empty( $rendered ) ) {
+				return;
+			}
+
+			echo '<fieldset class="uds-extra-options">' . implode( '', $rendered ) . '<p class="uds-extra-option--error hide" role="alert"></p></fieldset>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each fragment is escaped as it is built above.
 		}
 
 		/**
@@ -207,6 +344,7 @@ if ( ! class_exists( 'Deactivation_Survey_Feedback' ) ) {
 
 			wp_enqueue_style( 'uds-feedback-style', $dir_path . 'assets/css/feedback' . $file_ext . '.css', array(), BSF_ANALYTICS_VERSION );
 			wp_style_add_data( 'uds-feedback-style', 'rtl', 'replace' );
+			wp_style_add_data( 'uds-feedback-style', 'suffix', $file_ext );
 		}
 
 		/**

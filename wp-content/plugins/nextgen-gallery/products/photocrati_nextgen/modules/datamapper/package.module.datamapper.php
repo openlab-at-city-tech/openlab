@@ -4,7 +4,7 @@
  */
 class A_DataMapper_Factory extends Mixin
 {
-    public function datamapper_model($mapper, $properties = array(), $context = false)
+    public function datamapper_model($mapper, $properties = [], $context = false)
     {
         return new C_DataMapper_Model($mapper, $properties = [], $context);
     }
@@ -43,19 +43,19 @@ class C_DataMapper_Driver_Base extends C_Component
      *
      * @var array
      */
-    public $_columns = array();
+    public $_columns = [];
     /**
      * Table columns cache.
      *
      * @var array
      */
-    public $_table_columns = array();
+    public $_table_columns = [];
     /**
      * Serialized columns list.
      *
      * @var array
      */
-    public $_serialized_columns = array();
+    public $_serialized_columns = [];
     public function define($object_name = false, $context = false)
     {
         parent::define($context);
@@ -233,7 +233,7 @@ class C_DataMapper_Driver_Base extends C_Component
      * @param object|bool $model (optional)
      * @return null|object
      */
-    public function find_first($conditions = array(), $model = false)
+    public function find_first($conditions = [], $model = false)
     {
         $results = $this->object->select()->where_and($conditions)->limit(1, 0)->run_query();
         if ($results) {
@@ -249,7 +249,7 @@ class C_DataMapper_Driver_Base extends C_Component
      * @param object|bool $model (optional)
      * @return array
      */
-    public function find_all($conditions = array(), $model = false)
+    public function find_all($conditions = [], $model = false)
     {
         // Sometimes users will forget that the first parameter is conditions, and think it's $model instead.
         if ($conditions === true) {
@@ -279,7 +279,7 @@ class C_DataMapper_Driver_Base extends C_Component
      * @param array $conditions (optional)
      * @return self
      */
-    public function where_and($conditions = array())
+    public function where_and($conditions = [])
     {
         return $this->object->_where($conditions, 'AND');
     }
@@ -289,7 +289,7 @@ class C_DataMapper_Driver_Base extends C_Component
      * @param array $conditions (optional)
      * @return self
      */
-    public function where_or($conditions = array())
+    public function where_or($conditions = [])
     {
         return $this->object->where($conditions, 'OR');
     }
@@ -299,7 +299,7 @@ class C_DataMapper_Driver_Base extends C_Component
      * @param array $conditions (optional)
      * @return self
      */
-    public function where($conditions = array())
+    public function where($conditions = [])
     {
         return $this->object->_where($conditions, 'AND');
     }
@@ -398,7 +398,7 @@ class C_DataMapper_Driver_Base extends C_Component
             $condition = $wpdb->prepare($condition, $binds);
         }
         // Parse the where clause.
-        if (preg_match('/^[^\\s]+/', $condition, $match)) {
+        if (preg_match('/^[^\s]+/', $condition, $match)) {
             $column = trim(array_shift($match));
             $condition = str_replace($column, '', $condition);
         }
@@ -441,11 +441,11 @@ class C_DataMapper_Driver_Base extends C_Component
          * of what objects we've already processed when we're running this method recursively
          */
         static $level = 0;
-        static $processed_objects = array();
+        static $processed_objects = [];
         ++$level;
         $processed_objects[] = $stdObject_or_array_or_string;
         if (is_string($stdObject_or_array_or_string)) {
-            $stdObject_or_array_or_string = str_replace("\\'", "'", str_replace('\\"', '"', str_replace('\\\\', '\\', $stdObject_or_array_or_string)));
+            $stdObject_or_array_or_string = str_replace("\\'", "'", str_replace('\"', '"', str_replace('\\\\', '\\', $stdObject_or_array_or_string)));
             // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
         } elseif (is_object($stdObject_or_array_or_string) && !in_array($stdObject_or_array_or_string, $processed_objects)) {
             foreach (get_object_vars($stdObject_or_array_or_string) as $key => $val) {
@@ -698,19 +698,19 @@ class C_CustomTable_DataMapper_Driver extends C_DataMapper_Driver_Base
      *
      * @var wpdb
      */
-    public $_where_clauses = array();
+    public $_where_clauses = [];
     /**
      * Order clauses.
      *
      * @var array
      */
-    public $_order_clauses = array();
+    public $_order_clauses = [];
     /**
      * Group by columns.
      *
      * @var array
      */
-    public $_group_by_columns = array();
+    public $_group_by_columns = [];
     /**
      * Limit clause.
      *
@@ -812,7 +812,7 @@ class C_CustomTable_DataMapper_Driver extends C_DataMapper_Driver_Base
     public function order_by($order_by, $direction = 'ASC')
     {
         // We treat the rand() function as an exception.
-        if (preg_match('/rand\\(\\s*\\)/', $order_by)) {
+        if (preg_match('/rand\(\s*\)/', $order_by)) {
             $order = 'rand()';
         } else {
             $order_by = $this->object->_clean_column($order_by);
@@ -851,7 +851,7 @@ class C_CustomTable_DataMapper_Driver extends C_DataMapper_Driver_Base
      * @param array|string $columns
      * @return object
      */
-    public function group_by($columns = array())
+    public function group_by($columns = [])
     {
         if (!is_array($columns)) {
             $columns = [$columns];
@@ -996,7 +996,7 @@ class C_CustomTable_DataMapper_Driver extends C_DataMapper_Driver_Base
      * @param array $conditions
      * @return object
      */
-    public function find_last($conditions = array(), $model = false)
+    public function find_last($conditions = [], $model = false)
     {
         $retval = null;
         // Get row number for the last row.
@@ -1243,7 +1243,7 @@ class C_CustomPost_DataMapper_Driver extends C_DataMapper_Driver_Base
      *
      * @var array
      */
-    public $_query_args = array();
+    public $_query_args = [];
     /**
      * Primary key column name.
      *
@@ -1267,7 +1267,7 @@ class C_CustomPost_DataMapper_Driver extends C_DataMapper_Driver_Base
      *
      * @var array
      */
-    public static $_post_table_columns = array();
+    public static $_post_table_columns = [];
     public function define($object_name = false, $context = false)
     {
         if (strlen($object_name) > 20) {
@@ -1320,7 +1320,7 @@ class C_CustomPost_DataMapper_Driver extends C_DataMapper_Driver_Base
     public function order_by($order_by, $direction = 'ASC')
     {
         // Make an exception for the rand() method.
-        $order_by = preg_replace('/rand\\(\\s*\\)/', 'rand', $order_by);
+        $order_by = preg_replace('/rand\(\s*\)/', 'rand', $order_by);
         // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
         if (in_array($order_by, $this->object->_get_querable_table_columns())) {
             $this->object->_query_args['orderby'] = $order_by;
@@ -1358,7 +1358,7 @@ class C_CustomPost_DataMapper_Driver extends C_DataMapper_Driver_Base
      * @param array|string $columns
      * @return object
      */
-    public function group_by($columns = array())
+    public function group_by($columns = [])
     {
         if (!isset($this->object->_query_args['group_by_columns'])) {
             $this->object->_query_args['group_by_columns'] = $columns;
@@ -1575,7 +1575,7 @@ class C_CustomPost_DataMapper_Driver extends C_DataMapper_Driver_Base
      *
      * @param int $post_id
      */
-    public function _flush_and_update_postmeta($post_id, $entity, $omit = array())
+    public function _flush_and_update_postmeta($post_id, $entity, $omit = [])
     {
         // We need to insert post meta data for each property
         // Unfortunately, that means flushing all existing postmeta
@@ -1703,7 +1703,7 @@ class C_CustomPost_DataMapper_Driver extends C_DataMapper_Driver_Base
      * @param object|bool $model (optional)
      * @return object
      */
-    public function find_last($conditions = array(), $model = false)
+    public function find_last($conditions = [], $model = false)
     {
         $retval = null;
         // Get row number for the last row.
@@ -1821,7 +1821,7 @@ class Mixin_DataMapper_Driver_Base extends Mixin
      * @param string|bool  $context (optional)
      * @return C_DataMapper_Model
      */
-    public function create($properties = array(), $context = false)
+    public function create($properties = [], $context = false)
     {
         $entity = $properties;
         $factory = C_Component_Factory::get_instance();
@@ -1930,7 +1930,7 @@ class C_DataMapper_Model extends C_Component
     /**
      * Define the model
      */
-    public function define($mapper = null, $properties = array(), $context = false)
+    public function define($mapper = null, $properties = [], $context = false)
     {
         parent::define($context);
         $this->add_mixin('Mixin_Validation');
@@ -2012,7 +2012,7 @@ class C_DataMapper_Model extends C_Component
      * @param array $updated_attributes
      * @return int|bool Object ID or false upon failure
      */
-    public function save($updated_attributes = array())
+    public function save($updated_attributes = [])
     {
         $this->update_attributes($updated_attributes);
         return $this->get_mapper()->save($this->get_entity());
@@ -2022,7 +2022,7 @@ class C_DataMapper_Model extends C_Component
      *
      * @param array $attributes (optional)
      */
-    public function update_attributes($attributes = array())
+    public function update_attributes($attributes = [])
     {
         foreach ($attributes as $key => $value) {
             $this->_stdObject->{$key} = $value;

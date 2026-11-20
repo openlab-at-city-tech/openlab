@@ -207,6 +207,7 @@ class SorterComponent extends Component {
 						} ) }
 					</ReactSortable>
 				</div>
+			{ this.props.control.renderNotice() }
 			</div>
 		);
 	}

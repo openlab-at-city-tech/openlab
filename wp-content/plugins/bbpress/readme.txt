@@ -3,10 +3,10 @@ Contributors:      matt, johnjamesjacoby, jmdodd, netweb, sergeybiryukov
 Tags:              forum, forums, discussion, support
 License:           GNU General Public License v2 or later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
-Requires PHP:      5.6.20
+Requires PHP:      7.2
 Requires at least: 6.0
-Tested up to:      6.9
-Stable tag:        2.6.14
+Tested up to:      7.1
+Stable tag:        2.6.22
 
 bbPress is forum software for WordPress.
 
@@ -43,6 +43,34 @@ bbPress is intentionally simple yet infinitely powerful forum software, built by
 * You may want to customize the register/activation/sign-in/lost-password flows, to better suit your site. bbPress comes with a bevy of shortcodes to make this possible, listed here: https://codex.bbpress.org/shortcodes/
 * bbPress also comes with built-in support for Akismet and BuddyPress, two very popular and very powerful WordPress plugins. If you're using either, visit your Forum Settings page and ensure that integration appears correct.
 
+== Developer Notes ==
+
+= Count updates in 2.6.17 =
+
+bbPress now synchronizes its built-in public and hidden topic and reply counts, aggregate forum counts, and user contribution counts on `bbp_transition_post_status` at priority 10, after WordPress persists the new post status. When a topic crosses the public status boundary, its stored public reply count is applied to the forum aggregate instead of recounting every reply. The action receives the new status, old status, and `WP_Post` object. The `bbp_pre_update_counts_on_transition_post_status` filter can short-circuit the complete topic or reply count operation for custom status lifecycles or count storage.
+
+The existing `bbp_new_*`, `bbp_insert_*`, `bbp_trash_*`, `bbp_untrash_*`, `bbp_spam_*`, `bbp_unspam_*`, `bbp_approve_*`, and `bbp_unapprove_*` topic and reply actions continue to fire with their existing arguments and timing. Their corresponding completed actions, such as `bbp_trashed_*`, also remain available. The public count helper functions also remain callable.
+
+For topic and reply creation, the status transition occurs inside `wp_insert_post()`. The later `bbp_new_*` and `bbp_insert_*` actions therefore continue to run after status counts are updated and after bbPress stores its relationship metadata. Creation-specific integrations can remain on those actions.
+
+For moderation, status-count synchronization occurs between the existing pre-transition action, such as `bbp_spam_reply`, and its completed action, such as `bbp_spammed_reply`. Extensions that need every persisted topic, reply, forum, and user status-count change should use `bbp_transition_post_status` at priority 11 or later. Completed moderation actions begin after those counts are finalized.
+
+bbPress no longer attaches its built-in topic, reply, forum, and user status-count callbacks to the creation and moderation actions. Manually firing one of those actions without changing the post status therefore no longer updates those counts. Topic voice counts and engagements remain attached to the creation and completed moderation actions, so manually firing one of those actions can still recalculate voices and engagements without a status change. The priority-11 transition hook does not observe those later updates. Extensions that need both recalculations to finish can use priority 31 or later on the legacy action; bbPress runs engagement callbacks before voice-count callbacks. Count membership comes from the filtered public and non-public status arrays. Extensions that already maintain counts for custom statuses should remove duplicate count callbacks and keep the public and non-public arrays disjoint. The public increase and decrease convenience functions now validate the current topic or reply status; use the lower-level bump functions for an intentional numeric difference. Do not manually fire `bbp_transition_post_status` to simulate a write because its count callback trusts the supplied statuses as a completed database transition.
+
+Permanent deletion does not produce a post-status transition. Its count maintenance continues through the existing `bbp_deleted_topic` and `bbp_deleted_reply` actions.
+
+Count bump functions now use conditional metadata writes and bounded retries so simultaneous requests do not overwrite each other's existing count changes. Existing bbPress count filters and the standard WordPress metadata filters and actions continue to run. A before-update metadata action may run more than once when a request loses a comparison and retries; its matching after-update action runs only for the successful write. The update-metadata short-circuit filter runs once for the bump call using its first sanitized candidate value. A user-count filter that changes the absolute result retains the previous absolute-update behavior and opts that call out of the atomic difference path.
+
+WordPress metadata tables do not enforce unique object-and-key pairs, so simultaneous first-time inserts retain the same limitation as the core metadata API. A request can also exhaust the bounded retries under unusually high contention. An atomic bump applies a difference to its supplied stored or default value and is not a recount. The `bbp_pre_bump_count_meta` filter can short-circuit an update, the `bbp_bump_count_meta_max_attempts` filter controls the default limit of five write attempts, and the `bbp_bump_count_meta_types` filter controls the post, user, term, and comment metadata types supported by default. `bbp_update_user_topic_count()` and `bbp_update_user_reply_count()` accept an optional third `$difference` argument for this internal bump lifecycle; existing calls remain compatible.
+
+Post-author changes and user deletion with post reassignment now reconcile affected user contribution, topic engagement, and voice counts. Moderator move, merge, and split operations also reconcile source, destination, and ancestor forum counts. Forum count updater functions accept an optional final argument for propagating a recount's difference through ancestor totals; existing calls remain compatible. Forum reply recounts include public replies only when their parent topics are also public. A public reply beneath a non-public topic is excluded from the public forum total without being included in the pending, spammed, and trashed reply count. Topic engagement recounts honor filtered public topic and reply statuses, and preserve other term-backed relationships.
+
+= Subforum counts in 2.6.17 =
+
+bbPress now maintains subforum counts when forums are trashed, restored, permanently deleted, or moved between parents. Recursive forum counts include public, private, and hidden subforums while excluding subforums with uncountable statuses. `bbp_forum_query_subforum_ids()` no longer inherits the broader `bbp_get_all_child_ids` result; extensions that customized subforum count membership through that lower-level filter should use `bbp_forum_query_subforum_ids`, `bbp_get_countable_forum_statuses`, or the forum-status filters. The new `bbp_post_updated` action receives the post ID, the updated `WP_Post` object, and the previous `WP_Post` object after any bbPress post type is updated.
+
+The upgrade does not synchronously recount every forum. Sites with known stale metadata can selectively run the applicable count and engagement tools under Tools > Forums > Repair Forums. These tools can be expensive on large sites.
+
 == Screenshots ==
 
 1. Forums - Admin Interface
@@ -56,3 +84,29 @@ bbPress is intentionally simple yet infinitely powerful forum software, built by
 == Changelog ==
 
 Check out the [releases page](https://codex.bbpress.org/releases/)
+
+== Upgrade Notice ==
+
+= 2.6.22 =
+
+Strengthens forum, topic, reply, attachment, and BuddyPress access checks. Improves block theme rendering, topic and forum trash and moderation performance, forum reset error reporting, and importer handling. Imported 32-character hexadecimal Vanilla plaintext passwords may require a reset. WordPress 6.0, PHP 7.2, and database version 264 requirements are unchanged; no database upgrade is required.
+
+= 2.6.21 =
+
+Strengthens forum visibility in feeds, search, BuddyPress activity, old-slug redirects, attachment requests, and WordPress-rendered content. Improves forum freshness, route handling, revision history, moderated reply titles, and reply administration, and adds the ugc link relationship and SVG admin icons. WordPress 6.0, PHP 7.2, and database version 264 requirements are unchanged; no database upgrade is required.
+
+= 2.6.20 =
+
+Adds a site-wide forum status setting and improves compatibility across BuddyPress, moderation forms, subscriptions, converters, notifications, widgets, profiles, and topic and reply administration. Strengthens password validation and keeps bbPress shortcodes literal in WordPress content loops. No database upgrade is required.
+
+= 2.6.19 =
+
+Strengthens forum access checks across APIs, feeds, and BuddyPress, tightens moderation and role permissions, and improves importer credential handling. The automatic database version 264 upgrade clears saved converter query SQL from older password upgrades.
+
+= 2.6.18 =
+
+Requires PHP 7.2. Improves first-login password upgrades for imported users, including sites where the source forum database is no longer available. Corrects PHPWind topic counts and restores Super Moderator edit links on front-end user screens.
+
+= 2.6.17 =
+
+Count maintenance now uses the bbPress post-status transition action and conditional metadata writes. Extensions that attach count callbacks to creation or moderation actions, add custom statuses, filter count values, or customize subforum queries should review the Developer Notes. Sites with known stale counts can selectively run the repair tools after upgrading.
