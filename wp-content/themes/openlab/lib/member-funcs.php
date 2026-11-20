@@ -2517,6 +2517,31 @@ function openlab_set_department_visibility( $user_id, $level ) {
 }
 
 /**
+ * Keeps profile field 78 visible when only the Department setting hides it.
+ *
+ * BuddyPress 14.5 casts the Department key -78 to 78 when it lists a member's hidden fields, and
+ * 78 is a real profile field. Field 78 stays hidden only when its own visibility hides it.
+ *
+ * @param int[] $hidden_fields     Hidden field IDs.
+ * @param int   $displayed_user_id Displayed user ID.
+ * @param int   $current_user_id   Viewing user ID.
+ * @return int[]
+ */
+function openlab_unhide_field_78_hidden_by_department( $hidden_fields, $displayed_user_id, $current_user_id ) {
+	if ( ! in_array( 78, array_map( 'intval', (array) $hidden_fields ), true ) ) {
+		return $hidden_fields;
+	}
+
+	$hidden_levels = bp_xprofile_get_hidden_field_types_for_user( $displayed_user_id, $current_user_id );
+	if ( in_array( xprofile_get_field_visibility_level( 78, $displayed_user_id ), $hidden_levels, true ) ) {
+		return $hidden_fields;
+	}
+
+	return array_values( array_diff( array_map( 'intval', (array) $hidden_fields ), [ 78 ] ) );
+}
+add_filter( 'bp_xprofile_get_hidden_fields_for_user', 'openlab_unhide_field_78_hidden_by_department', 10, 3 );
+
+/**
  * Gets the submenu items for 'My Settings'.
  *
  * @return array
