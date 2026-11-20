@@ -70,7 +70,9 @@ function validate() {
 		$_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ] = array_unique( $_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ] );
 
 		// Primary.
-		$_POST[ Two_Factor_Core::PROVIDER_USER_META_KEY ] = Two_Factor_Core::is_user_using_two_factor( $user_id ) ? Two_Factor_Core::get_primary_provider_for_user( $user_id ) : 'Two_Factor_Totp';
+		$primary = Two_Factor_Core::is_user_using_two_factor( $user_id ) ? Two_Factor_Core::get_primary_provider_for_user( $user_id ) : null;
+
+		$_POST[ Two_Factor_Core::PROVIDER_USER_META_KEY ] = $primary instanceof Two_Factor_Provider ? $primary->get_key() : 'Two_Factor_Totp';
 
 		// Save primary and enabled providers again.
 		Two_Factor_Core::user_two_factor_options_update( $user_id );
