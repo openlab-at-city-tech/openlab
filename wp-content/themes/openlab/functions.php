@@ -451,7 +451,13 @@ function openlab_xprofile_field_visibility_selector( $field_id = null, $include_
 
 	$visibility_levels = openlab_get_xprofile_visibility_levels();
 
-	$selected_value = bp_is_register_page() ? '' : xprofile_get_field_visibility_level( $field_id, bp_displayed_user_id() );
+	if ( bp_is_register_page() ) {
+		$selected_value = '';
+	} elseif ( -78 === (int) $field_id ) {
+		$selected_value = openlab_get_department_visibility( bp_displayed_user_id() );
+	} else {
+		$selected_value = xprofile_get_field_visibility_level( $field_id, bp_displayed_user_id() );
+	}
 
 	if ( bp_current_user_can( 'bp_xprofile_change_field_visibility' ) ) : ?>
 		<div class="field-visibility-settings" id="field-visibility-settings-<?php echo esc_attr( $field_id ); ?>">
